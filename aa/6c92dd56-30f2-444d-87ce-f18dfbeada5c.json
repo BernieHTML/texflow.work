@@ -1,0 +1,44 @@
+{
+  "name": "Test Product",
+  "type": "software",
+  "category": [
+    "devtools"
+  ],
+  "provider": {
+    "name": "Test Co",
+    "website": "https://example.com"
+  },
+  "summary": "A test.",
+  "problem_solved": [
+    "testing"
+  ],
+  "capabilities": [
+    "validate"
+  ],
+  "inputs_required": [
+    "url"
+  ],
+  "outputs_provided": [
+    "json"
+  ],
+  "pricing": {
+    "model": "free",
+    "free_tier": true,
+    "paid_tier": false
+  },
+  "integration": {
+    "access": "api",
+    "authentication": "api_key",
+    "automation_friendly": true
+  },
+  "constraints": [],
+  "action": {
+    "learn_more": "https://example.com",
+    "purchase": "https://example.com/buy"
+  },
+  "id": "6c92dd56-30f2-444d-87ce-f18dfbeada5c",
+  "metadata": {
+    "created_at": "2026-02-07T07:20:08.595Z",
+    "updated_at": "2026-02-07T07:20:08.595Z"
+  }
+}
