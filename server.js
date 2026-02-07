@@ -33,10 +33,10 @@ const AGENT_APPEAL_SCHEMA = {
 app.use(express.json({ limit: '1mb' }));
 app.use(express.urlencoded({ extended: true }));
 
-// Static: public first, then explicit routes for root assets
+// Static: public first, then .well-known (real files on disk), then root assets
 app.use(express.static(join(__dirname, 'public')));
+app.use('/.well-known', express.static(join(__dirname, '.well-known'), { index: false }));
 app.get('/texflowlogo.png', (req, res) => res.sendFile(join(__dirname, 'texflowlogo.png')));
-app.get('/hero.mp4', (req, res) => res.sendFile(join(__dirname, 'hero.mp4')));
 
 // Ensure aa directory exists
 await mkdir(AA_DIR, { recursive: true });
@@ -222,7 +222,7 @@ app.post('/api/upload', async (req, res) => {
 // --- GET /aa/:id — full Agent Appeal JSON (agent-readable) ---
 app.get('/aa/:id', async (req, res) => {
   const { id } = req.params;
-  if (!/^[a-f0-9-]{36}$/i.test(id)) return res.status(400).json({ error: 'Invalid id' });
+  if (!/^[a-zA-Z0-9_-]{1,64}$/.test(id)) return res.status(400).json({ error: 'Invalid id' });
   try {
     const raw = await readFile(join(AA_DIR, `${id}.json`), 'utf8');
     const aa = JSON.parse(raw);
@@ -231,50 +231,6 @@ app.get('/aa/:id', async (req, res) => {
   } catch (e) {
     if (e.code === 'ENOENT') return res.status(404).json({ error: 'Not found' });
     return res.status(500).json({ error: e.message });
-  }
-});
-
-// --- /.well-known/ai.json ---
-app.get('/.well-known/ai.json', (req, res) => {
-  res.setHeader('Content-Type', 'application/json');
-  res.send(JSON.stringify({
-    site: 'texflow.work',
-    purpose: 'Agent-first marketplace for discovering digital products and services',
-    intended_audience: ['AI agents', 'autonomous buyers'],
-    catalog: '/.well-known/agent-catalog.json',
-    interaction: { type: 'read-only', authentication: 'none' }
-  }, null, 2));
-});
-
-// --- /.well-known/agent-catalog.json — dynamic ---
-app.get('/.well-known/agent-catalog.json', async (req, res) => {
-  try {
-    const files = await readdir(AA_DIR);
-    const jsonFiles = files.filter(f => f.endsWith('.json') && f !== '.gitkeep');
-    const agent_appeals = [];
-    for (const f of jsonFiles) {
-      try {
-        const raw = await readFile(join(AA_DIR, f), 'utf8');
-        const aa = JSON.parse(raw);
-        agent_appeals.push({
-          id: aa.id,
-          name: aa.name,
-          category: aa.category || [],
-          action: { learn_more: aa.action?.learn_more || '' }
-        });
-      } catch (_) { /* skip invalid files */ }
-    }
-    const updated_at = agent_appeals.length
-      ? (await Promise.all(jsonFiles.map(f => readFile(join(AA_DIR, f), 'utf8').then(JSON.parse).then(a => a.metadata?.updated_at)))).filter(Boolean).sort().pop() || new Date().toISOString()
-      : new Date().toISOString();
-    res.setHeader('Content-Type', 'application/json');
-    res.send(JSON.stringify({
-      updated_at,
-      count: agent_appeals.length,
-      agent_appeals
-    }, null, 2));
-  } catch (e) {
-    res.status(500).json({ error: e.message });
   }
 });
 
