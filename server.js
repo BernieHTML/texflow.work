@@ -33,26 +33,70 @@ const AGENT_APPEAL_SCHEMA = {
 app.use(express.json({ limit: '1mb' }));
 app.use(express.urlencoded({ extended: true }));
 
-// Static: public first, then .well-known (real files on disk), then root assets
-app.use(express.static(join(__dirname, 'public')));
-app.use('/.well-known', express.static(join(__dirname, '.well-known'), { index: false }));
-app.get('/texflowlogo.png', (req, res) => res.sendFile(join(__dirname, 'texflowlogo.png')));
-
 // Ensure aa directory exists
 await mkdir(AA_DIR, { recursive: true });
 
-// Log all requests to .well-known/*
+// Log requests to TexMKT .well-known
 app.use((req, res, next) => {
-  if (req.path.startsWith('/.well-known/')) {
+  if (req.path.startsWith('/texmkt/.well-known/')) {
     console.log(`[.well-known] ${req.method} ${req.path} | User-Agent: ${req.get('User-Agent') || 'none'}`);
   }
   next();
 });
 
-// SPA-style routes: serve HTML for frontend routes
+// --- TexFlow brand homepage ---
 app.get('/', (req, res) => res.sendFile(join(__dirname, 'public', 'index.html')));
-app.get('/generate', (req, res) => res.sendFile(join(__dirname, 'public', 'generate.html')));
-app.get('/upload', (req, res) => res.sendFile(join(__dirname, 'public', 'upload.html')));
+
+// --- TexMKT product: pages (before static so they take precedence) ---
+app.get('/texmkt/', (req, res) => res.sendFile(join(__dirname, 'public', 'texmkt', 'index.html')));
+app.get('/texmkt', (req, res) => res.redirect(301, '/texmkt/'));
+app.get('/texmkt/generate', (req, res) => res.sendFile(join(__dirname, 'public', 'texmkt', 'generate.html')));
+app.get('/texmkt/upload', (req, res) => res.sendFile(join(__dirname, 'public', 'texmkt', 'upload.html')));
+
+// --- Legacy redirects (before static so they take precedence) ---
+app.get('/generate', (req, res) => res.redirect(301, '/texmkt/generate'));
+app.get('/upload', (req, res) => res.redirect(301, '/texmkt/upload'));
+app.get('/aa/:id', (req, res) => res.redirect(301, `/texmkt/aa/${req.params.id}`));
+
+// --- TexMKT .well-known (before static) ---
+app.get('/texmkt/.well-known/ai.json', (req, res) => {
+  res.setHeader('Content-Type', 'application/json');
+  res.sendFile(join(__dirname, 'public', 'texmkt', '.well-known', 'ai.json'));
+});
+app.get('/texmkt/.well-known/agent-catalog.json', async (req, res) => {
+  try {
+    const files = await readdir(AA_DIR);
+    const jsonFiles = files.filter(f => f.endsWith('.json') && f !== '.gitkeep');
+    const agent_appeals = [];
+    for (const f of jsonFiles) {
+      try {
+        const raw = await readFile(join(AA_DIR, f), 'utf8');
+        const aa = JSON.parse(raw);
+        agent_appeals.push({
+          id: aa.id,
+          name: aa.name,
+          category: aa.category || [],
+          action: { learn_more: aa.action?.learn_more || '' }
+        });
+      } catch (_) { /* skip invalid */ }
+    }
+    const updated_at = agent_appeals.length
+      ? (await Promise.all(jsonFiles.map(f => readFile(join(AA_DIR, f), 'utf8').then(JSON.parse).then(a => a.metadata?.updated_at)))).filter(Boolean).sort().pop() || new Date().toISOString()
+      : new Date().toISOString();
+    res.setHeader('Content-Type', 'application/json');
+    res.send(JSON.stringify({
+      updated_at: updated_at.slice(0, 10),
+      count: agent_appeals.length,
+      agent_appeals
+    }, null, 2));
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+// --- Static: public, then root assets ---
+app.use(express.static(join(__dirname, 'public')));
+app.get('/texflowlogo.png', (req, res) => res.sendFile(join(__dirname, 'texflowlogo.png')));
 
 // --- API: Generate draft Agent Appeal (streaming: crawl4ai + Gemini) ---
 const PYTHON_SCRIPT = join(__dirname, 'scripts', 'generate_aa.py');
@@ -68,7 +112,7 @@ function sendSSE(res, event, data) {
   res.write(`event: ${event}\ndata: ${payload.replace(/\n/g, '\ndata: ')}\n\n`);
 }
 
-app.post('/api/generate-draft', (req, res) => {
+app.post('/texmkt/api/generate-draft', (req, res) => {
   const { url } = req.body || {};
   if (!url || typeof url !== 'string') {
     return res.status(400).json({ error: 'Missing or invalid url' });
@@ -194,7 +238,7 @@ function validateAA(obj) {
   return null;
 }
 
-app.post('/api/upload', async (req, res) => {
+app.post('/texmkt/api/upload', async (req, res) => {
   const body = req.body;
   const err = validateAA(body);
   if (err) return res.status(400).json({ error: err });
@@ -213,14 +257,14 @@ app.post('/api/upload', async (req, res) => {
 
   try {
     await writeFile(join(AA_DIR, `${id}.json`), JSON.stringify(aa, null, 2), 'utf8');
-    return res.status(201).json({ id, url: `/aa/${id}` });
+    return res.status(201).json({ id, url: `/texmkt/aa/${id}` });
   } catch (e) {
     return res.status(500).json({ error: e.message });
   }
 });
 
-// --- GET /aa/:id — full Agent Appeal JSON (agent-readable) ---
-app.get('/aa/:id', async (req, res) => {
+// --- GET /texmkt/aa/:id — full Agent Appeal JSON (agent-readable) ---
+app.get('/texmkt/aa/:id', async (req, res) => {
   const { id } = req.params;
   if (!/^[a-zA-Z0-9_-]{1,64}$/.test(id)) return res.status(400).json({ error: 'Invalid id' });
   try {
@@ -234,4 +278,7 @@ app.get('/aa/:id', async (req, res) => {
   }
 });
 
-app.listen(PORT, () => console.log(`TexFlow running at http://localhost:${PORT}`));
+const HOST = process.env.HOST || '0.0.0.0';
+app.listen(PORT, HOST, () => {
+  console.log(`TexFlow listening on http://${HOST}:${PORT}`);
+});
