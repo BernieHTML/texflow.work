@@ -1,4 +1,3 @@
-
 import React from 'react';
 
 interface NavbarProps {
@@ -26,8 +25,8 @@ const Navbar: React.FC<NavbarProps> = ({ onNavigate, currentPath }) => {
               Platform1
             </span>
           </div>
-          <div className="hidden md:block">
-            <div className="ml-10 flex items-baseline space-x-4">
+          <div className="hidden md:flex items-center gap-6">
+            <div className="flex items-baseline space-x-4">
               {links.map((link) => (
                 <button
                   key={link.path}
@@ -41,6 +40,10 @@ const Navbar: React.FC<NavbarProps> = ({ onNavigate, currentPath }) => {
                   {link.label}
                 </button>
               ))}
+            </div>
+            <div className="border-l border-slate-700 pl-4 flex items-baseline gap-3 text-sm">
+              <a href="/" className="text-slate-400 hover:text-white transition-colors">TexFlow</a>
+              <a href="/texmkt/" className="text-slate-400 hover:text-white transition-colors">TexMKT</a>
             </div>
           </div>
         </div>

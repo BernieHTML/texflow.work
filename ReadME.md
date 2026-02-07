@@ -5,12 +5,14 @@
 ## Structure
 
 - **TexFlow** — Brand; homepage at `/`.
-- **TexMKT** — First product: Agent Appeal generation and public Agent Catalog. All under `/texmkt/`.
+- **TexMKT** — Agent Appeal generation and public Agent Catalog. All under `/texmkt/`.
+- **Platform1** — Agent Discovery Hub (Vy/agent onboarding, catalog, .well-known preview). SPA at `/platform1/`.
 
 ## Features
 
-- **Home** (`/`) — TexFlow brand landing; link to TexMKT.
+- **Home** (`/`) — TexFlow brand landing; links to TexMKT and Platform1.
 - **TexMKT** (`/texmkt/`) — Product landing for the Agent-First Marketplace.
+- **Platform1** (`/platform1/`) — Client-side Agent Discovery Hub: onboard products (Gemini-powered AA), catalog, .well-known preview. Build with `npm run build:platform1`; then the server serves it from `Platform1/dist`.
 - **Generate** (`/texmkt/generate`) — Enter a URL → Crawl4AI + Gemini → draft Agent Appeal → edit → publish (live status).
 - **Publish** (`/texmkt/upload`) — Paste validated AA JSON → publish to catalog.
 - **Catalog** — Full AA at `/texmkt/aa/:id`; discovery at `/texmkt/.well-known/agent-catalog.json`.
@@ -36,7 +38,7 @@ python -m playwright install   # one-time: Chromium for Crawl4AI
 ```
 Set `GOOGLE_AI_API_KEY` in project root `.env`. Chromium installs automatically on first generate; on Linux you may need `sudo python -m playwright install-deps`.
 
-Open http://localhost:5001 (or your configured PORT).
+To include **Platform1**, build it once: `npm run build:platform1`. Then open http://localhost:5001 (or your configured PORT).
 
 ## Deploy on VPS (public internet)
 
@@ -90,6 +92,10 @@ Open http://localhost:5001 (or your configured PORT).
 /
 ├── server.js
 ├── package.json
+├── Platform1/               # Agent Discovery Hub (Vite/React SPA)
+│   ├── dist/                # built output (after npm run build:platform1)
+│   ├── components/
+│   └── ...
 ├── public/
 │   ├── index.html          # TexFlow brand homepage
 │   ├── styles.css

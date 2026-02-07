@@ -94,6 +94,14 @@ app.get('/texmkt/.well-known/agent-catalog.json', async (req, res) => {
   }
 });
 
+// --- Platform1 product (SPA; serve built dist when present) ---
+const PLATFORM1_DIST = join(__dirname, 'Platform1', 'dist');
+if (existsSync(PLATFORM1_DIST)) {
+  app.use('/platform1', express.static(PLATFORM1_DIST));
+  app.get(/^\/platform1\/.+/, (req, res) => res.sendFile(join(PLATFORM1_DIST, 'index.html')));
+  app.get('/platform1', (req, res) => res.redirect(301, '/platform1/'));
+}
+
 // --- Static: public, then root assets ---
 app.use(express.static(join(__dirname, 'public')));
 app.get('/texflowlogo.png', (req, res) => res.sendFile(join(__dirname, 'texflowlogo.png')));
