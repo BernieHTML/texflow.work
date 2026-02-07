@@ -1,15 +1,22 @@
-# TexFlow — Agent-First Marketplace
+# TexFlow
 
-**https://texflow.work** — Where AI agents discover, evaluate, and act on digital products and services.
+**https://texflow.work** — Agent-first products for the open web.
+
+## Structure
+
+- **TexFlow** — Brand; homepage at `/`.
+- **TexMKT** — First product: Agent Appeal generation and public Agent Catalog. All under `/texmkt/`.
 
 ## Features
 
-- **Landing page** — Dark, futuristic UI with hero video and logo
-- **Agent Appeal (AA)** — Machine-readable JSON schema for products/services
-- **Generate** (`/generate`) — Enter a URL → crawl (Crawl4AI) + AI (Gemini 1.5 Flash) → draft AA → edit → publish (with live status)
-- **Upload** (`/upload`) — Paste validated AA JSON → publish to catalog
-- **Catalog** — Each AA at `/aa/:id` (full JSON); discovery at `/.well-known/agent-catalog.json`
-- **Discovery** — `/.well-known/ai.json` for agents (read-only, no auth)
+- **Home** (`/`) — TexFlow brand landing; link to TexMKT.
+- **TexMKT** (`/texmkt/`) — Product landing for the Agent-First Marketplace.
+- **Generate** (`/texmkt/generate`) — Enter a URL → Crawl4AI + Gemini → draft Agent Appeal → edit → publish (live status).
+- **Publish** (`/texmkt/upload`) — Paste validated AA JSON → publish to catalog.
+- **Catalog** — Full AA at `/texmkt/aa/:id`; discovery at `/texmkt/.well-known/agent-catalog.json`.
+- **Discovery** — `/texmkt/.well-known/ai.json` for agents (read-only, no auth).
+
+Legacy paths redirect to TexMKT: `/generate` → `/texmkt/generate`, `/upload` → `/texmkt/upload`, `/aa/:id` → `/texmkt/aa/:id`.
 
 ## Quick start (local)
 
@@ -19,21 +26,21 @@ npm install
 npm start
 ```
 
-**Python (required for /generate)** — Crawl4AI + Gemini 1.5 Flash (Python 3.9–3.12):
+**Python (for TexMKT generate)** — Crawl4AI + Gemini (Python 3.9–3.12):
 ```bash
 cd scripts
 python3 -m venv .venv
 source .venv/bin/activate   # or .venv\Scripts\activate on Windows
 pip install -r requirements.txt
-python -m playwright install   # one-time: install Chromium for Crawl4AI
+python -m playwright install   # one-time: Chromium for Crawl4AI
 ```
-Set `GOOGLE_AI_API_KEY` in the project root `.env` (copy from `.env.example`). The Node server spawns the venv’s Python and runs `generate_aa.py <url>`, streaming live status to the browser. **Chromium is installed automatically** on first generate (local or VPS); on Linux you may need `sudo python -m playwright install-deps` if the browser fails to launch.
+Set `GOOGLE_AI_API_KEY` in project root `.env`. Chromium installs automatically on first generate; on Linux you may need `sudo python -m playwright install-deps`.
 
-Open http://localhost:5001
+Open http://localhost:5001 (or your configured PORT).
 
-## Deploy on Ubuntu 22.04 (VPS)
+## Deploy on VPS (public internet)
 
-1. **Node.js 18+**
+1. **Node.js 18+** (e.g. Ubuntu 22.04):
    ```bash
    curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
    sudo apt-get install -y nodejs
@@ -41,7 +48,7 @@ Open http://localhost:5001
 
 2. **Clone and install**
    ```bash
-   cd /var/www  # or your app dir
+   cd /var/www
    git clone <your-repo> texflow.work && cd texflow.work
    npm install --production
    ```
@@ -49,14 +56,14 @@ Open http://localhost:5001
 3. **Environment**
    ```bash
    cp .env.example .env
-   nano .env   # set GOOGLE_AI_API_KEY=... (Google AI Studio / Gemini)
+   nano .env   # GOOGLE_AI_API_KEY=...
    ```
 
-4. **Run with systemd** (recommended)
-   - Create `/etc/systemd/system/texflow.service`:
+4. **Run with systemd**
+   - `/etc/systemd/system/texflow.service`:
    ```ini
    [Unit]
-   Description=TexFlow Agent Marketplace
+   Description=TexFlow
    After=network.target
 
    [Service]
@@ -68,46 +75,52 @@ Open http://localhost:5001
    ExecStart=/usr/bin/node server.js
    Restart=on-failure
    PORT=5001
+   HOST=0.0.0.0
 
    [Install]
    WantedBy=multi-user.target
    ```
-   - Then: `sudo systemctl daemon-reload && sudo systemctl enable texflow && sudo systemctl start texflow`
+   - `sudo systemctl daemon-reload && sudo systemctl enable texflow && sudo systemctl start texflow`
 
-5. **Reverse proxy (nginx)** — Proxy to `http://127.0.0.1:5001` and terminate TLS for `texflow.work`.
+5. **Reverse proxy** — Nginx (or Caddy) in front of `http://127.0.0.1:5001`; terminate TLS for `texflow.work`. Use relative URLs in the app (no localhost); the site works on any host.
 
 ## Project structure
 
 ```
 /
-├── server.js           # Express app, APIs, .well-known
+├── server.js
 ├── package.json
-├── scripts/
-│   ├── generate_aa.py  # Crawl4AI + Gemini draft generator
-│   └── requirements.txt
 ├── public/
-│   ├── index.html      # Landing
-│   ├── generate.html   # AA generator (live status)
-│   ├── upload.html     # AA upload
+│   ├── index.html          # TexFlow brand homepage
 │   ├── styles.css
-│   └── app.js
-├── aa/                 # Stored Agent Appeals (aa/<uuid>.json)
+│   ├── app.js
+│   ├── mars-hero.mp4
+│   └── texmkt/
+│       ├── index.html      # TexMKT product landing
+│       ├── generate.html
+│       ├── upload.html
+│       └── .well-known/
+│           └── ai.json     # static; catalog is dynamic
+├── scripts/
+│   ├── generate_aa.py
+│   └── requirements.txt
+├── aa/                     # Stored Agent Appeals (aa/<id>.json)
 └── .env.example
 ```
 
-## Agent endpoints (no auth)
+## TexMKT agent endpoints (no auth)
 
 | Endpoint | Description |
 |----------|-------------|
-| `GET /.well-known/ai.json` | Site purpose and catalog pointer |
-| `GET /.well-known/agent-catalog.json` | List of AAs (id, name, category, action.learn_more) |
-| `GET /aa/:id` | Full Agent Appeal JSON |
+| `GET /texmkt/.well-known/ai.json` | Product purpose and catalog pointer |
+| `GET /texmkt/.well-known/agent-catalog.json` | List of AAs (id, name, category, action.learn_more) |
+| `GET /texmkt/aa/:id` | Full Agent Appeal JSON |
 
-All `.well-known` requests are logged (including User-Agent) to stdout.
+All `/texmkt/.well-known/*` requests are logged (including User-Agent).
 
 ## Agent Appeal schema (v1)
 
-See the spec in the codebase: `id`, `name`, `type`, `category`, `provider`, `summary`, `problem_solved`, `capabilities`, `inputs_required`, `outputs_provided`, `pricing`, `integration`, `constraints`, `action`, `metadata`.
+`id`, `name`, `type`, `category`, `provider`, `summary`, `problem_solved`, `capabilities`, `inputs_required`, `outputs_provided`, `pricing`, `integration`, `constraints`, `action`, `metadata`.
 
 ## License
 
