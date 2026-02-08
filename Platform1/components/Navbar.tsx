@@ -43,7 +43,6 @@ const Navbar: React.FC<NavbarProps> = ({ onNavigate, currentPath }) => {
             </div>
             <div className="border-l border-slate-700 pl-4 flex items-baseline gap-3 text-sm">
               <a href="/" className="text-slate-400 hover:text-white transition-colors">TexFlow</a>
-              <a href="/texmkt/" className="text-slate-400 hover:text-white transition-colors">TexMKT</a>
             </div>
           </div>
         </div>

@@ -20,7 +20,6 @@
         <span class="logo-text">TexFlow</span>
       </a>
       <nav class="nav">
-        <a href="/texmkt/">TexMKT</a>
         <a href="/platform1/">Platform1</a>
       </nav>
     </header>
@@ -39,23 +38,20 @@
           </span>
           <h1 class="hero-title">TexFlow</h1>
           <p class="hero-sub">Agent-first products for the open web.</p>
+          <p class="hero-typing" id="hero-typing" aria-live="polite"></p>
           <div class="hero-cta">
-            <a href="/texmkt/" class="btn btn-primary">Explore TexMKT</a>
+            <a href="/platform1/" class="btn btn-primary">Explore Platform1</a>
           </div>
         </div>
       </section>
 
       <section class="explain" id="explain">
         <h2 class="section-title">Products</h2>
+        <p class="section-intro">Agent-readable tools and discovery for the open web. More products coming soon.</p>
         <div class="cards">
           <article class="card">
-            <h3>TexMKT</h3>
-            <p>Agent Appeal generation and the public Agent Catalog. Create machine-readable product descriptions, publish them, and let AI agents discover and act on them—no auth, read-only by design.</p>
-            <a href="/texmkt/" class="btn btn-secondary" style="margin-top: 0.75rem;">Open TexMKT</a>
-          </article>
-          <article class="card">
             <h3>Platform1</h3>
-            <p>Agent Discovery Hub for Vy and other agents. Onboard products with Agent Appeal scaffolds, browse the catalog, and preview .well-known discovery—client-side with Gemini-powered AA generation.</p>
+            <p>Agent Discovery Hub. Onboard products with Agent Appeal scaffolds, generate AAs with AI, browse the catalog, and expose discovery via .well-known—for Vy and every agent.</p>
             <a href="/platform1/" class="btn btn-secondary" style="margin-top: 0.75rem;">Open Platform1</a>
           </article>
         </div>
@@ -63,10 +59,52 @@
 
       <footer class="footer">
         <p class="footer-tagline">Agent-readable by design</p>
-        <a href="/texmkt/.well-known/ai.json" class="footer-link">/texmkt/.well-known/ai.json</a>
+        <a href="/.well-known/ai.json" class="footer-link">/.well-known/ai.json</a>
       </footer>
     </main>
   </div>
   <script src="/app.js"></script>
+  <script>
+    (function () {
+      const lines = [
+        'The dawn of the agent internet',
+        'The agentic layer, redefined.',
+        'Build and thrive with the agent community'
+      ];
+      const el = document.getElementById('hero-typing');
+      if (!el) return;
+      let lineIndex = 0;
+      let charIndex = 0;
+      let isDeleting = false;
+      const typeMs = 70;
+      const pauseAfterType = 2200;
+      const pauseAfterDelete = 600;
+
+      function tick() {
+        const line = lines[lineIndex];
+        if (isDeleting) {
+          charIndex--;
+          el.textContent = line.slice(0, charIndex);
+          if (charIndex <= 0) {
+            isDeleting = false;
+            lineIndex = (lineIndex + 1) % lines.length;
+            setTimeout(tick, pauseAfterDelete);
+            return;
+          }
+          setTimeout(tick, typeMs / 2);
+          return;
+        }
+        charIndex++;
+        el.textContent = line.slice(0, charIndex);
+        if (charIndex >= line.length) {
+          isDeleting = true;
+          setTimeout(tick, pauseAfterType);
+          return;
+        }
+        setTimeout(tick, typeMs);
+      }
+      setTimeout(tick, 800);
+    })();
+  </script>
 </body>
 </html>
