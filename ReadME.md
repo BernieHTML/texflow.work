@@ -86,6 +86,14 @@ To include **Platform1**, build it once: `npm run build:platform1`. Then open ht
 
 5. **Reverse proxy** — Nginx (or Caddy) in front of `http://127.0.0.1:5001`; terminate TLS for `texflow.work`. Use relative URLs in the app (no localhost); the site works on any host.
 
+**Production URLs (texflow.work)** — The codebase is configured for **https://texflow.work**:
+- Homepage: `https://texflow.work/`
+- Platform1: `https://texflow.work/platform1/`
+- Discovery: `https://texflow.work/.well-known/ai.json`
+- Product catalog: `https://texflow.work/.well-known/agent-catalog.json`
+- Platform1 API upload: `https://texflow.work/platform1/api/upload`
+All canonical, Open Graph and Twitter meta tags, and `.well-known/ai.json` product URLs use this domain. In-app links use relative paths so they resolve correctly on the deployed host.
+
 ## Project structure
 
 ```
