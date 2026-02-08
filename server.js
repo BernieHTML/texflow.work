@@ -262,7 +262,7 @@ function validateAA(obj) {
   for (const k of required) {
     if (obj[k] === undefined) return `Missing required field: ${k}`;
   }
-  const allowedTypes = ['software', 'service', 'api', 'dataset', 'tool'];
+  const allowedTypes = ['software', 'service', 'api', 'dataset', 'tool', 'hardware'];
   if (!allowedTypes.includes(obj.type)) return `Invalid type. Must be one of: ${allowedTypes.join(', ')}`;
   if (!obj.provider?.name || typeof obj.provider.name !== 'string') return 'provider.name required';
   if (!Array.isArray(obj.category)) return 'category must be an array';

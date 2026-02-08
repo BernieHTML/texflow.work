@@ -20,6 +20,9 @@ const Catalog: React.FC<CatalogProps> = ({ appeals }) => {
       <div className="mb-12">
         <h2 className="text-3xl font-bold text-white mb-2">Agent Appeal Catalog</h2>
         <p className="text-slate-400">Products currently registered and available for Vy Agents.</p>
+        <p className="text-slate-500 text-sm mt-1 font-mono">
+          Catalog endpoint: <span className="text-indigo-400">GET /platform1/.well-known/agent-catalog.json</span>
+        </p>
       </div>
 
       {appeals.length === 0 ? (

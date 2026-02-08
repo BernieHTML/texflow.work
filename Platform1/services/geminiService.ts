@@ -8,7 +8,7 @@ const agentAppealJsonSchema = {
   properties: {
     id: { type: "string" },
     name: { type: "string" },
-    type: { type: "string", description: "software | service | api | dataset | tool" },
+    type: { type: "string", description: "software | service | api | dataset | tool | hardware" },
     category: { type: "array", items: { type: "string" } },
     provider: {
       type: "object",

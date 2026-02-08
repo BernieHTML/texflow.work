@@ -1,5 +1,5 @@
 
-export type ProductType = "software" | "service" | "api" | "dataset" | "tool";
+export type ProductType = "software" | "service" | "api" | "dataset" | "tool" | "hardware";
 export type PricingModel = "free" | "freemium" | "subscription" | "usage" | "one-time";
 export type AccessType = "web" | "api" | "download";
 export type AuthType = "none" | "api_key" | "oauth";
