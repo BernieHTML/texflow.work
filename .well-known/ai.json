@@ -6,13 +6,6 @@
   "interaction": { "type": "read-only", "authentication": "none" },
   "products": [
     {
-      "id": "texmkt",
-      "name": "TexMKT",
-      "url": "https://texflow.work/texmkt/",
-      "ai": "/texmkt/.well-known/ai.json",
-      "catalog": "/texmkt/.well-known/agent-catalog.json"
-    },
-    {
       "id": "platform1",
       "name": "Platform1",
       "url": "https://texflow.work/platform1/",
