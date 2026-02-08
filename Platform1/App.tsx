@@ -1,74 +1,67 @@
-
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Navbar from './components/Navbar';
 import LandingPage from './components/LandingPage';
 import Onboarding from './components/Onboarding';
 import Catalog from './components/Catalog';
 import WellKnownPreview from './components/WellKnownPreview';
-import { AgentAppeal } from './types';
+import { AgentAppeal, Platform1AiJson, AgentCatalogResponse } from './types';
+
+const WELL_KNOWN_BASE = '/platform1/.well-known';
 
 const App: React.FC = () => {
   const [currentPath, setCurrentPath] = useState('/');
-  const [appeals, setAppeals] = useState<AgentAppeal[]>([]);
+  const [localAppeals, setLocalAppeals] = useState<AgentAppeal[]>([]);
+  const [aiDescriptor, setAiDescriptor] = useState<Platform1AiJson | null>(null);
+  const [catalogResponse, setCatalogResponse] = useState<AgentCatalogResponse | null>(null);
+  const [wellKnownLoading, setWellKnownLoading] = useState(true);
 
-  // Initialize from LocalStorage
+  // Fetch .well-known/ai.json and agent-catalog.json
+  useEffect(() => {
+    let cancelled = false;
+    setWellKnownLoading(true);
+    Promise.all([
+      fetch(`${WELL_KNOWN_BASE}/ai.json`).then(r => r.ok ? r.json() : null),
+      fetch(`${WELL_KNOWN_BASE}/agent-catalog.json`).then(r => r.ok ? r.json() : null)
+    ]).then(([ai, catalog]) => {
+      if (cancelled) return;
+      setAiDescriptor(ai as Platform1AiJson | null);
+      setCatalogResponse(catalog as AgentCatalogResponse | null);
+    }).catch(() => {}).finally(() => {
+      if (!cancelled) setWellKnownLoading(false);
+    });
+    return () => { cancelled = true; };
+  }, []);
+
+  // Initialize local appeals from LocalStorage (user-onboarded only)
   useEffect(() => {
     const saved = localStorage.getItem('p1-appeals');
     if (saved) {
       try {
-        setAppeals(JSON.parse(saved));
+        setLocalAppeals(JSON.parse(saved));
       } catch (e) {
-        console.error("Failed to load saved appeals");
+        console.error('Failed to load saved appeals');
       }
-    } else {
-      // Default placeholder if empty
-      const placeholder: AgentAppeal = {
-        id: "default-vy-helper",
-        name: "Vercept Connector",
-        type: "tool",
-        category: ["Automation"],
-        provider: {
-          name: "Platform1 Team",
-          website: "https://platform1.io"
-        },
-        summary: "Standardized bridge for Vy agents to interact with third party platforms.",
-        problem_solved: ["Agent compatibility", "Protocol mapping"],
-        capabilities: ["Translation", "Discovery"],
-        inputs_required: ["API Key"],
-        outputs_provided: ["Discovery JSON"],
-        pricing: {
-          model: "free",
-          free_tier: true,
-          paid_tier: false
-        },
-        integration: {
-          access: "api",
-          authentication: "none",
-          automation_friendly: true
-        },
-        constraints: ["Rate limited"],
-        action: {
-          learn_more: "https://platform1.io",
-          purchase: "https://platform1.io"
-        },
-        metadata: {
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString()
-        }
-      };
-      setAppeals([placeholder]);
     }
   }, []);
 
-  // Save to LocalStorage
+  // Merged catalog: server agent_appeals + local appeals (local overwrites by id)
+  const appeals = useMemo(() => {
+    const fromServer = catalogResponse?.agent_appeals ?? [];
+    const byId = new Map<string, AgentAppeal>();
+    fromServer.forEach(aa => byId.set(aa.id, aa));
+    localAppeals.forEach(aa => byId.set(aa.id, aa));
+    return Array.from(byId.values());
+  }, [catalogResponse, localAppeals]);
+
+  // Save local appeals to LocalStorage
   useEffect(() => {
-    if (appeals.length > 0) {
-      localStorage.setItem('p1-appeals', JSON.stringify(appeals));
+    if (localAppeals.length > 0) {
+      localStorage.setItem('p1-appeals', JSON.stringify(localAppeals));
     }
-  }, [appeals]);
+  }, [localAppeals]);
 
   const handleAASaved = (aa: AgentAppeal) => {
-    setAppeals(prev => [...prev.filter(a => a.id !== aa.id), aa]);
+    setLocalAppeals(prev => [...prev.filter(a => a.id !== aa.id), aa]);
     setCurrentPath('/catalog');
   };
 
@@ -81,7 +74,14 @@ const App: React.FC = () => {
       case '/catalog':
         return <Catalog appeals={appeals} />;
       case '/well-known':
-        return <WellKnownPreview appeals={appeals} />;
+        return (
+          <WellKnownPreview
+            appeals={appeals}
+            aiDescriptor={aiDescriptor}
+            catalogResponse={catalogResponse}
+            loading={wellKnownLoading}
+          />
+        );
       default:
         return <LandingPage onStart={() => setCurrentPath('/onboard')} />;
     }

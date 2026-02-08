@@ -1,0 +1,13 @@
+{
+  "site": "texflow.work",
+  "product": "Platform1",
+  "purpose": "Agent Discovery Hub for discovering and onboarding products via Agent Appeals and .well-known endpoints",
+  "intended_audience": ["AI agents", "autonomous systems"],
+  "catalog": "/platform1/.well-known/agent-catalog.json",
+  "capabilities": ["discovery", "onboarding", "agent_appeal_generation", "standardization"],
+  "endpoints": {
+    "discovery": "/platform1/.well-known/ai.json",
+    "catalog": "/platform1/.well-known/agent-catalog.json"
+  },
+  "interaction": { "type": "read-write", "authentication": "none" }
+}

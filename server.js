@@ -94,6 +94,37 @@ app.get('/texmkt/.well-known/agent-catalog.json', async (req, res) => {
   }
 });
 
+// --- Platform1 .well-known (before SPA so routes take precedence) ---
+app.get('/platform1/.well-known/ai.json', (req, res) => {
+  res.setHeader('Content-Type', 'application/json');
+  res.sendFile(join(__dirname, 'public', 'platform1', '.well-known', 'ai.json'));
+});
+app.get('/platform1/.well-known/agent-catalog.json', async (req, res) => {
+  try {
+    const files = await readdir(AA_DIR);
+    const jsonFiles = files.filter(f => f.endsWith('.json') && f !== '.gitkeep');
+    const agent_appeals = [];
+    for (const f of jsonFiles) {
+      try {
+        const raw = await readFile(join(AA_DIR, f), 'utf8');
+        const aa = JSON.parse(raw);
+        agent_appeals.push(aa);
+      } catch (_) { /* skip invalid */ }
+    }
+    const updated_at = agent_appeals.length
+      ? (await Promise.all(jsonFiles.map(f => readFile(join(AA_DIR, f), 'utf8').then(JSON.parse).then(a => a.metadata?.updated_at)))).filter(Boolean).sort().pop() || new Date().toISOString()
+      : new Date().toISOString();
+    res.setHeader('Content-Type', 'application/json');
+    res.send(JSON.stringify({
+      updated_at: updated_at.slice(0, 10),
+      count: agent_appeals.length,
+      agent_appeals
+    }, null, 2));
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
 // --- Platform1 product (SPA; serve built dist when present) ---
 const PLATFORM1_DIST = join(__dirname, 'Platform1', 'dist');
 if (existsSync(PLATFORM1_DIST)) {

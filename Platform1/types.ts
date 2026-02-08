@@ -43,3 +43,22 @@ export interface CatalogEntry {
   category: string;
   products: AgentAppeal[];
 }
+
+/** Platform1 /.well-known/ai.json descriptor */
+export interface Platform1AiJson {
+  site: string;
+  product: string;
+  purpose: string;
+  intended_audience: string[];
+  catalog: string;
+  capabilities?: string[];
+  endpoints?: { discovery?: string; catalog?: string };
+  interaction?: { type: string; authentication: string };
+}
+
+/** Response from /.well-known/agent-catalog.json */
+export interface AgentCatalogResponse {
+  updated_at: string;
+  count: number;
+  agent_appeals: AgentAppeal[];
+}
