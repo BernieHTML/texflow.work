@@ -7,6 +7,7 @@ import WellKnownPreview from './components/WellKnownPreview';
 import { AgentAppeal, Platform1AiJson, AgentCatalogResponse } from './types';
 
 const WELL_KNOWN_BASE = '/platform1/.well-known';
+const CATALOG_URL = '/.well-known/agent-catalog.json';
 
 const App: React.FC = () => {
   const [currentPath, setCurrentPath] = useState('/');
@@ -15,13 +16,13 @@ const App: React.FC = () => {
   const [catalogResponse, setCatalogResponse] = useState<AgentCatalogResponse | null>(null);
   const [wellKnownLoading, setWellKnownLoading] = useState(true);
 
-  // Fetch .well-known/ai.json and agent-catalog.json
+  // Fetch Platform1 ai descriptor and root product catalog
   useEffect(() => {
     let cancelled = false;
     setWellKnownLoading(true);
     Promise.all([
       fetch(`${WELL_KNOWN_BASE}/ai.json`).then(r => r.ok ? r.json() : null),
-      fetch(`${WELL_KNOWN_BASE}/agent-catalog.json`).then(r => r.ok ? r.json() : null)
+      fetch(CATALOG_URL).then(r => r.ok ? r.json() : null)
     ]).then(([ai, catalog]) => {
       if (cancelled) return;
       setAiDescriptor(ai as Platform1AiJson | null);
@@ -71,7 +72,7 @@ const App: React.FC = () => {
         const data = await res.json();
         const savedId = data.id ?? aa.id;
         setLocalAppeals(prev => [...prev.filter(a => a.id !== savedId && a.id !== aa.id), { ...aa, id: savedId }]);
-        const catalogRes = await fetch(`${WELL_KNOWN_BASE}/agent-catalog.json`);
+        const catalogRes = await fetch(CATALOG_URL);
         if (catalogRes.ok) {
           const catalog = (await catalogRes.json()) as AgentCatalogResponse;
           setCatalogResponse(catalog);

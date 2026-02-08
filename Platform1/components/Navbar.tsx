@@ -17,9 +17,9 @@ const Navbar: React.FC<NavbarProps> = ({ onNavigate, currentPath }) => {
     <nav className="border-b border-slate-800 bg-slate-900/50 backdrop-blur-md sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          <div className="flex items-center gap-2 cursor-pointer" onClick={() => onNavigate('/')}>
-            <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center font-bold text-white shadow-lg shadow-indigo-500/20">
-              P1
+          <div className="flex items-center gap-3 cursor-pointer" onClick={() => onNavigate('/')}>
+            <div className="h-12 w-12 rounded-full overflow-hidden ring-2 ring-slate-700/80 flex-shrink-0 bg-slate-900 flex items-center justify-center">
+              <img src="/Platform1.png" alt="Platform1" className="h-full w-full object-cover" />
             </div>
             <span className="text-xl font-bold bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent">
               Platform1

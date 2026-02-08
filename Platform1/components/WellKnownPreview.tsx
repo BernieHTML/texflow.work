@@ -24,11 +24,11 @@ const WellKnownPreview: React.FC<WellKnownPreviewProps> = ({
     product: 'Platform1',
     purpose: 'Agent Discovery Hub',
     intended_audience: ['AI agents', 'autonomous systems'],
-    catalog: '/platform1/.well-known/agent-catalog.json',
+    catalog: '/.well-known/agent-catalog.json',
     capabilities: ['discovery', 'onboarding', 'agent_appeal_generation', 'standardization'],
     endpoints: {
       discovery: '/platform1/.well-known/ai.json',
-      catalog: '/platform1/.well-known/agent-catalog.json'
+      catalog: '/.well-known/agent-catalog.json'
     }
   };
 
@@ -37,7 +37,7 @@ const WellKnownPreview: React.FC<WellKnownPreviewProps> = ({
       <div className="mb-12">
         <h2 className="text-3xl font-bold text-white mb-2">Agent Endpoints</h2>
         <p className="text-slate-400">
-          Served from <span className="font-mono text-indigo-400">/platform1/.well-known/</span> for discovery and catalog.
+          Discovery at <span className="font-mono text-indigo-400">/platform1/.well-known/ai.json</span>; product catalog at <span className="font-mono text-indigo-400">/.well-known/agent-catalog.json</span>.
         </p>
       </div>
 
@@ -64,7 +64,7 @@ const WellKnownPreview: React.FC<WellKnownPreviewProps> = ({
         <div>
           <div className="flex items-center gap-2 mb-4">
             <span className="bg-slate-800 text-slate-300 px-3 py-1 rounded text-xs mono">GET</span>
-            <span className="text-indigo-400 font-bold font-mono">/platform1/.well-known/agent-catalog.json</span>
+            <span className="text-indigo-400 font-bold font-mono">/.well-known/agent-catalog.json</span>
           </div>
           <div className="bg-slate-950 border border-slate-800 rounded-lg overflow-hidden">
             <div className="bg-slate-900 px-4 py-2 border-b border-slate-800 flex justify-between">

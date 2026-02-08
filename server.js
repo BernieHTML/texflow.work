@@ -58,10 +58,35 @@ app.get('/generate', (req, res) => res.redirect(301, '/texmkt/generate'));
 app.get('/upload', (req, res) => res.redirect(301, '/texmkt/upload'));
 app.get('/aa/:id', (req, res) => res.redirect(301, `/texmkt/aa/${req.params.id}`));
 
-// --- Root .well-known (discovery only; product catalog is at /platform1/.well-known/agent-catalog.json) ---
+// --- Root .well-known (discovery + product catalog; Platform1 uploads feed this) ---
 app.get('/.well-known/ai.json', (req, res) => {
   res.setHeader('Content-Type', 'application/json');
   res.sendFile(join(__dirname, '.well-known', 'ai.json'));
+});
+app.get('/.well-known/agent-catalog.json', async (req, res) => {
+  try {
+    const files = await readdir(AA_DIR);
+    const jsonFiles = files.filter(f => f.endsWith('.json') && f !== '.gitkeep');
+    const agent_appeals = [];
+    for (const f of jsonFiles) {
+      try {
+        const raw = await readFile(join(AA_DIR, f), 'utf8');
+        const aa = JSON.parse(raw);
+        agent_appeals.push(aa);
+      } catch (_) { /* skip invalid */ }
+    }
+    const updated_at = agent_appeals.length
+      ? (await Promise.all(jsonFiles.map(f => readFile(join(AA_DIR, f), 'utf8').then(JSON.parse).then(a => a.metadata?.updated_at)))).filter(Boolean).sort().pop() || new Date().toISOString()
+      : new Date().toISOString();
+    res.setHeader('Content-Type', 'application/json');
+    res.send(JSON.stringify({
+      updated_at: updated_at.slice(0, 10),
+      count: agent_appeals.length,
+      agent_appeals
+    }, null, 2));
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
 });
 
 // --- TexMKT .well-known (before static) ---
@@ -142,6 +167,7 @@ if (existsSync(PLATFORM1_DIST)) {
 // --- Static: public, then root assets ---
 app.use(express.static(join(__dirname, 'public')));
 app.get('/texflowlogo.png', (req, res) => res.sendFile(join(__dirname, 'texflowlogo.png')));
+app.get('/Platform1.png', (req, res) => res.sendFile(join(__dirname, 'Platform1.png')));
 
 // --- API: Generate draft Agent Appeal (streaming: crawl4ai + Gemini) ---
 const PYTHON_SCRIPT = join(__dirname, 'scripts', 'generate_aa.py');

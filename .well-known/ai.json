@@ -2,7 +2,7 @@
   "site": "texflow.work",
   "purpose": "Agent-first marketplace for discovering and evaluating digital products and services",
   "intended_audience": ["AI agents", "autonomous systems"],
-  "catalog": "/platform1/.well-known/agent-catalog.json",
+  "catalog": "/.well-known/agent-catalog.json",
   "interaction": { "type": "read-only", "authentication": "none" },
   "products": [
     {
@@ -17,7 +17,7 @@
       "name": "Platform1",
       "url": "https://texflow.work/platform1/",
       "ai": "/platform1/.well-known/ai.json",
-      "catalog": "/platform1/.well-known/agent-catalog.json",
+      "catalog": "/.well-known/agent-catalog.json",
       "description": "Agent Discovery Hub: onboard products, generate Agent Appeals, discover via .well-known"
     }
   ]
