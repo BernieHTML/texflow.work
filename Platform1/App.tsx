@@ -60,7 +60,28 @@ const App: React.FC = () => {
     }
   }, [localAppeals]);
 
-  const handleAASaved = (aa: AgentAppeal) => {
+  const handleAASaved = async (aa: AgentAppeal) => {
+    try {
+      const res = await fetch('/platform1/api/upload', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(aa),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        const savedId = data.id ?? aa.id;
+        setLocalAppeals(prev => [...prev.filter(a => a.id !== savedId && a.id !== aa.id), { ...aa, id: savedId }]);
+        const catalogRes = await fetch(`${WELL_KNOWN_BASE}/agent-catalog.json`);
+        if (catalogRes.ok) {
+          const catalog = (await catalogRes.json()) as AgentCatalogResponse;
+          setCatalogResponse(catalog);
+        }
+        setCurrentPath('/catalog');
+        return;
+      }
+    } catch (_) {
+      /* fallback to local only */
+    }
     setLocalAppeals(prev => [...prev.filter(a => a.id !== aa.id), aa]);
     setCurrentPath('/catalog');
   };

@@ -308,6 +308,34 @@ app.post('/texmkt/api/upload', async (req, res) => {
   }
 });
 
+// --- Platform1: upload Agent Appeal (persists to aa/ so it appears in catalog) ---
+app.post('/platform1/api/upload', async (req, res) => {
+  const body = req.body;
+  const err = validateAA(body);
+  if (err) return res.status(400).json({ error: err });
+
+  const id = (body.id && typeof body.id === 'string' && /^[a-zA-Z0-9_-]{1,64}$/.test(body.id))
+    ? body.id
+    : uuidv4();
+  const now = new Date().toISOString();
+  const aa = {
+    ...body,
+    id,
+    metadata: {
+      ...(body.metadata || {}),
+      created_at: body.metadata?.created_at || now,
+      updated_at: now
+    }
+  };
+
+  try {
+    await writeFile(join(AA_DIR, `${id}.json`), JSON.stringify(aa, null, 2), 'utf8');
+    return res.status(201).json({ id, url: `/texmkt/aa/${id}` });
+  } catch (e) {
+    return res.status(500).json({ error: e.message });
+  }
+});
+
 // --- GET /texmkt/aa/:id — full Agent Appeal JSON (agent-readable) ---
 app.get('/texmkt/aa/:id', async (req, res) => {
   const { id } = req.params;
