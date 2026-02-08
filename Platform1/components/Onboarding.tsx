@@ -10,9 +10,6 @@ interface OnboardingProps {
 
 const REQUIRED_TOP_LEVEL = ['name', 'type', 'category', 'provider', 'summary', 'problem_solved', 'capabilities', 'inputs_required', 'outputs_provided', 'pricing', 'integration', 'constraints', 'action'] as const;
 const PRODUCT_TYPES = ['software', 'service', 'api', 'dataset', 'tool', 'hardware'];
-const PRICING_MODELS = ['free', 'freemium', 'subscription', 'usage', 'one-time'];
-const ACCESS_TYPES = ['web', 'api', 'download'];
-const AUTH_TYPES = ['none', 'api_key', 'oauth'];
 
 function validateAndNormalizePaste(obj: unknown): { ok: true; aa: AgentAppeal } | { ok: false; error: string } {
   if (!obj || typeof obj !== 'object') return { ok: false, error: 'Invalid: not a JSON object' };
@@ -31,12 +28,12 @@ function validateAndNormalizePaste(obj: unknown): { ok: true; aa: AgentAppeal } 
   if (!provider?.name || typeof provider.name !== 'string') return { ok: false, error: 'provider.name is required (string)' };
   if (!provider?.website || typeof provider.website !== 'string') return { ok: false, error: 'provider.website is required (string)' };
   const pricing = raw.pricing as Record<string, unknown>;
-  if (!pricing?.model || !PRICING_MODELS.includes(pricing.model as string)) return { ok: false, error: `pricing.model must be one of: ${PRICING_MODELS.join(', ')}` };
+  if (!pricing?.model || typeof pricing.model !== 'string') return { ok: false, error: 'pricing.model is required (string)' };
   if (typeof pricing.free_tier !== 'boolean') return { ok: false, error: 'pricing.free_tier must be boolean' };
   if (typeof pricing.paid_tier !== 'boolean') return { ok: false, error: 'pricing.paid_tier must be boolean' };
   const integration = raw.integration as Record<string, unknown>;
-  if (!integration?.access || !ACCESS_TYPES.includes(integration.access as string)) return { ok: false, error: `integration.access must be one of: ${ACCESS_TYPES.join(', ')}` };
-  if (!integration?.authentication || !AUTH_TYPES.includes(integration.authentication as string)) return { ok: false, error: `integration.authentication must be one of: ${AUTH_TYPES.join(', ')}` };
+  if (!integration?.access || typeof integration.access !== 'string') return { ok: false, error: 'integration.access is required (string)' };
+  if (!integration?.authentication || typeof integration.authentication !== 'string') return { ok: false, error: 'integration.authentication is required (string)' };
   if (typeof integration.automation_friendly !== 'boolean') return { ok: false, error: 'integration.automation_friendly must be boolean' };
   const action = raw.action as Record<string, unknown>;
   if (!action?.learn_more || typeof action.learn_more !== 'string') return { ok: false, error: 'action.learn_more is required (string)' };

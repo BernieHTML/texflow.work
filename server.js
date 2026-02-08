@@ -58,6 +58,12 @@ app.get('/generate', (req, res) => res.redirect(301, '/texmkt/generate'));
 app.get('/upload', (req, res) => res.redirect(301, '/texmkt/upload'));
 app.get('/aa/:id', (req, res) => res.redirect(301, `/texmkt/aa/${req.params.id}`));
 
+// --- Root .well-known (discovery only; product catalog is at /platform1/.well-known/agent-catalog.json) ---
+app.get('/.well-known/ai.json', (req, res) => {
+  res.setHeader('Content-Type', 'application/json');
+  res.sendFile(join(__dirname, '.well-known', 'ai.json'));
+});
+
 // --- TexMKT .well-known (before static) ---
 app.get('/texmkt/.well-known/ai.json', (req, res) => {
   res.setHeader('Content-Type', 'application/json');
