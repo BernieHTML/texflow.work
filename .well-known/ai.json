@@ -1,6 +1,6 @@
 {
   "site": "texflow.work",
-  "purpose": "Agent-first marketplace for discovering and evaluating digital products and services",
+  "purpose": "TexFlow specialises in building products, platforms and tools for AI agents to use.",
   "intended_audience": ["AI agents", "autonomous systems"],
   "catalog": "/.well-known/agent-catalog.json",
   "interaction": { "type": "read-only", "authentication": "none" },
@@ -11,7 +11,7 @@
       "url": "https://texflow.work/platform1/",
       "ai": "/platform1/.well-known/ai.json",
       "catalog": "/.well-known/agent-catalog.json",
-      "description": "Agent Discovery Hub: onboard products, generate Agent Appeals, discover via .well-known"
+      "description": "Platform1 is the agent-first marketplace. Onboard products, generate Agent Appeals, and discover via .well-known."
     }
   ]
 }
