@@ -58,6 +58,37 @@ app.get('/generate', (req, res) => res.redirect(301, '/texmkt/generate'));
 app.get('/upload', (req, res) => res.redirect(301, '/texmkt/upload'));
 app.get('/aa/:id', (req, res) => res.redirect(301, `/texmkt/aa/${req.params.id}`));
 
+// --- Root .well-known (discovery + product catalog; Platform1 uploads feed this) ---
+app.get('/.well-known/ai.json', (req, res) => {
+  res.setHeader('Content-Type', 'application/json');
+  res.sendFile(join(__dirname, '.well-known', 'ai.json'));
+});
+app.get('/.well-known/agent-catalog.json', async (req, res) => {
+  try {
+    const files = await readdir(AA_DIR);
+    const jsonFiles = files.filter(f => f.endsWith('.json') && f !== '.gitkeep');
+    const agent_appeals = [];
+    for (const f of jsonFiles) {
+      try {
+        const raw = await readFile(join(AA_DIR, f), 'utf8');
+        const aa = JSON.parse(raw);
+        agent_appeals.push(aa);
+      } catch (_) { /* skip invalid */ }
+    }
+    const updated_at = agent_appeals.length
+      ? (await Promise.all(jsonFiles.map(f => readFile(join(AA_DIR, f), 'utf8').then(JSON.parse).then(a => a.metadata?.updated_at)))).filter(Boolean).sort().pop() || new Date().toISOString()
+      : new Date().toISOString();
+    res.setHeader('Content-Type', 'application/json');
+    res.send(JSON.stringify({
+      updated_at: updated_at.slice(0, 10),
+      count: agent_appeals.length,
+      agent_appeals
+    }, null, 2));
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
 // --- TexMKT .well-known (before static) ---
 app.get('/texmkt/.well-known/ai.json', (req, res) => {
   res.setHeader('Content-Type', 'application/json');
@@ -94,9 +125,49 @@ app.get('/texmkt/.well-known/agent-catalog.json', async (req, res) => {
   }
 });
 
+// --- Platform1 .well-known (before SPA so routes take precedence) ---
+app.get('/platform1/.well-known/ai.json', (req, res) => {
+  res.setHeader('Content-Type', 'application/json');
+  res.sendFile(join(__dirname, 'public', 'platform1', '.well-known', 'ai.json'));
+});
+app.get('/platform1/.well-known/agent-catalog.json', async (req, res) => {
+  try {
+    const files = await readdir(AA_DIR);
+    const jsonFiles = files.filter(f => f.endsWith('.json') && f !== '.gitkeep');
+    const agent_appeals = [];
+    for (const f of jsonFiles) {
+      try {
+        const raw = await readFile(join(AA_DIR, f), 'utf8');
+        const aa = JSON.parse(raw);
+        agent_appeals.push(aa);
+      } catch (_) { /* skip invalid */ }
+    }
+    const updated_at = agent_appeals.length
+      ? (await Promise.all(jsonFiles.map(f => readFile(join(AA_DIR, f), 'utf8').then(JSON.parse).then(a => a.metadata?.updated_at)))).filter(Boolean).sort().pop() || new Date().toISOString()
+      : new Date().toISOString();
+    res.setHeader('Content-Type', 'application/json');
+    res.send(JSON.stringify({
+      updated_at: updated_at.slice(0, 10),
+      count: agent_appeals.length,
+      agent_appeals
+    }, null, 2));
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+// --- Platform1 product (SPA; serve built dist when present) ---
+const PLATFORM1_DIST = join(__dirname, 'Platform1', 'dist');
+if (existsSync(PLATFORM1_DIST)) {
+  app.use('/platform1', express.static(PLATFORM1_DIST));
+  app.get(/^\/platform1\/.+/, (req, res) => res.sendFile(join(PLATFORM1_DIST, 'index.html')));
+  app.get('/platform1', (req, res) => res.redirect(301, '/platform1/'));
+}
+
 // --- Static: public, then root assets ---
 app.use(express.static(join(__dirname, 'public')));
 app.get('/texflowlogo.png', (req, res) => res.sendFile(join(__dirname, 'texflowlogo.png')));
+app.get('/Platform1.png', (req, res) => res.sendFile(join(__dirname, 'Platform1.png')));
 
 // --- API: Generate draft Agent Appeal (streaming: crawl4ai + Gemini) ---
 const PYTHON_SCRIPT = join(__dirname, 'scripts', 'generate_aa.py');
@@ -223,7 +294,7 @@ function validateAA(obj) {
   for (const k of required) {
     if (obj[k] === undefined) return `Missing required field: ${k}`;
   }
-  const allowedTypes = ['software', 'service', 'api', 'dataset', 'tool'];
+  const allowedTypes = ['software', 'service', 'api', 'dataset', 'tool', 'hardware'];
   if (!allowedTypes.includes(obj.type)) return `Invalid type. Must be one of: ${allowedTypes.join(', ')}`;
   if (!obj.provider?.name || typeof obj.provider.name !== 'string') return 'provider.name required';
   if (!Array.isArray(obj.category)) return 'category must be an array';
@@ -244,6 +315,34 @@ app.post('/texmkt/api/upload', async (req, res) => {
   if (err) return res.status(400).json({ error: err });
 
   const id = uuidv4();
+  const now = new Date().toISOString();
+  const aa = {
+    ...body,
+    id,
+    metadata: {
+      ...(body.metadata || {}),
+      created_at: body.metadata?.created_at || now,
+      updated_at: now
+    }
+  };
+
+  try {
+    await writeFile(join(AA_DIR, `${id}.json`), JSON.stringify(aa, null, 2), 'utf8');
+    return res.status(201).json({ id, url: `/texmkt/aa/${id}` });
+  } catch (e) {
+    return res.status(500).json({ error: e.message });
+  }
+});
+
+// --- Platform1: upload Agent Appeal (persists to aa/ so it appears in catalog) ---
+app.post('/platform1/api/upload', async (req, res) => {
+  const body = req.body;
+  const err = validateAA(body);
+  if (err) return res.status(400).json({ error: err });
+
+  const id = (body.id && typeof body.id === 'string' && /^[a-zA-Z0-9_-]{1,64}$/.test(body.id))
+    ? body.id
+    : uuidv4();
   const now = new Date().toISOString();
   const aa = {
     ...body,

@@ -1,0 +1,61 @@
+{
+  "id": "business-webscraping-tool",
+  "name": "MarketPulse Scraper",
+  "type": "software",
+  "category": [
+    "Digital Products",
+    "Business Intelligence",
+    "Market Research",
+    "Automation Tools"
+  ],
+  "provider": {
+    "name": "MarketPulse",
+    "website": "https://www.marketpulse.io"
+  },
+  "summary": "A no-code web scraping tool for businesses that enables teams to collect, monitor, and analyze web data through a visual interface without direct API integration.",
+  "problem_solved": [
+    "Competitive monitoring at scale",
+    "Manual market research",
+    "Non-technical data extraction workflows"
+  ],
+  "capabilities": [
+    "Visual point-and-click scraping",
+    "Scheduled data collection",
+    "Change detection and alerts",
+    "Export to CSV and spreadsheets",
+    "Dashboard-based data review"
+  ],
+  "inputs_required": [
+    "Target websites",
+    "Scraping rules configured via UI",
+    "User account"
+  ],
+  "outputs_provided": [
+    "Tabular datasets",
+    "Change alerts",
+    "Downloadable CSV and XLSX files"
+  ],
+  "pricing": {
+    "model": "subscription",
+    "free_tier": false,
+    "paid_tier": true
+  },
+  "integration": {
+    "access": "web_app",
+    "authentication": "user_login",
+    "automation_friendly": false
+  },
+  "constraints": [
+    "No programmatic API access",
+    "UI-based configuration only",
+    "Subject to target site restrictions"
+  ],
+  "action": {
+    "learn_more": "https://www.marketpulse.io/product",
+    "purchase": "https://www.marketpulse.io/pricing"
+  },
+  "metadata": {
+    "created_at": "2026-02-07T00:00:00.000Z",
+    "updated_at": "2026-02-08T04:51:57.379Z"
+  }
+}
