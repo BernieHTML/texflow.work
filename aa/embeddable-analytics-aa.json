@@ -1,0 +1,53 @@
+{
+  "id": "embeddable-analytics-aa",
+  "name": "Embeddable Analytics",
+  "type": "api",
+  "category": [
+    "Analytics",
+    "Developer Tools"
+  ],
+  "provider": {
+    "name": "Embeddable",
+    "website": "https://embeddable.com"
+  },
+  "summary": "An embeddable analytics platform that allows developers to integrate interactive dashboards and data visualisations directly into applications without iframes.",
+  "problem_solved": [
+    "Embedding analytics into applications",
+    "Building custom dashboards from scratch"
+  ],
+  "capabilities": [
+    "Embeddable dashboards",
+    "SDK integration",
+    "Data visualisation"
+  ],
+  "inputs_required": [
+    "Project configuration",
+    "Data source connection"
+  ],
+  "outputs_provided": [
+    "Interactive dashboards",
+    "Charts and analytics views"
+  ],
+  "pricing": {
+    "model": "subscription",
+    "free_tier": false,
+    "paid_tier": true
+  },
+  "integration": {
+    "access": "api",
+    "authentication": "api_key",
+    "automation_friendly": true
+  },
+  "constraints": [
+    "Requires supported data sources",
+    "Usage limits based on plan"
+  ],
+  "action": {
+    "learn_more": "https://embeddable.com/docs",
+    "purchase": "https://embeddable.com/pricing"
+  },
+  "metadata": {
+    "created_at": "2026-02-07T00:00:00.000Z",
+    "updated_at": "2026-02-07T00:00:00.000Z"
+  }
+}

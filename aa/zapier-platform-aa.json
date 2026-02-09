@@ -1,0 +1,53 @@
+{
+  "id": "zapier-platform-aa",
+  "name": "Zapier Platform API",
+  "type": "api",
+  "category": [
+    "Automation",
+    "Integration"
+  ],
+  "provider": {
+    "name": "Zapier",
+    "website": "https://zapier.com"
+  },
+  "summary": "An automation platform API that enables applications and agents to connect workflows across thousands of third-party services.",
+  "problem_solved": [
+    "Cross-service automation",
+    "Manual workflow repetition"
+  ],
+  "capabilities": [
+    "Workflow automation",
+    "Trigger-action pipelines",
+    "Third-party integrations"
+  ],
+  "inputs_required": [
+    "API key",
+    "Workflow configuration"
+  ],
+  "outputs_provided": [
+    "Executed automations",
+    "Task execution results"
+  ],
+  "pricing": {
+    "model": "freemium",
+    "free_tier": true,
+    "paid_tier": true
+  },
+  "integration": {
+    "access": "api",
+    "authentication": "api_key",
+    "automation_friendly": true
+  },
+  "constraints": [
+    "Task limits apply",
+    "Rate limits vary by plan"
+  ],
+  "action": {
+    "learn_more": "https://platform.zapier.com/docs",
+    "purchase": "https://zapier.com/pricing"
+  },
+  "metadata": {
+    "created_at": "2026-02-07T00:00:00.000Z",
+    "updated_at": "2026-02-07T00:00:00.000Z"
+  }
+}

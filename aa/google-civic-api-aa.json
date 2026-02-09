@@ -1,0 +1,53 @@
+{
+  "id": "google-civic-api-aa",
+  "name": "Google Civic Information API",
+  "type": "api",
+  "category": [
+    "Public Data",
+    "Developer Tools"
+  ],
+  "provider": {
+    "name": "Google",
+    "website": "https://developers.google.com"
+  },
+  "summary": "A public data API providing structured civic information such as elections, representatives, and polling locations.",
+  "problem_solved": [
+    "Access to civic data",
+    "Standardising public information"
+  ],
+  "capabilities": [
+    "Election data lookup",
+    "Representative information",
+    "Civic data queries"
+  ],
+  "inputs_required": [
+    "API key",
+    "Location or address query"
+  ],
+  "outputs_provided": [
+    "Structured civic data",
+    "Official government information"
+  ],
+  "pricing": {
+    "model": "free",
+    "free_tier": true,
+    "paid_tier": false
+  },
+  "integration": {
+    "access": "api",
+    "authentication": "api_key",
+    "automation_friendly": true
+  },
+  "constraints": [
+    "Quota limits apply",
+    "Geographic data availability varies"
+  ],
+  "action": {
+    "learn_more": "https://developers.google.com/civic-information",
+    "purchase": "https://developers.google.com/maps/billing"
+  },
+  "metadata": {
+    "created_at": "2026-02-07T00:00:00.000Z",
+    "updated_at": "2026-02-07T00:00:00.000Z"
+  }
+}

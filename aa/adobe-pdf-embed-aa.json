@@ -1,0 +1,53 @@
+{
+  "id": "adobe-pdf-embed-aa",
+  "name": "Adobe PDF Embed API",
+  "type": "api",
+  "category": [
+    "Documents",
+    "Developer Tools"
+  ],
+  "provider": {
+    "name": "Adobe",
+    "website": "https://www.adobe.com"
+  },
+  "summary": "An API for embedding and interacting with PDF documents directly inside web applications with viewing and annotation capabilities.",
+  "problem_solved": [
+    "PDF viewing in web apps",
+    "Document interaction without downloads"
+  ],
+  "capabilities": [
+    "PDF rendering",
+    "Annotations",
+    "Document controls"
+  ],
+  "inputs_required": [
+    "Client ID",
+    "PDF document URL or file"
+  ],
+  "outputs_provided": [
+    "Embedded PDF viewer",
+    "User interaction events"
+  ],
+  "pricing": {
+    "model": "freemium",
+    "free_tier": true,
+    "paid_tier": true
+  },
+  "integration": {
+    "access": "api",
+    "authentication": "api_key",
+    "automation_friendly": true
+  },
+  "constraints": [
+    "Domain restrictions",
+    "Usage limits apply"
+  ],
+  "action": {
+    "learn_more": "https://developer.adobe.com/document-services/docs/",
+    "purchase": "https://developer.adobe.com/document-services/pricing/"
+  },
+  "metadata": {
+    "created_at": "2026-02-07T00:00:00.000Z",
+    "updated_at": "2026-02-07T00:00:00.000Z"
+  }
+}
