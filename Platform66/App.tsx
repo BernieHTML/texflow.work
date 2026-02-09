@@ -4,19 +4,19 @@ import LandingPage from './components/LandingPage';
 import Onboarding from './components/Onboarding';
 import Catalog from './components/Catalog';
 import WellKnownPreview from './components/WellKnownPreview';
-import { AgentAppeal, Platform1AiJson, AgentCatalogResponse } from './types';
+import { AgentAppeal, Platform66AiJson, AgentCatalogResponse } from './types';
 
-const WELL_KNOWN_BASE = '/platform1/.well-known';
+const WELL_KNOWN_BASE = '/platform66/.well-known';
 const CATALOG_URL = '/.well-known/agent-catalog.json';
 
 const App: React.FC = () => {
   const [currentPath, setCurrentPath] = useState('/');
   const [localAppeals, setLocalAppeals] = useState<AgentAppeal[]>([]);
-  const [aiDescriptor, setAiDescriptor] = useState<Platform1AiJson | null>(null);
+  const [aiDescriptor, setAiDescriptor] = useState<Platform66AiJson | null>(null);
   const [catalogResponse, setCatalogResponse] = useState<AgentCatalogResponse | null>(null);
   const [wellKnownLoading, setWellKnownLoading] = useState(true);
 
-  // Fetch Platform1 ai descriptor and root product catalog
+  // Fetch Platform66 ai descriptor and root product catalog
   useEffect(() => {
     let cancelled = false;
     setWellKnownLoading(true);
@@ -25,7 +25,7 @@ const App: React.FC = () => {
       fetch(CATALOG_URL).then(r => r.ok ? r.json() : null)
     ]).then(([ai, catalog]) => {
       if (cancelled) return;
-      setAiDescriptor(ai as Platform1AiJson | null);
+      setAiDescriptor(ai as Platform66AiJson | null);
       setCatalogResponse(catalog as AgentCatalogResponse | null);
     }).catch(() => {}).finally(() => {
       if (!cancelled) setWellKnownLoading(false);
@@ -35,7 +35,7 @@ const App: React.FC = () => {
 
   // Initialize local appeals from LocalStorage (user-onboarded only)
   useEffect(() => {
-    const saved = localStorage.getItem('p1-appeals');
+    const saved = localStorage.getItem('p66-appeals');
     if (saved) {
       try {
         setLocalAppeals(JSON.parse(saved));
@@ -57,13 +57,13 @@ const App: React.FC = () => {
   // Save local appeals to LocalStorage
   useEffect(() => {
     if (localAppeals.length > 0) {
-      localStorage.setItem('p1-appeals', JSON.stringify(localAppeals));
+      localStorage.setItem('p66-appeals', JSON.stringify(localAppeals));
     }
   }, [localAppeals]);
 
   const handleAASaved = async (aa: AgentAppeal) => {
     try {
-      const res = await fetch('/platform1/api/upload', {
+      const res = await fetch('/platform66/api/upload', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(aa),
@@ -123,7 +123,7 @@ const App: React.FC = () => {
           <div className="w-1.5 h-1.5 rounded-full bg-indigo-500/50"></div>
           <div className="w-1.5 h-1.5 rounded-full bg-slate-800"></div>
         </div>
-        <p className="text-slate-600 text-xs mono uppercase tracking-[0.2em]">Platform1 • Built for Autonomous Futures</p>
+        <p className="text-slate-600 text-xs mono uppercase tracking-[0.2em]">Platform66 • Built for Autonomous Futures</p>
       </footer>
     </div>
   );

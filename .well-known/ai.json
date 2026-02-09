@@ -6,12 +6,12 @@
   "interaction": { "type": "read-only", "authentication": "none" },
   "products": [
     {
-      "id": "platform1",
-      "name": "Platform1",
-      "url": "https://texflow.work/platform1/",
-      "ai": "/platform1/.well-known/ai.json",
+      "id": "platform66",
+      "name": "Platform66",
+      "url": "https://texflow.work/platform66/",
+      "ai": "/platform66/.well-known/ai.json",
       "catalog": "/.well-known/agent-catalog.json",
-      "description": "Platform1 is the agent-first marketplace. Onboard products, generate Agent Appeals, and discover via .well-known."
+      "description": "Platform66 is the agent-first marketplace. Onboard products, generate Agent Appeals, and discover via .well-known."
     }
   ]
 }

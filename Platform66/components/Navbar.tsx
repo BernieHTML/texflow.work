@@ -19,10 +19,10 @@ const Navbar: React.FC<NavbarProps> = ({ onNavigate, currentPath }) => {
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center gap-3 cursor-pointer" onClick={() => onNavigate('/')}>
             <div className="h-12 w-12 rounded-full overflow-hidden ring-2 ring-slate-700/80 flex-shrink-0 bg-slate-900 flex items-center justify-center">
-              <img src="/Platform1.png" alt="Platform1" className="h-full w-full object-cover" />
+              <img src="/Platform66.png" alt="Platform66" className="h-full w-full object-cover" />
             </div>
             <span className="text-xl font-bold bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent">
-              Platform1
+              Platform66
             </span>
           </div>
           <div className="hidden md:flex items-center gap-6">

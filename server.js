@@ -58,7 +58,7 @@ app.get('/generate', (req, res) => res.redirect(301, '/texmkt/generate'));
 app.get('/upload', (req, res) => res.redirect(301, '/texmkt/upload'));
 app.get('/aa/:id', (req, res) => res.redirect(301, `/texmkt/aa/${req.params.id}`));
 
-// --- Root .well-known (discovery + product catalog; Platform1 uploads feed this) ---
+// --- Root .well-known (discovery + product catalog; Platform66 uploads feed this) ---
 app.get('/.well-known/ai.json', (req, res) => {
   res.setHeader('Content-Type', 'application/json');
   res.sendFile(join(__dirname, '.well-known', 'ai.json'));
@@ -125,12 +125,12 @@ app.get('/texmkt/.well-known/agent-catalog.json', async (req, res) => {
   }
 });
 
-// --- Platform1 .well-known (before SPA so routes take precedence) ---
-app.get('/platform1/.well-known/ai.json', (req, res) => {
+// --- Platform66 .well-known (before SPA so routes take precedence) ---
+app.get('/platform66/.well-known/ai.json', (req, res) => {
   res.setHeader('Content-Type', 'application/json');
-  res.sendFile(join(__dirname, 'public', 'platform1', '.well-known', 'ai.json'));
+  res.sendFile(join(__dirname, 'public', 'platform66', '.well-known', 'ai.json'));
 });
-app.get('/platform1/.well-known/agent-catalog.json', async (req, res) => {
+app.get('/platform66/.well-known/agent-catalog.json', async (req, res) => {
   try {
     const files = await readdir(AA_DIR);
     const jsonFiles = files.filter(f => f.endsWith('.json') && f !== '.gitkeep');
@@ -156,18 +156,18 @@ app.get('/platform1/.well-known/agent-catalog.json', async (req, res) => {
   }
 });
 
-// --- Platform1 product (SPA; serve built dist when present) ---
-const PLATFORM1_DIST = join(__dirname, 'Platform1', 'dist');
-if (existsSync(PLATFORM1_DIST)) {
-  app.use('/platform1', express.static(PLATFORM1_DIST));
-  app.get(/^\/platform1\/.+/, (req, res) => res.sendFile(join(PLATFORM1_DIST, 'index.html')));
-  app.get('/platform1', (req, res) => res.redirect(301, '/platform1/'));
+// --- Platform66 product (SPA; serve built dist when present) ---
+const PLATFORM66_DIST = join(__dirname, 'Platform66', 'dist');
+if (existsSync(PLATFORM66_DIST)) {
+  app.use('/platform66', express.static(PLATFORM66_DIST));
+  app.get(/^\/platform66\/.+/, (req, res) => res.sendFile(join(PLATFORM66_DIST, 'index.html')));
+  app.get('/platform66', (req, res) => res.redirect(301, '/platform66/'));
 }
 
 // --- Static: public, then root assets ---
 app.use(express.static(join(__dirname, 'public')));
 app.get('/texflowlogo.png', (req, res) => res.sendFile(join(__dirname, 'texflowlogo.png')));
-app.get('/Platform1.png', (req, res) => res.sendFile(join(__dirname, 'Platform1.png')));
+app.get('/Platform66.png', (req, res) => res.sendFile(join(__dirname, 'Platform66.png')));
 
 // --- API: Generate draft Agent Appeal (streaming: crawl4ai + Gemini) ---
 const PYTHON_SCRIPT = join(__dirname, 'scripts', 'generate_aa.py');
@@ -334,8 +334,8 @@ app.post('/texmkt/api/upload', async (req, res) => {
   }
 });
 
-// --- Platform1: upload Agent Appeal (persists to aa/ so it appears in catalog) ---
-app.post('/platform1/api/upload', async (req, res) => {
+// --- Platform66: upload Agent Appeal (persists to aa/ so it appears in catalog) ---
+app.post('/platform66/api/upload', async (req, res) => {
   const body = req.body;
   const err = validateAA(body);
   if (err) return res.status(400).json({ error: err });

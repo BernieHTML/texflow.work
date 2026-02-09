@@ -6,13 +6,13 @@
 
 - **TexFlow** — Brand; homepage at `/`.
 - **TexMKT** — Agent Appeal generation and public Agent Catalog. All under `/texmkt/`.
-- **Platform1** — Agent Discovery Hub (Vy/agent onboarding, catalog, .well-known preview). SPA at `/platform1/`.
+- **Platform66** — Agent Discovery Hub (Vy/agent onboarding, catalog, .well-known preview). SPA at `/platform66/`.
 
 ## Features
 
-- **Home** (`/`) — TexFlow brand landing; links to TexMKT and Platform1.
+- **Home** (`/`) — TexFlow brand landing; links to TexMKT and Platform66.
 - **TexMKT** (`/texmkt/`) — Product landing for the Agent-First Marketplace.
-- **Platform1** (`/platform1/`) — Client-side Agent Discovery Hub: onboard products (Gemini-powered AA), catalog, .well-known preview. Build with `npm run build:platform1`; then the server serves it from `Platform1/dist`.
+- **Platform66** (`/platform66/`) — Client-side Agent Discovery Hub: onboard products (Gemini-powered AA), catalog, .well-known preview. Build with `npm run build:platform66`; then the server serves it from `Platform66/dist`.
 - **Generate** (`/texmkt/generate`) — Enter a URL → Crawl4AI + Gemini → draft Agent Appeal → edit → publish (live status).
 - **Publish** (`/texmkt/upload`) — Paste validated AA JSON → publish to catalog.
 - **Catalog** — Full AA at `/texmkt/aa/:id`; discovery at `/texmkt/.well-known/agent-catalog.json`.
@@ -38,7 +38,7 @@ python -m playwright install   # one-time: Chromium for Crawl4AI
 ```
 Set `GOOGLE_AI_API_KEY` in project root `.env`. Chromium installs automatically on first generate; on Linux you may need `sudo python -m playwright install-deps`.
 
-To include **Platform1**, build it once: `npm run build:platform1`. Then open http://localhost:5001 (or your configured PORT).
+To include **Platform66**, build it once: `npm run build:platform66`. Then open http://localhost:5001 (or your configured PORT).
 
 ## Deploy on VPS (public internet)
 
@@ -88,10 +88,10 @@ To include **Platform1**, build it once: `npm run build:platform1`. Then open ht
 
 **Production URLs (texflow.work)** — The codebase is configured for **https://texflow.work**:
 - Homepage: `https://texflow.work/`
-- Platform1: `https://texflow.work/platform1/`
+- Platform66: `https://texflow.work/platform66/`
 - Discovery: `https://texflow.work/.well-known/ai.json`
 - Product catalog: `https://texflow.work/.well-known/agent-catalog.json`
-- Platform1 API upload: `https://texflow.work/platform1/api/upload`
+- Platform66 API upload: `https://texflow.work/platform66/api/upload`
 All canonical, Open Graph and Twitter meta tags, and `.well-known/ai.json` product URLs use this domain. In-app links use relative paths so they resolve correctly on the deployed host.
 
 ## Project structure
@@ -100,8 +100,8 @@ All canonical, Open Graph and Twitter meta tags, and `.well-known/ai.json` produ
 /
 ├── server.js
 ├── package.json
-├── Platform1/               # Agent Discovery Hub (Vite/React SPA)
-│   ├── dist/                # built output (after npm run build:platform1)
+├── Platform66/               # Agent Discovery Hub (Vite/React SPA)
+│   ├── dist/                # built output (after npm run build:platform66)
 │   ├── components/
 │   └── ...
 ├── public/

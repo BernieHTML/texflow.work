@@ -44,8 +44,8 @@ export interface CatalogEntry {
   products: AgentAppeal[];
 }
 
-/** Platform1 /.well-known/ai.json descriptor */
-export interface Platform1AiJson {
+/** Platform66 /.well-known/ai.json descriptor */
+export interface Platform66AiJson {
   site: string;
   product: string;
   purpose: string;

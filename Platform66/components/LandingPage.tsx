@@ -21,7 +21,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onStart }) => {
             Bridge your product to the <span className="text-indigo-500">Agentic Economy</span>.
           </h1>
           <p className="mt-6 text-lg leading-8 text-slate-300">
-            Platform1 provides a standardized infrastructure for AI agents like Vy (Vercept) to find, evaluate, and integrate your products directly into user workflows.
+            Platform66 provides a standardized infrastructure for AI agents like Vy (Vercept) to find, evaluate, and integrate your products directly into user workflows.
           </p>
           <div className="mt-10 flex items-center gap-x-6">
             <button

@@ -1,7 +1,7 @@
 import { AgentAppeal } from '../types';
 
 /**
- * Example Agent Appeal in the exact schema format required by Platform1.
+ * Example Agent Appeal in the exact schema format required by Platform66.
  * Use as reference when pasting or constructing an AA manually.
  */
 export const EXAMPLE_AGENT_APPEAL: AgentAppeal = {
