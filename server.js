@@ -79,6 +79,7 @@ app.get('/.well-known/agent-catalog.json', async (req, res) => {
       ? (await Promise.all(jsonFiles.map(f => readFile(join(AA_DIR, f), 'utf8').then(JSON.parse).then(a => a.metadata?.updated_at)))).filter(Boolean).sort().pop() || new Date().toISOString()
       : new Date().toISOString();
     res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
     res.send(JSON.stringify({
       updated_at: updated_at.slice(0, 10),
       count: agent_appeals.length,
@@ -115,6 +116,7 @@ app.get('/texmkt/.well-known/agent-catalog.json', async (req, res) => {
       ? (await Promise.all(jsonFiles.map(f => readFile(join(AA_DIR, f), 'utf8').then(JSON.parse).then(a => a.metadata?.updated_at)))).filter(Boolean).sort().pop() || new Date().toISOString()
       : new Date().toISOString();
     res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
     res.send(JSON.stringify({
       updated_at: updated_at.slice(0, 10),
       count: agent_appeals.length,
@@ -146,6 +148,7 @@ app.get('/platform66/.well-known/agent-catalog.json', async (req, res) => {
       ? (await Promise.all(jsonFiles.map(f => readFile(join(AA_DIR, f), 'utf8').then(JSON.parse).then(a => a.metadata?.updated_at)))).filter(Boolean).sort().pop() || new Date().toISOString()
       : new Date().toISOString();
     res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
     res.send(JSON.stringify({
       updated_at: updated_at.slice(0, 10),
       count: agent_appeals.length,
@@ -156,11 +159,39 @@ app.get('/platform66/.well-known/agent-catalog.json', async (req, res) => {
   }
 });
 
+// --- Platform66: upload Agent Appeal (persists to aa/ so it appears in catalog) ---
+app.post('/platform66/api/upload', async (req, res) => {
+  const body = req.body;
+  const err = validateAA(body);
+  if (err) return res.status(400).json({ error: err });
+
+  const id = (body.id && typeof body.id === 'string' && /^[a-zA-Z0-9_-]{1,64}$/.test(body.id))
+    ? body.id
+    : uuidv4();
+  const now = new Date().toISOString();
+  const aa = {
+    ...body,
+    id,
+    metadata: {
+      ...(body.metadata || {}),
+      created_at: body.metadata?.created_at || now,
+      updated_at: now
+    }
+  };
+
+  try {
+    await writeFile(join(AA_DIR, `${id}.json`), JSON.stringify(aa, null, 2), 'utf8');
+    return res.status(201).json({ id, url: `/texmkt/aa/${id}` });
+  } catch (e) {
+    return res.status(500).json({ error: e.message });
+  }
+});
+
 // --- Platform66 product (SPA; serve built dist when present) ---
 const PLATFORM66_DIST = join(__dirname, 'Platform66', 'dist');
 if (existsSync(PLATFORM66_DIST)) {
   app.use('/platform66', express.static(PLATFORM66_DIST));
-  app.get(/^\/platform66\/.+/, (req, res) => res.sendFile(join(PLATFORM66_DIST, 'index.html')));
+  app.get(/^\/platform66\/(?!\.well-known|api\/).+/, (req, res) => res.sendFile(join(PLATFORM66_DIST, 'index.html')));
   app.get('/platform66', (req, res) => res.redirect(301, '/platform66/'));
 }
 
@@ -315,34 +346,6 @@ app.post('/texmkt/api/upload', async (req, res) => {
   if (err) return res.status(400).json({ error: err });
 
   const id = uuidv4();
-  const now = new Date().toISOString();
-  const aa = {
-    ...body,
-    id,
-    metadata: {
-      ...(body.metadata || {}),
-      created_at: body.metadata?.created_at || now,
-      updated_at: now
-    }
-  };
-
-  try {
-    await writeFile(join(AA_DIR, `${id}.json`), JSON.stringify(aa, null, 2), 'utf8');
-    return res.status(201).json({ id, url: `/texmkt/aa/${id}` });
-  } catch (e) {
-    return res.status(500).json({ error: e.message });
-  }
-});
-
-// --- Platform66: upload Agent Appeal (persists to aa/ so it appears in catalog) ---
-app.post('/platform66/api/upload', async (req, res) => {
-  const body = req.body;
-  const err = validateAA(body);
-  if (err) return res.status(400).json({ error: err });
-
-  const id = (body.id && typeof body.id === 'string' && /^[a-zA-Z0-9_-]{1,64}$/.test(body.id))
-    ? body.id
-    : uuidv4();
   const now = new Date().toISOString();
   const aa = {
     ...body,
