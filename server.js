@@ -11,6 +11,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const app = express();
 const PORT = process.env.PORT || 5001;
 const AA_DIR = join(__dirname, 'aa');
+const COMMUNIFLOW_FILE = join(__dirname, 'data', 'communiflow.json');
 
 const AGENT_APPEAL_SCHEMA = {
   id: 'string',
@@ -33,8 +34,12 @@ const AGENT_APPEAL_SCHEMA = {
 app.use(express.json({ limit: '1mb' }));
 app.use(express.urlencoded({ extended: true }));
 
-// Ensure aa directory exists
+// Ensure aa and data directories exist
 await mkdir(AA_DIR, { recursive: true });
+await mkdir(dirname(COMMUNIFLOW_FILE), { recursive: true });
+if (!existsSync(COMMUNIFLOW_FILE)) {
+  await writeFile(COMMUNIFLOW_FILE, JSON.stringify({ updated_at: new Date().toISOString(), visits: [] }, null, 2), 'utf8');
+}
 
 // Log requests to TexMKT .well-known
 app.use((req, res, next) => {
@@ -57,6 +62,10 @@ app.get('/texmkt/upload', (req, res) => res.sendFile(join(__dirname, 'public', '
 app.get('/generate', (req, res) => res.redirect(301, '/texmkt/generate'));
 app.get('/upload', (req, res) => res.redirect(301, '/texmkt/upload'));
 app.get('/aa/:id', (req, res) => res.redirect(301, `/texmkt/aa/${req.params.id}`));
+
+// --- Communiflow page (server test) ---
+app.get('/communiflow', (req, res) => res.sendFile(join(__dirname, 'public', 'communiflow.html')));
+app.get('/communiflow/', (req, res) => res.redirect(301, '/communiflow'));
 
 // --- Root .well-known (discovery + product catalog; Platform66 uploads feed this) ---
 app.get('/.well-known/ai.json', (req, res) => {
@@ -84,6 +93,40 @@ app.get('/.well-known/agent-catalog.json', async (req, res) => {
       count: agent_appeals.length,
       agent_appeals
     }, null, 2));
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+// --- Communiflow: visit counter (server test; .well-known + API) ---
+app.get('/.well-known/communiflow.json', async (req, res) => {
+  try {
+    const raw = await readFile(COMMUNIFLOW_FILE, 'utf8');
+    const data = JSON.parse(raw);
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    res.send(JSON.stringify({
+      updated_at: data.updated_at || new Date().toISOString(),
+      count: (data.visits || []).length,
+      visits: (data.visits || []).map(v => ({ timestamp: v.timestamp })),
+    }, null, 2));
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+app.post('/api/communiflow', async (req, res) => {
+  try {
+    let data = { updated_at: new Date().toISOString(), visits: [] };
+    if (existsSync(COMMUNIFLOW_FILE)) {
+      const raw = await readFile(COMMUNIFLOW_FILE, 'utf8');
+      data = JSON.parse(raw);
+      if (!Array.isArray(data.visits)) data.visits = [];
+    }
+    data.visits.push({ timestamp: new Date().toISOString() });
+    data.updated_at = new Date().toISOString();
+    await writeFile(COMMUNIFLOW_FILE, JSON.stringify(data, null, 2), 'utf8');
+    res.setHeader('Content-Type', 'application/json');
+    res.status(201).json({ ok: true, count: data.visits.length });
   } catch (e) {
     res.status(500).json({ error: e.message });
   }
