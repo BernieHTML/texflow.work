@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Communiflow — TexFlow</title>
+  <meta name="description" content="Record that you visited texflow.work. Server test feature.">
+  <link rel="icon" href="/texflowlogo.png" type="image/png">
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    .communiflow { max-width: 420px; margin: 4rem auto; padding: 2rem; text-align: center; }
+    .communiflow h1 { font-family: 'Outfit', sans-serif; font-size: 1.5rem; margin-bottom: 0.5rem; }
+    .communiflow p { color: var(--muted, #666); margin-bottom: 1.5rem; font-size: 0.95rem; }
+    .btn-visit { display: inline-block; padding: 0.75rem 1.5rem; background: var(--accent, #0d9488); color: #fff; border: none; border-radius: 8px; font-family: inherit; font-size: 1rem; font-weight: 500; cursor: pointer; }
+    .btn-visit:hover { opacity: 0.9; }
+    .btn-visit:disabled { opacity: 0.6; cursor: not-allowed; }
+    .feedback { margin-top: 1rem; min-height: 1.5em; font-size: 0.9rem; }
+    .feedback.success { color: var(--accent, #0d9488); }
+    .feedback.error { color: #b91c1c; }
+    .link-json { margin-top: 2rem; font-size: 0.85rem; }
+    .link-json a { color: var(--accent); }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="header">
+      <a href="/" class="logo-wrap">
+        <span class="logo-circle">
+          <img src="/texflowlogo.png" alt="TexFlow" class="logo" width="48" height="48">
+        </span>
+        <span class="logo-text">TexFlow</span>
+      </a>
+      <nav class="nav">
+        <a href="/platform66/">Platform66</a>
+        <a href="/">Home</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="communiflow">
+        <h1>Communiflow</h1>
+        <p>Click below to record that you visited texflow.work. Timestamps are stored on the server and appear at <code>/.well-known/communiflow.json</code>.</p>
+        <button type="button" class="btn-visit" id="btn-visit">I visited texflow.work</button>
+        <div class="feedback" id="feedback" aria-live="polite"></div>
+        <div class="link-json">
+          <a href="/.well-known/communiflow.json">View /.well-known/communiflow.json</a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer" style="margin-top: 3rem;">
+      <a href="/">TexFlow</a>
+      <a href="/.well-known/ai.json">.well-known/ai.json</a>
+    </footer>
+  </div>
+
+  <script>
+    (function () {
+      const btn = document.getElementById('btn-visit');
+      const feedback = document.getElementById('feedback');
+      function setFeedback(msg, isError) {
+        feedback.textContent = msg;
+        feedback.className = 'feedback ' + (isError ? 'error' : 'success');
+      }
+      btn.addEventListener('click', async function () {
+        btn.disabled = true;
+        setFeedback('Recording…', false);
+        try {
+          const res = await fetch('/api/communiflow', { method: 'POST', headers: { 'Content-Type': 'application/json' } });
+          const data = await res.json().catch(() => ({}));
+          if (res.ok) {
+            setFeedback('Recorded. Total visits: ' + (data.count ?? '—'), false);
+          } else {
+            setFeedback('Error: ' + (data.error || res.statusText), true);
+          }
+        } catch (e) {
+          setFeedback('Network error: ' + e.message, true);
+        }
+        btn.disabled = false;
+      });
+    })();
+  </script>
+</body>
+</html>
