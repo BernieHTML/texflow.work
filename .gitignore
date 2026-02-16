@@ -1,6 +1,47 @@
+# Dependencies
 node_modules/
+.pnpm-store/
+
+# Build outputs
+dist/
+.next/
+out/
+*.tsbuildinfo
+
+# Environment
 .env
+.env.local
+.env.*.local
+
+# Logs
 *.log
+npm-debug.log*
+pnpm-debug.log*
+
+# OS
 .DS_Store
-scripts/.venv/
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Testing
+coverage/
+.nyc_output/
+
+# Misc
+*.pem
+.vercel
+.turbo
+
+# Legacy / data
 data/
+scripts/.venv/
+aa/
+
+# Large assets (optional - uncomment if not needed)
+# mars-hero.mp4
+# *.png

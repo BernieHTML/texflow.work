@@ -1,0 +1,327 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Merchant {
+  id                String   @id @default(cuid())
+  businessName      String
+  website           String   @unique
+  industry          String?
+  apiKey            String   @unique
+  apiSecret         String
+  plan              Plan     @default(FREE)
+  stripeCustomerId  String?  @unique
+
+  email             String
+  phone             String?
+  supportEmail      String?
+
+  catalogSyncEnabled Boolean @default(true)
+  catalogSyncFreq    Int     @default(3600)
+  webhooksEnabled    Boolean @default(true)
+
+  monthlyOrderLimit  Int     @default(100)
+  monthlyOrderCount  Int     @default(0)
+
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  lastSyncAt        DateTime?
+
+  products          Product[]
+  orders            Order[]
+  webhooks          Webhook[]
+  apiKeys           ApiKey[]
+
+  @@index([apiKey])
+  @@index([email])
+}
+
+enum Plan {
+  FREE
+  STARTER
+  BUSINESS
+  ENTERPRISE
+}
+
+model ApiKey {
+  id          String   @id @default(cuid())
+  merchantId  String
+  merchant    Merchant @relation(fields: [merchantId], references: [id], onDelete: Cascade)
+
+  name        String
+  key         String   @unique
+
+  permissions Json
+
+  lastUsedAt  DateTime?
+  expiresAt   DateTime?
+  createdAt   DateTime @default(now())
+
+  @@index([key])
+  @@index([merchantId])
+}
+
+model Product {
+  id              String   @id @default(cuid())
+  merchantId      String
+  merchant        Merchant @relation(fields: [merchantId], references: [id], onDelete: Cascade)
+
+  sku             String
+  name            String
+  description     String   @db.Text
+
+  basePrice       Decimal  @db.Decimal(10, 2)
+  currency        String   @default("USD")
+  bulkTiers       Json?
+
+  stockQuantity   Int      @default(0)
+  warehouse       String?
+  leadTimeDays    Int      @default(1)
+
+  category        String
+  categoryPath    Json?
+
+  specifications  Json?
+
+  images          Json?
+
+  tags            String[]
+
+  active          Boolean  @default(true)
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@unique([merchantId, sku])
+  @@index([merchantId])
+  @@index([category])
+  @@index([active])
+}
+
+model Agent {
+  id              String   @id @default(cuid())
+  agentId         String   @unique
+  name            String
+  type            String
+
+  ownerEmail      String?
+
+  capabilities    Json?
+
+  activeTokens    Int      @default(0)
+
+  totalOrders     Int      @default(0)
+  totalSpent      Decimal  @db.Decimal(10, 2) @default(0)
+
+  createdAt       DateTime @default(now())
+  lastActiveAt    DateTime?
+
+  sessions        AgentSession[]
+  orders          Order[]
+
+  @@index([agentId])
+}
+
+model AgentSession {
+  id                String   @id @default(cuid())
+  agentId           String
+  agent             Agent    @relation(fields: [agentId], references: [id], onDelete: Cascade)
+
+  merchantId        String
+
+  accessToken       String   @unique
+  refreshToken      String?  @unique
+
+  userId            String?
+  userConsentToken  String
+
+  scope             String[]
+
+  expiresAt         DateTime
+  createdAt         DateTime @default(now())
+  lastUsedAt        DateTime?
+
+  @@index([accessToken])
+  @@index([agentId])
+}
+
+model Cart {
+  id              String   @id @default(cuid())
+  merchantId      String
+
+  agentId         String?
+  userId          String?
+
+  items           Json
+
+  subtotal        Decimal  @db.Decimal(10, 2)
+  bulkSavings     Decimal  @db.Decimal(10, 2) @default(0)
+  tax             Decimal  @db.Decimal(10, 2) @default(0)
+  shipping        Decimal  @db.Decimal(10, 2) @default(0)
+  total           Decimal  @db.Decimal(10, 2)
+
+  status          CartStatus @default(ACTIVE)
+
+  expiresAt       DateTime
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([merchantId])
+  @@index([agentId])
+}
+
+enum CartStatus {
+  ACTIVE
+  CHECKED_OUT
+  EXPIRED
+  ABANDONED
+}
+
+model Order {
+  id                  String   @id @default(cuid())
+  merchantId          String
+  merchant            Merchant @relation(fields: [merchantId], references: [id])
+
+  agentId             String?
+  agent               Agent?   @relation(fields: [agentId], references: [id])
+
+  userId              String?
+
+  confirmationNumber  String   @unique
+
+  items               Json
+
+  subtotal            Decimal  @db.Decimal(10, 2)
+  tax                 Decimal  @db.Decimal(10, 2)
+  shipping            Decimal  @db.Decimal(10, 2)
+  total               Decimal  @db.Decimal(10, 2)
+
+  paymentMethod       String
+  paymentStatus       PaymentStatus
+  stripePaymentId     String?
+
+  shippingAddress     Json
+  billingAddress      Json
+
+  carrier             String?
+  trackingNumber      String?
+
+  status              OrderStatus @default(CONFIRMED)
+
+  approvalToken       String
+  approvedAt          DateTime
+
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+  estimatedShipDate   DateTime?
+  estimatedDelivery   DateTime?
+  shippedAt           DateTime?
+  deliveredAt         DateTime?
+
+  events              OrderEvent[]
+
+  @@index([merchantId])
+  @@index([agentId])
+  @@index([confirmationNumber])
+  @@index([status])
+  @@index([createdAt])
+}
+
+enum PaymentStatus {
+  PENDING
+  CAPTURED
+  FAILED
+  REFUNDED
+}
+
+enum OrderStatus {
+  CONFIRMED
+  PROCESSING
+  SHIPPED
+  OUT_FOR_DELIVERY
+  DELIVERED
+  CANCELLED
+  FAILED
+}
+
+model OrderEvent {
+  id          String   @id @default(cuid())
+  orderId     String
+  order       Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  status      String
+  description String
+  metadata    Json?
+
+  timestamp   DateTime @default(now())
+
+  @@index([orderId])
+  @@index([timestamp])
+}
+
+model Webhook {
+  id              String   @id @default(cuid())
+  merchantId      String
+  merchant        Merchant @relation(fields: [merchantId], references: [id], onDelete: Cascade)
+
+  agentId         String
+
+  events          String[]
+  callbackUrl     String
+
+  authHeader      String?
+  authValue       String?
+
+  filters         Json?
+
+  active          Boolean  @default(true)
+
+  totalDeliveries Int      @default(0)
+  failedDeliveries Int     @default(0)
+  lastDeliveredAt DateTime?
+
+  createdAt       DateTime @default(now())
+
+  @@index([merchantId])
+  @@index([agentId])
+}
+
+model WebhookDelivery {
+  id              String   @id @default(cuid())
+  webhookId       String
+
+  event           String
+  payload         Json
+
+  statusCode      Int?
+  success         Boolean
+
+  attemptCount    Int      @default(1)
+
+  createdAt       DateTime @default(now())
+  deliveredAt     DateTime?
+
+  @@index([webhookId])
+  @@index([createdAt])
+}
+
+model AnalyticsEvent {
+  id          String   @id @default(cuid())
+
+  merchantId  String?
+  agentId     String?
+
+  event       String
+  metadata    Json?
+
+  timestamp   DateTime @default(now())
+
+  @@index([merchantId, timestamp])
+  @@index([agentId, timestamp])
+  @@index([event, timestamp])
+}

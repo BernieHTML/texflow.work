@@ -1,17 +1,25 @@
 {
-  "name": "texflow-work",
+  "name": "texflow",
   "version": "1.0.0",
-  "description": "Agent-first marketplace for discovering digital products and services",
-  "main": "server.js",
-  "type": "module",
+  "private": true,
+  "description": "TexFlow - SaaS platform for Agentic Commerce Protocol (ACP)",
   "scripts": {
-    "start": "node server.js",
-    "dev": "node --watch server.js",
-    "build:platform66": "cd Platform66 && npm install && npm run build"
+    "build": "pnpm -r run build",
+    "dev": "pnpm -r run dev --parallel",
+    "dev:web": "pnpm --filter @texflow/web dev",
+    "dev:dashboard": "pnpm --filter @texflow/dashboard dev",
+    "dev:api": "pnpm --filter @texflow/api dev",
+    "dev:agent-api": "pnpm --filter @texflow/agent-api dev",
+    "db:generate": "pnpm --filter @texflow/database exec prisma generate",
+    "db:migrate": "pnpm --filter @texflow/database exec prisma migrate deploy",
+    "db:push": "pnpm --filter @texflow/database exec prisma db push",
+    "db:studio": "pnpm --filter @texflow/database exec prisma studio",
+    "lint": "pnpm -r run lint",
+    "test": "pnpm -r run test",
+    "clean": "pnpm -r exec rm -rf node_modules dist .next out && rm -rf node_modules"
   },
-  "dependencies": {
-    "dotenv": "^16.4.5",
-    "express": "^4.21.0",
-    "uuid": "^10.0.0"
-  }
+  "engines": {
+    "node": ">=20"
+  },
+  "packageManager": "pnpm@9.0.0"
 }

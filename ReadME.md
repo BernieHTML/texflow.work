@@ -1,140 +1,168 @@
 # TexFlow
 
-**https://texflow.work** — Agent-first products for the open web.
+**https://texflow.work** — SaaS platform that makes any e-commerce website agent-ready via the **Agentic Commerce Protocol (ACP)**. AI agents (Claude, GPT-4, etc.) can discover catalogs and execute purchases on behalf of users.
 
-## Structure
+## Monorepo structure
 
-- **TexFlow** — Brand; homepage at `/`.
-- **TexMKT** — Agent Appeal generation and public Agent Catalog. All under `/texmkt/`.
-- **Platform66** — Agent Discovery Hub (Vy/agent onboarding, catalog, .well-known preview). SPA at `/platform66/`.
+```
+texflow.work/
+├── apps/
+│   ├── web/           # Marketing site (Next.js 14, port 3000)
+│   ├── dashboard/     # Merchant dashboard (Next.js 14, port 3001)
+│   ├── api/           # Core API (Express, port 4000)
+│   └── agent-api/     # Agent-facing API gateway (port 4001)
+├── packages/
+│   ├── ui/            # Shared React UI components
+│   ├── database/      # Prisma schema & client
+│   ├── acp-sdk-js/    # JavaScript SDK for agents
+│   ├── acp-sdk-python/# Python SDK for agents
+│   └── merchant-sdk/   # SDK for merchant integrations
+├── services/
+│   ├── catalog-sync/  # Product catalog sync
+│   ├── webhook-dispatcher/
+│   └── analytics/
+├── infrastructure/
+│   ├── nginx/
+│   ├── docker/
+│   └── scripts/
+└── docs/
+    ├── acp-specification.md
+    └── api-reference.md
+```
 
-## Features
+## Quick start
 
-- **Home** (`/`) — TexFlow brand landing; links to TexMKT and Platform66.
-- **TexMKT** (`/texmkt/`) — Product landing for the Agent-First Marketplace.
-- **Platform66** (`/platform66/`) — Client-side Agent Discovery Hub: onboard products (Gemini-powered AA), catalog, .well-known preview. Build with `npm run build:platform66`; then the server serves it from `Platform66/dist`.
-- **Generate** (`/texmkt/generate`) — Enter a URL → Crawl4AI + Gemini → draft Agent Appeal → edit → publish (live status).
-- **Publish** (`/texmkt/upload`) — Paste validated AA JSON → publish to catalog.
-- **Catalog** — Full AA at `/texmkt/aa/:id`; discovery at `/texmkt/.well-known/agent-catalog.json`.
-- **Discovery** — `/texmkt/.well-known/ai.json` for agents (read-only, no auth).
+**Prerequisites**: Node.js 20+, pnpm 9 (or use `npx pnpm` for any command).
 
-Legacy paths redirect to TexMKT: `/generate` → `/texmkt/generate`, `/upload` → `/texmkt/upload`, `/aa/:id` → `/texmkt/aa/:id`.
-
-## Quick start (local)
-
-**Node**
 ```bash
-npm install
-npm start
+pnpm install
+pnpm db:generate   # Generate Prisma client
 ```
 
-**Python (for TexMKT generate)** — Crawl4AI + Gemini (Python 3.9–3.12):
+**Database** (Docker):
+
 ```bash
-cd scripts
-python3 -m venv .venv
-source .venv/bin/activate   # or .venv\Scripts\activate on Windows
-pip install -r requirements.txt
-python -m playwright install   # one-time: Chromium for Crawl4AI
-```
-Set `GOOGLE_AI_API_KEY` in project root `.env`. Chromium installs automatically on first generate; on Linux you may need `sudo python -m playwright install-deps`.
-
-To include **Platform66**, build it once: `npm run build:platform66`. Then open http://localhost:5001 (or your configured PORT).
-
-## Deploy on VPS (public internet)
-
-1. **Node.js 18+** (e.g. Ubuntu 22.04):
-   ```bash
-   curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
-   sudo apt-get install -y nodejs
-   ```
-
-2. **Clone and install**
-   ```bash
-   cd /var/www
-   git clone <your-repo> texflow.work && cd texflow.work
-   npm install --production
-   ```
-
-3. **Environment**
-   ```bash
-   cp .env.example .env
-   nano .env   # GOOGLE_AI_API_KEY=...
-   ```
-
-4. **Run with systemd**
-   - `/etc/systemd/system/texflow.service`:
-   ```ini
-   [Unit]
-   Description=TexFlow
-   After=network.target
-
-   [Service]
-   Type=simple
-   User=www-data
-   WorkingDirectory=/var/www/texflow.work
-   Environment=NODE_ENV=production
-   EnvironmentFile=/var/www/texflow.work/.env
-   ExecStart=/usr/bin/node server.js
-   Restart=on-failure
-   PORT=5001
-   HOST=0.0.0.0
-
-   [Install]
-   WantedBy=multi-user.target
-   ```
-   - `sudo systemctl daemon-reload && sudo systemctl enable texflow && sudo systemctl start texflow`
-
-5. **Reverse proxy** — Nginx (or Caddy) in front of `http://127.0.0.1:5001`; terminate TLS for `texflow.work`. Use relative URLs in the app (no localhost); the site works on any host.
-
-**Production URLs (texflow.work)** — The codebase is configured for **https://texflow.work**:
-- Homepage: `https://texflow.work/`
-- Platform66: `https://texflow.work/platform66/`
-- Discovery: `https://texflow.work/.well-known/ai.json`
-- Product catalog: `https://texflow.work/.well-known/agent-catalog.json`
-- Platform66 API upload: `https://texflow.work/platform66/api/upload`
-All canonical, Open Graph and Twitter meta tags, and `.well-known/ai.json` product URLs use this domain. In-app links use relative paths so they resolve correctly on the deployed host.
-
-## Project structure
-
-```
-/
-├── server.js
-├── package.json
-├── Platform66/               # Agent Discovery Hub (Vite/React SPA)
-│   ├── dist/                # built output (after npm run build:platform66)
-│   ├── components/
-│   └── ...
-├── public/
-│   ├── index.html          # TexFlow brand homepage
-│   ├── styles.css
-│   ├── app.js
-│   ├── mars-hero.mp4
-│   └── texmkt/
-│       ├── index.html      # TexMKT product landing
-│       ├── generate.html
-│       ├── upload.html
-│       └── .well-known/
-│           └── ai.json     # static; catalog is dynamic
-├── scripts/
-│   ├── generate_aa.py
-│   └── requirements.txt
-├── aa/                     # Stored Agent Appeals (aa/<id>.json)
-└── .env.example
+cd infrastructure/docker && docker compose up -d postgres redis
 ```
 
-## TexMKT agent endpoints (no auth)
+Set `DATABASE_URL` in `.env` (see `.env.example`).
 
-| Endpoint | Description |
-|----------|-------------|
-| `GET /texmkt/.well-known/ai.json` | Product purpose and catalog pointer |
-| `GET /texmkt/.well-known/agent-catalog.json` | List of AAs (id, name, category, action.learn_more) |
-| `GET /texmkt/aa/:id` | Full Agent Appeal JSON |
+**Run apps**:
 
-All `/texmkt/.well-known/*` requests are logged (including User-Agent).
+```bash
+pnpm dev:web        # Marketing site → http://localhost:3000
+pnpm dev:dashboard  # Dashboard → http://localhost:3001
+pnpm dev:api        # API → http://localhost:4000
+```
 
-## Agent Appeal schema (v1)
+Or from app directories:
 
-`id`, `name`, `type`, `category`, `provider`, `summary`, `problem_solved`, `capabilities`, `inputs_required`, `outputs_provided`, `pricing`, `integration`, `constraints`, `action`, `metadata`.
+```bash
+pnpm --filter @texflow/web dev
+pnpm --filter @texflow/dashboard dev
+pnpm --filter @texflow/api dev
+```
+
+**Migrations**:
+
+```bash
+pnpm db:push    # Dev: push schema
+pnpm db:migrate # Prod: run migrations
+```
+
+---
+
+## Run locally (testing)
+
+Minimal steps to run everything on your machine:
+
+**1. Install dependencies** (use `npx pnpm` if you don’t have pnpm installed globally)
+
+```bash
+npx pnpm install
+```
+
+**2. Start PostgreSQL** (pick one)
+
+- **Docker** (if you have it): from repo root,
+  ```bash
+  cd infrastructure/docker && docker compose up -d postgres && cd ../..
+  ```
+- **No Docker – use Homebrew** (Mac):
+  ```bash
+  brew install postgresql@16
+  brew services start postgresql@16
+  createuser -s texflow   # create user (or use your Mac username)
+  createdb texflow       # create database
+  ```
+  Then in `.env` use: `DATABASE_URL="postgresql://texflow@localhost:5432/texflow"` (no password) or, if you set a password, `postgresql://texflow:YOUR_PASSWORD@localhost:5432/texflow`.
+- **Local Postgres already installed**: ensure a database exists (e.g. `createdb texflow`) and set `DATABASE_URL` in `.env` to match.
+
+**3. Environment**
+
+```bash
+cp .env.example .env
+```
+
+Edit `.env` and set at least:
+
+- `DATABASE_URL` — e.g. `postgresql://texflow:texflow@localhost:5432/texflow` (Docker default user/pass are in `infrastructure/docker/docker-compose.yml`; default DB name is `texflow`).
+- `JWT_SECRET` — any string for local testing (e.g. `dev-secret`).
+
+**4. Database schema**
+
+```bash
+npx pnpm db:generate
+npx pnpm db:push
+```
+
+(`db:push` creates/updates tables without migration files; fine for local testing.)
+
+**5. Run the apps** (use 3 terminals, or one with background jobs)
+
+Terminal 1 – marketing site:
+
+```bash
+npx pnpm dev:web
+```
+
+→ **http://localhost:3000**
+
+Terminal 2 – merchant dashboard:
+
+```bash
+npx pnpm dev:dashboard
+```
+
+→ **http://localhost:3001**
+
+Terminal 3 – API:
+
+```bash
+npx pnpm dev:api
+```
+
+→ **http://localhost:4000** (e.g. **http://localhost:4000/health**)
+
+**Optional**: Run all three in one terminal (Unix):
+
+```bash
+npx pnpm dev:web & npx pnpm dev:dashboard & npx pnpm dev:api & wait
+```
+
+**Testing the API**: The API needs at least one **Merchant** in the DB to generate `texflow.md` or use auth. You can create one via Prisma Studio (`npx pnpm db:studio`) or a one-off script.
+
+## Environment
+
+Copy `.env.example` to `.env` and set at least:
+
+- `DATABASE_URL` — PostgreSQL connection string
+- `JWT_SECRET` — Secret for agent tokens
+
+## Docs
+
+- [ACP Specification](docs/acp-specification.md)
+- [API Reference](docs/api-reference.md)
 
 ## License
 
