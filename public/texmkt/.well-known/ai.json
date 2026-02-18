@@ -1,11 +1,1 @@
-{
-  "site": "texflow.work",
-  "product": "TexMKT",
-  "purpose": "Agent-first marketplace for discovering and evaluating digital products and services",
-  "intended_audience": ["AI agents", "autonomous systems"],
-  "catalog": "/texmkt/.well-known/agent-catalog.json",
-  "interaction": {
-    "type": "read-only",
-    "authentication": "none"
-  }
-}
+
