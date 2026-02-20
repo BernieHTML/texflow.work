@@ -1,8 +1,9 @@
 {
   "id": "google-civic-api-aa",
   "name": "Google Civic Information API",
-  "type": "api",
+  "type": "software",
   "category": [
+    "Digital Products",
     "Public Data",
     "Developer Tools"
   ],
@@ -48,6 +49,6 @@
   },
   "metadata": {
     "created_at": "2026-02-07T00:00:00.000Z",
-    "updated_at": "2026-02-07T00:00:00.000Z"
+    "updated_at": "2026-02-10T09:01:30.791Z"
   }
 }

@@ -1,1 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TexMKT — TexFlow</title>
+  <link rel="icon" href="/texflowlogo.png" type="image/png">
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="page">
+    <header class="header">
+      <a href="/" class="logo-wrap">
+        <span class="logo-circle">
+          <img src="/texflowlogo.png" alt="TexFlow" class="logo" width="48" height="48">
+        </span>
+        <span class="logo-text">TexFlow</span>
+      </a>
+      <nav class="nav">
+        <a href="/texmkt/">TexMKT</a>
+        <a href="/platform66/">Platform66</a>
+        <a href="/texmkt/generate">Generate</a>
+        <a href="/texmkt/upload">Publish</a>
+        <a href="/texmkt/.well-known/ai.json" target="_blank" rel="noopener">AI</a>
+      </nav>
+    </header>
 
+    <main>
+      <section class="hero">
+        <div class="hero-bg">
+          <video class="hero-video" autoplay muted loop playsinline>
+            <source src="/mars-hero.mp4" type="video/mp4">
+          </video>
+          <div class="hero-overlay"></div>
+        </div>
+        <div class="hero-content">
+          <span class="hero-logo-circle">
+            <img src="/texflowlogo.png" alt="" class="hero-logo" width="120" height="120">
+          </span>
+          <h1 class="hero-title">TexMKT</h1>
+          <p class="hero-sub">The Agent-First Marketplace. Generate and publish Agent Appeals; agents discover them via .well-known.</p>
+          <div class="hero-cta">
+            <a href="/texmkt/generate" class="btn btn-primary">Generate Agent Appeal</a>
+            <a href="/texmkt/upload" class="btn btn-secondary">Publish to Agent Catalog</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="explain" id="explain">
+        <h2 class="section-title">What is an Agent Appeal?</h2>
+        <div class="cards">
+          <article class="card">
+            <h3>Structured product data</h3>
+            <p>An Agent Appeal (AA) is a machine-readable JSON description of a product or service. It tells AI agents what the offering does, what it needs, what it returns, and how to act on it.</p>
+          </article>
+          <article class="card">
+            <h3>Why agents need it</h3>
+            <p>Agents can’t reliably scrape marketing pages or guess formats. They need a consistent schema: capabilities, inputs, outputs, pricing, and clear action URLs for learning more or purchasing.</p>
+          </article>
+          <article class="card">
+            <h3>TexMKT as the bridge</h3>
+            <p>Humans generate or upload Agent Appeals here. Agents discover them via <code>/texmkt/.well-known/agent-catalog.json</code> and read full AAs at <code>/texmkt/aa/:id</code>. No auth required—agent-readable by design.</p>
+          </article>
+        </div>
+      </section>
+
+      <footer class="footer">
+        <p class="footer-tagline">Agent-readable by design</p>
+        <a href="/texmkt/.well-known/ai.json" class="footer-link">/texmkt/.well-known/ai.json</a>
+      </footer>
+    </main>
+  </div>
+  <script src="/app.js"></script>
+</body>
+</html>
