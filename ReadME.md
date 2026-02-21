@@ -25,7 +25,7 @@ Legacy paths redirect to TexMKT: `/generate` → `/texmkt/generate`, `/upload` �
 
 - **Home** (`/vy-experts/`) — List public experts (cards, filter by category, search). Submit at `/vy-experts/create`.
 - **Expert detail** (`/vy-experts/expert/:id`) — Full description, use cases, author. Free: "Copy Base Knowledge"; paid: Stripe checkout.
-- **Catalog** (`GET /.well-known/vy-experts.json`) — Public JSON for Vy/agents (ACP-Version: 1.0). Entries include `preamble_url`, `checkout_url`, `capability`.
+- **Catalog** — Public JSON (ACP-Version: 1.0): `GET /.well-known/vy-experts.json` (canonical for agents; requires Nginx to proxy `/.well-known/` to the app) or `GET /vy-experts/api/catalog` (same response; used by the marketplace page so it works even if Nginx serves .well-known from disk).
 - **Preamble** (`GET /vy-experts/expert/:id/preamble`) — Plain-text base knowledge. Free: 200; paid: requires `?access_token=...` or 402 + `checkout_url`.
 - **Checkout** (`GET /vy-experts/expert/:id/checkout`) — Redirects to Stripe Checkout. Success → `/vy-experts/expert/:id/success?session_id=...`.
 - **Webhook** (`POST /webhooks/stripe`) — Stripe `checkout.session.completed`; records order and access token in `data/orders.json`.

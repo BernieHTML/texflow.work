@@ -277,8 +277,8 @@ app.get('/.well-known/vy-experts.json', async (req, res) => {
 });
 
 // --- Vy Experts: pages (before static) ---
-// --- Vy Experts: pages (before static) ---
 app.get('/vy-experts', (req, res) => res.sendFile(join(VY_EXPERTS_PUBLIC, 'index.html')));
+app.get('/vy-experts/', (req, res) => res.sendFile(join(VY_EXPERTS_PUBLIC, 'index.html')));
 app.get('/vy-experts/create', (req, res) => res.sendFile(join(VY_EXPERTS_PUBLIC, 'create.html')));
 app.get('/vy-experts/expert/:id', (req, res) => res.sendFile(join(VY_EXPERTS_PUBLIC, 'expert.html')));
 app.get('/vy-experts/expert/:id/success', (req, res) => res.sendFile(join(VY_EXPERTS_PUBLIC, 'success.html')));
@@ -365,6 +365,35 @@ app.get('/vy-experts/api/expert/:id/complete-session', async (req, res) => {
     await writeOrders(orders);
   }
   res.json({ access_token: order.access_token, expert_id: id });
+});
+
+// --- Vy Experts: catalog API (same as .well-known; use this if Nginx serves .well-known from disk) ---
+app.get('/vy-experts/api/catalog', async (req, res) => {
+  try {
+    const experts = await readExperts();
+    const publicExperts = experts.filter(e => e.status === 'public');
+    const catalog = publicExperts.map(e => ({
+      id: e.id,
+      name: e.name,
+      category: e.category,
+      description: e.description || '',
+      author: e.author || '',
+      tags: Array.isArray(e.tags) ? e.tags : [],
+      price: e.price ?? 0,
+      paid: !!e.paid,
+      preamble_url: `${BASE_URL}/vy-experts/expert/${e.id}/preamble`,
+      checkout_url: `${BASE_URL}/vy-experts/expert/${e.id}/checkout`
+    }));
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('ACP-Version', ACP_VERSION);
+    res.send(JSON.stringify({
+      capability: { protocol: 'ACP', auth: 'bearer_token', auth_flow: 'stripe_checkout' },
+      experts: catalog,
+      updated_at: new Date().toISOString().slice(0, 10)
+    }, null, 2));
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
 });
 
 // --- Vy Experts: API ---
