@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agent Commerce Microtransactions - Concept</title>
+  <meta name="description" content="Concept webpage for AI-agent microtransactions powered by Agent Commerce Protocol and Stripe.">
+  <style>
+    :root {
+      --bg: #060912;
+      --panel: #0f1526;
+      --panel-2: #111a31;
+      --text: #e8edff;
+      --muted: #9da8cc;
+      --line: #253154;
+      --brand: #7c9cff;
+      --brand-2: #00d4ff;
+      --ok: #47d38b;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, Arial, sans-serif;
+      color: var(--text);
+      background: radial-gradient(circle at 20% 0%, #1a2450 0%, var(--bg) 45%);
+      line-height: 1.5;
+    }
+
+    .wrap {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    .nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      padding: 12px 0 28px;
+    }
+
+    .logo {
+      font-weight: 700;
+      letter-spacing: 0.3px;
+    }
+
+    .tag {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 7px 12px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .hero {
+      background: linear-gradient(180deg, rgba(124,156,255,0.12) 0%, rgba(124,156,255,0.03) 100%), var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 42px 32px;
+    }
+
+    h1 {
+      font-size: clamp(30px, 5vw, 54px);
+      line-height: 1.1;
+      margin: 0 0 14px;
+      letter-spacing: -0.02em;
+    }
+
+    .hero p {
+      max-width: 760px;
+      color: var(--muted);
+      margin: 0 0 24px;
+      font-size: 18px;
+    }
+
+    .chips {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+    }
+
+    .chip {
+      background: rgba(124,156,255,0.14);
+      border: 1px solid rgba(124,156,255,0.35);
+      color: #dfe6ff;
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .cta {
+      display: inline-block;
+      text-decoration: none;
+      color: #071022;
+      background: linear-gradient(90deg, var(--brand), var(--brand-2));
+      border-radius: 12px;
+      padding: 12px 18px;
+      font-weight: 700;
+    }
+
+    .grid {
+      margin-top: 24px;
+      display: grid;
+      gap: 14px;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    }
+
+    .card {
+      background: var(--panel-2);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 16px;
+    }
+
+    .card h3 {
+      margin: 0 0 8px;
+      font-size: 17px;
+    }
+
+    .card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .section {
+      margin-top: 22px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 24px;
+    }
+
+    .section h2 {
+      margin: 0 0 12px;
+      font-size: 24px;
+    }
+
+    .steps {
+      display: grid;
+      gap: 12px;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    }
+
+    .step {
+      border: 1px dashed #35519a;
+      background: #0d1430;
+      border-radius: 12px;
+      padding: 14px;
+    }
+
+    .step .n {
+      display: inline-block;
+      color: #0a1a38;
+      background: #92afff;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 12px;
+      padding: 3px 8px;
+      margin-bottom: 8px;
+    }
+
+    .step p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .footer {
+      margin: 22px 0 6px;
+      color: var(--muted);
+      font-size: 13px;
+      text-align: center;
+    }
+
+    .ok {
+      color: var(--ok);
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="nav">
+      <div class="logo">AgentPay Concept</div>
+      <div class="tag">Microtransactions for AI Agents</div>
+    </div>
+
+    <section class="hero">
+      <h1>Pay-per-action commerce for autonomous AI agents</h1>
+      <p>
+        A concept marketplace where agents can discover services, agree to pricing through
+        the Agent Commerce Protocol, and complete secure microtransactions through Stripe.
+      </p>
+      <div class="chips">
+        <span class="chip">Agent Commerce Protocol</span>
+        <span class="chip">Stripe Payments</span>
+        <span class="chip">Usage-based Billing</span>
+        <span class="chip">API-first Fulfillment</span>
+      </div>
+      <a class="cta" href="#">View Agent Commerce Demo</a>
+
+      <div class="grid">
+        <article class="card">
+          <h3>Machine-readable offers</h3>
+          <p>Agents parse normalized price cards and service terms before purchasing.</p>
+        </article>
+        <article class="card">
+          <h3>Sub-cent pricing</h3>
+          <p>Charge for one API call, one dataset row, or one workflow execution.</p>
+        </article>
+        <article class="card">
+          <h3>Trust + auditability</h3>
+          <p>Each transaction includes capability scopes, receipts, and a replay-safe id.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>How a transaction works</h2>
+      <div class="steps">
+        <div class="step">
+          <div class="n">Step 1</div>
+          <p>Agent reads the merchant ACP endpoint for supported capabilities and pricing.</p>
+        </div>
+        <div class="step">
+          <div class="n">Step 2</div>
+          <p>Agent requests a quote and receives payment requirements and execution terms.</p>
+        </div>
+        <div class="step">
+          <div class="n">Step 3</div>
+          <p>Stripe completes authorization or capture, then returns transaction confirmation.</p>
+        </div>
+        <div class="step">
+          <div class="n">Step 4</div>
+          <p>Merchant fulfills the action and returns signed proof of completion to the agent.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Concept value proposition</h2>
+      <div class="grid">
+        <article class="card">
+          <h3>For developers</h3>
+          <p>Monetize APIs without forcing full subscriptions for low-volume use cases.</p>
+        </article>
+        <article class="card">
+          <h3>For agents</h3>
+          <p>Programmatic checkout with explicit caps and predictable billing behavior.</p>
+        </article>
+        <article class="card">
+          <h3>For operators</h3>
+          <p>Centralized fraud checks and settlement through Stripe infrastructure.</p>
+        </article>
+      </div>
+    </section>
+
+    <p class="footer">
+      Status: <span class="ok">Concept prototype page</span> - no backend logic wired on this route.
+    </p>
+  </div>
+</body>
+</html>
