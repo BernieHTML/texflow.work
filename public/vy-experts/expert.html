@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Expert — Vy Experts Marketplace</title>
+  <link rel="icon" href="/texflowlogo.png" type="image/png">
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/vy-experts/vy-experts.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="page">
+    <header class="header">
+      <a href="/" class="logo-wrap">
+        <span class="logo-circle"><img src="/texflowlogo.png" alt="TexFlow" class="logo" width="48" height="48"></span>
+        <span class="logo-text">TexFlow</span>
+      </a>
+      <nav class="nav">
+        <a href="/platform66/">Platform66</a>
+        <a href="/vy-experts/">Vy Experts</a>
+      </nav>
+    </header>
+
+    <main class="vy-page">
+      <div class="vy-container">
+        <div id="vy-loading" class="vy-muted">Loading…</div>
+        <div id="vy-error" style="display: none; color: #ef4444;"></div>
+        <div id="vy-detail" class="vy-detail" style="display: none;"></div>
+      </div>
+    </main>
+  </div>
+  <script src="/app.js"></script>
+  <script src="/vy-experts/vy-experts.js"></script>
+  <script>
+    (function () {
+      var id = window.vyExpertId && window.vyExpertId();
+      if (!id) {
+        document.getElementById('vy-error').textContent = 'Invalid expert.';
+        document.getElementById('vy-error').style.display = 'block';
+        document.getElementById('vy-loading').style.display = 'none';
+        return;
+      }
+
+      var loading = document.getElementById('vy-loading');
+      var errEl = document.getElementById('vy-error');
+      var detailEl = document.getElementById('vy-detail');
+
+      function escapeHtml(s) {
+        if (s == null) return '';
+        var div = document.createElement('div');
+        div.textContent = s;
+        return div.innerHTML;
+      }
+
+      fetch('/vy-experts/api/experts/' + encodeURIComponent(id))
+        .then(function (r) {
+          if (!r.ok) throw new Error('Not found');
+          return r.json();
+        })
+        .then(function (expert) {
+          loading.style.display = 'none';
+          var priceText = expert.paid ? '$' + (expert.price != null ? Number(expert.price).toFixed(2) : '0') : 'Free';
+          var meta = expert.category + ' · ' + escapeHtml(expert.author);
+          var tagsHtml = (expert.tags || []).length ? '<p class="vy-meta">' + (expert.tags || []).map(function (t) { return '<span>' + escapeHtml(t) + '</span>'; }).join(', ') + '</p>' : '';
+          var useCases = (expert.use_cases || []);
+          var useCasesHtml = useCases.length ? '<div class="vy-block"><h4>Use cases</h4><ul>' + useCases.map(function (u) { return '<li>' + escapeHtml(u) + '</li>'; }).join('') + '</ul></div>' : '';
+          var actions = '';
+          if (expert.paid) {
+            actions = '<p><a href="/vy-experts/expert/' + encodeURIComponent(id) + '/checkout" class="vy-btn vy-btn-primary">Purchase — ' + priceText + '</a></p>';
+          } else {
+            actions = '<p><button type="button" class="vy-btn vy-btn-secondary vy-btn-copy" id="vy-copy-preamble">Copy Base Knowledge</button><span class="vy-copy-feedback" id="vy-copy-feedback"></span></p>' +
+              '<div class="vy-block" id="vy-preamble-block" style="display: none;"><h4>Base knowledge (preamble)</h4><div class="vy-preamble-box" id="vy-preamble-content"></div></div>';
+          }
+          detailEl.innerHTML =
+            '<p><a href="/vy-experts/">← Back to marketplace</a></p>' +
+            '<h1>' + escapeHtml(expert.name) + '</h1>' +
+            '<p class="vy-meta">' + meta + '</p>' +
+            tagsHtml +
+            '<div class="vy-block"><h4>Description</h4><p>' + escapeHtml(expert.full_description || expert.description || '') + '</p></div>' +
+            useCasesHtml +
+            '<div class="vy-block"><h4>Price</h4><p>' + priceText + '</p>' + actions + '</div>';
+          detailEl.style.display = 'block';
+
+          if (!expert.paid) {
+            fetch('/vy-experts/expert/' + encodeURIComponent(id) + '/preamble')
+              .then(function (r) { return r.text(); })
+              .then(function (text) {
+                var block = document.getElementById('vy-preamble-block');
+                var content = document.getElementById('vy-preamble-content');
+                var btn = document.getElementById('vy-copy-preamble');
+                if (block && content) {
+                  content.textContent = text;
+                  block.style.display = 'block';
+                  if (btn) btn.addEventListener('click', function () {
+                    window.vyCopy && window.vyCopy(text, btn);
+                  });
+                }
+              })
+              .catch(function () {});
+          }
+        })
+        .catch(function () {
+          loading.style.display = 'none';
+          errEl.textContent = 'Expert not found.';
+          errEl.style.display = 'block';
+        });
+    })();
+  </script>
+  <script>
+    (function () {
+      var header = document.querySelector('.header');
+      if (header) window.addEventListener('scroll', function () { header.classList.toggle('scrolled', window.scrollY > 20); });
+    })();
+  </script>
+</body>
+</html>

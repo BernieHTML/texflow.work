@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Purchase complete — Vy Experts</title>
+  <link rel="icon" href="/texflowlogo.png" type="image/png">
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/vy-experts/vy-experts.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="page">
+    <header class="header">
+      <a href="/" class="logo-wrap">
+        <span class="logo-circle"><img src="/texflowlogo.png" alt="TexFlow" class="logo" width="48" height="48"></span>
+        <span class="logo-text">TexFlow</span>
+      </a>
+      <nav class="nav">
+        <a href="/platform66/">Platform66</a>
+        <a href="/vy-experts/">Vy Experts</a>
+      </nav>
+    </header>
+
+    <main class="vy-page">
+      <div class="vy-container">
+        <div id="vy-loading" class="vy-muted">Verifying payment…</div>
+        <div id="vy-error" style="display: none; color: #ef4444;"></div>
+        <div id="vy-success" class="vy-success-box" style="display: none;">
+          <h2 style="margin: 0 0 0.5rem;">Purchase complete</h2>
+          <p style="margin: 0 0 1rem; color: var(--vy-muted);">Use this access token with Vy to load the expert preamble. Store it securely; you can reuse it.</p>
+          <label style="font-size: 0.85rem; color: var(--vy-muted);">Access token</label>
+          <div class="vy-token-box" id="vy-token"></div>
+          <button type="button" class="vy-btn vy-btn-secondary vy-btn-copy" id="vy-copy-token">Copy token</button>
+          <p style="margin-top: 1.5rem; font-size: 0.9rem;">In Vy, use the preamble URL with the token:</p>
+          <code id="vy-preamble-url" style="display: block; margin: 0.5rem 0; font-size: 0.85rem; word-break: break-all;"></code>
+          <button type="button" class="vy-btn vy-btn-secondary vy-btn-copy" id="vy-copy-url">Copy URL</button>
+          <p style="margin-top: 1rem;"><a href="/vy-experts/">Back to marketplace</a></p>
+        </div>
+      </div>
+    </main>
+  </div>
+  <script src="/app.js"></script>
+  <script src="/vy-experts/vy-experts.js"></script>
+  <script>
+    (function () {
+      var id = window.vyExpertId && window.vyExpertId();
+      var params = new URLSearchParams(window.location.search);
+      var sessionId = params.get('session_id');
+      var loading = document.getElementById('vy-loading');
+      var errEl = document.getElementById('vy-error');
+      var successEl = document.getElementById('vy-success');
+
+      if (!id || !sessionId) {
+        loading.style.display = 'none';
+        errEl.textContent = 'Missing session. Return to the expert and complete checkout.';
+        errEl.style.display = 'block';
+        return;
+      }
+
+      fetch('/vy-experts/api/expert/' + encodeURIComponent(id) + '/complete-session?session_id=' + encodeURIComponent(sessionId))
+        .then(function (r) {
+          if (!r.ok) return r.json().then(function (d) { throw new Error(d.error || 'Failed'); });
+          return r.json();
+        })
+        .then(function (data) {
+          loading.style.display = 'none';
+          var token = data.access_token;
+          var base = window.location.origin;
+          var preambleUrl = base + '/vy-experts/expert/' + encodeURIComponent(id) + '/preamble?access_token=' + encodeURIComponent(token);
+          document.getElementById('vy-token').textContent = token;
+          document.getElementById('vy-preamble-url').textContent = preambleUrl;
+          successEl.style.display = 'block';
+
+          document.getElementById('vy-copy-token').addEventListener('click', function () {
+            window.vyCopy && window.vyCopy(token, this);
+          });
+          document.getElementById('vy-copy-url').addEventListener('click', function () {
+            window.vyCopy && window.vyCopy(preambleUrl, this);
+          });
+        })
+        .catch(function (err) {
+          loading.style.display = 'none';
+          errEl.textContent = err.message || 'Could not verify payment.';
+          errEl.style.display = 'block';
+        });
+    })();
+  </script>
+  <script>
+    (function () {
+      var header = document.querySelector('.header');
+      if (header) window.addEventListener('scroll', function () { header.classList.toggle('scrolled', window.scrollY > 20); });
+    })();
+  </script>
+</body>
+</html>

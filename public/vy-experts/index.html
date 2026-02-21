@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vy Experts Marketplace — TexFlow</title>
+  <link rel="icon" href="/texflowlogo.png" type="image/png">
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/vy-experts/vy-experts.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="page">
+    <header class="header">
+      <a href="/" class="logo-wrap">
+        <span class="logo-circle"><img src="/texflowlogo.png" alt="TexFlow" class="logo" width="48" height="48"></span>
+        <span class="logo-text">TexFlow</span>
+      </a>
+      <nav class="nav">
+        <a href="/platform66/">Platform66</a>
+        <a href="/vy-experts/">Vy Experts</a>
+      </nav>
+    </header>
+
+    <main class="vy-page">
+      <div class="vy-container">
+        <div class="vy-hero">
+          <h1>Vy Experts Marketplace</h1>
+          <p>Curated base knowledge and preambles for Vy desktop agents. Free and paid experts.</p>
+          <p style="margin-top: 0.5rem;"><a href="/vy-experts/create" class="vy-btn vy-btn-secondary">Submit an Expert</a></p>
+        </div>
+
+        <div class="vy-filters">
+          <select id="vy-category" aria-label="Filter by category">
+            <option value="">All categories</option>
+            <option value="Accounting">Accounting</option>
+            <option value="Research">Research</option>
+            <option value="Design">Design</option>
+            <option value="Productivity">Productivity</option>
+            <option value="Data">Data</option>
+            <option value="Sales">Sales</option>
+            <option value="HR">HR</option>
+            <option value="Custom">Custom</option>
+          </select>
+          <input type="search" id="vy-search" placeholder="Search by name or tag..." aria-label="Search">
+        </div>
+
+        <div id="vy-loading" class="vy-muted">Loading…</div>
+        <div id="vy-error" style="display: none; color: #ef4444;"></div>
+        <div class="vy-grid" id="vy-grid"></div>
+      </div>
+    </main>
+  </div>
+  <script src="/app.js"></script>
+  <script src="/vy-experts/vy-experts.js"></script>
+  <script>
+    (function () {
+      var grid = document.getElementById('vy-grid');
+      var loading = document.getElementById('vy-loading');
+      var errEl = document.getElementById('vy-error');
+      var categorySelect = document.getElementById('vy-category');
+      var searchInput = document.getElementById('vy-search');
+
+      function render(experts) {
+        var cat = (categorySelect && categorySelect.value) || '';
+        var q = (searchInput && searchInput.value) || '';
+        q = q.toLowerCase().trim();
+        var list = experts.filter(function (e) {
+          if (cat && e.category !== cat) return false;
+          if (!q) return true;
+          var name = (e.name || '').toLowerCase();
+          var tags = (e.tags || []).join(' ').toLowerCase();
+          var desc = (e.description || '').toLowerCase();
+          return name.indexOf(q) !== -1 || tags.indexOf(q) !== -1 || desc.indexOf(q) !== -1;
+        });
+        grid.innerHTML = list.map(function (e) {
+          var priceText = e.paid ? '$' + (e.price != null ? Number(e.price).toFixed(2) : '0') : 'Free';
+          var priceClass = e.paid ? '' : ' free';
+          return '<article class="vy-card">' +
+            '<a href="/vy-experts/expert/' + encodeURIComponent(e.id) + '">' +
+            '<h3>' + escapeHtml(e.name) + '</h3>' +
+            '<p class="vy-meta">' + escapeHtml(e.category) + ' · ' + escapeHtml(e.author) + '</p>' +
+            '<p class="vy-desc">' + escapeHtml((e.description || '').slice(0, 120)) + (e.description && e.description.length > 120 ? '…' : '') + '</p>' +
+            '<p class="vy-price' + priceClass + '">' + priceText + '</p>' +
+            '</a></article>';
+        }).join('');
+      }
+
+      function escapeHtml(s) {
+        var div = document.createElement('div');
+        div.textContent = s;
+        return div.innerHTML;
+      }
+
+      var cachedExperts = [];
+
+      function load() {
+        loading.style.display = 'block';
+        errEl.style.display = 'none';
+        fetch('/.well-known/vy-experts.json')
+          .then(function (r) { return r.json(); })
+          .then(function (data) {
+            loading.style.display = 'none';
+            cachedExperts = data.experts || [];
+            render(cachedExperts);
+          })
+          .catch(function (e) {
+            loading.style.display = 'none';
+            errEl.textContent = 'Failed to load catalog.';
+            errEl.style.display = 'block';
+          });
+      }
+
+      if (categorySelect) categorySelect.addEventListener('change', function () { render(cachedExperts); });
+      if (searchInput) searchInput.addEventListener('input', function () { render(cachedExperts); });
+
+      load();
+    })();
+  </script>
+  <script>
+    (function () {
+      var header = document.querySelector('.header');
+      if (header) window.addEventListener('scroll', function () {
+        header.classList.toggle('scrolled', window.scrollY > 20);
+      });
+    })();
+  </script>
+</body>
+</html>

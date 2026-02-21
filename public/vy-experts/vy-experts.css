@@ -1,0 +1,336 @@
+/* Vy Experts Marketplace — dark, minimal, developer-oriented */
+:root {
+  --vy-bg: #0a0b0f;
+  --vy-surface: #111318;
+  --vy-card: #16181f;
+  --vy-border: #252830;
+  --vy-text: #e8eaef;
+  --vy-muted: #8b90a0;
+  --vy-accent: #3b82f6;
+  --vy-success: #22c55e;
+  --vy-font-sans: 'Outfit', system-ui, sans-serif;
+  --vy-font-mono: 'JetBrains Mono', monospace;
+}
+
+.vy-page {
+  min-height: 100vh;
+  background: var(--vy-bg);
+  color: var(--vy-text);
+  font-family: var(--vy-font-sans);
+  padding-top: 5rem;
+}
+
+.vy-container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 1.25rem 2rem;
+}
+
+.vy-hero {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.vy-hero h1 {
+  font-size: 1.75rem;
+  font-weight: 600;
+  margin: 0 0 0.5rem;
+}
+
+.vy-hero p {
+  color: var(--vy-muted);
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+.vy-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+  align-items: center;
+}
+
+.vy-filters select,
+.vy-filters input {
+  background: var(--vy-surface);
+  border: 1px solid var(--vy-border);
+  color: var(--vy-text);
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-family: inherit;
+}
+
+.vy-filters input {
+  min-width: 200px;
+}
+
+.vy-filters input::placeholder {
+  color: var(--vy-muted);
+}
+
+.vy-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.25rem;
+}
+
+.vy-card {
+  background: var(--vy-card);
+  border: 1px solid var(--vy-border);
+  border-radius: 12px;
+  padding: 1.25rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.vy-card:hover {
+  border-color: rgba(59, 130, 246, 0.3);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.vy-card a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.vy-card h3 {
+  font-size: 1.1rem;
+  margin: 0 0 0.5rem;
+  font-weight: 600;
+}
+
+.vy-card .vy-meta {
+  font-size: 0.8rem;
+  color: var(--vy-muted);
+  margin-bottom: 0.5rem;
+}
+
+.vy-card .vy-desc {
+  font-size: 0.9rem;
+  color: var(--vy-muted);
+  line-height: 1.5;
+  margin: 0 0 0.75rem;
+}
+
+.vy-card .vy-price {
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.vy-card .vy-price.free {
+  color: var(--vy-success);
+}
+
+.vy-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  transition: opacity 0.2s, background 0.2s;
+}
+
+.vy-btn-primary {
+  background: var(--vy-accent);
+  color: #fff;
+}
+
+.vy-btn-primary:hover {
+  opacity: 0.95;
+}
+
+.vy-btn-secondary {
+  background: var(--vy-surface);
+  color: var(--vy-text);
+  border: 1px solid var(--vy-border);
+}
+
+.vy-btn-secondary:hover {
+  background: var(--vy-border);
+}
+
+.vy-btn-copy {
+  font-size: 0.85rem;
+  padding: 0.4rem 0.75rem;
+}
+
+.vy-detail h1 {
+  font-size: 1.5rem;
+  margin: 0 0 0.5rem;
+}
+
+.vy-detail .vy-meta {
+  color: var(--vy-muted);
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+}
+
+.vy-detail .vy-block {
+  margin-bottom: 1.5rem;
+}
+
+.vy-detail .vy-block h4 {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--vy-muted);
+  margin: 0 0 0.5rem;
+}
+
+.vy-detail pre,
+.vy-detail .vy-preamble-box {
+  background: var(--vy-surface);
+  border: 1px solid var(--vy-border);
+  border-radius: 8px;
+  padding: 1rem;
+  font-family: var(--vy-font-mono);
+  font-size: 0.85rem;
+  white-space: pre-wrap;
+  word-break: break-word;
+  max-height: 320px;
+  overflow-y: auto;
+}
+
+.vy-form label {
+  display: block;
+  font-size: 0.9rem;
+  margin-bottom: 0.35rem;
+  color: var(--vy-muted);
+}
+
+.vy-form input,
+.vy-form select,
+.vy-form textarea {
+  width: 100%;
+  max-width: 560px;
+  background: var(--vy-surface);
+  border: 1px solid var(--vy-border);
+  color: var(--vy-text);
+  padding: 0.6rem 0.75rem;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-family: inherit;
+  margin-bottom: 1rem;
+}
+
+.vy-form textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.vy-form textarea.vy-preamble-field {
+  min-height: 200px;
+}
+
+.vy-form .vy-toggle-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.vy-form .vy-toggle-row input[type="checkbox"] {
+  width: auto;
+  max-width: none;
+  margin: 0;
+}
+
+.vy-form .vy-price-row {
+  display: none;
+}
+
+.vy-form .vy-price-row.visible {
+  display: block;
+}
+
+.vy-success-box {
+  background: var(--vy-surface);
+  border: 1px solid var(--vy-success);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+}
+
+.vy-success-box code,
+.vy-token-box {
+  font-family: var(--vy-font-mono);
+  font-size: 0.9rem;
+  word-break: break-all;
+  background: rgba(0,0,0,0.2);
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  display: block;
+  margin: 0.5rem 0;
+}
+
+.vy-admin-section {
+  margin-bottom: 2rem;
+}
+
+.vy-admin-section h2 {
+  font-size: 1.1rem;
+  margin: 0 0 1rem;
+}
+
+.vy-admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.vy-admin-table th,
+.vy-admin-table td {
+  text-align: left;
+  padding: 0.6rem 0.75rem;
+  border-bottom: 1px solid var(--vy-border);
+}
+
+.vy-admin-table th {
+  color: var(--vy-muted);
+  font-weight: 500;
+}
+
+.vy-status-badge {
+  font-size: 0.75rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 6px;
+  background: var(--vy-surface);
+}
+
+.vy-status-badge.public { background: rgba(34, 197, 94, 0.2); color: var(--vy-success); }
+.vy-status-badge.pending_payment_setup { background: rgba(234, 179, 8, 0.2); color: #eab308; }
+
+.vy-login-form {
+  max-width: 320px;
+  margin: 2rem auto;
+}
+
+.vy-login-form input {
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.vy-copy-feedback {
+  font-size: 0.8rem;
+  color: var(--vy-success);
+  margin-left: 0.5rem;
+}
+
+@media (max-width: 640px) {
+  .vy-grid {
+    grid-template-columns: 1fr;
+  }
+  .vy-filters {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .vy-filters input {
+    min-width: 0;
+  }
+}

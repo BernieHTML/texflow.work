@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Submit Expert — Vy Experts Marketplace</title>
+  <link rel="icon" href="/texflowlogo.png" type="image/png">
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/vy-experts/vy-experts.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="page">
+    <header class="header">
+      <a href="/" class="logo-wrap">
+        <span class="logo-circle"><img src="/texflowlogo.png" alt="TexFlow" class="logo" width="48" height="48"></span>
+        <span class="logo-text">TexFlow</span>
+      </a>
+      <nav class="nav">
+        <a href="/platform66/">Platform66</a>
+        <a href="/vy-experts/">Vy Experts</a>
+      </nav>
+    </header>
+
+    <main class="vy-page">
+      <div class="vy-container">
+        <div class="vy-hero">
+          <h1>Submit an Expert</h1>
+          <p>Publish base knowledge for Vy agents. Free experts go live immediately; paid experts require admin approval.</p>
+        </div>
+
+        <form id="vy-create-form" class="vy-form">
+          <label for="vy-name">Expert Name</label>
+          <input type="text" id="vy-name" name="name" required placeholder="e.g. Xero Bookkeeping Expert">
+
+          <label for="vy-category">Category</label>
+          <select id="vy-category" name="category">
+            <option value="Accounting">Accounting</option>
+            <option value="Research">Research</option>
+            <option value="Design">Design</option>
+            <option value="Productivity">Productivity</option>
+            <option value="Data">Data</option>
+            <option value="Sales">Sales</option>
+            <option value="HR">HR</option>
+            <option value="Custom">Custom</option>
+          </select>
+
+          <label for="vy-description">Short Description (max 160 chars)</label>
+          <input type="text" id="vy-description" name="description" maxlength="160" placeholder="One-line summary for cards and catalog">
+
+          <label for="vy-full-description">Full Description</label>
+          <textarea id="vy-full-description" name="full_description" placeholder="Detailed description for the expert detail page."></textarea>
+
+          <label for="vy-use-cases">Use Cases (one per line)</label>
+          <textarea id="vy-use-cases" name="use_cases" placeholder="Process invoices&#10;Match to POs&#10;Export for month-end"></textarea>
+
+          <label for="vy-tags">Tags (comma separated)</label>
+          <input type="text" id="vy-tags" name="tags" placeholder="xero, accounting, invoicing">
+
+          <label for="vy-author">Author Handle</label>
+          <input type="text" id="vy-author" name="author" placeholder="your-handle">
+
+          <label for="vy-preamble">Base Knowledge / Preamble</label>
+          <textarea id="vy-preamble" name="preamble" class="vy-preamble-field" required placeholder="The actual content Vy will load as workflow preamble. Plain text or structured instructions."></textarea>
+
+          <div class="vy-toggle-row">
+            <input type="checkbox" id="vy-paid" name="paid" value="1">
+            <label for="vy-paid" style="display:inline; margin:0;">Paid expert</label>
+          </div>
+          <div class="vy-price-row" id="vy-price-row">
+            <label for="vy-price">Price (USD, minimum $4.99)</label>
+            <input type="number" id="vy-price" name="price" min="4.99" step="0.01" value="4.99">
+          </div>
+
+          <div id="vy-form-message" style="display: none; margin-bottom: 1rem;"></div>
+          <button type="submit" class="vy-btn vy-btn-primary">Submit Expert</button>
+        </form>
+      </div>
+    </main>
+  </div>
+  <script src="/app.js"></script>
+  <script src="/vy-experts/vy-experts.js"></script>
+  <script>
+    (function () {
+      var form = document.getElementById('vy-create-form');
+      var paidCheck = document.getElementById('vy-paid');
+      var priceRow = document.getElementById('vy-price-row');
+      var messageEl = document.getElementById('vy-form-message');
+
+      if (paidCheck && priceRow) {
+        paidCheck.addEventListener('change', function () {
+          priceRow.classList.toggle('visible', paidCheck.checked);
+          document.getElementById('vy-price').required = paidCheck.checked;
+        });
+      }
+
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var paid = document.getElementById('vy-paid').checked;
+        var price = paid ? parseFloat(document.getElementById('vy-price').value) || 4.99 : 0;
+        if (paid && price < 4.99) {
+          messageEl.textContent = 'Minimum price is $4.99.';
+          messageEl.style.display = 'block';
+          messageEl.style.color = '#ef4444';
+          return;
+        }
+        var useCasesEl = document.getElementById('vy-use-cases');
+        var useCases = useCasesEl ? useCasesEl.value.split('\n').map(function (s) { return s.trim(); }).filter(Boolean) : [];
+        var tagsEl = document.getElementById('vy-tags');
+        var tags = tagsEl ? tagsEl.value.split(',').map(function (s) { return s.trim(); }).filter(Boolean) : [];
+        var payload = {
+          name: document.getElementById('vy-name').value.trim(),
+          category: document.getElementById('vy-category').value,
+          description: document.getElementById('vy-description').value.trim(),
+          full_description: document.getElementById('vy-full-description').value.trim(),
+          use_cases: useCases,
+          tags: tags,
+          author: document.getElementById('vy-author').value.trim(),
+          preamble: document.getElementById('vy-preamble').value,
+          paid: paid,
+          price: price
+        };
+        messageEl.style.display = 'none';
+        fetch('/vy-experts/api/experts', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        })
+          .then(function (r) {
+            if (!r.ok) return r.json().then(function (d) { throw new Error(d.error || 'Failed'); });
+            return r.json();
+          })
+          .then(function (data) {
+            messageEl.textContent = 'Expert submitted. ' + (paid ? 'It will appear after admin approval.' : '') + ' View: ';
+            messageEl.innerHTML = messageEl.innerHTML + '<a href="/vy-experts/expert/' + encodeURIComponent(data.id) + '">' + data.id + '</a>';
+            messageEl.style.display = 'block';
+            messageEl.style.color = 'var(--vy-success)';
+            form.reset();
+            document.getElementById('vy-price-row').classList.remove('visible');
+          })
+          .catch(function (err) {
+            messageEl.textContent = err.message || 'Submission failed.';
+            messageEl.style.display = 'block';
+            messageEl.style.color = '#ef4444';
+          });
+      });
+    })();
+  </script>
+  <script>
+    (function () {
+      var header = document.querySelector('.header');
+      if (header) window.addEventListener('scroll', function () { header.classList.toggle('scrolled', window.scrollY > 20); });
+    })();
+  </script>
+</body>
+</html>

@@ -7,6 +7,7 @@
 - **TexFlow** — Brand; homepage at `/`.
 - **TexMKT** — Agent Appeal generation and public Agent Catalog. All under `/texmkt/`.
 - **Platform66** — Agent Discovery Hub (Vy/agent onboarding, catalog, .well-known preview). SPA at `/platform66/`.
+- **Vy Experts Marketplace** — Curated base knowledge/preambles for Vy desktop agents. Marketplace at `/vy-experts/`; catalog at `/.well-known/vy-experts.json`. Free and paid experts (Stripe); ACP-compatible.
 
 ## Features
 
@@ -19,6 +20,17 @@
 - **Discovery** — `/texmkt/.well-known/ai.json` for agents (read-only, no auth).
 
 Legacy paths redirect to TexMKT: `/generate` → `/texmkt/generate`, `/upload` → `/texmkt/upload`, `/aa/:id` → `/texmkt/aa/:id`.
+
+### Vy Experts Marketplace
+
+- **Home** (`/vy-experts/`) — List public experts (cards, filter by category, search). Submit at `/vy-experts/create`.
+- **Expert detail** (`/vy-experts/expert/:id`) — Full description, use cases, author. Free: "Copy Base Knowledge"; paid: Stripe checkout.
+- **Catalog** (`GET /.well-known/vy-experts.json`) — Public JSON for Vy/agents (ACP-Version: 1.0). Entries include `preamble_url`, `checkout_url`, `capability`.
+- **Preamble** (`GET /vy-experts/expert/:id/preamble`) — Plain-text base knowledge. Free: 200; paid: requires `?access_token=...` or 402 + `checkout_url`.
+- **Checkout** (`GET /vy-experts/expert/:id/checkout`) — Redirects to Stripe Checkout. Success → `/vy-experts/expert/:id/success?session_id=...`.
+- **Webhook** (`POST /webhooks/stripe`) — Stripe `checkout.session.completed`; records order and access token in `data/orders.json`.
+
+Data: `data/experts.json`, `data/orders.json`. Seed 5 free experts on first run if empty, or `node scripts/seed-vy-experts.js`. Env: `STRIPE_SECRET_KEY`, `STRIPE_PUBLISHABLE_KEY`, `STRIPE_WEBHOOK_SECRET`, `BASE_URL`.
 
 ## Quick start (local)
 
@@ -40,6 +52,8 @@ Set `GOOGLE_AI_API_KEY` in project root `.env`. Chromium installs automatically 
 
 To include **Platform66**, build it once: `npm run build:platform66`. Then open http://localhost:5001 (or your configured PORT).
 
+**Vy Experts** uses the same Node app: no extra install or build. Run `npm install` (installs Stripe, etc.) and `npm start`. The marketplace is served at `/vy-experts/`; there is no separate build command for Vy Experts.
+
 ## Deploy on VPS (public internet)
 
 1. **Node.js 18+** (e.g. Ubuntu 22.04):
@@ -58,14 +72,16 @@ To include **Platform66**, build it once: `npm run build:platform66`. Then open 
 3. **Environment**
    ```bash
    cp .env.example .env
-   nano .env   # GOOGLE_AI_API_KEY=...
+   nano .env   # GOOGLE_AI_API_KEY, Vy Experts: STRIPE_*, BASE_URL
    ```
 
-4. **Run with systemd**
-   - `/etc/systemd/system/texflow.service`:
+4. **Data (Vy Experts)** — Ensure `data/` exists and is writable. On first start the app seeds 5 free experts if `data/experts.json` is empty. Optional: `node scripts/seed-vy-experts.js`.
+
+5. **Run with systemd**
+   - Copy or use `etc/texflow.service`; install to `/etc/systemd/system/texflow.service`:
    ```ini
    [Unit]
-   Description=TexFlow
+   Description=TexFlow (incl. Vy Experts Marketplace)
    After=network.target
 
    [Service]
@@ -76,23 +92,22 @@ To include **Platform66**, build it once: `npm run build:platform66`. Then open 
    EnvironmentFile=/var/www/texflow.work/.env
    ExecStart=/usr/bin/node server.js
    Restart=on-failure
-   PORT=5001
-   HOST=0.0.0.0
 
    [Install]
    WantedBy=multi-user.target
    ```
    - `sudo systemctl daemon-reload && sudo systemctl enable texflow && sudo systemctl start texflow`
 
-5. **Reverse proxy** — Nginx (or Caddy) in front of `http://127.0.0.1:5001`; terminate TLS for `texflow.work`. Use relative URLs in the app (no localhost); the site works on any host.
+6. **Reverse proxy** — Nginx (or Caddy) in front of `http://127.0.0.1:5001`; terminate TLS for `texflow.work`. Use `etc/nginx-texflow.conf` as reference; ensure `/.well-known/` is proxied to the app so `/.well-known/vy-experts.json` is served by Node.
 
 **Production URLs (texflow.work)** — The codebase is configured for **https://texflow.work**:
 - Homepage: `https://texflow.work/`
 - Platform66: `https://texflow.work/platform66/`
+- Vy Experts: `https://texflow.work/vy-experts/` · Catalog: `https://texflow.work/.well-known/vy-experts.json`
 - Discovery: `https://texflow.work/.well-known/ai.json`
 - Product catalog: `https://texflow.work/.well-known/agent-catalog.json`
 - Platform66 API upload: `https://texflow.work/platform66/api/upload`
-All canonical, Open Graph and Twitter meta tags, and `.well-known/ai.json` product URLs use this domain. In-app links use relative paths so they resolve correctly on the deployed host.
+All canonical, Open Graph and Twitter meta tags, and `.well-known/ai.json` product URLs use this domain. In-app links use relative paths so they resolve correctly on the deployed host. Set `BASE_URL=https://texflow.work` in `.env` for Vy Experts catalog and checkout URLs.
 
 ## Project structure
 
@@ -109,15 +124,29 @@ All canonical, Open Graph and Twitter meta tags, and `.well-known/ai.json` produ
 │   ├── styles.css
 │   ├── app.js
 │   ├── mars-hero.mp4
-│   └── texmkt/
-│       ├── index.html      # TexMKT product landing
-│       ├── generate.html
-│       ├── upload.html
-│       └── .well-known/
-│           └── ai.json     # static; catalog is dynamic
+│   ├── texmkt/
+│   │   ├── index.html      # TexMKT product landing
+│   │   ├── generate.html
+│   │   ├── upload.html
+│   │   └── .well-known/
+│   │       └── ai.json     # static; catalog is dynamic
+│   └── vy-experts/         # Vy Experts Marketplace UI
+│       ├── index.html
+│       ├── expert.html
+│       ├── create.html
+│       ├── success.html
+│       ├── vy-experts.css
+│       └── vy-experts.js
+├── data/
+│   ├── experts.json        # Vy Experts (flat file)
+│   └── orders.json         # Orders / access tokens
 ├── scripts/
 │   ├── generate_aa.py
+│   ├── seed-vy-experts.js
 │   └── requirements.txt
+├── etc/
+│   ├── texflow.service     # systemd unit
+│   └── nginx-texflow.conf  # Nginx reverse proxy
 ├── aa/                     # Stored Agent Appeals (aa/<id>.json)
 └── .env.example
 ```

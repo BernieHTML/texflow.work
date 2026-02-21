@@ -1,5 +1,6 @@
 import 'dotenv/config';
 import express from 'express';
+import Stripe from 'stripe';
 import { existsSync } from 'fs';
 import { readFile, writeFile, readdir, mkdir } from 'fs/promises';
 import { join, dirname } from 'path';
@@ -11,6 +12,11 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const app = express();
 const PORT = process.env.PORT || 5001;
 const AA_DIR = join(__dirname, 'aa');
+const DATA_DIR = join(__dirname, 'data');
+const EXPERTS_PATH = join(DATA_DIR, 'experts.json');
+const ORDERS_PATH = join(DATA_DIR, 'orders.json');
+const BASE_URL = (process.env.BASE_URL || `http://localhost:${PORT}`).replace(/\/$/, '');
+const ACP_VERSION = '1.0';
 
 const AGENT_APPEAL_SCHEMA = {
   id: 'string',
@@ -30,11 +36,96 @@ const AGENT_APPEAL_SCHEMA = {
   metadata: { created_at: 'ISO-8601', updated_at: 'ISO-8601' }
 };
 
-app.use(express.json({ limit: '1mb' }));
 app.use(express.urlencoded({ extended: true }));
+
+// Stripe webhook must receive raw body — register before express.json()
+app.post('/webhooks/stripe', express.raw({ type: 'application/json' }), async (req, res) => {
+  const sig = req.headers['stripe-signature'];
+  const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+  const stripeKey = process.env.STRIPE_SECRET_KEY;
+  if (!webhookSecret || !stripeKey) return res.status(503).send();
+  const stripe = new Stripe(stripeKey);
+  let event;
+  try {
+    event = stripe.webhooks.constructEvent(req.body, sig, webhookSecret);
+  } catch (err) {
+    return res.status(400).send(`Webhook Error: ${err.message}`);
+  }
+  if (event.type === 'checkout.session.completed') {
+    const session = event.data.object;
+    const expertId = session.metadata?.expert_id;
+    if (expertId) {
+      const orders = await readOrders();
+      let order = orders.find(o => o.stripe_session_id === session.id);
+      const accessToken = order?.access_token || uuidv4();
+      if (!order) {
+        order = { order_id: uuidv4(), expert_id: expertId, stripe_session_id: session.id, access_token: accessToken, email: session.customer_email || session.customer_details?.email || '', paid_at: new Date().toISOString(), status: 'paid' };
+        orders.push(order);
+      } else {
+        order.status = 'paid';
+        order.paid_at = order.paid_at || new Date().toISOString();
+        if (!order.access_token) order.access_token = accessToken;
+      }
+      await writeOrders(orders);
+    }
+  }
+  res.sendStatus(200);
+});
+
+app.use(express.json({ limit: '1mb' }));
 
 // Ensure aa directory exists
 await mkdir(AA_DIR, { recursive: true });
+
+// --- Vy Experts: ensure data dir and files; seed if empty ---
+await mkdir(DATA_DIR, { recursive: true });
+let expertsData = [];
+let ordersData = [];
+try {
+  const raw = await readFile(EXPERTS_PATH, 'utf8');
+  expertsData = JSON.parse(raw);
+} catch (e) {
+  if (e.code === 'ENOENT') await writeFile(EXPERTS_PATH, '[]', 'utf8');
+}
+try {
+  const raw = await readFile(ORDERS_PATH, 'utf8');
+  ordersData = JSON.parse(raw);
+} catch (e) {
+  if (e.code === 'ENOENT') await writeFile(ORDERS_PATH, '[]', 'utf8');
+}
+if (expertsData.length === 0) {
+  const seed = [
+    { id: 'xero-invoice-processing', name: 'Xero Invoice Processing Expert', category: 'Accounting', description: 'Base knowledge for processing and reconciling Xero invoices.', full_description: 'Structured knowledge for Xero invoice processing.', use_cases: ['Code invoices', 'Match to POs'], tags: ['xero', 'accounting'], author: 'texflow', price: 0, paid: false, preamble: 'You are assisting with Xero invoice processing. Match to POs when reference exists; use account from first line item.', status: 'public', created_at: new Date().toISOString() },
+    { id: 'linkedin-outreach', name: 'LinkedIn Outreach Expert', category: 'Sales', description: 'Templates and rules for LinkedIn outreach.', full_description: 'Curated knowledge for LinkedIn outreach.', use_cases: ['Connection requests', 'Follow-ups'], tags: ['linkedin', 'sales'], author: 'texflow', price: 0, paid: false, preamble: 'You are helping with LinkedIn outreach. Keep requests under 300 chars; use one concrete detail from profile.', status: 'public', created_at: new Date().toISOString() },
+    { id: 'figma-design-qa', name: 'Figma Design QA Expert', category: 'Design', description: 'Checklist for design QA in Figma.', full_description: 'Design QA workflows in Figma.', use_cases: ['Spacing', 'Typography'], tags: ['figma', 'design'], author: 'texflow', price: 0, paid: false, preamble: 'You are assisting with Figma design QA. Use 4px/8px grid; flag contrast and touch targets.', status: 'public', created_at: new Date().toISOString() },
+    { id: 'competitor-research', name: 'Competitor Research Expert', category: 'Research', description: 'Structure for competitor research.', full_description: 'Competitive overview and SWOT.', use_cases: ['Overview table', 'SWOT'], tags: ['research', 'competitors'], author: 'texflow', price: 0, paid: false, preamble: 'You are helping with competitor research. Cite sources; do not invent pricing or features.', status: 'public', created_at: new Date().toISOString() },
+    { id: 'morning-productivity-routine', name: 'Morning Productivity Routine Expert', category: 'Productivity', description: 'Morning routine and prioritization.', full_description: 'Triage and time-blocking.', use_cases: ['Top 3', 'Time-block'], tags: ['productivity', 'morning'], author: 'texflow', price: 0, paid: false, preamble: 'You are supporting a morning productivity routine. Triage, top 3, time-block.', status: 'public', created_at: new Date().toISOString() }
+  ];
+  await writeFile(EXPERTS_PATH, JSON.stringify(seed, null, 2), 'utf8');
+  expertsData = seed;
+}
+
+async function readExperts() {
+  const raw = await readFile(EXPERTS_PATH, 'utf8');
+  return JSON.parse(raw);
+}
+async function writeExperts(experts) {
+  await writeFile(EXPERTS_PATH, JSON.stringify(experts, null, 2), 'utf8');
+}
+async function readOrders() {
+  const raw = await readFile(ORDERS_PATH, 'utf8');
+  return JSON.parse(raw);
+}
+async function writeOrders(orders) {
+  await writeFile(ORDERS_PATH, JSON.stringify(orders, null, 2), 'utf8');
+}
+function getExpertById(experts, id) {
+  return experts.find(e => e.id === id) || null;
+}
+function slugify(name) {
+  return name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || uuidv4().slice(0, 8);
+}
+const VY_EXPERTS_PUBLIC = join(__dirname, 'public', 'vy-experts');
 
 // Log requests to TexMKT .well-known
 app.use((req, res, next) => {
@@ -154,6 +245,171 @@ app.get('/platform66/.well-known/agent-catalog.json', async (req, res) => {
   } catch (e) {
     res.status(500).json({ error: e.message });
   }
+});
+
+// --- Vy Experts: .well-known catalog (ACP) ---
+app.get('/.well-known/vy-experts.json', async (req, res) => {
+  try {
+    const experts = await readExperts();
+    const publicExperts = experts.filter(e => e.status === 'public');
+    const catalog = publicExperts.map(e => ({
+      id: e.id,
+      name: e.name,
+      category: e.category,
+      description: e.description || '',
+      author: e.author || '',
+      tags: Array.isArray(e.tags) ? e.tags : [],
+      price: e.price ?? 0,
+      paid: !!e.paid,
+      preamble_url: `${BASE_URL}/vy-experts/expert/${e.id}/preamble`,
+      checkout_url: `${BASE_URL}/vy-experts/expert/${e.id}/checkout`
+    }));
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('ACP-Version', ACP_VERSION);
+    res.send(JSON.stringify({
+      capability: { protocol: 'ACP', auth: 'bearer_token', auth_flow: 'stripe_checkout' },
+      experts: catalog,
+      updated_at: new Date().toISOString().slice(0, 10)
+    }, null, 2));
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+// --- Vy Experts: pages (before static) ---
+app.get('/vy-experts', (req, res) => res.redirect(301, '/vy-experts/'));
+app.get('/vy-experts/', (req, res) => res.sendFile(join(VY_EXPERTS_PUBLIC, 'index.html')));
+app.get('/vy-experts/create', (req, res) => res.sendFile(join(VY_EXPERTS_PUBLIC, 'create.html')));
+app.get('/vy-experts/expert/:id', (req, res) => res.sendFile(join(VY_EXPERTS_PUBLIC, 'expert.html')));
+app.get('/vy-experts/expert/:id/success', (req, res) => res.sendFile(join(VY_EXPERTS_PUBLIC, 'success.html')));
+
+// --- Vy Experts: preamble (ACP; 402 for paid without token) ---
+app.get('/vy-experts/expert/:id/preamble', async (req, res) => {
+  res.setHeader('ACP-Version', ACP_VERSION);
+  const { id } = req.params;
+  const experts = await readExperts();
+  const expert = getExpertById(experts, id);
+  if (!expert) return res.status(404).json({ error: 'Not found' });
+  if (!expert.paid) {
+    res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+    return res.send(expert.preamble || '');
+  }
+  const token = req.query.access_token || req.get('Authorization')?.replace(/^Bearer\s+/i, '');
+  if (!token) {
+    return res.status(402).json({
+      error: 'payment_required',
+      checkout_url: `${BASE_URL}/vy-experts/expert/${id}/checkout`
+    });
+  }
+  const orders = await readOrders();
+  const order = orders.find(o => o.expert_id === id && o.access_token === token && o.status === 'paid');
+  if (!order) {
+    return res.status(402).json({
+      error: 'payment_required',
+      checkout_url: `${BASE_URL}/vy-experts/expert/${id}/checkout`
+    });
+  }
+  res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+  res.send(expert.preamble || '');
+});
+
+// --- Vy Experts: Stripe Checkout ---
+app.get('/vy-experts/expert/:id/checkout', async (req, res) => {
+  const { id } = req.params;
+  const experts = await readExperts();
+  const expert = getExpertById(experts, id);
+  if (!expert || !expert.paid || expert.status !== 'public') return res.status(404).json({ error: 'Not found' });
+  const stripeKey = process.env.STRIPE_SECRET_KEY;
+  if (!stripeKey) return res.status(503).json({ error: 'Stripe not configured' });
+  const stripe = new Stripe(stripeKey);
+  const priceCents = Math.round((expert.price || 0) * 100);
+  if (priceCents < 499) return res.status(400).json({ error: 'Invalid price' });
+  const session = await stripe.checkout.sessions.create({
+    mode: 'payment',
+    payment_method_types: ['card'],
+    line_items: [{ price_data: { currency: 'usd', unit_amount: priceCents, product_data: { name: expert.name, description: expert.description || '' } }, quantity: 1 }],
+    success_url: `${BASE_URL}/vy-experts/expert/${id}/success?session_id={CHECKOUT_SESSION_ID}`,
+    cancel_url: `${BASE_URL}/vy-experts/expert/${id}`,
+    metadata: { expert_id: id }
+  });
+  res.redirect(303, session.url);
+});
+
+// --- Vy Experts: complete session (success page calls this to get token) ---
+app.get('/vy-experts/api/expert/:id/complete-session', async (req, res) => {
+  const { id } = req.params;
+  const sessionId = req.query.session_id;
+  if (!sessionId) return res.status(400).json({ error: 'Missing session_id' });
+  const stripeKey = process.env.STRIPE_SECRET_KEY;
+  if (!stripeKey) return res.status(503).json({ error: 'Stripe not configured' });
+  const stripe = new Stripe(stripeKey);
+  let session;
+  try {
+    session = await stripe.checkout.sessions.retrieve(sessionId);
+  } catch (_) {
+    return res.status(400).json({ error: 'Invalid session' });
+  }
+  if (session.metadata?.expert_id !== id) return res.status(400).json({ error: 'Session mismatch' });
+  const experts = await readExperts();
+  const expert = getExpertById(experts, id);
+  if (!expert) return res.status(404).json({ error: 'Not found' });
+  let orders = await readOrders();
+  let order = orders.find(o => o.stripe_session_id === sessionId);
+  const accessToken = order?.access_token || uuidv4();
+  if (!order) {
+    order = { order_id: uuidv4(), expert_id: id, stripe_session_id: sessionId, access_token: accessToken, email: session.customer_email || session.customer_details?.email || '', paid_at: new Date().toISOString(), status: 'paid' };
+    orders.push(order);
+    await writeOrders(orders);
+  } else if (!order.access_token) {
+    order.access_token = accessToken;
+    await writeOrders(orders);
+  }
+  res.json({ access_token: order.access_token, expert_id: id });
+});
+
+// --- Vy Experts: API ---
+app.post('/vy-experts/api/experts', async (req, res) => {
+  const body = req.body || {};
+  const name = (body.name || '').trim();
+  if (!name) return res.status(400).json({ error: 'Expert name required' });
+  const experts = await readExperts();
+  const id = body.id && /^[a-z0-9-]{1,64}$/.test(body.id) ? body.id : slugify(name);
+  if (experts.some(e => e.id === id)) return res.status(409).json({ error: 'Expert id already exists' });
+  const category = (body.category || 'Custom').trim();
+  const paid = !!body.paid;
+  const price = paid ? Math.max(4.99, parseFloat(body.price) || 4.99) : 0;
+  const expert = {
+    id,
+    name,
+    category,
+    description: (body.description || '').slice(0, 160),
+    full_description: body.full_description || '',
+    use_cases: Array.isArray(body.use_cases) ? body.use_cases : (typeof body.use_cases === 'string' ? body.use_cases.split('\n').map(s => s.trim()).filter(Boolean) : []),
+    tags: Array.isArray(body.tags) ? body.tags : (typeof body.tags === 'string' ? body.tags.split(',').map(s => s.trim()).filter(Boolean) : []),
+    author: (body.author || '').trim() || 'anonymous',
+    price,
+    paid,
+    preamble: body.preamble || '',
+    status: paid ? 'pending_payment_setup' : 'public',
+    created_at: new Date().toISOString()
+  };
+  experts.push(expert);
+  await writeExperts(experts);
+  res.status(201).json({ id, url: `/vy-experts/expert/${id}` });
+});
+
+app.get('/vy-experts/api/experts', async (req, res) => {
+  const experts = await readExperts();
+  const publicOnly = experts.filter(e => e.status === 'public');
+  res.json(publicOnly.map(e => ({ id: e.id, name: e.name, category: e.category, description: e.description, author: e.author, tags: e.tags, price: e.price, paid: e.paid })));
+});
+
+app.get('/vy-experts/api/experts/:id', async (req, res) => {
+  const experts = await readExperts();
+  const expert = getExpertById(experts, req.params.id);
+  if (!expert) return res.status(404).json({ error: 'Not found' });
+  const { preamble, ...rest } = expert;
+  res.json(rest);
 });
 
 // --- Platform66 product (SPA; serve built dist when present) ---
