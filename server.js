@@ -277,8 +277,8 @@ app.get('/.well-known/vy-experts.json', async (req, res) => {
 });
 
 // --- Vy Experts: pages (before static) ---
-app.get('/vy-experts', (req, res) => res.redirect(301, '/vy-experts/'));
-app.get('/vy-experts/', (req, res) => res.sendFile(join(VY_EXPERTS_PUBLIC, 'index.html')));
+// --- Vy Experts: pages (before static) ---
+app.get('/vy-experts', (req, res) => res.sendFile(join(VY_EXPERTS_PUBLIC, 'index.html')));
 app.get('/vy-experts/create', (req, res) => res.sendFile(join(VY_EXPERTS_PUBLIC, 'create.html')));
 app.get('/vy-experts/expert/:id', (req, res) => res.sendFile(join(VY_EXPERTS_PUBLIC, 'expert.html')));
 app.get('/vy-experts/expert/:id/success', (req, res) => res.sendFile(join(VY_EXPERTS_PUBLIC, 'success.html')));

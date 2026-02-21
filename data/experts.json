@@ -5,8 +5,17 @@
     "category": "Accounting",
     "description": "Base knowledge for processing and reconciling Xero invoices. Rules for coding, approval workflows, and export.",
     "full_description": "This expert provides Vy with structured knowledge for working inside Xero: how to interpret invoice fields, match to purchase orders, apply coding rules, and run approval workflows. Use it when your workflow involves processing supplier invoices or preparing them for export.",
-    "use_cases": ["Code incoming invoices by account", "Match invoices to POs", "Export paid invoices for month-end"],
-    "tags": ["xero", "invoicing", "accounting", "reconciliation"],
+    "use_cases": [
+      "Code incoming invoices by account",
+      "Match invoices to POs",
+      "Export paid invoices for month-end"
+    ],
+    "tags": [
+      "xero",
+      "invoicing",
+      "accounting",
+      "reconciliation"
+    ],
     "author": "texflow",
     "price": 0,
     "paid": false,
@@ -20,8 +29,17 @@
     "category": "Sales",
     "description": "Templates and rules for personalized LinkedIn outreach: connection requests, follow-ups, and reply handling.",
     "full_description": "Curated base knowledge for running LinkedIn outreach with Vy: connection message templates, follow-up sequences, and rules for when to personalize vs use templates. Includes tone guidelines and compliance-friendly phrasing.",
-    "use_cases": ["Draft connection requests by segment", "Write follow-up sequences", "Suggest replies to common responses"],
-    "tags": ["linkedin", "sales", "outreach", "cold-messaging"],
+    "use_cases": [
+      "Draft connection requests by segment",
+      "Write follow-up sequences",
+      "Suggest replies to common responses"
+    ],
+    "tags": [
+      "linkedin",
+      "sales",
+      "outreach",
+      "cold-messaging"
+    ],
     "author": "texflow",
     "price": 0,
     "paid": false,
@@ -35,8 +53,17 @@
     "category": "Design",
     "description": "Checklist and preamble for design QA in Figma: spacing, alignment, typography, and accessibility.",
     "full_description": "Structured knowledge for running design QA workflows in Figma with Vy: spacing and alignment rules, typography scale checks, color contrast, and basic accessibility (focus order, touch targets). Use when reviewing screens before handoff.",
-    "use_cases": ["Check spacing and alignment consistency", "Verify typography scale", "Run accessibility checklist"],
-    "tags": ["figma", "design", "qa", "accessibility"],
+    "use_cases": [
+      "Check spacing and alignment consistency",
+      "Verify typography scale",
+      "Run accessibility checklist"
+    ],
+    "tags": [
+      "figma",
+      "design",
+      "qa",
+      "accessibility"
+    ],
     "author": "texflow",
     "price": 0,
     "paid": false,
@@ -50,8 +77,17 @@
     "category": "Research",
     "description": "Structure for competitor research workflows: positioning, features, pricing, and SWOT-style output.",
     "full_description": "Base knowledge for running competitor research with Vy: how to structure a competitive overview, compare features and pricing, and produce SWOT-style summaries. Use when preparing battle cards or strategy docs.",
-    "use_cases": ["Build a competitor overview table", "Compare features and pricing", "Draft SWOT-style summaries"],
-    "tags": ["research", "competitors", "strategy", "positioning"],
+    "use_cases": [
+      "Build a competitor overview table",
+      "Compare features and pricing",
+      "Draft SWOT-style summaries"
+    ],
+    "tags": [
+      "research",
+      "competitors",
+      "strategy",
+      "positioning"
+    ],
     "author": "texflow",
     "price": 0,
     "paid": false,
@@ -65,13 +101,46 @@
     "category": "Productivity",
     "description": "Morning routine and prioritization preamble: triage, top 3, and time-blocking rules for Vy.",
     "full_description": "Curated knowledge for a morning productivity workflow: triage inbox and tasks, pick a top 3 for the day, and apply simple time-blocking rules. Use with Vy to run a consistent start-of-day routine.",
-    "use_cases": ["Triage tasks and pick top 3", "Time-block the day", "Draft a short daily plan"],
-    "tags": ["productivity", "morning", "prioritization", "time-blocking"],
+    "use_cases": [
+      "Triage tasks and pick top 3",
+      "Time-block the day",
+      "Draft a short daily plan"
+    ],
+    "tags": [
+      "productivity",
+      "morning",
+      "prioritization",
+      "time-blocking"
+    ],
     "author": "texflow",
     "price": 0,
     "paid": false,
     "preamble": "You are supporting a morning productivity routine. Steps: (1) Triage: list all open tasks; label each as Urgent/Important/Later. (2) Top 3: user picks exactly 3 tasks for today; you confirm and write them in one sentence each. (3) Time-block: suggest 1–2 hour blocks for deep work and place the top 3; leave buffer between blocks. (4) Output: one short paragraph summary of the day plan and one line per top-3 task. Do not add new tasks; only work from the list the user provides.",
     "status": "public",
     "created_at": "2025-02-21T00:00:00.000Z"
+  },
+  {
+    "id": "google-calender-expert",
+    "name": "Google Calender Expert",
+    "category": "Productivity",
+    "description": "An expert in professional google calender operations.",
+    "full_description": "Always consult learnings first\nBefore starting a Google Calendar task, skim learning titles and follow relevant learnings.\n1) UI map and mental model\nLeft rail: Create button, Appointment booking pages, \"My calendars\", and \"Other calendars.\"\nTop bar: search, settings, account switcher. Switch Day/Week/Month/Year/Agenda, jump to Today, navigate with arrows;\nEvent editing UI\nClick event → popup card\nPencil icon in popup card → full event editor\nPOPUP VS FULL EVENT EDITOR — QUICK SUMMARY\nPOPUP CARD (what you see when clicking an event)\nShown:\n\nTitle\nDate + time\nLocation (if any)\nMeet link (if any)\nGuests preview + RSVP buttons\nColor picker (sometimes)\nRecurrence label (“Repeats…”), not editable in popup card\nDescription preview (truncated), not editable in popup card\nEditable in popup:\n\nTitle (only if it's a new event, otherwise needs full editor)\nTime (only if it's a new event, otherwise needs full editor)\nColor\nRSVP (Yes/No/Maybe)\nNot editable in popup (requires full editor):\n\nGuests (add/remove)\nGoogle Meet (add)\nRecurrence rules\nNotifications\nDescription (full)\nBusy/Free\nVisibility (Public/Private)\nAttachments\nEvent type (Event / OOO / Focus time)\nTimezone\n2) Core actions\nCreate events\n\nClick an empty slot or Create → add title, time, guests → Save. Do NOT drag to set duration from the grid, instead edit it from the event pane that opens after pressing create/clicking empty slot. Make sure to take a step back and verify your progress after every few actions to truly verify your progress.\nAdd Google Meet: from the event pane use Add Google Meet video conferencing.\nEdit / delete / color\n\nOpen event → Edit to change details, notify guests, adjust permissions; set event color.\nRepeat / all-day\n\nYou can optionally mark an event as All-day\nYou can also set recurring events or keep it as the default: Does not repeat.\nFind availability\n\nIn an event pane, you can add guests → Find a time to see shared calendars side-by-side\nOr, from the main page, you can press Search for people to overlay a colleague's calendar if shared.\n3) Advanced event types that block time correctly\nAppointment schedules (public booking pages)\n\nCreate → Appointment schedule. Configure slots, buffers, max bookings; share the booking link. Good for external scheduling without full calendar sharing.\nOut of office (auto-decline)\n\nOpen event pane either using Create or by pressing in empty region → Click Out of office → set range and decline rules; Calendar auto-declines overlapping invites.\nFocus time\n\nOpen event pane either using Create or by pressing in empty region → Focus time; optionally auto-decline meetings during the block and set DND.\nWorking hours & location\n\nSettings → Working hours to set weekly hours\nWorking location can be accessed by clicking the create button and then clicking 'Working location' to set working location. You can either set it for a specified time or for a day-range.\n“Find a Time” / “Suggested Times” to find a time with someone for a meeting\nLocation\nIn event editor next to “Event details” tab\nProcedure\nAdd guests first\nOpen “Suggested Times” if in popup card, otherwise open “Find a Time” from the event editor\nLook for a shared slot that works\nClick the slot to apply\nMake sure to take a step back and verify your progress after every few actions to truly verify your progress.\n4) Subscribe/import/export calendars\nAdd other calendars → From URL to subscribe to an ICS feed.\nSettings → Import & export to bulk move events (.ics/.zip).\n5) Notifications\nSettings → Notification settings to choose browser notifications, email notifications, and defaults per calendar.\n6) Search and quick jumps\nPress / to focus search. Use g to jump to a date; ? shows all shortcuts after enabling them in Settings.\n7) Verified keyboard shortcuts (web)\nIf some shortcut that you tried didn't work, turn on: Settings → Enable keyboard shortcuts. You can see a list of shortcuts by pressing ?.\n\nNavigation\n\nNext period (depends on current view): n or j\nPrevious period (depends on current view): p or k\nToday: t\nSearch box: /\nGo to date: g\nSettings: s\nChange view\n\nDay: 1 or d\nWeek: 2 or w\nMonth: 3 or m\nCustom view: 4 or x\nSchedule view (agenda): 5 or a\nYear view: 6 or y\nEvent actions\n\nCreate event: c\nOpen event details (only works after clicking event in calendar): e\nDelete event (only works after clicking event in calendar): Backspace/Delete\nUndo: z\nSave from event page: ⌘+s (Mac) / Ctrl+s (Windows)\nReturn to grid from event pane: Esc\nQUICK REFERENCE - MOST IMPORTANT RULES\nTop rules:\n\nAlways verify calendar, date, and view before creating or editing events.\nUse the full event editor (pencil icon) for any non-trivial change.\nTreat recurring-event scope prompts with extreme care and choose the narrowest scope that matches the user instructions.\nFor rescheduling/bulk changes, operate on one event first, verify, then repeat.\nShow less",
+    "use_cases": [
+      "Book appointments",
+      "Manage events",
+      "time management"
+    ],
+    "tags": [
+      "productivity",
+      "calendar",
+      "planning",
+      "booking"
+    ],
+    "author": "hello-world",
+    "price": 0,
+    "paid": false,
+    "preamble": "Always consult learnings first\nBefore starting a Google Calendar task, skim learning titles and follow relevant learnings.\n1) UI map and mental model\nLeft rail: Create button, Appointment booking pages, \"My calendars\", and \"Other calendars.\"\nTop bar: search, settings, account switcher. Switch Day/Week/Month/Year/Agenda, jump to Today, navigate with arrows;\nEvent editing UI\nClick event → popup card\nPencil icon in popup card → full event editor\nPOPUP VS FULL EVENT EDITOR — QUICK SUMMARY\nPOPUP CARD (what you see when clicking an event)\nShown:\n\nTitle\nDate + time\nLocation (if any)\nMeet link (if any)\nGuests preview + RSVP buttons\nColor picker (sometimes)\nRecurrence label (“Repeats…”), not editable in popup card\nDescription preview (truncated), not editable in popup card\nEditable in popup:\n\nTitle (only if it's a new event, otherwise needs full editor)\nTime (only if it's a new event, otherwise needs full editor)\nColor\nRSVP (Yes/No/Maybe)\nNot editable in popup (requires full editor):\n\nGuests (add/remove)\nGoogle Meet (add)\nRecurrence rules\nNotifications\nDescription (full)\nBusy/Free\nVisibility (Public/Private)\nAttachments\nEvent type (Event / OOO / Focus time)\nTimezone\n2) Core actions\nCreate events\n\nClick an empty slot or Create → add title, time, guests → Save. Do NOT drag to set duration from the grid, instead edit it from the event pane that opens after pressing create/clicking empty slot. Make sure to take a step back and verify your progress after every few actions to truly verify your progress.\nAdd Google Meet: from the event pane use Add Google Meet video conferencing.\nEdit / delete / color\n\nOpen event → Edit to change details, notify guests, adjust permissions; set event color.\nRepeat / all-day\n\nYou can optionally mark an event as All-day\nYou can also set recurring events or keep it as the default: Does not repeat.\nFind availability\n\nIn an event pane, you can add guests → Find a time to see shared calendars side-by-side\nOr, from the main page, you can press Search for people to overlay a colleague's calendar if shared.\n3) Advanced event types that block time correctly\nAppointment schedules (public booking pages)\n\nCreate → Appointment schedule. Configure slots, buffers, max bookings; share the booking link. Good for external scheduling without full calendar sharing.\nOut of office (auto-decline)\n\nOpen event pane either using Create or by pressing in empty region → Click Out of office → set range and decline rules; Calendar auto-declines overlapping invites.\nFocus time\n\nOpen event pane either using Create or by pressing in empty region → Focus time; optionally auto-decline meetings during the block and set DND.\nWorking hours & location\n\nSettings → Working hours to set weekly hours\nWorking location can be accessed by clicking the create button and then clicking 'Working location' to set working location. You can either set it for a specified time or for a day-range.\n“Find a Time” / “Suggested Times” to find a time with someone for a meeting\nLocation\nIn event editor next to “Event details” tab\nProcedure\nAdd guests first\nOpen “Suggested Times” if in popup card, otherwise open “Find a Time” from the event editor\nLook for a shared slot that works\nClick the slot to apply\nMake sure to take a step back and verify your progress after every few actions to truly verify your progress.\n4) Subscribe/import/export calendars\nAdd other calendars → From URL to subscribe to an ICS feed.\nSettings → Import & export to bulk move events (.ics/.zip).\n5) Notifications\nSettings → Notification settings to choose browser notifications, email notifications, and defaults per calendar.\n6) Search and quick jumps\nPress / to focus search. Use g to jump to a date; ? shows all shortcuts after enabling them in Settings.\n7) Verified keyboard shortcuts (web)\nIf some shortcut that you tried didn't work, turn on: Settings → Enable keyboard shortcuts. You can see a list of shortcuts by pressing ?.\n\nNavigation\n\nNext period (depends on current view): n or j\nPrevious period (depends on current view): p or k\nToday: t\nSearch box: /\nGo to date: g\nSettings: s\nChange view\n\nDay: 1 or d\nWeek: 2 or w\nMonth: 3 or m\nCustom view: 4 or x\nSchedule view (agenda): 5 or a\nYear view: 6 or y\nEvent actions\n\nCreate event: c\nOpen event details (only works after clicking event in calendar): e\nDelete event (only works after clicking event in calendar): Backspace/Delete\nUndo: z\nSave from event page: ⌘+s (Mac) / Ctrl+s (Windows)\nReturn to grid from event pane: Esc\nQUICK REFERENCE - MOST IMPORTANT RULES\nTop rules:\n\nAlways verify calendar, date, and view before creating or editing events.\nUse the full event editor (pencil icon) for any non-trivial change.\nTreat recurring-event scope prompts with extreme care and choose the narrowest scope that matches the user instructions.\nFor rescheduling/bulk changes, operate on one event first, verify, then repeat.\nShow less",
+    "status": "public",
+    "created_at": "2026-02-21T13:18:49.758Z"
   }
 ]
