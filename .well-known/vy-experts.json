@@ -123,6 +123,21 @@
       "paid": false,
       "preamble_url": "http://localhost:5001/vy-experts/expert/gmail-expert/preamble",
       "checkout_url": "http://localhost:5001/vy-experts/expert/gmail-expert/checkout"
+    },
+    {
+      "id": "youtube-content-creation-expert",
+      "name": "Youtube content creation expert",
+      "category": "Custom",
+      "description": "Expert in YT content creation",
+      "author": "bernie3147",
+      "tags": [
+        "content creation",
+        "productivity"
+      ],
+      "price": 25.99,
+      "paid": true,
+      "preamble_url": "http://localhost:5001/vy-experts/expert/youtube-content-creation-expert/preamble",
+      "checkout_url": "http://localhost:5001/vy-experts/expert/youtube-content-creation-expert/checkout"
     }
   ],
   "updated_at": "2026-02-21"

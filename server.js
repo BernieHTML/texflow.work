@@ -461,7 +461,7 @@ app.post('/vy-experts/api/experts', async (req, res) => {
     price,
     paid,
     preamble: body.preamble || '',
-    status: paid ? 'pending_payment_setup' : 'public',
+    status: 'public',
     created_at: new Date().toISOString()
   };
   experts.push(expert);

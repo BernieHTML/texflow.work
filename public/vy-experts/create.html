@@ -133,7 +133,7 @@
             return r.json();
           })
           .then(function (data) {
-            messageEl.textContent = 'Expert submitted. ' + (paid ? 'It will appear after admin approval.' : '') + ' View: ';
+            messageEl.textContent = 'Expert submitted. View: ';
             messageEl.innerHTML = messageEl.innerHTML + '<a href="/vy-experts/expert/' + encodeURIComponent(data.id) + '">' + data.id + '</a>';
             messageEl.style.display = 'block';
             messageEl.style.color = 'var(--vy-success)';
