@@ -99,7 +99,7 @@
       function load() {
         loading.style.display = 'block';
         errEl.style.display = 'none';
-        fetch('/vy-experts/api/catalog')
+        fetch('/.well-known/vy-experts.json')
           .then(function (r) { return r.json(); })
           .then(function (data) {
             loading.style.display = 'none';

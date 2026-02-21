@@ -104,6 +104,7 @@ if (expertsData.length === 0) {
   await writeFile(EXPERTS_PATH, JSON.stringify(seed, null, 2), 'utf8');
   expertsData = seed;
 }
+await writeWellKnownVyExperts();
 
 async function readExperts() {
   const raw = await readFile(EXPERTS_PATH, 'utf8');
@@ -125,6 +126,38 @@ function getExpertById(experts, id) {
 function slugify(name) {
   return name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || uuidv4().slice(0, 8);
 }
+
+const WELL_KNOWN_DIR = join(__dirname, '.well-known');
+const VY_EXPERTS_WELL_KNOWN_PATH = join(WELL_KNOWN_DIR, 'vy-experts.json');
+
+async function writeWellKnownVyExperts() {
+  try {
+    await mkdir(WELL_KNOWN_DIR, { recursive: true });
+    const experts = await readExperts();
+    const publicExperts = experts.filter(e => e.status === 'public');
+    const catalog = publicExperts.map(e => ({
+      id: e.id,
+      name: e.name,
+      category: e.category,
+      description: e.description || '',
+      author: e.author || '',
+      tags: Array.isArray(e.tags) ? e.tags : [],
+      price: e.price ?? 0,
+      paid: !!e.paid,
+      preamble_url: `${BASE_URL}/vy-experts/expert/${e.id}/preamble`,
+      checkout_url: `${BASE_URL}/vy-experts/expert/${e.id}/checkout`
+    }));
+    const body = JSON.stringify({
+      capability: { protocol: 'ACP', auth: 'bearer_token', auth_flow: 'stripe_checkout' },
+      experts: catalog,
+      updated_at: new Date().toISOString().slice(0, 10)
+    }, null, 2);
+    await writeFile(VY_EXPERTS_WELL_KNOWN_PATH, body, 'utf8');
+  } catch (e) {
+    console.error('[Vy Experts] Failed to write .well-known/vy-experts.json:', e.message);
+  }
+}
+
 const VY_EXPERTS_PUBLIC = join(__dirname, 'public', 'vy-experts');
 
 // Log requests to TexMKT .well-known
@@ -247,9 +280,19 @@ app.get('/platform66/.well-known/agent-catalog.json', async (req, res) => {
   }
 });
 
-// --- Vy Experts: .well-known catalog (ACP) ---
+// --- Vy Experts: .well-known catalog (ACP); serve live file from .well-known/vy-experts.json ---
 app.get('/.well-known/vy-experts.json', async (req, res) => {
   try {
+    res.setHeader('ACP-Version', ACP_VERSION);
+    if (existsSync(VY_EXPERTS_WELL_KNOWN_PATH)) {
+      res.setHeader('Content-Type', 'application/json');
+      return res.sendFile(VY_EXPERTS_WELL_KNOWN_PATH);
+    }
+    await writeWellKnownVyExperts();
+    if (existsSync(VY_EXPERTS_WELL_KNOWN_PATH)) {
+      res.setHeader('Content-Type', 'application/json');
+      return res.sendFile(VY_EXPERTS_WELL_KNOWN_PATH);
+    }
     const experts = await readExperts();
     const publicExperts = experts.filter(e => e.status === 'public');
     const catalog = publicExperts.map(e => ({
@@ -265,7 +308,6 @@ app.get('/.well-known/vy-experts.json', async (req, res) => {
       checkout_url: `${BASE_URL}/vy-experts/expert/${e.id}/checkout`
     }));
     res.setHeader('Content-Type', 'application/json');
-    res.setHeader('ACP-Version', ACP_VERSION);
     res.send(JSON.stringify({
       capability: { protocol: 'ACP', auth: 'bearer_token', auth_flow: 'stripe_checkout' },
       experts: catalog,
@@ -424,6 +466,7 @@ app.post('/vy-experts/api/experts', async (req, res) => {
   };
   experts.push(expert);
   await writeExperts(experts);
+  await writeWellKnownVyExperts();
   res.status(201).json({ id, url: `/vy-experts/expert/${id}` });
 });
 
