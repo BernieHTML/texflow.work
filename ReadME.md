@@ -7,7 +7,7 @@
 - **TexFlow** — Brand; homepage at `/`.
 - **TexMKT** — Agent Appeal generation and public Agent Catalog. All under `/texmkt/`.
 - **Platform66** — Agent Discovery Hub (Vy/agent onboarding, catalog, .well-known preview). SPA at `/platform66/`.
-- **Vy Experts Marketplace** — Curated base knowledge/preambles for Vy desktop agents. Marketplace at `/vy-experts/`; catalog at `/.well-known/vy-experts.json`. Free and paid experts (Stripe); ACP-compatible.
+- **VyEx** — Curated base knowledge/preambles for Vy desktop agents. Marketplace at `/vyex/`; catalog at `/.well-known/vyex.json`. Free and paid experts (Stripe); ACP-compatible.
 
 ## Features
 
@@ -21,16 +21,16 @@
 
 Legacy paths redirect to TexMKT: `/generate` → `/texmkt/generate`, `/upload` → `/texmkt/upload`, `/aa/:id` → `/texmkt/aa/:id`.
 
-### Vy Experts Marketplace
+### VyEx
 
-- **Home** (`/vy-experts/`) — List public experts (cards, filter by category, search). Submit at `/vy-experts/create`.
-- **Expert detail** (`/vy-experts/expert/:id`) — Full description, use cases, author. Free: "Copy Base Knowledge"; paid: Stripe checkout.
-- **Catalog** — Public JSON (ACP-Version: 1.0): `GET /.well-known/vy-experts.json` (canonical for agents; requires Nginx to proxy `/.well-known/` to the app) or `GET /vy-experts/api/catalog` (same response; used by the marketplace page so it works even if Nginx serves .well-known from disk).
-- **Preamble** (`GET /vy-experts/expert/:id/preamble`) — Plain-text base knowledge. Free: 200; paid: requires `?access_token=...` or 402 + `checkout_url`.
-- **Checkout** (`GET /vy-experts/expert/:id/checkout`) — Redirects to Stripe Checkout. Success → `/vy-experts/expert/:id/success?session_id=...`.
+- **Home** (`/vyex/`) — List public experts (cards, filter by category, search). Submit at `/vyex/create`.
+- **Expert detail** (`/vyex/expert/:id`) — Full description, use cases, author. Free: "Copy Base Knowledge"; paid: Stripe checkout.
+- **Catalog** — Public JSON (ACP-Version: 1.0): `GET /.well-known/vyex.json` or `GET /vyex/api/catalog` (same response).
+- **Preamble** (`GET /vyex/expert/:id/preamble`) — Plain-text base knowledge. Free: 200; paid: requires `?access_token=...` or 402 + `checkout_url`.
+- **Checkout** (`GET /vyex/expert/:id/checkout`) — Redirects to Stripe Checkout. Success → `/vyex/expert/:id/success?session_id=...`.
 - **Webhook** (`POST /webhooks/stripe`) — Stripe `checkout.session.completed`; records order and access token in `data/orders.json`.
 
-Data: `data/experts.json`, `data/orders.json`. Seed 5 free experts on first run if empty, or `node scripts/seed-vy-experts.js`. Env: `STRIPE_SECRET_KEY`, `STRIPE_PUBLISHABLE_KEY`, `STRIPE_WEBHOOK_SECRET`, `BASE_URL`.
+Data: `data/experts.json`, `data/orders.json`. Seed 5 free experts on first run if empty, or `node scripts/seed-vyex.js`. Env: `STRIPE_SECRET_KEY`, `STRIPE_PUBLISHABLE_KEY`, `STRIPE_WEBHOOK_SECRET`, `BASE_URL`.
 
 ## Quick start (local)
 
@@ -52,7 +52,7 @@ Set `GOOGLE_AI_API_KEY` in project root `.env`. Chromium installs automatically 
 
 To include **Platform66**, build it once: `npm run build:platform66`. Then open http://localhost:5001 (or your configured PORT).
 
-**Vy Experts** uses the same Node app: no extra install or build. Run `npm install` (installs Stripe, etc.) and `npm start`. The marketplace is served at `/vy-experts/`; there is no separate build command for Vy Experts.
+**VyEx** uses the same Node app: no extra install or build. Run `npm install` (installs Stripe, etc.) and `npm start`. The marketplace is served at `/vyex/`; there is no separate build command for VyEx.
 
 ## Deploy on VPS (public internet)
 
@@ -72,16 +72,16 @@ To include **Platform66**, build it once: `npm run build:platform66`. Then open 
 3. **Environment**
    ```bash
    cp .env.example .env
-   nano .env   # GOOGLE_AI_API_KEY, Vy Experts: STRIPE_*, BASE_URL
+   nano .env   # GOOGLE_AI_API_KEY, VyEx: STRIPE_*, BASE_URL
    ```
 
-4. **Data (Vy Experts)** — Ensure `data/` exists and is writable. On first start the app seeds 5 free experts if `data/experts.json` is empty. Optional: `node scripts/seed-vy-experts.js`.
+4. **Data (VyEx)** — Ensure `data/` exists and is writable. On first start the app seeds 5 free experts if `data/experts.json` is empty. Optional: `node scripts/seed-vyex.js`.
 
 5. **Run with systemd**
    - Copy or use `etc/texflow.service`; install to `/etc/systemd/system/texflow.service`:
    ```ini
    [Unit]
-   Description=TexFlow (incl. Vy Experts Marketplace)
+   Description=TexFlow (incl. VyEx)
    After=network.target
 
    [Service]
@@ -98,16 +98,16 @@ To include **Platform66**, build it once: `npm run build:platform66`. Then open 
    ```
    - `sudo systemctl daemon-reload && sudo systemctl enable texflow && sudo systemctl start texflow`
 
-6. **Reverse proxy** — Nginx (or Caddy) in front of `http://127.0.0.1:5001`; terminate TLS for `texflow.work`. Use `etc/nginx-texflow.conf` as reference; ensure `/.well-known/` is proxied to the app so `/.well-known/vy-experts.json` is served by Node.
+6. **Reverse proxy** — Nginx (or Caddy) in front of `http://127.0.0.1:5001`; terminate TLS for `texflow.work`. Use `etc/nginx-texflow.conf` as reference; ensure `/.well-known/` is proxied to the app so `/.well-known/vyex.json` is served by Node.
 
 **Production URLs (texflow.work)** — The codebase is configured for **https://texflow.work**:
 - Homepage: `https://texflow.work/`
 - Platform66: `https://texflow.work/platform66/`
-- Vy Experts: `https://texflow.work/vy-experts/` · Catalog: `https://texflow.work/.well-known/vy-experts.json`
+- VyEx: `https://texflow.work/vyex/` · Catalog: `https://texflow.work/.well-known/vyex.json`
 - Discovery: `https://texflow.work/.well-known/ai.json`
 - Product catalog: `https://texflow.work/.well-known/agent-catalog.json`
 - Platform66 API upload: `https://texflow.work/platform66/api/upload`
-All canonical, Open Graph and Twitter meta tags, and `.well-known/ai.json` product URLs use this domain. In-app links use relative paths so they resolve correctly on the deployed host. Set `BASE_URL=https://texflow.work` in `.env` for Vy Experts catalog and checkout URLs.
+All canonical, Open Graph and Twitter meta tags, and `.well-known/ai.json` product URLs use this domain. In-app links use relative paths so they resolve correctly on the deployed host. Set `BASE_URL=https://texflow.work` in `.env` for VyEx catalog and checkout URLs.
 
 ## Project structure
 
@@ -130,19 +130,19 @@ All canonical, Open Graph and Twitter meta tags, and `.well-known/ai.json` produ
 │   │   ├── upload.html
 │   │   └── .well-known/
 │   │       └── ai.json     # static; catalog is dynamic
-│   └── vy-experts/         # Vy Experts Marketplace UI
+│   └── vyex/               # VyEx marketplace UI
 │       ├── index.html
 │       ├── expert.html
 │       ├── create.html
 │       ├── success.html
-│       ├── vy-experts.css
-│       └── vy-experts.js
+│       ├── vyex.css
+│       └── vyex.js
 ├── data/
-│   ├── experts.json        # Vy Experts (flat file)
+│   ├── experts.json        # VyEx (flat file)
 │   └── orders.json         # Orders / access tokens
 ├── scripts/
 │   ├── generate_aa.py
-│   ├── seed-vy-experts.js
+│   ├── seed-vyex.js
 │   └── requirements.txt
 ├── etc/
 │   ├── texflow.service     # systemd unit

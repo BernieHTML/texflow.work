@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Vy Experts Marketplace — TexFlow</title>
+  <title>VyEx — TexFlow</title>
   <link rel="icon" href="/texflowlogo.png" type="image/png">
   <link rel="stylesheet" href="/styles.css">
-  <link rel="stylesheet" href="/vy-experts/vy-experts.css">
+  <link rel="stylesheet" href="/vyex/vyex.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -20,16 +20,16 @@
       </a>
       <nav class="nav">
         <a href="/platform66/">Platform66</a>
-        <a href="/vy-experts/">Vy Experts</a>
+        <a href="/vyex/">VyEx</a>
       </nav>
     </header>
 
     <main class="vy-page">
       <div class="vy-container">
         <div class="vy-hero">
-          <h1>Vy Experts Marketplace</h1>
+          <h1>VyEx</h1>
           <p>Curated base knowledge and preambles for Vy desktop agents. Free and paid experts.</p>
-          <p style="margin-top: 0.5rem;"><a href="/vy-experts/create" class="vy-btn vy-btn-secondary">Submit an Expert</a></p>
+          <p style="margin-top: 0.5rem;"><a href="/vyex/create" class="vy-btn vy-btn-secondary">Submit an Expert</a></p>
         </div>
 
         <div class="vy-filters">
@@ -54,7 +54,7 @@
     </main>
   </div>
   <script src="/app.js"></script>
-  <script src="/vy-experts/vy-experts.js"></script>
+  <script src="/vyex/vyex.js"></script>
   <script>
     (function () {
       var grid = document.getElementById('vy-grid');
@@ -79,7 +79,7 @@
           var priceText = e.paid ? '$' + (e.price != null ? Number(e.price).toFixed(2) : '0') : 'Free';
           var priceClass = e.paid ? '' : ' free';
           return '<article class="vy-card">' +
-            '<a href="/vy-experts/expert/' + encodeURIComponent(e.id) + '">' +
+            '<a href="/vyex/expert/' + encodeURIComponent(e.id) + '">' +
             '<h3>' + escapeHtml(e.name) + '</h3>' +
             '<p class="vy-meta">' + escapeHtml(e.category) + ' · ' + escapeHtml(e.author) + '</p>' +
             '<p class="vy-desc">' + escapeHtml((e.description || '').slice(0, 120)) + (e.description && e.description.length > 120 ? '…' : '') + '</p>' +
@@ -99,7 +99,7 @@
       function load() {
         loading.style.display = 'block';
         errEl.style.display = 'none';
-        fetch('/vy-experts/api/catalog')
+        fetch('/vyex/api/catalog')
           .then(function (r) { return r.json(); })
           .then(function (data) {
             loading.style.display = 'none';

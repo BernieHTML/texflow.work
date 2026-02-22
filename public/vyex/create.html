@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Submit Expert — Vy Experts Marketplace</title>
+  <title>Submit Expert — VyEx</title>
   <link rel="icon" href="/texflowlogo.png" type="image/png">
   <link rel="stylesheet" href="/styles.css">
-  <link rel="stylesheet" href="/vy-experts/vy-experts.css">
+  <link rel="stylesheet" href="/vyex/vyex.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -20,7 +20,7 @@
       </a>
       <nav class="nav">
         <a href="/platform66/">Platform66</a>
-        <a href="/vy-experts/">Vy Experts</a>
+        <a href="/vyex/">VyEx</a>
       </nav>
     </header>
 
@@ -28,7 +28,7 @@
       <div class="vy-container">
         <div class="vy-hero">
           <h1>Submit an Expert</h1>
-          <p>Publish base knowledge for Vy agents. Free experts go live immediately; paid experts require admin approval.</p>
+          <p>Publish base knowledge for Vy agents. Free and paid experts go live immediately.</p>
         </div>
 
         <form id="vy-create-form" class="vy-form">
@@ -81,7 +81,7 @@
     </main>
   </div>
   <script src="/app.js"></script>
-  <script src="/vy-experts/vy-experts.js"></script>
+  <script src="/vyex/vyex.js"></script>
   <script>
     (function () {
       var form = document.getElementById('vy-create-form');
@@ -123,7 +123,7 @@
           price: price
         };
         messageEl.style.display = 'none';
-        fetch('/vy-experts/api/experts', {
+        fetch('/vyex/api/experts', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)
@@ -134,7 +134,7 @@
           })
           .then(function (data) {
             messageEl.textContent = 'Expert submitted. View: ';
-            messageEl.innerHTML = messageEl.innerHTML + '<a href="/vy-experts/expert/' + encodeURIComponent(data.id) + '">' + data.id + '</a>';
+            messageEl.innerHTML = messageEl.innerHTML + '<a href="/vyex/expert/' + encodeURIComponent(data.id) + '">' + data.id + '</a>';
             messageEl.style.display = 'block';
             messageEl.style.color = 'var(--vy-success)';
             form.reset();

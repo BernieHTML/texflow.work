@@ -1,4 +1,4 @@
-/* Vy Experts Marketplace — dark, minimal, developer-oriented */
+/* VyEx — dark, minimal, developer-oriented */
 :root {
   --vy-bg: #0a0b0f;
   --vy-surface: #111318;
@@ -267,53 +267,6 @@
   border-radius: 6px;
   display: block;
   margin: 0.5rem 0;
-}
-
-.vy-admin-section {
-  margin-bottom: 2rem;
-}
-
-.vy-admin-section h2 {
-  font-size: 1.1rem;
-  margin: 0 0 1rem;
-}
-
-.vy-admin-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 0.9rem;
-}
-
-.vy-admin-table th,
-.vy-admin-table td {
-  text-align: left;
-  padding: 0.6rem 0.75rem;
-  border-bottom: 1px solid var(--vy-border);
-}
-
-.vy-admin-table th {
-  color: var(--vy-muted);
-  font-weight: 500;
-}
-
-.vy-status-badge {
-  font-size: 0.75rem;
-  padding: 0.2rem 0.5rem;
-  border-radius: 6px;
-  background: var(--vy-surface);
-}
-
-.vy-status-badge.public { background: rgba(34, 197, 94, 0.2); color: var(--vy-success); }
-.vy-status-badge.pending_payment_setup { background: rgba(234, 179, 8, 0.2); color: #eab308; }
-
-.vy-login-form {
-  max-width: 320px;
-  margin: 2rem auto;
-}
-
-.vy-login-form input {
-  width: 100%;
-  margin-bottom: 1rem;
 }
 
 .vy-copy-feedback {

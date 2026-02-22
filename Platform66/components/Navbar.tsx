@@ -42,7 +42,7 @@ const Navbar: React.FC<NavbarProps> = ({ onNavigate, currentPath }) => {
               ))}
             </div>
             <div className="border-l border-slate-700 pl-4 flex items-baseline gap-3 text-sm">
-              <a href="/vy-experts/" className="text-slate-400 hover:text-white transition-colors">Vy Experts</a>
+              <a href="/vyex/" className="text-slate-400 hover:text-white transition-colors">VyEx</a>
               <a href="/" className="text-slate-400 hover:text-white transition-colors">TexFlow</a>
             </div>
           </div>

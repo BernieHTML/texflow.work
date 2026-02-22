@@ -77,7 +77,7 @@ app.use(express.json({ limit: '1mb' }));
 // Ensure aa directory exists
 await mkdir(AA_DIR, { recursive: true });
 
-// --- Vy Experts: ensure data dir and files; seed if empty ---
+// --- VyEx: ensure data dir and files; seed if empty ---
 await mkdir(DATA_DIR, { recursive: true });
 let expertsData = [];
 let ordersData = [];
@@ -104,7 +104,7 @@ if (expertsData.length === 0) {
   await writeFile(EXPERTS_PATH, JSON.stringify(seed, null, 2), 'utf8');
   expertsData = seed;
 }
-await writeWellKnownVyExperts();
+await writeWellKnownVyex();
 
 async function readExperts() {
   const raw = await readFile(EXPERTS_PATH, 'utf8');
@@ -128,9 +128,9 @@ function slugify(name) {
 }
 
 const WELL_KNOWN_DIR = join(__dirname, '.well-known');
-const VY_EXPERTS_WELL_KNOWN_PATH = join(WELL_KNOWN_DIR, 'vy-experts.json');
+const VYEX_WELL_KNOWN_PATH = join(WELL_KNOWN_DIR, 'vyex.json');
 
-async function writeWellKnownVyExperts() {
+async function writeWellKnownVyex() {
   try {
     await mkdir(WELL_KNOWN_DIR, { recursive: true });
     const experts = await readExperts();
@@ -144,21 +144,21 @@ async function writeWellKnownVyExperts() {
       tags: Array.isArray(e.tags) ? e.tags : [],
       price: e.price ?? 0,
       paid: !!e.paid,
-      preamble_url: `${BASE_URL}/vy-experts/expert/${e.id}/preamble`,
-      checkout_url: `${BASE_URL}/vy-experts/expert/${e.id}/checkout`
+      preamble_url: `${BASE_URL}/vyex/expert/${e.id}/preamble`,
+      checkout_url: `${BASE_URL}/vyex/expert/${e.id}/checkout`
     }));
     const body = JSON.stringify({
       capability: { protocol: 'ACP', auth: 'bearer_token', auth_flow: 'stripe_checkout' },
       experts: catalog,
       updated_at: new Date().toISOString().slice(0, 10)
     }, null, 2);
-    await writeFile(VY_EXPERTS_WELL_KNOWN_PATH, body, 'utf8');
+    await writeFile(VYEX_WELL_KNOWN_PATH, body, 'utf8');
   } catch (e) {
-    console.error('[Vy Experts] Failed to write .well-known/vy-experts.json:', e.message);
+    console.error('[VyEx] Failed to write .well-known/vyex.json:', e.message);
   }
 }
 
-const VY_EXPERTS_PUBLIC = join(__dirname, 'public', 'vy-experts');
+const VYEX_PUBLIC = join(__dirname, 'public', 'vyex');
 
 // Log requests to TexMKT .well-known
 app.use((req, res, next) => {
@@ -280,18 +280,18 @@ app.get('/platform66/.well-known/agent-catalog.json', async (req, res) => {
   }
 });
 
-// --- Vy Experts: .well-known catalog (ACP); serve live file from .well-known/vy-experts.json ---
-app.get('/.well-known/vy-experts.json', async (req, res) => {
+// --- VyEx: .well-known catalog (ACP); serve live file from .well-known/vyex.json ---
+app.get('/.well-known/vyex.json', async (req, res) => {
   try {
     res.setHeader('ACP-Version', ACP_VERSION);
-    if (existsSync(VY_EXPERTS_WELL_KNOWN_PATH)) {
+    if (existsSync(VYEX_WELL_KNOWN_PATH)) {
       res.setHeader('Content-Type', 'application/json');
-      return res.sendFile(VY_EXPERTS_WELL_KNOWN_PATH);
+      return res.sendFile(VYEX_WELL_KNOWN_PATH);
     }
-    await writeWellKnownVyExperts();
-    if (existsSync(VY_EXPERTS_WELL_KNOWN_PATH)) {
+    await writeWellKnownVyex();
+    if (existsSync(VYEX_WELL_KNOWN_PATH)) {
       res.setHeader('Content-Type', 'application/json');
-      return res.sendFile(VY_EXPERTS_WELL_KNOWN_PATH);
+      return res.sendFile(VYEX_WELL_KNOWN_PATH);
     }
     const experts = await readExperts();
     const publicExperts = experts.filter(e => e.status === 'public');
@@ -304,8 +304,8 @@ app.get('/.well-known/vy-experts.json', async (req, res) => {
       tags: Array.isArray(e.tags) ? e.tags : [],
       price: e.price ?? 0,
       paid: !!e.paid,
-      preamble_url: `${BASE_URL}/vy-experts/expert/${e.id}/preamble`,
-      checkout_url: `${BASE_URL}/vy-experts/expert/${e.id}/checkout`
+      preamble_url: `${BASE_URL}/vyex/expert/${e.id}/preamble`,
+      checkout_url: `${BASE_URL}/vyex/expert/${e.id}/checkout`
     }));
     res.setHeader('Content-Type', 'application/json');
     res.send(JSON.stringify({
@@ -318,15 +318,15 @@ app.get('/.well-known/vy-experts.json', async (req, res) => {
   }
 });
 
-// --- Vy Experts: pages (before static) ---
-app.get('/vy-experts', (req, res) => res.sendFile(join(VY_EXPERTS_PUBLIC, 'index.html')));
-app.get('/vy-experts/', (req, res) => res.sendFile(join(VY_EXPERTS_PUBLIC, 'index.html')));
-app.get('/vy-experts/create', (req, res) => res.sendFile(join(VY_EXPERTS_PUBLIC, 'create.html')));
-app.get('/vy-experts/expert/:id', (req, res) => res.sendFile(join(VY_EXPERTS_PUBLIC, 'expert.html')));
-app.get('/vy-experts/expert/:id/success', (req, res) => res.sendFile(join(VY_EXPERTS_PUBLIC, 'success.html')));
+// --- VyEx: pages (before static) ---
+app.get('/vyex', (req, res) => res.sendFile(join(VYEX_PUBLIC, 'index.html')));
+app.get('/vyex/', (req, res) => res.sendFile(join(VYEX_PUBLIC, 'index.html')));
+app.get('/vyex/create', (req, res) => res.sendFile(join(VYEX_PUBLIC, 'create.html')));
+app.get('/vyex/expert/:id', (req, res) => res.sendFile(join(VYEX_PUBLIC, 'expert.html')));
+app.get('/vyex/expert/:id/success', (req, res) => res.sendFile(join(VYEX_PUBLIC, 'success.html')));
 
-// --- Vy Experts: preamble (ACP; 402 for paid without token) ---
-app.get('/vy-experts/expert/:id/preamble', async (req, res) => {
+// --- VyEx: preamble (ACP; 402 for paid without token) ---
+app.get('/vyex/expert/:id/preamble', async (req, res) => {
   res.setHeader('ACP-Version', ACP_VERSION);
   const { id } = req.params;
   const experts = await readExperts();
@@ -340,7 +340,7 @@ app.get('/vy-experts/expert/:id/preamble', async (req, res) => {
   if (!token) {
     return res.status(402).json({
       error: 'payment_required',
-      checkout_url: `${BASE_URL}/vy-experts/expert/${id}/checkout`
+      checkout_url: `${BASE_URL}/vyex/expert/${id}/checkout`
     });
   }
   const orders = await readOrders();
@@ -348,15 +348,15 @@ app.get('/vy-experts/expert/:id/preamble', async (req, res) => {
   if (!order) {
     return res.status(402).json({
       error: 'payment_required',
-      checkout_url: `${BASE_URL}/vy-experts/expert/${id}/checkout`
+      checkout_url: `${BASE_URL}/vyex/expert/${id}/checkout`
     });
   }
   res.setHeader('Content-Type', 'text/plain; charset=utf-8');
   res.send(expert.preamble || '');
 });
 
-// --- Vy Experts: Stripe Checkout ---
-app.get('/vy-experts/expert/:id/checkout', async (req, res) => {
+// --- VyEx: Stripe Checkout ---
+app.get('/vyex/expert/:id/checkout', async (req, res) => {
   const { id } = req.params;
   const experts = await readExperts();
   const expert = getExpertById(experts, id);
@@ -370,15 +370,15 @@ app.get('/vy-experts/expert/:id/checkout', async (req, res) => {
     mode: 'payment',
     payment_method_types: ['card'],
     line_items: [{ price_data: { currency: 'usd', unit_amount: priceCents, product_data: { name: expert.name, description: expert.description || '' } }, quantity: 1 }],
-    success_url: `${BASE_URL}/vy-experts/expert/${id}/success?session_id={CHECKOUT_SESSION_ID}`,
-    cancel_url: `${BASE_URL}/vy-experts/expert/${id}`,
+    success_url: `${BASE_URL}/vyex/expert/${id}/success?session_id={CHECKOUT_SESSION_ID}`,
+    cancel_url: `${BASE_URL}/vyex/expert/${id}`,
     metadata: { expert_id: id }
   });
   res.redirect(303, session.url);
 });
 
-// --- Vy Experts: complete session (success page calls this to get token) ---
-app.get('/vy-experts/api/expert/:id/complete-session', async (req, res) => {
+// --- VyEx: complete session (success page calls this to get token) ---
+app.get('/vyex/api/expert/:id/complete-session', async (req, res) => {
   const { id } = req.params;
   const sessionId = req.query.session_id;
   if (!sessionId) return res.status(400).json({ error: 'Missing session_id' });
@@ -409,8 +409,8 @@ app.get('/vy-experts/api/expert/:id/complete-session', async (req, res) => {
   res.json({ access_token: order.access_token, expert_id: id });
 });
 
-// --- Vy Experts: catalog API (same as .well-known; use this if Nginx serves .well-known from disk) ---
-app.get('/vy-experts/api/catalog', async (req, res) => {
+// --- VyEx: catalog API (same as .well-known; use this if Nginx serves .well-known from disk) ---
+app.get('/vyex/api/catalog', async (req, res) => {
   try {
     const experts = await readExperts();
     const publicExperts = experts.filter(e => e.status === 'public');
@@ -423,8 +423,8 @@ app.get('/vy-experts/api/catalog', async (req, res) => {
       tags: Array.isArray(e.tags) ? e.tags : [],
       price: e.price ?? 0,
       paid: !!e.paid,
-      preamble_url: `${BASE_URL}/vy-experts/expert/${e.id}/preamble`,
-      checkout_url: `${BASE_URL}/vy-experts/expert/${e.id}/checkout`
+      preamble_url: `${BASE_URL}/vyex/expert/${e.id}/preamble`,
+      checkout_url: `${BASE_URL}/vyex/expert/${e.id}/checkout`
     }));
     res.setHeader('Content-Type', 'application/json');
     res.setHeader('ACP-Version', ACP_VERSION);
@@ -438,8 +438,8 @@ app.get('/vy-experts/api/catalog', async (req, res) => {
   }
 });
 
-// --- Vy Experts: API ---
-app.post('/vy-experts/api/experts', async (req, res) => {
+// --- VyEx: API ---
+app.post('/vyex/api/experts', async (req, res) => {
   const body = req.body || {};
   const name = (body.name || '').trim();
   if (!name) return res.status(400).json({ error: 'Expert name required' });
@@ -466,17 +466,17 @@ app.post('/vy-experts/api/experts', async (req, res) => {
   };
   experts.push(expert);
   await writeExperts(experts);
-  await writeWellKnownVyExperts();
-  res.status(201).json({ id, url: `/vy-experts/expert/${id}` });
+  await writeWellKnownVyex();
+  res.status(201).json({ id, url: `/vyex/expert/${id}` });
 });
 
-app.get('/vy-experts/api/experts', async (req, res) => {
+app.get('/vyex/api/experts', async (req, res) => {
   const experts = await readExperts();
   const publicOnly = experts.filter(e => e.status === 'public');
   res.json(publicOnly.map(e => ({ id: e.id, name: e.name, category: e.category, description: e.description, author: e.author, tags: e.tags, price: e.price, paid: e.paid })));
 });
 
-app.get('/vy-experts/api/experts/:id', async (req, res) => {
+app.get('/vyex/api/experts/:id', async (req, res) => {
   const experts = await readExperts();
   const expert = getExpertById(experts, req.params.id);
   if (!expert) return res.status(404).json({ error: 'Not found' });

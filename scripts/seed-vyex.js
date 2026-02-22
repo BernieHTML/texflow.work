@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
- * One-time seed: writes 5 free Vy Experts to data/experts.json.
- * Run: node scripts/seed-vy-experts.js
+ * One-time seed: writes 5 free experts to data/experts.json for VyEx.
+ * Run: node scripts/seed-vyex.js
  * If data/experts.json already has entries, this script does not overwrite (exit 0).
  */
 import { readFile, writeFile, mkdir } from 'fs/promises';

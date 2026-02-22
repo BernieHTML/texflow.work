@@ -41,7 +41,7 @@
   }
 
   window.vyExpertId = function () {
-    var m = /\/vy-experts\/expert\/([^/]+)/.exec(window.location.pathname);
+    var m = /\/vyex\/expert\/([^/]+)/.exec(window.location.pathname);
     return m ? m[1] : null;
   };
 })();

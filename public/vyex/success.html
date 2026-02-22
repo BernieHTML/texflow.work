@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Purchase complete — Vy Experts</title>
+  <title>Purchase complete — VyEx</title>
   <link rel="icon" href="/texflowlogo.png" type="image/png">
   <link rel="stylesheet" href="/styles.css">
-  <link rel="stylesheet" href="/vy-experts/vy-experts.css">
+  <link rel="stylesheet" href="/vyex/vyex.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -20,7 +20,7 @@
       </a>
       <nav class="nav">
         <a href="/platform66/">Platform66</a>
-        <a href="/vy-experts/">Vy Experts</a>
+        <a href="/vyex/">VyEx</a>
       </nav>
     </header>
 
@@ -37,13 +37,13 @@
           <p style="margin-top: 1.5rem; font-size: 0.9rem;">In Vy, use the preamble URL with the token:</p>
           <code id="vy-preamble-url" style="display: block; margin: 0.5rem 0; font-size: 0.85rem; word-break: break-all;"></code>
           <button type="button" class="vy-btn vy-btn-secondary vy-btn-copy" id="vy-copy-url">Copy URL</button>
-          <p style="margin-top: 1rem;"><a href="/vy-experts/">Back to marketplace</a></p>
+          <p style="margin-top: 1rem;"><a href="/vyex/">Back to marketplace</a></p>
         </div>
       </div>
     </main>
   </div>
   <script src="/app.js"></script>
-  <script src="/vy-experts/vy-experts.js"></script>
+  <script src="/vyex/vyex.js"></script>
   <script>
     (function () {
       var id = window.vyExpertId && window.vyExpertId();
@@ -60,7 +60,7 @@
         return;
       }
 
-      fetch('/vy-experts/api/expert/' + encodeURIComponent(id) + '/complete-session?session_id=' + encodeURIComponent(sessionId))
+      fetch('/vyex/api/expert/' + encodeURIComponent(id) + '/complete-session?session_id=' + encodeURIComponent(sessionId))
         .then(function (r) {
           if (!r.ok) return r.json().then(function (d) { throw new Error(d.error || 'Failed'); });
           return r.json();
@@ -69,7 +69,7 @@
           loading.style.display = 'none';
           var token = data.access_token;
           var base = window.location.origin;
-          var preambleUrl = base + '/vy-experts/expert/' + encodeURIComponent(id) + '/preamble?access_token=' + encodeURIComponent(token);
+          var preambleUrl = base + '/vyex/expert/' + encodeURIComponent(id) + '/preamble?access_token=' + encodeURIComponent(token);
           document.getElementById('vy-token').textContent = token;
           document.getElementById('vy-preamble-url').textContent = preambleUrl;
           successEl.style.display = 'block';
