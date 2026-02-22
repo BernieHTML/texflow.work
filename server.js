@@ -160,6 +160,28 @@ async function writeWellKnownVyex() {
 
 const VYEX_PUBLIC = join(__dirname, 'public', 'vyex');
 
+async function buildVyexCatalog() {
+  const experts = await readExperts();
+  const publicExperts = experts.filter(e => e.status === 'public');
+  const catalog = publicExperts.map(e => ({
+    id: e.id,
+    name: e.name,
+    category: e.category,
+    description: e.description || '',
+    author: e.author || '',
+    tags: Array.isArray(e.tags) ? e.tags : [],
+    price: e.price ?? 0,
+    paid: !!e.paid,
+    preamble_url: `${BASE_URL}/vyex/expert/${e.id}/preamble`,
+    checkout_url: `${BASE_URL}/vyex/expert/${e.id}/checkout`
+  }));
+  return {
+    capability: { protocol: 'ACP', auth: 'bearer_token', auth_flow: 'stripe_checkout' },
+    experts: catalog,
+    updated_at: new Date().toISOString().slice(0, 10)
+  };
+}
+
 // Log requests to TexMKT .well-known
 app.use((req, res, next) => {
   if (req.path.startsWith('/texmkt/.well-known/')) {
@@ -190,6 +212,17 @@ app.get('/.well-known/ai.json', (req, res) => {
 app.get('/.well-known/vyex.md', (req, res) => {
   res.setHeader('Content-Type', 'text/markdown; charset=utf-8');
   res.sendFile(join(__dirname, '.well-known', 'vyex.md'));
+});
+app.get('/.well-known/vyex.json', async (req, res) => {
+  try {
+    res.setHeader('ACP-Version', ACP_VERSION);
+    res.setHeader('Content-Type', 'application/json');
+    const payload = await buildVyexCatalog();
+    res.send(JSON.stringify(payload, null, 2));
+    writeWellKnownVyex().catch(() => {});
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
 });
 app.get('/.well-known/agent-catalog.json', async (req, res) => {
   try {
@@ -278,44 +311,6 @@ app.get('/platform66/.well-known/agent-catalog.json', async (req, res) => {
       updated_at: updated_at.slice(0, 10),
       count: agent_appeals.length,
       agent_appeals
-    }, null, 2));
-  } catch (e) {
-    res.status(500).json({ error: e.message });
-  }
-});
-
-// --- VyEx: .well-known catalog (ACP); serve live file from .well-known/vyex.json ---
-app.get('/.well-known/vyex.json', async (req, res) => {
-  try {
-    res.setHeader('ACP-Version', ACP_VERSION);
-    if (existsSync(VYEX_WELL_KNOWN_PATH)) {
-      res.setHeader('Content-Type', 'application/json');
-      return res.sendFile(VYEX_WELL_KNOWN_PATH);
-    }
-    await writeWellKnownVyex();
-    if (existsSync(VYEX_WELL_KNOWN_PATH)) {
-      res.setHeader('Content-Type', 'application/json');
-      return res.sendFile(VYEX_WELL_KNOWN_PATH);
-    }
-    const experts = await readExperts();
-    const publicExperts = experts.filter(e => e.status === 'public');
-    const catalog = publicExperts.map(e => ({
-      id: e.id,
-      name: e.name,
-      category: e.category,
-      description: e.description || '',
-      author: e.author || '',
-      tags: Array.isArray(e.tags) ? e.tags : [],
-      price: e.price ?? 0,
-      paid: !!e.paid,
-      preamble_url: `${BASE_URL}/vyex/expert/${e.id}/preamble`,
-      checkout_url: `${BASE_URL}/vyex/expert/${e.id}/checkout`
-    }));
-    res.setHeader('Content-Type', 'application/json');
-    res.send(JSON.stringify({
-      capability: { protocol: 'ACP', auth: 'bearer_token', auth_flow: 'stripe_checkout' },
-      experts: catalog,
-      updated_at: new Date().toISOString().slice(0, 10)
     }, null, 2));
   } catch (e) {
     res.status(500).json({ error: e.message });
@@ -414,30 +409,13 @@ app.get('/vyex/api/expert/:id/complete-session', async (req, res) => {
   res.json({ access_token: order.access_token, expert_id: id });
 });
 
-// --- VyEx: catalog API (same as .well-known; use this if Nginx serves .well-known from disk) ---
+// --- VyEx: catalog API (same payload as /.well-known/vyex.json) ---
 app.get('/vyex/api/catalog', async (req, res) => {
   try {
-    const experts = await readExperts();
-    const publicExperts = experts.filter(e => e.status === 'public');
-    const catalog = publicExperts.map(e => ({
-      id: e.id,
-      name: e.name,
-      category: e.category,
-      description: e.description || '',
-      author: e.author || '',
-      tags: Array.isArray(e.tags) ? e.tags : [],
-      price: e.price ?? 0,
-      paid: !!e.paid,
-      preamble_url: `${BASE_URL}/vyex/expert/${e.id}/preamble`,
-      checkout_url: `${BASE_URL}/vyex/expert/${e.id}/checkout`
-    }));
-    res.setHeader('Content-Type', 'application/json');
     res.setHeader('ACP-Version', ACP_VERSION);
-    res.send(JSON.stringify({
-      capability: { protocol: 'ACP', auth: 'bearer_token', auth_flow: 'stripe_checkout' },
-      experts: catalog,
-      updated_at: new Date().toISOString().slice(0, 10)
-    }, null, 2));
+    res.setHeader('Content-Type', 'application/json');
+    const payload = await buildVyexCatalog();
+    res.send(JSON.stringify(payload, null, 2));
   } catch (e) {
     res.status(500).json({ error: e.message });
   }
