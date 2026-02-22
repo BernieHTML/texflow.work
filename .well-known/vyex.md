@@ -47,7 +47,7 @@ VyEx is a catalog of **experts**: curated base knowledge (preambles) that Vy des
 | `price` | number | Price in USD (0 = free). |
 | `paid` | boolean | `true` if paid expert. |
 | `preamble_url` | string | Full URL to fetch preamble (see below). |
-| `checkout_url` | string | URL for purchase (paid experts). Reserved for future ACP/Stripe flow. |
+| `checkout_url` | string | URL for purchase (paid experts). Direct user here to pay; then use access_token with preamble (see docs/VYEX-PAYMENTS.md).  ACP/Stripe flow. |
 
 **Example catalog request:**
 
@@ -104,7 +104,7 @@ Replace `{id}` with the expert’s `id` from the catalog (e.g. `xero-invoice-pro
 - **Status:** `404`
 - **Body:** JSON `{"error":"Not found"}`
 
-**Optional:** Preamble endpoint supports `ACP-Version: 1.0` semantics. Paid experts may later require an `access_token` (query or `Authorization: Bearer ...`). ACP payments through Stripe for paid experts are planned; this document will be updated when that flow is live.
+**Paid experts (ACP):** If the expert is paid and no valid token is provided, the response is **402 Payment Required** with JSON body: `{"error":"payment_required","checkout_url":"..."}`. Direct the user to `checkout_url` to pay via Stripe. After payment, obtain an `access_token` (e.g. from the success page or `GET /vyex/api/expert/{id}/complete-session?session_id=...`). Then fetch the preamble with `GET preamble_url?access_token=TOKEN` or `Authorization: Bearer TOKEN`. Full payment flow: see `docs/VYEX-PAYMENTS.md`.
 
 **Example preamble request:**
 
@@ -168,3 +168,4 @@ Agents may refer users to these for context; agents should use the API endpoints
 ## Changelog
 
 - **2026-02-21** — Initial agent guide; catalog and preamble endpoints documented. ACP/Stripe for paid experts noted as coming soon.
+n.
