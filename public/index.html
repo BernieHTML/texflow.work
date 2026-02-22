@@ -25,6 +25,15 @@
 </head>
 <body>
   <div class="page">
+    <div id="agent-entry-popup" class="agent-entry-popup" role="dialog" aria-label="Agent or human">
+      <div class="agent-entry-popup-inner">
+        <p class="agent-entry-popup-text">Are you an agent or a human?</p>
+        <div class="agent-entry-popup-actions">
+          <button type="button" id="agent-entry-human" class="btn btn-secondary agent-entry-btn">I am human</button>
+          <a href="/.well-known/vyex.md" id="agent-entry-agent" class="btn btn-primary agent-entry-btn">I am an agent</a>
+        </div>
+      </div>
+    </div>
     <header class="header">
       <a href="/" class="logo-wrap">
         <span class="logo-circle">
@@ -84,6 +93,23 @@
     </main>
   </div>
   <script src="/app.js"></script>
+  <script>
+    (function () {
+      var popup = document.getElementById('agent-entry-popup');
+      var humanBtn = document.getElementById('agent-entry-human');
+      if (popup && humanBtn) {
+        try {
+          if (sessionStorage.getItem('texflow-agent-entry') === 'human') {
+            popup.classList.add('hidden');
+          }
+        } catch (e) {}
+        humanBtn.addEventListener('click', function () {
+          popup.classList.add('hidden');
+          try { sessionStorage.setItem('texflow-agent-entry', 'human'); } catch (e) {}
+        });
+      }
+    })();
+  </script>
   <script>
     (function () {
       const lines = [

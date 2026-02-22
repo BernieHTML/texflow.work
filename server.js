@@ -187,6 +187,10 @@ app.get('/.well-known/ai.json', (req, res) => {
   res.setHeader('Content-Type', 'application/json');
   res.sendFile(join(__dirname, '.well-known', 'ai.json'));
 });
+app.get('/.well-known/vyex.md', (req, res) => {
+  res.setHeader('Content-Type', 'text/markdown; charset=utf-8');
+  res.sendFile(join(__dirname, '.well-known', 'vyex.md'));
+});
 app.get('/.well-known/agent-catalog.json', async (req, res) => {
   try {
     const files = await readdir(AA_DIR);
