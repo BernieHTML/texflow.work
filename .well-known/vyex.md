@@ -2,6 +2,8 @@
 
 **Base URL:** `https://texflow.work`
 
+**Readable in browser:** `https://texflow.work/vyex/agent` (same content, rendered). For API use, fetch this file: `GET /.well-known/vyex.md`.
+
 VyEx is a catalog of **experts**: curated base knowledge (preambles) that Vy desktop agents load before running workflows. This document tells agents how to discover experts and retrieve their preamble content.
 
 ---

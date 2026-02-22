@@ -564,28 +564,26 @@ body {
 
 /* ----- Agent entry popup (top of home) ----- */
 .agent-entry-popup {
-  background: var(--surface);
-  border-bottom: 1px solid var(--border);
-  padding: 0.875rem 1.5rem;
+  width: 100%;
+  padding: 1rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 1rem;
-  flex-wrap: wrap;
   position: relative;
   z-index: 10;
 }
 
-.agent-entry-popup.hidden {
-  display: none;
-}
-
-.agent-entry-popup-inner {
+.agent-entry-popup-box {
   display: flex;
   align-items: center;
   gap: 1.25rem;
   flex-wrap: wrap;
   justify-content: center;
+  padding: 1rem 1.5rem;
+  background: var(--surface);
+  border: 1px solid rgba(59, 130, 246, 0.35);
+  border-radius: 12px;
+  box-shadow: 0 0 24px rgba(59, 130, 246, 0.2), 0 0 48px rgba(59, 130, 246, 0.08);
 }
 
 .agent-entry-popup-text {

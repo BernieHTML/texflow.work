@@ -325,6 +325,7 @@ app.get('/.well-known/vyex.json', async (req, res) => {
 // --- VyEx: pages (before static) ---
 app.get('/vyex', (req, res) => res.sendFile(join(VYEX_PUBLIC, 'index.html')));
 app.get('/vyex/', (req, res) => res.sendFile(join(VYEX_PUBLIC, 'index.html')));
+app.get('/vyex/agent', (req, res) => res.sendFile(join(VYEX_PUBLIC, 'agent.html')));
 app.get('/vyex/create', (req, res) => res.sendFile(join(VYEX_PUBLIC, 'create.html')));
 app.get('/vyex/expert/:id', (req, res) => res.sendFile(join(VYEX_PUBLIC, 'expert.html')));
 app.get('/vyex/expert/:id/success', (req, res) => res.sendFile(join(VYEX_PUBLIC, 'success.html')));

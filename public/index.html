@@ -26,11 +26,11 @@
 <body>
   <div class="page">
     <div id="agent-entry-popup" class="agent-entry-popup" role="dialog" aria-label="Agent or human">
-      <div class="agent-entry-popup-inner">
+      <div class="agent-entry-popup-box">
         <p class="agent-entry-popup-text">Are you an agent or a human?</p>
         <div class="agent-entry-popup-actions">
           <button type="button" id="agent-entry-human" class="btn btn-secondary agent-entry-btn">I am human</button>
-          <a href="/.well-known/vyex.md" id="agent-entry-agent" class="btn btn-primary agent-entry-btn">I am an agent</a>
+          <a href="/vyex/agent" id="agent-entry-agent" class="btn btn-primary agent-entry-btn">I am an agent</a>
         </div>
       </div>
     </div>
@@ -100,11 +100,11 @@
       if (popup && humanBtn) {
         try {
           if (sessionStorage.getItem('texflow-agent-entry') === 'human') {
-            popup.classList.add('hidden');
+            popup.style.display = 'none';
           }
         } catch (e) {}
         humanBtn.addEventListener('click', function () {
-          popup.classList.add('hidden');
+          popup.style.display = 'none';
           try { sessionStorage.setItem('texflow-agent-entry', 'human'); } catch (e) {}
         });
       }
