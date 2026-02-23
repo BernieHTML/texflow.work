@@ -152,7 +152,22 @@
       "paid": false,
       "preamble_url": "http://localhost:5001/vyex/expert/pet-medication-expert/preamble",
       "checkout_url": "http://localhost:5001/vyex/expert/pet-medication-expert/checkout"
+    },
+    {
+      "id": "sports-analyst-expert",
+      "name": "Sports analyst expert",
+      "category": "Custom",
+      "description": "Analyses sports plays",
+      "author": "bernie3147",
+      "tags": [
+        "sports",
+        "analysis"
+      ],
+      "price": 16.99,
+      "paid": true,
+      "preamble_url": "http://localhost:5001/vyex/expert/sports-analyst-expert/preamble",
+      "checkout_url": "http://localhost:5001/vyex/expert/sports-analyst-expert/checkout"
     }
   ],
-  "updated_at": "2026-02-22"
+  "updated_at": "2026-02-23"
 }
