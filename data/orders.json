@@ -1,1 +1,11 @@
-[]
+[
+  {
+    "order_id": "13612daa-fa81-4c7d-b11f-d38f37eb0093",
+    "expert_id": "sports-analyst-expert",
+    "stripe_session_id": "cs_test_a1MCzKE9sHOVDOziXWs8tXqEW09DOG8CxCBk5jFG0obcyzEXk3cJYEue4r",
+    "access_token": "5454440e-beee-42ff-925c-e368cc4f4cdf",
+    "email": "test@example.com",
+    "paid_at": "2026-02-23T10:20:51.031Z",
+    "status": "paid"
+  }
+]
