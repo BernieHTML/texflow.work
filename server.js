@@ -329,6 +329,7 @@ app.get('/vyex/', (req, res) => res.sendFile(join(VYEX_PUBLIC, 'index.html')));
 app.get('/vyex/agent', (req, res) => res.sendFile(join(VYEX_PUBLIC, 'agent.html')));
 app.get('/vyex/create', (req, res) => res.sendFile(join(VYEX_PUBLIC, 'create.html')));
 app.get('/vyex/expert/:id', (req, res) => res.sendFile(join(VYEX_PUBLIC, 'expert.html')));
+app.get('/vyex/expert/:id/checkout', (req, res) => res.sendFile(join(VYEX_PUBLIC, 'checkout.html')));
 app.get('/vyex/expert/:id/success', (req, res) => res.sendFile(join(VYEX_PUBLIC, 'success.html')));
 
 // --- VyEx: preamble (ACP; 402 for paid without token) ---
@@ -361,8 +362,8 @@ app.get('/vyex/expert/:id/preamble', async (req, res) => {
   res.send(expert.preamble || '');
 });
 
-// --- VyEx: Stripe Checkout ---
-app.get('/vyex/expert/:id/checkout', async (req, res) => {
+// --- VyEx: create Stripe Checkout Session (used by checkout page) ---
+app.post('/vyex/api/expert/:id/checkout-session', async (req, res) => {
   const { id } = req.params;
   const experts = await readExperts();
   const expert = getExpertById(experts, id);
@@ -377,10 +378,10 @@ app.get('/vyex/expert/:id/checkout', async (req, res) => {
     payment_method_types: ['card'],
     line_items: [{ price_data: { currency: 'usd', unit_amount: priceCents, product_data: { name: expert.name, description: expert.description || '' } }, quantity: 1 }],
     success_url: `${BASE_URL}/vyex/expert/${id}/success?session_id={CHECKOUT_SESSION_ID}`,
-    cancel_url: `${BASE_URL}/vyex/expert/${id}`,
+    cancel_url: `${BASE_URL}/vyex/expert/${id}/checkout`,
     metadata: { expert_id: id }
   });
-  res.redirect(303, session.url);
+  res.json({ url: session.url });
 });
 
 // --- VyEx: complete session (success page calls this to get token) ---
