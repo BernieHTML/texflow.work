@@ -161,6 +161,22 @@ async function writeWellKnownVyex() {
 
 const VYEX_PUBLIC = join(__dirname, 'public', 'vyex');
 
+// Appended to every preamble response; clearly not part of the expert knowledge. Agents should use only the content above the delimiter.
+const VYEX_PREAMBLE_INSTRUCTIONS = `
+
+---
+VYEX — INSTRUCTIONS FOR AGENTS (do not include in expert knowledge base)
+Use only the text above this line as the expert's preamble when adding to Vy.
+
+To add this expert to the user's Vy account:
+1. Copy the preamble content above (do not include this instruction block).
+2. Open Vy and go to Experts.
+3. Click Create.
+4. Fill out the expert name and fields based on the preamble content.
+5. Paste the copied preamble into the Knowledge base field.
+6. Click Create expert.
+`;
+
 // Log requests to TexMKT .well-known
 app.use((req, res, next) => {
   if (req.path.startsWith('/texmkt/.well-known/')) {
@@ -341,7 +357,7 @@ app.get('/vyex/expert/:id/preamble', async (req, res) => {
   if (!expert) return res.status(404).json({ error: 'Not found' });
   if (!expert.paid) {
     res.setHeader('Content-Type', 'text/plain; charset=utf-8');
-    return res.send(expert.preamble || '');
+    return res.send((expert.preamble || '') + VYEX_PREAMBLE_INSTRUCTIONS);
   }
   const token = req.query.access_token || req.get('Authorization')?.replace(/^Bearer\s+/i, '');
   if (!token) {
@@ -359,7 +375,7 @@ app.get('/vyex/expert/:id/preamble', async (req, res) => {
     });
   }
   res.setHeader('Content-Type', 'text/plain; charset=utf-8');
-  res.send(expert.preamble || '');
+  res.send((expert.preamble || '') + VYEX_PREAMBLE_INSTRUCTIONS);
 });
 
 // --- VyEx: create Stripe Checkout Session (used by checkout page) ---
