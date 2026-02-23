@@ -7,5 +7,14 @@
     "email": "test@example.com",
     "paid_at": "2026-02-23T10:20:51.031Z",
     "status": "paid"
+  },
+  {
+    "order_id": "b918fc5b-8b0b-405d-a53d-70bc7b338dba",
+    "expert_id": "sports-analyst-expert",
+    "stripe_session_id": "cs_test_a1PBtIS3pOy8awUNXK4LsRHoId34t4pSNAlnYyb6ciuGM0j6tqAf62GSvi",
+    "access_token": "9bddffef-7cb7-4534-9ec1-7d2a7343356e",
+    "email": "example@gmail.com",
+    "paid_at": "2026-02-23T10:39:05.355Z",
+    "status": "paid"
   }
 ]
