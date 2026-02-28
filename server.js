@@ -7,6 +7,7 @@ import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { spawn } from 'child_process';
 import { v4 as uuidv4 } from 'uuid';
+import { transformShopifyProduct, fetchShopifyProducts, slugifyMerchant } from './scripts/texmkt-shopify.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const app = express();
@@ -17,6 +18,13 @@ const EXPERTS_PATH = join(DATA_DIR, 'experts.json');
 const ORDERS_PATH = join(DATA_DIR, 'orders.json');
 const BASE_URL = (process.env.BASE_URL || `http://localhost:${PORT}`).replace(/\/$/, '');
 const ACP_VERSION = '1.0';
+
+// ===== TEXMKT: constants =====
+const TEXMKT_MERCHANTS_PATH = join(DATA_DIR, 'texmkt-merchants.json');
+const TEXMKT_CREDITS_PATH = join(DATA_DIR, 'texmkt-credits.json');
+const TEXMKT_QUERY_LOG_PATH = join(DATA_DIR, 'texmkt-query-log.json');
+const TEXMKT_CATALOGS_DIR = join(__dirname, '.well-known', 'catalogs');
+const TEXMKT_QUERY_FEE = 0.10;
 
 const AGENT_APPEAL_SCHEMA = {
   id: 'string',
@@ -68,6 +76,20 @@ app.post('/webhooks/stripe', express.raw({ type: 'application/json' }), async (r
       }
       await writeOrders(orders);
     }
+    // ===== TEXMKT: credit top-up webhook (self-contained) =====
+    if (session.metadata?.product === 'texmkt-credits') {
+      const agentId = session.metadata.agent_id;
+      const amountUsd = parseFloat(session.metadata.amount_usd) || 0;
+      if (agentId && amountUsd > 0) {
+        const credits = await texmktReadCredits();
+        const entry = credits[agentId] || { balance_usd: 0, total_topped_up: 0, total_spent: 0, created_at: new Date().toISOString(), last_active: new Date().toISOString() };
+        entry.balance_usd = +((entry.balance_usd || 0) + amountUsd).toFixed(2);
+        entry.total_topped_up = +((entry.total_topped_up || 0) + amountUsd).toFixed(2);
+        entry.last_active = new Date().toISOString();
+        credits[agentId] = entry;
+        await texmktWriteCredits(credits);
+      }
+    }
   }
   res.sendStatus(200);
 });
@@ -106,6 +128,12 @@ if (expertsData.length === 0) {
   expertsData = seed;
 }
 await writeWellKnownVyex();
+
+// ===== TEXMKT: ensure data files and catalogs dir =====
+await mkdir(TEXMKT_CATALOGS_DIR, { recursive: true });
+try { await readFile(TEXMKT_MERCHANTS_PATH, 'utf8'); } catch (e) { if (e.code === 'ENOENT') await writeFile(TEXMKT_MERCHANTS_PATH, '[]', 'utf8'); }
+try { await readFile(TEXMKT_CREDITS_PATH, 'utf8'); } catch (e) { if (e.code === 'ENOENT') await writeFile(TEXMKT_CREDITS_PATH, '{}', 'utf8'); }
+try { await readFile(TEXMKT_QUERY_LOG_PATH, 'utf8'); } catch (e) { if (e.code === 'ENOENT') await writeFile(TEXMKT_QUERY_LOG_PATH, '[]', 'utf8'); }
 
 async function readExperts() {
   const raw = await readFile(EXPERTS_PATH, 'utf8');
@@ -727,6 +755,358 @@ app.get('/texmkt/aa/:id', async (req, res) => {
     return res.status(500).json({ error: e.message });
   }
 });
+
+// ===== TEXMKT: Agent-Native Product Marketplace =====
+// Fully isolated — no shared routes, data, or logic with VyEx or Platform66.
+
+async function texmktReadMerchants() {
+  try { return JSON.parse(await readFile(TEXMKT_MERCHANTS_PATH, 'utf8')); } catch (_) { return []; }
+}
+async function texmktWriteMerchants(merchants) {
+  await writeFile(TEXMKT_MERCHANTS_PATH, JSON.stringify(merchants, null, 2), 'utf8');
+}
+async function texmktReadCredits() {
+  try { return JSON.parse(await readFile(TEXMKT_CREDITS_PATH, 'utf8')); } catch (_) { return {}; }
+}
+async function texmktWriteCredits(credits) {
+  await writeFile(TEXMKT_CREDITS_PATH, JSON.stringify(credits, null, 2), 'utf8');
+}
+async function texmktReadQueryLog() {
+  try { return JSON.parse(await readFile(TEXMKT_QUERY_LOG_PATH, 'utf8')); } catch (_) { return []; }
+}
+async function texmktAppendQueryLog(entry) {
+  const log = await texmktReadQueryLog();
+  log.push(entry);
+  await writeFile(TEXMKT_QUERY_LOG_PATH, JSON.stringify(log, null, 2), 'utf8');
+}
+
+async function texmktLoadAllProducts(merchantSlug) {
+  const merchants = await texmktReadMerchants();
+  const active = merchants.filter(m => m.status === 'active');
+  const targets = merchantSlug ? active.filter(m => m.slug === merchantSlug) : active;
+  const allProducts = [];
+  for (const m of targets) {
+    try {
+      const raw = await readFile(join(TEXMKT_CATALOGS_DIR, `${m.slug}.json`), 'utf8');
+      const products = JSON.parse(raw);
+      allProducts.push(...products);
+    } catch (_) { /* catalog file missing or invalid */ }
+  }
+  return allProducts;
+}
+
+// --- TexMKT: GET /.well-known/texmkt.json (dynamic ACP manifest) ---
+app.get('/.well-known/texmkt.json', async (req, res) => {
+  try {
+    const merchants = await texmktReadMerchants();
+    const active = merchants.filter(m => m.status === 'active');
+    const manifest = {
+      name: 'TexMKT',
+      version: '1.0',
+      description: 'Open agent-native product marketplace. Any Shopify merchant can list. Any agent can query.',
+      endpoints: {
+        match: `${BASE_URL}/texmkt/api/match`,
+        topup: `${BASE_URL}/texmkt/api/credits/topup`,
+        onboard: `${BASE_URL}/texmkt/api/onboard`,
+        merchants: `${BASE_URL}/texmkt/api/merchants`,
+      },
+      catalogs: active.map(m => ({
+        merchant: m.name,
+        slug: m.slug,
+        category: m.category,
+        url: `${BASE_URL}/.well-known/catalogs/${m.slug}.json`,
+      })),
+      pricing: {
+        query_fee_usd: TEXMKT_QUERY_FEE,
+        onboarding: 'free',
+        payment_methods: ['stripe', 'prepaid_credits'],
+      },
+      input_schema: {
+        goal: 'string (natural language, required)',
+        agent_id: 'string (required for fee deduction)',
+        budget_usd: 'number (optional)',
+        merchant_slug: 'string (optional — filter results to one merchant)',
+      },
+    };
+    res.setHeader('Content-Type', 'application/json');
+    res.send(JSON.stringify(manifest, null, 2));
+  } catch (e) {
+    res.status(500).json({ status: 'error', error: e.message, meta: { platform: 'texmkt', version: '1.0' } });
+  }
+});
+
+// --- TexMKT: serve catalog files from .well-known/catalogs/ ---
+app.use('/.well-known/catalogs', express.static(TEXMKT_CATALOGS_DIR));
+
+// --- TexMKT: POST /texmkt/api/onboard (free merchant onboarding) ---
+app.post('/texmkt/api/onboard', async (req, res) => {
+  try {
+    const { shopify_url, merchant_name, category, contact_email } = req.body || {};
+    if (!shopify_url || !merchant_name) {
+      return res.status(400).json({ status: 'error', error: 'shopify_url and merchant_name are required', meta: { platform: 'texmkt', version: '1.0' } });
+    }
+
+    let cleanUrl;
+    try {
+      cleanUrl = new URL(shopify_url.replace(/\/+$/, '')).href;
+    } catch (_) {
+      return res.status(400).json({ status: 'error', error: 'store_not_reachable', message: 'Invalid URL format.', meta: { platform: 'texmkt', version: '1.0' } });
+    }
+
+    const merchants = await texmktReadMerchants();
+    if (merchants.some(m => m.shopify_url === cleanUrl || m.shopify_url === cleanUrl.replace(/\/$/, ''))) {
+      return res.status(409).json({ status: 'error', error: 'already_registered', message: 'This store is already registered.', meta: { platform: 'texmkt', version: '1.0' } });
+    }
+
+    let products;
+    try {
+      products = await fetchShopifyProducts(cleanUrl);
+    } catch (e) {
+      const code = e.message === 'not_a_shopify_store' ? 'not_a_shopify_store' : 'store_not_reachable';
+      return res.status(400).json({ status: 'error', error: code, message: `Could not fetch products: ${e.message}`, meta: { platform: 'texmkt', version: '1.0' } });
+    }
+
+    if (products.length === 0) {
+      return res.status(400).json({ status: 'error', error: 'no_products_found', message: 'Store returned zero products.', meta: { platform: 'texmkt', version: '1.0' } });
+    }
+
+    const slug = slugifyMerchant(merchant_name);
+    const domain = new URL(cleanUrl).hostname;
+    const enriched = products.map(p => transformShopifyProduct(p, slug, domain, BASE_URL));
+
+    await mkdir(TEXMKT_CATALOGS_DIR, { recursive: true });
+    await writeFile(join(TEXMKT_CATALOGS_DIR, `${slug}.json`), JSON.stringify(enriched, null, 2), 'utf8');
+
+    const now = new Date().toISOString();
+    const merchant = {
+      id: uuidv4(),
+      name: merchant_name.trim(),
+      slug,
+      shopify_url: cleanUrl.replace(/\/$/, ''),
+      products_json_url: `${cleanUrl.replace(/\/$/, '')}/products.json`,
+      catalog_endpoint: `${BASE_URL}/.well-known/catalogs/${slug}.json`,
+      product_count: enriched.length,
+      category: (category || 'other').trim(),
+      submitted_by_email: (contact_email || '').trim(),
+      status: 'active',
+      created_at: now,
+      last_synced: now,
+    };
+    merchants.push(merchant);
+    await texmktWriteMerchants(merchants);
+
+    res.status(201).json({
+      status: 'ok',
+      data: {
+        merchant_name: merchant.name,
+        slug: merchant.slug,
+        product_count: enriched.length,
+        catalog_url: merchant.catalog_endpoint,
+        message: 'Your catalog is live and queryable by agents.',
+      },
+      meta: { platform: 'texmkt', version: '1.0' },
+    });
+  } catch (e) {
+    res.status(500).json({ status: 'error', error: e.message, meta: { platform: 'texmkt', version: '1.0' } });
+  }
+});
+
+// --- TexMKT: GET /texmkt/api/merchants ---
+app.get('/texmkt/api/merchants', async (req, res) => {
+  try {
+    const merchants = await texmktReadMerchants();
+    const active = merchants.filter(m => m.status === 'active');
+    res.json({
+      status: 'ok',
+      data: {
+        merchants: active.map(m => ({
+          name: m.name,
+          slug: m.slug,
+          category: m.category,
+          product_count: m.product_count,
+          catalog_url: m.catalog_endpoint,
+        })),
+        total: active.length,
+      },
+      meta: { platform: 'texmkt', version: '1.0' },
+    });
+  } catch (e) {
+    res.status(500).json({ status: 'error', error: e.message, meta: { platform: 'texmkt', version: '1.0' } });
+  }
+});
+
+// --- TexMKT: POST /texmkt/api/match (goal-matching) ---
+app.post('/texmkt/api/match', async (req, res) => {
+  try {
+    const { agent_id, goal, budget_usd, merchant_slug } = req.body || {};
+    if (!agent_id || !goal) {
+      return res.status(400).json({ status: 'error', error: 'agent_id and goal are required', meta: { platform: 'texmkt', version: '1.0' } });
+    }
+
+    const credits = await texmktReadCredits();
+    const agentCredits = credits[agent_id];
+    if (!agentCredits || agentCredits.balance_usd < TEXMKT_QUERY_FEE) {
+      return res.status(402).json({
+        status: 'error',
+        error: 'insufficient_credits',
+        message: `Top up at ${BASE_URL}/texmkt/api/credits/topup`,
+        meta: { platform: 'texmkt', version: '1.0' },
+      });
+    }
+
+    const allProducts = await texmktLoadAllProducts(merchant_slug || null);
+    const keywords = goal.toLowerCase().replace(/[^a-z0-9\s]/g, '').split(/\s+/).filter(w => w.length > 1);
+
+    const scored = allProducts.map(product => {
+      const haystack = [
+        product.title,
+        product.vendor,
+        product.category,
+        ...(product.tags || []),
+        ...(product.use_cases || []),
+        product.summary,
+      ].join(' ').toLowerCase();
+
+      let score = 0;
+      const matched = [];
+      for (const kw of keywords) {
+        if (haystack.includes(kw)) {
+          score++;
+          matched.push(kw);
+        }
+      }
+      if (keywords.length > 0) score = score / keywords.length;
+      return { product, score, matched };
+    });
+
+    let filtered = scored;
+    if (budget_usd !== undefined && budget_usd !== null) {
+      const budget = parseFloat(budget_usd);
+      if (!isNaN(budget)) {
+        filtered = scored.filter(s => parseFloat(s.product.price_usd) <= budget);
+      }
+    }
+
+    const ranked = filtered
+      .filter(s => s.score > 0)
+      .sort((a, b) => b.score - a.score)
+      .slice(0, 5);
+
+    const merchants = await texmktReadMerchants();
+    const merchantMap = {};
+    for (const m of merchants) merchantMap[m.slug] = m.name;
+
+    const matches = ranked.map((r, i) => ({
+      rank: i + 1,
+      product_id: r.product.id,
+      title: r.product.title,
+      merchant: merchantMap[r.product.merchant_slug] || r.product.merchant_slug,
+      merchant_slug: r.product.merchant_slug,
+      relevance_reason: `Matched: ${r.matched.join(', ')}`,
+      score: +r.score.toFixed(2),
+      price_usd: r.product.price_usd,
+      product_url: r.product.product_url,
+      checkout_url: `${BASE_URL}/texmkt/checkout/${r.product.id}`,
+    }));
+
+    agentCredits.balance_usd = +((agentCredits.balance_usd || 0) - TEXMKT_QUERY_FEE).toFixed(2);
+    agentCredits.total_spent = +((agentCredits.total_spent || 0) + TEXMKT_QUERY_FEE).toFixed(2);
+    agentCredits.last_active = new Date().toISOString();
+    credits[agent_id] = agentCredits;
+    await texmktWriteCredits(credits);
+
+    await texmktAppendQueryLog({
+      agent_id,
+      goal,
+      budget_usd: budget_usd ?? null,
+      merchant_slug: merchant_slug || null,
+      match_count: matches.length,
+      fee_charged: TEXMKT_QUERY_FEE,
+      timestamp: new Date().toISOString(),
+    });
+
+    res.json({
+      status: 'ok',
+      data: {
+        goal_received: goal,
+        matches,
+        query_fee_charged: TEXMKT_QUERY_FEE,
+        credits_remaining: agentCredits.balance_usd,
+      },
+      meta: { platform: 'texmkt', version: '1.0', matched_at: new Date().toISOString() },
+    });
+  } catch (e) {
+    res.status(500).json({ status: 'error', error: e.message, meta: { platform: 'texmkt', version: '1.0' } });
+  }
+});
+
+// --- TexMKT: POST /texmkt/api/credits/topup ---
+app.post('/texmkt/api/credits/topup', async (req, res) => {
+  try {
+    const { agent_id, amount_usd } = req.body || {};
+    if (!agent_id) return res.status(400).json({ status: 'error', error: 'agent_id is required', meta: { platform: 'texmkt', version: '1.0' } });
+    const amount = parseFloat(amount_usd);
+    if (!amount || amount < 1) return res.status(400).json({ status: 'error', error: 'amount_usd must be at least 1.00', meta: { platform: 'texmkt', version: '1.0' } });
+
+    const stripeKey = process.env.STRIPE_SECRET_KEY;
+    if (!stripeKey) return res.status(503).json({ status: 'error', error: 'Stripe not configured', meta: { platform: 'texmkt', version: '1.0' } });
+
+    const stripe = new Stripe(stripeKey);
+    const amountCents = Math.round(amount * 100);
+
+    const session = await stripe.checkout.sessions.create({
+      mode: 'payment',
+      payment_method_types: ['card'],
+      line_items: [{
+        price_data: {
+          currency: 'usd',
+          unit_amount: amountCents,
+          product_data: { name: 'TexMKT Query Credits', description: `$${amount.toFixed(2)} in query credits for agent ${agent_id}` },
+        },
+        quantity: 1,
+      }],
+      success_url: `${BASE_URL}/texmkt/?topup=success`,
+      cancel_url: `${BASE_URL}/texmkt/?topup=cancelled`,
+      metadata: { product: 'texmkt-credits', agent_id, amount_usd: String(amount) },
+    });
+
+    res.json({
+      status: 'ok',
+      data: {
+        stripe_checkout_url: session.url,
+        agent_id,
+        amount_usd: amount,
+      },
+      meta: { platform: 'texmkt', version: '1.0' },
+    });
+  } catch (e) {
+    res.status(500).json({ status: 'error', error: e.message, meta: { platform: 'texmkt', version: '1.0' } });
+  }
+});
+
+// --- TexMKT: GET /texmkt/checkout/:product_id (redirect to product URL) ---
+app.get('/texmkt/checkout/:product_id', async (req, res) => {
+  const { product_id } = req.params;
+  try {
+    const allProducts = await texmktLoadAllProducts(null);
+    const product = allProducts.find(p => p.id === product_id || p.id === String(product_id));
+    if (!product) return res.status(404).json({ status: 'error', error: 'Product not found', meta: { platform: 'texmkt', version: '1.0' } });
+
+    await texmktAppendQueryLog({
+      type: 'checkout_redirect',
+      product_id,
+      product_url: product.product_url,
+      merchant_slug: product.merchant_slug,
+      timestamp: new Date().toISOString(),
+    });
+
+    res.redirect(302, product.product_url);
+  } catch (e) {
+    res.status(500).json({ status: 'error', error: e.message, meta: { platform: 'texmkt', version: '1.0' } });
+  }
+});
+
+// ===== END TEXMKT =====
 
 const HOST = process.env.HOST || '0.0.0.0';
 app.listen(PORT, HOST, () => {
