@@ -1,0 +1,1178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TexMKT — The Agent Commerce Layer</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0a0a0f;
+    --cream: #f5f0e8;
+    --gold: #c9a84c;
+    --gold-light: #e8d08a;
+    --silver: #9ba3af;
+    --glass: rgba(245,240,232,0.04);
+    --glass-border: rgba(201,168,76,0.2);
+  }
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--ink);
+    color: var(--cream);
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    overflow-x: hidden;
+  }
+
+  /* Noise overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.4;
+  }
+
+  /* Nav */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 28px 60px;
+    mix-blend-mode: normal;
+  }
+  nav::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 60px; right: 60px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--glass-border), transparent);
+  }
+  .nav-logo {
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 0.15em;
+    color: var(--gold);
+    text-transform: uppercase;
+  }
+  .nav-links {
+    display: flex;
+    gap: 40px;
+    list-style: none;
+  }
+  .nav-links a {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--silver);
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: color 0.3s;
+  }
+  .nav-links a:hover { color: var(--cream); }
+
+  /* Hero */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 0 60px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background: 
+      radial-gradient(ellipse 60% 80% at 80% 50%, rgba(201,168,76,0.06) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 40% at 20% 80%, rgba(201,168,76,0.04) 0%, transparent 60%);
+  }
+
+  /* Animated grid lines */
+  .grid-lines {
+    position: absolute;
+    inset: 0;
+    background-image: 
+      linear-gradient(rgba(201,168,76,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(201,168,76,0.04) 1px, transparent 1px);
+    background-size: 80px 80px;
+    animation: gridDrift 20s linear infinite;
+    mask-image: radial-gradient(ellipse 70% 70% at 50% 50%, black 30%, transparent 100%);
+  }
+  @keyframes gridDrift {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(80px); }
+  }
+
+  .hero-eyebrow {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 32px;
+    opacity: 0;
+    animation: fadeUp 1s 0.3s forwards;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .hero-eyebrow::before {
+    content: '';
+    width: 40px;
+    height: 1px;
+    background: var(--gold);
+  }
+
+  .hero-title {
+    font-size: clamp(64px, 9vw, 140px);
+    font-weight: 300;
+    line-height: 0.9;
+    letter-spacing: -0.02em;
+    max-width: 900px;
+    opacity: 0;
+    animation: fadeUp 1s 0.5s forwards;
+  }
+  .hero-title em {
+    font-style: italic;
+    color: var(--gold-light);
+  }
+
+  .hero-sub {
+    margin-top: 40px;
+    font-size: 20px;
+    font-weight: 300;
+    color: var(--silver);
+    max-width: 560px;
+    line-height: 1.7;
+    opacity: 0;
+    animation: fadeUp 1s 0.7s forwards;
+  }
+
+  .hero-cta {
+    margin-top: 56px;
+    display: flex;
+    gap: 20px;
+    opacity: 0;
+    animation: fadeUp 1s 0.9s forwards;
+  }
+
+  .btn-primary {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 16px 36px;
+    background: var(--gold);
+    color: var(--ink);
+    text-decoration: none;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+  .btn-primary::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: white;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .btn-primary:hover::after { opacity: 0.1; }
+
+  .btn-ghost {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 16px 36px;
+    border: 1px solid var(--glass-border);
+    color: var(--cream);
+    text-decoration: none;
+    transition: all 0.3s;
+  }
+  .btn-ghost:hover {
+    border-color: var(--gold);
+    color: var(--gold);
+  }
+
+  /* Scrolling ticker */
+  .ticker {
+    position: absolute;
+    bottom: 60px;
+    left: 0; right: 0;
+    overflow: hidden;
+    border-top: 1px solid rgba(201,168,76,0.1);
+    border-bottom: 1px solid rgba(201,168,76,0.1);
+    padding: 12px 0;
+  }
+  .ticker-inner {
+    display: flex;
+    gap: 80px;
+    animation: tickerScroll 30s linear infinite;
+    white-space: nowrap;
+  }
+  .ticker-item {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: rgba(201,168,76,0.4);
+    text-transform: uppercase;
+    flex-shrink: 0;
+  }
+  .ticker-dot {
+    color: var(--gold);
+    margin-right: 80px;
+  }
+  @keyframes tickerScroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Section base */
+  section {
+    padding: 140px 60px;
+    position: relative;
+  }
+
+  .section-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 60px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    max-width: 80px;
+    height: 1px;
+    background: var(--glass-border);
+  }
+
+  /* How it works */
+  .how {
+    background: linear-gradient(180deg, var(--ink) 0%, rgba(20,18,14,1) 100%);
+  }
+
+  .how-title {
+    font-size: clamp(42px, 5vw, 80px);
+    font-weight: 300;
+    line-height: 1.05;
+    max-width: 700px;
+    margin-bottom: 100px;
+  }
+  .how-title em { font-style: italic; color: var(--gold-light); }
+
+  .flow-steps {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0;
+    max-width: 860px;
+  }
+
+  .flow-step {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 40px;
+    padding: 48px 0;
+    border-bottom: 1px solid rgba(201,168,76,0.08);
+    opacity: 0;
+    transform: translateX(-20px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  .flow-step.visible { opacity: 1; transform: translateX(0); }
+
+  .step-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--gold);
+    letter-spacing: 0.1em;
+    padding-top: 6px;
+  }
+
+  .step-content h3 {
+    font-size: 28px;
+    font-weight: 400;
+    margin-bottom: 12px;
+    letter-spacing: -0.01em;
+  }
+  .step-content p {
+    font-size: 17px;
+    color: var(--silver);
+    line-height: 1.7;
+    font-weight: 300;
+  }
+
+  .code-pill {
+    display: inline-block;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    padding: 4px 10px;
+    background: rgba(201,168,76,0.1);
+    border: 1px solid rgba(201,168,76,0.2);
+    color: var(--gold-light);
+    margin-top: 14px;
+    letter-spacing: 0.05em;
+  }
+
+  /* For whom */
+  .audience {
+    background: rgba(201,168,76,0.02);
+    border-top: 1px solid rgba(201,168,76,0.06);
+    border-bottom: 1px solid rgba(201,168,76,0.06);
+  }
+
+  .audience-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    margin-top: 20px;
+  }
+
+  .audience-card {
+    background: rgba(245,240,232,0.02);
+    border: 1px solid rgba(201,168,76,0.08);
+    padding: 56px 48px;
+    transition: all 0.5s ease;
+    position: relative;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease, transform 0.8s ease, background 0.3s ease, border-color 0.3s ease;
+  }
+  .audience-card.visible { opacity: 1; transform: translateY(0); }
+  .audience-card:hover {
+    background: rgba(201,168,76,0.04);
+    border-color: rgba(201,168,76,0.25);
+  }
+  .audience-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    opacity: 0;
+    transition: opacity 0.5s;
+  }
+  .audience-card:hover::before { opacity: 1; }
+
+  .card-icon {
+    font-size: 32px;
+    margin-bottom: 28px;
+    display: block;
+  }
+  .card-type {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+  .card-title {
+    font-size: 32px;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    margin-bottom: 20px;
+  }
+  .card-body {
+    font-size: 16px;
+    color: var(--silver);
+    line-height: 1.75;
+    font-weight: 300;
+  }
+  .card-benefits {
+    margin-top: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .benefit {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.05em;
+    color: rgba(201,168,76,0.6);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .benefit::before {
+    content: '→';
+    color: var(--gold);
+  }
+
+  /* Endpoint showcase */
+  .endpoint-section {
+    background: var(--ink);
+  }
+
+  .endpoint-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+    margin-top: 20px;
+  }
+
+  .endpoint-text h2 {
+    font-size: clamp(36px, 4vw, 64px);
+    font-weight: 300;
+    line-height: 1.1;
+    margin-bottom: 28px;
+  }
+  .endpoint-text h2 em { font-style: italic; color: var(--gold-light); }
+  .endpoint-text p {
+    font-size: 18px;
+    color: var(--silver);
+    line-height: 1.7;
+    font-weight: 300;
+  }
+
+  .terminal {
+    background: rgba(245,240,232,0.03);
+    border: 1px solid rgba(201,168,76,0.12);
+    padding: 40px;
+    position: relative;
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    line-height: 1.8;
+    overflow: hidden;
+  }
+  .terminal::before {
+    content: '● ● ●';
+    position: absolute;
+    top: 16px; left: 20px;
+    color: rgba(201,168,76,0.3);
+    font-size: 10px;
+    letter-spacing: 6px;
+  }
+  .terminal-content {
+    margin-top: 24px;
+    color: var(--silver);
+  }
+  .t-label { color: rgba(201,168,76,0.5); }
+  .t-key { color: var(--cream); }
+  .t-val { color: var(--gold-light); }
+  .t-str { color: #8ec07c; }
+  .t-num { color: #fabd2f; }
+  .t-bool { color: #83a598; }
+  .t-comment { color: rgba(155,163,175,0.4); font-style: italic; }
+  .t-url { color: var(--gold); }
+
+  .terminal-glow {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 60% 40% at 50% 0%, rgba(201,168,76,0.04), transparent);
+    pointer-events: none;
+  }
+
+  /* Commission */
+  .commission {
+    background: linear-gradient(180deg, rgba(20,18,14,1) 0%, var(--ink) 100%);
+  }
+
+  .commission-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 120px;
+    align-items: start;
+  }
+
+  .commission-title {
+    font-size: clamp(42px, 5vw, 72px);
+    font-weight: 300;
+    line-height: 1.05;
+    margin-bottom: 32px;
+  }
+  .commission-title em { font-style: italic; color: var(--gold-light); }
+  .commission-body {
+    font-size: 18px;
+    color: var(--silver);
+    line-height: 1.75;
+    font-weight: 300;
+  }
+
+  .revenue-streams {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .stream {
+    border: 1px solid rgba(201,168,76,0.1);
+    padding: 36px;
+    transition: all 0.4s;
+    opacity: 0;
+    transform: translateX(20px);
+    transition: opacity 0.8s ease, transform 0.8s ease, border-color 0.3s ease;
+  }
+  .stream.visible { opacity: 1; transform: translateX(0); }
+  .stream:hover { border-color: rgba(201,168,76,0.3); }
+
+  .stream-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .stream-title {
+    font-size: 24px;
+    font-weight: 400;
+    margin-bottom: 10px;
+  }
+  .stream-desc {
+    font-size: 15px;
+    color: var(--silver);
+    line-height: 1.65;
+    font-weight: 300;
+  }
+  .stream-rate {
+    margin-top: 16px;
+    font-family: 'Space Mono', monospace;
+    font-size: 22px;
+    color: var(--gold);
+  }
+
+  /* CTA final */
+  .final-cta {
+    text-align: center;
+    padding: 160px 60px;
+    position: relative;
+    overflow: hidden;
+  }
+  .final-cta::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 50% 50%, rgba(201,168,76,0.05), transparent);
+  }
+  .final-cta-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 40px;
+  }
+  .final-cta h2 {
+    font-size: clamp(52px, 8vw, 110px);
+    font-weight: 300;
+    line-height: 0.95;
+    margin-bottom: 48px;
+  }
+  .final-cta h2 em { font-style: italic; color: var(--gold-light); }
+  .final-cta p {
+    font-size: 18px;
+    color: var(--silver);
+    max-width: 480px;
+    margin: 0 auto 56px;
+    line-height: 1.7;
+    font-weight: 300;
+  }
+
+  /* Footer */
+  footer {
+    padding: 40px 60px;
+    border-top: 1px solid rgba(201,168,76,0.08);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .footer-logo {
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    color: var(--gold);
+    letter-spacing: 0.15em;
+  }
+  .footer-right {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: var(--silver);
+    letter-spacing: 0.1em;
+  }
+  .footer-endpoint {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: rgba(201,168,76,0.4);
+    letter-spacing: 0.05em;
+  }
+
+  /* Divider ornament */
+  .ornament {
+    text-align: center;
+    padding: 20px 0;
+    color: rgba(201,168,76,0.2);
+    font-size: 18px;
+    letter-spacing: 20px;
+  }
+
+  /* Onboarding */
+  .onboard {
+    background: var(--ink);
+    border-top: 1px solid rgba(201,168,76,0.06);
+  }
+  .onboard-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 100px;
+    align-items: start;
+  }
+  .onboard-text h2 {
+    font-size: clamp(38px, 4.5vw, 68px);
+    font-weight: 300;
+    line-height: 1.05;
+    margin-bottom: 24px;
+  }
+  .onboard-text h2 em { font-style: italic; color: var(--gold-light); }
+  .onboard-text p {
+    font-size: 17px;
+    color: var(--silver);
+    line-height: 1.75;
+    font-weight: 300;
+    margin-bottom: 16px;
+  }
+  .onboard-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 28px;
+  }
+  .onboard-step {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    color: rgba(201,168,76,0.5);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .onboard-step-num {
+    color: var(--gold);
+    font-size: 11px;
+  }
+
+  .onboard-form {
+    background: rgba(245,240,232,0.02);
+    border: 1px solid rgba(201,168,76,0.1);
+    padding: 48px;
+    position: relative;
+  }
+  .onboard-form::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+  .form-title {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 36px;
+  }
+  .form-group {
+    margin-bottom: 20px;
+  }
+  .form-label {
+    display: block;
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    color: var(--silver);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .form-input {
+    width: 100%;
+    background: rgba(245,240,232,0.04);
+    border: 1px solid rgba(201,168,76,0.12);
+    color: var(--cream);
+    padding: 12px 16px;
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    outline: none;
+    transition: border-color 0.3s;
+  }
+  .form-input:focus { border-color: rgba(201,168,76,0.4); }
+  .form-input::placeholder { color: rgba(155,163,175,0.4); }
+  .form-select {
+    width: 100%;
+    background: rgba(245,240,232,0.04);
+    border: 1px solid rgba(201,168,76,0.12);
+    color: var(--cream);
+    padding: 12px 16px;
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    outline: none;
+    appearance: none;
+    cursor: pointer;
+    transition: border-color 0.3s;
+  }
+  .form-select:focus { border-color: rgba(201,168,76,0.4); }
+  .form-select option { background: #1a1a24; }
+  .form-submit {
+    width: 100%;
+    margin-top: 12px;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 16px;
+    background: var(--gold);
+    color: var(--ink);
+    border: none;
+    cursor: pointer;
+    transition: opacity 0.3s;
+    font-weight: 700;
+  }
+  .form-submit:hover { opacity: 0.85; }
+  .form-submit:disabled { opacity: 0.4; cursor: not-allowed; }
+  .form-result {
+    margin-top: 20px;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    line-height: 1.7;
+    padding: 16px;
+    display: none;
+  }
+  .form-result.success {
+    display: block;
+    background: rgba(142,192,124,0.08);
+    border: 1px solid rgba(142,192,124,0.2);
+    color: #8ec07c;
+  }
+  .form-result.error {
+    display: block;
+    background: rgba(251,73,52,0.08);
+    border: 1px solid rgba(251,73,52,0.2);
+    color: #fb4934;
+  }
+  .form-result .result-url {
+    margin-top: 10px;
+    color: var(--gold-light);
+    word-break: break-all;
+  }
+
+  @media (max-width: 900px) {
+    .onboard-inner { grid-template-columns: 1fr; gap: 48px; }
+    .onboard-form { padding: 32px 24px; }
+  }
+
+  /* Responsive */
+  @media (max-width: 900px) {
+    nav { padding: 24px 30px; }
+    section { padding: 100px 30px; }
+    .hero { padding: 0 30px; }
+    .audience-grid { grid-template-columns: 1fr; }
+    .endpoint-container { grid-template-columns: 1fr; gap: 48px; }
+    .commission-inner { grid-template-columns: 1fr; gap: 60px; }
+    .nav-links { display: none; }
+    footer { flex-direction: column; gap: 16px; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">TexMKT</div>
+  <ul class="nav-links">
+    <li><a href="#how">How It Works</a></li>
+    <li><a href="#audience">For Whom</a></li>
+    <li><a href="#endpoint">The Endpoint</a></li>
+    <li><a href="#onboard">List Your Store</a></li>
+    <li><a href="#commission">Revenue</a></li>
+    <li><a href="https://texflow.work">← texflow.work</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="grid-lines"></div>
+
+  <div class="hero-eyebrow">Agent Commerce Layer</div>
+  <h1 class="hero-title">The internet,<br><em>curated for</em><br>agents.</h1>
+  <p class="hero-sub">Agents declare a goal. TexMKT returns the perfect physical product from any registered merchant — priced, matched, and ready to purchase. No scraping. No browsing. One endpoint.</p>
+  <div class="hero-cta">
+    <a href="#how" class="btn-primary">See How It Works</a>
+    <a href="#onboard" class="btn-ghost">List Your Store →</a>
+  </div>
+
+  <div class="ticker">
+    <div class="ticker-inner">
+      <span class="ticker-item">Goal-Driven Matching</span>
+      <span class="ticker-dot">✦</span>
+      <span class="ticker-item">ACP Compatible</span>
+      <span class="ticker-dot">✦</span>
+      <span class="ticker-item">Query Fee per Match</span>
+      <span class="ticker-dot">✦</span>
+      <span class="ticker-item">Any Shopify Store</span>
+      <span class="ticker-dot">✦</span>
+      <span class="ticker-item">Free Merchant Onboarding</span>
+      <span class="ticker-dot">✦</span>
+      <span class="ticker-item">Stripe Checkout</span>
+      <span class="ticker-dot">✦</span>
+      <span class="ticker-item">texflow.work/.well-known/texmkt.json</span>
+      <span class="ticker-dot">✦</span>
+      <span class="ticker-item">No Database Required</span>
+      <span class="ticker-dot">✦</span>
+      <span class="ticker-item">Goal-Driven Matching</span>
+      <span class="ticker-dot">✦</span>
+      <span class="ticker-item">ACP Compatible</span>
+      <span class="ticker-dot">✦</span>
+      <span class="ticker-item">Query Fee per Match</span>
+      <span class="ticker-dot">✦</span>
+      <span class="ticker-item">Any Shopify Store</span>
+      <span class="ticker-dot">✦</span>
+      <span class="ticker-item">Free Merchant Onboarding</span>
+      <span class="ticker-dot">✦</span>
+      <span class="ticker-item">Stripe Checkout</span>
+      <span class="ticker-dot">✦</span>
+      <span class="ticker-item">texflow.work/.well-known/texmkt.json</span>
+      <span class="ticker-dot">✦</span>
+      <span class="ticker-item">No Database Required</span>
+      <span class="ticker-dot">✦</span>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how" id="how">
+  <div class="section-label">Process</div>
+  <h2 class="how-title">From <em>goal</em> to product,<br>in one request.</h2>
+
+  <div class="flow-steps">
+    <div class="flow-step">
+      <div class="step-num">01</div>
+      <div class="step-content">
+        <h3>Agent declares a goal</h3>
+        <p>Any AI agent — personal assistant, shopping concierge, gifting tool — sends a plain-language goal to the TexMKT endpoint. No special integration required, just a POST request.</p>
+        <span class="code-pill">POST /texmkt/api/match</span>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="step-num">02</div>
+      <div class="step-content">
+        <h3>TexMKT interprets &amp; matches</h3>
+        <p>Every registered merchant catalog is enriched with tags, use-cases, and structured metadata. Goals are scored against all catalogs simultaneously and ranked by relevance — across any product type, any category.</p>
+        <span class="code-pill">texflow.work/.well-known/texmkt.json</span>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="step-num">03</div>
+      <div class="step-content">
+        <h3>Ranked results returned instantly</h3>
+        <p>The agent receives a ranked list of products: title, merchant, price, relevance reason, and a direct product URL. The human is never asked to browse.</p>
+        <span class="code-pill">"relevance_reason": "Matched: wireless, earbuds, within budget"</span>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="step-num">04</div>
+      <div class="step-content">
+        <h3>Query fee charged, results delivered</h3>
+        <p>Each match request deducts a small fee from the agent's pre-loaded Stripe credit balance. TexMKT earns on every query — whether or not a purchase follows. No sale required.</p>
+        <span class="code-pill">$0.10 per match query</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="ornament">· · ·</div>
+
+<!-- AUDIENCE -->
+<section class="audience" id="audience">
+  <div class="section-label">For Whom</div>
+
+  <div class="audience-grid">
+    <div class="audience-card" style="transition-delay: 0.1s">
+      <span class="card-icon">⬡</span>
+      <div class="card-type">For Agents</div>
+      <h3 class="card-title">Stop navigating the web.</h3>
+      <p class="card-body">Discover curated physical products through a single, structured endpoint. Declare a goal in plain language and receive ranked results with purchase-ready URLs. No crawling. No parsing HTML. No guesswork.</p>
+      <div class="card-benefits">
+        <span class="benefit">ACP-compatible discovery</span>
+        <span class="benefit">Structured JSON responses</span>
+        <span class="benefit">Goal-to-product in one request</span>
+        <span class="benefit">Consistent schema, always</span>
+      </div>
+    </div>
+
+    <div class="audience-card" style="transition-delay: 0.25s">
+      <span class="card-icon">◈</span>
+      <div class="card-type">For Merchants</div>
+      <h3 class="card-title">Be found by agents.</h3>
+      <p class="card-body">Any Shopify store can list on TexMKT for free. Your products are imported, enriched, and served to AI agents at the moment of purchase intent — across any category, any niche.</p>
+      <div class="card-benefits">
+        <span class="benefit">Free onboarding, no integration work</span>
+        <span class="benefit">Agent-native product visibility</span>
+        <span class="benefit">Intent-matched discovery</span>
+        <span class="benefit">Your own dedicated catalog endpoint</span>
+      </div>
+    </div>
+
+    <div class="audience-card" style="transition-delay: 0.4s">
+      <span class="card-icon">◎</span>
+      <div class="card-type">For Humans</div>
+      <h3 class="card-title">Let your agent shop.</h3>
+      <p class="card-body">Tell your AI what you need. It handles the research, the comparison, the selection. You get a recommendation that actually matches your goal — not a list of sponsored results and dark patterns.</p>
+      <div class="card-benefits">
+        <span class="benefit">No sponsored placements</span>
+        <span class="benefit">Curated, not algorithmic</span>
+        <span class="benefit">Goal-matched, not keyword-matched</span>
+        <span class="benefit">One click to checkout</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ENDPOINT SHOWCASE -->
+<section class="endpoint-section" id="endpoint">
+  <div class="section-label">The Endpoint</div>
+
+  <div class="endpoint-container">
+    <div class="endpoint-text">
+      <h2>One POST.<br><em>Perfect</em><br>products.</h2>
+      <p>Any agent that can make an HTTP request can access TexMKT. The discovery manifest lives at <code style="font-family:'Space Mono',monospace;font-size:13px;color:var(--gold)">/.well-known/texmkt.json</code> — ACP-compliant, self-describing, instantly parseable.</p>
+    </div>
+
+    <div class="terminal">
+      <div class="terminal-glow"></div>
+      <div class="terminal-content">
+<pre><span class="t-comment">// POST /texmkt/api/match</span>
+{
+  <span class="t-key">"agent_id"</span>: <span class="t-str">"my-assistant-01"</span>,
+  <span class="t-key">"goal"</span>: <span class="t-str">"wireless earbuds for the gym</span>
+<span class="t-str">          under $150"</span>,
+  <span class="t-key">"budget_usd"</span>: <span class="t-num">150</span>
+}
+
+<span class="t-comment">// Response</span>
+{
+  <span class="t-key">"status"</span>: <span class="t-str">"ok"</span>,
+  <span class="t-key">"data"</span>: {
+    <span class="t-key">"matches"</span>: [{
+      <span class="t-key">"rank"</span>: <span class="t-num">1</span>,
+      <span class="t-key">"title"</span>: <span class="t-str">"Sony WF-1000XM5"</span>,
+      <span class="t-key">"merchant"</span>: <span class="t-str">"JB Hi-Fi"</span>,
+      <span class="t-key">"score"</span>: <span class="t-num">0.91</span>,
+      <span class="t-key">"price_usd"</span>: <span class="t-str">"129.00"</span>,
+      <span class="t-key">"relevance_reason"</span>: <span class="t-str">"wireless,
+        earbuds, within budget"</span>,
+      <span class="t-key">"checkout_url"</span>: <span class="t-url">"texflow.work/texmkt/..."</span>
+    }],
+    <span class="t-key">"query_fee_charged"</span>: <span class="t-num">0.10</span>,
+    <span class="t-key">"credits_remaining"</span>: <span class="t-num">2.40</span>
+  },
+  <span class="t-key">"meta"</span>: {
+    <span class="t-key">"platform"</span>: <span class="t-str">"texmkt"</span>
+  }
+}</pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="ornament">· · ·</div>
+
+<!-- COMMISSION -->
+<section class="commission" id="commission">
+  <div class="section-label">Revenue Model</div>
+
+  <div class="commission-inner">
+    <div>
+      <h2 class="commission-title">Earn on<br><em>every</em><br>question asked.</h2>
+      <p class="commission-body">TexMKT's primary revenue is the query fee — a micro-transaction charged each time an agent hits the goal-matching endpoint. No sale required. No merchant relationship required. Just agents asking questions, and TexMKT answering them. Volume compounds automatically as more merchants list and more agents come online.</p>
+    </div>
+
+    <div class="revenue-streams">
+      <div class="stream">
+        <div class="stream-label">Primary Revenue</div>
+        <div class="stream-title">Query Fee</div>
+        <p class="stream-desc">Agents pre-load credits via Stripe. Each call to <code style="font-family:'Space Mono',monospace;font-size:11px;color:var(--gold-light)">/texmkt/api/match</code> deducts from their balance. No query goes unanswered, no answer goes unpaid.</p>
+        <div class="stream-rate">$0.10 per query</div>
+      </div>
+
+      <div class="stream" style="transition-delay: 0.15s">
+        <div class="stream-label">Scale</div>
+        <div class="stream-title">Volume is the moat</div>
+        <p class="stream-desc">At 1,000 queries/day that's $100. At 10,000 it's $1,000. The fee is small enough that agents don't hesitate, large enough that volume creates a real business. Infrastructure, not transactions.</p>
+        <div class="stream-rate">Scales with agent adoption</div>
+      </div>
+
+      <div class="stream" style="transition-delay: 0.3s">
+        <div class="stream-label">Future Layer</div>
+        <div class="stream-title">Merchant partnerships</div>
+        <p class="stream-desc">Once query volume is established, merchant relationships and referral arrangements become negotiable from a position of proven traffic. The query fee proves the value first.</p>
+        <div class="stream-rate">Coming later</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="ornament">· · ·</div>
+
+<!-- MERCHANT ONBOARDING -->
+<section class="onboard" id="onboard">
+  <div class="section-label">Merchants</div>
+
+  <div class="onboard-inner">
+    <div class="onboard-text">
+      <h2>Your store.<br><em>Agent-ready</em><br>in minutes.</h2>
+      <p>Any public Shopify store can list on TexMKT for free. Submit your store URL and your entire product catalog will be imported, enriched with agent-readable metadata, and served at its own dedicated endpoint — immediately queryable by any AI agent.</p>
+      <p>No code changes. No API keys. No ongoing maintenance. TexMKT reads your public <code style="font-family:'Space Mono',monospace;font-size:12px;color:var(--gold)">/products.json</code> endpoint and handles the rest.</p>
+      <div class="onboard-steps">
+        <div class="onboard-step"><span class="onboard-step-num">01</span> Submit your Shopify store URL</div>
+        <div class="onboard-step"><span class="onboard-step-num">02</span> TexMKT fetches and enriches your catalog</div>
+        <div class="onboard-step"><span class="onboard-step-num">03</span> Your products get their own catalog endpoint</div>
+        <div class="onboard-step"><span class="onboard-step-num">04</span> Agents start finding your products immediately</div>
+      </div>
+    </div>
+
+    <div class="onboard-form">
+      <div class="form-title">List Your Store — Free</div>
+
+      <div class="form-group">
+        <label class="form-label" for="merchantName">Store / Brand Name</label>
+        <input class="form-input" type="text" id="merchantName" placeholder="e.g. Zoologist Perfumes" />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="shopifyUrl">Shopify Store URL</label>
+        <input class="form-input" type="url" id="shopifyUrl" placeholder="https://yourstore.com" />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="category">Product Category</label>
+        <select class="form-select" id="category">
+          <option value="" disabled selected>Select a category</option>
+          <option value="fragrance">Fragrance & Beauty</option>
+          <option value="electronics">Electronics & Tech</option>
+          <option value="fashion">Fashion & Apparel</option>
+          <option value="home">Home & Living</option>
+          <option value="food">Food & Beverage</option>
+          <option value="health">Health & Wellness</option>
+          <option value="sports">Sports & Outdoors</option>
+          <option value="books">Books & Media</option>
+          <option value="toys">Toys & Games</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="contactEmail">Contact Email</label>
+        <input class="form-input" type="email" id="contactEmail" placeholder="you@yourstore.com" />
+      </div>
+
+      <button class="form-submit" id="onboardBtn" onclick="submitOnboarding()">Submit My Store</button>
+
+      <div class="form-result" id="formResult"></div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="final-cta">
+  <div class="final-cta-label">texflow.work/texmkt</div>
+  <h2>The agent web<br><em>starts here.</em></h2>
+  <p>TexMKT is open to any Shopify merchant. List your store free. Agents find your products. The catalog grows itself.</p>
+  <div style="display:flex;gap:20px;justify-content:center;flex-wrap:wrap;">
+    <a href="#onboard" class="btn-primary">List Your Store — Free</a>
+    <a href="https://texflow.work/.well-known/texmkt.json" class="btn-ghost">Explore the Manifest</a>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">TexMKT</div>
+  <div class="footer-endpoint">texflow.work/.well-known/texmkt.json</div>
+  <div class="footer-right">Agent Commerce Layer · texmkt branch</div>
+</footer>
+
+<script>
+  // Merchant onboarding form
+  async function submitOnboarding() {
+    const btn = document.getElementById('onboardBtn');
+    const result = document.getElementById('formResult');
+    const name = document.getElementById('merchantName').value.trim();
+    const url = document.getElementById('shopifyUrl').value.trim();
+    const category = document.getElementById('category').value;
+    const email = document.getElementById('contactEmail').value.trim();
+
+    result.className = 'form-result';
+    result.style.display = 'none';
+
+    if (!name || !url || !category || !email) {
+      result.className = 'form-result error';
+      result.innerHTML = 'Please fill in all fields.';
+      return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = 'Submitting...';
+
+    try {
+      const res = await fetch('/texmkt/api/onboard', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ merchant_name: name, shopify_url: url, category, contact_email: email })
+      });
+      const data = await res.json();
+
+      if (data.status === 'ok') {
+        result.className = 'form-result success';
+        result.innerHTML = `✓ ${data.data.merchant_name} is live — ${data.data.product_count} products imported.
+          <div class="result-url">Your catalog endpoint:<br>${data.data.catalog_url}</div>`;
+        btn.textContent = 'Submitted ✓';
+      } else {
+        result.className = 'form-result error';
+        result.innerHTML = `Error: ${data.error || data.message || 'Something went wrong.'}`;
+        btn.disabled = false;
+        btn.textContent = 'Submit My Store';
+      }
+    } catch (e) {
+      result.className = 'form-result error';
+      result.innerHTML = 'Could not reach the server. Please try again.';
+      btn.disabled = false;
+      btn.textContent = 'Submit My Store';
+    }
+  }
+
+  // Scroll reveal
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), 
+          entry.target.style.transitionDelay ? 0 : 0);
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.15 });
+
+  document.querySelectorAll('.flow-step, .audience-card, .stream').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
