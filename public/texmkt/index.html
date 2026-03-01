@@ -997,6 +997,84 @@
   </div>
 </section>
 
+<!-- CURL EXAMPLES -->
+<section class="endpoint-section" id="try-it">
+  <div class="section-label">Try It</div>
+
+  <div style="max-width:860px;">
+    <h2 style="font-size:clamp(36px,4vw,64px);font-weight:300;line-height:1.1;margin-bottom:20px;">Two curls.<br><em>That's it.</em></h2>
+    <p style="font-size:18px;color:var(--silver);line-height:1.7;font-weight:300;margin-bottom:56px;">Any agent or developer can start querying in seconds. Top up credits, then match a goal.</p>
+
+    <div style="display:flex;flex-direction:column;gap:36px;">
+
+      <div>
+        <div style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.2em;color:var(--gold);text-transform:uppercase;margin-bottom:14px;">Step 1 — Top Up Credits</div>
+        <div class="terminal">
+          <div class="terminal-glow"></div>
+          <div class="terminal-content">
+<pre><span class="t-comment"># Add query credits (use /credits/topup for Stripe, or /credits/seed for testing)</span>
+
+<span class="t-label">$</span> curl -X POST https://texflow.work/texmkt/api/credits/seed \
+  -H <span class="t-str">'Content-Type: application/json'</span> \
+  -d <span class="t-str">'{
+    "agent_id": "my-assistant-01",
+    "amount_usd": 10.00
+  }'</span>
+
+<span class="t-comment">// Response</span>
+{
+  <span class="t-key">"status"</span>: <span class="t-str">"ok"</span>,
+  <span class="t-key">"data"</span>: {
+    <span class="t-key">"agent_id"</span>: <span class="t-str">"my-assistant-01"</span>,
+    <span class="t-key">"credited"</span>: <span class="t-num">10.00</span>,
+    <span class="t-key">"balance_usd"</span>: <span class="t-num">10.00</span>
+  }
+}</pre>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.2em;color:var(--gold);text-transform:uppercase;margin-bottom:14px;">Step 2 — Find a Product</div>
+        <div class="terminal">
+          <div class="terminal-glow"></div>
+          <div class="terminal-content">
+<pre><span class="t-comment"># Declare a goal — TexMKT returns ranked matches</span>
+
+<span class="t-label">$</span> curl -X POST https://texflow.work/texmkt/api/match \
+  -H <span class="t-str">'Content-Type: application/json'</span> \
+  -d <span class="t-str">'{
+    "agent_id": "my-assistant-01",
+    "goal": "unique nature-inspired fragrance as a gift",
+    "budget_usd": 250
+  }'</span>
+
+<span class="t-comment">// Response</span>
+{
+  <span class="t-key">"status"</span>: <span class="t-str">"ok"</span>,
+  <span class="t-key">"data"</span>: {
+    <span class="t-key">"goal_received"</span>: <span class="t-str">"unique nature-inspired fragrance as a gift"</span>,
+    <span class="t-key">"matches"</span>: [{
+      <span class="t-key">"rank"</span>: <span class="t-num">1</span>,
+      <span class="t-key">"title"</span>: <span class="t-str">"Hummingbird Eau de Parfum"</span>,
+      <span class="t-key">"merchant"</span>: <span class="t-str">"Zoologist Perfumes"</span>,
+      <span class="t-key">"score"</span>: <span class="t-num">0.80</span>,
+      <span class="t-key">"price_usd"</span>: <span class="t-str">"175.00"</span>,
+      <span class="t-key">"relevance_reason"</span>: <span class="t-str">"Matched: nature, fragrance, gift"</span>,
+      <span class="t-key">"checkout_url"</span>: <span class="t-url">"texflow.work/texmkt/checkout/..."</span>
+    }],
+    <span class="t-key">"query_fee_charged"</span>: <span class="t-num">0.10</span>,
+    <span class="t-key">"credits_remaining"</span>: <span class="t-num">9.90</span>
+  }
+}</pre>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
 <div class="ornament">· · ·</div>
 
 <!-- COMMISSION -->

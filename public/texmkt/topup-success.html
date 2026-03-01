@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Top-Up Successful — TexMKT</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0a0a0f;
+    --cream: #f5f0e8;
+    --gold: #c9a84c;
+    --gold-light: #e8d08a;
+    --silver: #9ba3af;
+    --glass-border: rgba(201,168,76,0.2);
+  }
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--ink);
+    color: var(--cream);
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 24px;
+  }
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.4;
+  }
+  .card {
+    position: relative;
+    z-index: 2;
+    max-width: 520px;
+    width: 100%;
+    background: rgba(245,240,232,0.02);
+    border: 1px solid rgba(201,168,76,0.15);
+    padding: 56px 48px;
+    text-align: center;
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+  .checkmark {
+    width: 56px;
+    height: 56px;
+    border: 2px solid var(--gold);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 28px;
+    animation: scaleIn 0.5s ease;
+  }
+  .checkmark svg { width: 28px; height: 28px; }
+  @keyframes scaleIn {
+    from { transform: scale(0); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+  .label {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+  h1 {
+    font-size: 36px;
+    font-weight: 300;
+    line-height: 1.15;
+    margin-bottom: 12px;
+  }
+  h1 em { font-style: italic; color: var(--gold-light); }
+  .sub {
+    font-size: 17px;
+    color: var(--silver);
+    font-weight: 300;
+    line-height: 1.6;
+    margin-bottom: 36px;
+  }
+  .stats {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    border: 1px solid rgba(201,168,76,0.1);
+    margin-bottom: 36px;
+  }
+  .stat {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+    border-bottom: 1px solid rgba(201,168,76,0.06);
+  }
+  .stat:last-child { border-bottom: none; }
+  .stat-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: var(--silver);
+    text-transform: uppercase;
+  }
+  .stat-value {
+    font-family: 'Space Mono', monospace;
+    font-size: 14px;
+    color: var(--cream);
+    letter-spacing: 0.02em;
+  }
+  .stat-value.highlight {
+    color: var(--gold);
+    font-size: 18px;
+    font-weight: 700;
+  }
+  .agent-id-display {
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    color: var(--gold-light);
+    background: rgba(201,168,76,0.08);
+    border: 1px solid rgba(201,168,76,0.15);
+    padding: 10px 16px;
+    margin-bottom: 32px;
+    word-break: break-all;
+    letter-spacing: 0.03em;
+  }
+  .actions {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .btn {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 14px 28px;
+    text-decoration: none;
+    transition: all 0.3s;
+    cursor: pointer;
+  }
+  .btn-primary {
+    background: var(--gold);
+    color: var(--ink);
+    border: none;
+  }
+  .btn-primary:hover { opacity: 0.85; }
+  .btn-ghost {
+    background: transparent;
+    color: var(--cream);
+    border: 1px solid var(--glass-border);
+  }
+  .btn-ghost:hover { border-color: var(--gold); color: var(--gold); }
+  .loading {
+    color: var(--silver);
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+  }
+  .loading::after {
+    content: '';
+    animation: dots 1.5s steps(3) infinite;
+  }
+  @keyframes dots {
+    0% { content: ''; }
+    33% { content: '.'; }
+    66% { content: '..'; }
+    100% { content: '...'; }
+  }
+  .error-msg {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: #fb4934;
+    margin-bottom: 20px;
+    display: none;
+  }
+  @media (max-width: 600px) {
+    .card { padding: 40px 24px; }
+    h1 { font-size: 28px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="card">
+  <div class="checkmark">
+    <svg viewBox="0 0 24 24" fill="none" stroke="#c9a84c" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="20 6 9 17 4 12"></polyline>
+    </svg>
+  </div>
+
+  <div class="label">Credits Added</div>
+  <h1>Top-up <em>successful.</em></h1>
+  <p class="sub" id="subText">Your query credits are ready.</p>
+
+  <div class="agent-id-display" id="agentIdDisplay">—</div>
+
+  <div id="statsContainer">
+    <p class="loading" id="loadingText">Fetching balance</p>
+  </div>
+
+  <div class="error-msg" id="errorMsg"></div>
+
+  <div class="actions">
+    <a href="/texmkt/" class="btn btn-primary">Back to TexMKT</a>
+    <a href="/.well-known/texmkt.json" class="btn btn-ghost">View Manifest</a>
+  </div>
+</div>
+
+<script>
+(async function () {
+  const params = new URLSearchParams(window.location.search);
+  const agentId = params.get('agent_id') || 'unknown';
+  const topupAmount = params.get('amount');
+
+  document.getElementById('agentIdDisplay').textContent = agentId;
+
+  if (topupAmount) {
+    document.getElementById('subText').textContent =
+      `$${parseFloat(topupAmount).toFixed(2)} in query credits added to your balance.`;
+  }
+
+  const container = document.getElementById('statsContainer');
+  const loading = document.getElementById('loadingText');
+  const errorMsg = document.getElementById('errorMsg');
+
+  try {
+    const res = await fetch(`/texmkt/api/credits/${encodeURIComponent(agentId)}`);
+    const json = await res.json();
+
+    if (json.status === 'ok' && json.data) {
+      const d = json.data;
+      loading.style.display = 'none';
+      container.innerHTML = `
+        <div class="stats">
+          <div class="stat">
+            <span class="stat-label">Current Balance</span>
+            <span class="stat-value highlight">$${(d.balance_usd || 0).toFixed(2)}</span>
+          </div>
+          <div class="stat">
+            <span class="stat-label">Total Topped Up</span>
+            <span class="stat-value">$${(d.total_topped_up || 0).toFixed(2)}</span>
+          </div>
+          <div class="stat">
+            <span class="stat-label">Total Spent</span>
+            <span class="stat-value">$${(d.total_spent || 0).toFixed(2)}</span>
+          </div>
+          <div class="stat">
+            <span class="stat-label">Queries Remaining</span>
+            <span class="stat-value">${Math.floor((d.balance_usd || 0) / 0.10)}</span>
+          </div>
+        </div>`;
+    } else {
+      throw new Error(json.error || 'Could not fetch balance');
+    }
+  } catch (e) {
+    loading.style.display = 'none';
+    errorMsg.style.display = 'block';
+    errorMsg.textContent = 'Could not load balance. Your credits have been added — check back shortly.';
+  }
+})();
+</script>
+</body>
+</html>

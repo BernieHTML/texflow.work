@@ -1040,6 +1040,26 @@ app.post('/texmkt/api/match', async (req, res) => {
   }
 });
 
+// --- TexMKT: GET /texmkt/api/credits/:agent_id (check balance) ---
+app.get('/texmkt/api/credits/:agent_id', async (req, res) => {
+  try {
+    const { agent_id } = req.params;
+    const credits = await texmktReadCredits();
+    const entry = credits[agent_id];
+    if (!entry) return res.json({ status: 'ok', data: { agent_id, balance_usd: 0, total_topped_up: 0, total_spent: 0 }, meta: { platform: 'texmkt', version: '1.0' } });
+    res.json({
+      status: 'ok',
+      data: { agent_id, balance_usd: entry.balance_usd, total_topped_up: entry.total_topped_up, total_spent: entry.total_spent, last_active: entry.last_active },
+      meta: { platform: 'texmkt', version: '1.0' },
+    });
+  } catch (e) {
+    res.status(500).json({ status: 'error', error: e.message, meta: { platform: 'texmkt', version: '1.0' } });
+  }
+});
+
+// --- TexMKT: topup success page ---
+app.get('/texmkt/topup-success', (req, res) => res.sendFile(join(__dirname, 'public', 'texmkt', 'topup-success.html')));
+
 // --- TexMKT: POST /texmkt/api/credits/topup ---
 app.post('/texmkt/api/credits/topup', async (req, res) => {
   try {
@@ -1065,7 +1085,7 @@ app.post('/texmkt/api/credits/topup', async (req, res) => {
         },
         quantity: 1,
       }],
-      success_url: `${BASE_URL}/texmkt/?topup=success`,
+      success_url: `${BASE_URL}/texmkt/topup-success?agent_id=${encodeURIComponent(agent_id)}&amount=${amount}`,
       cancel_url: `${BASE_URL}/texmkt/?topup=cancelled`,
       metadata: { product: 'texmkt-credits', agent_id, amount_usd: String(amount) },
     });
@@ -1077,6 +1097,31 @@ app.post('/texmkt/api/credits/topup', async (req, res) => {
         agent_id,
         amount_usd: amount,
       },
+      meta: { platform: 'texmkt', version: '1.0' },
+    });
+  } catch (e) {
+    res.status(500).json({ status: 'error', error: e.message, meta: { platform: 'texmkt', version: '1.0' } });
+  }
+});
+
+// --- TexMKT: POST /texmkt/api/credits/seed (manual credit for testing — no Stripe required) ---
+app.post('/texmkt/api/credits/seed', async (req, res) => {
+  try {
+    const { agent_id, amount_usd } = req.body || {};
+    if (!agent_id) return res.status(400).json({ status: 'error', error: 'agent_id is required', meta: { platform: 'texmkt', version: '1.0' } });
+    const amount = parseFloat(amount_usd) || 5.00;
+
+    const credits = await texmktReadCredits();
+    const entry = credits[agent_id] || { balance_usd: 0, total_topped_up: 0, total_spent: 0, created_at: new Date().toISOString(), last_active: new Date().toISOString() };
+    entry.balance_usd = +((entry.balance_usd || 0) + amount).toFixed(2);
+    entry.total_topped_up = +((entry.total_topped_up || 0) + amount).toFixed(2);
+    entry.last_active = new Date().toISOString();
+    credits[agent_id] = entry;
+    await texmktWriteCredits(credits);
+
+    res.json({
+      status: 'ok',
+      data: { agent_id, credited: amount, balance_usd: entry.balance_usd },
       meta: { platform: 'texmkt', version: '1.0' },
     });
   } catch (e) {
