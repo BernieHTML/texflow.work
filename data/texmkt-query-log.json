@@ -1,1 +1,18 @@
-[]
+[
+  {
+    "agent_id": "bernie-test-agent",
+    "goal": "unique nature-inspired fragrance as a gift",
+    "budget_usd": 250,
+    "merchant_slug": null,
+    "match_count": 5,
+    "fee_charged": 0.1,
+    "timestamp": "2026-03-01T06:05:45.268Z"
+  },
+  {
+    "type": "checkout_redirect",
+    "product_id": "7537772232763",
+    "product_url": "https://zoologistperfumes.com/products/zoologist-joey-edition",
+    "merchant_slug": "zoologist-perfumes",
+    "timestamp": "2026-03-01T06:06:23.633Z"
+  }
+]
