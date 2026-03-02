@@ -14,5 +14,50 @@
     "product_url": "https://zoologistperfumes.com/products/zoologist-joey-edition",
     "merchant_slug": "zoologist-perfumes",
     "timestamp": "2026-03-01T06:06:23.633Z"
+  },
+  {
+    "agent_id": "bernie-test-agent",
+    "goal": "unique nature-inspired fragrance as a gift",
+    "budget_usd": 250,
+    "merchant_slug": null,
+    "match_count": 5,
+    "fee_charged": 0.1,
+    "timestamp": "2026-03-02T05:21:30.342Z"
+  },
+  {
+    "agent_id": "bernie-test-agent",
+    "goal": "unique nature-inspired fragrance as a gift",
+    "budget_usd": 250,
+    "merchant_slug": null,
+    "match_count": 0,
+    "fee_charged": 0.1,
+    "timestamp": "2026-03-02T05:21:36.356Z"
+  },
+  {
+    "agent_id": "bernie-test-agent",
+    "goal": "fragrance perfume",
+    "budget_usd": 250,
+    "merchant_slug": null,
+    "match_count": 5,
+    "fee_charged": 0.1,
+    "timestamp": "2026-03-02T05:21:57.132Z"
+  },
+  {
+    "agent_id": "bernie-test-agent",
+    "goal": "unique nature-inspired fragrance as a gift",
+    "budget_usd": 250,
+    "merchant_slug": null,
+    "match_count": 0,
+    "fee_charged": 0.1,
+    "timestamp": "2026-03-02T05:22:08.432Z"
+  },
+  {
+    "agent_id": "bernie-test-agent",
+    "goal": "fragrance",
+    "budget_usd": 250,
+    "merchant_slug": null,
+    "match_count": 0,
+    "fee_charged": 0.1,
+    "timestamp": "2026-03-02T05:22:13.438Z"
   }
 ]

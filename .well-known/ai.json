@@ -6,6 +6,14 @@
   "interaction": { "type": "read-only", "authentication": "none" },
   "products": [
     {
+      "id": "texmkt",
+      "name": "TexMKT",
+      "url": "https://texflow.work/texmkt/",
+      "ai": "/.well-known/texmkt.json",
+      "catalog": "/.well-known/texmkt.json",
+      "description": "Agent-native product marketplace. Query products by natural-language goal across Shopify merchant catalogs. Prepaid credits, $0.10/query."
+    },
+    {
       "id": "platform66",
       "name": "Platform66",
       "url": "https://texflow.work/platform66/",

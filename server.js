@@ -8,6 +8,7 @@ import { fileURLToPath } from 'url';
 import { spawn } from 'child_process';
 import { v4 as uuidv4 } from 'uuid';
 import { transformShopifyProduct, fetchShopifyProducts, slugifyMerchant } from './scripts/texmkt-shopify.js';
+import { writeWellKnownTexmkt } from './scripts/texmkt-well-known.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const app = express();
@@ -134,6 +135,7 @@ await mkdir(TEXMKT_CATALOGS_DIR, { recursive: true });
 try { await readFile(TEXMKT_MERCHANTS_PATH, 'utf8'); } catch (e) { if (e.code === 'ENOENT') await writeFile(TEXMKT_MERCHANTS_PATH, '[]', 'utf8'); }
 try { await readFile(TEXMKT_CREDITS_PATH, 'utf8'); } catch (e) { if (e.code === 'ENOENT') await writeFile(TEXMKT_CREDITS_PATH, '{}', 'utf8'); }
 try { await readFile(TEXMKT_QUERY_LOG_PATH, 'utf8'); } catch (e) { if (e.code === 'ENOENT') await writeFile(TEXMKT_QUERY_LOG_PATH, '[]', 'utf8'); }
+await writeWellKnownTexmkt();
 
 async function readExperts() {
   const raw = await readFile(EXPERTS_PATH, 'utf8');
@@ -235,6 +237,14 @@ app.get('/.well-known/ai.json', (req, res) => {
 app.get('/.well-known/vyex.md', (req, res) => {
   res.setHeader('Content-Type', 'text/markdown; charset=utf-8');
   res.sendFile(join(__dirname, '.well-known', 'vyex.md'));
+});
+app.get('/.well-known/ai-plugin.json', (req, res) => {
+  res.setHeader('Content-Type', 'application/json');
+  res.sendFile(join(__dirname, '.well-known', 'ai-plugin.json'));
+});
+app.get('/.well-known/texmkt-openapi.json', (req, res) => {
+  res.setHeader('Content-Type', 'application/json');
+  res.sendFile(join(__dirname, '.well-known', 'texmkt-openapi.json'));
 });
 app.get('/.well-known/agent-catalog.json', async (req, res) => {
   try {
@@ -894,6 +904,7 @@ app.post('/texmkt/api/onboard', async (req, res) => {
     };
     merchants.push(merchant);
     await texmktWriteMerchants(merchants);
+    await writeWellKnownTexmkt();
 
     res.status(201).json({
       status: 'ok',
@@ -955,7 +966,9 @@ app.post('/texmkt/api/match', async (req, res) => {
     }
 
     const allProducts = await texmktLoadAllProducts(merchant_slug || null);
-    const keywords = goal.toLowerCase().replace(/[^a-z0-9\s]/g, '').split(/\s+/).filter(w => w.length > 1);
+    const STOPWORDS = new Set(['a','an','as','at','be','by','do','for','in','is','it','of','on','or','to','the','and','but','if','so','with','into','from','up','out','no','not','we','they','this','that','these','those','i','you','he','she','it','we','they','my','your','his','her','its','our','their','me','him','them','us','what','which','who','when','where','why','how','all','each','every','both','few','more','most','other','some','such','than','too','very','just','can','will','would','could','should','may','might','must','shall']);
+    const rawWords = goal.toLowerCase().replace(/[^a-z0-9\s]/g, '').split(/\s+/).filter(w => w.length > 1);
+    const keywords = rawWords.filter(w => !STOPWORDS.has(w));
 
     const scored = allProducts.map(product => {
       const haystack = [

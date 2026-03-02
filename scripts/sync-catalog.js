@@ -9,6 +9,7 @@ import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { v4 as uuidv4 } from 'uuid';
 import { fetchShopifyProducts, transformShopifyProduct } from './texmkt-shopify.js';
+import { writeWellKnownTexmkt } from './texmkt-well-known.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, '..');
@@ -89,6 +90,7 @@ try {
   }
 
   await writeFile(MERCHANTS_PATH, JSON.stringify(merchants, null, 2), 'utf8');
+  await writeWellKnownTexmkt();
   console.log(`[sync] Merchant registry updated. Total merchants: ${merchants.length}`);
 
   const skipped = products.length - enriched.length;

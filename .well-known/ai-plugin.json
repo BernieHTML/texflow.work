@@ -1,0 +1,15 @@
+{
+  "schema_version": "v1",
+  "name_for_human": "TexMKT",
+  "name_for_model": "texmkt",
+  "description_for_human": "Agent-native product marketplace. Query products by natural-language goal, top up credits, onboard Shopify merchants.",
+  "description_for_model": "TexMKT is an open product marketplace for AI agents. POST a natural-language goal to find products across Shopify merchant catalogs. Requires agent_id and prepaid credits ($0.10/query). Endpoints: match (goal search), topup (Stripe checkout for credits), onboard (merchant registration), merchants (list). Discovery manifest at /.well-known/texmkt.json.",
+  "auth": { "type": "none" },
+  "api": {
+    "type": "openapi",
+    "url": "https://texflow.work/.well-known/texmkt-openapi.json"
+  },
+  "logo_url": "https://texflow.work/favicon.ico",
+  "contact_email": "hello@texflow.work",
+  "legal_info_url": "https://texflow.work/"
+}

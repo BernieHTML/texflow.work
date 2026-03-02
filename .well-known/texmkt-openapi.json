@@ -1,0 +1,83 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "TexMKT API",
+    "description": "Agent-native product marketplace. Query products by goal, top up credits, onboard merchants.",
+    "version": "1.0"
+  },
+  "servers": [{ "url": "https://texflow.work" }],
+  "paths": {
+    "/texmkt/api/match": {
+      "post": {
+        "summary": "Find products matching a natural-language goal",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["agent_id", "goal"],
+                "properties": {
+                  "agent_id": { "type": "string", "description": "Agent identifier (required for fee deduction)" },
+                  "goal": { "type": "string", "description": "Natural-language product goal" },
+                  "budget_usd": { "type": "number", "description": "Optional max price filter" },
+                  "merchant_slug": { "type": "string", "description": "Optional filter to one merchant" }
+                }
+              }
+            }
+          }
+        },
+        "responses": { "200": { "description": "Ranked product matches" } }
+      }
+    },
+    "/texmkt/api/credits/topup": {
+      "post": {
+        "summary": "Create Stripe Checkout session for credit top-up",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["agent_id", "amount_usd"],
+                "properties": {
+                  "agent_id": { "type": "string" },
+                  "amount_usd": { "type": "number", "minimum": 1 }
+                }
+              }
+            }
+          }
+        },
+        "responses": { "200": { "description": "Stripe checkout URL" } }
+      }
+    },
+    "/texmkt/api/onboard": {
+      "post": {
+        "summary": "Onboard a Shopify merchant (free)",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["shopify_url", "merchant_name"],
+                "properties": {
+                  "shopify_url": { "type": "string", "format": "uri" },
+                  "merchant_name": { "type": "string" },
+                  "category": { "type": "string" },
+                  "contact_email": { "type": "string", "format": "email" }
+                }
+              }
+            }
+          }
+        },
+        "responses": { "201": { "description": "Merchant onboarded" } }
+      }
+    },
+    "/texmkt/api/merchants": {
+      "get": {
+        "summary": "List all registered merchants",
+        "responses": { "200": { "description": "Merchant list" } }
+      }
+    }
+  }
+}
