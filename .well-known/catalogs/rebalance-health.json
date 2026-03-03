@@ -1,0 +1,702 @@
+[
+  {
+    "id": "8753961205922",
+    "title": "DREAM™ 60 Day Supply",
+    "vendor": "Rebalance Health",
+    "category": "supplement",
+    "summary": "DREAM™ 60 Day Supply — supplement",
+    "tags": [
+      "supplement"
+    ],
+    "use_cases": [
+      "sleep",
+      "supports",
+      "superceutical",
+      "support",
+      "deep"
+    ],
+    "price_usd": "91.98",
+    "available": true,
+    "product_url": "https://www.rebalancehealth.com/products/dream™-60-day-supply",
+    "image_url": "https://cdn.shopify.com/s/files/1/0517/7321/0786/files/rh_dream_1_939db91f-e77e-43a7-8e3e-4792aec76ee8.png?v=1709315437",
+    "checkout_url": "https://texflow.work/texmkt/checkout/8753961205922",
+    "merchant_slug": "rebalance-health",
+    "source": "www.rebalancehealth.com"
+  },
+  {
+    "id": "8753935483042",
+    "title": "DREAM™ 90 Day Supply",
+    "vendor": "Rebalance Health",
+    "category": "supplement",
+    "summary": "DREAM™ 90 Day Supply — supplement",
+    "tags": [
+      "supplement"
+    ],
+    "use_cases": [
+      "sleep",
+      "supports",
+      "superceutical",
+      "support",
+      "deep"
+    ],
+    "price_usd": "135.00",
+    "available": true,
+    "product_url": "https://www.rebalancehealth.com/products/dream™-90-day-supply",
+    "image_url": "https://cdn.shopify.com/s/files/1/0517/7321/0786/files/rh_dream_1_939db91f-e77e-43a7-8e3e-4792aec76ee8.png?v=1709315437",
+    "checkout_url": "https://texflow.work/texmkt/checkout/8753935483042",
+    "merchant_slug": "rebalance-health",
+    "source": "www.rebalancehealth.com"
+  },
+  {
+    "id": "8680168849570",
+    "title": "BONUS GIFT | Stress Nation (FREE) $29.99 value + Glass Jar",
+    "vendor": "Rebalance Health",
+    "category": "",
+    "summary": "BONUS GIFT | Stress Nation (FREE) $29.99 value + Glass Jar — nonpublic, ship 895",
+    "tags": [
+      "nonpublic",
+      "ship 895"
+    ],
+    "use_cases": [],
+    "price_usd": "0.00",
+    "available": true,
+    "product_url": "https://www.rebalancehealth.com/products/bonus-gift",
+    "image_url": "https://cdn.shopify.com/s/files/1/0517/7321/0786/files/stress_nation_jar_free_gift.png?v=1758722910",
+    "checkout_url": "https://texflow.work/texmkt/checkout/8680168849570",
+    "merchant_slug": "rebalance-health",
+    "source": "www.rebalancehealth.com"
+  },
+  {
+    "id": "8705278050466",
+    "title": "DREAM + DREAM (melatonin free) 14-Days",
+    "vendor": "Rebalance Health",
+    "category": "supplement",
+    "summary": "DREAM + DREAM (melatonin free) 14-Days — nonpublic, redirect_to_home, supplement",
+    "tags": [
+      "nonpublic",
+      "redirect_to_home",
+      "supplement"
+    ],
+    "use_cases": [
+      "sleep",
+      "superceutical",
+      "support",
+      "available",
+      "rebalance"
+    ],
+    "price_usd": "20.00",
+    "available": true,
+    "product_url": "https://www.rebalancehealth.com/products/dream-7-day-samples-melatonin-no-melatonin",
+    "image_url": "https://cdn.shopify.com/s/files/1/0517/7321/0786/files/carousel_drm_7day_01_f214112c-1aed-426b-bd59-26ee170979d6.jpg?v=1750941735",
+    "checkout_url": "https://texflow.work/texmkt/checkout/8705278050466",
+    "merchant_slug": "rebalance-health",
+    "source": "www.rebalancehealth.com"
+  },
+  {
+    "id": "8677209145506",
+    "title": "mellomints™ + DREAM Bundle",
+    "vendor": "Rebalance Health",
+    "category": "",
+    "summary": "mellomints™ + DREAM Bundle — nonpublic, ship 895",
+    "tags": [
+      "nonpublic",
+      "ship 895"
+    ],
+    "use_cases": [
+      "mello",
+      "mints",
+      "fast-acting",
+      "lozenges",
+      "designed"
+    ],
+    "price_usd": "95.38",
+    "available": true,
+    "product_url": "https://www.rebalancehealth.com/products/mellomints-dream",
+    "image_url": "https://cdn.shopify.com/s/files/1/0517/7321/0786/files/melo-dream-bundle.png?v=1747914206",
+    "checkout_url": "https://texflow.work/texmkt/checkout/8677209145506",
+    "merchant_slug": "rebalance-health",
+    "source": "www.rebalancehealth.com"
+  },
+  {
+    "id": "8677181030562",
+    "title": "manmints™ + DREAM Bundle",
+    "vendor": "Rebalance Health",
+    "category": "",
+    "summary": "manmints™ + DREAM Bundle — nonpublic, ship 895",
+    "tags": [
+      "nonpublic",
+      "ship 895"
+    ],
+    "use_cases": [],
+    "price_usd": "95.38",
+    "available": true,
+    "product_url": "https://www.rebalancehealth.com/products/manmints-dream",
+    "image_url": "https://cdn.shopify.com/s/files/1/0517/7321/0786/files/man-dream-bundle.png?v=1747913676",
+    "checkout_url": "https://texflow.work/texmkt/checkout/8677181030562",
+    "merchant_slug": "rebalance-health",
+    "source": "www.rebalancehealth.com"
+  },
+  {
+    "id": "8677177884834",
+    "title": "menomints™ + DREAM Bundle",
+    "vendor": "Rebalance Health",
+    "category": "",
+    "summary": "menomints™ + DREAM Bundle — nonpublic, ship 895",
+    "tags": [
+      "nonpublic",
+      "ship 895"
+    ],
+    "use_cases": [],
+    "price_usd": "95.38",
+    "available": true,
+    "product_url": "https://www.rebalancehealth.com/products/menomints-dream",
+    "image_url": "https://cdn.shopify.com/s/files/1/0517/7321/0786/files/meno-dream-bundle.png?v=1747913676",
+    "checkout_url": "https://texflow.work/texmkt/checkout/8677177884834",
+    "merchant_slug": "rebalance-health",
+    "source": "www.rebalancehealth.com"
+  },
+  {
+    "id": "8676254023842",
+    "title": "mellomints™",
+    "vendor": "Rebalance Health, Inc.",
+    "category": "",
+    "summary": "mellomints™ — featured, main, ship 895",
+    "tags": [
+      "featured",
+      "main",
+      "ship 895"
+    ],
+    "use_cases": [
+      "mello",
+      "mints",
+      "fast-acting",
+      "lozenges",
+      "designed"
+    ],
+    "price_usd": "59.99",
+    "available": true,
+    "product_url": "https://www.rebalancehealth.com/products/mellomints",
+    "image_url": "https://cdn.shopify.com/s/files/1/0517/7321/0786/files/Mellomints_Primary.png?v=1753209507",
+    "checkout_url": "https://texflow.work/texmkt/checkout/8676254023842",
+    "merchant_slug": "rebalance-health",
+    "source": "www.rebalancehealth.com"
+  },
+  {
+    "id": "8676653760674",
+    "title": "manmints™",
+    "vendor": "Rebalance Health",
+    "category": "",
+    "summary": "manmints™ — featured, main, ship 895",
+    "tags": [
+      "featured",
+      "main",
+      "ship 895"
+    ],
+    "use_cases": [],
+    "price_usd": "59.99",
+    "available": true,
+    "product_url": "https://www.rebalancehealth.com/products/manmints",
+    "image_url": "https://cdn.shopify.com/s/files/1/0517/7321/0786/files/man_1.png?v=1747909276",
+    "checkout_url": "https://texflow.work/texmkt/checkout/8676653760674",
+    "merchant_slug": "rebalance-health",
+    "source": "www.rebalancehealth.com"
+  },
+  {
+    "id": "8660138066082",
+    "title": "menomints™",
+    "vendor": "Rebalance Health",
+    "category": "",
+    "summary": "menomints™ — featured, main, ship 895",
+    "tags": [
+      "featured",
+      "main",
+      "ship 895"
+    ],
+    "use_cases": [
+      "meet",
+      "meno",
+      "mints",
+      "poppable",
+      "fast-acting"
+    ],
+    "price_usd": "59.99",
+    "available": true,
+    "product_url": "https://www.rebalancehealth.com/products/menomints",
+    "image_url": "https://cdn.shopify.com/s/files/1/0517/7321/0786/files/Image1.jpg?v=1752738894",
+    "checkout_url": "https://texflow.work/texmkt/checkout/8660138066082",
+    "merchant_slug": "rebalance-health",
+    "source": "www.rebalancehealth.com"
+  },
+  {
+    "id": "8619464163490",
+    "title": "Boost Your Dreams Bundle",
+    "vendor": "Rebalance Health",
+    "category": "supplement",
+    "summary": "Boost Your Dreams Bundle — featured, main, ship 895",
+    "tags": [
+      "featured",
+      "main",
+      "ship 895",
+      "supplement"
+    ],
+    "use_cases": [
+      "support",
+      "supercharged",
+      "sleep",
+      "boost",
+      "dreams"
+    ],
+    "price_usd": "79.99",
+    "available": true,
+    "product_url": "https://www.rebalancehealth.com/products/boost-your-dreams-bundle",
+    "image_url": "https://cdn.shopify.com/s/files/1/0517/7321/0786/files/img_carousel-bundle.png?v=1742320167",
+    "checkout_url": "https://texflow.work/texmkt/checkout/8619464163490",
+    "merchant_slug": "rebalance-health",
+    "source": "www.rebalancehealth.com"
+  },
+  {
+    "id": "8569350881442",
+    "title": "BOOST Lozenges",
+    "vendor": "Rebalance Health",
+    "category": "supplement",
+    "summary": "BOOST Lozenges — featured, main, ship 895",
+    "tags": [
+      "featured",
+      "main",
+      "ship 895",
+      "supplement"
+    ],
+    "use_cases": [
+      "energy",
+      "support",
+      "superceutical",
+      "need",
+      "daily"
+    ],
+    "price_usd": "49.99",
+    "available": true,
+    "product_url": "https://www.rebalancehealth.com/products/boost",
+    "image_url": "https://cdn.shopify.com/s/files/1/0517/7321/0786/files/boost_1_2x_53853941-65e0-4966-8392-8e0b0785f4d7.jpg?v=1744381065",
+    "checkout_url": "https://texflow.work/texmkt/checkout/8569350881442",
+    "merchant_slug": "rebalance-health",
+    "source": "www.rebalancehealth.com"
+  },
+  {
+    "id": "8583300055202",
+    "title": "CERTIFIED Cortisol & Sleep Expert",
+    "vendor": "Rebalance Health, Inc.",
+    "category": "",
+    "summary": "CERTIFIED Cortisol & Sleep Expert",
+    "tags": [],
+    "use_cases": [
+      "take",
+      "level",
+      "rebalance",
+      "cortisol",
+      "sleep"
+    ],
+    "price_usd": "199.99",
+    "available": true,
+    "product_url": "https://www.rebalancehealth.com/products/certified-cortisol-sleep-expert",
+    "image_url": "https://cdn.shopify.com/s/files/1/0517/7321/0786/files/img_cert_carousel_1_1.png?v=1738861320",
+    "checkout_url": "https://texflow.work/texmkt/checkout/8583300055202",
+    "merchant_slug": "rebalance-health",
+    "source": "www.rebalancehealth.com"
+  },
+  {
+    "id": "8570003292322",
+    "title": "The Balance System",
+    "vendor": "Rebalance Health",
+    "category": "retail",
+    "summary": "The Balance System — featured, main, ship 895",
+    "tags": [
+      "featured",
+      "main",
+      "ship 895",
+      "retail"
+    ],
+    "use_cases": [
+      "sleep",
+      "day",
+      "stress",
+      "support",
+      "balance"
+    ],
+    "price_usd": "119.99",
+    "available": true,
+    "product_url": "https://www.rebalancehealth.com/products/the-balance-system",
+    "image_url": "https://cdn.shopify.com/s/files/1/0517/7321/0786/files/1_d91afafa-9622-441c-8a91-d43e6d453113.jpg?v=1744381218",
+    "checkout_url": "https://texflow.work/texmkt/checkout/8570003292322",
+    "merchant_slug": "rebalance-health",
+    "source": "www.rebalancehealth.com"
+  },
+  {
+    "id": "8570025083042",
+    "title": "The Balance System Melatonin Free",
+    "vendor": "Rebalance Health",
+    "category": "retail",
+    "summary": "The Balance System Melatonin Free — featured, main, ship 895",
+    "tags": [
+      "featured",
+      "main",
+      "ship 895",
+      "retail"
+    ],
+    "use_cases": [
+      "sleep",
+      "day",
+      "stress",
+      "support",
+      "balance"
+    ],
+    "price_usd": "119.99",
+    "available": true,
+    "product_url": "https://www.rebalancehealth.com/products/the-balance-system-melatonin-free",
+    "image_url": "https://cdn.shopify.com/s/files/1/0517/7321/0786/files/1_d91afafa-9622-441c-8a91-d43e6d453113.jpg?v=1744381218",
+    "checkout_url": "https://texflow.work/texmkt/checkout/8570025083042",
+    "merchant_slug": "rebalance-health",
+    "source": "www.rebalancehealth.com"
+  },
+  {
+    "id": "8577583251618",
+    "title": "Sample:  7 Day Dream - Melatonin Free (1 unit)",
+    "vendor": "Rebalance Health, Inc.",
+    "category": "",
+    "summary": "Sample:  7 Day Dream - Melatonin Free (1 unit)",
+    "tags": [],
+    "use_cases": [],
+    "price_usd": "30.00",
+    "available": true,
+    "product_url": "https://www.rebalancehealth.com/products/sample-7-day-dream-melatonin-free-1-unit",
+    "image_url": "",
+    "checkout_url": "https://texflow.work/texmkt/checkout/8577583251618",
+    "merchant_slug": "rebalance-health",
+    "source": "www.rebalancehealth.com"
+  },
+  {
+    "id": "8577582891170",
+    "title": "Sample:  7 Day Dream (1 unit)",
+    "vendor": "Rebalance Health, Inc.",
+    "category": "",
+    "summary": "Sample:  7 Day Dream (1 unit)",
+    "tags": [],
+    "use_cases": [],
+    "price_usd": "30.00",
+    "available": true,
+    "product_url": "https://www.rebalancehealth.com/products/sample-7-day-dr",
+    "image_url": "",
+    "checkout_url": "https://texflow.work/texmkt/checkout/8577582891170",
+    "merchant_slug": "rebalance-health",
+    "source": "www.rebalancehealth.com"
+  },
+  {
+    "id": "8566451241122",
+    "title": "7-Day Sample DREAM™",
+    "vendor": "Rebalance Health",
+    "category": "supplement",
+    "summary": "7-Day Sample DREAM™ — supplement",
+    "tags": [
+      "supplement"
+    ],
+    "use_cases": [
+      "sleep",
+      "superceutical",
+      "support",
+      "available",
+      "rebalance"
+    ],
+    "price_usd": "10.00",
+    "available": true,
+    "product_url": "https://www.rebalancehealth.com/products/7-day-sample-dream",
+    "image_url": "https://cdn.shopify.com/s/files/1/0517/7321/0786/files/carousel_drm_7day_01.jpg?v=1736328980",
+    "checkout_url": "https://texflow.work/texmkt/checkout/8566451241122",
+    "merchant_slug": "rebalance-health",
+    "source": "www.rebalancehealth.com"
+  },
+  {
+    "id": "8485559828642",
+    "title": "The Anxiety System™ Melatonin Free",
+    "vendor": "Rebalance Health",
+    "category": "retail",
+    "summary": "The Anxiety System™ Melatonin Free — featured, main, retail",
+    "tags": [
+      "featured",
+      "main",
+      "retail"
+    ],
+    "use_cases": [
+      "relief",
+      "anxiety",
+      "focus",
+      "day",
+      "feel"
+    ],
+    "price_usd": "119.99",
+    "available": true,
+    "product_url": "https://www.rebalancehealth.com/products/the-anxiety-system™-melatonin-free",
+    "image_url": "https://cdn.shopify.com/s/files/1/0517/7321/0786/files/anxiety_color.png?v=1742395868",
+    "checkout_url": "https://texflow.work/texmkt/checkout/8485559828642",
+    "merchant_slug": "rebalance-health",
+    "source": "www.rebalancehealth.com"
+  },
+  {
+    "id": "8485561729186",
+    "title": "The Testosterone System™ Melatonin Free",
+    "vendor": "Rebalance Health",
+    "category": "supplement",
+    "summary": "The Testosterone System™ Melatonin Free — featured, main, ship 895",
+    "tags": [
+      "featured",
+      "main",
+      "ship 895",
+      "supplement"
+    ],
+    "use_cases": [
+      "feel",
+      "testosterone",
+      "stronger",
+      "back",
+      "system"
+    ],
+    "price_usd": "119.99",
+    "available": true,
+    "product_url": "https://www.rebalancehealth.com/products/the-testosterone-system™-melatonin-free",
+    "image_url": "https://cdn.shopify.com/s/files/1/0517/7321/0786/files/testosterone_color.png?v=1742395764",
+    "checkout_url": "https://texflow.work/texmkt/checkout/8485561729186",
+    "merchant_slug": "rebalance-health",
+    "source": "www.rebalancehealth.com"
+  },
+  {
+    "id": "8485561073826",
+    "title": "The Hot Flash System™ Melatonin Free",
+    "vendor": "Rebalance Health",
+    "category": "retail",
+    "summary": "The Hot Flash System™ Melatonin Free — featured, main, ship 895",
+    "tags": [
+      "featured",
+      "main",
+      "ship 895",
+      "retail"
+    ],
+    "use_cases": [
+      "hot",
+      "relief",
+      "menopause",
+      "flashes",
+      "study"
+    ],
+    "price_usd": "119.99",
+    "available": true,
+    "product_url": "https://www.rebalancehealth.com/products/the-hot-flash-system™-melatonin-free",
+    "image_url": "https://cdn.shopify.com/s/files/1/0517/7321/0786/files/hot_flash_color.png?v=1742395913",
+    "checkout_url": "https://texflow.work/texmkt/checkout/8485561073826",
+    "merchant_slug": "rebalance-health",
+    "source": "www.rebalancehealth.com"
+  },
+  {
+    "id": "8485543379106",
+    "title": "DREAM™ Melatonin Free",
+    "vendor": "Rebalance Health",
+    "category": "supplement",
+    "summary": "DREAM™ Melatonin Free — featured, main, supplement",
+    "tags": [
+      "featured",
+      "main",
+      "supplement"
+    ],
+    "use_cases": [
+      "sleep",
+      "melatonin",
+      "deep",
+      "drift",
+      "off"
+    ],
+    "price_usd": "45.99",
+    "available": true,
+    "product_url": "https://www.rebalancehealth.com/products/dream™-melatonin-free-1",
+    "image_url": "https://cdn.shopify.com/s/files/1/0517/7321/0786/files/dream-media-1.jpg?v=1751554451",
+    "checkout_url": "https://texflow.work/texmkt/checkout/8485543379106",
+    "merchant_slug": "rebalance-health",
+    "source": "www.rebalancehealth.com"
+  },
+  {
+    "id": "8194753626274",
+    "title": "DREAM™ Quarterly",
+    "vendor": "Rebalance Health",
+    "category": "supplement",
+    "summary": "DREAM™ Quarterly — supplement",
+    "tags": [
+      "supplement"
+    ],
+    "use_cases": [
+      "sleep",
+      "supports",
+      "superceutical",
+      "support",
+      "deep"
+    ],
+    "price_usd": "135.00",
+    "available": true,
+    "product_url": "https://www.rebalancehealth.com/products/dream™-quarterly",
+    "image_url": "https://cdn.shopify.com/s/files/1/0517/7321/0786/files/rh_dream_1_939db91f-e77e-43a7-8e3e-4792aec76ee8.png?v=1709315437",
+    "checkout_url": "https://texflow.work/texmkt/checkout/8194753626274",
+    "merchant_slug": "rebalance-health",
+    "source": "www.rebalancehealth.com"
+  },
+  {
+    "id": "8112471998626",
+    "title": "The Testosterone System™ Quarterly",
+    "vendor": "Rebalance Health",
+    "category": "supplement",
+    "summary": "The Testosterone System™ Quarterly — nonpublic, supplement",
+    "tags": [
+      "nonpublic",
+      "supplement"
+    ],
+    "use_cases": [
+      "testosterone",
+      "supports",
+      "day",
+      "superceutical",
+      "booster"
+    ],
+    "price_usd": "317.62",
+    "available": true,
+    "product_url": "https://www.rebalancehealth.com/products/he-testosterone-system-test",
+    "image_url": "https://cdn.shopify.com/s/files/1/0517/7321/0786/files/rh_testosterone_1_aeb31f45-c710-4d98-8982-c3f15cc54e53.png?v=1705007756",
+    "checkout_url": "https://texflow.work/texmkt/checkout/8112471998626",
+    "merchant_slug": "rebalance-health",
+    "source": "www.rebalancehealth.com"
+  },
+  {
+    "id": "8112467804322",
+    "title": "The Anxiety System™ Quarterly",
+    "vendor": "Rebalance Health",
+    "category": "supplement",
+    "summary": "The Anxiety System™ Quarterly — nonpublic, supplement",
+    "tags": [
+      "nonpublic",
+      "supplement"
+    ],
+    "use_cases": [
+      "anxiety",
+      "relief",
+      "day",
+      "superceutical",
+      "rebalance"
+    ],
+    "price_usd": "317.62",
+    "available": true,
+    "product_url": "https://www.rebalancehealth.com/products/the-anxiety-system-test",
+    "image_url": "https://cdn.shopify.com/s/files/1/0517/7321/0786/files/rh_anxiety_pouch_lozenges_1.png?v=1703272217",
+    "checkout_url": "https://texflow.work/texmkt/checkout/8112467804322",
+    "merchant_slug": "rebalance-health",
+    "source": "www.rebalancehealth.com"
+  },
+  {
+    "id": "7912197488802",
+    "title": "The Testosterone System™",
+    "vendor": "Rebalance Health",
+    "category": "supplement",
+    "summary": "The Testosterone System™ — featured, main, ship 895",
+    "tags": [
+      "featured",
+      "main",
+      "ship 895",
+      "supplement"
+    ],
+    "use_cases": [
+      "testosterone",
+      "supports",
+      "day",
+      "superceutical",
+      "booster"
+    ],
+    "price_usd": "119.99",
+    "available": true,
+    "product_url": "https://www.rebalancehealth.com/products/testosterone-system",
+    "image_url": "https://cdn.shopify.com/s/files/1/0517/7321/0786/files/2.0_T_1.png?v=1742396143",
+    "checkout_url": "https://texflow.work/texmkt/checkout/7912197488802",
+    "merchant_slug": "rebalance-health",
+    "source": "www.rebalancehealth.com"
+  },
+  {
+    "id": "7912194932898",
+    "title": "The Hot Flash System™",
+    "vendor": "Rebalance Health",
+    "category": "retail",
+    "summary": "The Hot Flash System™ — featured, main, ship 895",
+    "tags": [
+      "featured",
+      "main",
+      "ship 895",
+      "retail"
+    ],
+    "use_cases": [
+      "relief",
+      "hot",
+      "flashes",
+      "study",
+      "menopause"
+    ],
+    "price_usd": "119.99",
+    "available": true,
+    "product_url": "https://www.rebalancehealth.com/products/hot-flash-system",
+    "image_url": "https://cdn.shopify.com/s/files/1/0517/7321/0786/files/2.0_HF_9.png?v=1742395890",
+    "checkout_url": "https://texflow.work/texmkt/checkout/7912194932898",
+    "merchant_slug": "rebalance-health",
+    "source": "www.rebalancehealth.com"
+  },
+  {
+    "id": "7912193228962",
+    "title": "The Anxiety System™",
+    "vendor": "Rebalance Health",
+    "category": "retail",
+    "summary": "The Anxiety System™ — featured, main, retail",
+    "tags": [
+      "featured",
+      "main",
+      "retail"
+    ],
+    "use_cases": [
+      "anxiety",
+      "relief",
+      "day",
+      "superceutical",
+      "rebalance"
+    ],
+    "price_usd": "119.99",
+    "available": true,
+    "product_url": "https://www.rebalancehealth.com/products/anxiety-system",
+    "image_url": "https://cdn.shopify.com/s/files/1/0517/7321/0786/files/2.0_Anxiety_1.png?v=1747655685",
+    "checkout_url": "https://texflow.work/texmkt/checkout/7912193228962",
+    "merchant_slug": "rebalance-health",
+    "source": "www.rebalancehealth.com"
+  },
+  {
+    "id": "7912153841826",
+    "title": "DREAM™",
+    "vendor": "Rebalance Health",
+    "category": "supplement",
+    "summary": "DREAM™ — featured, main, supplement",
+    "tags": [
+      "featured",
+      "main",
+      "supplement"
+    ],
+    "use_cases": [
+      "sleep",
+      "supports",
+      "superceutical",
+      "support",
+      "deep"
+    ],
+    "price_usd": "45.99",
+    "available": true,
+    "product_url": "https://www.rebalancehealth.com/products/dream",
+    "image_url": "https://cdn.shopify.com/s/files/1/0517/7321/0786/files/Frame_19264.png?v=1751572704",
+    "checkout_url": "https://texflow.work/texmkt/checkout/7912153841826",
+    "merchant_slug": "rebalance-health",
+    "source": "www.rebalancehealth.com"
+  }
+]

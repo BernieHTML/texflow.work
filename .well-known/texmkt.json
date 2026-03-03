@@ -14,6 +14,36 @@
       "slug": "zoologist-perfumes",
       "category": "fragrance",
       "url": "https://texflow.work/.well-known/catalogs/zoologist-perfumes.json"
+    },
+    {
+      "merchant": "Brook Linen",
+      "slug": "brook-linen",
+      "category": "home",
+      "url": "https://texflow.work/.well-known/catalogs/brook-linen.json"
+    },
+    {
+      "merchant": "Slumbercloud",
+      "slug": "slumbercloud",
+      "category": "home",
+      "url": "https://texflow.work/.well-known/catalogs/slumbercloud.json"
+    },
+    {
+      "merchant": "Rebalance Health",
+      "slug": "rebalance-health",
+      "category": "health",
+      "url": "https://texflow.work/.well-known/catalogs/rebalance-health.json"
+    },
+    {
+      "merchant": "Fresh Heritage",
+      "slug": "fresh-heritage",
+      "category": "health",
+      "url": "https://texflow.work/.well-known/catalogs/fresh-heritage.json"
+    },
+    {
+      "merchant": "Gym Shark",
+      "slug": "gym-shark",
+      "category": "health",
+      "url": "https://texflow.work/.well-known/catalogs/gym-shark.json"
     }
   ],
   "pricing": {
