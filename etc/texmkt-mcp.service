@@ -1,0 +1,14 @@
+[Unit]
+Description=TexMKT MCP Server (Model Context Protocol)
+After=network.target
+
+[Service]
+Type=simple
+User=www-data
+WorkingDirectory=/var/www/texflow.work
+Environment=NODE_ENV=production
+ExecStart=/usr/bin/node mcp/texmkt-mcp-server.js
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

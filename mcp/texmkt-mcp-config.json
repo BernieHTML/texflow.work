@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "texmkt": {
+      "type": "http",
+      "url": "https://texflow.work/mcp"
+    }
+  }
+}
