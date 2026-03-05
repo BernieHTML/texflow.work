@@ -949,7 +949,7 @@ app.get('/texmkt/api/merchants', async (req, res) => {
 // --- TexMKT: POST /texmkt/api/match (goal-matching) ---
 app.post('/texmkt/api/match', async (req, res) => {
   try {
-    const { agent_id, goal, budget_usd, merchant_slug } = req.body || {};
+    const { agent_id, goal, budget_usd, merchant_slug, context } = req.body || {};
     if (!agent_id || !goal) {
       return res.status(400).json({ status: 'error', error: 'agent_id and goal are required', meta: { platform: 'texmkt', version: '1.0' } });
     }
@@ -967,10 +967,47 @@ app.post('/texmkt/api/match', async (req, res) => {
 
     const allProducts = await texmktLoadAllProducts(merchant_slug || null);
     const STOPWORDS = new Set(['a','an','as','at','be','by','do','for','in','is','it','of','on','or','to','the','and','but','if','so','with','into','from','up','out','no','not','we','they','this','that','these','those','i','you','he','she','it','we','they','my','your','his','her','its','our','their','me','him','them','us','what','which','who','when','where','why','how','all','each','every','both','few','more','most','other','some','such','than','too','very','just','can','will','would','could','should','may','might','must','shall']);
-    const rawWords = goal.toLowerCase().replace(/[^a-z0-9\s]/g, '').split(/\s+/).filter(w => w.length > 1);
-    const keywords = rawWords.filter(w => !STOPWORDS.has(w));
 
-    const scored = allProducts.map(product => {
+    // Build keyword pool: goal + context (known_preferences, occasion, recipient) — same scoring weight
+    const tokenize = (s) => (s || '').toLowerCase().replace(/[^a-z0-9\s]/g, '').split(/\s+/).filter(w => w.length > 1 && !STOPWORDS.has(w));
+    const kwWithSource = []; // { kw, source } — source: null = goal, 'preferences'|'occasion'|'recipient'
+    for (const w of tokenize(goal)) kwWithSource.push({ kw: w, source: null });
+    const ctx = context && typeof context === 'object' ? context : {};
+    if (Array.isArray(ctx.known_preferences)) {
+      for (const s of ctx.known_preferences) for (const w of tokenize(String(s))) kwWithSource.push({ kw: w, source: 'preferences' });
+    }
+    if (ctx.occasion) for (const w of tokenize(String(ctx.occasion))) kwWithSource.push({ kw: w, source: 'occasion' });
+    if (ctx.recipient) for (const w of tokenize(String(ctx.recipient))) kwWithSource.push({ kw: w, source: 'recipient' });
+    const keywords = kwWithSource.map(x => x.kw);
+
+    // past_purchases: if any exactly matches a catalog product title, boost products from that merchant
+    let familiarityMerchant = null;
+    if (Array.isArray(ctx.past_purchases)) {
+      const titles = new Set(allProducts.map(p => p.title?.toLowerCase().trim()));
+      for (const pp of ctx.past_purchases) {
+        const t = String(pp).toLowerCase().trim();
+        if (titles.has(t)) {
+          const found = allProducts.find(p => p.title?.toLowerCase().trim() === t);
+          if (found) { familiarityMerchant = found.merchant_slug; break; }
+        }
+      }
+    }
+
+    // avoid: filter out products whose tags, title, or category overlap with avoid terms
+    const avoidTerms = Array.isArray(ctx.avoid) ? ctx.avoid.map(a => String(a).toLowerCase().trim()).filter(Boolean) : [];
+    const productPassesAvoid = (product) => {
+      if (avoidTerms.length === 0) return true;
+      const haystack = [
+        product.title,
+        product.category,
+        ...(product.tags || []),
+      ].join(' ').toLowerCase();
+      return !avoidTerms.some(term => haystack.includes(term));
+    };
+
+    let productsToScore = avoidTerms.length > 0 ? allProducts.filter(productPassesAvoid) : allProducts;
+
+    const scored = productsToScore.map(product => {
       const haystack = [
         product.title,
         product.vendor,
@@ -981,14 +1018,18 @@ app.post('/texmkt/api/match', async (req, res) => {
       ].join(' ').toLowerCase();
 
       let score = 0;
-      const matched = [];
-      for (const kw of keywords) {
+      const matched = []; // { kw, source }
+      for (let i = 0; i < keywords.length; i++) {
+        const kw = keywords[i];
+        const src = kwWithSource[i]?.source;
         if (haystack.includes(kw)) {
           score++;
-          matched.push(kw);
+          matched.push({ kw, source: src });
         }
       }
       if (keywords.length > 0) score = score / keywords.length;
+      // Familiarity boost: same merchant as past purchase
+      if (familiarityMerchant && product.merchant_slug === familiarityMerchant) score += 0.2;
       return { product, score, matched };
     });
 
@@ -1009,13 +1050,21 @@ app.post('/texmkt/api/match', async (req, res) => {
     const merchantMap = {};
     for (const m of merchants) merchantMap[m.slug] = m.name;
 
+    const buildRelevanceReason = (r) => {
+      const parts = r.matched.map(m => m.source ? `${m.kw} (${m.source === 'preferences' ? 'from preferences' : m.source})` : m.kw);
+      if (familiarityMerchant && r.product.merchant_slug === familiarityMerchant) parts.push('from familiar merchant');
+      let reason = parts.length ? `Matched: ${parts.join(', ')}` : 'Matched';
+      if (budget_usd !== undefined && budget_usd !== null && !isNaN(parseFloat(budget_usd))) reason += ', within budget';
+      return reason;
+    };
+
     const matches = ranked.map((r, i) => ({
       rank: i + 1,
       product_id: r.product.id,
       title: r.product.title,
       merchant: merchantMap[r.product.merchant_slug] || r.product.merchant_slug,
       merchant_slug: r.product.merchant_slug,
-      relevance_reason: `Matched: ${r.matched.join(', ')}`,
+      relevance_reason: buildRelevanceReason(r),
       score: +r.score.toFixed(2),
       price_usd: r.product.price_usd,
       product_url: r.product.product_url,
@@ -1028,7 +1077,7 @@ app.post('/texmkt/api/match', async (req, res) => {
     credits[agent_id] = agentCredits;
     await texmktWriteCredits(credits);
 
-    await texmktAppendQueryLog({
+    const logEntry = {
       agent_id,
       goal,
       budget_usd: budget_usd ?? null,
@@ -1036,7 +1085,11 @@ app.post('/texmkt/api/match', async (req, res) => {
       match_count: matches.length,
       fee_charged: TEXMKT_QUERY_FEE,
       timestamp: new Date().toISOString(),
-    });
+    };
+    if (context && typeof context === 'object' && Object.keys(context).length > 0) {
+      logEntry.context = context;
+    }
+    await texmktAppendQueryLog(logEntry);
 
     res.json({
       status: 'ok',

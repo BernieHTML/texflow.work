@@ -24,11 +24,19 @@ function createServer() {
       goal: z.string().describe('What you are trying to find or accomplish'),
       budget_usd: z.number().optional().describe('Optional maximum price in USD'),
       merchant_slug: z.string().optional().describe('Optional — filter to one merchant'),
+      context: z.object({
+        recipient: z.string().optional(),
+        known_preferences: z.array(z.string()).optional(),
+        occasion: z.string().optional(),
+        past_purchases: z.array(z.string()).optional(),
+        avoid: z.array(z.string()).optional(),
+      }).optional().describe('Optional user context to improve match quality. Include known preferences, occasion, past purchases, or things to avoid. Agents should populate this from any relevant user profile or conversation history they hold.'),
     },
-  }, async ({ agent_id, goal, budget_usd, merchant_slug }) => {
+  }, async ({ agent_id, goal, budget_usd, merchant_slug, context }) => {
     const body = { agent_id, goal };
     if (budget_usd != null) body.budget_usd = budget_usd;
     if (merchant_slug != null) body.merchant_slug = merchant_slug;
+    if (context != null && typeof context === 'object' && Object.keys(context).length > 0) body.context = context;
     const res = await fetch(`${TEXMKT_BASE}/texmkt/api/match`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
