@@ -66,5 +66,14 @@
     "product_url": "https://gymshark.com/products/gymshark-strength-in-culture-t-shirt-ss-tops-black-ss26",
     "merchant_slug": "gym-shark",
     "timestamp": "2026-03-03T03:19:25.390Z"
+  },
+  {
+    "agent_id": "bernie-agent-01",
+    "goal": "high quality headphones with spatial audio and head tracking under $300",
+    "budget_usd": 300,
+    "merchant_slug": null,
+    "match_count": 5,
+    "fee_charged": 0.1,
+    "timestamp": "2026-03-07T12:41:50.370Z"
   }
 ]

@@ -44,6 +44,18 @@
       "slug": "gym-shark",
       "category": "health",
       "url": "https://texflow.work/.well-known/catalogs/gym-shark.json"
+    },
+    {
+      "merchant": "SV Sound",
+      "slug": "sv-sound",
+      "category": "electronics",
+      "url": "https://texflow.work/.well-known/catalogs/sv-sound.json"
+    },
+    {
+      "merchant": "Skull Candy",
+      "slug": "skull-candy",
+      "category": "electronics",
+      "url": "https://texflow.work/.well-known/catalogs/skull-candy.json"
     }
   ],
   "pricing": {

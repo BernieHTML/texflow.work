@@ -82,5 +82,33 @@
     "status": "active",
     "created_at": "2026-03-03T03:17:50.185Z",
     "last_synced": "2026-03-03T03:17:50.185Z"
+  },
+  {
+    "id": "b884ff5d-64d8-462f-91f5-3a91da5de22d",
+    "name": "SV Sound",
+    "slug": "sv-sound",
+    "shopify_url": "https://svsound.com",
+    "products_json_url": "https://svsound.com/products.json",
+    "catalog_endpoint": "https://texflow.work/.well-known/catalogs/sv-sound.json",
+    "product_count": 2907,
+    "category": "electronics",
+    "submitted_by_email": "custservice@svsound.com",
+    "status": "active",
+    "created_at": "2026-03-07T12:30:43.830Z",
+    "last_synced": "2026-03-07T12:30:43.830Z"
+  },
+  {
+    "id": "bbb7c2d4-9a8a-4bd7-9ada-b8d1bbb10a11",
+    "name": "Skull Candy",
+    "slug": "skull-candy",
+    "shopify_url": "https://skullcandy.com.au",
+    "products_json_url": "https://skullcandy.com.au/products.json",
+    "catalog_endpoint": "https://texflow.work/.well-known/catalogs/skull-candy.json",
+    "product_count": 42,
+    "category": "electronics",
+    "submitted_by_email": "support@skullcandy.com.au",
+    "status": "active",
+    "created_at": "2026-03-07T12:34:46.751Z",
+    "last_synced": "2026-03-07T12:34:46.751Z"
   }
 ]
