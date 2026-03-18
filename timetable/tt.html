@@ -1,0 +1,2739 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Timetable</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0e0f13;
+    --surface: #16181f;
+    --surface2: #1e2029;
+    --border: #2a2d38;
+    --text: #e8eaf2;
+    --muted: #6b7080;
+    --accent: #f0c040;
+    --accent2: #5b8af4;
+    --now: #e05f5f;
+
+    --c-it: #f28c4e;
+    --c-sci: #5fb8a0;
+    --c-maths: #5b8af4;
+    --c-eng: #d46be5;
+    --c-hsie: #e8a94e;
+    --c-pdhpe: #6bbfe8;
+    --c-comm: #e86b6b;
+    --c-sport: #7ec97e;
+    --c-care: #b8a0e8;
+    --c-rc: #888fa0;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    padding: 0;
+    overflow-x: hidden;
+  }
+
+  /* Background texture */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      radial-gradient(ellipse 80% 50% at 20% -10%, rgba(91,138,244,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 40% at 80% 110%, rgba(240,192,64,0.05) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Header */
+  header {
+    margin-bottom: 48px;
+  }
+
+  .header-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .header-eyebrow::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, var(--accent), transparent);
+  }
+
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(40px, 8vw, 64px);
+    font-weight: 900;
+    line-height: 1.0;
+    letter-spacing: -0.02em;
+    color: var(--text);
+  }
+
+  h1 span {
+    color: var(--accent);
+  }
+
+  .date-display {
+    margin-top: 16px;
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+
+  .week-badge {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 4px 10px;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent2);
+  }
+
+  /* Nav */
+  .nav-strip {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 36px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 5px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .nav-strip::-webkit-scrollbar { display: none; }
+
+  .nav-day {
+    flex: 1;
+    min-width: 72px;
+    padding: 8px 10px;
+    border-radius: 7px;
+    text-align: center;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: all 0.18s ease;
+    background: transparent;
+    color: var(--muted);
+  }
+
+  .nav-day:hover {
+    background: var(--surface2);
+    color: var(--text);
+  }
+
+  .nav-day.active {
+    background: var(--accent);
+    color: #111;
+    border-color: var(--accent);
+    font-weight: 500;
+  }
+
+  .nav-day.today {
+    border-color: var(--accent2);
+  }
+
+  .nav-day .day-name {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 2px;
+  }
+
+  .nav-day .day-num {
+    font-size: 18px;
+    font-weight: 500;
+    display: block;
+    line-height: 1;
+  }
+
+  /* Classes list */
+  .day-header {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .day-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 700;
+  }
+
+  .day-subtitle {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+  }
+
+  .weekend-msg {
+    text-align: center;
+    padding: 80px 40px;
+    color: var(--muted);
+  }
+
+  .weekend-msg .emoji { font-size: 48px; display: block; margin-bottom: 16px; }
+  .weekend-msg h2 { font-family: 'Playfair Display', serif; font-size: 28px; color: var(--text); margin-bottom: 8px; }
+  .weekend-msg p { font-size: 14px; }
+
+  /* Period cards */
+  .period-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .period-card {
+    display: grid;
+    grid-template-columns: 60px 1fr auto;
+    align-items: stretch;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.15s ease, border-color 0.15s ease;
+    position: relative;
+    animation: fadeUp 0.3s ease both;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .period-card:hover {
+    transform: translateY(-2px);
+    border-color: #3a3e4e;
+  }
+
+  .period-card.current {
+    border-color: var(--now);
+    box-shadow: 0 0 0 1px var(--now), 0 4px 20px rgba(224,95,95,0.15);
+  }
+
+  .period-card.past {
+    opacity: 0.45;
+  }
+
+  /* Colored left accent */
+  .period-accent {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    color: #111;
+    writing-mode: horizontal-tb;
+    padding: 12px 0;
+  }
+
+  .period-body {
+    padding: 14px 16px;
+    min-width: 0;
+  }
+
+  .period-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+
+  .period-name {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--text);
+    line-height: 1.3;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .period-meta {
+    display: flex;
+    gap: 14px;
+    margin-top: 6px;
+    flex-wrap: wrap;
+  }
+
+  .period-meta span {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .period-meta span svg {
+    opacity: 0.6;
+    flex-shrink: 0;
+  }
+
+  .period-time {
+    padding: 14px 16px 14px 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 4px;
+  }
+
+  .period-time .start {
+    font-family: 'DM Mono', monospace;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+  }
+
+  .period-time .end {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  .now-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: var(--now);
+    color: white;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    border-radius: 20px;
+    padding: 2px 8px;
+    margin-top: 4px;
+    animation: pulse 2s ease infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+  }
+
+  .now-dot {
+    width: 5px; height: 5px;
+    background: white;
+    border-radius: 50%;
+  }
+
+  /* Break cards */
+  .break-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 16px;
+    opacity: 0.5;
+  }
+
+  .break-line {
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .break-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* No classes */
+  .no-classes {
+    padding: 48px;
+    text-align: center;
+    color: var(--muted);
+    border: 1px dashed var(--border);
+    border-radius: 12px;
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+  }
+
+  /* Week toggle */
+  .week-toggle {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 24px;
+    align-items: center;
+  }
+
+  .week-toggle-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-right: 4px;
+  }
+
+  .week-btn {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    padding: 6px 16px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.15s;
+    letter-spacing: 0.05em;
+  }
+
+  .week-btn.active {
+    background: var(--accent2);
+    border-color: var(--accent2);
+    color: white;
+  }
+
+  /* Footer */
+  footer {
+    margin-top: 60px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .footer-clock {
+    font-family: 'DM Mono', monospace;
+    font-size: 22px;
+    font-weight: 300;
+    color: var(--text);
+    letter-spacing: 0.05em;
+  }
+
+  .footer-note {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+  }
+
+  @media (max-width: 500px) {
+    .period-card { grid-template-columns: 48px 1fr auto; }
+    .period-accent { font-size: 10px; }
+    .period-name { font-size: 14px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <div class="header-eyebrow">Yr 10 · Bidgywan 6 · Sydney</div>
+    <h1>My <span>Timetable</span></h1>
+    <div class="date-display">
+      <span id="full-date">Loading…</span>
+      <span class="week-badge" id="week-badge">Week —</span>
+    </div>
+  </header>
+
+  <div class="nav-strip" id="nav-strip"></div>
+
+  <div class="week-toggle">
+    <span class="week-toggle-label">Jump to</span>
+    <button class="week-btn" id="btn-prev-week" onclick="shiftWeek(-1)">← Prev week</button>
+    <button class="week-btn" id="btn-today" onclick="goToday()">Today</button>
+    <button class="week-btn" id="btn-next-week" onclick="shiftWeek(1)">Next week →</button>
+  </div>
+
+  <div id="day-view"></div>
+
+  <footer>
+    <div class="footer-clock" id="live-clock">--:--:--</div>
+    <div class="footer-note">AEDT · Sydney, NSW</div>
+  </footer>
+</div>
+
+<script>
+// ────────────────────────────────────────────────
+// All ICS data baked in — parsed at runtime
+// ────────────────────────────────────────────────
+const ICS_DATA = `BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//My Timetable//
+CALSCALE:GREGORIAN
+BEGIN:VEVENT
+DTSTART:20260126T220500Z
+DTEND:20260126T222000Z
+DESCRIPTION:Teacher: Ms Yun Yun Cheah\\nPeriod: RC
+SUMMARY:RCBID6: Bidgywan 6 (10) RC
+LOCATION:Room: 8
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260126T222000Z
+DTEND:20260126T232000Z
+DESCRIPTION:Teacher: Mr Matthew Doyle\\nPeriod: 1
+SUMMARY:10ITT2: Industrial Technology (Timber Products) Yr10
+LOCATION:Room: WW1
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260126T235000Z
+DTEND:20260127T005000Z
+DESCRIPTION:Teacher: Mr Matthew Doyle\\nPeriod: 2
+SUMMARY:10ITT2: Industrial Technology (Timber Products) Yr10
+LOCATION:Room: WW1
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260127T005000Z
+DTEND:20260127T015000Z
+DESCRIPTION:Teacher: Mrs Natalie Goddard\\nPeriod: 3
+SUMMARY:10SCIY: Science Yr10
+LOCATION:Room: L3
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260127T022000Z
+DTEND:20260127T032000Z
+DESCRIPTION:Teacher: Mrs Lucy O'Brien\\nPeriod: 4
+SUMMARY:10HSIE: HSIE Yr10
+LOCATION:Room: 19
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260127T032000Z
+DTEND:20260127T042000Z
+DESCRIPTION:Teacher: Mr Ahmed Mohamed\\nPeriod: 5
+SUMMARY:10MAA1: Maths Advanced (11) Yr10
+LOCATION:Room: 3
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260127T220500Z
+DTEND:20260127T222000Z
+DESCRIPTION:Teacher: Ms Yun Yun Cheah\\nPeriod: RC
+SUMMARY:RCBID6: Bidgywan 6 (10) RC
+LOCATION:Room: 8
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260127T222000Z
+DTEND:20260127T232000Z
+DESCRIPTION:Teacher: Mrs Lucy O'Brien\\nPeriod: 1
+SUMMARY:10HSIE: HSIE Yr10
+LOCATION:Room: 21
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260127T235000Z
+DTEND:20260128T005000Z
+DESCRIPTION:Teacher: Mrs Natalie Goddard\\nPeriod: 2
+SUMMARY:10SCIY: Science Yr10
+LOCATION:Room: L3
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260128T005000Z
+DTEND:20260128T015000Z
+DESCRIPTION:Teacher: Tepa Faletoese\\nPeriod: 3
+SUMMARY:10PDHE: PDHPE Yr10
+LOCATION:Room: SC1
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260128T022000Z
+DTEND:20260128T032000Z
+DESCRIPTION:Teacher: Mrs Ellen Trent\\nPeriod: 4
+SUMMARY:10ENGL: English (Enrichment) Yr10
+LOCATION:Room: 26
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260128T220500Z
+DTEND:20260128T222000Z
+DESCRIPTION:Teacher: Ms Yun Yun Cheah\\nPeriod: RC
+SUMMARY:RCBID6: Bidgywan 6 (10) RC
+LOCATION:Room: 8
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260128T222000Z
+DTEND:20260128T232000Z
+DESCRIPTION:Teacher: Tepa Faletoese\\nPeriod: 1
+SUMMARY:10PDHE: PDHPE Yr10
+LOCATION:Room: 1
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260128T235000Z
+DTEND:20260129T005000Z
+DESCRIPTION:Teacher: Tepa Faletoese\\nPeriod: 2
+SUMMARY:10PDHE: PDHPE Yr10
+LOCATION:Room: SC1
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260129T005000Z
+DTEND:20260129T015000Z
+DESCRIPTION:Teacher: Mr Ahmed Mohamed\\nPeriod: 3
+SUMMARY:10MAA1: Maths Advanced (11) Yr10
+LOCATION:Room: 3
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260129T022000Z
+DTEND:20260129T032000Z
+DESCRIPTION:Teacher: Mrs Ellen Trent\\nPeriod: 4
+SUMMARY:10ENGL: English (Enrichment) Yr10
+LOCATION:Room: 26
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260129T032000Z
+DTEND:20260129T042000Z
+DESCRIPTION:Teacher: Mr Matthew Doyle\\nPeriod: 5
+SUMMARY:10ITT2: Industrial Technology (Timber Products) Yr10
+LOCATION:Room: WW1
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260129T220500Z
+DTEND:20260129T222000Z
+DESCRIPTION:Teacher: Ms Yun Yun Cheah\\nPeriod: RC
+SUMMARY:RCBID6: Bidgywan 6 (10) RC
+LOCATION:Room: 8
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260129T222000Z
+DTEND:20260129T232000Z
+DESCRIPTION:Teacher: Mr Grant Monk\\nPeriod: 1
+SUMMARY:10COM1: Commerce Yr10
+LOCATION:Room: 17
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260129T235000Z
+DTEND:20260130T005000Z
+DESCRIPTION:Teacher: Tepa Faletoese\\nPeriod: 2
+SUMMARY:10PDHE: PDHPE Yr10
+LOCATION:Room: SC1
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260130T005000Z
+DTEND:20260130T015000Z
+DESCRIPTION:Teacher: Mrs Natalie Goddard\\nPeriod: 3
+SUMMARY:10SCIY: Science Yr10
+LOCATION:Room: L3
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260130T022000Z
+DTEND:20260130T032000Z
+DESCRIPTION:Teacher: Mrs Rebecca Holmes\\nPeriod: 4
+SUMMARY:10CARE: Careers Yr10
+LOCATION:Room: 26
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260130T032000Z
+DTEND:20260130T042000Z
+DESCRIPTION:Teacher: Mr Ahmed Mohamed\\nPeriod: 5
+SUMMARY:10MAA1: Maths Advanced (11) Yr10
+LOCATION:Room: 3
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260201T220500Z
+DTEND:20260201T230000Z
+DESCRIPTION:Teacher: Mr Grant Monk\\nPeriod: 1
+SUMMARY:10COM1: Commerce Yr10
+LOCATION:Room: 17
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260201T230000Z
+DTEND:20260201T232000Z
+DESCRIPTION:Teacher: Ms Yun Yun Cheah\\nPeriod: RC
+SUMMARY:RCBID6: Bidgywan 6 (10) RC
+LOCATION:Room: 8
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260201T235000Z
+DTEND:20260202T005000Z
+DESCRIPTION:Teacher: Mrs Lucy O'Brien\\nPeriod: 2
+SUMMARY:10HSIE: HSIE Yr10
+LOCATION:Room: 19
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260202T005000Z
+DTEND:20260202T015000Z
+DESCRIPTION:Teacher: Mr Ahmed Mohamed\\nPeriod: 3
+SUMMARY:10MAA1: Maths Advanced (11) Yr10
+LOCATION:Room: 3
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260202T022000Z
+DTEND:20260202T032000Z
+DESCRIPTION:Teacher: Mrs Ellen Trent\\nPeriod: 4
+SUMMARY:10ENGL: English (Enrichment) Yr10
+LOCATION:Room: 26
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260202T220500Z
+DTEND:20260202T222000Z
+DESCRIPTION:Teacher: Ms Yun Yun Cheah\\nPeriod: RC
+SUMMARY:RCBID6: Bidgywan 6 (10) RC
+LOCATION:Room: 8
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260202T222000Z
+DTEND:20260202T232000Z
+DESCRIPTION:Teacher: Mr Grant Monk\\nPeriod: 1
+SUMMARY:10COM1: Commerce Yr10
+LOCATION:Room: 17
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260202T235000Z
+DTEND:20260203T005000Z
+DESCRIPTION:Teacher: Mr Matthew Doyle\\nPeriod: 2
+SUMMARY:10ITT2: Industrial Technology (Timber Products) Yr10
+LOCATION:Room: WW1
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260203T005000Z
+DTEND:20260203T015000Z
+DESCRIPTION:Teacher: Mrs Lucy O'Brien\\nPeriod: 3
+SUMMARY:10HSIE: HSIE Yr10
+LOCATION:Room: 21
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260203T022000Z
+DTEND:20260203T032000Z
+DESCRIPTION:Teacher: Mrs Ellen Trent\\nPeriod: 4
+SUMMARY:10ENGL: English (Enrichment) Yr10
+LOCATION:Room: 26
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260203T032000Z
+DTEND:20260203T042000Z
+DESCRIPTION:Teacher: Mrs Natalie Goddard\\nPeriod: 5
+SUMMARY:10SCIY: Science Yr10
+LOCATION:Room: L3
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260203T220500Z
+DTEND:20260203T222000Z
+DESCRIPTION:Teacher: Ms Yun Yun Cheah\\nPeriod: RC
+SUMMARY:RCBID6: Bidgywan 6 (10) RC
+LOCATION:Room: 8
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260203T222000Z
+DTEND:20260203T232000Z
+DESCRIPTION:Teacher: Mr Grant Monk\\nPeriod: 1
+SUMMARY:10COM1: Commerce Yr10
+LOCATION:Room: 17
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260203T235000Z
+DTEND:20260204T005000Z
+DESCRIPTION:Teacher: Mrs Natalie Goddard\\nPeriod: 2
+SUMMARY:10SCIY: Science Yr10
+LOCATION:Room: L3
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260204T005000Z
+DTEND:20260204T015000Z
+DESCRIPTION:Teacher: Mrs Natalie Goddard\\nPeriod: 3
+SUMMARY:10SCIY: Science Yr10
+LOCATION:Room: L3
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260204T022000Z
+DTEND:20260204T032000Z
+DESCRIPTION:Teacher: Mrs Lucy O'Brien\\nPeriod: 4
+SUMMARY:10HSIE: HSIE Yr10
+LOCATION:Room: 21
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260204T220500Z
+DTEND:20260204T222000Z
+DESCRIPTION:Teacher: Ms Yun Yun Cheah\\nPeriod: RC
+SUMMARY:RCBID6: Bidgywan 6 (10) RC
+LOCATION:Room: 8
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260204T222000Z
+DTEND:20260204T232000Z
+DESCRIPTION:Teacher: Tepa Faletoese\\nPeriod: 1
+SUMMARY:10PDHE: PDHPE Yr10
+LOCATION:Room: 2
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260204T235000Z
+DTEND:20260205T005000Z
+DESCRIPTION:Teacher: Mrs Ellen Trent\\nPeriod: 2
+SUMMARY:10ENGL: English (Enrichment) Yr10
+LOCATION:Room: 26
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260205T005000Z
+DTEND:20260205T015000Z
+DESCRIPTION:Teacher: Mrs Ellen Trent\\nPeriod: 3
+SUMMARY:10ENGL: English (Enrichment) Yr10
+LOCATION:Room: 26
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260205T022000Z
+DTEND:20260205T032000Z
+DESCRIPTION:Teacher: Mr Ahmed Mohamed\\nPeriod: 4
+SUMMARY:10MAA1: Maths Advanced (11) Yr10
+LOCATION:Room: 3
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260205T032000Z
+DTEND:20260205T042000Z
+DESCRIPTION:Teacher: Mr Ahmed Mohamed\\nPeriod: 5
+SUMMARY:10MAA1: Maths Advanced (11) Yr10
+LOCATION:Room: 3
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260205T220500Z
+DTEND:20260205T222000Z
+DESCRIPTION:Teacher: Ms Yun Yun Cheah\\nPeriod: RC
+SUMMARY:RCBID6: Bidgywan 6 (10) RC
+LOCATION:Room: 8
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260205T222000Z
+DTEND:20260205T232000Z
+DESCRIPTION:Teacher: Mr Ahmed Mohamed\\nPeriod: 1
+SUMMARY:10MAA1: Maths Advanced (11) Yr10
+LOCATION:Room: 3
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260205T235000Z
+DTEND:20260206T005000Z
+DESCRIPTION:Teacher: Ms Jacinta Jackson\\nPeriod: 2
+SUMMARY:10SPFO1: SPORT- Flip Out (10) SPORT
+LOCATION:
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260206T005000Z
+DTEND:20260206T015000Z
+DESCRIPTION:Teacher: Ms Jacinta Jackson\\nPeriod: 3
+SUMMARY:10SPFO1: SPORT- Flip Out (10) SPORT
+LOCATION:
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260206T022000Z
+DTEND:20260206T032000Z
+DESCRIPTION:Teacher: Tepa Faletoese\\nPeriod: 4
+SUMMARY:10PDHE: PDHPE Yr10
+LOCATION:Room: SC1
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260206T032000Z
+DTEND:20260206T042000Z
+DESCRIPTION:Teacher: Mr Matthew Doyle\\nPeriod: 5
+SUMMARY:10ITT2: Industrial Technology (Timber Products) Yr10
+LOCATION:Room: WW1
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260208T220500Z
+DTEND:20260208T230000Z
+DESCRIPTION:Teacher: Mrs Lucy O'Brien\\nPeriod: 1
+SUMMARY:10HSIE: HSIE Yr10
+LOCATION:Room: 19
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260208T230000Z
+DTEND:20260208T232000Z
+DESCRIPTION:Teacher: Ms Yun Yun Cheah\\nPeriod: RC
+SUMMARY:RCBID6: Bidgywan 6 (10) RC
+LOCATION:Room: 8
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260208T235000Z
+DTEND:20260209T005000Z
+DESCRIPTION:Teacher: Mr Grant Monk\\nPeriod: 2
+SUMMARY:10COM1: Commerce Yr10
+LOCATION:Room: 17
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260209T005000Z
+DTEND:20260209T015000Z
+DESCRIPTION:Teacher: Mrs Ellen Trent\\nPeriod: 3
+SUMMARY:10ENGL: English (Enrichment) Yr10
+LOCATION:Room: 26
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260209T022000Z
+DTEND:20260209T032000Z
+DESCRIPTION:Teacher: Mrs Natalie Goddard\\nPeriod: 4
+SUMMARY:10SCIY: Science Yr10
+LOCATION:Room: L3
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260209T220500Z
+DTEND:20260209T222000Z
+DESCRIPTION:Teacher: Ms Yun Yun Cheah\\nPeriod: RC
+SUMMARY:RCBID6: Bidgywan 6 (10) RC
+LOCATION:Room: 8
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260209T222000Z
+DTEND:20260209T232000Z
+DESCRIPTION:Teacher: Mr Matthew Doyle\\nPeriod: 1
+SUMMARY:10ITT2: Industrial Technology (Timber Products) Yr10
+LOCATION:Room: WW1
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260209T235000Z
+DTEND:20260210T005000Z
+DESCRIPTION:Teacher: Mr Matthew Doyle\\nPeriod: 2
+SUMMARY:10ITT2: Industrial Technology (Timber Products) Yr10
+LOCATION:Room: WW1
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260210T005000Z
+DTEND:20260210T015000Z
+DESCRIPTION:Teacher: Mrs Natalie Goddard\\nPeriod: 3
+SUMMARY:10SCIY: Science Yr10
+LOCATION:Room: L3
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260210T022000Z
+DTEND:20260210T032000Z
+DESCRIPTION:Teacher: Mrs Lucy O'Brien\\nPeriod: 4
+SUMMARY:10HSIE: HSIE Yr10
+LOCATION:Room: 19
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260210T032000Z
+DTEND:20260210T042000Z
+DESCRIPTION:Teacher: Mr Ahmed Mohamed\\nPeriod: 5
+SUMMARY:10MAA1: Maths Advanced (11) Yr10
+LOCATION:Room: 3
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260210T220500Z
+DTEND:20260210T222000Z
+DESCRIPTION:Teacher: Ms Yun Yun Cheah\\nPeriod: RC
+SUMMARY:RCBID6: Bidgywan 6 (10) RC
+LOCATION:Room: 8
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260210T222000Z
+DTEND:20260210T232000Z
+DESCRIPTION:Teacher: Mrs Lucy O'Brien\\nPeriod: 1
+SUMMARY:10HSIE: HSIE Yr10
+LOCATION:Room: 21
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260210T235000Z
+DTEND:20260211T005000Z
+DESCRIPTION:Teacher: Mrs Natalie Goddard\\nPeriod: 2
+SUMMARY:10SCIY: Science Yr10
+LOCATION:Room: L3
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260211T005000Z
+DTEND:20260211T015000Z
+DESCRIPTION:Teacher: Tepa Faletoese\\nPeriod: 3
+SUMMARY:10PDHE: PDHPE Yr10
+LOCATION:Room: SC1
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260211T022000Z
+DTEND:20260211T032000Z
+DESCRIPTION:Teacher: Mrs Ellen Trent\\nPeriod: 4
+SUMMARY:10ENGL: English (Enrichment) Yr10
+LOCATION:Room: 26
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260211T220500Z
+DTEND:20260211T222000Z
+DESCRIPTION:Teacher: Ms Yun Yun Cheah\\nPeriod: RC
+SUMMARY:RCBID6: Bidgywan 6 (10) RC
+LOCATION:Room: 8
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260211T222000Z
+DTEND:20260211T232000Z
+DESCRIPTION:Teacher: Tepa Faletoese\\nPeriod: 1
+SUMMARY:10PDHE: PDHPE Yr10
+LOCATION:Room: 1
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260211T235000Z
+DTEND:20260212T005000Z
+DESCRIPTION:Teacher: Tepa Faletoese\\nPeriod: 2
+SUMMARY:10PDHE: PDHPE Yr10
+LOCATION:Room: SC1
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260212T005000Z
+DTEND:20260212T015000Z
+DESCRIPTION:Teacher: Mr Ahmed Mohamed\\nPeriod: 3
+SUMMARY:10MAA1: Maths Advanced (11) Yr10
+LOCATION:Room: 3
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260212T022000Z
+DTEND:20260212T032000Z
+DESCRIPTION:Teacher: Mrs Ellen Trent\\nPeriod: 4
+SUMMARY:10ENGL: English (Enrichment) Yr10
+LOCATION:Room: 26
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260212T032000Z
+DTEND:20260212T042000Z
+DESCRIPTION:Teacher: Mr Matthew Doyle\\nPeriod: 5
+SUMMARY:10ITT2: Industrial Technology (Timber Products) Yr10
+LOCATION:Room: WW1
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260212T220500Z
+DTEND:20260212T222000Z
+DESCRIPTION:Teacher: Ms Yun Yun Cheah\\nPeriod: RC
+SUMMARY:RCBID6: Bidgywan 6 (10) RC
+LOCATION:Room: 8
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260212T222000Z
+DTEND:20260212T232000Z
+DESCRIPTION:Teacher: Mr Grant Monk\\nPeriod: 1
+SUMMARY:10COM1: Commerce Yr10
+LOCATION:Room: 17
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260212T235000Z
+DTEND:20260213T005000Z
+DESCRIPTION:Teacher: Tepa Faletoese\\nPeriod: 2
+SUMMARY:10PDHE: PDHPE Yr10
+LOCATION:Room: SC1
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260213T005000Z
+DTEND:20260213T015000Z
+DESCRIPTION:Teacher: Mrs Natalie Goddard\\nPeriod: 3
+SUMMARY:10SCIY: Science Yr10
+LOCATION:Room: L3
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260213T022000Z
+DTEND:20260213T032000Z
+DESCRIPTION:Teacher: Mrs Rebecca Holmes\\nPeriod: 4
+SUMMARY:10CARE: Careers Yr10
+LOCATION:Room: 26
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260213T032000Z
+DTEND:20260213T042000Z
+DESCRIPTION:Teacher: Mr Ahmed Mohamed\\nPeriod: 5
+SUMMARY:10MAA1: Maths Advanced (11) Yr10
+LOCATION:Room: 3
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260215T220500Z
+DTEND:20260215T230000Z
+DESCRIPTION:Teacher: Mr Grant Monk\\nPeriod: 1
+SUMMARY:10COM1: Commerce Yr10
+LOCATION:Room: 17
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260215T230000Z
+DTEND:20260215T232000Z
+DESCRIPTION:Teacher: Ms Yun Yun Cheah\\nPeriod: RC
+SUMMARY:RCBID6: Bidgywan 6 (10) RC
+LOCATION:Room: 8
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260215T235000Z
+DTEND:20260216T005000Z
+DESCRIPTION:Teacher: Mrs Lucy O'Brien\\nPeriod: 2
+SUMMARY:10HSIE: HSIE Yr10
+LOCATION:Room: 19
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260216T005000Z
+DTEND:20260216T015000Z
+DESCRIPTION:Teacher: Mr Ahmed Mohamed\\nPeriod: 3
+SUMMARY:10MAA1: Maths Advanced (11) Yr10
+LOCATION:Room: 3
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260216T022000Z
+DTEND:20260216T032000Z
+DESCRIPTION:Teacher: Mrs Ellen Trent\\nPeriod: 4
+SUMMARY:10ENGL: English (Enrichment) Yr10
+LOCATION:Room: 26
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260216T220500Z
+DTEND:20260216T222000Z
+DESCRIPTION:Teacher: Ms Yun Yun Cheah\\nPeriod: RC
+SUMMARY:RCBID6: Bidgywan 6 (10) RC
+LOCATION:Room: 8
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260216T222000Z
+DTEND:20260216T232000Z
+DESCRIPTION:Teacher: Mr Grant Monk\\nPeriod: 1
+SUMMARY:10COM1: Commerce Yr10
+LOCATION:Room: 17
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260216T235000Z
+DTEND:20260217T005000Z
+DESCRIPTION:Teacher: Mr Matthew Doyle\\nPeriod: 2
+SUMMARY:10ITT2: Industrial Technology (Timber Products) Yr10
+LOCATION:Room: WW1
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260217T005000Z
+DTEND:20260217T015000Z
+DESCRIPTION:Teacher: Mrs Lucy O'Brien\\nPeriod: 3
+SUMMARY:10HSIE: HSIE Yr10
+LOCATION:Room: 21
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260217T022000Z
+DTEND:20260217T032000Z
+DESCRIPTION:Teacher: Mrs Ellen Trent\\nPeriod: 4
+SUMMARY:10ENGL: English (Enrichment) Yr10
+LOCATION:Room: 26
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260217T032000Z
+DTEND:20260217T042000Z
+DESCRIPTION:Teacher: Mrs Natalie Goddard\\nPeriod: 5
+SUMMARY:10SCIY: Science Yr10
+LOCATION:Room: L3
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260217T220500Z
+DTEND:20260217T222000Z
+DESCRIPTION:Teacher: Ms Yun Yun Cheah\\nPeriod: RC
+SUMMARY:RCBID6: Bidgywan 6 (10) RC
+LOCATION:Room: 8
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260217T222000Z
+DTEND:20260217T232000Z
+DESCRIPTION:Teacher: Mr Grant Monk\\nPeriod: 1
+SUMMARY:10COM1: Commerce Yr10
+LOCATION:Room: 17
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260217T235000Z
+DTEND:20260218T005000Z
+DESCRIPTION:Teacher: Mrs Natalie Goddard\\nPeriod: 2
+SUMMARY:10SCIY: Science Yr10
+LOCATION:Room: L3
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260218T005000Z
+DTEND:20260218T015000Z
+DESCRIPTION:Teacher: Mrs Natalie Goddard\\nPeriod: 3
+SUMMARY:10SCIY: Science Yr10
+LOCATION:Room: L3
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260218T022000Z
+DTEND:20260218T032000Z
+DESCRIPTION:Teacher: Mrs Lucy O'Brien\\nPeriod: 4
+SUMMARY:10HSIE: HSIE Yr10
+LOCATION:Room: 21
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260218T220500Z
+DTEND:20260218T222000Z
+DESCRIPTION:Teacher: Ms Yun Yun Cheah\\nPeriod: RC
+SUMMARY:RCBID6: Bidgywan 6 (10) RC
+LOCATION:Room: 8
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260218T222000Z
+DTEND:20260218T232000Z
+DESCRIPTION:Teacher: Tepa Faletoese\\nPeriod: 1
+SUMMARY:10PDHE: PDHPE Yr10
+LOCATION:Room: 2
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260218T235000Z
+DTEND:20260219T005000Z
+DESCRIPTION:Teacher: Mrs Ellen Trent\\nPeriod: 2
+SUMMARY:10ENGL: English (Enrichment) Yr10
+LOCATION:Room: 26
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260219T005000Z
+DTEND:20260219T015000Z
+DESCRIPTION:Teacher: Mrs Ellen Trent\\nPeriod: 3
+SUMMARY:10ENGL: English (Enrichment) Yr10
+LOCATION:Room: 26
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260219T022000Z
+DTEND:20260219T032000Z
+DESCRIPTION:Teacher: Mr Ahmed Mohamed\\nPeriod: 4
+SUMMARY:10MAA1: Maths Advanced (11) Yr10
+LOCATION:Room: 3
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260219T032000Z
+DTEND:20260219T042000Z
+DESCRIPTION:Teacher: Mr Ahmed Mohamed\\nPeriod: 5
+SUMMARY:10MAA1: Maths Advanced (11) Yr10
+LOCATION:Room: 3
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260219T220500Z
+DTEND:20260219T222000Z
+DESCRIPTION:Teacher: Ms Yun Yun Cheah\\nPeriod: RC
+SUMMARY:RCBID6: Bidgywan 6 (10) RC
+LOCATION:Room: 8
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260219T222000Z
+DTEND:20260219T232000Z
+DESCRIPTION:Teacher: Mr Ahmed Mohamed\\nPeriod: 1
+SUMMARY:10MAA1: Maths Advanced (11) Yr10
+LOCATION:Room: 3
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260219T235000Z
+DTEND:20260220T005000Z
+DESCRIPTION:Teacher: Ms Jacinta Jackson\\nPeriod: 2
+SUMMARY:10SPFO1: SPORT- Flip Out (10) SPORT
+LOCATION:
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260220T005000Z
+DTEND:20260220T015000Z
+DESCRIPTION:Teacher: Ms Jacinta Jackson\\nPeriod: 3
+SUMMARY:10SPFO1: SPORT- Flip Out (10) SPORT
+LOCATION:
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260220T022000Z
+DTEND:20260220T032000Z
+DESCRIPTION:Teacher: Tepa Faletoese\\nPeriod: 4
+SUMMARY:10PDHE: PDHPE Yr10
+LOCATION:Room: SC1
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260220T032000Z
+DTEND:20260220T042000Z
+DESCRIPTION:Teacher: Mr Matthew Doyle\\nPeriod: 5
+SUMMARY:10ITT2: Industrial Technology (Timber Products) Yr10
+LOCATION:Room: WW1
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260222T220500Z
+DTEND:20260222T230000Z
+DESCRIPTION:Teacher: Mrs Lucy O'Brien\\nPeriod: 1
+SUMMARY:10HSIE: HSIE Yr10
+LOCATION:Room: 19
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260222T230000Z
+DTEND:20260222T232000Z
+DESCRIPTION:Teacher: Ms Yun Yun Cheah\\nPeriod: RC
+SUMMARY:RCBID6: Bidgywan 6 (10) RC
+LOCATION:Room: 8
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260222T235000Z
+DTEND:20260223T005000Z
+DESCRIPTION:Teacher: Mr Grant Monk\\nPeriod: 2
+SUMMARY:10COM1: Commerce Yr10
+LOCATION:Room: 17
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260223T005000Z
+DTEND:20260223T015000Z
+DESCRIPTION:Teacher: Mrs Ellen Trent\\nPeriod: 3
+SUMMARY:10ENGL: English (Enrichment) Yr10
+LOCATION:Room: 26
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260223T022000Z
+DTEND:20260223T032000Z
+DESCRIPTION:Teacher: Mrs Natalie Goddard\\nPeriod: 4
+SUMMARY:10SCIY: Science Yr10
+LOCATION:Room: L3
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260223T220500Z
+DTEND:20260223T222000Z
+DESCRIPTION:Teacher: Ms Yun Yun Cheah\\nPeriod: RC
+SUMMARY:RCBID6: Bidgywan 6 (10) RC
+LOCATION:Room: 8
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260223T222000Z
+DTEND:20260223T232000Z
+DESCRIPTION:Teacher: Mr Matthew Doyle\\nPeriod: 1
+SUMMARY:10ITT2: Industrial Technology (Timber Products) Yr10
+LOCATION:Room: WW1
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260223T235000Z
+DTEND:20260224T005000Z
+DESCRIPTION:Teacher: Mr Matthew Doyle\\nPeriod: 2
+SUMMARY:10ITT2: Industrial Technology (Timber Products) Yr10
+LOCATION:Room: WW1
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260224T005000Z
+DTEND:20260224T015000Z
+DESCRIPTION:Teacher: Mrs Natalie Goddard\\nPeriod: 3
+SUMMARY:10SCIY: Science Yr10
+LOCATION:Room: L3
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260224T022000Z
+DTEND:20260224T032000Z
+DESCRIPTION:Teacher: Mrs Lucy O'Brien\\nPeriod: 4
+SUMMARY:10HSIE: HSIE Yr10
+LOCATION:Room: 19
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260224T032000Z
+DTEND:20260224T042000Z
+DESCRIPTION:Teacher: Mr Ahmed Mohamed\\nPeriod: 5
+SUMMARY:10MAA1: Maths Advanced (11) Yr10
+LOCATION:Room: 3
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260224T220500Z
+DTEND:20260224T222000Z
+DESCRIPTION:Teacher: Ms Yun Yun Cheah\\nPeriod: RC
+SUMMARY:RCBID6: Bidgywan 6 (10) RC
+LOCATION:Room: 8
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260224T222000Z
+DTEND:20260224T232000Z
+DESCRIPTION:Teacher: Mrs Lucy O'Brien\\nPeriod: 1
+SUMMARY:10HSIE: HSIE Yr10
+LOCATION:Room: 21
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260224T235000Z
+DTEND:20260225T005000Z
+DESCRIPTION:Teacher: Mrs Natalie Goddard\\nPeriod: 2
+SUMMARY:10SCIY: Science Yr10
+LOCATION:Room: L3
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260225T005000Z
+DTEND:20260225T015000Z
+DESCRIPTION:Teacher: Tepa Faletoese\\nPeriod: 3
+SUMMARY:10PDHE: PDHPE Yr10
+LOCATION:Room: SC1
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260225T022000Z
+DTEND:20260225T032000Z
+DESCRIPTION:Teacher: Mrs Ellen Trent\\nPeriod: 4
+SUMMARY:10ENGL: English (Enrichment) Yr10
+LOCATION:Room: 26
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260225T220500Z
+DTEND:20260225T222000Z
+DESCRIPTION:Teacher: Ms Yun Yun Cheah\\nPeriod: RC
+SUMMARY:RCBID6: Bidgywan 6 (10) RC
+LOCATION:Room: 8
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260225T222000Z
+DTEND:20260225T232000Z
+DESCRIPTION:Teacher: Tepa Faletoese\\nPeriod: 1
+SUMMARY:10PDHE: PDHPE Yr10
+LOCATION:Room: 1
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260225T235000Z
+DTEND:20260226T005000Z
+DESCRIPTION:Teacher: Tepa Faletoese\\nPeriod: 2
+SUMMARY:10PDHE: PDHPE Yr10
+LOCATION:Room: SC1
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260226T005000Z
+DTEND:20260226T015000Z
+DESCRIPTION:Teacher: Mr Ahmed Mohamed\\nPeriod: 3
+SUMMARY:10MAA1: Maths Advanced (11) Yr10
+LOCATION:Room: 3
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260226T022000Z
+DTEND:20260226T032000Z
+DESCRIPTION:Teacher: Mrs Ellen Trent\\nPeriod: 4
+SUMMARY:10ENGL: English (Enrichment) Yr10
+LOCATION:Room: 26
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260226T032000Z
+DTEND:20260226T042000Z
+DESCRIPTION:Teacher: Mr Matthew Doyle\\nPeriod: 5
+SUMMARY:10ITT2: Industrial Technology (Timber Products) Yr10
+LOCATION:Room: WW1
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260226T220500Z
+DTEND:20260226T222000Z
+DESCRIPTION:Teacher: Ms Yun Yun Cheah\\nPeriod: RC
+SUMMARY:RCBID6: Bidgywan 6 (10) RC
+LOCATION:Room: 8
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260226T222000Z
+DTEND:20260226T232000Z
+DESCRIPTION:Teacher: Mr Grant Monk\\nPeriod: 1
+SUMMARY:10COM1: Commerce Yr10
+LOCATION:Room: 17
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260226T235000Z
+DTEND:20260227T005000Z
+DESCRIPTION:Teacher: Tepa Faletoese\\nPeriod: 2
+SUMMARY:10PDHE: PDHPE Yr10
+LOCATION:Room: SC1
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260227T005000Z
+DTEND:20260227T015000Z
+DESCRIPTION:Teacher: Mrs Natalie Goddard\\nPeriod: 3
+SUMMARY:10SCIY: Science Yr10
+LOCATION:Room: L3
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260227T022000Z
+DTEND:20260227T032000Z
+DESCRIPTION:Teacher: Mrs Rebecca Holmes\\nPeriod: 4
+SUMMARY:10CARE: Careers Yr10
+LOCATION:Room: 26
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260227T032000Z
+DTEND:20260227T042000Z
+DESCRIPTION:Teacher: Mr Ahmed Mohamed\\nPeriod: 5
+SUMMARY:10MAA1: Maths Advanced (11) Yr10
+LOCATION:Room: 3
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260301T220500Z
+DTEND:20260301T230000Z
+DESCRIPTION:Teacher: Mr Grant Monk\\nPeriod: 1
+SUMMARY:10COM1: Commerce Yr10
+LOCATION:Room: 17
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260301T230000Z
+DTEND:20260301T232000Z
+DESCRIPTION:Teacher: Ms Yun Yun Cheah\\nPeriod: RC
+SUMMARY:RCBID6: Bidgywan 6 (10) RC
+LOCATION:Room: 8
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260301T235000Z
+DTEND:20260302T005000Z
+DESCRIPTION:Teacher: Mrs Lucy O'Brien\\nPeriod: 2
+SUMMARY:10HSIE: HSIE Yr10
+LOCATION:Room: 19
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260302T005000Z
+DTEND:20260302T015000Z
+DESCRIPTION:Teacher: Mr Ahmed Mohamed\\nPeriod: 3
+SUMMARY:10MAA1: Maths Advanced (11) Yr10
+LOCATION:Room: 3
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260302T022000Z
+DTEND:20260302T032000Z
+DESCRIPTION:Teacher: Mrs Ellen Trent\\nPeriod: 4
+SUMMARY:10ENGL: English (Enrichment) Yr10
+LOCATION:Room: 26
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260302T220500Z
+DTEND:20260302T222000Z
+DESCRIPTION:Teacher: Ms Yun Yun Cheah\\nPeriod: RC
+SUMMARY:RCBID6: Bidgywan 6 (10) RC
+LOCATION:Room: 8
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260302T222000Z
+DTEND:20260302T232000Z
+DESCRIPTION:Teacher: Mr Grant Monk\\nPeriod: 1
+SUMMARY:10COM1: Commerce Yr10
+LOCATION:Room: 17
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260302T235000Z
+DTEND:20260303T005000Z
+DESCRIPTION:Teacher: Mr Matthew Doyle\\nPeriod: 2
+SUMMARY:10ITT2: Industrial Technology (Timber Products) Yr10
+LOCATION:Room: WW1
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260303T005000Z
+DTEND:20260303T015000Z
+DESCRIPTION:Teacher: Mrs Lucy O'Brien\\nPeriod: 3
+SUMMARY:10HSIE: HSIE Yr10
+LOCATION:Room: 21
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260303T022000Z
+DTEND:20260303T032000Z
+DESCRIPTION:Teacher: Mrs Ellen Trent\\nPeriod: 4
+SUMMARY:10ENGL: English (Enrichment) Yr10
+LOCATION:Room: 26
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260303T032000Z
+DTEND:20260303T042000Z
+DESCRIPTION:Teacher: Mrs Natalie Goddard\\nPeriod: 5
+SUMMARY:10SCIY: Science Yr10
+LOCATION:Room: L3
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260303T220500Z
+DTEND:20260303T222000Z
+DESCRIPTION:Teacher: Ms Yun Yun Cheah\\nPeriod: RC
+SUMMARY:RCBID6: Bidgywan 6 (10) RC
+LOCATION:Room: 8
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260303T222000Z
+DTEND:20260303T232000Z
+DESCRIPTION:Teacher: Mr Grant Monk\\nPeriod: 1
+SUMMARY:10COM1: Commerce Yr10
+LOCATION:Room: 17
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260303T235000Z
+DTEND:20260304T005000Z
+DESCRIPTION:Teacher: Mrs Natalie Goddard\\nPeriod: 2
+SUMMARY:10SCIY: Science Yr10
+LOCATION:Room: L3
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260304T005000Z
+DTEND:20260304T015000Z
+DESCRIPTION:Teacher: Mrs Natalie Goddard\\nPeriod: 3
+SUMMARY:10SCIY: Science Yr10
+LOCATION:Room: L3
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260304T022000Z
+DTEND:20260304T032000Z
+DESCRIPTION:Teacher: Mrs Lucy O'Brien\\nPeriod: 4
+SUMMARY:10HSIE: HSIE Yr10
+LOCATION:Room: 21
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260304T220500Z
+DTEND:20260304T222000Z
+DESCRIPTION:Teacher: Ms Yun Yun Cheah\\nPeriod: RC
+SUMMARY:RCBID6: Bidgywan 6 (10) RC
+LOCATION:Room: 8
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260304T222000Z
+DTEND:20260304T232000Z
+DESCRIPTION:Teacher: Tepa Faletoese\\nPeriod: 1
+SUMMARY:10PDHE: PDHPE Yr10
+LOCATION:Room: 2
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260304T235000Z
+DTEND:20260305T005000Z
+DESCRIPTION:Teacher: Mrs Ellen Trent\\nPeriod: 2
+SUMMARY:10ENGL: English (Enrichment) Yr10
+LOCATION:Room: 26
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260305T005000Z
+DTEND:20260305T015000Z
+DESCRIPTION:Teacher: Mrs Ellen Trent\\nPeriod: 3
+SUMMARY:10ENGL: English (Enrichment) Yr10
+LOCATION:Room: 26
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260305T022000Z
+DTEND:20260305T032000Z
+DESCRIPTION:Teacher: Mr Ahmed Mohamed\\nPeriod: 4
+SUMMARY:10MAA1: Maths Advanced (11) Yr10
+LOCATION:Room: 3
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260305T032000Z
+DTEND:20260305T042000Z
+DESCRIPTION:Teacher: Mr Ahmed Mohamed\\nPeriod: 5
+SUMMARY:10MAA1: Maths Advanced (11) Yr10
+LOCATION:Room: 3
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260305T220500Z
+DTEND:20260305T222000Z
+DESCRIPTION:Teacher: Ms Yun Yun Cheah\\nPeriod: RC
+SUMMARY:RCBID6: Bidgywan 6 (10) RC
+LOCATION:Room: 8
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260305T222000Z
+DTEND:20260305T232000Z
+DESCRIPTION:Teacher: Mr Ahmed Mohamed\\nPeriod: 1
+SUMMARY:10MAA1: Maths Advanced (11) Yr10
+LOCATION:Room: 3
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260305T235000Z
+DTEND:20260306T005000Z
+DESCRIPTION:Teacher: Ms Jacinta Jackson\\nPeriod: 2
+SUMMARY:10SPFO1: SPORT- Flip Out (10) SPORT
+LOCATION:
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260306T005000Z
+DTEND:20260306T015000Z
+DESCRIPTION:Teacher: Ms Jacinta Jackson\\nPeriod: 3
+SUMMARY:10SPFO1: SPORT- Flip Out (10) SPORT
+LOCATION:
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260306T022000Z
+DTEND:20260306T032000Z
+DESCRIPTION:Teacher: Tepa Faletoese\\nPeriod: 4
+SUMMARY:10PDHE: PDHPE Yr10
+LOCATION:Room: SC1
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260306T032000Z
+DTEND:20260306T042000Z
+DESCRIPTION:Teacher: Mr Matthew Doyle\\nPeriod: 5
+SUMMARY:10ITT2: Industrial Technology (Timber Products) Yr10
+LOCATION:Room: WW1
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260308T220500Z
+DTEND:20260308T230000Z
+DESCRIPTION:Teacher: Mrs Lucy O'Brien\\nPeriod: 1
+SUMMARY:10HSIE: HSIE Yr10
+LOCATION:Room: 19
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260308T230000Z
+DTEND:20260308T232000Z
+DESCRIPTION:Teacher: Ms Yun Yun Cheah\\nPeriod: RC
+SUMMARY:RCBID6: Bidgywan 6 (10) RC
+LOCATION:Room: 8
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260308T235000Z
+DTEND:20260309T005000Z
+DESCRIPTION:Teacher: Mr Grant Monk\\nPeriod: 2
+SUMMARY:10COM1: Commerce Yr10
+LOCATION:Room: 17
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260309T005000Z
+DTEND:20260309T015000Z
+DESCRIPTION:Teacher: Mrs Ellen Trent\\nPeriod: 3
+SUMMARY:10ENGL: English (Enrichment) Yr10
+LOCATION:Room: 26
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260309T022000Z
+DTEND:20260309T032000Z
+DESCRIPTION:Teacher: Mrs Natalie Goddard\\nPeriod: 4
+SUMMARY:10SCIY: Science Yr10
+LOCATION:Room: L3
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260309T220500Z
+DTEND:20260309T222000Z
+DESCRIPTION:Teacher: Ms Yun Yun Cheah\\nPeriod: RC
+SUMMARY:RCBID6: Bidgywan 6 (10) RC
+LOCATION:Room: 8
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260309T222000Z
+DTEND:20260309T232000Z
+DESCRIPTION:Teacher: Mr Matthew Doyle\\nPeriod: 1
+SUMMARY:10ITT2: Industrial Technology (Timber Products) Yr10
+LOCATION:Room: WW1
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260309T235000Z
+DTEND:20260310T005000Z
+DESCRIPTION:Teacher: Mr Matthew Doyle\\nPeriod: 2
+SUMMARY:10ITT2: Industrial Technology (Timber Products) Yr10
+LOCATION:Room: WW1
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260310T005000Z
+DTEND:20260310T015000Z
+DESCRIPTION:Teacher: Mrs Natalie Goddard\\nPeriod: 3
+SUMMARY:10SCIY: Science Yr10
+LOCATION:Room: L3
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260310T022000Z
+DTEND:20260310T032000Z
+DESCRIPTION:Teacher: Mrs Lucy O'Brien\\nPeriod: 4
+SUMMARY:10HSIE: HSIE Yr10
+LOCATION:Room: 19
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260310T032000Z
+DTEND:20260310T042000Z
+DESCRIPTION:Teacher: Mr Ahmed Mohamed\\nPeriod: 5
+SUMMARY:10MAA1: Maths Advanced (11) Yr10
+LOCATION:Room: 3
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260310T220500Z
+DTEND:20260310T222000Z
+DESCRIPTION:Teacher: Ms Yun Yun Cheah\\nPeriod: RC
+SUMMARY:RCBID6: Bidgywan 6 (10) RC
+LOCATION:Room: 8
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260310T222000Z
+DTEND:20260310T232000Z
+DESCRIPTION:Teacher: Mrs Lucy O'Brien\\nPeriod: 1
+SUMMARY:10HSIE: HSIE Yr10
+LOCATION:Room: 21
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260310T235000Z
+DTEND:20260311T005000Z
+DESCRIPTION:Teacher: Mrs Natalie Goddard\\nPeriod: 2
+SUMMARY:10SCIY: Science Yr10
+LOCATION:Room: L3
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260311T005000Z
+DTEND:20260311T015000Z
+DESCRIPTION:Teacher: Tepa Faletoese\\nPeriod: 3
+SUMMARY:10PDHE: PDHPE Yr10
+LOCATION:Room: SC1
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260311T022000Z
+DTEND:20260311T032000Z
+DESCRIPTION:Teacher: Mrs Ellen Trent\\nPeriod: 4
+SUMMARY:10ENGL: English (Enrichment) Yr10
+LOCATION:Room: 26
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260311T220500Z
+DTEND:20260311T222000Z
+DESCRIPTION:Teacher: Ms Yun Yun Cheah\\nPeriod: RC
+SUMMARY:RCBID6: Bidgywan 6 (10) RC
+LOCATION:Room: 8
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260311T222000Z
+DTEND:20260311T232000Z
+DESCRIPTION:Teacher: Tepa Faletoese\\nPeriod: 1
+SUMMARY:10PDHE: PDHPE Yr10
+LOCATION:Room: 1
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260311T235000Z
+DTEND:20260312T005000Z
+DESCRIPTION:Teacher: Tepa Faletoese\\nPeriod: 2
+SUMMARY:10PDHE: PDHPE Yr10
+LOCATION:Room: SC1
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260312T005000Z
+DTEND:20260312T015000Z
+DESCRIPTION:Teacher: Mr Ahmed Mohamed\\nPeriod: 3
+SUMMARY:10MAA1: Maths Advanced (11) Yr10
+LOCATION:Room: 3
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260312T022000Z
+DTEND:20260312T032000Z
+DESCRIPTION:Teacher: Mrs Ellen Trent\\nPeriod: 4
+SUMMARY:10ENGL: English (Enrichment) Yr10
+LOCATION:Room: 26
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260312T032000Z
+DTEND:20260312T042000Z
+DESCRIPTION:Teacher: Mr Matthew Doyle\\nPeriod: 5
+SUMMARY:10ITT2: Industrial Technology (Timber Products) Yr10
+LOCATION:Room: WW1
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260312T220500Z
+DTEND:20260312T222000Z
+DESCRIPTION:Teacher: Ms Yun Yun Cheah\\nPeriod: RC
+SUMMARY:RCBID6: Bidgywan 6 (10) RC
+LOCATION:Room: 8
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260312T222000Z
+DTEND:20260312T232000Z
+DESCRIPTION:Teacher: Mr Grant Monk\\nPeriod: 1
+SUMMARY:10COM1: Commerce Yr10
+LOCATION:Room: 17
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260312T235000Z
+DTEND:20260313T005000Z
+DESCRIPTION:Teacher: Tepa Faletoese\\nPeriod: 2
+SUMMARY:10PDHE: PDHPE Yr10
+LOCATION:Room: SC1
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260313T005000Z
+DTEND:20260313T015000Z
+DESCRIPTION:Teacher: Mrs Natalie Goddard\\nPeriod: 3
+SUMMARY:10SCIY: Science Yr10
+LOCATION:Room: L3
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260313T022000Z
+DTEND:20260313T032000Z
+DESCRIPTION:Teacher: Mrs Rebecca Holmes\\nPeriod: 4
+SUMMARY:10CARE: Careers Yr10
+LOCATION:Room: 26
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260313T032000Z
+DTEND:20260313T042000Z
+DESCRIPTION:Teacher: Mr Ahmed Mohamed\\nPeriod: 5
+SUMMARY:10MAA1: Maths Advanced (11) Yr10
+LOCATION:Room: 3
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260315T220500Z
+DTEND:20260315T230000Z
+DESCRIPTION:Teacher: Mr Grant Monk\\nPeriod: 1
+SUMMARY:10COM1: Commerce Yr10
+LOCATION:Room: 17
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260315T230000Z
+DTEND:20260315T232000Z
+DESCRIPTION:Teacher: Ms Yun Yun Cheah\\nPeriod: RC
+SUMMARY:RCBID6: Bidgywan 6 (10) RC
+LOCATION:Room: 8
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260315T235000Z
+DTEND:20260316T005000Z
+DESCRIPTION:Teacher: Mrs Lucy O'Brien\\nPeriod: 2
+SUMMARY:10HSIE: HSIE Yr10
+LOCATION:Room: 19
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260316T005000Z
+DTEND:20260316T015000Z
+DESCRIPTION:Teacher: Mr Ahmed Mohamed\\nPeriod: 3
+SUMMARY:10MAA1: Maths Advanced (11) Yr10
+LOCATION:Room: 3
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260316T022000Z
+DTEND:20260316T032000Z
+DESCRIPTION:Teacher: Mrs Ellen Trent\\nPeriod: 4
+SUMMARY:10ENGL: English (Enrichment) Yr10
+LOCATION:Room: 26
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260316T220500Z
+DTEND:20260316T222000Z
+DESCRIPTION:Teacher: Ms Yun Yun Cheah\\nPeriod: RC
+SUMMARY:RCBID6: Bidgywan 6 (10) RC
+LOCATION:Room: 8
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260316T222000Z
+DTEND:20260316T232000Z
+DESCRIPTION:Teacher: Mr Grant Monk\\nPeriod: 1
+SUMMARY:10COM1: Commerce Yr10
+LOCATION:Room: 17
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260316T235000Z
+DTEND:20260317T005000Z
+DESCRIPTION:Teacher: Mr Matthew Doyle\\nPeriod: 2
+SUMMARY:10ITT2: Industrial Technology (Timber Products) Yr10
+LOCATION:Room: WW1
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260317T005000Z
+DTEND:20260317T015000Z
+DESCRIPTION:Teacher: Mrs Lucy O'Brien\\nPeriod: 3
+SUMMARY:10HSIE: HSIE Yr10
+LOCATION:Room: 21
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260317T022000Z
+DTEND:20260317T032000Z
+DESCRIPTION:Teacher: Mrs Ellen Trent\\nPeriod: 4
+SUMMARY:10ENGL: English (Enrichment) Yr10
+LOCATION:Room: 26
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260317T032000Z
+DTEND:20260317T042000Z
+DESCRIPTION:Teacher: Mrs Natalie Goddard\\nPeriod: 5
+SUMMARY:10SCIY: Science Yr10
+LOCATION:Room: L3
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260317T220500Z
+DTEND:20260317T222000Z
+DESCRIPTION:Teacher: Ms Yun Yun Cheah\\nPeriod: RC
+SUMMARY:RCBID6: Bidgywan 6 (10) RC
+LOCATION:Room: 8
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260317T222000Z
+DTEND:20260317T232000Z
+DESCRIPTION:Teacher: Mr Grant Monk\\nPeriod: 1
+SUMMARY:10COM1: Commerce Yr10
+LOCATION:Room: 17
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260317T235000Z
+DTEND:20260318T005000Z
+DESCRIPTION:Teacher: Mrs Natalie Goddard\\nPeriod: 2
+SUMMARY:10SCIY: Science Yr10
+LOCATION:Room: L3
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260318T005000Z
+DTEND:20260318T015000Z
+DESCRIPTION:Teacher: Mrs Natalie Goddard\\nPeriod: 3
+SUMMARY:10SCIY: Science Yr10
+LOCATION:Room: L3
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260318T022000Z
+DTEND:20260318T032000Z
+DESCRIPTION:Teacher: Mrs Lucy O'Brien\\nPeriod: 4
+SUMMARY:10HSIE: HSIE Yr10
+LOCATION:Room: 21
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260318T220500Z
+DTEND:20260318T222000Z
+DESCRIPTION:Teacher: Ms Yun Yun Cheah\\nPeriod: RC
+SUMMARY:RCBID6: Bidgywan 6 (10) RC
+LOCATION:Room: 8
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260318T222000Z
+DTEND:20260318T232000Z
+DESCRIPTION:Teacher: Tepa Faletoese\\nPeriod: 1
+SUMMARY:10PDHE: PDHPE Yr10
+LOCATION:Room: 2
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260318T235000Z
+DTEND:20260319T005000Z
+DESCRIPTION:Teacher: Mrs Ellen Trent\\nPeriod: 2
+SUMMARY:10ENGL: English (Enrichment) Yr10
+LOCATION:Room: 26
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260319T005000Z
+DTEND:20260319T015000Z
+DESCRIPTION:Teacher: Mrs Ellen Trent\\nPeriod: 3
+SUMMARY:10ENGL: English (Enrichment) Yr10
+LOCATION:Room: 26
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260319T022000Z
+DTEND:20260319T032000Z
+DESCRIPTION:Teacher: Mr Ahmed Mohamed\\nPeriod: 4
+SUMMARY:10MAA1: Maths Advanced (11) Yr10
+LOCATION:Room: 3
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260319T032000Z
+DTEND:20260319T042000Z
+DESCRIPTION:Teacher: Mr Ahmed Mohamed\\nPeriod: 5
+SUMMARY:10MAA1: Maths Advanced (11) Yr10
+LOCATION:Room: 3
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260319T220500Z
+DTEND:20260319T222000Z
+DESCRIPTION:Teacher: Ms Yun Yun Cheah\\nPeriod: RC
+SUMMARY:RCBID6: Bidgywan 6 (10) RC
+LOCATION:Room: 8
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260319T222000Z
+DTEND:20260319T232000Z
+DESCRIPTION:Teacher: Mr Ahmed Mohamed\\nPeriod: 1
+SUMMARY:10MAA1: Maths Advanced (11) Yr10
+LOCATION:Room: 3
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260319T235000Z
+DTEND:20260320T005000Z
+DESCRIPTION:Teacher: Ms Jacinta Jackson\\nPeriod: 2
+SUMMARY:10SPFO1: SPORT- Flip Out (10) SPORT
+LOCATION:
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260320T005000Z
+DTEND:20260320T015000Z
+DESCRIPTION:Teacher: Ms Jacinta Jackson\\nPeriod: 3
+SUMMARY:10SPFO1: SPORT- Flip Out (10) SPORT
+LOCATION:
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260320T022000Z
+DTEND:20260320T032000Z
+DESCRIPTION:Teacher: Tepa Faletoese\\nPeriod: 4
+SUMMARY:10PDHE: PDHPE Yr10
+LOCATION:Room: SC1
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260320T032000Z
+DTEND:20260320T042000Z
+DESCRIPTION:Teacher: Mr Matthew Doyle\\nPeriod: 5
+SUMMARY:10ITT2: Industrial Technology (Timber Products) Yr10
+LOCATION:Room: WW1
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260322T220500Z
+DTEND:20260322T230000Z
+DESCRIPTION:Teacher: Mrs Lucy O'Brien\\nPeriod: 1
+SUMMARY:10HSIE: HSIE Yr10
+LOCATION:Room: 19
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260322T230000Z
+DTEND:20260322T232000Z
+DESCRIPTION:Teacher: Ms Yun Yun Cheah\\nPeriod: RC
+SUMMARY:RCBID6: Bidgywan 6 (10) RC
+LOCATION:Room: 8
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260322T235000Z
+DTEND:20260323T005000Z
+DESCRIPTION:Teacher: Mr Grant Monk\\nPeriod: 2
+SUMMARY:10COM1: Commerce Yr10
+LOCATION:Room: 17
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260323T005000Z
+DTEND:20260323T015000Z
+DESCRIPTION:Teacher: Mrs Ellen Trent\\nPeriod: 3
+SUMMARY:10ENGL: English (Enrichment) Yr10
+LOCATION:Room: 26
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260323T022000Z
+DTEND:20260323T032000Z
+DESCRIPTION:Teacher: Mrs Natalie Goddard\\nPeriod: 4
+SUMMARY:10SCIY: Science Yr10
+LOCATION:Room: L3
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260323T220500Z
+DTEND:20260323T222000Z
+DESCRIPTION:Teacher: Ms Yun Yun Cheah\\nPeriod: RC
+SUMMARY:RCBID6: Bidgywan 6 (10) RC
+LOCATION:Room: 8
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260323T222000Z
+DTEND:20260323T232000Z
+DESCRIPTION:Teacher: Mr Matthew Doyle\\nPeriod: 1
+SUMMARY:10ITT2: Industrial Technology (Timber Products) Yr10
+LOCATION:Room: WW1
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260323T235000Z
+DTEND:20260324T005000Z
+DESCRIPTION:Teacher: Mr Matthew Doyle\\nPeriod: 2
+SUMMARY:10ITT2: Industrial Technology (Timber Products) Yr10
+LOCATION:Room: WW1
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260324T005000Z
+DTEND:20260324T015000Z
+DESCRIPTION:Teacher: Mrs Natalie Goddard\\nPeriod: 3
+SUMMARY:10SCIY: Science Yr10
+LOCATION:Room: L3
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260324T022000Z
+DTEND:20260324T032000Z
+DESCRIPTION:Teacher: Mrs Lucy O'Brien\\nPeriod: 4
+SUMMARY:10HSIE: HSIE Yr10
+LOCATION:Room: 19
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260324T032000Z
+DTEND:20260324T042000Z
+DESCRIPTION:Teacher: Mr Ahmed Mohamed\\nPeriod: 5
+SUMMARY:10MAA1: Maths Advanced (11) Yr10
+LOCATION:Room: 3
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260324T220500Z
+DTEND:20260324T222000Z
+DESCRIPTION:Teacher: Ms Yun Yun Cheah\\nPeriod: RC
+SUMMARY:RCBID6: Bidgywan 6 (10) RC
+LOCATION:Room: 8
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260324T222000Z
+DTEND:20260324T232000Z
+DESCRIPTION:Teacher: Mrs Lucy O'Brien\\nPeriod: 1
+SUMMARY:10HSIE: HSIE Yr10
+LOCATION:Room: 21
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260324T235000Z
+DTEND:20260325T005000Z
+DESCRIPTION:Teacher: Mrs Natalie Goddard\\nPeriod: 2
+SUMMARY:10SCIY: Science Yr10
+LOCATION:Room: L3
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260325T005000Z
+DTEND:20260325T015000Z
+DESCRIPTION:Teacher: Tepa Faletoese\\nPeriod: 3
+SUMMARY:10PDHE: PDHPE Yr10
+LOCATION:Room: SC1
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260325T022000Z
+DTEND:20260325T032000Z
+DESCRIPTION:Teacher: Mrs Ellen Trent\\nPeriod: 4
+SUMMARY:10ENGL: English (Enrichment) Yr10
+LOCATION:Room: 26
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260325T220500Z
+DTEND:20260325T222000Z
+DESCRIPTION:Teacher: Ms Yun Yun Cheah\\nPeriod: RC
+SUMMARY:RCBID6: Bidgywan 6 (10) RC
+LOCATION:Room: 8
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260325T222000Z
+DTEND:20260325T232000Z
+DESCRIPTION:Teacher: Tepa Faletoese\\nPeriod: 1
+SUMMARY:10PDHE: PDHPE Yr10
+LOCATION:Room: 1
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260325T235000Z
+DTEND:20260326T005000Z
+DESCRIPTION:Teacher: Tepa Faletoese\\nPeriod: 2
+SUMMARY:10PDHE: PDHPE Yr10
+LOCATION:Room: SC1
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260326T005000Z
+DTEND:20260326T015000Z
+DESCRIPTION:Teacher: Mr Ahmed Mohamed\\nPeriod: 3
+SUMMARY:10MAA1: Maths Advanced (11) Yr10
+LOCATION:Room: 3
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260326T022000Z
+DTEND:20260326T032000Z
+DESCRIPTION:Teacher: Mrs Ellen Trent\\nPeriod: 4
+SUMMARY:10ENGL: English (Enrichment) Yr10
+LOCATION:Room: 26
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260326T032000Z
+DTEND:20260326T042000Z
+DESCRIPTION:Teacher: Mr Matthew Doyle\\nPeriod: 5
+SUMMARY:10ITT2: Industrial Technology (Timber Products) Yr10
+LOCATION:Room: WW1
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260326T220500Z
+DTEND:20260326T222000Z
+DESCRIPTION:Teacher: Ms Yun Yun Cheah\\nPeriod: RC
+SUMMARY:RCBID6: Bidgywan 6 (10) RC
+LOCATION:Room: 8
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260326T222000Z
+DTEND:20260326T232000Z
+DESCRIPTION:Teacher: Mr Grant Monk\\nPeriod: 1
+SUMMARY:10COM1: Commerce Yr10
+LOCATION:Room: 17
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260326T235000Z
+DTEND:20260327T005000Z
+DESCRIPTION:Teacher: Tepa Faletoese\\nPeriod: 2
+SUMMARY:10PDHE: PDHPE Yr10
+LOCATION:Room: SC1
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260327T005000Z
+DTEND:20260327T015000Z
+DESCRIPTION:Teacher: Mrs Natalie Goddard\\nPeriod: 3
+SUMMARY:10SCIY: Science Yr10
+LOCATION:Room: L3
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260327T022000Z
+DTEND:20260327T032000Z
+DESCRIPTION:Teacher: Mrs Rebecca Holmes\\nPeriod: 4
+SUMMARY:10CARE: Careers Yr10
+LOCATION:Room: 26
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260327T032000Z
+DTEND:20260327T042000Z
+DESCRIPTION:Teacher: Mr Ahmed Mohamed\\nPeriod: 5
+SUMMARY:10MAA1: Maths Advanced (11) Yr10
+LOCATION:Room: 3
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260329T220500Z
+DTEND:20260329T230000Z
+DESCRIPTION:Teacher: Mr Grant Monk\\nPeriod: 1
+SUMMARY:10COM1: Commerce Yr10
+LOCATION:Room: 17
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260329T230000Z
+DTEND:20260329T232000Z
+DESCRIPTION:Teacher: Ms Yun Yun Cheah\\nPeriod: RC
+SUMMARY:RCBID6: Bidgywan 6 (10) RC
+LOCATION:Room: 8
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260329T235000Z
+DTEND:20260330T005000Z
+DESCRIPTION:Teacher: Mrs Lucy O'Brien\\nPeriod: 2
+SUMMARY:10HSIE: HSIE Yr10
+LOCATION:Room: 19
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260330T005000Z
+DTEND:20260330T015000Z
+DESCRIPTION:Teacher: Mr Ahmed Mohamed\\nPeriod: 3
+SUMMARY:10MAA1: Maths Advanced (11) Yr10
+LOCATION:Room: 3
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260330T022000Z
+DTEND:20260330T032000Z
+DESCRIPTION:Teacher: Mrs Ellen Trent\\nPeriod: 4
+SUMMARY:10ENGL: English (Enrichment) Yr10
+LOCATION:Room: 26
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260330T220500Z
+DTEND:20260330T222000Z
+DESCRIPTION:Teacher: Ms Yun Yun Cheah\\nPeriod: RC
+SUMMARY:RCBID6: Bidgywan 6 (10) RC
+LOCATION:Room: 8
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260330T222000Z
+DTEND:20260330T232000Z
+DESCRIPTION:Teacher: Mr Grant Monk\\nPeriod: 1
+SUMMARY:10COM1: Commerce Yr10
+LOCATION:Room: 17
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260330T235000Z
+DTEND:20260331T005000Z
+DESCRIPTION:Teacher: Mr Matthew Doyle\\nPeriod: 2
+SUMMARY:10ITT2: Industrial Technology (Timber Products) Yr10
+LOCATION:Room: WW1
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260331T005000Z
+DTEND:20260331T015000Z
+DESCRIPTION:Teacher: Mrs Lucy O'Brien\\nPeriod: 3
+SUMMARY:10HSIE: HSIE Yr10
+LOCATION:Room: 21
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260331T022000Z
+DTEND:20260331T032000Z
+DESCRIPTION:Teacher: Mrs Ellen Trent\\nPeriod: 4
+SUMMARY:10ENGL: English (Enrichment) Yr10
+LOCATION:Room: 26
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260331T032000Z
+DTEND:20260331T042000Z
+DESCRIPTION:Teacher: Mrs Natalie Goddard\\nPeriod: 5
+SUMMARY:10SCIY: Science Yr10
+LOCATION:Room: L3
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260331T220500Z
+DTEND:20260331T222000Z
+DESCRIPTION:Teacher: Ms Yun Yun Cheah\\nPeriod: RC
+SUMMARY:RCBID6: Bidgywan 6 (10) RC
+LOCATION:Room: 8
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260331T222000Z
+DTEND:20260331T232000Z
+DESCRIPTION:Teacher: Mr Grant Monk\\nPeriod: 1
+SUMMARY:10COM1: Commerce Yr10
+LOCATION:Room: 17
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260331T235000Z
+DTEND:20260401T005000Z
+DESCRIPTION:Teacher: Mrs Natalie Goddard\\nPeriod: 2
+SUMMARY:10SCIY: Science Yr10
+LOCATION:Room: L3
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260401T005000Z
+DTEND:20260401T015000Z
+DESCRIPTION:Teacher: Mrs Natalie Goddard\\nPeriod: 3
+SUMMARY:10SCIY: Science Yr10
+LOCATION:Room: L3
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260401T022000Z
+DTEND:20260401T032000Z
+DESCRIPTION:Teacher: Mrs Lucy O'Brien\\nPeriod: 4
+SUMMARY:10HSIE: HSIE Yr10
+LOCATION:Room: 21
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260401T220500Z
+DTEND:20260401T222000Z
+DESCRIPTION:Teacher: Ms Yun Yun Cheah\\nPeriod: RC
+SUMMARY:RCBID6: Bidgywan 6 (10) RC
+LOCATION:Room: 8
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260401T222000Z
+DTEND:20260401T232000Z
+DESCRIPTION:Teacher: Tepa Faletoese\\nPeriod: 1
+SUMMARY:10PDHE: PDHPE Yr10
+LOCATION:Room: 2
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260401T235000Z
+DTEND:20260402T005000Z
+DESCRIPTION:Teacher: Mrs Ellen Trent\\nPeriod: 2
+SUMMARY:10ENGL: English (Enrichment) Yr10
+LOCATION:Room: 26
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260402T005000Z
+DTEND:20260402T015000Z
+DESCRIPTION:Teacher: Mrs Ellen Trent\\nPeriod: 3
+SUMMARY:10ENGL: English (Enrichment) Yr10
+LOCATION:Room: 26
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260402T022000Z
+DTEND:20260402T032000Z
+DESCRIPTION:Teacher: Mr Ahmed Mohamed\\nPeriod: 4
+SUMMARY:10MAA1: Maths Advanced (11) Yr10
+LOCATION:Room: 3
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260402T032000Z
+DTEND:20260402T042000Z
+DESCRIPTION:Teacher: Mr Ahmed Mohamed\\nPeriod: 5
+SUMMARY:10MAA1: Maths Advanced (11) Yr10
+LOCATION:Room: 3
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260402T220500Z
+DTEND:20260402T222000Z
+DESCRIPTION:Teacher: Ms Yun Yun Cheah\\nPeriod: RC
+SUMMARY:RCBID6: Bidgywan 6 (10) RC
+LOCATION:Room: 8
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260402T222000Z
+DTEND:20260402T232000Z
+DESCRIPTION:Teacher: Mr Ahmed Mohamed\\nPeriod: 1
+SUMMARY:10MAA1: Maths Advanced (11) Yr10
+LOCATION:Room: 3
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260402T235000Z
+DTEND:20260403T005000Z
+DESCRIPTION:Teacher: Ms Jacinta Jackson\\nPeriod: 2
+SUMMARY:10SPFO1: SPORT- Flip Out (10) SPORT
+LOCATION:
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260403T005000Z
+DTEND:20260403T015000Z
+DESCRIPTION:Teacher: Ms Jacinta Jackson\\nPeriod: 3
+SUMMARY:10SPFO1: SPORT- Flip Out (10) SPORT
+LOCATION:
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260403T022000Z
+DTEND:20260403T032000Z
+DESCRIPTION:Teacher: Tepa Faletoese\\nPeriod: 4
+SUMMARY:10PDHE: PDHPE Yr10
+LOCATION:Room: SC1
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260403T032000Z
+DTEND:20260403T042000Z
+DESCRIPTION:Teacher: Mr Matthew Doyle\\nPeriod: 5
+SUMMARY:10ITT2: Industrial Technology (Timber Products) Yr10
+LOCATION:Room: WW1
+END:VEVENT
+END:VCALENDAR`;
+
+// ────────────────────────────────────────────────
+// ICS Parser
+// ────────────────────────────────────────────────
+function parseICS(text) {
+  const events = [];
+  const blocks = text.split('BEGIN:VEVENT');
+  blocks.shift();
+  for (const block of blocks) {
+    const get = (key) => {
+      const m = block.match(new RegExp(key + ':([^\\r\\n]+)'));
+      return m ? m[1].trim() : '';
+    };
+    const parseDate = (s) => {
+      // Format: 20260126T220500Z
+      const y = +s.slice(0,4), mo = +s.slice(4,6)-1, d = +s.slice(6,8);
+      const h = +s.slice(9,11), mi = +s.slice(11,13), sec = +s.slice(13,15);
+      return new Date(Date.UTC(y, mo, d, h, mi, sec));
+    };
+    const summary = get('SUMMARY').replace(/\\n/g,' ');
+    const desc = get('DESCRIPTION').replace(/\\n/g,'\n');
+    const loc = get('LOCATION').replace('Room: ','').trim();
+    const start = parseDate(get('DTSTART'));
+    const end = parseDate(get('DTEND'));
+
+    // Extract period from description
+    const periodMatch = desc.match(/Period: (\w+)/);
+    const period = periodMatch ? periodMatch[1] : '?';
+
+    // Extract teacher
+    const teacherMatch = desc.match(/Teacher: (.+)/);
+    const teacher = teacherMatch ? teacherMatch[1].trim() : '';
+
+    // Extract clean subject name
+    let name = summary;
+    // Remove code prefix like "10ITT2: "
+    name = name.replace(/^\w+:\s*/, '');
+    // Remove year suffix like " Yr10"
+    name = name.replace(/\s+Yr\d+$/, '');
+    // Remove "(10)" etc
+    name = name.replace(/\s*\(\d+\)\s*/, ' ').trim();
+
+    events.push({ summary, name, loc, start, end, period, teacher });
+  }
+  return events;
+}
+
+// ────────────────────────────────────────────────
+// Subject colours
+// ────────────────────────────────────────────────
+function getSubjectStyle(name) {
+  const n = name.toLowerCase();
+  if (n.includes('industrial') || n.includes('timber')) return { color: '#f28c4e', label: 'IT' };
+  if (n.includes('science'))   return { color: '#5fb8a0', label: 'SCI' };
+  if (n.includes('maths') || n.includes('math')) return { color: '#5b8af4', label: 'MTH' };
+  if (n.includes('english'))   return { color: '#d46be5', label: 'ENG' };
+  if (n.includes('hsie'))      return { color: '#e8a94e', label: 'HSI' };
+  if (n.includes('pdhpe') || n.includes('sport')) return { color: '#6bbfe8', label: 'PE' };
+  if (n.includes('commerce'))  return { color: '#e86b6b', label: 'COM' };
+  if (n.includes('careers'))   return { color: '#b8a0e8', label: 'CAR' };
+  if (n.includes('rc') || n.includes('bidgywan')) return { color: '#888fa0', label: 'RC' };
+  return { color: '#aaa', label: '·' };
+}
+
+// ────────────────────────────────────────────────
+// Timezone: AEDT = UTC+11 (Oct-Apr), AEST = UTC+10 (Apr-Oct)
+// Simple approach: detect from the browser
+// ────────────────────────────────────────────────
+function nowSydney() {
+  return new Date(new Date().toLocaleString('en-AU', { timeZone: 'Australia/Sydney' }));
+}
+
+function toSydney(utcDate) {
+  return new Date(utcDate.toLocaleString('en-AU', { timeZone: 'Australia/Sydney' }));
+}
+
+function fmtTime(d) {
+  return d.toLocaleTimeString('en-AU', { hour: '2-digit', minute: '2-digit', hour12: false, timeZone: 'Australia/Sydney' });
+}
+
+function dateKey(d) {
+  // YYYY-MM-DD in Sydney time
+  const s = toSydney(d);
+  return `${s.getFullYear()}-${String(s.getMonth()+1).padStart(2,'0')}-${String(s.getDate()).padStart(2,'0')}`;
+}
+
+function dateKeyLocal(y, m, d) {
+  return `${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+}
+
+// ────────────────────────────────────────────────
+// App State
+// ────────────────────────────────────────────────
+const events = parseICS(ICS_DATA);
+
+// Build a lookup map: dateKey -> [events]
+const eventMap = {};
+for (const ev of events) {
+  const k = dateKey(ev.start);
+  if (!eventMap[k]) eventMap[k] = [];
+  eventMap[k].push(ev);
+}
+// Sort each day's events by start time
+for (const k in eventMap) {
+  eventMap[k].sort((a,b) => a.start - b.start);
+}
+
+// Determine week A/B from first available date
+// Looking at the data, we need to figure out which weeks are A and which are B.
+// Jan 26, 2026 = first week. Let's determine: week starting Jan 26 (Mon) is Week A.
+// We'll classify by ISO week number parity relative to a known Week A start.
+const WEEK_A_START = new Date('2026-01-26T00:00:00+11:00'); // Monday Jan 26 = Week A
+
+function getWeekType(date) {
+  const sydDate = toSydney(date instanceof Date ? date : new Date(date));
+  // get monday of this week
+  const day = sydDate.getDay(); // 0=Sun
+  const diffToMon = (day === 0) ? -6 : 1 - day;
+  const monday = new Date(sydDate);
+  monday.setDate(sydDate.getDate() + diffToMon);
+  monday.setHours(0,0,0,0);
+
+  const weekAMon = new Date(WEEK_A_START);
+  weekAMon.setHours(0,0,0,0);
+
+  const diffMs = monday - weekAMon;
+  const diffWeeks = Math.round(diffMs / (7 * 24 * 3600 * 1000));
+  return diffWeeks % 2 === 0 ? 'A' : 'B';
+}
+
+let viewOffset = 0; // week offset from current week
+
+function getWeekDates(offset) {
+  const now = nowSydney();
+  const day = now.getDay(); // 0=Sun
+  const diffToMon = (day === 0) ? -6 : 1 - day;
+  const monday = new Date(now);
+  monday.setDate(now.getDate() + diffToMon + offset * 7);
+  monday.setHours(0,0,0,0);
+
+  const days = [];
+  for (let i = 0; i < 5; i++) {
+    const d = new Date(monday);
+    d.setDate(monday.getDate() + i);
+    days.push(d);
+  }
+  return days;
+}
+
+let selectedDate = null;
+
+function setSelectedDate(d) {
+  selectedDate = d;
+  renderNav();
+  renderDayView();
+}
+
+function goToday() {
+  viewOffset = 0;
+  selectedDate = nowSydney();
+  renderNav();
+  renderDayView();
+}
+
+function shiftWeek(dir) {
+  viewOffset += dir;
+  const days = getWeekDates(viewOffset);
+  selectedDate = days[0];
+  renderNav();
+  renderDayView();
+}
+
+// ────────────────────────────────────────────────
+// Render Nav
+// ────────────────────────────────────────────────
+function renderNav() {
+  const days = getWeekDates(viewOffset);
+  const today = nowSydney();
+  const todayKey = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`;
+
+  const DAY_NAMES = ['Mon','Tue','Wed','Thu','Fri'];
+  const strip = document.getElementById('nav-strip');
+  strip.innerHTML = '';
+
+  days.forEach((d, i) => {
+    const key = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+    const isToday = key === todayKey;
+    const selKey = selectedDate ? `${selectedDate.getFullYear()}-${String(selectedDate.getMonth()+1).padStart(2,'0')}-${String(selectedDate.getDate()).padStart(2,'0')}` : '';
+    const isSelected = key === selKey;
+    const hasClasses = !!eventMap[key];
+
+    const btn = document.createElement('button');
+    btn.className = 'nav-day' + (isSelected ? ' active' : '') + (isToday && !isSelected ? ' today' : '');
+    btn.innerHTML = `<span class="day-name">${DAY_NAMES[i]}</span><span class="day-num">${d.getDate()}</span>${hasClasses ? '' : ''}`;
+    btn.onclick = () => { selectedDate = d; renderNav(); renderDayView(); };
+    strip.appendChild(btn);
+  });
+
+  // Update date display
+  const days2 = getWeekDates(viewOffset);
+  const wtype = getWeekType(days2[0]);
+  document.getElementById('week-badge').textContent = `Week ${wtype}`;
+
+  const dispDate = selectedDate || nowSydney();
+  document.getElementById('full-date').textContent = dispDate.toLocaleDateString('en-AU', {
+    weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Australia/Sydney'
+  });
+}
+
+// ────────────────────────────────────────────────
+// Render Day View
+// ────────────────────────────────────────────────
+function renderDayView() {
+  const view = document.getElementById('day-view');
+  const disp = selectedDate || nowSydney();
+  const key = `${disp.getFullYear()}-${String(disp.getMonth()+1).padStart(2,'0')}-${String(disp.getDate()).padStart(2,'0')}`;
+  const dayEvents = eventMap[key] || [];
+
+  const now = new Date(); // real UTC now
+  const dayNames = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const sydDisp = toSydney(disp instanceof Date ? disp : new Date(disp));
+  const dayOfWeek = sydDisp.getDay();
+
+  const wtype = getWeekType(disp instanceof Date ? disp : new Date(disp));
+
+  let html = `<div class="day-header">
+    <div class="day-title">${dayNames[dayOfWeek]}</div>
+    <div class="day-subtitle">${disp.toLocaleDateString('en-AU', {day:'numeric',month:'short',year:'numeric',timeZone:'Australia/Sydney'})} &nbsp;·&nbsp; Week ${wtype}</div>
+  </div>`;
+
+  if (dayOfWeek === 0 || dayOfWeek === 6) {
+    html += `<div class="weekend-msg">
+      <span class="emoji">🎉</span>
+      <h2>Weekend!</h2>
+      <p>No classes today. Enjoy the break.</p>
+    </div>`;
+  } else if (dayEvents.length === 0) {
+    html += `<div class="no-classes">No classes found for this day.</div>`;
+  } else {
+    html += `<div class="period-list">`;
+    let prevEnd = null;
+
+    dayEvents.forEach((ev, idx) => {
+      const startSyd = toSydney(ev.start);
+      const endSyd = toSydney(ev.end);
+      const style = getSubjectStyle(ev.name);
+
+      const isCurrent = now >= ev.start && now < ev.end;
+      const isPast = now >= ev.end;
+
+      // Insert break indicator if gap > 5 min
+      if (prevEnd) {
+        const gapMs = ev.start - prevEnd;
+        if (gapMs > 5 * 60 * 1000) {
+          const gapMin = Math.round(gapMs / 60000);
+          const breakLabel = gapMin >= 20 ? (gapMin >= 40 ? 'Lunch break' : 'Recess') : 'Break';
+          html += `<div class="break-card">
+            <div class="break-line"></div>
+            <div class="break-label">${breakLabel} · ${gapMin} min</div>
+            <div class="break-line"></div>
+          </div>`;
+        }
+      }
+      prevEnd = ev.end;
+
+      const animDelay = idx * 0.06;
+
+      html += `<div class="period-card ${isCurrent ? 'current' : isPast ? 'past' : ''}" style="animation-delay:${animDelay}s">
+        <div class="period-accent" style="background:${style.color}">${style.label}</div>
+        <div class="period-body">
+          <div class="period-label">Period ${ev.period}</div>
+          <div class="period-name">${ev.name}</div>
+          <div class="period-meta">
+            ${ev.loc ? `<span><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>Room ${ev.loc}</span>` : ''}
+            ${ev.teacher ? `<span><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>${ev.teacher}</span>` : ''}
+          </div>
+          ${isCurrent ? '<span class="now-pill"><span class="now-dot"></span>NOW</span>' : ''}
+        </div>
+        <div class="period-time">
+          <span class="start">${fmtTime(ev.start)}</span>
+          <span class="end">${fmtTime(ev.end)}</span>
+        </div>
+      </div>`;
+    });
+
+    html += `</div>`;
+  }
+
+  view.innerHTML = html;
+}
+
+// ────────────────────────────────────────────────
+// Live clock
+// ────────────────────────────────────────────────
+function updateClock() {
+  const now = new Date();
+  document.getElementById('live-clock').textContent = now.toLocaleTimeString('en-AU', {
+    hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false,
+    timeZone: 'Australia/Sydney'
+  });
+}
+
+// ────────────────────────────────────────────────
+// Init
+// ────────────────────────────────────────────────
+selectedDate = nowSydney();
+renderNav();
+renderDayView();
+setInterval(updateClock, 1000);
+updateClock();
+// Refresh current period highlighting every minute
+setInterval(() => { renderDayView(); }, 60000);
+</script>
+</body>
+</html>
