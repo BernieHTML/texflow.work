@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gander — TexFlow Negotiation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/gander/gander.css" />
+</head>
+<body>
+
+  <!-- Create room (no room id in URL) -->
+  <div id="setupGate" class="page" style="display: none">
+    <header>
+      <a href="/" class="logo">
+        <div class="logo-mark">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+            <circle cx="12" cy="12" r="3"/>
+          </svg>
+        </div>
+        <span class="logo-name">Gan<span>der</span></span>
+      </a>
+    </header>
+    <div class="room-title-block">
+      <div class="room-label">// texflow.work/gander</div>
+      <h1 class="room-title">Start a <em>negotiation room</em></h1>
+    </div>
+    <div class="product-card setup-card">
+      <div class="product-source">New room</div>
+      <label for="setupProductUrl">Product URL</label>
+      <input id="setupProductUrl" type="url" placeholder="https://example.com/product" autocomplete="off" />
+      <label for="setupTitle">Display title (optional)</label>
+      <input id="setupTitle" type="text" placeholder="Sony WH-1000XM5…" autocomplete="off" />
+      <label for="setupPrice">List price (optional)</label>
+      <input id="setupPrice" type="text" placeholder="499" autocomplete="off" />
+      <div class="error-toast" id="setupError"></div>
+      <button type="button" class="btn btn-primary" id="btnSetupCreate">Create room</button>
+      <p style="margin-top:16px;font-family:var(--mono);font-size:11px;color:var(--text-muted)">
+        External agents post to <code style="color:var(--blue-bright)">POST /api/room/:id/message</code>
+      </p>
+    </div>
+    <div class="status-bar">
+      <div class="status-text"><div class="status-dot"></div><span><a href="/" style="color:var(--text-dim)">← TexFlow home</a></span></div>
+      <div class="powered-by">a <span>TexFlow</span> product</div>
+    </div>
+  </div>
+
+  <div id="ganderApp" class="page" style="display: none">
+    <header>
+      <a href="/gander" class="logo">
+        <div class="logo-mark">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+            <circle cx="12" cy="12" r="3"/>
+          </svg>
+        </div>
+        <span class="logo-name">Gan<span>der</span></span>
+      </a>
+      <div class="header-meta">
+        <span class="room-id" id="roomIdLabel">ROOM</span>
+        <div class="live-badge" id="liveBadge">
+          <div class="live-dot"></div>
+          <span id="liveBadgeText">LIVE</span>
+        </div>
+      </div>
+    </header>
+
+    <div class="room-title-block">
+      <div class="room-label" id="roomPathLabel">// texflow.work/gander</div>
+      <h1 class="room-title">Gander <em>Room</em></h1>
+    </div>
+
+    <div class="product-card">
+      <div class="product-card-inner">
+        <div class="product-info">
+          <div class="product-source">Detected Product</div>
+          <div class="product-name" id="productName" contenteditable="true">Set product title…</div>
+          <a href="#" class="product-url" id="productUrl">https://…</a>
+        </div>
+        <div class="product-price-block">
+          <div class="price-label">List Price</div>
+          <div class="price-value" id="listPrice" contenteditable="true"><span class="price-currency">$</span><span id="listPriceDigits">—</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="agents-row">
+      <div class="agent-pill buyer">
+        <div class="agent-icon">B</div>
+        <div class="agent-details">
+          <div class="agent-role">Buyer Agent</div>
+          <div class="agent-name">Axiom-7</div>
+        </div>
+      </div>
+      <div class="vs-divider">VS</div>
+      <div class="agent-pill seller">
+        <div class="agent-details" style="text-align:right">
+          <div class="agent-role">Seller Agent</div>
+          <div class="agent-name">Meridian-3</div>
+        </div>
+        <div class="agent-icon">S</div>
+      </div>
+    </div>
+
+    <div class="error-toast" id="errorToast"></div>
+
+    <div class="log-container" id="logContainer">
+      <div class="scan-line"></div>
+      <div class="log-header">
+        <div class="log-header-left">
+          <div class="dot"></div>
+          Negotiation Log
+        </div>
+        <div class="log-step-counter" id="stepCounter">0 exchanges</div>
+      </div>
+      <div class="log-scroll" id="logScroll">
+        <div class="log-entry system" style="opacity:1">
+          <div class="entry-bubble">Awaiting negotiation start — register this room, then agents can post messages via the API.</div>
+        </div>
+      </div>
+      <div class="typing-indicator" id="typingIndicator">
+        <div class="typing-dots"><span></span><span></span><span></span></div>
+        <span id="typingLabel">Syncing…</span>
+      </div>
+    </div>
+
+    <div class="deal-result" id="dealResult">
+      <div class="deal-header">
+        <div class="deal-icon">✓</div>
+        <div>
+          <div class="deal-title">Deal Reached</div>
+          <div class="deal-subtitle">Both agents agreed on terms</div>
+        </div>
+      </div>
+      <div class="deal-terms" id="dealTerms"></div>
+    </div>
+
+    <div class="controls">
+      <button class="btn btn-primary" type="button" id="btnStart">Start / register room</button>
+      <button class="btn btn-secondary" type="button" id="btnStep" disabled>Pull latest</button>
+      <button class="btn btn-danger" type="button" id="btnReset">Reset view</button>
+    </div>
+
+    <div class="status-bar">
+      <div class="status-text" id="statusText">
+        <div class="status-dot"></div>
+        <span id="statusMsg">Idle — ready to start</span>
+      </div>
+      <div class="powered-by">a <span>TexFlow</span> product</div>
+    </div>
+  </div>
+
+<script>
+  const API_BASE = '';
+
+  let ROOM_ID = null;
+  let roomData = null;
+  let stepCount = 0;
+  let negotiating = false;
+  let dealReached = false;
+  let syncedLogCount = 0;
+  let pollTimer = null;
+  let productUrlState = '';
+
+  const logScroll = document.getElementById('logScroll');
+  const stepCounter = document.getElementById('stepCounter');
+  const typingIndicator = document.getElementById('typingIndicator');
+  const typingLabel = document.getElementById('typingLabel');
+  const dealResult = document.getElementById('dealResult');
+  const dealTerms = document.getElementById('dealTerms');
+  const btnStart = document.getElementById('btnStart');
+  const btnStep = document.getElementById('btnStep');
+  const statusText = document.getElementById('statusText');
+  const statusMsg = document.getElementById('statusMsg');
+  const errorToast = document.getElementById('errorToast');
+  const logContainer = document.getElementById('logContainer');
+  const liveBadge = document.getElementById('liveBadge');
+  const liveBadgeText = document.getElementById('liveBadgeText');
+  const setupGate = document.getElementById('setupGate');
+  const ganderApp = document.getElementById('ganderApp');
+
+  function parseRoomId() {
+    const p = location.pathname.replace(/\/$/, '') || '/';
+    const m = p.match(/^\/gander(?:\/([^/]+))?$/);
+    if (!m) return null;
+    return m[1] ? decodeURIComponent(m[1]) : null;
+  }
+
+  function shortRoomLabel(id) {
+    if (!id) return '';
+    return id.length > 14 ? id.slice(0, 8) + '…' : id;
+  }
+
+  async function apiPost(path, body = {}) {
+    const res = await fetch(`${API_BASE}${path}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(data.error || `HTTP ${res.status}`);
+    return data;
+  }
+
+  async function apiGet(path) {
+    const res = await fetch(`${API_BASE}${path}`);
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(data.error || `HTTP ${res.status}`);
+    return data;
+  }
+
+  function setStatus(msg, active = false) {
+    statusMsg.textContent = msg;
+    statusText.classList.toggle('active', active);
+  }
+
+  function showError(msg) {
+    errorToast.textContent = msg;
+    errorToast.classList.add('visible');
+    setTimeout(() => errorToast.classList.remove('visible'), 5000);
+  }
+
+  function showSetupError(msg) {
+    const el = document.getElementById('setupError');
+    if (!el) return showError(msg);
+    el.textContent = msg;
+    el.classList.add('visible');
+    setTimeout(() => el.classList.remove('visible'), 5000);
+  }
+
+  function showTyping(label = 'Syncing…') {
+    typingLabel.textContent = label;
+    typingIndicator.classList.add('visible');
+  }
+
+  function hideTyping() {
+    typingIndicator.classList.remove('visible');
+  }
+
+  function updateStepCounter() {
+    stepCounter.textContent = `${stepCount} exchange${stepCount !== 1 ? 's' : ''}`;
+  }
+
+  function scrollLog() {
+    logScroll.scrollTo({ top: logScroll.scrollHeight, behavior: 'smooth' });
+  }
+
+  function appendLogEntry(role, message, timestamp) {
+    const placeholder = logScroll.querySelector('.log-entry.system');
+    if (placeholder && placeholder.textContent.includes('Awaiting negotiation')) placeholder.remove();
+
+    const entry = document.createElement('div');
+    const cssRole =
+      role === 'system'
+        ? 'system'
+        : String(role).toLowerCase().includes('buyer')
+          ? 'buyer'
+          : String(role).toLowerCase().includes('seller')
+            ? 'seller'
+            : 'buyer';
+
+    entry.className = `log-entry ${cssRole}`;
+
+    const time = timestamp
+      ? new Date(timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })
+      : new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+
+    const meta =
+      cssRole !== 'system' ? `<div class="entry-meta">${escapeHtml(role)} · ${time}</div>` : '';
+
+    const formatted = escapeHtml(message).replace(
+      /\$[\d,]+(\.\d{2})?/g,
+      (m) => `<span class="amount">${m}</span>`
+    );
+
+    entry.innerHTML = `${meta}<div class="entry-bubble">${formatted}</div>`;
+    logScroll.appendChild(entry);
+
+    if (cssRole !== 'system') stepCount++;
+    updateStepCounter();
+    scrollLog();
+  }
+
+  function escapeHtml(s) {
+    const d = document.createElement('div');
+    d.textContent = s;
+    return d.innerHTML;
+  }
+
+  function renderFullLog(log) {
+    logScroll.innerHTML = '';
+    stepCount = 0;
+    syncedLogCount = 0;
+    if (!log || !log.length) {
+      logScroll.innerHTML =
+        '<div class="log-entry system" style="opacity:1"><div class="entry-bubble">No messages yet — waiting for agents or use Pull latest after posting.</div></div>';
+      updateStepCounter();
+      return;
+    }
+    log.forEach((e) => appendLogEntry(e.role, e.message, e.timestamp));
+    syncedLogCount = log.length;
+  }
+
+  function showDeal(terms) {
+    dealTerms.innerHTML = '';
+    Object.entries(terms).forEach(([label, value]) => {
+      const isPrice = label.toLowerCase().includes('price') || label.toLowerCase().includes('amount');
+      dealTerms.innerHTML += `
+        <div class="deal-term">
+          <div class="term-label">${escapeHtml(label)}</div>
+          <div class="term-value ${isPrice ? 'price' : ''}">${escapeHtml(String(value))}</div>
+        </div>`;
+    });
+    dealResult.classList.add('visible');
+    dealReached = true;
+    liveBadge.classList.add('done');
+    liveBadgeText.textContent = 'DONE';
+    logContainer.classList.remove('negotiating');
+    if (pollTimer) {
+      clearInterval(pollTimer);
+      pollTimer = null;
+    }
+  }
+
+  function applyRoomToChrome(data) {
+    roomData = data;
+    const p = data.product || {};
+    document.getElementById('productName').textContent = p.title || 'Product';
+    const url = p.url || '';
+    productUrlState = url;
+    const a = document.getElementById('productUrl');
+    a.href = url || '#';
+    a.textContent = url || '—';
+
+    const digits = document.getElementById('listPriceDigits');
+    if (p.price != null && p.price !== '') {
+      digits.textContent = String(p.price).replace(/^\$/, '');
+    } else {
+      digits.textContent = '—';
+    }
+
+    if (data.status === 'deal_reached' && data.deal) {
+      if (!dealReached) showDeal(data.deal);
+      btnStart.disabled = true;
+      btnStep.disabled = true;
+      setStatus('Deal finalised');
+    } else {
+      dealResult.classList.remove('visible');
+      dealTerms.innerHTML = '';
+      dealReached = false;
+      liveBadge.classList.remove('done');
+      liveBadgeText.textContent = 'LIVE';
+    }
+  }
+
+  function getProductUrlForApi() {
+    const href = document.getElementById('productUrl').getAttribute('href');
+    if (href && href !== '#') return href;
+    return (productUrlState || '').trim();
+  }
+
+  function parseListPrice() {
+    const digits = document.getElementById('listPriceDigits').textContent.trim();
+    if (!digits || digits === '—') return null;
+    const n = parseFloat(digits.replace(/,/g, ''));
+    return Number.isFinite(n) ? n : null;
+  }
+
+  async function pullLatest(opts = {}) {
+    if (!ROOM_ID || dealReached) return;
+    const silent = opts.silent;
+    if (!silent) showTyping('Fetching negotiation log…');
+    try {
+      const data = await apiGet(`/api/gander/room/${encodeURIComponent(ROOM_ID)}`);
+      hideTyping();
+      applyRoomToChrome(data);
+      const log = data.log || [];
+      for (let i = syncedLogCount; i < log.length; i++) {
+        appendLogEntry(log[i].role, log[i].message, log[i].timestamp);
+      }
+      syncedLogCount = log.length;
+      if (data.status === 'deal_reached' && data.deal) {
+        setStatus('Deal reached ✓');
+        btnStep.disabled = true;
+        negotiating = false;
+        logContainer.classList.remove('negotiating');
+      } else if (!silent) {
+        setStatus('Log synced', true);
+      }
+    } catch (e) {
+      hideTyping();
+      if (!silent) showError(e.message || 'Could not load room');
+    }
+  }
+
+  async function loadRoom() {
+    if (!ROOM_ID) return;
+    try {
+      const data = await apiGet(`/api/gander/room/${encodeURIComponent(ROOM_ID)}`);
+      applyRoomToChrome(data);
+      renderFullLog(data.log || []);
+      if (data.status === 'deal_reached') {
+        btnStart.disabled = true;
+        btnStep.disabled = true;
+      } else {
+        btnStep.disabled = false;
+      }
+    } catch {
+      /* room not created yet — UI stays editable */
+    }
+  }
+
+  async function startNegotiation() {
+    if (dealReached) return;
+    const pu = getProductUrlForApi();
+    if (!pu) {
+      showError('Set a product URL on the card (click the link text) or load from server.');
+      return;
+    }
+
+    btnStart.disabled = true;
+    negotiating = true;
+    logContainer.classList.add('negotiating');
+    setStatus('Registering room…', true);
+
+    try {
+      showTyping('Registering room on TexFlow…');
+      const title = document.getElementById('productName').textContent.trim();
+      const body = {
+        product_url: pu,
+        room_id: ROOM_ID,
+        product_title: title && title !== 'Set product title…' ? title : undefined,
+        list_price: parseListPrice(),
+      };
+      const data = await apiPost('/api/create-room', body);
+      hideTyping();
+      productUrlState = pu;
+      if (data.room_url) {
+        document.getElementById('roomPathLabel').textContent =
+          '// ' + (data.room_url.replace(/^https?:\/\//, '').split('/').slice(0, 2).join('/'));
+      }
+      renderFullLog(data.log || []);
+      if (!data.log || !data.log.length) {
+        appendLogEntry(
+          'system',
+          'Room registered. External agents can POST to /api/room/' + ROOM_ID + '/message',
+          null
+        );
+      }
+      if (data.status === 'deal_reached' && data.deal) {
+        showDeal(data.deal);
+        setStatus('Deal reached');
+        logContainer.classList.remove('negotiating');
+      } else {
+        btnStep.disabled = false;
+        setStatus('Room active — polling for new messages', true);
+        if (!pollTimer) {
+          pollTimer = setInterval(() => pullLatest({ silent: true }), 2500);
+        }
+      }
+    } catch (e) {
+      hideTyping();
+      showError(e.message || 'Failed to register room');
+      btnStart.disabled = false;
+      negotiating = false;
+      logContainer.classList.remove('negotiating');
+      setStatus('Error — fix fields and retry');
+    }
+  }
+
+  function resetRoom() {
+    negotiating = false;
+    dealReached = false;
+    stepCount = 0;
+    syncedLogCount = 0;
+    if (pollTimer) {
+      clearInterval(pollTimer);
+      pollTimer = null;
+    }
+
+    logScroll.innerHTML =
+      '<div class="log-entry system" style="opacity:1"><div class="entry-bubble">Awaiting negotiation start — register this room, then agents can post messages via the API.</div></div>';
+    updateStepCounter();
+    dealResult.classList.remove('visible');
+    dealTerms.innerHTML = '';
+    btnStart.disabled = false;
+    btnStep.disabled = true;
+    logContainer.classList.remove('negotiating');
+    errorToast.classList.remove('visible');
+    liveBadge.classList.remove('done');
+    liveBadgeText.textContent = 'LIVE';
+    setStatus('Idle — ready to start');
+  }
+
+  async function createRoomFromSetup() {
+    const product_url = document.getElementById('setupProductUrl').value.trim();
+    if (!product_url) {
+      showSetupError('Product URL is required');
+      return;
+    }
+    const product_title = document.getElementById('setupTitle').value.trim() || undefined;
+    const rawPrice = document.getElementById('setupPrice').value.trim();
+    const list_price = rawPrice ? parseFloat(rawPrice.replace(/[^0-9.]/g, '')) : undefined;
+    try {
+      const data = await apiPost('/api/create-room', {
+        product_url,
+        product_title,
+        list_price: Number.isFinite(list_price) ? list_price : undefined,
+      });
+      location.href = '/gander/' + encodeURIComponent(data.room_id);
+    } catch (e) {
+      showSetupError(e.message || 'Create failed');
+    }
+  }
+
+  function wireUi() {
+    document.getElementById('btnSetupCreate')?.addEventListener('click', createRoomFromSetup);
+    btnStart.addEventListener('click', startNegotiation);
+    btnStep.addEventListener('click', () => pullLatest({ silent: false }));
+    btnReset.addEventListener('click', resetRoom);
+  }
+
+  (function init() {
+    wireUi();
+    ROOM_ID = parseRoomId();
+    document.title = ROOM_ID
+      ? `Gander — ${shortRoomLabel(ROOM_ID)}`
+      : 'Gander — TexFlow Negotiation';
+
+    if (!ROOM_ID) {
+      setupGate.style.display = 'block';
+      ganderApp.style.display = 'none';
+      return;
+    }
+
+    setupGate.style.display = 'none';
+    ganderApp.style.display = 'block';
+    document.getElementById('roomIdLabel').textContent =
+      'ROOM #' + shortRoomLabel(ROOM_ID).toUpperCase();
+    document.getElementById('roomPathLabel').textContent =
+      '// texflow.work/gander/' + ROOM_ID;
+    loadRoom();
+  })();
+</script>
+</body>
+</html>

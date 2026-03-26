@@ -1,1172 +1,245 @@
-import 'dotenv/config';
 import express from 'express';
-import Stripe from 'stripe';
-import { existsSync } from 'fs';
-import { readFile, writeFile, readdir, mkdir } from 'fs/promises';
-import { join, dirname } from 'path';
+import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
-import { spawn } from 'child_process';
-import { v4 as uuidv4 } from 'uuid';
-import { transformShopifyProduct, fetchShopifyProducts, slugifyMerchant } from './scripts/texmkt-shopify.js';
-import { writeWellKnownTexmkt } from './scripts/texmkt-well-known.js';
+import { randomUUID } from 'crypto';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const app = express();
-const PORT = process.env.PORT || 5001;
-const AA_DIR = join(__dirname, 'aa');
-const DATA_DIR = join(__dirname, 'data');
-const EXPERTS_PATH = join(DATA_DIR, 'experts.json');
-const ORDERS_PATH = join(DATA_DIR, 'orders.json');
+const PORT = process.env.PORT || 5005;
 const BASE_URL = (process.env.BASE_URL || `http://localhost:${PORT}`).replace(/\/$/, '');
-const ACP_VERSION = '1.0';
 
-// ===== TEXMKT: constants =====
-const TEXMKT_MERCHANTS_PATH = join(DATA_DIR, 'texmkt-merchants.json');
-const TEXMKT_CREDITS_PATH = join(DATA_DIR, 'texmkt-credits.json');
-const TEXMKT_QUERY_LOG_PATH = join(DATA_DIR, 'texmkt-query-log.json');
-const TEXMKT_CATALOGS_DIR = join(__dirname, '.well-known', 'catalogs');
-const TEXMKT_QUERY_FEE = 0.10;
+const MESSAGE_TYPES = new Set(['offer', 'counter', 'accept', 'reject', 'message']);
+const ROOM_ID_RE = /^[a-zA-Z0-9_-]{1,128}$/;
 
-const AGENT_APPEAL_SCHEMA = {
-  id: 'string',
-  name: 'string',
-  type: 'software | service | api | dataset | tool',
-  category: ['string'],
-  provider: { name: 'string', website: 'url' },
-  summary: 'string',
-  problem_solved: ['string'],
-  capabilities: ['string'],
-  inputs_required: ['string'],
-  outputs_provided: ['string'],
-  pricing: { model: 'free | freemium | subscription | usage | one-time', free_tier: 'boolean', paid_tier: 'boolean' },
-  integration: { access: 'web | api | download', authentication: 'none | api_key | oauth', automation_friendly: 'boolean' },
-  constraints: ['string'],
-  action: { learn_more: 'url', purchase: 'url' },
-  metadata: { created_at: 'ISO-8601', updated_at: 'ISO-8601' }
-};
+/** @type {Record<string, { product_url: string, product_title: string | null, list_price: string | number | null, history: object[], status: string, created_at: number }>} */
+const rooms = {};
 
-app.use(express.urlencoded({ extended: true }));
-
-// Stripe webhook must receive raw body — register before express.json()
-app.post('/webhooks/stripe', express.raw({ type: 'application/json' }), async (req, res) => {
-  const sig = req.headers['stripe-signature'];
-  const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
-  const stripeKey = process.env.STRIPE_SECRET_KEY;
-  if (!webhookSecret || !stripeKey) return res.status(503).send();
-  const stripe = new Stripe(stripeKey);
-  let event;
-  try {
-    event = stripe.webhooks.constructEvent(req.body, sig, webhookSecret);
-  } catch (err) {
-    return res.status(400).send(`Webhook Error: ${err.message}`);
-  }
-  if (event.type === 'checkout.session.completed') {
-    const session = event.data.object;
-    const expertId = session.metadata?.expert_id;
-    if (expertId) {
-      const orders = await readOrders();
-      let order = orders.find(o => o.stripe_session_id === session.id);
-      const accessToken = order?.access_token || uuidv4();
-      if (!order) {
-        order = { order_id: uuidv4(), expert_id: expertId, stripe_session_id: session.id, access_token: accessToken, email: session.customer_email || session.customer_details?.email || '', paid_at: new Date().toISOString(), status: 'paid' };
-        orders.push(order);
-      } else {
-        order.status = 'paid';
-        order.paid_at = order.paid_at || new Date().toISOString();
-        if (!order.access_token) order.access_token = accessToken;
-      }
-      await writeOrders(orders);
-    }
-    // ===== TEXMKT: credit top-up webhook (self-contained) =====
-    if (session.metadata?.product === 'texmkt-credits') {
-      const agentId = session.metadata.agent_id;
-      const amountUsd = parseFloat(session.metadata.amount_usd) || 0;
-      if (agentId && amountUsd > 0) {
-        const credits = await texmktReadCredits();
-        const entry = credits[agentId] || { balance_usd: 0, total_topped_up: 0, total_spent: 0, created_at: new Date().toISOString(), last_active: new Date().toISOString() };
-        entry.balance_usd = +((entry.balance_usd || 0) + amountUsd).toFixed(2);
-        entry.total_topped_up = +((entry.total_topped_up || 0) + amountUsd).toFixed(2);
-        entry.last_active = new Date().toISOString();
-        credits[agentId] = entry;
-        await texmktWriteCredits(credits);
-      }
-    }
-  }
-  res.sendStatus(200);
-});
-
-app.use(express.json({ limit: '1mb' }));
-
-// Ensure aa directory exists
-await mkdir(AA_DIR, { recursive: true });
-
-// --- VyEx: ensure data dir and files; seed if empty ---
-await mkdir(DATA_DIR, { recursive: true });
-let expertsData = [];
-let ordersData = [];
-try {
-  const raw = await readFile(EXPERTS_PATH, 'utf8');
-  expertsData = JSON.parse(raw);
-} catch (e) {
-  if (e.code === 'ENOENT') await writeFile(EXPERTS_PATH, '[]', 'utf8');
-}
-try {
-  const raw = await readFile(ORDERS_PATH, 'utf8');
-  ordersData = JSON.parse(raw);
-} catch (e) {
-  if (e.code === 'ENOENT') await writeFile(ORDERS_PATH, '[]', 'utf8');
-}
-if (expertsData.length === 0) {
-  const seed = [
-    { id: 'xero-invoice-processing', name: 'Xero Invoice Processing Expert', category: 'Accounting', description: 'Base knowledge for processing and reconciling Xero invoices.', full_description: 'Structured knowledge for Xero invoice processing.', use_cases: ['Code invoices', 'Match to POs'], tags: ['xero', 'accounting'], author: 'texflow', price: 0, paid: false, preamble: 'You are assisting with Xero invoice processing. Match to POs when reference exists; use account from first line item.', status: 'public', created_at: new Date().toISOString() },
-    { id: 'linkedin-outreach', name: 'LinkedIn Outreach Expert', category: 'Sales', description: 'Templates and rules for LinkedIn outreach.', full_description: 'Curated knowledge for LinkedIn outreach.', use_cases: ['Connection requests', 'Follow-ups'], tags: ['linkedin', 'sales'], author: 'texflow', price: 0, paid: false, preamble: 'You are helping with LinkedIn outreach. Keep requests under 300 chars; use one concrete detail from profile.', status: 'public', created_at: new Date().toISOString() },
-    { id: 'figma-design-qa', name: 'Figma Design QA Expert', category: 'Design', description: 'Checklist for design QA in Figma.', full_description: 'Design QA workflows in Figma.', use_cases: ['Spacing', 'Typography'], tags: ['figma', 'design'], author: 'texflow', price: 0, paid: false, preamble: 'You are assisting with Figma design QA. Use 4px/8px grid; flag contrast and touch targets.', status: 'public', created_at: new Date().toISOString() },
-    { id: 'competitor-research', name: 'Competitor Research Expert', category: 'Research', description: 'Structure for competitor research.', full_description: 'Competitive overview and SWOT.', use_cases: ['Overview table', 'SWOT'], tags: ['research', 'competitors'], author: 'texflow', price: 0, paid: false, preamble: 'You are helping with competitor research. Cite sources; do not invent pricing or features.', status: 'public', created_at: new Date().toISOString() },
-    { id: 'morning-productivity-routine', name: 'Morning Productivity Routine Expert', category: 'Productivity', description: 'Morning routine and prioritization.', full_description: 'Triage and time-blocking.', use_cases: ['Top 3', 'Time-block'], tags: ['productivity', 'morning'], author: 'texflow', price: 0, paid: false, preamble: 'You are supporting a morning productivity routine. Triage, top 3, time-block.', status: 'public', created_at: new Date().toISOString() },
-    { id: 'pet-medication-expert', name: 'Pet Medication Expert', category: 'Custom', description: 'Dosing and safety guidance for common pet medications.', full_description: 'Structured knowledge for pet medication dosing, interactions, and safety. Not a substitute for veterinary advice.', use_cases: ['Dosing', 'Interactions', 'Safety'], tags: ['pet', 'medication', 'veterinary'], author: 'texflow', price: 4.99, paid: true, preamble: 'You are assisting with pet medication guidance. Always recommend consulting a vet for dosing changes. Do not prescribe; provide general information only.', status: 'public', created_at: new Date().toISOString() }
-  ];
-  await writeFile(EXPERTS_PATH, JSON.stringify(seed, null, 2), 'utf8');
-  expertsData = seed;
-}
-await writeWellKnownVyex();
-
-// ===== TEXMKT: ensure data files and catalogs dir =====
-await mkdir(TEXMKT_CATALOGS_DIR, { recursive: true });
-try { await readFile(TEXMKT_MERCHANTS_PATH, 'utf8'); } catch (e) { if (e.code === 'ENOENT') await writeFile(TEXMKT_MERCHANTS_PATH, '[]', 'utf8'); }
-try { await readFile(TEXMKT_CREDITS_PATH, 'utf8'); } catch (e) { if (e.code === 'ENOENT') await writeFile(TEXMKT_CREDITS_PATH, '{}', 'utf8'); }
-try { await readFile(TEXMKT_QUERY_LOG_PATH, 'utf8'); } catch (e) { if (e.code === 'ENOENT') await writeFile(TEXMKT_QUERY_LOG_PATH, '[]', 'utf8'); }
-await writeWellKnownTexmkt();
-
-async function readExperts() {
-  const raw = await readFile(EXPERTS_PATH, 'utf8');
-  return JSON.parse(raw);
-}
-async function writeExperts(experts) {
-  await writeFile(EXPERTS_PATH, JSON.stringify(experts, null, 2), 'utf8');
-}
-async function readOrders() {
-  const raw = await readFile(ORDERS_PATH, 'utf8');
-  return JSON.parse(raw);
-}
-async function writeOrders(orders) {
-  await writeFile(ORDERS_PATH, JSON.stringify(orders, null, 2), 'utf8');
-}
-function getExpertById(experts, id) {
-  return experts.find(e => e.id === id) || null;
-}
-function slugify(name) {
-  return name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || uuidv4().slice(0, 8);
-}
-
-const WELL_KNOWN_DIR = join(__dirname, '.well-known');
-const VYEX_WELL_KNOWN_PATH = join(WELL_KNOWN_DIR, 'vyex.json');
-
-async function writeWellKnownVyex() {
-  try {
-    await mkdir(WELL_KNOWN_DIR, { recursive: true });
-    const experts = await readExperts();
-    const publicExperts = experts.filter(e => e.status === 'public');
-    const catalog = publicExperts.map(e => ({
-      id: e.id,
-      name: e.name,
-      category: e.category,
-      description: e.description || '',
-      author: e.author || '',
-      tags: Array.isArray(e.tags) ? e.tags : [],
-      price: e.price ?? 0,
-      paid: !!e.paid,
-      preamble_url: `${BASE_URL}/vyex/expert/${e.id}/preamble`,
-      checkout_url: `${BASE_URL}/vyex/expert/${e.id}/checkout`
-    }));
-    const body = JSON.stringify({
-      capability: { protocol: 'ACP', auth: 'bearer_token', auth_flow: 'stripe_checkout' },
-      experts: catalog,
-      updated_at: new Date().toISOString().slice(0, 10)
-    }, null, 2);
-    await writeFile(VYEX_WELL_KNOWN_PATH, body, 'utf8');
-  } catch (e) {
-    console.error('[VyEx] Failed to write .well-known/vyex.json:', e.message);
-  }
-}
-
-const VYEX_PUBLIC = join(__dirname, 'public', 'vyex');
-
-// Appended to every preamble response; clearly not part of the expert knowledge. Agents should use only the content above the delimiter.
-const VYEX_PREAMBLE_INSTRUCTIONS = `
-
----
-VYEX — INSTRUCTIONS FOR AGENTS (do not include in expert knowledge base)
-Use only the text above this line as the expert's preamble when adding to Vy.
-
-To add this expert to the user's Vy account:
-1. Copy the preamble content above (do not include this instruction block).
-2. Open Vy and go to Experts.
-3. Click Create.
-4. Fill out the expert name and fields based on the preamble content.
-5. Paste the copied preamble into the Knowledge base field.
-6. Click Create expert.
-`;
-
-// Log requests to TexMKT .well-known
+const app = express();
 app.use((req, res, next) => {
-  if (req.path.startsWith('/texmkt/.well-known/')) {
-    console.log(`[.well-known] ${req.method} ${req.path} | User-Agent: ${req.get('User-Agent') || 'none'}`);
-  }
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  if (req.method === 'OPTIONS') return res.sendStatus(204);
   next();
 });
+app.use(express.json({ limit: '512kb' }));
 
-// --- TexFlow brand homepage ---
-app.get('/', (req, res) => res.sendFile(join(__dirname, 'public', 'index.html')));
+const ganderDir = join(__dirname, 'public', 'gander');
+const ganderIndex = join(ganderDir, 'index.html');
 
-// --- TexMKT product: pages (before static so they take precedence) ---
-app.get('/texmkt/', (req, res) => res.sendFile(join(__dirname, 'public', 'texmkt', 'index.html')));
-app.get('/texmkt', (req, res) => res.redirect(301, '/texmkt/'));
-app.get('/texmkt/generate', (req, res) => res.sendFile(join(__dirname, 'public', 'texmkt', 'generate.html')));
-app.get('/texmkt/upload', (req, res) => res.sendFile(join(__dirname, 'public', 'texmkt', 'upload.html')));
-
-// --- Legacy redirects (before static so they take precedence) ---
-app.get('/generate', (req, res) => res.redirect(301, '/texmkt/generate'));
-app.get('/upload', (req, res) => res.redirect(301, '/texmkt/upload'));
-app.get('/aa/:id', (req, res) => res.redirect(301, `/texmkt/aa/${req.params.id}`));
-
-// --- Root .well-known (discovery + product catalog; Platform66 uploads feed this) ---
-app.get('/.well-known/ai.json', (req, res) => {
-  res.setHeader('Content-Type', 'application/json');
-  res.sendFile(join(__dirname, '.well-known', 'ai.json'));
-});
-app.get('/.well-known/vyex.md', (req, res) => {
-  res.setHeader('Content-Type', 'text/markdown; charset=utf-8');
-  res.sendFile(join(__dirname, '.well-known', 'vyex.md'));
-});
-app.get('/.well-known/ai-plugin.json', (req, res) => {
-  res.setHeader('Content-Type', 'application/json');
-  res.sendFile(join(__dirname, '.well-known', 'ai-plugin.json'));
-});
-app.get('/.well-known/texmkt-openapi.json', (req, res) => {
-  res.setHeader('Content-Type', 'application/json');
-  res.sendFile(join(__dirname, '.well-known', 'texmkt-openapi.json'));
-});
-app.get('/.well-known/agent-catalog.json', async (req, res) => {
-  try {
-    const files = await readdir(AA_DIR);
-    const jsonFiles = files.filter(f => f.endsWith('.json') && f !== '.gitkeep');
-    const agent_appeals = [];
-    for (const f of jsonFiles) {
-      try {
-        const raw = await readFile(join(AA_DIR, f), 'utf8');
-        const aa = JSON.parse(raw);
-        agent_appeals.push(aa);
-      } catch (_) { /* skip invalid */ }
-    }
-    const updated_at = agent_appeals.length
-      ? (await Promise.all(jsonFiles.map(f => readFile(join(AA_DIR, f), 'utf8').then(JSON.parse).then(a => a.metadata?.updated_at)))).filter(Boolean).sort().pop() || new Date().toISOString()
-      : new Date().toISOString();
-    res.setHeader('Content-Type', 'application/json');
-    res.send(JSON.stringify({
-      updated_at: updated_at.slice(0, 10),
-      count: agent_appeals.length,
-      agent_appeals
-    }, null, 2));
-  } catch (e) {
-    res.status(500).json({ error: e.message });
-  }
+app.use('/gander', express.static(ganderDir, { index: false }));
+app.get(['/gander', '/gander/'], (_, res) => res.sendFile(ganderIndex));
+app.get('/gander/:roomId', (req, res, next) => {
+  if (req.params.roomId.includes('.')) return next();
+  res.sendFile(ganderIndex);
 });
 
-// --- TexMKT .well-known (before static) ---
-app.get('/texmkt/.well-known/ai.json', (req, res) => {
-  res.setHeader('Content-Type', 'application/json');
-  res.sendFile(join(__dirname, 'public', 'texmkt', '.well-known', 'ai.json'));
-});
-app.get('/texmkt/.well-known/agent-catalog.json', async (req, res) => {
-  try {
-    const files = await readdir(AA_DIR);
-    const jsonFiles = files.filter(f => f.endsWith('.json') && f !== '.gitkeep');
-    const agent_appeals = [];
-    for (const f of jsonFiles) {
-      try {
-        const raw = await readFile(join(AA_DIR, f), 'utf8');
-        const aa = JSON.parse(raw);
-        agent_appeals.push({
-          id: aa.id,
-          name: aa.name,
-          category: aa.category || [],
-          action: { learn_more: aa.action?.learn_more || '' }
-        });
-      } catch (_) { /* skip invalid */ }
-    }
-    const updated_at = agent_appeals.length
-      ? (await Promise.all(jsonFiles.map(f => readFile(join(AA_DIR, f), 'utf8').then(JSON.parse).then(a => a.metadata?.updated_at)))).filter(Boolean).sort().pop() || new Date().toISOString()
-      : new Date().toISOString();
-    res.setHeader('Content-Type', 'application/json');
-    res.send(JSON.stringify({
-      updated_at: updated_at.slice(0, 10),
-      count: agent_appeals.length,
-      agent_appeals
-    }, null, 2));
-  } catch (e) {
-    res.status(500).json({ error: e.message });
-  }
-});
-
-// --- Platform66 .well-known (before SPA so routes take precedence) ---
-app.get('/platform66/.well-known/ai.json', (req, res) => {
-  res.setHeader('Content-Type', 'application/json');
-  res.sendFile(join(__dirname, 'public', 'platform66', '.well-known', 'ai.json'));
-});
-app.get('/platform66/.well-known/agent-catalog.json', async (req, res) => {
-  try {
-    const files = await readdir(AA_DIR);
-    const jsonFiles = files.filter(f => f.endsWith('.json') && f !== '.gitkeep');
-    const agent_appeals = [];
-    for (const f of jsonFiles) {
-      try {
-        const raw = await readFile(join(AA_DIR, f), 'utf8');
-        const aa = JSON.parse(raw);
-        agent_appeals.push(aa);
-      } catch (_) { /* skip invalid */ }
-    }
-    const updated_at = agent_appeals.length
-      ? (await Promise.all(jsonFiles.map(f => readFile(join(AA_DIR, f), 'utf8').then(JSON.parse).then(a => a.metadata?.updated_at)))).filter(Boolean).sort().pop() || new Date().toISOString()
-      : new Date().toISOString();
-    res.setHeader('Content-Type', 'application/json');
-    res.send(JSON.stringify({
-      updated_at: updated_at.slice(0, 10),
-      count: agent_appeals.length,
-      agent_appeals
-    }, null, 2));
-  } catch (e) {
-    res.status(500).json({ error: e.message });
-  }
-});
-
-// --- VyEx: .well-known catalog (ACP); serve live file from .well-known/vyex.json ---
-app.get('/.well-known/vyex.json', async (req, res) => {
-  try {
-    res.setHeader('ACP-Version', ACP_VERSION);
-    if (existsSync(VYEX_WELL_KNOWN_PATH)) {
-      res.setHeader('Content-Type', 'application/json');
-      return res.sendFile(VYEX_WELL_KNOWN_PATH);
-    }
-    await writeWellKnownVyex();
-    if (existsSync(VYEX_WELL_KNOWN_PATH)) {
-      res.setHeader('Content-Type', 'application/json');
-      return res.sendFile(VYEX_WELL_KNOWN_PATH);
-    }
-    const experts = await readExperts();
-    const publicExperts = experts.filter(e => e.status === 'public');
-    const catalog = publicExperts.map(e => ({
-      id: e.id,
-      name: e.name,
-      category: e.category,
-      description: e.description || '',
-      author: e.author || '',
-      tags: Array.isArray(e.tags) ? e.tags : [],
-      price: e.price ?? 0,
-      paid: !!e.paid,
-      preamble_url: `${BASE_URL}/vyex/expert/${e.id}/preamble`,
-      checkout_url: `${BASE_URL}/vyex/expert/${e.id}/checkout`
-    }));
-    res.setHeader('Content-Type', 'application/json');
-    res.send(JSON.stringify({
-      capability: { protocol: 'ACP', auth: 'bearer_token', auth_flow: 'stripe_checkout' },
-      experts: catalog,
-      updated_at: new Date().toISOString().slice(0, 10)
-    }, null, 2));
-  } catch (e) {
-    res.status(500).json({ error: e.message });
-  }
-});
-
-// --- VyEx: pages (before static) ---
-app.get('/vyex', (req, res) => res.sendFile(join(VYEX_PUBLIC, 'index.html')));
-app.get('/vyex/', (req, res) => res.sendFile(join(VYEX_PUBLIC, 'index.html')));
-app.get('/vyex/agent', (req, res) => res.sendFile(join(VYEX_PUBLIC, 'agent.html')));
-app.get('/vyex/create', (req, res) => res.sendFile(join(VYEX_PUBLIC, 'create.html')));
-app.get('/vyex/expert/:id', (req, res) => res.sendFile(join(VYEX_PUBLIC, 'expert.html')));
-app.get('/vyex/expert/:id/checkout', (req, res) => res.sendFile(join(VYEX_PUBLIC, 'checkout.html')));
-app.get('/vyex/expert/:id/success', (req, res) => res.sendFile(join(VYEX_PUBLIC, 'success.html')));
-
-// --- VyEx: preamble (ACP; 402 for paid without token) ---
-app.get('/vyex/expert/:id/preamble', async (req, res) => {
-  res.setHeader('ACP-Version', ACP_VERSION);
-  const { id } = req.params;
-  const experts = await readExperts();
-  const expert = getExpertById(experts, id);
-  if (!expert) return res.status(404).json({ error: 'Not found' });
-  if (!expert.paid) {
-    res.setHeader('Content-Type', 'text/plain; charset=utf-8');
-    return res.send((expert.preamble || '') + VYEX_PREAMBLE_INSTRUCTIONS);
-  }
-  const token = req.query.access_token || req.get('Authorization')?.replace(/^Bearer\s+/i, '');
-  if (!token) {
-    return res.status(402).json({
-      error: 'payment_required',
-      checkout_url: `${BASE_URL}/vyex/expert/${id}/checkout`
-    });
-  }
-  const orders = await readOrders();
-  const order = orders.find(o => o.expert_id === id && o.access_token === token && o.status === 'paid');
-  if (!order) {
-    return res.status(402).json({
-      error: 'payment_required',
-      checkout_url: `${BASE_URL}/vyex/expert/${id}/checkout`
-    });
-  }
-  res.setHeader('Content-Type', 'text/plain; charset=utf-8');
-  res.send((expert.preamble || '') + VYEX_PREAMBLE_INSTRUCTIONS);
-});
-
-// --- VyEx: create Stripe Checkout Session (used by checkout page) ---
-app.post('/vyex/api/expert/:id/checkout-session', async (req, res) => {
-  const { id } = req.params;
-  const experts = await readExperts();
-  const expert = getExpertById(experts, id);
-  if (!expert || !expert.paid || expert.status !== 'public') return res.status(404).json({ error: 'Not found' });
-  const stripeKey = process.env.STRIPE_SECRET_KEY;
-  if (!stripeKey) return res.status(503).json({ error: 'Stripe not configured' });
-  const stripe = new Stripe(stripeKey);
-  const priceCents = Math.round((expert.price || 0) * 100);
-  if (priceCents < 499) return res.status(400).json({ error: 'Invalid price' });
-  const session = await stripe.checkout.sessions.create({
-    mode: 'payment',
-    payment_method_types: ['card'],
-    line_items: [{ price_data: { currency: 'usd', unit_amount: priceCents, product_data: { name: expert.name, description: expert.description || '' } }, quantity: 1 }],
-    success_url: `${BASE_URL}/vyex/expert/${id}/success?session_id={CHECKOUT_SESSION_ID}`,
-    cancel_url: `${BASE_URL}/vyex/expert/${id}/checkout`,
-    metadata: { expert_id: id }
-  });
-  res.json({ url: session.url });
-});
-
-// --- VyEx: complete session (success page calls this to get token) ---
-app.get('/vyex/api/expert/:id/complete-session', async (req, res) => {
-  const { id } = req.params;
-  const sessionId = req.query.session_id;
-  if (!sessionId) return res.status(400).json({ error: 'Missing session_id' });
-  const stripeKey = process.env.STRIPE_SECRET_KEY;
-  if (!stripeKey) return res.status(503).json({ error: 'Stripe not configured' });
-  const stripe = new Stripe(stripeKey);
-  let session;
-  try {
-    session = await stripe.checkout.sessions.retrieve(sessionId);
-  } catch (_) {
-    return res.status(400).json({ error: 'Invalid session' });
-  }
-  if (session.metadata?.expert_id !== id) return res.status(400).json({ error: 'Session mismatch' });
-  const experts = await readExperts();
-  const expert = getExpertById(experts, id);
-  if (!expert) return res.status(404).json({ error: 'Not found' });
-  let orders = await readOrders();
-  let order = orders.find(o => o.stripe_session_id === sessionId);
-  const accessToken = order?.access_token || uuidv4();
-  if (!order) {
-    order = { order_id: uuidv4(), expert_id: id, stripe_session_id: sessionId, access_token: accessToken, email: session.customer_email || session.customer_details?.email || '', paid_at: new Date().toISOString(), status: 'paid' };
-    orders.push(order);
-    await writeOrders(orders);
-  } else if (!order.access_token) {
-    order.access_token = accessToken;
-    await writeOrders(orders);
-  }
-  res.json({ access_token: order.access_token, expert_id: id });
-});
-
-// --- VyEx: catalog API (same as .well-known; use this if Nginx serves .well-known from disk) ---
-app.get('/vyex/api/catalog', async (req, res) => {
-  try {
-    const experts = await readExperts();
-    const publicExperts = experts.filter(e => e.status === 'public');
-    const catalog = publicExperts.map(e => ({
-      id: e.id,
-      name: e.name,
-      category: e.category,
-      description: e.description || '',
-      author: e.author || '',
-      tags: Array.isArray(e.tags) ? e.tags : [],
-      price: e.price ?? 0,
-      paid: !!e.paid,
-      preamble_url: `${BASE_URL}/vyex/expert/${e.id}/preamble`,
-      checkout_url: `${BASE_URL}/vyex/expert/${e.id}/checkout`
-    }));
-    res.setHeader('Content-Type', 'application/json');
-    res.setHeader('ACP-Version', ACP_VERSION);
-    res.send(JSON.stringify({
-      capability: { protocol: 'ACP', auth: 'bearer_token', auth_flow: 'stripe_checkout' },
-      experts: catalog,
-      updated_at: new Date().toISOString().slice(0, 10)
-    }, null, 2));
-  } catch (e) {
-    res.status(500).json({ error: e.message });
-  }
-});
-
-// --- VyEx: API ---
-app.post('/vyex/api/experts', async (req, res) => {
-  const body = req.body || {};
-  const name = (body.name || '').trim();
-  if (!name) return res.status(400).json({ error: 'Expert name required' });
-  const experts = await readExperts();
-  const id = body.id && /^[a-z0-9-]{1,64}$/.test(body.id) ? body.id : slugify(name);
-  if (experts.some(e => e.id === id)) return res.status(409).json({ error: 'Expert id already exists' });
-  const category = (body.category || 'Custom').trim();
-  const paid = !!body.paid;
-  const price = paid ? Math.max(4.99, parseFloat(body.price) || 4.99) : 0;
-  const expert = {
-    id,
-    name,
-    category,
-    description: (body.description || '').slice(0, 160),
-    full_description: body.full_description || '',
-    use_cases: Array.isArray(body.use_cases) ? body.use_cases : (typeof body.use_cases === 'string' ? body.use_cases.split('\n').map(s => s.trim()).filter(Boolean) : []),
-    tags: Array.isArray(body.tags) ? body.tags : (typeof body.tags === 'string' ? body.tags.split(',').map(s => s.trim()).filter(Boolean) : []),
-    author: (body.author || '').trim() || 'anonymous',
-    price,
-    paid,
-    preamble: body.preamble || '',
-    status: 'public',
-    created_at: new Date().toISOString()
-  };
-  experts.push(expert);
-  await writeExperts(experts);
-  await writeWellKnownVyex();
-  res.status(201).json({ id, url: `/vyex/expert/${id}` });
-});
-
-app.get('/vyex/api/experts', async (req, res) => {
-  const experts = await readExperts();
-  const publicOnly = experts.filter(e => e.status === 'public');
-  res.json(publicOnly.map(e => ({ id: e.id, name: e.name, category: e.category, description: e.description, author: e.author, tags: e.tags, price: e.price, paid: e.paid })));
-});
-
-app.get('/vyex/api/experts/:id', async (req, res) => {
-  const experts = await readExperts();
-  const expert = getExpertById(experts, req.params.id);
-  if (!expert) return res.status(404).json({ error: 'Not found' });
-  const { preamble, ...rest } = expert;
-  res.json(rest);
-});
-
-// --- Platform66 product (SPA; serve built dist when present) ---
-const PLATFORM66_DIST = join(__dirname, 'Platform66', 'dist');
-if (existsSync(PLATFORM66_DIST)) {
-  app.use('/platform66', express.static(PLATFORM66_DIST));
-  app.get(/^\/platform66\/.+/, (req, res) => res.sendFile(join(PLATFORM66_DIST, 'index.html')));
-  app.get('/platform66', (req, res) => res.redirect(301, '/platform66/'));
-}
-
-// --- Static: public, then root assets ---
 app.use(express.static(join(__dirname, 'public')));
-app.get('/texflowlogo.png', (req, res) => res.sendFile(join(__dirname, 'texflowlogo.png')));
-app.get('/Platform66.png', (req, res) => res.sendFile(join(__dirname, 'Platform66.png')));
 
-// --- API: Generate draft Agent Appeal (streaming: crawl4ai + Gemini) ---
-const PYTHON_SCRIPT = join(__dirname, 'scripts', 'generate_aa.py');
-const PYTHON_VENV = process.platform === 'win32'
-  ? join(__dirname, 'scripts', '.venv', 'Scripts', 'python.exe')
-  : join(__dirname, 'scripts', '.venv', 'bin', 'python3');
-function getPythonPath() {
-  return existsSync(PYTHON_VENV) ? PYTHON_VENV : 'python3';
-}
-
-function sendSSE(res, event, data) {
-  const payload = typeof data === 'string' ? data : JSON.stringify(data);
-  res.write(`event: ${event}\ndata: ${payload.replace(/\n/g, '\ndata: ')}\n\n`);
-}
-
-app.post('/texmkt/api/generate-draft', (req, res) => {
-  const { url } = req.body || {};
-  if (!url || typeof url !== 'string') {
-    return res.status(400).json({ error: 'Missing or invalid url' });
-  }
-  let parsed;
+function productTitleFromUrl(url) {
   try {
-    parsed = new URL(url);
+    const u = new URL(url);
+    const path = u.pathname.replace(/\/$/, '') || '/';
+    return `${u.hostname}${path}`;
   } catch {
-    return res.status(400).json({ error: 'Invalid URL' });
+    return url.slice(0, 80);
   }
-  if (!['http:', 'https:'].includes(parsed.protocol)) {
-    return res.status(400).json({ error: 'URL must be http or https' });
+}
+
+function historyItemToGanderLog(h) {
+  const agent = (h.agent || 'agent').toLowerCase();
+  let role = h.agent || 'Agent';
+  if (agent.includes('seller')) role = 'Meridian-3 (Seller)';
+  else if (agent.includes('buyer')) role = 'Axiom-7 (Buyer)';
+
+  let message = '';
+  switch (h.type) {
+    case 'offer':
+      message =
+        h.message ||
+        (h.price != null
+          ? `Offer: $${h.price}${h.shipping != null ? ` · shipping: ${h.shipping}` : ''}`
+          : 'Offer');
+      break;
+    case 'counter':
+      message =
+        h.message ||
+        (h.price != null
+          ? `Counter: $${h.price}${h.shipping != null ? ` · shipping: ${h.shipping}` : ''}`
+          : 'Counter-offer');
+      break;
+    case 'accept':
+      message = h.message || 'Accepting terms.';
+      break;
+    case 'reject':
+      message = h.message || 'Rejecting offer.';
+      break;
+    case 'message':
+    default:
+      message = h.message || String(h.type || '');
   }
+  return { role, message, timestamp: h.timestamp };
+}
 
-  const apiKey = process.env.GOOGLE_AI_API_KEY || process.env.GEMINI_API_KEY;
-  if (!apiKey) {
-    return res.status(503).json({ error: 'GOOGLE_AI_API_KEY not configured' });
-  }
-
-  res.setHeader('Content-Type', 'text/event-stream');
-  res.setHeader('Cache-Control', 'no-cache');
-  res.setHeader('Connection', 'keep-alive');
-  res.setHeader('X-Accel-Buffering', 'no');
-  res.flushHeaders && res.flushHeaders();
-
-  const py = spawn(getPythonPath(), [PYTHON_SCRIPT, url], {
-    env: { ...process.env, GOOGLE_AI_API_KEY: apiKey, GEMINI_API_KEY: apiKey },
-    stdio: ['ignore', 'pipe', 'pipe']
-  });
-
-  let buffer = '';
-  const onData = (chunk) => {
-    buffer += chunk.toString();
-    const lines = buffer.split('\n');
-    buffer = lines.pop() || '';
-    for (const line of lines) {
-      const t = line.trim();
-      if (!t) continue;
-      if (t.startsWith('STATUS:')) {
-        sendSSE(res, 'status', t.slice(7).trim());
-      } else if (t.startsWith('RESULT:')) {
-        try {
-          const json = JSON.parse(t.slice(7));
-          sendSSE(res, 'result', json);
-        } catch (_) {
-          sendSSE(res, 'error', 'Invalid result JSON');
-        }
-        cleanup();
-        res.end();
-        return;
-      } else if (t.startsWith('ERROR:')) {
-        sendSSE(res, 'error', t.slice(6).trim());
-        cleanup();
-        res.end();
-        return;
+function buildDealTerms(history) {
+  let price;
+  let shipping;
+  for (let i = history.length - 1; i >= 0; i--) {
+    const h = history[i];
+    if (h.type !== 'accept') continue;
+    for (let j = i; j >= 0; j--) {
+      const o = history[j];
+      if ((o.type === 'offer' || o.type === 'counter') && o.price != null) {
+        price = o.price;
+        shipping = o.shipping;
+        break;
       }
     }
+    break;
+  }
+  const terms = {};
+  if (price != null) terms['Agreed price'] = `$${price}`;
+  if (shipping != null && shipping !== '') terms['Shipping'] = String(shipping);
+  terms['Outcome'] = 'Accepted';
+  return terms;
+}
+
+function toGanderRoom(roomId) {
+  const r = rooms[roomId];
+  if (!r) return null;
+  const log = r.history.map(historyItemToGanderLog);
+  const status = r.status === 'complete' ? 'deal_reached' : 'active';
+  const deal = r.status === 'complete' ? buildDealTerms(r.history) : null;
+  return {
+    room_id: roomId,
+    product: {
+      title: r.product_title || productTitleFromUrl(r.product_url),
+      url: r.product_url,
+      price: r.list_price,
+    },
+    log,
+    status,
+    deal,
+  };
+}
+
+function roomPayload(roomId) {
+  const r = rooms[roomId];
+  if (!r) return null;
+  return {
+    room_id: roomId,
+    product_url: r.product_url,
+    status: r.status,
+    history: r.history,
+  };
+}
+
+app.post('/api/create-room', (req, res) => {
+  const body = req.body || {};
+  const product_url = body.product_url;
+  if (!product_url || typeof product_url !== 'string') {
+    return res.status(400).json({ error: 'product_url required (string)' });
+  }
+
+  let room_id = body.room_id;
+  if (room_id != null) {
+    if (typeof room_id !== 'string' || !ROOM_ID_RE.test(room_id)) {
+      return res.status(400).json({ error: 'invalid room_id' });
+    }
+  } else {
+    room_id = randomUUID();
+  }
+
+  const trimmedUrl = product_url.trim();
+  const product_title =
+    typeof body.product_title === 'string' && body.product_title.trim()
+      ? body.product_title.trim()
+      : null;
+  const list_price =
+    body.list_price != null && body.list_price !== ''
+      ? body.list_price
+      : null;
+
+  if (rooms[room_id]) {
+    const existing = rooms[room_id];
+    if (existing.product_url !== trimmedUrl) {
+      return res.status(409).json({ error: 'room_id already in use' });
+    }
+    const g = toGanderRoom(room_id);
+    return res.json({
+      room_id,
+      room_url: `${BASE_URL}/gander/${room_id}`,
+      log: g.log,
+      status: g.status,
+      deal: g.deal,
+    });
+  }
+
+  rooms[room_id] = {
+    product_url: trimmedUrl,
+    product_title,
+    list_price,
+    history: [],
+    status: 'active',
+    created_at: Date.now(),
   };
 
-  const cleanup = () => {
-    py.stdout?.removeListener('data', onData);
-    py.stderr?.removeListener('data', onStderr);
-    py.removeAllListeners();
-    try { py.kill(); } catch (_) {}
-  };
-
-  const onStderr = (chunk) => {
-    const msg = chunk.toString().trim();
-    if (msg) sendSSE(res, 'status', `[log] ${msg}`);
-  };
-
-  py.stdout.on('data', onData);
-  py.stderr.on('data', onStderr);
-  py.on('error', (err) => {
-    sendSSE(res, 'error', err.message || 'Python process failed');
-    cleanup();
-    res.end();
+  const g = toGanderRoom(room_id);
+  res.json({
+    room_id,
+    room_url: `${BASE_URL}/gander/${room_id}`,
+    log: g.log,
+    status: g.status,
+    deal: g.deal,
   });
-  py.on('close', (code, signal) => {
-    if (code !== 0 && code !== null && !res.writableEnded) {
-      sendSSE(res, 'error', `Process exited with code ${code}`);
-      res.end();
-    }
-    cleanup();
-  });
-
-  py.stdout.on('end', () => {
-    if (buffer.trim()) {
-      const t = buffer.trim();
-      if (t.startsWith('RESULT:')) {
-        try {
-          sendSSE(res, 'result', JSON.parse(t.slice(7)));
-        } catch (_) {
-          sendSSE(res, 'error', 'Invalid result JSON');
-        }
-      } else if (t.startsWith('ERROR:')) {
-        sendSSE(res, 'error', t.slice(6).trim());
-      }
-    }
-    if (!res.writableEnded) res.end();
-  });
 });
 
-// --- API: Upload / publish Agent Appeal ---
-function validateAA(obj) {
-  if (!obj || typeof obj !== 'object') return 'Invalid: not an object';
-  const required = ['name', 'type', 'provider', 'summary', 'action'];
-  for (const k of required) {
-    if (obj[k] === undefined) return `Missing required field: ${k}`;
+app.get('/api/gander/room/:roomId', (req, res) => {
+  const g = toGanderRoom(req.params.roomId);
+  if (!g) return res.status(404).json({ error: 'Room not found' });
+  res.json(g);
+});
+
+app.get('/api/room/:roomId', (req, res) => {
+  const payload = roomPayload(req.params.roomId);
+  if (!payload) return res.status(404).json({ error: 'Room not found' });
+  res.json(payload);
+});
+
+app.get('/api/room/:roomId/history', (req, res) => {
+  const r = rooms[req.params.roomId];
+  if (!r) return res.status(404).json({ error: 'Room not found' });
+  res.json({ history: r.history });
+});
+
+app.post('/api/room/:roomId/message', (req, res) => {
+  const r = rooms[req.params.roomId];
+  if (!r) return res.status(404).json({ error: 'Room not found' });
+
+  const { agent, type } = req.body || {};
+  if (!agent || typeof agent !== 'string') {
+    return res.status(400).json({ error: 'agent required (string)' });
   }
-  const allowedTypes = ['software', 'service', 'api', 'dataset', 'tool', 'hardware'];
-  if (!allowedTypes.includes(obj.type)) return `Invalid type. Must be one of: ${allowedTypes.join(', ')}`;
-  if (!obj.provider?.name || typeof obj.provider.name !== 'string') return 'provider.name required';
-  if (!Array.isArray(obj.category)) return 'category must be an array';
-  if (!Array.isArray(obj.problem_solved)) return 'problem_solved must be an array';
-  if (!Array.isArray(obj.capabilities)) return 'capabilities must be an array';
-  if (!Array.isArray(obj.inputs_required)) return 'inputs_required must be an array';
-  if (!Array.isArray(obj.outputs_provided)) return 'outputs_provided must be an array';
-  if (!obj.pricing || typeof obj.pricing.model !== 'string') return 'pricing.model required';
-  if (!obj.integration || typeof obj.integration.access !== 'string') return 'integration.access required';
-  if (!Array.isArray(obj.constraints)) return 'constraints must be an array';
-  if (!obj.action?.learn_more) return 'action.learn_more required';
-  return null;
-}
+  if (!type || typeof type !== 'string' || !MESSAGE_TYPES.has(type)) {
+    return res.status(400).json({
+      error: `type must be one of: ${[...MESSAGE_TYPES].join(', ')}`,
+    });
+  }
 
-app.post('/texmkt/api/upload', async (req, res) => {
-  const body = req.body;
-  const err = validateAA(body);
-  if (err) return res.status(400).json({ error: err });
-
-  const id = uuidv4();
-  const now = new Date().toISOString();
-  const aa = {
-    ...body,
-    id,
-    metadata: {
-      ...(body.metadata || {}),
-      created_at: body.metadata?.created_at || now,
-      updated_at: now
-    }
+  const entry = {
+    type,
+    agent: agent.trim(),
+    timestamp: Date.now(),
   };
+  if (req.body.price != null) entry.price = req.body.price;
+  if (req.body.shipping != null) entry.shipping = req.body.shipping;
+  if (req.body.message != null) entry.message = req.body.message;
 
-  try {
-    await writeFile(join(AA_DIR, `${id}.json`), JSON.stringify(aa, null, 2), 'utf8');
-    return res.status(201).json({ id, url: `/texmkt/aa/${id}` });
-  } catch (e) {
-    return res.status(500).json({ error: e.message });
-  }
+  r.history.push(entry);
+  if (type === 'accept') r.status = 'complete';
+
+  res.json({ history: r.history });
 });
 
-// --- Platform66: upload Agent Appeal (persists to aa/ so it appears in catalog) ---
-app.post('/platform66/api/upload', async (req, res) => {
-  const body = req.body;
-  const err = validateAA(body);
-  if (err) return res.status(400).json({ error: err });
-
-  const id = (body.id && typeof body.id === 'string' && /^[a-zA-Z0-9_-]{1,64}$/.test(body.id))
-    ? body.id
-    : uuidv4();
-  const now = new Date().toISOString();
-  const aa = {
-    ...body,
-    id,
-    metadata: {
-      ...(body.metadata || {}),
-      created_at: body.metadata?.created_at || now,
-      updated_at: now
-    }
-  };
-
-  try {
-    await writeFile(join(AA_DIR, `${id}.json`), JSON.stringify(aa, null, 2), 'utf8');
-    return res.status(201).json({ id, url: `/texmkt/aa/${id}` });
-  } catch (e) {
-    return res.status(500).json({ error: e.message });
-  }
-});
-
-// --- GET /texmkt/aa/:id — full Agent Appeal JSON (agent-readable) ---
-app.get('/texmkt/aa/:id', async (req, res) => {
-  const { id } = req.params;
-  if (!/^[a-zA-Z0-9_-]{1,64}$/.test(id)) return res.status(400).json({ error: 'Invalid id' });
-  try {
-    const raw = await readFile(join(AA_DIR, `${id}.json`), 'utf8');
-    const aa = JSON.parse(raw);
-    res.setHeader('Content-Type', 'application/json');
-    return res.send(raw);
-  } catch (e) {
-    if (e.code === 'ENOENT') return res.status(404).json({ error: 'Not found' });
-    return res.status(500).json({ error: e.message });
-  }
-});
-
-// ===== TEXMKT: Agent-Native Product Marketplace =====
-// Fully isolated — no shared routes, data, or logic with VyEx or Platform66.
-
-async function texmktReadMerchants() {
-  try { return JSON.parse(await readFile(TEXMKT_MERCHANTS_PATH, 'utf8')); } catch (_) { return []; }
-}
-async function texmktWriteMerchants(merchants) {
-  await writeFile(TEXMKT_MERCHANTS_PATH, JSON.stringify(merchants, null, 2), 'utf8');
-}
-async function texmktReadCredits() {
-  try { return JSON.parse(await readFile(TEXMKT_CREDITS_PATH, 'utf8')); } catch (_) { return {}; }
-}
-async function texmktWriteCredits(credits) {
-  await writeFile(TEXMKT_CREDITS_PATH, JSON.stringify(credits, null, 2), 'utf8');
-}
-async function texmktReadQueryLog() {
-  try { return JSON.parse(await readFile(TEXMKT_QUERY_LOG_PATH, 'utf8')); } catch (_) { return []; }
-}
-async function texmktAppendQueryLog(entry) {
-  const log = await texmktReadQueryLog();
-  log.push(entry);
-  await writeFile(TEXMKT_QUERY_LOG_PATH, JSON.stringify(log, null, 2), 'utf8');
-}
-
-async function texmktLoadAllProducts(merchantSlug) {
-  const merchants = await texmktReadMerchants();
-  const active = merchants.filter(m => m.status === 'active');
-  const targets = merchantSlug ? active.filter(m => m.slug === merchantSlug) : active;
-  const allProducts = [];
-  for (const m of targets) {
-    try {
-      const raw = await readFile(join(TEXMKT_CATALOGS_DIR, `${m.slug}.json`), 'utf8');
-      const products = JSON.parse(raw);
-      allProducts.push(...products);
-    } catch (_) { /* catalog file missing or invalid */ }
-  }
-  return allProducts;
-}
-
-// --- TexMKT: GET /.well-known/texmkt.json (dynamic ACP manifest) ---
-app.get('/.well-known/texmkt.json', async (req, res) => {
-  try {
-    const merchants = await texmktReadMerchants();
-    const active = merchants.filter(m => m.status === 'active');
-    const manifest = {
-      name: 'TexMKT',
-      version: '1.0',
-      description: 'Open agent-native product marketplace. Any Shopify merchant can list. Any agent can query.',
-      endpoints: {
-        match: `${BASE_URL}/texmkt/api/match`,
-        topup: `${BASE_URL}/texmkt/api/credits/topup`,
-        onboard: `${BASE_URL}/texmkt/api/onboard`,
-        merchants: `${BASE_URL}/texmkt/api/merchants`,
-      },
-      catalogs: active.map(m => ({
-        merchant: m.name,
-        slug: m.slug,
-        category: m.category,
-        url: `${BASE_URL}/.well-known/catalogs/${m.slug}.json`,
-      })),
-      pricing: {
-        query_fee_usd: TEXMKT_QUERY_FEE,
-        onboarding: 'free',
-        payment_methods: ['stripe', 'prepaid_credits'],
-      },
-      input_schema: {
-        goal: 'string (natural language, required)',
-        agent_id: 'string (required for fee deduction)',
-        budget_usd: 'number (optional)',
-        merchant_slug: 'string (optional — filter results to one merchant)',
-      },
-    };
-    res.setHeader('Content-Type', 'application/json');
-    res.send(JSON.stringify(manifest, null, 2));
-  } catch (e) {
-    res.status(500).json({ status: 'error', error: e.message, meta: { platform: 'texmkt', version: '1.0' } });
-  }
-});
-
-// --- TexMKT: serve catalog files from .well-known/catalogs/ ---
-app.use('/.well-known/catalogs', express.static(TEXMKT_CATALOGS_DIR));
-
-// --- TexMKT: POST /texmkt/api/onboard (free merchant onboarding) ---
-app.post('/texmkt/api/onboard', async (req, res) => {
-  try {
-    const { shopify_url, merchant_name, category, contact_email } = req.body || {};
-    if (!shopify_url || !merchant_name) {
-      return res.status(400).json({ status: 'error', error: 'shopify_url and merchant_name are required', meta: { platform: 'texmkt', version: '1.0' } });
-    }
-
-    let cleanUrl;
-    try {
-      cleanUrl = new URL(shopify_url.replace(/\/+$/, '')).href;
-    } catch (_) {
-      return res.status(400).json({ status: 'error', error: 'store_not_reachable', message: 'Invalid URL format.', meta: { platform: 'texmkt', version: '1.0' } });
-    }
-
-    const merchants = await texmktReadMerchants();
-    if (merchants.some(m => m.shopify_url === cleanUrl || m.shopify_url === cleanUrl.replace(/\/$/, ''))) {
-      return res.status(409).json({ status: 'error', error: 'already_registered', message: 'This store is already registered.', meta: { platform: 'texmkt', version: '1.0' } });
-    }
-
-    let products;
-    try {
-      products = await fetchShopifyProducts(cleanUrl);
-    } catch (e) {
-      const code = e.message === 'not_a_shopify_store' ? 'not_a_shopify_store' : 'store_not_reachable';
-      return res.status(400).json({ status: 'error', error: code, message: `Could not fetch products: ${e.message}`, meta: { platform: 'texmkt', version: '1.0' } });
-    }
-
-    if (products.length === 0) {
-      return res.status(400).json({ status: 'error', error: 'no_products_found', message: 'Store returned zero products.', meta: { platform: 'texmkt', version: '1.0' } });
-    }
-
-    const slug = slugifyMerchant(merchant_name);
-    const domain = new URL(cleanUrl).hostname;
-    const enriched = products.map(p => transformShopifyProduct(p, slug, domain, BASE_URL));
-
-    await mkdir(TEXMKT_CATALOGS_DIR, { recursive: true });
-    await writeFile(join(TEXMKT_CATALOGS_DIR, `${slug}.json`), JSON.stringify(enriched, null, 2), 'utf8');
-
-    const now = new Date().toISOString();
-    const merchant = {
-      id: uuidv4(),
-      name: merchant_name.trim(),
-      slug,
-      shopify_url: cleanUrl.replace(/\/$/, ''),
-      products_json_url: `${cleanUrl.replace(/\/$/, '')}/products.json`,
-      catalog_endpoint: `${BASE_URL}/.well-known/catalogs/${slug}.json`,
-      product_count: enriched.length,
-      category: (category || 'other').trim(),
-      submitted_by_email: (contact_email || '').trim(),
-      status: 'active',
-      created_at: now,
-      last_synced: now,
-    };
-    merchants.push(merchant);
-    await texmktWriteMerchants(merchants);
-    await writeWellKnownTexmkt();
-
-    res.status(201).json({
-      status: 'ok',
-      data: {
-        merchant_name: merchant.name,
-        slug: merchant.slug,
-        product_count: enriched.length,
-        catalog_url: merchant.catalog_endpoint,
-        message: 'Your catalog is live and queryable by agents.',
-      },
-      meta: { platform: 'texmkt', version: '1.0' },
-    });
-  } catch (e) {
-    res.status(500).json({ status: 'error', error: e.message, meta: { platform: 'texmkt', version: '1.0' } });
-  }
-});
-
-// --- TexMKT: GET /texmkt/api/merchants ---
-app.get('/texmkt/api/merchants', async (req, res) => {
-  try {
-    const merchants = await texmktReadMerchants();
-    const active = merchants.filter(m => m.status === 'active');
-    res.json({
-      status: 'ok',
-      data: {
-        merchants: active.map(m => ({
-          name: m.name,
-          slug: m.slug,
-          category: m.category,
-          product_count: m.product_count,
-          catalog_url: m.catalog_endpoint,
-        })),
-        total: active.length,
-      },
-      meta: { platform: 'texmkt', version: '1.0' },
-    });
-  } catch (e) {
-    res.status(500).json({ status: 'error', error: e.message, meta: { platform: 'texmkt', version: '1.0' } });
-  }
-});
-
-// --- TexMKT: POST /texmkt/api/match (goal-matching) ---
-app.post('/texmkt/api/match', async (req, res) => {
-  try {
-    const { agent_id, goal, budget_usd, merchant_slug } = req.body || {};
-    if (!agent_id || !goal) {
-      return res.status(400).json({ status: 'error', error: 'agent_id and goal are required', meta: { platform: 'texmkt', version: '1.0' } });
-    }
-
-    const credits = await texmktReadCredits();
-    const agentCredits = credits[agent_id];
-    if (!agentCredits || agentCredits.balance_usd < TEXMKT_QUERY_FEE) {
-      return res.status(402).json({
-        status: 'error',
-        error: 'insufficient_credits',
-        message: `Top up at ${BASE_URL}/texmkt/api/credits/topup`,
-        meta: { platform: 'texmkt', version: '1.0' },
-      });
-    }
-
-    const allProducts = await texmktLoadAllProducts(merchant_slug || null);
-    const STOPWORDS = new Set(['a','an','as','at','be','by','do','for','in','is','it','of','on','or','to','the','and','but','if','so','with','into','from','up','out','no','not','we','they','this','that','these','those','i','you','he','she','it','we','they','my','your','his','her','its','our','their','me','him','them','us','what','which','who','when','where','why','how','all','each','every','both','few','more','most','other','some','such','than','too','very','just','can','will','would','could','should','may','might','must','shall']);
-    const rawWords = goal.toLowerCase().replace(/[^a-z0-9\s]/g, '').split(/\s+/).filter(w => w.length > 1);
-    const keywords = rawWords.filter(w => !STOPWORDS.has(w));
-
-    const scored = allProducts.map(product => {
-      const haystack = [
-        product.title,
-        product.vendor,
-        product.category,
-        ...(product.tags || []),
-        ...(product.use_cases || []),
-        product.summary,
-      ].join(' ').toLowerCase();
-
-      let score = 0;
-      const matched = [];
-      for (const kw of keywords) {
-        if (haystack.includes(kw)) {
-          score++;
-          matched.push(kw);
-        }
-      }
-      if (keywords.length > 0) score = score / keywords.length;
-      return { product, score, matched };
-    });
-
-    let filtered = scored;
-    if (budget_usd !== undefined && budget_usd !== null) {
-      const budget = parseFloat(budget_usd);
-      if (!isNaN(budget)) {
-        filtered = scored.filter(s => parseFloat(s.product.price_usd) <= budget);
-      }
-    }
-
-    const ranked = filtered
-      .filter(s => s.score > 0)
-      .sort((a, b) => b.score - a.score)
-      .slice(0, 5);
-
-    const merchants = await texmktReadMerchants();
-    const merchantMap = {};
-    for (const m of merchants) merchantMap[m.slug] = m.name;
-
-    const matches = ranked.map((r, i) => ({
-      rank: i + 1,
-      product_id: r.product.id,
-      title: r.product.title,
-      merchant: merchantMap[r.product.merchant_slug] || r.product.merchant_slug,
-      merchant_slug: r.product.merchant_slug,
-      relevance_reason: `Matched: ${r.matched.join(', ')}`,
-      score: +r.score.toFixed(2),
-      price_usd: r.product.price_usd,
-      product_url: r.product.product_url,
-      checkout_url: `${BASE_URL}/texmkt/checkout/${r.product.id}`,
-    }));
-
-    agentCredits.balance_usd = +((agentCredits.balance_usd || 0) - TEXMKT_QUERY_FEE).toFixed(2);
-    agentCredits.total_spent = +((agentCredits.total_spent || 0) + TEXMKT_QUERY_FEE).toFixed(2);
-    agentCredits.last_active = new Date().toISOString();
-    credits[agent_id] = agentCredits;
-    await texmktWriteCredits(credits);
-
-    await texmktAppendQueryLog({
-      agent_id,
-      goal,
-      budget_usd: budget_usd ?? null,
-      merchant_slug: merchant_slug || null,
-      match_count: matches.length,
-      fee_charged: TEXMKT_QUERY_FEE,
-      timestamp: new Date().toISOString(),
-    });
-
-    res.json({
-      status: 'ok',
-      data: {
-        goal_received: goal,
-        matches,
-        query_fee_charged: TEXMKT_QUERY_FEE,
-        credits_remaining: agentCredits.balance_usd,
-      },
-      meta: { platform: 'texmkt', version: '1.0', matched_at: new Date().toISOString() },
-    });
-  } catch (e) {
-    res.status(500).json({ status: 'error', error: e.message, meta: { platform: 'texmkt', version: '1.0' } });
-  }
-});
-
-// --- TexMKT: GET /texmkt/api/credits/:agent_id (check balance) ---
-app.get('/texmkt/api/credits/:agent_id', async (req, res) => {
-  try {
-    const { agent_id } = req.params;
-    const credits = await texmktReadCredits();
-    const entry = credits[agent_id];
-    if (!entry) return res.json({ status: 'ok', data: { agent_id, balance_usd: 0, total_topped_up: 0, total_spent: 0 }, meta: { platform: 'texmkt', version: '1.0' } });
-    res.json({
-      status: 'ok',
-      data: { agent_id, balance_usd: entry.balance_usd, total_topped_up: entry.total_topped_up, total_spent: entry.total_spent, last_active: entry.last_active },
-      meta: { platform: 'texmkt', version: '1.0' },
-    });
-  } catch (e) {
-    res.status(500).json({ status: 'error', error: e.message, meta: { platform: 'texmkt', version: '1.0' } });
-  }
-});
-
-// --- TexMKT: topup success page ---
-app.get('/texmkt/topup-success', (req, res) => res.sendFile(join(__dirname, 'public', 'texmkt', 'topup-success.html')));
-
-// --- TexMKT: POST /texmkt/api/credits/topup ---
-app.post('/texmkt/api/credits/topup', async (req, res) => {
-  try {
-    const { agent_id, amount_usd } = req.body || {};
-    if (!agent_id) return res.status(400).json({ status: 'error', error: 'agent_id is required', meta: { platform: 'texmkt', version: '1.0' } });
-    const amount = parseFloat(amount_usd);
-    if (!amount || amount < 1) return res.status(400).json({ status: 'error', error: 'amount_usd must be at least 1.00', meta: { platform: 'texmkt', version: '1.0' } });
-
-    const stripeKey = process.env.STRIPE_SECRET_KEY;
-    if (!stripeKey) return res.status(503).json({ status: 'error', error: 'Stripe not configured', meta: { platform: 'texmkt', version: '1.0' } });
-
-    const stripe = new Stripe(stripeKey);
-    const amountCents = Math.round(amount * 100);
-
-    const session = await stripe.checkout.sessions.create({
-      mode: 'payment',
-      payment_method_types: ['card'],
-      line_items: [{
-        price_data: {
-          currency: 'usd',
-          unit_amount: amountCents,
-          product_data: { name: 'TexMKT Query Credits', description: `$${amount.toFixed(2)} in query credits for agent ${agent_id}` },
-        },
-        quantity: 1,
-      }],
-      success_url: `${BASE_URL}/texmkt/topup-success?agent_id=${encodeURIComponent(agent_id)}&amount=${amount}`,
-      cancel_url: `${BASE_URL}/texmkt/?topup=cancelled`,
-      metadata: { product: 'texmkt-credits', agent_id, amount_usd: String(amount) },
-    });
-
-    res.json({
-      status: 'ok',
-      data: {
-        stripe_checkout_url: session.url,
-        agent_id,
-        amount_usd: amount,
-      },
-      meta: { platform: 'texmkt', version: '1.0' },
-    });
-  } catch (e) {
-    res.status(500).json({ status: 'error', error: e.message, meta: { platform: 'texmkt', version: '1.0' } });
-  }
-});
-
-// --- TexMKT: POST /texmkt/api/credits/seed (manual credit for testing — no Stripe required) ---
-app.post('/texmkt/api/credits/seed', async (req, res) => {
-  try {
-    const { agent_id, amount_usd } = req.body || {};
-    if (!agent_id) return res.status(400).json({ status: 'error', error: 'agent_id is required', meta: { platform: 'texmkt', version: '1.0' } });
-    const amount = parseFloat(amount_usd) || 5.00;
-
-    const credits = await texmktReadCredits();
-    const entry = credits[agent_id] || { balance_usd: 0, total_topped_up: 0, total_spent: 0, created_at: new Date().toISOString(), last_active: new Date().toISOString() };
-    entry.balance_usd = +((entry.balance_usd || 0) + amount).toFixed(2);
-    entry.total_topped_up = +((entry.total_topped_up || 0) + amount).toFixed(2);
-    entry.last_active = new Date().toISOString();
-    credits[agent_id] = entry;
-    await texmktWriteCredits(credits);
-
-    res.json({
-      status: 'ok',
-      data: { agent_id, credited: amount, balance_usd: entry.balance_usd },
-      meta: { platform: 'texmkt', version: '1.0' },
-    });
-  } catch (e) {
-    res.status(500).json({ status: 'error', error: e.message, meta: { platform: 'texmkt', version: '1.0' } });
-  }
-});
-
-// --- TexMKT: GET /texmkt/checkout/:product_id (redirect to product URL) ---
-app.get('/texmkt/checkout/:product_id', async (req, res) => {
-  const { product_id } = req.params;
-  try {
-    const allProducts = await texmktLoadAllProducts(null);
-    const product = allProducts.find(p => p.id === product_id || p.id === String(product_id));
-    if (!product) return res.status(404).json({ status: 'error', error: 'Product not found', meta: { platform: 'texmkt', version: '1.0' } });
-
-    await texmktAppendQueryLog({
-      type: 'checkout_redirect',
-      product_id,
-      product_url: product.product_url,
-      merchant_slug: product.merchant_slug,
-      timestamp: new Date().toISOString(),
-    });
-
-    res.redirect(302, product.product_url);
-  } catch (e) {
-    res.status(500).json({ status: 'error', error: e.message, meta: { platform: 'texmkt', version: '1.0' } });
-  }
-});
-
-// ===== END TEXMKT =====
-
-const HOST = process.env.HOST || '0.0.0.0';
-app.listen(PORT, HOST, () => {
-  console.log(`TexFlow listening on http://${HOST}:${PORT}`);
+app.listen(PORT, () => {
+  console.log(`TexFlow — ${BASE_URL} (Gander: ${BASE_URL}/gander)`);
 });
