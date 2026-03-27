@@ -1,43 +1,48 @@
 (function () {
-  const header = document.querySelector('.header');
+  var header = document.querySelector('.header');
   if (header) {
-    function onScroll() {
+    window.addEventListener('scroll', function () {
       header.classList.toggle('scrolled', window.scrollY > 40);
-    }
-    window.addEventListener('scroll', onScroll, { passive: true });
-    onScroll();
+    }, { passive: true });
+    header.classList.toggle('scrolled', window.scrollY > 40);
   }
 })();
 
-(function initNavProducts() {
-  const wrap = document.querySelector('[data-nav-products]');
+(function () {
+  var wrap = document.querySelector('[data-nav-products]');
   if (!wrap) return;
-
-  const btn = wrap.querySelector('.nav-products-btn');
-  const panel = wrap.querySelector('.nav-products-panel');
+  var btn = wrap.querySelector('.nav-products-btn');
+  var panel = wrap.querySelector('.nav-products-panel');
   if (!btn || !panel) return;
 
-  function setOpen(open) {
-    panel.classList.toggle('open', open);
-    btn.classList.toggle('active', open);
-    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
-    panel.setAttribute('aria-hidden', open ? 'false' : 'true');
+  var isOpen = false;
+
+  function open() {
+    if (isOpen) return;
+    isOpen = true;
+    panel.classList.add('open');
+    btn.classList.add('active');
+    btn.setAttribute('aria-expanded', 'true');
   }
 
-  function toggle() {
-    setOpen(!panel.classList.contains('open'));
+  function close() {
+    if (!isOpen) return;
+    isOpen = false;
+    panel.classList.remove('open');
+    btn.classList.remove('active');
+    btn.setAttribute('aria-expanded', 'false');
   }
 
   btn.addEventListener('click', function (e) {
     e.stopPropagation();
-    toggle();
+    if (isOpen) close(); else open();
   });
 
   document.addEventListener('click', function (e) {
-    if (!wrap.contains(e.target)) setOpen(false);
+    if (isOpen && !wrap.contains(e.target)) close();
   });
 
   document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape') setOpen(false);
+    if (e.key === 'Escape' && isOpen) close();
   });
 })();
