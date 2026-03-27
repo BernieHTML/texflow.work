@@ -215,8 +215,9 @@ app.use((req, res, next) => {
   next();
 });
 
-// --- TexFlow brand homepage ---
+// --- TexFlow brand homepage & agent entry ---
 app.get('/', (req, res) => res.sendFile(join(__dirname, 'public', 'index.html')));
+app.get('/agent', (req, res) => res.sendFile(join(__dirname, 'public', 'agent.html')));
 
 // --- TexMKT product: pages (before static so they take precedence) ---
 app.get('/texmkt/', (req, res) => res.sendFile(join(__dirname, 'public', 'texmkt', 'index.html')));
@@ -237,6 +238,10 @@ app.get('/.well-known/ai.json', (req, res) => {
 app.get('/.well-known/vyex.md', (req, res) => {
   res.setHeader('Content-Type', 'text/markdown; charset=utf-8');
   res.sendFile(join(__dirname, '.well-known', 'vyex.md'));
+});
+app.get('/.well-known/agent-entry.md', (req, res) => {
+  res.setHeader('Content-Type', 'text/markdown; charset=utf-8');
+  res.sendFile(join(__dirname, '.well-known', 'agent-entry.md'));
 });
 app.get('/.well-known/ai-plugin.json', (req, res) => {
   res.setHeader('Content-Type', 'application/json');
@@ -380,7 +385,7 @@ app.get('/.well-known/vyex.json', async (req, res) => {
 // --- VyEx: pages (before static) ---
 app.get('/vyex', (req, res) => res.sendFile(join(VYEX_PUBLIC, 'index.html')));
 app.get('/vyex/', (req, res) => res.sendFile(join(VYEX_PUBLIC, 'index.html')));
-app.get('/vyex/agent', (req, res) => res.sendFile(join(VYEX_PUBLIC, 'agent.html')));
+app.get('/vyex/agent', (req, res) => res.redirect(301, '/agent'));
 app.get('/vyex/create', (req, res) => res.sendFile(join(VYEX_PUBLIC, 'create.html')));
 app.get('/vyex/expert/:id', (req, res) => res.sendFile(join(VYEX_PUBLIC, 'expert.html')));
 app.get('/vyex/expert/:id/checkout', (req, res) => res.sendFile(join(VYEX_PUBLIC, 'checkout.html')));

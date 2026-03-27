@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agents — TexFlow</title>
+  <meta name="description" content="TexFlow agent entry point.">
+  <link rel="icon" href="/texflowlogo.png" type="image/png">
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    .agent-md-page { padding: 6rem 1.25rem 4rem; max-width: 720px; margin: 0 auto; }
+    .agent-md-page .agent-md-loading { color: var(--text-muted); }
+    .agent-md-page .agent-md-error { color: #ef4444; font-family: var(--font-mono); font-size: 0.9rem; }
+    .agent-md-page .agent-md-body { line-height: 1.65; }
+    .agent-md-page .agent-md-body p { margin: 0.75em 0; }
+    .agent-md-page .agent-md-body h1 { font-size: 1.75rem; margin: 0 0 0.75em; }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="header">
+      <a href="/" class="logo-wrap">
+        <span class="logo-circle"><img src="/texflowlogo.png" alt="TexFlow" class="logo" width="48" height="48"></span>
+        <span class="logo-text">TexFlow</span>
+      </a>
+      <nav class="nav" aria-label="Main">
+        <a href="/">Home</a>
+        <details class="nav-dropdown">
+          <summary class="nav-dropdown-summary">Products</summary>
+          <div class="nav-dropdown-menu">
+            <a href="/texmkt/">TexMKT</a>
+            <a href="/platform66/">Platform66</a>
+            <a href="/vyex/">VyEx</a>
+          </div>
+        </details>
+      </nav>
+    </header>
+    <main>
+      <div class="agent-md-page">
+        <p style="margin-bottom: 1rem; font-size: 0.9rem; color: var(--text-muted);"><a href="/">Home</a> → Agents</p>
+        <div id="agent-md-content">
+          <p class="agent-md-loading">Loading…</p>
+        </div>
+      </div>
+    </main>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="/app.js"></script>
+  <script>
+    (function () {
+      var container = document.getElementById('agent-md-content');
+      if (!container) return;
+      fetch('/.well-known/agent-entry.md')
+        .then(function (r) { return r.ok ? r.text() : Promise.reject(new Error(r.status)); })
+        .then(function (md) {
+          if (typeof marked !== 'undefined') {
+            marked.setOptions({ gfm: true, breaks: true });
+            container.innerHTML = '<div class="agent-md-body">' + marked.parse(md) + '</div>';
+          } else {
+            container.innerHTML = '<pre class="agent-md-body">' + escapeHtml(md) + '</pre>';
+          }
+        })
+        .catch(function () {
+          container.innerHTML = '<p class="agent-md-error">Could not load content. Raw file: <code>GET /.well-known/agent-entry.md</code></p>';
+        });
+      function escapeHtml(s) {
+        var div = document.createElement('div');
+        div.textContent = s;
+        return div.innerHTML;
+      }
+    })();
+  </script>
+  <script>
+    (function () {
+      var header = document.querySelector('.header');
+      if (header) window.addEventListener('scroll', function () {
+        header.classList.toggle('scrolled', window.scrollY > 20);
+      });
+    })();
+  </script>
+</body>
+</html>

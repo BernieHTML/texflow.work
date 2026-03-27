@@ -4,19 +4,19 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TexFlow — Products and platforms for AI agents</title>
-  <meta name="description" content="TexFlow builds products, platforms and tools for AI agents. Platform66 is the agent-first marketplace for discovering and onboarding products with Agent Appeals and .well-known discovery.">
-  <meta name="keywords" content="AI agents, agent-first, Agent Appeal, .well-known, agent discovery, marketplace, TexFlow, Platform66">
+  <meta name="description" content="TexFlow builds infrastructure and products for the agent web.">
+  <meta name="keywords" content="AI agents, TexFlow, agent-first, open web">
   <link rel="canonical" href="https://texflow.work/">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://texflow.work/">
   <meta property="og:title" content="TexFlow — Products and platforms for AI agents">
-  <meta property="og:description" content="TexFlow builds products, platforms and tools for AI agents. Platform66 is the agent-first marketplace.">
+  <meta property="og:description" content="TexFlow builds infrastructure and products for the agent web.">
   <meta property="og:image" content="https://texflow.work/texflowlogo.png">
   <meta property="og:site_name" content="TexFlow">
   <meta property="og:locale" content="en_US">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="TexFlow — Products and platforms for AI agents">
-  <meta name="twitter:description" content="TexFlow builds products, platforms and tools for AI agents. Platform66 is the agent-first marketplace.">
+  <meta name="twitter:description" content="TexFlow builds infrastructure and products for the agent web.">
   <link rel="icon" href="/texflowlogo.png" type="image/png">
   <link rel="stylesheet" href="/styles.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -36,13 +36,18 @@
         <span class="agent-entry-nav-text">Are you an agent or a human?</span>
         <div class="agent-entry-nav-actions">
           <button type="button" id="agent-entry-human" class="agent-entry-nav-btn agent-entry-nav-btn-secondary">I am human</button>
-          <a href="/vyex/agent" id="agent-entry-agent" class="agent-entry-nav-btn agent-entry-nav-btn-primary">I am an agent</a>
+          <a href="/agent" id="agent-entry-agent" class="agent-entry-nav-btn agent-entry-nav-btn-primary">I am an agent</a>
         </div>
       </div>
-      <nav class="nav">
-        <a href="/texmkt/">TexMKT</a>
-        <a href="/platform66/">Platform66</a>
-        <a href="/vyex/">VyEx</a>
+      <nav class="nav" aria-label="Main">
+        <details class="nav-dropdown">
+          <summary class="nav-dropdown-summary">Products</summary>
+          <div class="nav-dropdown-menu">
+            <a href="/texmkt/">TexMKT</a>
+            <a href="/platform66/">Platform66</a>
+            <a href="/vyex/">VyEx</a>
+          </div>
+        </details>
       </nav>
     </header>
 
@@ -62,25 +67,30 @@
           <p class="hero-sub">Agent-first products for the open web.</p>
           <p class="hero-typing" id="hero-typing" aria-live="polite"></p>
           <div class="hero-cta">
-            <a href="/texmkt/" class="btn btn-primary">Explore TexMKT</a>
-            <a href="/vyex/" class="btn btn-secondary">Browse VyEx</a>
+            <a href="#about" class="btn btn-primary">Learn more</a>
+            <a href="/agent" class="btn btn-secondary">For agents</a>
           </div>
         </div>
       </section>
 
-      <section class="explain" id="explain">
-        <h2 class="section-title">Products</h2>
-        <p class="section-intro">Agent-readable tools and discovery for the open web.</p>
-        <div class="cards">
-          <article class="card">
-            <h3>VyEx</h3>
-            <p>Curated experts for Vy: base knowledge and preambles that Vy desktop agents load before running workflows. Browse free and paid experts, copy preambles, or purchase access. Catalog at <code>/.well-known/vyex.json</code> for agent discovery.</p>
-            <a href="/vyex/" class="btn btn-primary" style="margin-top: 0.75rem;">Open VyEx</a>
+      <section class="explain explain-about" id="about">
+        <h2 class="section-title">What we build</h2>
+        <p class="section-intro">Tools for discovery, commerce, and knowledge—designed for humans and agents on the open web.</p>
+        <div class="about-grid">
+          <article class="about-pillar">
+            <span class="about-pillar-icon" aria-hidden="true">◇</span>
+            <h3 class="about-pillar-title">Discovery</h3>
+            <p class="about-pillar-text">Structured, machine-readable surfaces so automated systems can find the right thing without guesswork.</p>
           </article>
-          <article class="card">
-            <h3>Platform66</h3>
-            <p>Agent Discovery Hub. Onboard products with Agent Appeal scaffolds, generate AAs with AI, browse the catalog, and expose discovery via .well-known—for Vy and every agent.</p>
-            <a href="/platform66/" class="btn btn-secondary" style="margin-top: 0.75rem;">Open Platform66</a>
+          <article class="about-pillar">
+            <span class="about-pillar-icon" aria-hidden="true">◈</span>
+            <h3 class="about-pillar-title">Commerce</h3>
+            <p class="about-pillar-text">Flows that work end-to-end when software—not just people—is doing the buying.</p>
+          </article>
+          <article class="about-pillar">
+            <span class="about-pillar-icon" aria-hidden="true">○</span>
+            <h3 class="about-pillar-title">Knowledge</h3>
+            <p class="about-pillar-text">Reusable expertise and context you can plug into real workflows, consistently and safely.</p>
           </article>
         </div>
       </section>
