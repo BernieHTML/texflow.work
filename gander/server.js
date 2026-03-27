@@ -10,6 +10,18 @@ const BASE = '/gander';
 const app = express();
 const gander = express.Router();
 
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+// These two lines are needed if you are using ES Modules (import/export)
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// This tells Express: "If someone asks for a file, look in the 'public' folder first"
+app.use(express.static(path.join(__dirname, 'public')));
+
+
+
 gander.use(express.json({ limit: '2mb' }));
 
 gander.get('/room/:roomId', (req, res) => {

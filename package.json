@@ -10,7 +10,7 @@
     "build:platform66": "cd Platform66 && npm install && npm run build"
   },
   "dependencies": {
-    "dotenv": "^16.4.5",
+    "dotenv": "^16.6.1",
     "express": "^4.21.0",
     "stripe": "^17.4.0",
     "uuid": "^10.0.0"
