@@ -5,35 +5,23 @@ const path = require('path');
 const roomsRouter = require('./routes/rooms');
 
 const PORT = parseInt(process.env.PORT, 10) || 5002;
-const BASE = '/gander';
 
 const app = express();
-const gander = express.Router();
 
-import path from 'path';
-import { fileURLToPath } from 'url';
+// 1. Middleware
+app.use(express.json({ limit: '2mb' }));
 
-// These two lines are needed if you are using ES Modules (import/export)
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-// This tells Express: "If someone asks for a file, look in the 'public' folder first"
+// 2. Serve Static Files (This makes index.html work at the root)
 app.use(express.static(path.join(__dirname, 'public')));
 
-
-
-gander.use(express.json({ limit: '2mb' }));
-
-gander.get('/room/:roomId', (req, res) => {
+// 3. Routes (Removed the '/gander' prefix because Nginx handles it)
+app.get('/room/:roomId', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'room.html'));
 });
 
-gander.use('/api/rooms', roomsRouter);
-gander.use(express.static(path.join(__dirname, 'public')));
+app.use('/api/rooms', roomsRouter);
 
-app.use(BASE, gander);
-
+// 4. Start Server
 app.listen(PORT, () => {
-  // eslint-disable-next-line no-console
-  console.log(`Gander listening on http://127.0.0.1:${PORT}${BASE}`);
+  console.log(`Gander engine running on port ${PORT}`);
 });
