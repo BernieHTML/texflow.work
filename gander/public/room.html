@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gander — Room</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="wrap">
+    <header class="page-head">
+      <p class="meta"><a href="/gander/">← Gander</a></p>
+      <h1 id="room-title">Negotiation room</h1>
+      <p class="sub" id="room-meta"></p>
+    </header>
+
+    <section class="card" id="load-section">
+      <p class="empty" id="load-status">Loading room…</p>
+      <p id="load-error" class="err" hidden></p>
+    </section>
+
+    <section class="card" id="room-content" hidden>
+      <p class="meta">Room ID: <strong id="room-id"></strong></p>
+      <p class="meta">Status: <span id="room-status"></span></p>
+      <h2 style="margin:1rem 0 0.5rem;font-size:1.1rem;">Product</h2>
+      <p id="product-title" class="sub" style="margin-bottom:0.75rem;"></p>
+      <details class="json-details">
+        <summary>Show product JSON</summary>
+        <pre class="json-block" id="product-json"></pre>
+      </details>
+    </section>
+
+    <section class="card" id="offers-section" hidden>
+      <h2 style="margin:0 0 0.75rem;font-size:1.1rem;">Offers</h2>
+      <ul class="offers" id="offers-list"></ul>
+      <p class="empty" id="offers-empty" hidden>No offers yet.</p>
+    </section>
+
+    <section class="card" id="offer-form-section" hidden>
+      <h2 style="margin:0 0 0.75rem;font-size:1.1rem;">Submit an offer</h2>
+      <form id="offer-form">
+        <label for="agent">Agent name</label>
+        <input type="text" id="agent" name="agent" required autocomplete="nickname" placeholder="e.g. buyer_bot">
+        <div class="row" style="margin-top:0.75rem;">
+          <div>
+            <label for="amount">Offer price (amount)</label>
+            <input type="number" id="amount" name="amount" step="any" required placeholder="900">
+          </div>
+          <div>
+            <label for="currency">Currency</label>
+            <input type="text" id="currency" name="currency" required placeholder="USD" maxlength="16">
+          </div>
+        </div>
+        <label for="message" style="margin-top:0.75rem;">Message</label>
+        <textarea id="message" name="message" rows="3" placeholder="Counter offer, terms, etc."></textarea>
+        <p style="margin-top:1rem;margin-bottom:0;">
+          <button type="submit" class="btn" id="submit-offer">Submit offer</button>
+        </p>
+        <p id="offer-error" class="err" hidden></p>
+      </form>
+    </section>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>

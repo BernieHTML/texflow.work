@@ -1,0 +1,243 @@
+:root {
+  --bg: #0f1218;
+  --surface: #171b24;
+  --border: #2a3142;
+  --text: #e8eaef;
+  --muted: #9aa3b5;
+  --accent: #5b8def;
+  --accent-hover: #7aa3f5;
+  --danger: #e85d5d;
+  --radius: 10px;
+  --font: "DM Sans", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, monospace;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: var(--font);
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--text);
+  background: radial-gradient(1200px 600px at 20% -10%, #1a2744 0%, transparent 55%),
+    radial-gradient(900px 500px at 100% 0%, #1e2a38 0%, transparent 50%), var(--bg);
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--accent-hover);
+  text-decoration: underline;
+}
+
+.wrap {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 2rem 1.25rem 3rem;
+}
+
+header.page-head {
+  margin-bottom: 2rem;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 1rem;
+}
+
+h1 {
+  margin: 0 0 0.35rem;
+  font-size: 1.75rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.sub {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem 1.35rem;
+  margin-bottom: 1.25rem;
+}
+
+label {
+  display: block;
+  font-weight: 500;
+  margin-bottom: 0.4rem;
+  font-size: 0.9rem;
+}
+
+textarea,
+input[type="text"],
+input[type="number"] {
+  width: 100%;
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  padding: 0.65rem 0.75rem;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: #0c0f14;
+  color: var(--text);
+}
+
+textarea {
+  min-height: 220px;
+  resize: vertical;
+}
+
+textarea:focus,
+input:focus {
+  outline: 2px solid rgba(91, 141, 239, 0.35);
+  outline-offset: 1px;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.row > * {
+  flex: 1;
+  min-width: 120px;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  font-family: var(--font);
+  font-size: 0.95rem;
+  font-weight: 600;
+  padding: 0.65rem 1.1rem;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  background: var(--accent);
+  color: #0a0c10;
+}
+
+.btn:hover {
+  background: var(--accent-hover);
+}
+
+.btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+
+.btn-ghost:hover {
+  background: rgba(255, 255, 255, 0.06);
+  text-decoration: none;
+  color: var(--text);
+}
+
+.err {
+  color: var(--danger);
+  font-size: 0.9rem;
+  margin-top: 0.75rem;
+}
+
+.meta {
+  font-size: 0.9rem;
+  color: var(--muted);
+  margin: 0 0 0.5rem;
+}
+
+.json-block {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  line-height: 1.45;
+  background: #0c0f14;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.85rem 1rem;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+  max-height: 320px;
+  overflow-y: auto;
+}
+
+details.json-details {
+  margin-top: 0.5rem;
+}
+
+details.json-details > summary {
+  cursor: pointer;
+  color: var(--accent);
+  font-size: 0.9rem;
+  user-select: none;
+  margin-bottom: 0.5rem;
+}
+
+.offers {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.offer {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.85rem 1rem;
+  background: #12161e;
+}
+
+.offer-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.35rem;
+}
+
+.offer-agent {
+  font-weight: 600;
+}
+
+.offer-price {
+  font-family: var(--mono);
+  font-size: 0.9rem;
+  color: var(--accent-hover);
+}
+
+.offer-time {
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.offer-msg {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--text);
+}
+
+.empty {
+  color: var(--muted);
+  font-size: 0.95rem;
+  margin: 0;
+}
