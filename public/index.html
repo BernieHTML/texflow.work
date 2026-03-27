@@ -40,14 +40,52 @@
         </div>
       </div>
       <nav class="nav" aria-label="Main">
-        <details class="nav-dropdown">
-          <summary class="nav-dropdown-summary">Products</summary>
-          <div class="nav-dropdown-menu">
-            <a href="/texmkt/">TexMKT</a>
-            <a href="/platform66/">Platform66</a>
-            <a href="/vyex/">VyEx</a>
+        <div class="nav-products-wrap" data-nav-products>
+          <button type="button" class="nav-products-btn" id="nav-products-btn" aria-expanded="false" aria-haspopup="true" aria-controls="nav-products-dropdown">
+            Products
+            <svg class="nav-products-chevron" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+              <path d="M2 4.5L6 8L10 4.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <div class="nav-products-panel" id="nav-products-dropdown" role="menu" aria-hidden="true">
+            <div class="nav-products-grid">
+              <a class="nav-products-item" href="/texmkt/" role="menuitem">
+                <div class="nav-products-icon nav-products-icon-amber">
+                  <svg width="17" height="17" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 14L8 9L12 11.5L16 6" stroke="#EF9F27" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="4" cy="14" r="1.5" fill="#EF9F27"/><circle cx="8" cy="9" r="1.5" fill="#EF9F27"/><circle cx="12" cy="11.5" r="1.5" fill="#EF9F27"/><circle cx="16" cy="6" r="1.5" fill="#EF9F27"/></svg>
+                </div>
+                <div class="nav-products-text">
+                  <div class="nav-products-label">TexMKT <span class="nav-products-badge">Commerce</span></div>
+                  <div class="nav-products-desc">Agent-native product matching, credits, and merchant catalogs.</div>
+                </div>
+                <span class="nav-products-arrow" aria-hidden="true">→</span>
+              </a>
+              <a class="nav-products-item" href="/platform66/" role="menuitem">
+                <div class="nav-products-icon nav-products-icon-purple">
+                  <svg width="17" height="17" viewBox="0 0 20 20" fill="none" aria-hidden="true"><rect x="3" y="3" width="6" height="6" rx="1.5" fill="#a89dff"/><rect x="11" y="3" width="6" height="6" rx="1.5" fill="#a89dff" opacity=".5"/><rect x="3" y="11" width="6" height="6" rx="1.5" fill="#a89dff" opacity=".5"/><rect x="11" y="11" width="6" height="6" rx="1.5" fill="#a89dff" opacity=".3"/></svg>
+                </div>
+                <div class="nav-products-text">
+                  <div class="nav-products-label">Platform66</div>
+                  <div class="nav-products-desc">Agent Discovery Hub — appeals, catalog, and .well-known previews.</div>
+                </div>
+                <span class="nav-products-arrow" aria-hidden="true">→</span>
+              </a>
+              <a class="nav-products-item nav-products-item-span" href="/vyex/" role="menuitem">
+                <div class="nav-products-icon nav-products-icon-teal">
+                  <svg width="17" height="17" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M10 3L17 7V13L10 17L3 13V7L10 3Z" stroke="#1D9E75" stroke-width="1.5" fill="none"/><circle cx="10" cy="10" r="2.5" fill="#1D9E75"/></svg>
+                </div>
+                <div class="nav-products-text">
+                  <div class="nav-products-label">VyEx</div>
+                  <div class="nav-products-desc">Curated expert preambles and marketplace for Vy-style agents.</div>
+                </div>
+                <span class="nav-products-arrow" aria-hidden="true">→</span>
+              </a>
+            </div>
+            <div class="nav-products-footer">
+              <span class="nav-products-footer-label">3 products · texflow.work</span>
+              <a class="nav-products-footer-link" href="/.well-known/ai.json">Discovery manifest →</a>
+            </div>
           </div>
-        </details>
+        </div>
       </nav>
     </header>
 

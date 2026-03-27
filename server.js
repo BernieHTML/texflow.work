@@ -215,9 +215,11 @@ app.use((req, res, next) => {
   next();
 });
 
-// --- TexFlow brand homepage & agent entry ---
+// --- TexFlow brand homepage & agent entry (explicit routes so /agent works even if static layout changes) ---
+const AGENT_ENTRY_PAGE = join(__dirname, 'public', 'agent', 'index.html');
 app.get('/', (req, res) => res.sendFile(join(__dirname, 'public', 'index.html')));
-app.get('/agent', (req, res) => res.sendFile(join(__dirname, 'public', 'agent.html')));
+app.get('/agent', (req, res) => res.sendFile(AGENT_ENTRY_PAGE));
+app.get('/agent/', (req, res) => res.sendFile(AGENT_ENTRY_PAGE));
 
 // --- TexMKT product: pages (before static so they take precedence) ---
 app.get('/texmkt/', (req, res) => res.sendFile(join(__dirname, 'public', 'texmkt', 'index.html')));

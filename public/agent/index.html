@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agents — TexFlow</title>
+  <meta name="description" content="TexFlow for AI agents.">
+  <link rel="icon" href="/texflowlogo.png" type="image/png">
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="page">
+    <header class="header">
+      <a href="/" class="logo-wrap">
+        <span class="logo-circle"><img src="/texflowlogo.png" alt="TexFlow" class="logo" width="48" height="48"></span>
+        <span class="logo-text">TexFlow</span>
+      </a>
+      <nav class="nav" aria-label="Main">
+        <a href="/">Home</a>
+        <div class="nav-products-wrap" data-nav-products>
+          <button type="button" class="nav-products-btn" id="nav-products-btn" aria-expanded="false" aria-haspopup="true" aria-controls="nav-products-dropdown">
+            Products
+            <svg class="nav-products-chevron" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+              <path d="M2 4.5L6 8L10 4.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <div class="nav-products-panel" id="nav-products-dropdown" role="menu" aria-hidden="true">
+            <div class="nav-products-grid">
+              <a class="nav-products-item" href="/texmkt/" role="menuitem">
+                <div class="nav-products-icon nav-products-icon-amber">
+                  <svg width="17" height="17" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 14L8 9L12 11.5L16 6" stroke="#EF9F27" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="4" cy="14" r="1.5" fill="#EF9F27"/><circle cx="8" cy="9" r="1.5" fill="#EF9F27"/><circle cx="12" cy="11.5" r="1.5" fill="#EF9F27"/><circle cx="16" cy="6" r="1.5" fill="#EF9F27"/></svg>
+                </div>
+                <div class="nav-products-text">
+                  <div class="nav-products-label">TexMKT <span class="nav-products-badge">Commerce</span></div>
+                  <div class="nav-products-desc">Agent-native product matching, credits, and merchant catalogs.</div>
+                </div>
+                <span class="nav-products-arrow" aria-hidden="true">→</span>
+              </a>
+              <a class="nav-products-item" href="/platform66/" role="menuitem">
+                <div class="nav-products-icon nav-products-icon-purple">
+                  <svg width="17" height="17" viewBox="0 0 20 20" fill="none" aria-hidden="true"><rect x="3" y="3" width="6" height="6" rx="1.5" fill="#a89dff"/><rect x="11" y="3" width="6" height="6" rx="1.5" fill="#a89dff" opacity=".5"/><rect x="3" y="11" width="6" height="6" rx="1.5" fill="#a89dff" opacity=".5"/><rect x="11" y="11" width="6" height="6" rx="1.5" fill="#a89dff" opacity=".3"/></svg>
+                </div>
+                <div class="nav-products-text">
+                  <div class="nav-products-label">Platform66</div>
+                  <div class="nav-products-desc">Agent Discovery Hub — appeals, catalog, and .well-known previews.</div>
+                </div>
+                <span class="nav-products-arrow" aria-hidden="true">→</span>
+              </a>
+              <a class="nav-products-item nav-products-item-span" href="/vyex/" role="menuitem">
+                <div class="nav-products-icon nav-products-icon-teal">
+                  <svg width="17" height="17" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M10 3L17 7V13L10 17L3 13V7L10 3Z" stroke="#1D9E75" stroke-width="1.5" fill="none"/><circle cx="10" cy="10" r="2.5" fill="#1D9E75"/></svg>
+                </div>
+                <div class="nav-products-text">
+                  <div class="nav-products-label">VyEx</div>
+                  <div class="nav-products-desc">Curated expert preambles and marketplace for Vy-style agents.</div>
+                </div>
+                <span class="nav-products-arrow" aria-hidden="true">→</span>
+              </a>
+            </div>
+            <div class="nav-products-footer">
+              <span class="nav-products-footer-label">3 products · texflow.work</span>
+              <a class="nav-products-footer-link" href="/.well-known/ai.json">Discovery manifest →</a>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+    <main class="agent-entry-main">
+      <div class="agent-entry-card">
+        <p class="agent-entry-breadcrumb"><a href="/">Home</a> → Agents</p>
+        <div id="agent-md-content" class="agent-entry-body-wrap">
+          <p class="agent-md-loading">Loading…</p>
+        </div>
+      </div>
+    </main>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="/app.js"></script>
+  <script>
+    (function () {
+      var container = document.getElementById('agent-md-content');
+      if (!container) return;
+      fetch('/.well-known/agent-entry.md')
+        .then(function (r) { return r.ok ? r.text() : Promise.reject(new Error(r.status)); })
+        .then(function (md) {
+          if (typeof marked !== 'undefined') {
+            marked.setOptions({ gfm: true, breaks: true });
+            container.innerHTML = '<div class="agent-entry-md">' + marked.parse(md) + '</div>';
+          } else {
+            container.innerHTML = '<div class="agent-entry-md"><p>' + escapeHtml(md) + '</p></div>';
+          }
+        })
+        .catch(function () {
+          container.innerHTML = '<p class="agent-md-error">Could not load content. Try <code>GET /.well-known/agent-entry.md</code></p>';
+        });
+      function escapeHtml(s) {
+        var div = document.createElement('div');
+        div.textContent = s;
+        return div.innerHTML;
+      }
+    })();
+  </script>
+</body>
+</html>
