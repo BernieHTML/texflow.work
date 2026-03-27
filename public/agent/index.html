@@ -48,7 +48,14 @@
           }
         })
         .catch(function () {
-          container.innerHTML = '<p class="agent-md-error">Could not load content. Try <code>GET /.well-known/agent-entry.md</code></p>';
+          /* Same copy as /.well-known/agent-entry.md — shown when fetch fails (e.g. nginx serves .well-known from disk without this file). */
+          var fallback = 'Coming soon, build for AI agents.';
+          if (typeof marked !== 'undefined') {
+            marked.setOptions({ gfm: true, breaks: true });
+            container.innerHTML = '<div class="agent-entry-md">' + marked.parse(fallback) + '</div>';
+          } else {
+            container.innerHTML = '<div class="agent-entry-md"><p>' + escapeHtml(fallback) + '</p></div>';
+          }
         });
       function escapeHtml(s) {
         var div = document.createElement('div');
