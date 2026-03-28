@@ -387,19 +387,10 @@
       '  ' + roomUrl,
       '',
       '--- Terminal (other party) ---',
-      'Plain-text feed (poll every 2s). macOS has no `watch` by default — use the loop below, or: brew install watch',
+      'Live stream — updates arrive the moment an offer or reply is posted (recommended):',
+      '  curl -N "' + base + '/api/rooms/' + roomId + '/watch"',
       '',
-      'Linux:',
-      '  watch -n 2 curl -sS "' + base + '/api/rooms/' + roomId + '/terminal"',
-      '',
-      'macOS / any shell:',
-      '  while true; do clear; date; echo; curl -sS "' +
-        base +
-        '/api/rooms/' +
-        roomId +
-        '/terminal"; sleep 2; done',
-      '',
-      'One-shot feed:',
+      'One-shot snapshot (no streaming):',
       '  curl -sS "' + base + '/api/rooms/' + roomId + '/terminal"',
       '',
       'Full room JSON:',
@@ -677,7 +668,6 @@
     var loadErr = document.getElementById('load-error');
     var pollTimer = null;
     var agentPrefilled = false;
-    var lastAiSuggestion = null;
 
     if (!roomId) {
       if (loadStatus) loadStatus.hidden = true;
@@ -866,69 +856,14 @@
       });
     }
 
-    var aiSuggestBtn = document.getElementById('ai-suggest-btn');
-    var aiApplyBtn = document.getElementById('ai-apply-btn');
     var aiSuggestErr = document.getElementById('ai-suggest-error');
-    var aiSuggestBox = document.getElementById('ai-suggest-box');
-
     function showAiErr(msg) {
       if (!aiSuggestErr) return;
       aiSuggestErr.textContent = msg || '';
       aiSuggestErr.hidden = !msg;
     }
-
-    if (aiSuggestBtn) {
-      aiSuggestBtn.addEventListener('click', function () {
-        showAiErr('');
-        lastAiSuggestion = null;
-        if (aiSuggestBox) {
-          aiSuggestBox.style.display = 'none';
-          aiSuggestBox.textContent = '';
-        }
-        if (aiApplyBtn) aiApplyBtn.style.display = 'none';
-        aiSuggestBtn.disabled = true;
-        fetch(API_BASE + '/' + encodeURIComponent(roomId) + '/ai-suggest', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: '{}',
-        })
-          .then(function (r) {
-            return r.json().then(function (data) {
-              if (!r.ok) throw new Error(data.error || r.statusText);
-              return data;
-            });
-          })
-          .then(function (data) {
-            lastAiSuggestion = data.suggestion;
-            if (aiSuggestBox) {
-              aiSuggestBox.style.display = 'block';
-              aiSuggestBox.textContent = JSON.stringify(data.suggestion, null, 2);
-            }
-            if (aiApplyBtn) aiApplyBtn.style.display = 'inline-flex';
-          })
-          .catch(function (e) {
-            showAiErr(e.message || 'AI suggestion failed.');
-          })
-          .finally(function () {
-            aiSuggestBtn.disabled = false;
-          });
-      });
-    }
-
-    if (aiApplyBtn) {
-      aiApplyBtn.addEventListener('click', function () {
-        if (!lastAiSuggestion || !lastAiSuggestion.price) return;
-        var ag = document.getElementById('agent');
-        var am = document.getElementById('amount');
-        var cur = document.getElementById('currency');
-        var msg = document.getElementById('message');
-        if (ag) ag.value = lastAiSuggestion.agent || '';
-        if (am) am.value = String(lastAiSuggestion.price.amount);
-        if (cur) cur.value = lastAiSuggestion.price.currency || '';
-        if (msg) msg.value = lastAiSuggestion.message || '';
-        if (lastAiSuggestion.agent) rememberAgent(lastAiSuggestion.agent);
-      });
-    }
+    // AI errors surface here if auto-reply fails (future hook point)
+    void showAiErr;
 
     var form = document.getElementById('offer-form');
     if (!form) return;

@@ -97,9 +97,42 @@ function formatTerminalTranscript(room) {
   }
 
   lines.push('---');
-  lines.push(`Poll: curl -sS "${BASE_PATH}/api/rooms/${rid}/terminal"`);
+  lines.push(`Live stream (updates in real-time): curl -N "${BASE_PATH}/api/rooms/${rid}/watch"`);
+  lines.push(`One-shot snapshot:                  curl -sS "${BASE_PATH}/api/rooms/${rid}/terminal"`);
   lines.push('');
   return lines.join('\n');
+}
+
+/* ── SSE subscriber registry ──────────────────────────────── */
+const roomSubscribers = new Map(); // roomId → Set<res>
+
+function notifySubscribers(roomId) {
+  const subs = roomSubscribers.get(roomId);
+  if (!subs || subs.size === 0) return;
+  fs.readFile(roomFile(roomId), 'utf8')
+    .then((raw) => {
+      const room = JSON.parse(raw);
+      if (Array.isArray(room.offers)) room.offers = room.offers.map(normalizeOffer);
+      const text = formatTerminalTranscript(room);
+      const payload = `data: ${text.replace(/\n/g, '\ndata: ')}\n\n`;
+      for (const sub of subs) {
+        try { sub.write(payload); } catch (_) { /* client gone */ }
+      }
+    })
+    .catch(() => {});
+}
+
+function addSubscriber(roomId, res) {
+  if (!roomSubscribers.has(roomId)) roomSubscribers.set(roomId, new Set());
+  roomSubscribers.get(roomId).add(res);
+}
+
+function removeSubscriber(roomId, res) {
+  const subs = roomSubscribers.get(roomId);
+  if (subs) {
+    subs.delete(res);
+    if (subs.size === 0) roomSubscribers.delete(roomId);
+  }
 }
 
 async function callGroqJson(systemPreamble, userContent) {
@@ -412,6 +445,81 @@ router.get('/:roomId', async (req, res) => {
   }
 });
 
+/* ── Auto-AI reply (fire-and-forget after offer is saved) ── */
+async function runAutoAiReply(roomId, offerIndex) {
+  const filePath = roomFile(roomId);
+  try {
+    const raw = await fs.readFile(filePath, 'utf8');
+    const room = JSON.parse(raw);
+
+    if (room.negotiation_mode !== 'ai' || !room.agent_preamble || !room.strategy_config) return;
+    const cfg = room.strategy_config;
+    const used = Number(room.ai_rounds_used) || 0;
+    if (used >= cfg.max_rounds) return;
+
+    const offers = Array.isArray(room.offers) ? room.offers : [];
+    const offer = offers[offerIndex];
+    if (!offer) return;
+
+    const existing = Array.isArray(offer.replies) ? offer.replies : [];
+    const hasResolution = existing.some((r) => r && (r.type === 'accept' || r.type === 'decline'));
+    if (hasResolution) return;
+
+    const userContent = `This is AI-assisted move ${used + 1} of ${cfg.max_rounds}.
+
+The buyer just submitted offer #${offerIndex + 1}:
+  Agent : ${offer.agent}
+  Price : ${offer.price.amount} ${offer.price.currency}
+  Message: ${offer.message || '(none)'}
+
+Full offer thread (all offers so far, most recent last):
+${JSON.stringify(offers, null, 2)}
+
+Respond as the seller according to your strategy. Output ONLY the JSON object.`;
+
+    const parsed = await callGroqJson(room.agent_preamble, userContent);
+
+    const type = typeof parsed.type === 'string' && ['accept', 'decline', 'counteroffer'].includes(parsed.type)
+      ? parsed.type
+      : 'counteroffer';
+
+    let pricePayload = null;
+    if (type === 'counteroffer') {
+      const amt = parsed.price && Number(parsed.price.amount);
+      const cur = parsed.price && typeof parsed.price.currency === 'string'
+        ? parsed.price.currency.trim().toUpperCase()
+        : cfg.currency;
+      if (!Number.isFinite(amt)) return;
+      let clamped = amt;
+      if (clamped < cfg.walk_away_price) clamped = cfg.walk_away_price;
+      const ceiling = Math.max(cfg.target_price * 2, cfg.walk_away_price * 1.5);
+      if (clamped > ceiling) clamped = ceiling;
+      pricePayload = { amount: clamped, currency: cur };
+    }
+
+    const reply = {
+      type,
+      agent: cfg.seller_agent_name || 'GanderSeller',
+      message: typeof parsed.message === 'string' ? parsed.message.slice(0, 2000) : '',
+      timestamp: new Date().toISOString(),
+    };
+    if (pricePayload) reply.price = pricePayload;
+
+    const raw2 = await fs.readFile(filePath, 'utf8');
+    const room2 = JSON.parse(raw2);
+    room2.ai_rounds_used = (Number(room2.ai_rounds_used) || 0) + 1;
+    if (Array.isArray(room2.offers) && room2.offers[offerIndex]) {
+      if (!Array.isArray(room2.offers[offerIndex].replies)) room2.offers[offerIndex].replies = [];
+      room2.offers[offerIndex].replies.push(reply);
+    }
+    await fs.writeFile(filePath, JSON.stringify(room2, null, 2), 'utf8');
+    notifySubscribers(roomId);
+  } catch (e) {
+    // eslint-disable-next-line no-console
+    console.error('[Gander auto-AI]', e.message || e);
+  }
+}
+
 router.post('/:roomId/offer', async (req, res) => {
   const roomId = safeRoomId(req.params.roomId);
   if (!roomId) {
@@ -453,9 +561,17 @@ router.post('/:roomId/offer', async (req, res) => {
       replies: [],
     };
     room.offers = Array.isArray(room.offers) ? room.offers : [];
+    const offerIndex = room.offers.length;
     room.offers.push(offer);
 
     await fs.writeFile(filePath, JSON.stringify(room, null, 2), 'utf8');
+    notifySubscribers(roomId);
+
+    // Fire-and-forget AI reply if room is in AI mode
+    if (room.negotiation_mode === 'ai') {
+      setImmediate(() => runAutoAiReply(roomId, offerIndex));
+    }
+
     return res.status(201).json({ ok: true, offer });
   } catch (e) {
     if (e && e.code === 'ENOENT') {
@@ -544,6 +660,7 @@ router.post('/:roomId/offers/:offerIndex/reply', async (req, res) => {
     room.offers = offers;
 
     await fs.writeFile(filePath, JSON.stringify(room, null, 2), 'utf8');
+    notifySubscribers(roomId);
     return res.status(201).json({ ok: true, reply, offer_index: idx });
   } catch (e) {
     if (e && e.code === 'ENOENT') {
@@ -553,6 +670,44 @@ router.post('/:roomId/offers/:offerIndex/reply', async (req, res) => {
     console.error(e);
     return res.status(500).json({ error: 'Failed to submit reply.' });
   }
+});
+
+/* ── Live stream (SSE) — terminal: curl -N ".../watch" ────── */
+router.get('/:roomId/watch', async (req, res) => {
+  const roomId = safeRoomId(req.params.roomId);
+  if (!roomId) {
+    return res.status(400).send('Invalid room id.\n');
+  }
+
+  res.setHeader('Content-Type', 'text/event-stream; charset=utf-8');
+  res.setHeader('Cache-Control', 'no-cache');
+  res.setHeader('Connection', 'keep-alive');
+  res.setHeader('X-Accel-Buffering', 'no'); // nginx: disable proxy buffering
+  res.flushHeaders();
+
+  // Send initial snapshot immediately
+  try {
+    const raw = await fs.readFile(roomFile(roomId), 'utf8');
+    const room = JSON.parse(raw);
+    if (Array.isArray(room.offers)) room.offers = room.offers.map(normalizeOffer);
+    const text = formatTerminalTranscript(room);
+    res.write(`data: ${text.replace(/\n/g, '\ndata: ')}\n\n`);
+  } catch (e) {
+    res.write(`data: Room not found or unreadable.\n\n`);
+    return res.end();
+  }
+
+  // Keep-alive heartbeat every 25s so nginx/proxies don't time out
+  const heartbeat = setInterval(() => {
+    try { res.write(': heartbeat\n\n'); } catch (_) { clearInterval(heartbeat); }
+  }, 25000);
+
+  addSubscriber(roomId, res);
+
+  req.on('close', () => {
+    clearInterval(heartbeat);
+    removeSubscriber(roomId, res);
+  });
 });
 
 module.exports = router;
