@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27><text y=%27.9em%27 font-size=%2790%27>🦆</text></svg>">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gander — Negotiation room</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -59,7 +60,10 @@
         <summary>Raw product JSON</summary>
         <pre class="json-block" id="product-json"></pre>
       </details>
-      <p class="room-foot meta">Room <strong id="room-id" class="mono"></strong> · Status <span id="room-status"></span></p>
+      <p class="room-foot meta">
+        Room <strong id="room-id" class="mono"></strong> · Status <span id="room-status"></span>
+        · <button type="button" id="copy-room-id-btn" class="btn-link mono" title="Copy room ID to clipboard" style="background:none;border:none;color:var(--accent);cursor:pointer;font:inherit;font-size:0.82em;padding:0;">copy ID</button>
+      </p>
     </section>
 
     <section class="card" id="offers-section" hidden>

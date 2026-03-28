@@ -383,6 +383,8 @@
     var lines = [
       'Welcome to Gander — negotiate a UCP product with others via the web or the terminal.',
       '',
+      'Room ID: ' + roomId,
+      '',
       'Room link (share in browser):',
       '  ' + roomUrl,
       '',
@@ -862,8 +864,21 @@
       aiSuggestErr.textContent = msg || '';
       aiSuggestErr.hidden = !msg;
     }
-    // AI errors surface here if auto-reply fails (future hook point)
     void showAiErr;
+
+    // Copy-room-id button
+    var copyRoomIdBtn = document.getElementById('copy-room-id-btn');
+    if (copyRoomIdBtn) {
+      copyRoomIdBtn.addEventListener('click', function () {
+        var txt = roomId;
+        function done() { copyRoomIdBtn.textContent = 'copied!'; setTimeout(function () { copyRoomIdBtn.textContent = 'copy ID'; }, 1500); }
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(txt).then(done).catch(done);
+        } else {
+          done();
+        }
+      });
+    }
 
     var form = document.getElementById('offer-form');
     if (!form) return;
