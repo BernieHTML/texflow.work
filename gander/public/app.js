@@ -192,6 +192,15 @@
     var errEl = document.getElementById('form-error');
     if (!ta || !btn) return;
 
+    // Pre-fill from UCP Generator "Open in Gander" button
+    try {
+      var prefill = sessionStorage.getItem('gander_prefill');
+      if (prefill && prefill.trim().startsWith('{')) {
+        ta.value = prefill;
+        sessionStorage.removeItem('gander_prefill');
+      }
+    } catch (_) {}
+
     btn.addEventListener('click', function () {
       showError(errEl, '');
       var text = ta.value.trim();

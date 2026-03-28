@@ -1173,6 +1173,256 @@ app.get('/texmkt/checkout/:product_id', async (req, res) => {
 
 // ===== END TEXMKT =====
 
+// ===== UCP PRODUCT GENERATOR =====
+const UCP_PRODUCTS_DIR = join(__dirname, '.well-known', 'ucp-products');
+await mkdir(UCP_PRODUCTS_DIR, { recursive: true });
+
+// --- Page route ---
+app.get('/ucp-gen', (req, res) => res.sendFile(join(__dirname, 'public', 'ucp-gen.html')));
+app.get('/ucp-gen/', (req, res) => res.redirect(301, '/ucp-gen'));
+
+// --- .well-known catalog (agent-readable index of all saved UCP products) ---
+app.get('/.well-known/ucp-products.json', async (req, res) => {
+  try {
+    const files = (await readdir(UCP_PRODUCTS_DIR)).filter(f => f.endsWith('.json'));
+    const products = [];
+    for (const f of files) {
+      try {
+        const raw = await readFile(join(UCP_PRODUCTS_DIR, f), 'utf8');
+        products.push(JSON.parse(raw));
+      } catch (_) { /* skip corrupt files */ }
+    }
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('X-UCP-Version', '1.0');
+    res.send(JSON.stringify({
+      schema: 'ucp-catalog/1.0',
+      description: 'UCP-formatted product catalog generated from public URLs.',
+      source: 'https://texflow.work/ucp-gen',
+      updated_at: new Date().toISOString(),
+      count: products.length,
+      products,
+    }, null, 2));
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+// Individual saved product
+app.get('/.well-known/ucp-products/:id.json', async (req, res) => {
+  const { id } = req.params;
+  if (!/^[a-zA-Z0-9_-]{1,128}$/.test(id)) return res.status(400).json({ error: 'Invalid id' });
+  try {
+    const raw = await readFile(join(UCP_PRODUCTS_DIR, `${id}.json`), 'utf8');
+    res.setHeader('Content-Type', 'application/json');
+    res.send(raw);
+  } catch (e) {
+    if (e.code === 'ENOENT') return res.status(404).json({ error: 'Not found' });
+    res.status(500).json({ error: e.message });
+  }
+});
+
+// --- POST /api/ucp-gen  (fetch URL, parse HTML, return UCP JSON) ---
+app.post('/api/ucp-gen', async (req, res) => {
+  const { url } = req.body || {};
+  if (!url || typeof url !== 'string') return res.status(400).json({ error: 'url is required' });
+  let parsed;
+  try { parsed = new URL(url); } catch { return res.status(400).json({ error: 'Invalid URL' }); }
+  if (!['http:', 'https:'].includes(parsed.protocol)) return res.status(400).json({ error: 'URL must be http or https' });
+
+  let html = '';
+  try {
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), 10000);
+    const resp = await fetch(parsed.href, {
+      signal: ctrl.signal,
+      headers: { 'User-Agent': 'TexFlow-UCP-Generator/1.0 (https://texflow.work/ucp-gen)' },
+      redirect: 'follow',
+    });
+    clearTimeout(timer);
+    if (!resp.ok) return res.status(502).json({ error: `Remote returned ${resp.status}` });
+    const ct = resp.headers.get('content-type') || '';
+    if (!ct.includes('html') && !ct.includes('json')) return res.status(415).json({ error: 'URL does not return HTML or JSON' });
+    html = await resp.text();
+  } catch (e) {
+    return res.status(502).json({ error: `Fetch failed: ${e.message}` });
+  }
+
+  const ucp = ucpFromHtml(html, parsed.href);
+  res.json(ucp);
+});
+
+// --- POST /api/ucp-products  (save a UCP product to .well-known) ---
+app.post('/api/ucp-products', async (req, res) => {
+  const body = req.body || {};
+  if (!body.id || !body.title) return res.status(400).json({ error: 'Product must have id and title' });
+  const id = String(body.id).replace(/[^a-zA-Z0-9_-]/g, '-').slice(0, 128);
+  const now = new Date().toISOString();
+  const product = { ...body, id, _saved_at: now };
+  try {
+    await writeFile(join(UCP_PRODUCTS_DIR, `${id}.json`), JSON.stringify(product, null, 2), 'utf8');
+    res.status(201).json({
+      ok: true,
+      id,
+      url: `/.well-known/ucp-products/${id}.json`,
+      catalog: '/.well-known/ucp-products.json',
+    });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+// --- HTML → UCP parser (no dependencies, pure regex + string extraction) ---
+function ucpFromHtml(html, sourceUrl) {
+  const origin = (() => { try { return new URL(sourceUrl).origin; } catch { return ''; } })();
+  const hostname = (() => { try { return new URL(sourceUrl).hostname; } catch { return ''; } })();
+  const now = new Date().toISOString();
+
+  function attr(tag, attrName) {
+    const m = new RegExp(`<${tag}[^>]+${attrName}=["']([^"']+)["']`, 'i').exec(html);
+    return m ? m[1].trim() : '';
+  }
+  function meta(nameOrProp, isOg = false) {
+    const key = isOg ? 'property' : 'name';
+    const re = new RegExp(`<meta[^>]+${key}=["']${nameOrProp}["'][^>]+content=["']([^"']+)["']`, 'i');
+    const m = re.exec(html) || new RegExp(`<meta[^>]+content=["']([^"']+)["'][^>]+${key}=["']${nameOrProp}["']`, 'i').exec(html);
+    return m ? m[1].trim() : '';
+  }
+  function stripTags(s) { return s.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim(); }
+  function decodeHtmlEntities(s) {
+    return s.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&nbsp;/g, ' ');
+  }
+
+  // 1. JSON-LD: try to find a Product schema
+  let ldProduct = null;
+  const ldMatches = html.matchAll(/<script[^>]+type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi);
+  for (const m of ldMatches) {
+    try {
+      const parsed = JSON.parse(m[1]);
+      const items = Array.isArray(parsed) ? parsed : parsed['@graph'] ? parsed['@graph'] : [parsed];
+      const p = items.find(x => x && (x['@type'] === 'Product' || x['@type'] === 'product'));
+      if (p) { ldProduct = p; break; }
+    } catch (_) { /* skip bad JSON-LD */ }
+  }
+
+  // 2. Open Graph
+  const ogTitle = meta('og:title', true);
+  const ogDesc = meta('og:description', true);
+  const ogImage = meta('og:image', true);
+  const ogUrl = meta('og:url', true) || sourceUrl;
+  const ogPriceAmt = meta('og:price:amount', true) || meta('product:price:amount', true);
+  const ogPriceCur = meta('og:price:currency', true) || meta('product:price:currency', true) || 'USD';
+  const ogBrand = meta('og:brand', true);
+  const ogSiteName = meta('og:site_name', true);
+
+  // 3. Standard meta
+  const metaDesc = meta('description') || meta('Description');
+  const keywords = meta('keywords') || meta('Keywords');
+
+  // 4. <title>
+  const titleTag = (() => {
+    const m = /<title[^>]*>([^<]+)<\/title>/i.exec(html);
+    return m ? decodeHtmlEntities(m[1].trim()) : '';
+  })();
+
+  // --- Assemble ---
+  const rawTitle = ldProduct?.name || ogTitle || titleTag || hostname;
+  const title = decodeHtmlEntities(rawTitle).replace(/\s*[\|–—\-]\s*.+$/, '').trim() || hostname;
+
+  const descriptionText = ldProduct?.description
+    ? decodeHtmlEntities(stripTags(ldProduct.description))
+    : (ogDesc || metaDesc || '');
+
+  const brand = ldProduct?.brand?.name || ogBrand || ogSiteName || hostname;
+  const productUrl = ldProduct?.url || ogUrl || sourceUrl;
+
+  const imageUrl = (() => {
+    const img = ldProduct?.image;
+    if (typeof img === 'string') return img;
+    if (Array.isArray(img) && img.length) return typeof img[0] === 'string' ? img[0] : img[0]?.url || '';
+    if (img && typeof img === 'object') return img.url || '';
+    return ogImage || '';
+  })();
+
+  // Price from JSON-LD
+  let priceMin = null, priceMax = null, priceCur = 'USD';
+  const offers = ldProduct?.offers || ldProduct?.Offers;
+  if (offers) {
+    const offerArr = Array.isArray(offers) ? offers : [offers];
+    const prices = offerArr.map(o => parseFloat(o.price || o.lowPrice || 0)).filter(p => p > 0);
+    if (prices.length) {
+      priceMin = Math.min(...prices);
+      priceMax = Math.max(...prices);
+      priceCur = offerArr[0]?.priceCurrency || 'USD';
+    }
+    if (offerArr[0]?.lowPrice) priceMin = parseFloat(offerArr[0].lowPrice);
+    if (offerArr[0]?.highPrice) priceMax = parseFloat(offerArr[0].highPrice);
+  }
+  // Fallback to OG price
+  if (!priceMin && ogPriceAmt) {
+    priceMin = parseFloat(ogPriceAmt) || null;
+    priceMax = priceMin;
+    priceCur = ogPriceCur;
+  }
+
+  // Variants from JSON-LD
+  const variants = (() => {
+    if (!offers) return [];
+    const offerArr = Array.isArray(offers) ? offers : [offers];
+    if (offerArr.length <= 1) return [];
+    return offerArr.slice(0, 20).map((o, i) => ({
+      id: `gid://variant/${i + 1}`,
+      title: o.name || o.sku || `Variant ${i + 1}`,
+      sku: o.sku || undefined,
+      description: { plain: o.description ? decodeHtmlEntities(stripTags(o.description)) : '' },
+      price: o.price ? { amount: parseFloat(o.price), currency: o.priceCurrency || priceCur } : undefined,
+      availability: o.availability ? o.availability.replace(/^.*\//, '') : undefined,
+    })).filter(v => v.price);
+  })();
+
+  // Tags/keywords
+  const tags = (() => {
+    const kws = ldProduct?.keywords || keywords || '';
+    if (!kws) return [];
+    return String(kws).split(/[,;]+/).map(k => k.trim()).filter(k => k.length > 0 && k.length < 64).slice(0, 20);
+  })();
+
+  // Build UCP product
+  const id = `gid://product/${hostname.replace(/\./g, '-')}/${slugifyUcp(title)}`;
+  const ucp = {
+    id,
+    schema: 'ucp/1.0',
+    title,
+    brand: brand || undefined,
+    url: productUrl,
+    source_url: sourceUrl,
+    description: descriptionText ? { plain: descriptionText } : undefined,
+    images: imageUrl ? [{ url: imageUrl }] : undefined,
+    tags: tags.length ? tags : undefined,
+    metadata: {
+      generated_at: now,
+      generator: 'texflow-ucp-gen/1.0',
+      source_hostname: hostname,
+    },
+  };
+
+  if (priceMin !== null) {
+    ucp.price_range = {
+      min: { amount: priceMin, currency: priceCur },
+      max: { amount: priceMax ?? priceMin, currency: priceCur },
+    };
+  }
+
+  if (variants.length) ucp.variants = variants;
+
+  return ucp;
+}
+
+function slugifyUcp(s) {
+  return String(s).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 64) || 'product';
+}
+
+// ===== END UCP PRODUCT GENERATOR =====
+
 const HOST = process.env.HOST || '0.0.0.0';
 app.listen(PORT, HOST, () => {
   console.log(`TexFlow listening on http://${HOST}:${PORT}`);

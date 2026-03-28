@@ -12,16 +12,18 @@
 <body>
   <div class="wrap">
     <header class="page-head">
+      <p class="meta"><a href="/">← TexFlow</a></p>
       <h1>Gander</h1>
-      <p class="sub">Create a negotiation room from a UCP product JSON.</p>
+      <p class="sub">Create a negotiation room from a UCP product JSON. Don't have one? <a href="/ucp-gen">Generate from a URL →</a></p>
     </header>
 
     <section class="card">
       <label for="product-json">UCP product JSON</label>
       <textarea id="product-json" spellcheck="false" placeholder='Paste JSON, e.g. { "id": "...", "title": "..." }'></textarea>
       <p id="form-error" class="err" hidden></p>
-      <p style="margin-top:1rem;margin-bottom:0;">
+      <p style="margin-top:1rem;margin-bottom:0;display:flex;gap:0.65rem;flex-wrap:wrap;align-items:center;">
         <button type="button" class="btn" id="create-btn">Create negotiation room</button>
+        <a href="/ucp-gen" class="btn" style="background:transparent;color:var(--accent);border:1px solid var(--border);box-shadow:none;">Generate UCP from URL</a>
       </p>
     </section>
   </div>
