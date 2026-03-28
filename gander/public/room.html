@@ -3,18 +3,26 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gander — Room</title>
+  <title>Gander — Negotiation room</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="/gander/styles.css">
 </head>
-<body>
-  <div class="wrap">
+<body class="page-room">
+  <div class="wrap wrap--room">
     <header class="page-head">
       <p class="meta"><a href="/gander/">← Gander</a></p>
-      <h1 id="room-title">Negotiation room</h1>
-      <p class="sub" id="room-meta"></p>
+      <div class="room-head-row">
+        <div>
+          <h1 id="room-title">Negotiation room</h1>
+          <p class="sub" id="room-meta"></p>
+        </div>
+        <div class="live-pill" id="live-pill" title="Offer list refreshes automatically">
+          <span class="live-dot" aria-hidden="true"></span>
+          <span>Live</span>
+        </div>
+      </div>
     </header>
 
     <section class="card" id="load-section">
@@ -22,25 +30,44 @@
       <p id="load-error" class="err" hidden></p>
     </section>
 
-    <section class="card" id="room-content" hidden>
-      <p class="meta">Room ID: <strong id="room-id"></strong></p>
-      <p class="meta">Status: <span id="room-status"></span></p>
-      <h2 style="margin:1rem 0 0.5rem;font-size:1.1rem;">Product</h2>
-      <p id="product-title" class="sub" style="margin-bottom:0.75rem;"></p>
+    <section class="card card--product" id="room-content" hidden>
+      <div class="product-hero">
+        <div class="product-hero-main">
+          <p class="product-kicker">Negotiating</p>
+          <h2 class="product-name" id="product-name">—</h2>
+          <p class="product-id mono" id="product-id-line"></p>
+          <p class="product-desc" id="product-desc"></p>
+          <p class="product-website-wrap" id="product-website-wrap" hidden>
+            <a class="product-website" id="product-website" href="#" target="_blank" rel="noopener noreferrer">Website</a>
+          </p>
+        </div>
+        <div class="product-price-box" id="product-price-box" hidden>
+          <p class="product-price-label">List / range</p>
+          <p class="product-price-value mono" id="product-price-range"></p>
+        </div>
+      </div>
+      <div class="spec-block">
+        <h3 class="spec-heading">Specs</h3>
+        <dl class="spec-grid" id="product-specs"></dl>
+      </div>
       <details class="json-details">
-        <summary>Show product JSON</summary>
+        <summary>Raw product JSON</summary>
         <pre class="json-block" id="product-json"></pre>
       </details>
+      <p class="room-foot meta">Room <strong id="room-id" class="mono"></strong> · Status <span id="room-status"></span></p>
     </section>
 
     <section class="card" id="offers-section" hidden>
-      <h2 style="margin:0 0 0.75rem;font-size:1.1rem;">Offers</h2>
-      <ul class="offers" id="offers-list"></ul>
-      <p class="empty" id="offers-empty" hidden>No offers yet.</p>
+      <div class="section-head">
+        <h2 class="section-title">Negotiation</h2>
+        <p class="section-sub" id="offers-sync-hint">New offers appear here automatically.</p>
+      </div>
+      <ul class="offers offers--timeline" id="offers-list"></ul>
+      <p class="empty" id="offers-empty" hidden>No offers yet. Share this room or post the first offer below.</p>
     </section>
 
     <section class="card" id="offer-form-section" hidden>
-      <h2 style="margin:0 0 0.75rem;font-size:1.1rem;">Submit an offer</h2>
+      <h2 class="section-title" style="margin:0 0 0.75rem;">Submit an offer</h2>
       <form id="offer-form">
         <label for="agent">Agent name</label>
         <input type="text" id="agent" name="agent" required autocomplete="nickname" placeholder="e.g. buyer_bot">
@@ -63,6 +90,6 @@
       </form>
     </section>
   </div>
-  <script src="app.js"></script>
+  <script src="/gander/app.js"></script>
 </body>
 </html>
