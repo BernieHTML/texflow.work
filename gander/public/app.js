@@ -374,9 +374,17 @@
       '  ' + roomUrl,
       '',
       '--- Terminal (other party) ---',
-      'Plain-text feed (poll every 2s to see new offers and replies):',
-      '  watch -n 2 \\',
-      '    curl -sS "' + base + '/api/rooms/' + roomId + '/terminal"',
+      'Plain-text feed (poll every 2s). macOS has no `watch` by default — use the loop below, or: brew install watch',
+      '',
+      'Linux:',
+      '  watch -n 2 curl -sS "' + base + '/api/rooms/' + roomId + '/terminal"',
+      '',
+      'macOS / any shell:',
+      '  while true; do clear; date; echo; curl -sS "' +
+        base +
+        '/api/rooms/' +
+        roomId +
+        '/terminal"; sleep 2; done',
       '',
       'One-shot feed:',
       '  curl -sS "' + base + '/api/rooms/' + roomId + '/terminal"',
