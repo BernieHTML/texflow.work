@@ -76,50 +76,43 @@ body {
   justify-content: flex-end;
 }
 
-/* Blue pill — same language as .btn-primary / agent-entry primary */
-.nav-gander-btn {
-  display: inline-flex;
+/* ── Gander pill button (header nav) ── */
+a.nav-gander-btn,
+a.nav-gander-btn:link,
+a.nav-gander-btn:visited {
+  display: inline-flex !important;
   align-items: center;
   justify-content: center;
-  padding: 0.45rem 1.15rem;
-  font-size: 0.85rem;
-  font-weight: 600;
+  padding: 0.45rem 1.1rem;
   font-family: var(--font-sans);
-  letter-spacing: 0.02em;
-  text-decoration: none;
-  color: #fff;
-  background: var(--accent);
-  border: none;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+  text-decoration: none !important;
+  color: #fff !important;
+  background: var(--accent) !important;
+  border: none !important;
   border-radius: 9999px;
-  box-shadow: 0 2px 12px var(--glow), 0 2px 8px rgba(59, 130, 246, 0.22);
-  transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+  box-shadow:
+    0 0 0 1px rgba(99, 155, 255, 0.25) inset,
+    0 2px 10px rgba(59, 130, 246, 0.35);
+  cursor: pointer;
+  transition: background 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
 }
 
-.nav-gander-btn:hover {
-  background: var(--accent-dim);
-  color: #fff;
-  box-shadow: 0 4px 20px var(--glow), 0 4px 14px rgba(59, 130, 246, 0.32);
-  transform: translateY(-2px);
+a.nav-gander-btn:hover {
+  background: var(--accent-dim) !important;
+  color: #fff !important;
+  text-decoration: none !important;
+  box-shadow:
+    0 0 0 1px rgba(99, 155, 255, 0.3) inset,
+    0 4px 18px rgba(59, 130, 246, 0.45);
+  transform: translateY(-1px);
 }
 
-/* Inside .nav (e.g. /agent) .nav a would otherwise win on color */
-.nav a.nav-gander-btn {
-  color: #fff;
-  background: var(--accent);
-  border: none;
-  box-shadow: 0 2px 12px var(--glow), 0 2px 8px rgba(59, 130, 246, 0.22);
-}
-
-.nav a.nav-gander-btn:hover {
-  color: #fff;
-  background: var(--accent-dim);
-  border: none;
-  box-shadow: 0 4px 20px var(--glow), 0 4px 14px rgba(59, 130, 246, 0.32);
-}
-
-.nav a.nav-gander-btn:active {
-  background: var(--accent-dim);
-  color: #fff;
+a.nav-gander-btn:active {
+  background: var(--accent-dim) !important;
   transform: translateY(0);
 }
 
@@ -720,10 +713,9 @@ body {
     gap: 0.45rem;
   }
 
-  .nav-gander-btn,
-  .nav a.nav-gander-btn {
+  a.nav-gander-btn {
     padding: 0.38rem 0.85rem;
-    font-size: 0.8rem;
+    font-size: 0.78rem;
   }
 
   .nav a {
