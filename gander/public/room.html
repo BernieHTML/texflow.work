@@ -18,9 +18,14 @@
           <h1 id="room-title">Negotiation room</h1>
           <p class="sub" id="room-meta"></p>
         </div>
-        <div class="live-pill" id="live-pill" title="Offer list refreshes automatically">
-          <span class="live-dot" aria-hidden="true"></span>
-          <span>Live</span>
+        <div class="room-head-actions">
+          <button type="button" class="btn-share" id="share-btn" title="Copy room link and terminal instructions">
+            Share
+          </button>
+          <div class="live-pill" id="live-pill" title="Offer list refreshes automatically">
+            <span class="live-dot" aria-hidden="true"></span>
+            <span>Live</span>
+          </div>
         </div>
       </div>
     </header>
@@ -90,6 +95,21 @@
       </form>
     </section>
   </div>
+
+  <div class="modal" id="share-modal" hidden aria-hidden="true">
+    <div class="modal-backdrop" data-close-share></div>
+    <div class="modal-panel" role="dialog" aria-labelledby="share-modal-title">
+      <h2 class="modal-title" id="share-modal-title">Share this negotiation</h2>
+      <p class="modal-lead">Copy the text below — it includes the room link and <strong>curl</strong> commands for the terminal.</p>
+      <textarea id="share-text" class="share-textarea" readonly rows="18" spellcheck="false"></textarea>
+      <p class="modal-actions">
+        <button type="button" class="btn" id="share-copy-btn">Copy to clipboard</button>
+        <button type="button" class="btn btn-ghost" data-close-share>Close</button>
+      </p>
+      <p id="share-copy-status" class="modal-status" hidden></p>
+    </div>
+  </div>
+
   <script src="/gander/app.js"></script>
 </body>
 </html>

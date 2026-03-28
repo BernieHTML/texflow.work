@@ -244,9 +244,51 @@
     }
   }
 
+  function rememberAgent(name) {
+    try {
+      if (name && String(name).trim()) sessionStorage.setItem('gander_agent', String(name).trim());
+    } catch (_) {}
+  }
+
+  function getAgentName() {
+    var el = document.getElementById('agent');
+    var v = el && el.value.trim();
+    if (v) return v;
+    try {
+      return sessionStorage.getItem('gander_agent') || '';
+    } catch (_) {
+      return '';
+    }
+  }
+
+  function offerHasResolution(offer) {
+    var r = offer.replies || [];
+    return r.some(function (x) {
+      return x && (x.type === 'accept' || x.type === 'decline');
+    });
+  }
+
+  function replySig(r) {
+    if (!r || typeof r !== 'object') return '';
+    var p = r.price || {};
+    return (
+      String(r.type || '') +
+      '|' +
+      String(r.timestamp || '') +
+      '|' +
+      String(r.agent || '') +
+      '|' +
+      String(p.amount) +
+      '|' +
+      String(p.currency || '') +
+      '|' +
+      String(r.message || '')
+    );
+  }
+
   function offerKey(o) {
     var p = o.price || {};
-    return (
+    var base =
       String(o.timestamp || '') +
       '|' +
       String(o.agent || '') +
@@ -255,13 +297,123 @@
       '|' +
       String(p.currency || '') +
       '|' +
-      String(o.message || '')
-    );
+      String(o.message || '');
+    var reps = (o.replies || []).map(replySig).join('||');
+    return base + '|' + reps;
   }
 
   var lastOfferKeySet = null;
 
-  function renderOffers(listEl, emptyEl, offers) {
+  function renderOfferReplies(offer) {
+    var wrap = document.createElement('div');
+    wrap.className = 'offer-replies';
+    var replies = offer.replies || [];
+    if (!replies.length) {
+      wrap.hidden = true;
+      return wrap;
+    }
+    replies.forEach(function (rep) {
+      var line = document.createElement('div');
+      line.className = 'offer-reply-line';
+      var kind = rep.type || '';
+      var who = rep.agent || '—';
+      var when = formatOfferTime(rep.timestamp || '');
+      var note = rep.message && String(rep.message).trim() ? String(rep.message).trim() : '';
+
+      if (kind === 'counteroffer') {
+        var cp = rep.price || {};
+        var sk = document.createElement('span');
+        sk.className = 'reply-kind';
+        sk.textContent = 'Counteroffer';
+        line.appendChild(sk);
+        line.appendChild(document.createTextNode(' from '));
+        var strong = document.createElement('strong');
+        strong.textContent = who;
+        line.appendChild(strong);
+        line.appendChild(
+          document.createTextNode(
+            ' · ' + String(cp.amount) + ' ' + String(cp.currency || '') + (note ? ' — ' + note : ''),
+          ),
+        );
+      } else if (kind === 'accept') {
+        var sk2 = document.createElement('span');
+        sk2.className = 'reply-kind';
+        sk2.textContent = 'Accepted';
+        line.appendChild(sk2);
+        line.appendChild(document.createTextNode(' by '));
+        var strong2 = document.createElement('strong');
+        strong2.textContent = who;
+        line.appendChild(strong2);
+        line.appendChild(document.createTextNode(' · ' + when + (note ? ' — ' + note : '')));
+      } else if (kind === 'decline') {
+        var sk3 = document.createElement('span');
+        sk3.className = 'reply-kind';
+        sk3.textContent = 'Declined';
+        line.appendChild(sk3);
+        line.appendChild(document.createTextNode(' by '));
+        var strong3 = document.createElement('strong');
+        strong3.textContent = who;
+        line.appendChild(strong3);
+        line.appendChild(document.createTextNode(' · ' + when + (note ? ' — ' + note : '')));
+      } else {
+        line.textContent = kind + ' from ' + who;
+      }
+      wrap.appendChild(line);
+    });
+    return wrap;
+  }
+
+  function buildShareText(roomId) {
+    var origin = window.location.origin || '';
+    var base = origin + '/gander';
+    var roomUrl = origin + '/gander/room/' + roomId;
+    var lines = [
+      'Welcome to Gander — negotiate a UCP product with others via the web or the terminal.',
+      '',
+      'Room link (share in browser):',
+      '  ' + roomUrl,
+      '',
+      '--- Terminal (other party) ---',
+      'Plain-text feed (poll every 2s to see new offers and replies):',
+      '  watch -n 2 \\',
+      '    curl -sS "' + base + '/api/rooms/' + roomId + '/terminal"',
+      '',
+      'One-shot feed:',
+      '  curl -sS "' + base + '/api/rooms/' + roomId + '/terminal"',
+      '',
+      'Full room JSON:',
+      '  curl -sS "' + base + '/api/rooms/' + roomId + '"',
+      '',
+      'Submit a new offer:',
+      '  curl -sS -X POST "' + base + '/api/rooms/' + roomId + '/offer" \\',
+      '    -H "Content-Type: application/json" \\',
+      '    -d \'{"agent":"my_agent","price":{"amount":900,"currency":"USD"},"message":"Here is my offer"}\'',
+      '',
+      'Reply to offer #1 — accept (index is 0 in the API):',
+      '  curl -sS -X POST "' + base + '/api/rooms/' + roomId + '/offers/0/reply" \\',
+      '    -H "Content-Type: application/json" \\',
+      '    -d \'{"type":"accept","agent":"seller","message":"Agreed."}\'',
+      '',
+      'Reply — decline:',
+      '  curl -sS -X POST "' + base + '/api/rooms/' + roomId + '/offers/0/reply" \\',
+      '    -H "Content-Type: application/json" \\',
+      '    -d \'{"type":"decline","agent":"seller","message":"No thanks."}\'',
+      '',
+      'Reply — counteroffer:',
+      '  curl -sS -X POST "' + base + '/api/rooms/' + roomId + '/offers/0/reply" \\',
+      '    -H "Content-Type: application/json" \\',
+      '    -d \'{"type":"counteroffer","agent":"seller","price":{"amount":950,"currency":"USD"},"message":"Meet halfway"}\'',
+      '',
+      'Create a new room (paste your UCP product JSON):',
+      '  curl -sS -X POST "' + base + '/api/rooms" \\',
+      '    -H "Content-Type: application/json" \\',
+      '    -d \'{"product":{"id":"gid://product/1","title":"Example"}}\'',
+      '',
+    ];
+    return lines.join('\n');
+  }
+
+  function renderOffers(listEl, emptyEl, offers, roomId, roomClosed, onReplyDone) {
     if (!listEl || !emptyEl) return;
 
     var showFlash = lastOfferKeySet !== null;
@@ -317,10 +469,180 @@
       li.appendChild(head);
       li.appendChild(time);
       li.appendChild(msg);
+      li.appendChild(renderOfferReplies(o));
+
+      var canReply = !roomClosed && !offerHasResolution(o);
+      if (canReply) {
+        var actions = document.createElement('div');
+        actions.className = 'offer-actions';
+
+        var formAccept = document.createElement('div');
+        formAccept.className = 'offer-reply-form';
+        formAccept.hidden = true;
+        formAccept.innerHTML =
+          '<label for="acc-' +
+          idx +
+          '">Optional note (shown to the other party in the terminal)</label>' +
+          '<textarea id="acc-' +
+          idx +
+          '" rows="2" class="offer-note"></textarea>' +
+          '<p style="margin:0.5rem 0 0;display:flex;gap:0.5rem;flex-wrap:wrap;">' +
+          '<button type="button" class="btn-sm btn-accept send-accept">Send accept</button>' +
+          '<button type="button" class="btn-sm cancel-reply">Cancel</button></p>';
+
+        var formDecline = document.createElement('div');
+        formDecline.className = 'offer-reply-form';
+        formDecline.hidden = true;
+        formDecline.innerHTML =
+          '<label for="dec-' +
+          idx +
+          '">Optional note (shown in the terminal)</label>' +
+          '<textarea id="dec-' +
+          idx +
+          '" rows="2" class="offer-note"></textarea>' +
+          '<p style="margin:0.5rem 0 0;display:flex;gap:0.5rem;flex-wrap:wrap;">' +
+          '<button type="button" class="btn-sm btn-decline send-decline">Send decline</button>' +
+          '<button type="button" class="btn-sm cancel-reply">Cancel</button></p>';
+
+        var formCounter = document.createElement('div');
+        formCounter.className = 'offer-reply-form';
+        formCounter.hidden = true;
+        formCounter.innerHTML =
+          '<label>Counteroffer price</label><div class="row">' +
+          '<div><input type="number" class="co-amt" step="any" placeholder="Amount" required></div>' +
+          '<div><input type="text" class="co-cur" placeholder="USD" maxlength="16" required></div></div>' +
+          '<label style="margin-top:0.5rem;">Message</label>' +
+          '<textarea rows="2" class="co-msg" placeholder="Terms or context"></textarea>' +
+          '<p style="margin:0.5rem 0 0;display:flex;gap:0.5rem;flex-wrap:wrap;">' +
+          '<button type="button" class="btn-sm btn-counter send-counter">Send counteroffer</button>' +
+          '<button type="button" class="btn-sm cancel-reply">Cancel</button></p>';
+
+        function showActions() {
+          actions.hidden = false;
+          formAccept.hidden = true;
+          formDecline.hidden = true;
+          formCounter.hidden = true;
+        }
+
+        function hideActions() {
+          actions.hidden = true;
+        }
+
+        var bAccept = document.createElement('button');
+        bAccept.type = 'button';
+        bAccept.className = 'btn-sm btn-accept';
+        bAccept.textContent = 'Accept';
+        bAccept.addEventListener('click', function () {
+          hideActions();
+          formAccept.hidden = false;
+        });
+
+        var bDecline = document.createElement('button');
+        bDecline.type = 'button';
+        bDecline.className = 'btn-sm btn-decline';
+        bDecline.textContent = 'Decline';
+        bDecline.addEventListener('click', function () {
+          hideActions();
+          formDecline.hidden = false;
+        });
+
+        var bCounter = document.createElement('button');
+        bCounter.type = 'button';
+        bCounter.className = 'btn-sm btn-counter';
+        bCounter.textContent = 'Counteroffer';
+        bCounter.addEventListener('click', function () {
+          hideActions();
+          formCounter.hidden = false;
+        });
+
+        actions.appendChild(bAccept);
+        actions.appendChild(bDecline);
+        actions.appendChild(bCounter);
+
+        formAccept.querySelector('.cancel-reply').addEventListener('click', showActions);
+        formDecline.querySelector('.cancel-reply').addEventListener('click', showActions);
+        formCounter.querySelector('.cancel-reply').addEventListener('click', showActions);
+
+        formAccept.querySelector('.send-accept').addEventListener('click', function () {
+          var noteEl = formAccept.querySelector('.offer-note');
+          var note = noteEl ? noteEl.value : '';
+          postReply(roomId, idx, { type: 'accept', message: note }, onReplyDone, showActions);
+        });
+
+        formDecline.querySelector('.send-decline').addEventListener('click', function () {
+          var noteEl = formDecline.querySelector('.offer-note');
+          var note = noteEl ? noteEl.value : '';
+          postReply(roomId, idx, { type: 'decline', message: note }, onReplyDone, showActions);
+        });
+
+        formCounter.querySelector('.send-counter').addEventListener('click', function () {
+          var amt = Number(formCounter.querySelector('.co-amt').value);
+          var cur = formCounter.querySelector('.co-cur').value.trim();
+          var ms = formCounter.querySelector('.co-msg').value;
+          if (!Number.isFinite(amt)) {
+            window.alert('Enter a valid counteroffer amount.');
+            return;
+          }
+          if (!cur) {
+            window.alert('Currency is required.');
+            return;
+          }
+          postReply(
+            roomId,
+            idx,
+            { type: 'counteroffer', message: ms, price: { amount: amt, currency: cur } },
+            onReplyDone,
+            showActions
+          );
+        });
+
+        li.appendChild(actions);
+        li.appendChild(formAccept);
+        li.appendChild(formDecline);
+        li.appendChild(formCounter);
+      }
+
       listEl.appendChild(li);
     });
 
     lastOfferKeySet = nextSet;
+  }
+
+  function postReply(roomId, offerIndex, payload, onReplyDone, showActions) {
+    var agent = getAgentName();
+    if (!agent) {
+      window.alert('Set your name in “Submit an offer” first — the other party will see it on replies.');
+      if (showActions) showActions();
+      return;
+    }
+
+    var body = {
+      type: payload.type,
+      agent: agent,
+      message: payload.message == null ? '' : String(payload.message),
+    };
+    if (payload.type === 'counteroffer' && payload.price) {
+      body.price = payload.price;
+    }
+
+    fetch(API_BASE + '/' + encodeURIComponent(roomId) + '/offers/' + offerIndex + '/reply', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    })
+      .then(function (r) {
+        return r.json().then(function (data) {
+          if (!r.ok) throw new Error(data.error || r.statusText);
+          return data;
+        });
+      })
+      .then(function () {
+        if (onReplyDone) onReplyDone();
+      })
+      .catch(function (e) {
+        window.alert(e.message || 'Reply failed.');
+        if (showActions) showActions();
+      });
   }
 
   function initRoom() {
@@ -347,7 +669,16 @@
 
       var listEl = document.getElementById('offers-list');
       var emptyEl = document.getElementById('offers-empty');
-      renderOffers(listEl, emptyEl, room.offers);
+      renderOffers(
+        listEl,
+        emptyEl,
+        room.offers,
+        room.room_id,
+        room.status === 'closed',
+        function () {
+          loadRoom(true);
+        },
+      );
 
       document.getElementById('offer-form-section').hidden = room.status === 'closed';
 
@@ -359,7 +690,7 @@
         hint.textContent =
           room.status === 'closed'
             ? 'This room is closed.'
-            : 'Offers refresh every few seconds — open in another tab to negotiate live.';
+            : 'Offers and replies refresh every few seconds. Terminal users can run curl on the plain-text feed.';
       }
 
       if (!silent) {
@@ -411,6 +742,68 @@
       false
     );
 
+    var shareModal = document.getElementById('share-modal');
+    var shareBtn = document.getElementById('share-btn');
+    var shareText = document.getElementById('share-text');
+    var shareCopyBtn = document.getElementById('share-copy-btn');
+    var shareCopyStatus = document.getElementById('share-copy-status');
+
+    function openShare() {
+      if (shareText) shareText.value = buildShareText(roomId);
+      if (shareModal) {
+        shareModal.hidden = false;
+        shareModal.setAttribute('aria-hidden', 'false');
+      }
+      if (shareCopyStatus) shareCopyStatus.hidden = true;
+    }
+
+    function closeShare() {
+      if (shareModal) {
+        shareModal.hidden = true;
+        shareModal.setAttribute('aria-hidden', 'true');
+      }
+    }
+
+    if (shareBtn) shareBtn.addEventListener('click', openShare);
+    if (shareModal) {
+      shareModal.querySelectorAll('[data-close-share]').forEach(function (el) {
+        el.addEventListener('click', closeShare);
+      });
+    }
+    if (shareCopyBtn && shareText) {
+      shareCopyBtn.addEventListener('click', function () {
+        var t = shareText.value;
+        function done(msg) {
+          if (shareCopyStatus) {
+            shareCopyStatus.hidden = false;
+            shareCopyStatus.textContent = msg;
+          }
+        }
+        function fallback() {
+          shareText.focus();
+          shareText.select();
+          shareText.setSelectionRange(0, 99999);
+          try {
+            if (document.execCommand('copy')) {
+              done('Copied.');
+              return;
+            }
+          } catch (_) {}
+          done('Select the text and copy manually (Ctrl+C).');
+        }
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard
+            .writeText(t)
+            .then(function () {
+              done('Copied.');
+            })
+            .catch(fallback);
+        } else {
+          fallback();
+        }
+      });
+    }
+
     var form = document.getElementById('offer-form');
     if (!form) return;
 
@@ -423,6 +816,8 @@
       var amountRaw = document.getElementById('amount').value;
       var currency = document.getElementById('currency').value.trim();
       var message = document.getElementById('message').value;
+
+      rememberAgent(agent);
 
       var amount = Number(amountRaw);
       if (!agent) {
