@@ -315,6 +315,7 @@
   }
 
   var lastOfferKeySet = null;
+  var replyFormOpen = false;
 
   function renderOfferReplies(offer) {
     var wrap = document.createElement('div');
@@ -538,6 +539,7 @@
           '<button type="button" class="btn-sm cancel-reply">Cancel</button></p>';
 
         function showActions() {
+          replyFormOpen = false;
           actions.hidden = false;
           formAccept.hidden = true;
           formDecline.hidden = true;
@@ -545,6 +547,7 @@
         }
 
         function hideActions() {
+          replyFormOpen = true;
           actions.hidden = true;
         }
 
@@ -584,12 +587,14 @@
         formCounter.querySelector('.cancel-reply').addEventListener('click', showActions);
 
         formAccept.querySelector('.send-accept').addEventListener('click', function () {
+          replyFormOpen = false;
           var noteEl = formAccept.querySelector('.offer-note');
           var note = noteEl ? noteEl.value : '';
           postReply(roomId, idx, { type: 'accept', message: note }, onReplyDone, showActions);
         });
 
         formDecline.querySelector('.send-decline').addEventListener('click', function () {
+          replyFormOpen = false;
           var noteEl = formDecline.querySelector('.offer-note');
           var note = noteEl ? noteEl.value : '';
           postReply(roomId, idx, { type: 'decline', message: note }, onReplyDone, showActions);
@@ -607,6 +612,7 @@
             window.alert('Currency is required.');
             return;
           }
+          replyFormOpen = false;
           postReply(
             roomId,
             idx,
@@ -691,16 +697,18 @@
 
       var listEl = document.getElementById('offers-list');
       var emptyEl = document.getElementById('offers-empty');
-      renderOffers(
-        listEl,
-        emptyEl,
-        room.offers,
-        room.room_id,
-        room.status === 'closed',
-        function () {
-          loadRoom(true);
-        },
-      );
+      if (!silent || !replyFormOpen) {
+        renderOffers(
+          listEl,
+          emptyEl,
+          room.offers,
+          room.room_id,
+          room.status === 'closed',
+          function () {
+            loadRoom(true);
+          },
+        );
+      }
 
       document.getElementById('offer-form-section').hidden = room.status === 'closed';
 
