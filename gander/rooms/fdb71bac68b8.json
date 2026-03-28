@@ -1,0 +1,10 @@
+{
+  "room_id": "fdb71bac68b8",
+  "created_at": "2026-03-28T11:54:29.184Z",
+  "product": {
+    "id": "test-2",
+    "title": "Widget"
+  },
+  "offers": [],
+  "status": "open"
+}
