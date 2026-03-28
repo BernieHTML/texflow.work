@@ -1,0 +1,30 @@
+{
+  "id": "gid---product-www-flightstore-com-au-visual-navigation-charts-vnc",
+  "schema": "ucp/1.0",
+  "title": "Visual Navigation Charts (VNC)",
+  "brand": "FlightStore.com.au",
+  "url": "https://www.flightstore.com.au/visual-navigation-charts-vnc",
+  "source_url": "https://www.flightstore.com.au/visual-navigation-charts-vnc",
+  "description": {
+    "plain": "Visual Navigation Charts (VNC) - Airservices Australia"
+  },
+  "images": [
+    {
+      "url": "https://www.flightstore.com.au/assets/full/VNC.jpg?20250104222417"
+    }
+  ],
+  "tags": [
+    "Aviation charts",
+    "aviation maps",
+    "pilot charts",
+    "pilot maps",
+    "aviation navigational charts",
+    "flight charts"
+  ],
+  "metadata": {
+    "generated_at": "2026-03-28T11:15:16.850Z",
+    "generator": "texflow-ucp-gen/1.0",
+    "source_hostname": "www.flightstore.com.au"
+  },
+  "_saved_at": "2026-03-28T11:16:04.360Z"
+}
