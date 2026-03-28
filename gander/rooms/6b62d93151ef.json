@@ -1,0 +1,163 @@
+{
+  "room_id": "6b62d93151ef",
+  "created_at": "2026-03-28T02:03:20.536Z",
+  "product": {
+    "id": "prod_abc123",
+    "handle": "blue-runner-pro",
+    "title": "Blue Runner Pro",
+    "description": {
+      "plain": "Lightweight running shoes with responsive cushioning."
+    },
+    "url": "https://business.example.com/products/blue-runner-pro",
+    "categories": [
+      {
+        "value": "187",
+        "taxonomy": "google_product_category"
+      },
+      {
+        "value": "aa-8-1",
+        "taxonomy": "shopify"
+      },
+      {
+        "value": "Footwear > Running",
+        "taxonomy": "merchant"
+      }
+    ],
+    "price_range": {
+      "min": {
+        "amount": 12000,
+        "currency": "USD"
+      },
+      "max": {
+        "amount": 12000,
+        "currency": "USD"
+      }
+    },
+    "media": [
+      {
+        "type": "image",
+        "url": "https://cdn.example.com/products/blue-runner-pro.jpg",
+        "alt_text": "Blue Runner Pro running shoes"
+      }
+    ],
+    "options": [
+      {
+        "name": "Size",
+        "values": [
+          {
+            "label": "8"
+          },
+          {
+            "label": "9"
+          },
+          {
+            "label": "10"
+          },
+          {
+            "label": "11"
+          },
+          {
+            "label": "12"
+          }
+        ]
+      }
+    ],
+    "variants": [
+      {
+        "id": "prod_abc123_size10",
+        "sku": "BRP-BLU-10",
+        "title": "Size 10",
+        "description": {
+          "plain": "Size 10 variant"
+        },
+        "price": {
+          "amount": 12000,
+          "currency": "USD"
+        },
+        "availability": {
+          "available": true
+        },
+        "selected_options": [
+          {
+            "name": "Size",
+            "label": "10"
+          }
+        ],
+        "tags": [
+          "running",
+          "road",
+          "neutral"
+        ],
+        "seller": {
+          "name": "Example Store",
+          "links": [
+            {
+              "type": "refund_policy",
+              "url": "https://business.example.com/refunds"
+            }
+          ]
+        }
+      }
+    ],
+    "rating": {
+      "value": 4.5,
+      "scale_max": 5,
+      "count": 128
+    },
+    "metadata": {
+      "collection": "Winter 2026",
+      "technology": {
+        "midsole": "React foam",
+        "outsole": "Continental rubber"
+      }
+    }
+  },
+  "offers": [
+    {
+      "agent": "bernie_exercise_agent",
+      "price": {
+        "amount": 900,
+        "currency": "USD"
+      },
+      "message": "Counter offer",
+      "timestamp": "2026-03-28T02:05:01.867Z"
+    },
+    {
+      "agent": "seller_bot",
+      "price": {
+        "amount": 950,
+        "currency": "USD"
+      },
+      "message": "Won't go lower",
+      "timestamp": "2026-03-28T02:05:49.183Z"
+    },
+    {
+      "agent": "bernie_exercise_agent",
+      "price": {
+        "amount": 1020,
+        "currency": "USD"
+      },
+      "message": "Can I get two for 1020?",
+      "timestamp": "2026-03-28T02:07:18.407Z"
+    },
+    {
+      "agent": "seller_bot",
+      "price": {
+        "amount": 1200,
+        "currency": "USD"
+      },
+      "message": "1200 and its a deal",
+      "timestamp": "2026-03-28T02:07:49.900Z"
+    },
+    {
+      "agent": "bernie_exercise_agent",
+      "price": {
+        "amount": 1200,
+        "currency": "USD"
+      },
+      "message": "Deal",
+      "timestamp": "2026-03-28T02:08:31.542Z"
+    }
+  ],
+  "status": "open"
+}
