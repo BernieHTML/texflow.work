@@ -68,6 +68,61 @@ body {
   border-color: rgba(59, 130, 246, 0.18);
 }
 
+.header-end {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+/* Blue pill — same language as .btn-primary / agent-entry primary */
+.nav-gander-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.45rem 1.15rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  font-family: var(--font-sans);
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  color: #fff;
+  background: var(--accent);
+  border: none;
+  border-radius: 9999px;
+  box-shadow: 0 2px 12px var(--glow), 0 2px 8px rgba(59, 130, 246, 0.22);
+  transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.nav-gander-btn:hover {
+  background: var(--accent-dim);
+  color: #fff;
+  box-shadow: 0 4px 20px var(--glow), 0 4px 14px rgba(59, 130, 246, 0.32);
+  transform: translateY(-2px);
+}
+
+/* Inside .nav (e.g. /agent) .nav a would otherwise win on color */
+.nav a.nav-gander-btn {
+  color: #fff;
+  background: var(--accent);
+  border: none;
+  box-shadow: 0 2px 12px var(--glow), 0 2px 8px rgba(59, 130, 246, 0.22);
+}
+
+.nav a.nav-gander-btn:hover {
+  color: #fff;
+  background: var(--accent-dim);
+  border: none;
+  box-shadow: 0 4px 20px var(--glow), 0 4px 14px rgba(59, 130, 246, 0.32);
+}
+
+.nav a.nav-gander-btn:active {
+  background: var(--accent-dim);
+  color: #fff;
+  transform: translateY(0);
+}
+
 .logo-wrap {
   display: flex;
   align-items: center;
@@ -659,6 +714,16 @@ body {
     right: 0.5rem;
     top: 0.5rem;
     padding: 0.5rem 1rem;
+  }
+
+  .header-end {
+    gap: 0.45rem;
+  }
+
+  .nav-gander-btn,
+  .nav a.nav-gander-btn {
+    padding: 0.38rem 0.85rem;
+    font-size: 0.8rem;
   }
 
   .nav a {
