@@ -1,0 +1,38 @@
+{
+  "room_id": "f18303d43dc8",
+  "created_at": "2026-03-28T11:10:30.176Z",
+  "product": {
+    "id": "gid---product-downunderpilotshop-com-au-asa-e6b-metal-flight-computer",
+    "schema": "ucp/1.0",
+    "title": "ASA E6B Metal Flight Computer",
+    "brand": "ASA",
+    "url": "https://downunderpilotshop.com.au/products/asa-e6b-metal-flight-computer",
+    "source_url": "https://downunderpilotshop.com.au/products/asa-e6b-metal-flight-computer?utm_source=google&utm_medium=cpc&utm_campaign=21085152178&gad_source=1&gad_campaignid=21468730713&gbraid=0AAAAApAXSjPh7Meaf33eiTtVlbIXFP-2Z&gclid=CjwKCAjwjtTNBhB0EiwAuswYhhwt7mtg14rZNSVq9LMQFvZu0VGLoq_ocsteRaYR-9a2fqeWID9zKRoCbuYQAvD_BwE",
+    "description": {
+      "plain": "The best slide-rule-style flight computer on the market, with solid aluminum construction and easy-to-read lettering. ASA's E6-B features a wind component grid and comprehensive crosswind correction chart, and on the other side the slide computes time, speed, distance, altitude, true airspeed, and density altitude problems as well as conversions. Nautical and statute scales are included.Vinyl case and instruction booklet included. 9-3/4\" x 5\"."
+    },
+    "images": [
+      {
+        "url": "https://downunderpilotshop.com.au/cdn/shop/products/asa-e6b.jpg?v=1571085081&width=1920"
+      }
+    ],
+    "metadata": {
+      "generated_at": "2026-03-28T11:09:21.692Z",
+      "generator": "texflow-ucp-gen/1.0",
+      "source_hostname": "downunderpilotshop.com.au"
+    },
+    "price_range": {
+      "min": {
+        "amount": 79.95,
+        "currency": "AUD"
+      },
+      "max": {
+        "amount": 79.95,
+        "currency": "AUD"
+      }
+    },
+    "_saved_at": "2026-03-28T11:09:30.066Z"
+  },
+  "offers": [],
+  "status": "open"
+}
