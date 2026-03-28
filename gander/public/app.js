@@ -234,7 +234,10 @@
         })
         .then(function (data) {
           var rid = data.room_id;
-          window.location.href = '/gander/negotiate-mode.html?room=' + encodeURIComponent(rid);
+          var base =
+            window.location.pathname.indexOf('/gander') >= 0 ? '/gander' : '';
+          window.location.href =
+            base + '/negotiate-mode.html?room=' + encodeURIComponent(rid);
         })
         .catch(function (e) {
           showError(errEl, e.message || 'Could not create room.');

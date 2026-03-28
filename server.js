@@ -1,4 +1,5 @@
 import 'dotenv/config';
+import { createRequire } from 'module';
 import express from 'express';
 import Stripe from 'stripe';
 import { existsSync } from 'fs';
@@ -11,6 +12,7 @@ import { transformShopifyProduct, fetchShopifyProducts, slugifyMerchant } from '
 import { writeWellKnownTexmkt } from './scripts/texmkt-well-known.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
+const require = createRequire(import.meta.url);
 const app = express();
 const PORT = process.env.PORT || 5001;
 const AA_DIR = join(__dirname, 'aa');
@@ -558,6 +560,14 @@ if (existsSync(PLATFORM66_DIST)) {
   app.use('/platform66', express.static(PLATFORM66_DIST));
   app.get(/^\/platform66\/.+/, (req, res) => res.sendFile(join(PLATFORM66_DIST, 'index.html')));
   app.get('/platform66', (req, res) => res.redirect(301, '/platform66/'));
+}
+
+// --- Gander: UCP negotiation rooms (proxied as /gander on nginx → this app on PORT) ---
+try {
+  const { createGanderRouter } = require(join(__dirname, 'gander', 'gander-app.js'));
+  app.use('/gander', createGanderRouter());
+} catch (e) {
+  console.error('[Gander] Failed to mount /gander:', e.message);
 }
 
 // --- Static: public, then root assets ---

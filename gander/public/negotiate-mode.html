@@ -110,7 +110,9 @@
   </div>
   <script>
     (function () {
-      var API = '/gander/api/rooms';
+      var API =
+        (window.location.pathname.indexOf('/gander') >= 0 ? '/gander' : '') +
+        '/api/rooms';
       var params = new URLSearchParams(window.location.search);
       var roomId = params.get('room');
       var line = document.getElementById('room-line');
