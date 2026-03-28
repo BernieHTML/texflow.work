@@ -24,6 +24,14 @@ function sendRoomHtml(req, res) {
 app.use('/api/rooms', roomsRouter);
 app.use('/gander/api/rooms', roomsRouter);
 
+function sendNegotiateMode(req, res) {
+  res.sendFile(path.join(publicDir, 'negotiate-mode.html'));
+}
+app.get('/negotiate-mode', sendNegotiateMode);
+app.get('/negotiate-mode.html', sendNegotiateMode);
+app.get('/gander/negotiate-mode', sendNegotiateMode);
+app.get('/gander/negotiate-mode.html', sendNegotiateMode);
+
 app.get('/room/:roomId', sendRoomHtml);
 app.get('/gander/room/:roomId', sendRoomHtml);
 

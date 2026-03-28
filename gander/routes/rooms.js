@@ -4,8 +4,33 @@ const express = require('express');
 const fs = require('fs/promises');
 const path = require('path');
 const crypto = require('crypto');
+const { buildAgentPreamble } = require('./strategy');
 
 const router = express.Router();
+
+const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
+const GROQ_MODEL = process.env.GROQ_MODEL || 'llama-3.1-8b-instant';
+
+function stripRoomForClient(room) {
+  const copy = { ...room };
+  delete copy.agent_preamble;
+  return copy;
+}
+
+function productListPriceHint(product) {
+  if (!product || typeof product !== 'object') return '';
+  const pr = product.price_range || product.priceRange;
+  if (pr && pr.min && pr.max) {
+    const a = pr.min.amount;
+    const c = pr.min.currency || '';
+    const b = pr.max.amount;
+    if (typeof a === 'number' && typeof b === 'number') return `${a}–${b} ${c}`.trim();
+  }
+  if (product.price && typeof product.price.amount === 'number') {
+    return `${product.price.amount} ${product.price.currency || ''}`.trim();
+  }
+  return '';
+}
 
 const ROOMS_DIR = path.join(__dirname, '..', 'rooms');
 const BASE_PATH = '/gander';
@@ -77,6 +102,46 @@ function formatTerminalTranscript(room) {
   return lines.join('\n');
 }
 
+async function callGroqJson(systemPreamble, userContent) {
+  const key = process.env.GROQ_API_KEY;
+  if (!key || typeof key !== 'string') {
+    throw new Error('GROQ_API_KEY is not configured on the server');
+  }
+  const resp = await fetch(GROQ_API_URL, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${key}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      model: GROQ_MODEL,
+      messages: [
+        { role: 'system', content: systemPreamble },
+        { role: 'user', content: userContent },
+      ],
+      temperature: 0.35,
+      max_tokens: 500,
+    }),
+  });
+  const data = await resp.json().catch(() => ({}));
+  if (!resp.ok) {
+    const msg = data.error?.message || resp.statusText || 'Groq request failed';
+    throw new Error(msg);
+  }
+  const text = data.choices?.[0]?.message?.content;
+  if (!text || typeof text !== 'string') {
+    throw new Error('Empty model response');
+  }
+  let jsonStr = text.trim();
+  const fence = jsonStr.match(/```(?:json)?\s*([\s\S]*?)```/);
+  if (fence) jsonStr = fence[1].trim();
+  const start = jsonStr.indexOf('{');
+  const end = jsonStr.lastIndexOf('}');
+  if (start === -1 || end === -1) throw new Error('Model did not return JSON');
+  jsonStr = jsonStr.slice(start, end + 1);
+  return JSON.parse(jsonStr);
+}
+
 router.post('/', async (req, res) => {
   try {
     const { product } = req.body || {};
@@ -146,6 +211,185 @@ router.get('/:roomId/terminal', async (req, res) => {
   }
 });
 
+router.post('/:roomId/strategy', async (req, res) => {
+  const roomId = safeRoomId(req.params.roomId);
+  if (!roomId) {
+    return res.status(400).json({ error: 'Invalid room id.' });
+  }
+
+  const body = req.body || {};
+  const mode = body.mode;
+  if (mode !== 'human' && mode !== 'ai') {
+    return res.status(400).json({ error: 'Field "mode" must be "human" or "ai".' });
+  }
+
+  const filePath = roomFile(roomId);
+  try {
+    const raw = await fs.readFile(filePath, 'utf8');
+    const room = JSON.parse(raw);
+
+    if (mode === 'human') {
+      room.negotiation_mode = 'human';
+      room.strategy_config = null;
+      delete room.agent_preamble;
+      room.ai_rounds_used = 0;
+      await fs.writeFile(filePath, JSON.stringify(room, null, 2), 'utf8');
+      return res.json({
+        ok: true,
+        negotiation_mode: 'human',
+        url: `${BASE_PATH}/room/${roomId}`,
+      });
+    }
+
+    const target = Number(body.target_price);
+    const walk = Number(body.walk_away_price);
+    const currency = typeof body.currency === 'string' ? body.currency.trim().toUpperCase() : '';
+    const maxRounds = Number.parseInt(String(body.max_rounds), 10);
+
+    if (!Number.isFinite(target) || !Number.isFinite(walk)) {
+      return res.status(400).json({ error: 'target_price and walk_away_price must be numbers.' });
+    }
+    if (!currency) {
+      return res.status(400).json({ error: 'currency is required (e.g. USD).' });
+    }
+    if (!Number.isInteger(maxRounds) || maxRounds < 1 || maxRounds > 50) {
+      return res.status(400).json({ error: 'max_rounds must be an integer between 1 and 50.' });
+    }
+
+    const styles = new Set(['aggressive_early', 'slow_bleed', 'hold_firm_then_drop']);
+    const concessionStyle = typeof body.concession_style === 'string' ? body.concession_style : '';
+    if (!styles.has(concessionStyle)) {
+      return res.status(400).json({ error: 'concession_style must be aggressive_early, slow_bleed, or hold_firm_then_drop.' });
+    }
+
+    const tones = new Set(['collaborative', 'firm']);
+    const tone = typeof body.tone === 'string' ? body.tone : '';
+    if (!tones.has(tone)) {
+      return res.status(400).json({ error: 'tone must be collaborative or firm.' });
+    }
+
+    let tradeable = body.tradeable_terms;
+    if (!Array.isArray(tradeable)) tradeable = [];
+    tradeable = tradeable.filter((t) => typeof t === 'string' && t.trim()).map((t) => t.trim()).slice(0, 12);
+
+    let tPrice = target;
+    let wPrice = walk;
+    if (wPrice > tPrice) {
+      const x = tPrice;
+      tPrice = wPrice;
+      wPrice = x;
+    }
+
+    const productTitle = room.product && room.product.title ? String(room.product.title) : '';
+    const strategyConfig = {
+      target_price: tPrice,
+      walk_away_price: wPrice,
+      currency,
+      concession_style: concessionStyle,
+      tradeable_terms: tradeable,
+      tone,
+      max_rounds: maxRounds,
+      seller_agent_name:
+        typeof body.seller_agent_name === 'string' && body.seller_agent_name.trim()
+          ? body.seller_agent_name.trim().slice(0, 64)
+          : 'GanderSeller',
+    };
+
+    const preamble = buildAgentPreamble(strategyConfig, productTitle, productListPriceHint(room.product));
+
+    room.negotiation_mode = 'ai';
+    room.strategy_config = strategyConfig;
+    room.agent_preamble = preamble;
+    room.ai_rounds_used = 0;
+
+    await fs.writeFile(filePath, JSON.stringify(room, null, 2), 'utf8');
+    return res.json({
+      ok: true,
+      negotiation_mode: 'ai',
+      url: `${BASE_PATH}/room/${roomId}`,
+    });
+  } catch (e) {
+    if (e && e.code === 'ENOENT') {
+      return res.status(404).json({ error: 'Room not found.' });
+    }
+    // eslint-disable-next-line no-console
+    console.error(e);
+    return res.status(500).json({ error: e.message || 'Failed to save strategy.' });
+  }
+});
+
+router.post('/:roomId/ai-suggest', async (req, res) => {
+  const roomId = safeRoomId(req.params.roomId);
+  if (!roomId) {
+    return res.status(400).json({ error: 'Invalid room id.' });
+  }
+
+  const filePath = roomFile(roomId);
+  try {
+    const raw = await fs.readFile(filePath, 'utf8');
+    const room = JSON.parse(raw);
+    if (room.negotiation_mode !== 'ai' || !room.agent_preamble) {
+      return res.status(400).json({ error: 'This room is not in AI negotiation mode.' });
+    }
+
+    const cfg = room.strategy_config;
+    if (!cfg) {
+      return res.status(400).json({ error: 'Missing strategy configuration.' });
+    }
+
+    const used = Number(room.ai_rounds_used) || 0;
+    if (used >= cfg.max_rounds) {
+      return res.status(409).json({ error: 'Maximum AI negotiation rounds reached. Continue manually or close the room.' });
+    }
+
+    const offers = Array.isArray(room.offers) ? room.offers : [];
+    const userContent = `Current AI-assisted move: ${used + 1} of ${cfg.max_rounds}
+
+Offer thread (most recent last). Each entry is from the buyer/counterparty unless marked as seller:
+${JSON.stringify(offers, null, 2)}
+
+If there are zero offers, you are preparing the seller's first move — propose an opening anchor price and message as the seller (still JSON format).
+
+Output ONLY the JSON object per your system instructions.`;
+
+    const parsed = await callGroqJson(room.agent_preamble, userContent);
+
+    const amt = parsed.price && Number(parsed.price.amount);
+    const cur = parsed.price && typeof parsed.price.currency === 'string' ? parsed.price.currency.trim().toUpperCase() : cfg.currency;
+    const msg = typeof parsed.message === 'string' ? parsed.message : '';
+
+    if (!Number.isFinite(amt)) {
+      return res.status(502).json({ error: 'Model returned invalid price.' });
+    }
+
+    let clamped = amt;
+    if (clamped < cfg.walk_away_price) clamped = cfg.walk_away_price;
+    const ceiling = Math.max(cfg.target_price * 2, cfg.walk_away_price * 1.5);
+    if (clamped > ceiling) clamped = ceiling;
+
+    room.ai_rounds_used = used + 1;
+    await fs.writeFile(filePath, JSON.stringify(room, null, 2), 'utf8');
+
+    return res.json({
+      ok: true,
+      suggestion: {
+        price: { amount: clamped, currency: cur || cfg.currency },
+        message: msg.slice(0, 2000),
+        agent: cfg.seller_agent_name || 'GanderSeller',
+      },
+      rounds_used: room.ai_rounds_used,
+      rounds_max: cfg.max_rounds,
+    });
+  } catch (e) {
+    if (e && e.code === 'ENOENT') {
+      return res.status(404).json({ error: 'Room not found.' });
+    }
+    // eslint-disable-next-line no-console
+    console.error(e);
+    return res.status(502).json({ error: e.message || 'AI suggestion failed.' });
+  }
+});
+
 router.get('/:roomId', async (req, res) => {
   const roomId = safeRoomId(req.params.roomId);
   if (!roomId) {
@@ -157,7 +401,7 @@ router.get('/:roomId', async (req, res) => {
     if (Array.isArray(room.offers)) {
       room.offers = room.offers.map(normalizeOffer);
     }
-    return res.json(room);
+    return res.json(stripRoomForClient(room));
   } catch (e) {
     if (e && e.code === 'ENOENT') {
       return res.status(404).json({ error: 'Room not found.' });

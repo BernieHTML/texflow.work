@@ -71,6 +71,19 @@
       <p class="empty" id="offers-empty" hidden>No offers yet. Share this room or post the first offer below.</p>
     </section>
 
+    <section class="card" id="ai-panel" hidden>
+      <h2 class="section-title" style="margin:0 0 0.5rem;">AI negotiation (Groq)</h2>
+      <p class="section-sub" id="ai-panel-meta"></p>
+      <p style="margin:0.75rem 0;">
+        <button type="button" class="btn" id="ai-suggest-btn">Get AI counter-offer</button>
+      </p>
+      <p id="ai-suggest-error" class="err" hidden></p>
+      <div id="ai-suggest-box" class="json-block" style="display:none;margin-top:0.75rem;max-height:200px;" aria-live="polite"></div>
+      <p style="margin-top:0.75rem;">
+        <button type="button" class="btn btn-ghost" id="ai-apply-btn" style="display:none;">Apply to offer form below</button>
+      </p>
+    </section>
+
     <section class="card" id="offer-form-section" hidden>
       <h2 class="section-title" style="margin:0 0 0.75rem;">Submit an offer</h2>
       <form id="offer-form">

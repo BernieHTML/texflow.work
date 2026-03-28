@@ -233,8 +233,8 @@
           });
         })
         .then(function (data) {
-          var url = data.url || '/gander/room/' + data.room_id;
-          window.location.href = url;
+          var rid = data.room_id;
+          window.location.href = '/gander/negotiate-mode.html?room=' + encodeURIComponent(rid);
         })
         .catch(function (e) {
           showError(errEl, e.message || 'Could not create room.');
@@ -667,6 +667,8 @@
     var loadStatus = document.getElementById('load-status');
     var loadErr = document.getElementById('load-error');
     var pollTimer = null;
+    var agentPrefilled = false;
+    var lastAiSuggestion = null;
 
     if (!roomId) {
       if (loadStatus) loadStatus.hidden = true;
@@ -708,6 +710,38 @@
           room.status === 'closed'
             ? 'This room is closed.'
             : 'Offers and replies refresh every few seconds. Terminal users can run curl on the plain-text feed.';
+      }
+
+      var aiPanel = document.getElementById('ai-panel');
+      if (aiPanel) {
+        if (room.negotiation_mode === 'ai' && room.status !== 'closed') {
+          aiPanel.hidden = false;
+          var cfg = room.strategy_config;
+          var used = Number(room.ai_rounds_used) || 0;
+          var maxR = cfg && cfg.max_rounds != null ? cfg.max_rounds : '?';
+          var meta = document.getElementById('ai-panel-meta');
+          if (meta) {
+            meta.textContent =
+              'Target ' +
+              (cfg ? cfg.target_price : '?') +
+              ' · Floor ' +
+              (cfg ? cfg.walk_away_price : '?') +
+              ' ' +
+              (cfg && cfg.currency ? cfg.currency : '') +
+              ' · AI-assisted rounds used: ' +
+              used +
+              ' / ' +
+              maxR;
+          }
+          var agentEl = document.getElementById('agent');
+          if (cfg && cfg.seller_agent_name && agentEl && !agentEl.value.trim() && !agentPrefilled) {
+            agentEl.value = cfg.seller_agent_name;
+            rememberAgent(cfg.seller_agent_name);
+            agentPrefilled = true;
+          }
+        } else {
+          aiPanel.hidden = true;
+        }
       }
 
       if (!silent) {
@@ -818,6 +852,70 @@
         } else {
           fallback();
         }
+      });
+    }
+
+    var aiSuggestBtn = document.getElementById('ai-suggest-btn');
+    var aiApplyBtn = document.getElementById('ai-apply-btn');
+    var aiSuggestErr = document.getElementById('ai-suggest-error');
+    var aiSuggestBox = document.getElementById('ai-suggest-box');
+
+    function showAiErr(msg) {
+      if (!aiSuggestErr) return;
+      aiSuggestErr.textContent = msg || '';
+      aiSuggestErr.hidden = !msg;
+    }
+
+    if (aiSuggestBtn) {
+      aiSuggestBtn.addEventListener('click', function () {
+        showAiErr('');
+        lastAiSuggestion = null;
+        if (aiSuggestBox) {
+          aiSuggestBox.style.display = 'none';
+          aiSuggestBox.textContent = '';
+        }
+        if (aiApplyBtn) aiApplyBtn.style.display = 'none';
+        aiSuggestBtn.disabled = true;
+        fetch(API_BASE + '/' + encodeURIComponent(roomId) + '/ai-suggest', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: '{}',
+        })
+          .then(function (r) {
+            return r.json().then(function (data) {
+              if (!r.ok) throw new Error(data.error || r.statusText);
+              return data;
+            });
+          })
+          .then(function (data) {
+            lastAiSuggestion = data.suggestion;
+            if (aiSuggestBox) {
+              aiSuggestBox.style.display = 'block';
+              aiSuggestBox.textContent = JSON.stringify(data.suggestion, null, 2);
+            }
+            if (aiApplyBtn) aiApplyBtn.style.display = 'inline-flex';
+          })
+          .catch(function (e) {
+            showAiErr(e.message || 'AI suggestion failed.');
+          })
+          .finally(function () {
+            aiSuggestBtn.disabled = false;
+          });
+      });
+    }
+
+    if (aiApplyBtn) {
+      aiApplyBtn.addEventListener('click', function () {
+        if (!lastAiSuggestion || !lastAiSuggestion.price) return;
+        var ag = document.getElementById('agent');
+        var am = document.getElementById('amount');
+        var cur = document.getElementById('currency');
+        var msg = document.getElementById('message');
+        if (ag) ag.value = lastAiSuggestion.agent || '';
+        if (am) am.value = String(lastAiSuggestion.price.amount);
+        if (cur) cur.value = lastAiSuggestion.price.currency || '';
+        if (msg) msg.value = lastAiSuggestion.message || '';
+        if (lastAiSuggestion.agent) rememberAgent(lastAiSuggestion.agent);
       });
     }
 
