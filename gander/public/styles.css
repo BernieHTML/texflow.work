@@ -903,6 +903,122 @@ details.json-details > summary {
   transition: width 1s linear, background 0.4s;
 }
 
+/* ── Entry gate modal ── */
+.gate-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(10,12,18,0.92);
+  backdrop-filter: blur(6px);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+.gate-overlay[hidden] { display: none !important; }
+.gate-modal {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 2rem 2rem 1.5rem;
+  width: 100%;
+  max-width: 440px;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.7);
+}
+.gate-heading {
+  margin: 0 0 0.25rem;
+  font-size: 1.35rem;
+  font-weight: 700;
+}
+.gate-sub {
+  margin: 0 0 1.5rem;
+  font-size: 0.83rem;
+  color: var(--muted);
+  font-family: var(--mono);
+}
+.gate-field {
+  margin-bottom: 1rem;
+}
+.gate-label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--muted);
+  margin-bottom: 0.3rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.gate-input {
+  width: 100%;
+  padding: 0.65rem 0.85rem;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: #0c0f14;
+  color: var(--text);
+  font-family: inherit;
+  font-size: 1rem;
+  transition: border-color 0.15s;
+}
+.gate-input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+.gate-input:invalid:not(:placeholder-shown) {
+  border-color: var(--danger);
+}
+.gate-consent {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  margin: 1rem 0 0.75rem;
+  font-size: 0.9rem;
+  line-height: 1.45;
+  cursor: pointer;
+}
+.gate-consent input[type="checkbox"] {
+  flex-shrink: 0;
+  width: 17px;
+  height: 17px;
+  margin-top: 2px;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+.gate-tc-link { color: #3B82F6; text-decoration: underline; }
+.gate-tc-link:hover { color: #60a5fa; }
+.gate-error {
+  color: var(--danger);
+  font-size: 0.85rem;
+  margin: 0 0 0.75rem;
+  padding: 0.5rem 0.75rem;
+  background: rgba(232,93,93,0.1);
+  border-radius: 6px;
+  border: 1px solid rgba(232,93,93,0.3);
+}
+.gate-submit {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  border: none;
+  background: #3B82F6;
+  color: #fff;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, opacity 0.15s;
+  margin-top: 0.25rem;
+}
+.gate-submit:hover:not(:disabled) { background: #2563eb; }
+.gate-submit:disabled { opacity: 0.45; cursor: not-allowed; }
+.gate-privacy-note {
+  margin: 0.85rem 0 0;
+  font-size: 0.77rem;
+  color: var(--muted);
+  font-style: italic;
+  line-height: 1.5;
+}
+.gate-privacy-note a { color: var(--muted); text-decoration: underline; }
+
 /* ── Room Settings card (negotiate-mode.html) ── */
 #room-settings-wrap {
   margin-bottom: 1rem;

@@ -419,40 +419,34 @@
       'Room link (share in browser):',
       '  ' + roomUrl,
       '',
-      '--- Terminal (other party) ---',
-      'Live stream — updates arrive the moment an offer or reply is posted (recommended):',
+      '--- Terminal (API) ---',
+      '',
+      'STEP 1 — Read the Terms & Conditions:',
+      '  curl -sS "' + base + '/api/rooms/' + roomId + '/terms" | python3 -m json.tool',
+      '',
+      'STEP 2 — Join the room to get your participant token (required for all actions):',
+      '  curl -sS -X POST "' + base + '/api/rooms/' + roomId + '/join" \\',
+      '    -H "Content-Type: application/json" \\',
+      '    -d \'{"full_name":"Jane Smith","email":"jane@example.com","terms_agreed":true}\'',
+      '  # Save the returned participant_token',
+      '',
+      'STEP 3 — Watch for offers (no token needed — anyone can observe):',
       '  curl -N "' + base + '/api/rooms/' + roomId + '/watch"',
       '',
-      'One-shot snapshot (no streaming):',
-      '  curl -sS "' + base + '/api/rooms/' + roomId + '/terminal"',
-      '',
-      'Full room JSON:',
-      '  curl -sS "' + base + '/api/rooms/' + roomId + '"',
-      '',
-      'Submit a new offer:',
+      'STEP 4 — Submit a new offer (include your token):',
       '  curl -sS -X POST "' + base + '/api/rooms/' + roomId + '/offer" \\',
       '    -H "Content-Type: application/json" \\',
+      '    -H "X-Participant-Token: YOUR_TOKEN" \\',
       '    -d \'{"agent":"my_agent","price":{"amount":900,"currency":"USD"},"message":"Here is my offer"}\'',
       '',
-      'Reply to offer #1 — accept (index is 0 in the API):',
+      'STEP 5 — Reply to offer #1 — accept/decline/counteroffer (index is 0 in the API):',
       '  curl -sS -X POST "' + base + '/api/rooms/' + roomId + '/offers/0/reply" \\',
       '    -H "Content-Type: application/json" \\',
+      '    -H "X-Participant-Token: YOUR_TOKEN" \\',
       '    -d \'{"type":"accept","agent":"seller","message":"Agreed."}\'',
       '',
-      'Reply — decline:',
-      '  curl -sS -X POST "' + base + '/api/rooms/' + roomId + '/offers/0/reply" \\',
-      '    -H "Content-Type: application/json" \\',
-      '    -d \'{"type":"decline","agent":"seller","message":"No thanks."}\'',
-      '',
-      'Reply — counteroffer:',
-      '  curl -sS -X POST "' + base + '/api/rooms/' + roomId + '/offers/0/reply" \\',
-      '    -H "Content-Type: application/json" \\',
-      '    -d \'{"type":"counteroffer","agent":"seller","price":{"amount":950,"currency":"USD"},"message":"Meet halfway"}\'',
-      '',
-      'Create a new room (paste your UCP product JSON):',
-      '  curl -sS -X POST "' + base + '/api/rooms" \\',
-      '    -H "Content-Type: application/json" \\',
-      '    -d \'{"product":{"id":"gid://product/1","title":"Example"}}\'',
+      'One-shot snapshot (no token needed):',
+      '  curl -sS "' + base + '/api/rooms/' + roomId + '/terminal"',
       '',
     ];
     return lines.join('\n');
@@ -675,9 +669,12 @@
       body.price = payload.price;
     }
 
+    var replyHeaders = { 'Content-Type': 'application/json' };
+    if (participantToken) replyHeaders['X-Participant-Token'] = participantToken;
+
     fetch(API_BASE + '/' + encodeURIComponent(roomId) + '/offers/' + offerIndex + '/reply', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: replyHeaders,
       body: JSON.stringify(body),
     })
       .then(function (r) {
@@ -717,6 +714,99 @@
       if (loadStatus) loadStatus.hidden = true;
       showError(loadErr, 'Missing room id in URL.');
       return;
+    }
+
+    /* ── Entry gate ── */
+    var participantToken = null;
+    var STORAGE_KEY = 'gander_token_' + roomId;
+    var BASE_API = API_BASE;
+
+    function storedToken() {
+      try { return localStorage.getItem(STORAGE_KEY); } catch (_) { return null; }
+    }
+    function storeToken(tok) {
+      try { localStorage.setItem(STORAGE_KEY, tok); } catch (_) {}
+    }
+    function clearToken() {
+      try { localStorage.removeItem(STORAGE_KEY); } catch (_) {}
+    }
+
+    function showGate() {
+      var gate = document.getElementById('entry-gate');
+      var sub  = document.getElementById('gate-sub');
+      if (sub) sub.textContent = 'Room: ' + roomId;
+      if (gate) gate.hidden = false;
+      document.body.style.overflow = 'hidden';
+    }
+    function hideGate() {
+      var gate = document.getElementById('entry-gate');
+      if (gate) gate.hidden = true;
+      document.body.style.overflow = '';
+    }
+
+    /* Wire gate form */
+    (function wireGate() {
+      var form     = document.getElementById('gate-form');
+      var nameEl   = document.getElementById('gate-name');
+      var emailEl  = document.getElementById('gate-email');
+      var checkEl  = document.getElementById('gate-consent-check');
+      var submitEl = document.getElementById('gate-submit');
+      var errEl    = document.getElementById('gate-error');
+
+      function validate() {
+        var nameOk  = nameEl && nameEl.value.trim().length >= 2;
+        var emailOk = emailEl && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailEl.value.trim());
+        var checked = checkEl && checkEl.checked;
+        if (submitEl) submitEl.disabled = !(nameOk && emailOk && checked);
+      }
+
+      if (nameEl) nameEl.addEventListener('input', validate);
+      if (emailEl) emailEl.addEventListener('input', validate);
+      if (checkEl) checkEl.addEventListener('change', validate);
+
+      if (form) {
+        form.addEventListener('submit', function (ev) {
+          ev.preventDefault();
+          if (submitEl) submitEl.disabled = true;
+          if (errEl) errEl.hidden = true;
+          var body = {
+            full_name: nameEl ? nameEl.value.trim() : '',
+            email: emailEl ? emailEl.value.trim() : '',
+            terms_agreed: true,
+          };
+          fetch(BASE_API + '/' + encodeURIComponent(roomId) + '/join', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body),
+          })
+            .then(function (r) {
+              return r.json().then(function (d) {
+                if (!r.ok) throw new Error(d.error || r.statusText);
+                return d;
+              });
+            })
+            .then(function (data) {
+              participantToken = data.participant_token;
+              storeToken(participantToken);
+              hideGate();
+              loadRoom(false);
+            })
+            .catch(function (e) {
+              if (errEl) { errEl.textContent = e.message || 'Failed to join room.'; errEl.hidden = false; }
+              if (submitEl) submitEl.disabled = false;
+            });
+        });
+      }
+    })();
+
+    /* Check if token already stored */
+    var existingToken = storedToken();
+    if (existingToken) {
+      /* Verify it's still valid with a quick ping — just proceed and let write requests 401 if needed */
+      participantToken = existingToken;
+      loadRoom(false);
+    } else {
+      showGate();
     }
 
     function applyRoom(room, silent) {
@@ -1066,9 +1156,12 @@
       var submitBtn = document.getElementById('submit-offer');
       if (submitBtn) submitBtn.disabled = true;
 
+      var offerHeaders = { 'Content-Type': 'application/json' };
+      if (participantToken) offerHeaders['X-Participant-Token'] = participantToken;
+
       fetch(API_BASE + '/' + encodeURIComponent(roomId) + '/offer', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: offerHeaders,
         body: JSON.stringify({
           agent: agent,
           price: { amount: amount, currency: currency },

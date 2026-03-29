@@ -11,6 +11,40 @@
   <link rel="stylesheet" href="/gander/styles.css">
 </head>
 <body class="page-room">
+
+  <!-- ═══ Entry gate modal ═══ -->
+  <div id="entry-gate" class="gate-overlay" hidden>
+    <div class="gate-modal" role="dialog" aria-modal="true" aria-labelledby="gate-heading">
+      <h2 class="gate-heading" id="gate-heading">Enter Negotiation Room</h2>
+      <p class="gate-sub" id="gate-sub"></p>
+
+      <form id="gate-form" novalidate>
+        <div class="gate-field">
+          <label class="gate-label" for="gate-name">Full legal name</label>
+          <input class="gate-input" type="text" id="gate-name" autocomplete="name"
+            placeholder="e.g. Jane Smith" required minlength="2">
+        </div>
+        <div class="gate-field">
+          <label class="gate-label" for="gate-email">Email address</label>
+          <input class="gate-input" type="email" id="gate-email" autocomplete="email"
+            placeholder="e.g. jane@example.com" required>
+        </div>
+        <label class="gate-consent">
+          <input type="checkbox" id="gate-consent-check" required>
+          <span>I have read and agree to the
+            <a href="https://www.texflow.work/terms-and-conditions" target="_blank" rel="noopener noreferrer" class="gate-tc-link">Terms and Conditions</a>
+          </span>
+        </label>
+        <p id="gate-error" class="gate-error" hidden></p>
+        <button type="submit" class="gate-submit" id="gate-submit" disabled>Enter Room</button>
+        <p class="gate-privacy-note">
+          Your name, email, and IP address are recorded when you enter this room in accordance with our
+          <a href="https://www.texflow.work/privacy-policy" target="_blank" rel="noopener noreferrer">Privacy Policy</a>.
+        </p>
+      </form>
+    </div>
+  </div>
+
   <div class="wrap wrap--room">
     <header class="page-head">
       <p class="meta"><a href="/gander/">← Gander</a></p>

@@ -57,7 +57,206 @@ function productListPriceHint(product) {
 }
 
 const ROOMS_DIR = path.join(__dirname, '..', 'rooms');
+const DATA_DIR  = path.join(__dirname, '..', 'data');
+const CONSENT_LOG_FILE = path.join(DATA_DIR, 'consent-log.ndjson');
+const TOKENS_FILE      = path.join(DATA_DIR, 'tokens.json');
 const BASE_PATH = '/gander';
+const TERMS_VERSION = '1.0';
+const TOKEN_TTL_MS = 24 * 60 * 60 * 1000; // 24 hours
+
+/* ── Embedded T&Cs text (for terminal users) ── */
+const TERMS_TEXT = `GANDER / TEXFLOW TERMS AND CONDITIONS
+Version ${TERMS_VERSION} — Last updated: 29 March 2026
+https://www.texflow.work/terms-and-conditions
+
+1. ABOUT THESE TERMS
+These Terms govern your use of the Gander negotiation platform operated by Bernie Dyke,
+accessible at www.texflow.work. By entering a negotiation room you agree to be bound by these Terms.
+
+2. WHO CAN USE THE PLATFORM
+To enter a negotiation room you must provide your real full legal name and a valid email address.
+You confirm you are at least 18 years of age (or have guardian consent), that the details you
+provide are accurate, and that you have legal capacity to enter agreements in your jurisdiction.
+
+3. HOW THE PLATFORM WORKS
+Gander is an AI-powered negotiation platform for structured price negotiations. Important: the
+Platform does not facilitate binding contracts, process payments, or verify identity beyond the
+name and email provided. Any generated documents are drafts only — not legally binding.
+
+4. AI AGENTS
+By connecting an AI agent you confirm you are the responsible human principal. The Platform is
+not responsible for the actions of any AI agent.
+
+5. API ACCESS
+API access is subject to the same Terms as web access. You must not disrupt the Platform,
+access rooms you were not invited to, or provide false details.
+
+6. PROHIBITED CONDUCT
+You must not provide false identity details, use the Platform for unlawful purposes, attempt
+unauthorised access, harass users, introduce malicious code, or represent draft documents as
+legally binding agreements.
+
+7. DISCLAIMER OF WARRANTIES
+The Platform is provided "as is" without warranty. We disclaim all warranties to the maximum
+extent permitted by law.
+
+8. LIMITATION OF LIABILITY
+To the maximum extent permitted by law, Bernie Dyke will not be liable for any loss or damage
+arising from use of the Platform, any negotiation conducted through it, or reliance on any
+generated document. Nothing excludes your rights under the Australian Consumer Law.
+
+9. PRIVACY
+Your name, email, and IP address are collected at room entry. See our Privacy Policy at
+https://www.texflow.work/privacy-policy for full details.
+
+10. GOVERNING LAW
+These Terms are governed by the laws of New South Wales, Australia.
+
+11. CONTACT
+Name: Bernie Dyke | Email: berniework.bd@gmail.com | Sydney, NSW, Australia
+
+---
+Read the full Terms at: https://www.texflow.work/terms-and-conditions
+Read the Privacy Policy at: https://www.texflow.work/privacy-policy
+`;
+
+/* ── Token store (in-memory + file-backed) ── */
+// Map<token, { room_id, email, full_name, created_at, expires_at }>
+const tokenStore = new Map();
+
+async function ensureDataDir() {
+  await fs.mkdir(DATA_DIR, { recursive: true });
+}
+
+async function loadTokens() {
+  try {
+    const raw = await fs.readFile(TOKENS_FILE, 'utf8');
+    const obj = JSON.parse(raw);
+    const now = Date.now();
+    let kept = 0;
+    for (const [tok, data] of Object.entries(obj)) {
+      if (data.expires_at && new Date(data.expires_at).getTime() > now) {
+        tokenStore.set(tok, data);
+        kept++;
+      }
+    }
+    // eslint-disable-next-line no-console
+    console.log(`[Gander] Loaded ${kept} active participant tokens.`);
+  } catch (_) { /* first run or empty file — fine */ }
+}
+
+async function persistTokens() {
+  try {
+    await ensureDataDir();
+    const obj = {};
+    for (const [tok, data] of tokenStore.entries()) {
+      obj[tok] = data;
+    }
+    await fs.writeFile(TOKENS_FILE, JSON.stringify(obj, null, 2), 'utf8');
+  } catch (e) {
+    // eslint-disable-next-line no-console
+    console.error('[Gander] Failed to persist tokens:', e.message);
+  }
+}
+
+function generateToken() {
+  return 'gdr_tok_' + crypto.randomBytes(20).toString('hex');
+}
+
+async function appendConsentLog(entry) {
+  try {
+    await ensureDataDir();
+    await fs.appendFile(CONSENT_LOG_FILE, JSON.stringify(entry) + '\n', 'utf8');
+  } catch (e) {
+    // eslint-disable-next-line no-console
+    console.error('[Gander] Failed to write consent log:', e.message);
+  }
+}
+
+function getClientIp(req) {
+  const forwarded = req.headers['x-forwarded-for'];
+  if (forwarded) return String(forwarded).split(',')[0].trim();
+  return req.socket && req.socket.remoteAddress ? req.socket.remoteAddress : 'unknown';
+}
+
+function buildJoinInstructions(roomId) {
+  return {
+    step_1_read_terms: `GET ${BASE_PATH}/api/rooms/${roomId}/terms`,
+    step_2_join: {
+      method: 'POST',
+      url: `${BASE_PATH}/api/rooms/${roomId}/join`,
+      body: {
+        full_name: 'Your full legal name',
+        email: 'your@email.com',
+        terms_agreed: true,
+      },
+      note: `By setting terms_agreed: true you confirm you have read the Terms at https://www.texflow.work/terms-and-conditions`,
+    },
+    step_3_participate: {
+      note: 'Include your participant_token in all subsequent requests:',
+      header: 'X-Participant-Token: gdr_tok_xxxx',
+    },
+    curl_example: [
+      `# Step 1 — read T&Cs in terminal`,
+      `curl "${BASE_PATH}/api/rooms/${roomId}/terms" | python3 -m json.tool`,
+      ``,
+      `# Step 2 — join and get your token`,
+      `curl -sS -X POST "https://texflow.work${BASE_PATH}/api/rooms/${roomId}/join" \\`,
+      `  -H "Content-Type: application/json" \\`,
+      `  -d '{"full_name":"Jane Smith","email":"jane@example.com","terms_agreed":true}'`,
+      ``,
+      `# Step 3 — use your token for all actions`,
+      `curl -sS -X POST "https://texflow.work${BASE_PATH}/api/rooms/${roomId}/offer" \\`,
+      `  -H "Content-Type: application/json" \\`,
+      `  -H "X-Participant-Token: gdr_tok_xxxx" \\`,
+      `  -d '{"agent":"myagent","price":{"amount":850,"currency":"USD"},"message":"Offer"}'`,
+      ``,
+      `# Watch (no token needed — open to anyone)`,
+      `curl -N "https://texflow.work${BASE_PATH}/api/rooms/${roomId}/watch"`,
+    ].join('\n'),
+  };
+}
+
+/* Middleware: require a valid participant token for the given room */
+function requireParticipant(req, res, next) {
+  const roomId = safeRoomId(req.params.roomId);
+  const token = req.headers['x-participant-token'] || req.headers['x-gander-token'];
+  if (!token) {
+    return res.status(401).json({
+      error: 'identity_required',
+      message: 'You must identify yourself and agree to the Terms and Conditions before participating in this room.',
+      instructions: buildJoinInstructions(roomId),
+    });
+  }
+  const data = tokenStore.get(String(token));
+  if (!data) {
+    return res.status(401).json({
+      error: 'token_invalid',
+      message: 'Participant token not recognised. Please join the room again.',
+      instructions: buildJoinInstructions(roomId),
+    });
+  }
+  if (data.expires_at && Date.now() > new Date(data.expires_at).getTime()) {
+    tokenStore.delete(String(token));
+    return res.status(401).json({
+      error: 'token_expired',
+      message: 'Your participant token has expired. Please re-join the room (your consent record is preserved).',
+      instructions: buildJoinInstructions(roomId),
+    });
+  }
+  if (roomId && data.room_id !== roomId) {
+    return res.status(403).json({
+      error: 'token_wrong_room',
+      message: 'This token is not valid for this room.',
+      instructions: buildJoinInstructions(roomId),
+    });
+  }
+  req.participant = data;
+  return next();
+}
+
+/* Load persisted tokens at startup */
+loadTokens().catch(() => {});
 
 function safeRoomId(id) {
   if (typeof id !== 'string' || !/^[a-zA-Z0-9_-]{1,64}$/.test(id)) {
@@ -293,6 +492,81 @@ router.get('/:roomId/terminal', async (req, res) => {
     console.error(e);
     return res.status(500).send('Failed to read room.\n');
   }
+});
+
+/* ── GET /:roomId/terms — T&Cs for terminal users (no auth required) ── */
+router.get('/:roomId/terms', (req, res) => {
+  return res.json({
+    terms_version: TERMS_VERSION,
+    terms_url: 'https://www.texflow.work/terms-and-conditions',
+    privacy_url: 'https://www.texflow.work/privacy-policy',
+    last_updated: '2026-03-29',
+    terms_text: TERMS_TEXT,
+  });
+});
+
+/* ── POST /:roomId/join — identity + consent, returns participant token ── */
+router.post('/:roomId/join', async (req, res) => {
+  const roomId = safeRoomId(req.params.roomId);
+  if (!roomId) {
+    return res.status(400).json({ error: 'Invalid room id.' });
+  }
+
+  const body = req.body || {};
+  const fullName = typeof body.full_name === 'string' ? body.full_name.trim() : '';
+  const email    = typeof body.email === 'string' ? body.email.trim().toLowerCase() : '';
+  const agreed   = body.terms_agreed;
+
+  if (!fullName || fullName.length < 2) {
+    return res.status(400).json({ error: 'full_name is required and must be at least 2 characters.' });
+  }
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    return res.status(400).json({ error: 'A valid email address is required.' });
+  }
+  if (agreed !== true) {
+    return res.status(400).json({
+      error: 'terms_agreed must be true (boolean). Read the Terms at https://www.texflow.work/terms-and-conditions before agreeing.',
+      how_to_read: `curl "${BASE_PATH}/api/rooms/${roomId}/terms" | python3 -m json.tool`,
+    });
+  }
+
+  // Verify room exists
+  try {
+    await fs.access(roomFile(roomId));
+  } catch {
+    return res.status(404).json({ error: 'Room not found.' });
+  }
+
+  const ip = getClientIp(req);
+  const now = new Date().toISOString();
+  const expiresAt = new Date(Date.now() + TOKEN_TTL_MS).toISOString();
+  const token = generateToken();
+  const channel = req.headers['user-agent'] && req.headers['user-agent'].toLowerCase().includes('curl') ? 'api' : 'web';
+
+  const tokenData = { room_id: roomId, full_name: fullName, email, created_at: now, expires_at: expiresAt };
+  tokenStore.set(token, tokenData);
+  persistTokens().catch(() => {});
+
+  const consentEntry = {
+    id: crypto.randomUUID(),
+    room_id: roomId,
+    full_name: fullName,
+    email,
+    ip_address: ip,
+    terms_version: TERMS_VERSION,
+    accepted_at: now,
+    participant_token: crypto.createHash('sha256').update(token).digest('hex').slice(0, 16),
+    channel,
+  };
+  appendConsentLog(consentEntry).catch(() => {});
+
+  return res.status(201).json({
+    success: true,
+    message: 'Identity confirmed. Terms accepted. You may now participate in this room.',
+    participant_token: token,
+    expires_at: expiresAt,
+    instructions: `Include this token in all subsequent requests as a header: X-Participant-Token: ${token}`,
+  });
 });
 
 router.post('/:roomId/strategy', async (req, res) => {
@@ -592,7 +866,7 @@ Respond as the seller according to your strategy. Output ONLY the JSON object.`;
   }
 }
 
-router.post('/:roomId/offer', async (req, res) => {
+router.post('/:roomId/offer', requireParticipant, async (req, res) => {
   const roomId = safeRoomId(req.params.roomId);
   if (!roomId) {
     return res.status(400).json({ error: 'Invalid room id.' });
@@ -655,7 +929,7 @@ router.post('/:roomId/offer', async (req, res) => {
   }
 });
 
-router.post('/:roomId/offers/:offerIndex/reply', async (req, res) => {
+router.post('/:roomId/offers/:offerIndex/reply', requireParticipant, async (req, res) => {
   const roomId = safeRoomId(req.params.roomId);
   if (!roomId) {
     return res.status(400).json({ error: 'Invalid room id.' });

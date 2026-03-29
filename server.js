@@ -223,6 +223,10 @@ app.get('/', (req, res) => res.sendFile(join(__dirname, 'public', 'index.html'))
 app.get('/agent', (req, res) => res.sendFile(AGENT_ENTRY_PAGE));
 app.get('/agent/', (req, res) => res.sendFile(AGENT_ENTRY_PAGE));
 
+// --- Legal pages (extensionless URLs) ---
+app.get('/terms-and-conditions', (req, res) => res.sendFile(join(__dirname, 'public', 'terms-and-conditions.html')));
+app.get('/privacy-policy', (req, res) => res.sendFile(join(__dirname, 'public', 'privacy-policy.html')));
+
 // --- TexMKT product: pages (before static so they take precedence) ---
 app.get('/texmkt/', (req, res) => res.sendFile(join(__dirname, 'public', 'texmkt', 'index.html')));
 app.get('/texmkt', (req, res) => res.redirect(301, '/texmkt/'));
