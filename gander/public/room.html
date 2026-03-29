@@ -20,6 +20,7 @@
           <p class="sub" id="room-meta"></p>
         </div>
         <div class="room-head-actions">
+          <span class="owner-badge" id="owner-badge" hidden>Room Owner</span>
           <button type="button" class="btn-share" id="share-btn" title="Copy room link and terminal instructions">
             Share
           </button>
@@ -65,6 +66,25 @@
         · <button type="button" id="copy-room-id-btn" class="btn-link mono" title="Copy room ID to clipboard" style="background:none;border:none;color:var(--accent);cursor:pointer;font:inherit;font-size:0.82em;padding:0;">copy ID</button>
       </p>
     </section>
+
+    <!-- Notes banner (shown when notes exist) -->
+    <div class="room-notes-band" id="room-notes-band" hidden>
+      <span class="room-notes-icon">📋</span>
+      <div>
+        <p class="room-notes-label">Room notes <span class="room-notes-owner">(set by room creator · visible on curl livestream)</span></p>
+        <p class="room-notes-text" id="room-notes-text"></p>
+      </div>
+    </div>
+
+    <!-- Time limit banner (shown when expires_at is set) -->
+    <div class="room-timer-band" id="room-timer-band" hidden>
+      <span class="room-timer-icon">⏱</span>
+      <div>
+        <p class="room-timer-label">Time remaining</p>
+        <p class="room-timer-value" id="room-timer-value">—</p>
+      </div>
+      <div class="room-timer-bar-wrap"><div class="room-timer-bar" id="room-timer-bar"></div></div>
+    </div>
 
     <section class="card offer-stats-card" id="offer-stats-card" hidden>
       <div class="offer-stats">

@@ -54,6 +54,37 @@
 
     <p id="mode-err" class="err" hidden></p>
 
+    <!-- Room Settings: always visible regardless of mode -->
+    <div class="card" id="room-settings-wrap">
+      <h2 style="margin:0 0 1rem;font-size:1.1rem;">⚙ Room settings</h2>
+
+      <label for="room_notes">Notes for all participants</label>
+      <textarea id="room_notes" name="room_notes" rows="3"
+        placeholder="E.g. Bulk orders welcome. Payment within 30 days required. Min order: 10 units."
+        style="min-height:80px;resize:vertical;"></textarea>
+      <p class="rs-hint">Visible to everyone — shown at the top of the curl livestream with a label that this was set by the room creator.</p>
+
+      <p style="margin:0.85rem 0 0.4rem;font-weight:500;font-size:0.9rem;">Time limit</p>
+      <div class="rs-radio-row">
+        <label class="rs-radio"><input type="radio" name="time_limit" id="tl-none" value="none" checked> No time limit</label>
+        <label class="rs-radio"><input type="radio" name="time_limit" id="tl-set" value="set"> Set a limit</label>
+      </div>
+      <div id="duration-wrap" hidden style="display:none;margin-top:0.65rem;">
+        <div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;">
+          <input type="number" id="duration_value" min="1" max="10080" placeholder="60"
+            style="width:90px;font-family:var(--mono);padding:0.6rem 0.75rem;border-radius:8px;border:1px solid var(--border);background:#0c0f14;color:var(--text);">
+          <select id="duration_unit"
+            style="padding:0.6rem 0.75rem;border-radius:8px;border:1px solid var(--border);background:#0c0f14;color:var(--text);font-family:inherit;">
+            <option value="minutes">minutes</option>
+            <option value="hours">hours</option>
+            <option value="days">days</option>
+          </select>
+          <span style="font-size:0.85rem;color:var(--muted);" id="duration-preview"></span>
+        </div>
+        <p class="rs-hint">A countdown will run in the curl livestream, updating every 30 seconds. The room closes automatically when the timer hits zero.</p>
+      </div>
+    </div>
+
     <div id="ai-form-wrap" class="card">
       <h2 style="margin:0 0 1rem;font-size:1.1rem;">AI strategy</h2>
       <form id="ai-form">
@@ -132,12 +163,50 @@
         err.hidden = !msg;
       }
 
+      /* ── Time-limit toggle ── */
+      var tlNone = document.getElementById('tl-none');
+      var tlSet  = document.getElementById('tl-set');
+      var durWrap = document.getElementById('duration-wrap');
+      var durVal  = document.getElementById('duration_value');
+      var durUnit = document.getElementById('duration_unit');
+      var durPrev = document.getElementById('duration-preview');
+
+      function updateDurPreview() {
+        var v = parseFloat(durVal.value);
+        var u = durUnit.value;
+        if (!v || v <= 0) { durPrev.textContent = ''; return; }
+        var mins = u === 'hours' ? v * 60 : u === 'days' ? v * 1440 : v;
+        var dt = new Date(Date.now() + mins * 60000);
+        durPrev.textContent = '→ closes ' + dt.toLocaleString();
+      }
+
+      tlNone.addEventListener('change', function () { durWrap.style.display = 'none'; });
+      tlSet.addEventListener('change',  function () { durWrap.style.display = 'block'; updateDurPreview(); });
+      durVal.addEventListener('input', updateDurPreview);
+      durUnit.addEventListener('change', updateDurPreview);
+
+      /* ── Read room-settings fields ── */
+      function getRoomSettings() {
+        var notes = (document.getElementById('room_notes').value || '').trim() || null;
+        var durMins = null;
+        if (tlSet.checked) {
+          var v = parseFloat(durVal.value);
+          var u = durUnit.value;
+          if (v > 0) {
+            durMins = u === 'hours' ? v * 60 : u === 'days' ? v * 1440 : v;
+          }
+        }
+        return { notes: notes, duration_minutes: durMins };
+      }
+
+      /* ── Human mode ── */
       document.getElementById('btn-human').addEventListener('click', function () {
         showErr('');
+        var settings = getRoomSettings();
         fetch(API + '/' + encodeURIComponent(roomId) + '/strategy', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ mode: 'human' }),
+          body: JSON.stringify(Object.assign({ mode: 'human' }, settings)),
         })
           .then(function (r) {
             return r.json().then(function (d) {
@@ -148,16 +217,16 @@
           .then(function (d) {
             window.location.href = d.url || '/gander/room/' + roomId;
           })
-          .catch(function (e) {
-            showErr(e.message || 'Failed.');
-          });
+          .catch(function (e) { showErr(e.message || 'Failed.'); });
       });
 
+      /* ── AI mode — show form ── */
       document.getElementById('btn-ai').addEventListener('click', function () {
         aiWrap.classList.add('visible');
         aiWrap.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
       });
 
+      /* ── AI mode — submit ── */
       document.getElementById('ai-form').addEventListener('submit', function (ev) {
         ev.preventDefault();
         var fe = document.getElementById('ai-form-err');
@@ -166,7 +235,8 @@
         document.querySelectorAll('input[name="term"]:checked').forEach(function (c) {
           terms.push(c.value);
         });
-        var body = {
+        var settings = getRoomSettings();
+        var body = Object.assign({
           mode: 'ai',
           target_price: Number(document.getElementById('target_price').value),
           walk_away_price: Number(document.getElementById('walk_away_price').value),
@@ -176,7 +246,7 @@
           tone: document.getElementById('tone').value,
           max_rounds: Number.parseInt(document.getElementById('max_rounds').value, 10),
           seller_agent_name: document.getElementById('seller_agent_name').value.trim() || 'GanderSeller',
-        };
+        }, settings);
         fetch(API + '/' + encodeURIComponent(roomId) + '/strategy', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },

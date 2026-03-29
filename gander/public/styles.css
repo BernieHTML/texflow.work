@@ -815,3 +815,129 @@ details.json-details > summary {
 .offer-stat--high .offer-stat-value {
   color: #7dffb3;
 }
+
+/* ── Room Owner badge ── */
+.owner-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.25rem 0.65rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  background: linear-gradient(135deg, #2d4a8a 0%, #1e3770 100%);
+  color: #93c0ff;
+  border: 1px solid #3b5fa8;
+}
+.owner-badge::before { content: "👑 "; }
+
+/* ── Room notes band ── */
+.room-notes-band {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.85rem;
+  background: #161c2b;
+  border: 1px solid #2d3c5e;
+  border-radius: var(--radius);
+  padding: 0.85rem 1rem;
+  margin-bottom: 0.75rem;
+}
+.room-notes-icon { font-size: 1.25rem; flex-shrink: 0; margin-top: 0.1rem; }
+.room-notes-label {
+  margin: 0 0 0.2rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.room-notes-owner { font-weight: 400; }
+.room-notes-text { margin: 0; font-size: 0.95rem; color: var(--text); }
+
+/* ── Timer band ── */
+.room-timer-band {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  background: #131c14;
+  border: 1px solid #2d4a30;
+  border-radius: var(--radius);
+  padding: 0.85rem 1rem;
+  margin-bottom: 0.75rem;
+  position: relative;
+  overflow: hidden;
+}
+.room-timer-icon { font-size: 1.25rem; flex-shrink: 0; }
+.room-timer-label {
+  margin: 0 0 0.15rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.room-timer-value {
+  margin: 0;
+  font-family: var(--mono);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #7dffb3;
+}
+.room-timer-bar-wrap {
+  flex: 1;
+  height: 5px;
+  background: #1e2e20;
+  border-radius: 999px;
+  overflow: hidden;
+  margin-left: auto;
+  min-width: 60px;
+  max-width: 200px;
+}
+.room-timer-bar {
+  height: 100%;
+  width: 100%;
+  background: var(--accent);
+  border-radius: 999px;
+  transition: width 1s linear, background 0.4s;
+}
+
+/* ── Room Settings card (negotiate-mode.html) ── */
+#room-settings-wrap {
+  margin-bottom: 1rem;
+}
+#room-settings-wrap textarea {
+  width: 100%;
+  padding: 0.65rem 0.75rem;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: #0c0f14;
+  color: var(--text);
+  font-family: inherit;
+  font-size: 0.95rem;
+  margin-top: 0.25rem;
+}
+#room-settings-wrap textarea:focus,
+#room-settings-wrap input:focus,
+#room-settings-wrap select:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+.rs-hint {
+  margin: 0.35rem 0 0;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+.rs-radio-row {
+  display: flex;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+}
+.rs-radio {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+}

@@ -14,7 +14,31 @@ const GROQ_MODEL = process.env.GROQ_MODEL || 'llama-3.1-8b-instant';
 function stripRoomForClient(room) {
   const copy = { ...room };
   delete copy.agent_preamble;
+  delete copy.creator_token;
   return copy;
+}
+
+function timeRemainingStr(expiresAt) {
+  if (!expiresAt) return null;
+  const diff = new Date(expiresAt).getTime() - Date.now();
+  if (diff <= 0) return 'EXPIRED';
+  const totalSec = Math.floor(diff / 1000);
+  const h = Math.floor(totalSec / 3600);
+  const m = Math.floor((totalSec % 3600) / 60);
+  const s = totalSec % 60;
+  const parts = [];
+  if (h) parts.push(`${h}h`);
+  if (m || h) parts.push(`${m}m`);
+  parts.push(`${s}s`);
+  return parts.join(' ');
+}
+
+function maybeExpireRoom(room) {
+  if (room.status === 'open' && room.expires_at && Date.now() >= new Date(room.expires_at).getTime()) {
+    room.status = 'closed';
+    return true;
+  }
+  return false;
 }
 
 function productListPriceHint(product) {
@@ -61,6 +85,22 @@ function formatTerminalTranscript(room) {
   const rid = room.room_id || '?';
   lines.push(`=== Gander room ${rid} (${room.status || 'open'}) ===`);
   lines.push(`Product: ${room.product && room.product.title ? String(room.product.title) : '(untitled)'}`);
+
+  if (room.notes) {
+    lines.push('');
+    lines.push(`📋 Notes: ${room.notes}`);
+    lines.push('   (Notes are set by the room creator and visible to all participants)');
+  }
+
+  if (room.expires_at) {
+    const tr = timeRemainingStr(room.expires_at);
+    if (tr === 'EXPIRED') {
+      lines.push(`⏱  Time limit: EXPIRED (closed ${room.expires_at})`);
+    } else {
+      lines.push(`⏱  Time remaining: ${tr} — closes at ${room.expires_at}`);
+    }
+  }
+
   lines.push('');
 
   const offers = Array.isArray(room.offers) ? room.offers : [];
@@ -199,20 +239,26 @@ router.post('/', async (req, res) => {
       return res.status(500).json({ error: 'Could not allocate room id.' });
     }
 
+    const creatorToken = crypto.randomBytes(16).toString('hex');
     const room = {
       room_id: roomId,
       created_at: new Date().toISOString(),
       product,
       offers: [],
       status: 'open',
+      creator_token: creatorToken,
+      notes: null,
+      expires_at: null,
     };
 
     await fs.writeFile(filePath, JSON.stringify(room, null, 2), 'utf8');
 
     return res.status(201).json({
       room_id: roomId,
+      creator_token: creatorToken,
       url: `${BASE_PATH}/room/${roomId}`,
       terminal: `${BASE_PATH}/api/rooms/${roomId}/terminal`,
+      watch: `${BASE_PATH}/api/rooms/${roomId}/watch`,
     });
   } catch (err) {
     // eslint-disable-next-line no-console
@@ -227,10 +273,15 @@ router.get('/:roomId/terminal', async (req, res) => {
     return res.status(400).send('Invalid room id.\n');
   }
   try {
-    const raw = await fs.readFile(roomFile(roomId), 'utf8');
+    const fp = roomFile(roomId);
+    const raw = await fs.readFile(fp, 'utf8');
     const room = JSON.parse(raw);
     if (Array.isArray(room.offers)) {
       room.offers = room.offers.map(normalizeOffer);
+    }
+    if (maybeExpireRoom(room)) {
+      await fs.writeFile(fp, JSON.stringify(room, null, 2), 'utf8');
+      notifySubscribers(roomId);
     }
     res.setHeader('Content-Type', 'text/plain; charset=utf-8');
     return res.send(formatTerminalTranscript(room));
@@ -256,10 +307,24 @@ router.post('/:roomId/strategy', async (req, res) => {
     return res.status(400).json({ error: 'Field "mode" must be "human" or "ai".' });
   }
 
+  // Room settings (common to both modes)
+  const notes = typeof body.notes === 'string' && body.notes.trim()
+    ? body.notes.trim().slice(0, 1000)
+    : null;
+  const durationMinutes = body.duration_minutes != null
+    ? Number(body.duration_minutes)
+    : null;
+  const expiresAt = (Number.isFinite(durationMinutes) && durationMinutes > 0)
+    ? new Date(Date.now() + durationMinutes * 60 * 1000).toISOString()
+    : null;
+
   const filePath = roomFile(roomId);
   try {
     const raw = await fs.readFile(filePath, 'utf8');
     const room = JSON.parse(raw);
+
+    room.notes = notes;
+    room.expires_at = expiresAt;
 
     if (mode === 'human') {
       room.negotiation_mode = 'human';
@@ -267,6 +332,7 @@ router.post('/:roomId/strategy', async (req, res) => {
       delete room.agent_preamble;
       room.ai_rounds_used = 0;
       await fs.writeFile(filePath, JSON.stringify(room, null, 2), 'utf8');
+      notifySubscribers(roomId);
       return res.json({
         ok: true,
         negotiation_mode: 'human',
@@ -336,6 +402,7 @@ router.post('/:roomId/strategy', async (req, res) => {
     room.ai_rounds_used = 0;
 
     await fs.writeFile(filePath, JSON.stringify(room, null, 2), 'utf8');
+    notifySubscribers(roomId);
     return res.json({
       ok: true,
       negotiation_mode: 'ai',
@@ -429,10 +496,15 @@ router.get('/:roomId', async (req, res) => {
     return res.status(400).json({ error: 'Invalid room id.' });
   }
   try {
-    const raw = await fs.readFile(roomFile(roomId), 'utf8');
+    const fp = roomFile(roomId);
+    const raw = await fs.readFile(fp, 'utf8');
     const room = JSON.parse(raw);
     if (Array.isArray(room.offers)) {
       room.offers = room.offers.map(normalizeOffer);
+    }
+    if (maybeExpireRoom(room)) {
+      await fs.writeFile(fp, JSON.stringify(room, null, 2), 'utf8');
+      notifySubscribers(roomId);
     }
     return res.json(stripRoomForClient(room));
   } catch (e) {
@@ -697,10 +769,22 @@ router.get('/:roomId/watch', async (req, res) => {
     return res.end();
   }
 
-  // Keep-alive heartbeat every 25s so nginx/proxies don't time out
-  const heartbeat = setInterval(() => {
-    try { res.write(': heartbeat\n\n'); } catch (_) { clearInterval(heartbeat); }
-  }, 25000);
+  // Refresh every 30s — updates time-remaining countdown and keeps connection alive
+  const heartbeat = setInterval(async () => {
+    try {
+      const fp = roomFile(roomId);
+      const raw2 = await fs.readFile(fp, 'utf8');
+      const room2 = JSON.parse(raw2);
+      if (Array.isArray(room2.offers)) room2.offers = room2.offers.map(normalizeOffer);
+      const expired = maybeExpireRoom(room2);
+      if (expired) await fs.writeFile(fp, JSON.stringify(room2, null, 2), 'utf8');
+      const text = formatTerminalTranscript(room2);
+      res.write(`data: ${text.replace(/\n/g, '\ndata: ')}\n\n`);
+      if (expired) notifySubscribers(roomId);
+    } catch (_) {
+      try { res.write(': heartbeat\n\n'); } catch (__) { clearInterval(heartbeat); }
+    }
+  }, 30000);
 
   addSubscriber(roomId, res);
 

@@ -262,6 +262,9 @@
         })
         .then(function (data) {
           var rid = data.room_id;
+          if (rid && data.creator_token) {
+            try { localStorage.setItem('gander_creator_' + rid, data.creator_token); } catch (_) {}
+          }
           var base =
             window.location.pathname.indexOf('/gander') >= 0 ? '/gander' : '';
           window.location.href =
@@ -697,7 +700,18 @@
     var loadStatus = document.getElementById('load-status');
     var loadErr = document.getElementById('load-error');
     var pollTimer = null;
+    var countdownTimer = null;
     var agentPrefilled = false;
+    var roomExpiresAt = null;
+    var roomCreatedAt = null;
+
+    /* Owner detection: set during room creation in initHome */
+    var isOwner = false;
+    try {
+      isOwner = !!localStorage.getItem('gander_creator_' + roomId);
+    } catch (_) {}
+    var ownerBadge = document.getElementById('owner-badge');
+    if (ownerBadge && isOwner) ownerBadge.hidden = false;
 
     if (!roomId) {
       if (loadStatus) loadStatus.hidden = true;
@@ -775,12 +789,82 @@
         }
       }
 
+      /* ── Notes band ── */
+      var notesBand = document.getElementById('room-notes-band');
+      var notesText = document.getElementById('room-notes-text');
+      if (notesBand && notesText) {
+        if (room.notes) {
+          notesText.textContent = room.notes;
+          notesBand.hidden = false;
+        } else {
+          notesBand.hidden = true;
+        }
+      }
+
+      /* ── Time limit band ── */
+      var timerBand  = document.getElementById('room-timer-band');
+      var timerValue = document.getElementById('room-timer-value');
+      var timerBar   = document.getElementById('room-timer-bar');
+      if (timerBand) {
+        if (room.expires_at) {
+          roomExpiresAt = room.expires_at;
+          roomCreatedAt = room.created_at;
+          timerBand.hidden = false;
+          updateTimerDisplay(timerValue, timerBar, room.expires_at, room.created_at);
+          /* Start countdown if not already running */
+          if (!countdownTimer) {
+            countdownTimer = window.setInterval(function () {
+              var tv = document.getElementById('room-timer-value');
+              var tb = document.getElementById('room-timer-bar');
+              updateTimerDisplay(tv, tb, roomExpiresAt, roomCreatedAt);
+            }, 1000);
+          }
+        } else {
+          timerBand.hidden = true;
+          if (countdownTimer) { window.clearInterval(countdownTimer); countdownTimer = null; }
+        }
+      }
+
       renderOfferStats(room.offers || []);
 
       if (!silent) {
         document.getElementById('load-section').hidden = true;
         document.getElementById('room-content').hidden = false;
         document.getElementById('offers-section').hidden = false;
+      }
+    }
+
+    function updateTimerDisplay(timerValue, timerBar, expiresAt, createdAt) {
+      if (!timerValue || !expiresAt) return;
+      var now = Date.now();
+      var exp = new Date(expiresAt).getTime();
+      var diff = exp - now;
+      if (diff <= 0) {
+        timerValue.textContent = 'Expired';
+        timerValue.style.color = 'var(--danger, #e55)';
+        if (timerBar) timerBar.style.width = '0%';
+        return;
+      }
+      var totalSec = Math.floor(diff / 1000);
+      var h = Math.floor(totalSec / 3600);
+      var m = Math.floor((totalSec % 3600) / 60);
+      var s = totalSec % 60;
+      var parts = [];
+      if (h) parts.push(h + 'h');
+      if (m || h) parts.push(m + 'm');
+      parts.push(s + 's');
+      timerValue.textContent = parts.join(' ') + ' left';
+      timerValue.style.color = '';
+      if (timerBar && createdAt) {
+        var start = new Date(createdAt).getTime();
+        var total = exp - start;
+        var pct = total > 0 ? Math.max(0, Math.min(100, (diff / total) * 100)) : 100;
+        timerBar.style.width = pct.toFixed(1) + '%';
+        timerBar.style.background = pct > 30
+          ? 'var(--accent, #3b82f6)'
+          : pct > 10
+            ? 'var(--warn, #f59e0b)'
+            : 'var(--danger, #e55)';
       }
     }
 
@@ -861,6 +945,7 @@
       'beforeunload',
       function () {
         if (pollTimer) window.clearInterval(pollTimer);
+        if (countdownTimer) window.clearInterval(countdownTimer);
       },
       false
     );
