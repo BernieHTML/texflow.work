@@ -185,6 +185,34 @@
     if (jsonEl) jsonEl.textContent = JSON.stringify(product, null, 2);
   }
 
+  /* ——— Home: join room ——— */
+  function initJoin() {
+    var input = document.getElementById('join-code');
+    var btn = document.getElementById('join-btn');
+    var errEl = document.getElementById('join-error');
+    if (!input || !btn) return;
+
+    function doJoin() {
+      var code = input.value.trim().replace(/^.*\/room\//, '');
+      if (!code) {
+        showError(errEl, 'Enter a room code.');
+        return;
+      }
+      if (!/^[a-zA-Z0-9_-]{1,64}$/.test(code)) {
+        showError(errEl, 'That doesn\'t look like a valid room code.');
+        return;
+      }
+      showError(errEl, '');
+      var base = window.location.pathname.indexOf('/gander') >= 0 ? '/gander' : '';
+      window.location.href = base + '/room/' + encodeURIComponent(code);
+    }
+
+    btn.addEventListener('click', doJoin);
+    input.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') doJoin();
+    });
+  }
+
   /* ——— Home: create room ——— */
   function initHome() {
     var ta = document.getElementById('product-json');
@@ -747,11 +775,52 @@
         }
       }
 
+      renderOfferStats(room.offers || []);
+
       if (!silent) {
         document.getElementById('load-section').hidden = true;
         document.getElementById('room-content').hidden = false;
         document.getElementById('offers-section').hidden = false;
       }
+    }
+
+    function renderOfferStats(offers) {
+      var card = document.getElementById('offer-stats-card');
+      if (!card) return;
+
+      var validOffers = offers.filter(function (o) {
+        return o && o.price && typeof o.price.amount === 'number' && Number.isFinite(o.price.amount);
+      });
+
+      if (!validOffers.length) {
+        card.hidden = true;
+        return;
+      }
+      card.hidden = false;
+
+      // Newest = last in array (chronological)
+      var newest = validOffers[validOffers.length - 1];
+
+      // Lowest and highest by amount
+      var lowest = validOffers[0], highest = validOffers[0];
+      for (var i = 1; i < validOffers.length; i++) {
+        if (validOffers[i].price.amount < lowest.price.amount) lowest = validOffers[i];
+        if (validOffers[i].price.amount > highest.price.amount) highest = validOffers[i];
+      }
+
+      function fmtPrice(o) {
+        return String(o.price.amount) + (o.price.currency ? ' ' + o.price.currency : '');
+      }
+      function fmtMeta(o) {
+        return (o.agent || '—') + (o.timestamp ? ' · ' + formatOfferTime(o.timestamp) : '');
+      }
+
+      document.getElementById('stat-newest').textContent = fmtPrice(newest);
+      document.getElementById('stat-newest-meta').textContent = fmtMeta(newest);
+      document.getElementById('stat-low').textContent = fmtPrice(lowest);
+      document.getElementById('stat-low-meta').textContent = fmtMeta(lowest);
+      document.getElementById('stat-high').textContent = fmtPrice(highest);
+      document.getElementById('stat-high-meta').textContent = fmtMeta(highest);
     }
 
     function loadRoom(silent) {
@@ -944,5 +1013,6 @@
     initRoom();
   } else {
     initHome();
+    initJoin();
   }
 })();

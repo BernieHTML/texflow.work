@@ -687,3 +687,131 @@ details.json-details > summary {
   font-size: 0.88rem;
   color: #7dffb3;
 }
+
+/* ── Home page two-column grid ────────────────────────────── */
+.home-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+  align-items: start;
+}
+
+@media (max-width: 620px) {
+  .home-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.home-card-label {
+  margin: 0 0 0.3rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.home-card-title {
+  margin: 0 0 0.35rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.home-card-sub {
+  margin: 0 0 1rem;
+  font-size: 0.88rem;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.home-card--join {
+  border-color: rgba(125, 255, 179, 0.2);
+}
+
+.home-card--join .home-card-label {
+  color: #7dffb3;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ── Offer stats strip ────────────────────────────────────── */
+.offer-stats-card {
+  padding: 0;
+  overflow: hidden;
+}
+
+.offer-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+@media (max-width: 540px) {
+  .offer-stats {
+    grid-template-columns: 1fr;
+  }
+}
+
+.offer-stat {
+  padding: 1.1rem 1.35rem;
+  border-right: 1px solid var(--border);
+  position: relative;
+}
+
+.offer-stat:last-child {
+  border-right: none;
+}
+
+@media (max-width: 540px) {
+  .offer-stat {
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+  }
+  .offer-stat:last-child {
+    border-bottom: none;
+  }
+}
+
+.offer-stat-label {
+  margin: 0 0 0.3rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.offer-stat-value {
+  margin: 0 0 0.2rem;
+  font-size: 1.35rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--text);
+  line-height: 1.2;
+}
+
+.offer-stat-meta {
+  margin: 0;
+  font-size: 0.78rem;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.offer-stat--low .offer-stat-value {
+  color: #e8a85d;
+}
+
+.offer-stat--high .offer-stat-value {
+  color: #7dffb3;
+}

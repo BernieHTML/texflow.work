@@ -18,15 +18,32 @@
       <p class="sub">Create a negotiation room from a UCP product JSON. Don't have one? <a href="/ucp-gen">Generate from a URL →</a></p>
     </header>
 
-    <section class="card">
-      <label for="product-json">UCP product JSON</label>
-      <textarea id="product-json" spellcheck="false" placeholder='Paste JSON, e.g. { "id": "...", "title": "..." }'></textarea>
-      <p id="form-error" class="err" hidden></p>
-      <p style="margin-top:1rem;margin-bottom:0;display:flex;gap:0.65rem;flex-wrap:wrap;align-items:center;">
-        <button type="button" class="btn" id="create-btn">Create negotiation room</button>
-        <a href="/ucp-gen" class="btn" style="background:transparent;color:var(--accent);border:1px solid var(--border);box-shadow:none;">Generate UCP from URL</a>
-      </p>
-    </section>
+    <div class="home-grid">
+      <section class="card home-card--create">
+        <p class="home-card-label">Seller</p>
+        <h2 class="home-card-title">Create a negotiation room</h2>
+        <p class="home-card-sub">Paste a UCP product JSON to open a room. Buyers join with the room code.</p>
+        <label for="product-json" class="sr-only">UCP product JSON</label>
+        <textarea id="product-json" spellcheck="false" placeholder='Paste UCP product JSON, e.g. { "id": "...", "title": "..." }'></textarea>
+        <p id="form-error" class="err" hidden></p>
+        <p style="margin-top:1rem;margin-bottom:0;display:flex;gap:0.65rem;flex-wrap:wrap;align-items:center;">
+          <button type="button" class="btn" id="create-btn">Create negotiation room</button>
+          <a href="/ucp-gen" class="btn btn-ghost">Generate UCP from URL</a>
+        </p>
+      </section>
+
+      <section class="card home-card--join">
+        <p class="home-card-label">Buyer</p>
+        <h2 class="home-card-title">Join a room</h2>
+        <p class="home-card-sub">Enter a room code shared by the seller to view the product and submit offers.</p>
+        <label for="join-code">Room code</label>
+        <input type="text" id="join-code" placeholder="e.g. afa5776e68dc" autocomplete="off" spellcheck="false" maxlength="64" style="font-family:var(--mono);">
+        <p id="join-error" class="err" hidden></p>
+        <p style="margin-top:1rem;margin-bottom:0;">
+          <button type="button" class="btn" id="join-btn">Join room →</button>
+        </p>
+      </section>
+    </div>
   </div>
   <script src="/gander/app.js"></script>
 </body>

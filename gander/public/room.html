@@ -66,9 +66,29 @@
       </p>
     </section>
 
+    <section class="card offer-stats-card" id="offer-stats-card" hidden>
+      <div class="offer-stats">
+        <div class="offer-stat">
+          <p class="offer-stat-label">Newest offer</p>
+          <p class="offer-stat-value mono" id="stat-newest">—</p>
+          <p class="offer-stat-meta" id="stat-newest-meta"></p>
+        </div>
+        <div class="offer-stat offer-stat--low">
+          <p class="offer-stat-label">Lowest offer</p>
+          <p class="offer-stat-value mono" id="stat-low">—</p>
+          <p class="offer-stat-meta" id="stat-low-meta"></p>
+        </div>
+        <div class="offer-stat offer-stat--high">
+          <p class="offer-stat-label">Highest offer</p>
+          <p class="offer-stat-value mono" id="stat-high">—</p>
+          <p class="offer-stat-meta" id="stat-high-meta"></p>
+        </div>
+      </div>
+    </section>
+
     <section class="card" id="offers-section" hidden>
       <div class="section-head">
-        <h2 class="section-title">Negotiation</h2>
+        <h2 class="section-title">Negotiation log</h2>
         <p class="section-sub" id="offers-sync-hint">New offers appear here automatically.</p>
       </div>
       <ul class="offers offers--timeline" id="offers-list"></ul>
