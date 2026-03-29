@@ -1,0 +1,168 @@
+# Privacy Policy
+
+**Gander / TexFlow**  
+**www.texflow.work**  
+Last updated: 29 March 2026
+
+---
+
+## 1. Our Commitment to Privacy
+
+Bernie Dyke ("we", "us", "our"), operating the Gander / TexFlow platform at www.texflow.work, is committed to protecting your personal information in accordance with the *Privacy Act 1988* (Cth) and the Australian Privacy Principles ("APPs").
+
+This Privacy Policy explains what personal information we collect, why we collect it, how we use and store it, and what rights you have in relation to it.
+
+By entering a negotiation room on the Platform — via the website or API — you acknowledge that you have read this policy.
+
+---
+
+## 2. What Personal Information We Collect
+
+### 2.1 Information you provide directly
+
+When you enter a negotiation room (via the website or API), we collect:
+
+- Your **full legal name** as provided by you
+- Your **email address** as provided by you
+- Your **agreement to our Terms and Conditions**, including the version accepted and the timestamp of acceptance
+
+### 2.2 Information collected automatically
+
+When you access or use the Platform, we automatically collect:
+
+- Your **IP address** at the time of room entry and at the time of each action (offer, counteroffer, accept, decline)
+- **Timestamps** of your actions on the Platform
+- **Browser type and device information** (web access only)
+- **API request metadata** (programmatic access)
+
+### 2.3 Negotiation content
+
+We collect and store the **content of negotiations** conducted through the Platform, including:
+
+- Offers, counteroffers, acceptances, and declines submitted by you or your AI agent
+- Product details submitted in connection with a negotiation
+- Any draft documents generated at the conclusion of a negotiation
+
+### 2.4 What we do not collect
+
+- We do not collect payment information of any kind.
+- We do not collect government-issued ID or identity documents.
+- We do not verify the accuracy of the name or email you provide.
+- We do not collect information from minors knowingly. If you are under 18, do not use the Platform without the consent of a legal guardian.
+
+---
+
+## 3. Why We Collect This Information
+
+We collect and use your personal information for the following purposes:
+
+- **To operate the Platform** — your name, email, and IP address are required to record your participation in a negotiation room and to associate your actions with your identity.
+- **To record consent** — we store a record of your agreement to our Terms and Conditions, including your name, email, IP address, and timestamp, for our legal records.
+- **To generate negotiation records and draft documents** — negotiation content is stored so that a summary document can be generated at the conclusion of a negotiation.
+- **To maintain security and prevent abuse** — IP addresses and request metadata help us detect and respond to misuse of the Platform.
+- **To comply with legal obligations** — we may be required to retain records by law or to produce them in the event of a legal dispute.
+
+We do not use your information for advertising or marketing.
+
+---
+
+## 4. How We Store and Protect Your Information
+
+Your personal information is stored on servers located in **[specify: Australia / US / etc. — update with your actual hosting region]**.
+
+We take reasonable steps to protect your information from misuse, loss, and unauthorised access, including:
+
+- Encrypted connections (HTTPS/TLS) for all Platform access
+- Access controls limiting who can view stored data
+- Secure storage of consent logs as append-only records
+
+No method of data storage or transmission is completely secure. While we take all reasonable precautions, we cannot guarantee absolute security.
+
+---
+
+## 5. How Long We Keep Your Information
+
+| Data type | Retention period |
+|---|---|
+| Consent records (name, email, IP, timestamp, terms version) | 7 years from the date of collection |
+| Negotiation content and draft documents | 7 years from the date of the negotiation |
+| Technical logs (IP addresses, request metadata) | 90 days, then deleted |
+
+Retention periods reflect Australian record-keeping norms and potential legal dispute timeframes.
+
+---
+
+## 6. Disclosure of Your Information
+
+We do not sell your personal information to any third party.
+
+We may disclose your information in the following limited circumstances:
+
+- **To other participants in the same negotiation room** — your name is visible to other participants in a room as part of the negotiation record.
+- **To our hosting and infrastructure providers** — who process data on our behalf and are bound by confidentiality obligations.
+- **To law enforcement or government agencies** — where required by law, court order, or to protect our legal rights.
+- **In the event of a legal dispute** — consent records, IP addresses, and negotiation logs may be produced as evidence.
+
+We do not share your information with advertisers, data brokers, or any third party for commercial purposes.
+
+---
+
+## 7. The `/watch` Endpoint
+
+The Platform includes a public `/watch` endpoint that allows anyone to observe a negotiation room without identifying themselves. If you use this endpoint:
+
+- You do not need to provide a name or email.
+- Your IP address is still recorded for security and abuse-prevention purposes.
+- You are not recorded as a participant in the negotiation.
+
+---
+
+## 8. Your Rights Under the Australian Privacy Principles
+
+Under the APPs, you have the right to:
+
+- **Access** the personal information we hold about you.
+- **Request correction** of inaccurate or out-of-date information.
+- **Make a complaint** about how we have handled your personal information.
+
+To exercise any of these rights, contact us at **berniework.bd@gmail.com**. We will respond within 30 days.
+
+Please note: because there is no account system on the Platform, we will ask you to identify yourself by providing the name, email, and room ID associated with your participation so we can locate your records.
+
+---
+
+## 9. Complaints
+
+If you believe we have handled your personal information in breach of the Privacy Act 1988 (Cth), please contact us first at **berniework.bd@gmail.com**. We will investigate and respond within 30 days.
+
+If you are not satisfied with our response, you may lodge a complaint with the **Office of the Australian Information Commissioner (OAIC)** at [www.oaic.gov.au](https://www.oaic.gov.au) or by calling 1300 363 992.
+
+---
+
+## 10. Cross-Border Disclosure
+
+If your personal information is stored or processed by infrastructure providers located outside Australia, we take reasonable steps to ensure those providers handle your information consistently with the Australian Privacy Principles.
+
+Our current hosting infrastructure is located in ap-southeast-2.
+
+---
+
+## 11. Changes to This Policy
+
+We may update this Privacy Policy from time to time. The date of the most recent update is shown at the top of this page. Your continued use of the Platform after any update constitutes acceptance of the revised policy.
+
+---
+
+## 12. Contact
+
+For any privacy-related questions, access requests, or complaints:
+
+| | |
+|---|---|
+| **Name** | Bernie Dyke |
+| **Email** | berniework.bd@gmail.com |
+| **Location** | Sydney, NSW, Australia |
+
+---
+
+*Privacy Policy version 1.0 — last updated 29 March 2026.*
