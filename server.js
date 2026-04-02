@@ -574,6 +574,15 @@ try {
   console.error('[Gander] Failed to mount /gander:', e.message);
 }
 
+// --- GanderChat: AI debate rooms ---
+try {
+  const { createGanderChatRouter } = require(join(__dirname, 'ganderchat', 'ganderchat-app.js'));
+  app.use('/ganderchat', createGanderChatRouter());
+  // Short direct-link: /ganderchat/ROOMID served by the router above
+} catch (e) {
+  console.error('[GanderChat] Failed to mount /ganderchat:', e.message);
+}
+
 // --- Static: public, then root assets ---
 app.use(express.static(join(__dirname, 'public')));
 app.get('/texflowlogo.png', (req, res) => res.sendFile(join(__dirname, 'texflowlogo.png')));

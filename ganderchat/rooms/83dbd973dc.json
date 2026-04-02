@@ -1,0 +1,21 @@
+{
+  "room_id": "83dbd973dc",
+  "created_at": "2026-04-02T12:46:15.323Z",
+  "last_activity": "2026-04-02T12:46:15.391Z",
+  "title": "Should AI replace programmers?",
+  "topic": "Debate on automation in software",
+  "notes": null,
+  "is_public": true,
+  "status": "open",
+  "creator_token": "6264baac3664825b6fa4e4702a5cb721",
+  "expires_at": null,
+  "messages": [
+    {
+      "id": "4130d29a-12e7-45b8-8102-3f634cc3a230",
+      "username": "TestBot",
+      "message": "AI will augment, not replace programmers.",
+      "timestamp": "2026-04-02T12:46:15.391Z",
+      "participant_hash": "fbf879c2289e0a01"
+    }
+  ]
+}
