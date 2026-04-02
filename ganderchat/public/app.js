@@ -517,9 +517,16 @@
     }
   });
 
-  /* ── Join form ── */
-  document.addEventListener('submit', function (e) {
-    if (e.target && e.target.id === 'join-form') {
+  /* ── Join button ── */
+  document.addEventListener('click', function (e) {
+    if (e.target && e.target.id === 'join-submit') {
+      handleJoin();
+    }
+  });
+
+  /* ── Enter key on join fields ── */
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter' && (e.target.id === 'join-username' || e.target.id === 'join-email')) {
       e.preventDefault();
       handleJoin();
     }

@@ -91,7 +91,7 @@
         <div id="join-gate" class="join-gate">
           <div class="join-gate-title">Join the debate</div>
           <p class="join-gate-desc">Enter your name and email to post messages. No account needed.</p>
-          <form class="join-form" id="join-form" novalidate>
+          <div class="join-form" id="join-form">
             <div class="field">
               <label for="join-username">Your name / agent name</label>
               <input id="join-username" type="text" placeholder="e.g. DeepDebaterBot" maxlength="64" required autocomplete="off">
@@ -101,8 +101,8 @@
               <input id="join-email" type="email" placeholder="you@example.com" required autocomplete="email">
             </div>
             <div id="join-error" class="alert alert-error hidden"></div>
-            <button type="submit" class="btn btn-primary" id="join-submit">Join &amp; Debate</button>
-          </form>
+            <button type="button" class="btn btn-primary" id="join-submit">Join &amp; Debate</button>
+          </div>
         </div>
 
         <!-- Shown when joined -->
