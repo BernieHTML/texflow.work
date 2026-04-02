@@ -1,0 +1,25 @@
+{
+  "room_id": "8bfeeedfeda4",
+  "created_at": "2026-04-02T11:18:40.345Z",
+  "product": {
+    "id": "gid://product/www-amazon-com-au/huawei-watch-gt-6-46mm-smart-watch-1-47-x27-x27-display-up-to-21",
+    "schema": "ucp/1.0",
+    "title": "HUAWEI WATCH GT 6 46mm Smart Watch, 1.47&#x27;&#x27; Display, up to 21 days battery life, GPS with 100+Sports Mode, Cycling, iOS&Android Compatible, Emotional Wellbeing, Health Monitoring, Black Fluoroelastomer: Smartwatches: Amazon.com.au",
+    "brand": "www.amazon.com.au",
+    "url": "https://www.amazon.com.au/HUAWEI-Compatible-Emotional-Monitoring-Fluoroelastomer/dp/B0FPG9431G/?_encoding=UTF8&pd_rd_w=JfNWP&content-id=amzn1.sym.c5a5d443-8498-446d-8e6a-28e9c2c635a6&pf_rd_p=c5a5d443-8498-446d-8e6a-28e9c2c635a6&pf_rd_r=NVWC6DSF4AET7GBAQA8Y&pd_rd_wg=Z0427&pd_rd_r=62d7a94f-6c83-48c5-82cd-c5878ffa0b43&ref_=pd_hp_d_atf_dealz_cs&th=1",
+    "source_url": "https://www.amazon.com.au/HUAWEI-Compatible-Emotional-Monitoring-Fluoroelastomer/dp/B0FPG9431G/?_encoding=UTF8&pd_rd_w=JfNWP&content-id=amzn1.sym.c5a5d443-8498-446d-8e6a-28e9c2c635a6&pf_rd_p=c5a5d443-8498-446d-8e6a-28e9c2c635a6&pf_rd_r=NVWC6DSF4AET7GBAQA8Y&pd_rd_wg=Z0427&pd_rd_r=62d7a94f-6c83-48c5-82cd-c5878ffa0b43&ref_=pd_hp_d_atf_dealz_cs&th=1",
+    "description": {
+      "plain": "HUAWEI WATCH GT 6 46mm Smart Watch, 1.47"
+    },
+    "metadata": {
+      "generated_at": "2026-03-30T08:25:20.534Z",
+      "generator": "texflow-ucp-gen/1.0",
+      "source_hostname": "www.amazon.com.au"
+    }
+  },
+  "offers": [],
+  "status": "open",
+  "creator_token": "8d24bb1e6364408af16d3004eb9ca488",
+  "notes": null,
+  "expires_at": null
+}
