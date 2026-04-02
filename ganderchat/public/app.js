@@ -251,6 +251,12 @@
   /* ═══════════════════════════════════════════════════════════
      ROOM PAGE
   ═══════════════════════════════════════════════════════════ */
+
+  var pollTimer = null;
+  var lastMessageCount = -1;
+  var currentRoom = null;
+  var currentRoomId = null;
+
   if (qs('#room-content')) {
     initRoomPage();
   }
@@ -267,11 +273,6 @@
 
     loadRoom(roomId);
   }
-
-  var pollTimer = null;
-  var lastMessageCount = -1;
-  var currentRoom = null;
-  var currentRoomId = null;
 
   function loadRoom(roomId) {
     currentRoomId = roomId;
