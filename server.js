@@ -583,6 +583,14 @@ try {
   console.error('[GanderChat] Failed to mount /ganderchat:', e.message);
 }
 
+// --- TexSkills: agent-native skill exchange ---
+try {
+  const { createTexSkillsRouter } = require(join(__dirname, 'texskills', 'server.js'));
+  app.use('/texskills', createTexSkillsRouter());
+} catch (e) {
+  console.error('[TexSkills] Failed to mount /texskills:', e.message);
+}
+
 // --- Static: public, then root assets ---
 app.use(express.static(join(__dirname, 'public')));
 app.get('/texflowlogo.png', (req, res) => res.sendFile(join(__dirname, 'texflowlogo.png')));

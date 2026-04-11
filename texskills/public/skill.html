@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Skill — TexSkills</title>
+  <link rel="icon" href="/texflowlogo.png" type="image/png">
+  <link rel="stylesheet" href="/texskills/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+<nav class="nav">
+  <div class="wrap" style="display:flex;align-items:center;width:100%;max-width:1100px;margin:0 auto;padding:0 1.5rem;">
+    <a href="/texskills" class="nav-brand"><span class="dot"></span>TexSkills</a>
+    <div class="nav-links">
+      <a href="/texskills" class="nav-link">home</a>
+      <a href="/texskills/skills" class="nav-link">catalog</a>
+      <a href="/texskills/docs" class="nav-link">docs</a>
+    </div>
+    <a href="https://texflow.work" class="nav-back">texflow.work ↗</a>
+  </div>
+</nav>
+
+<!-- Loading state -->
+<div id="skill-loading" class="wrap" style="padding: 4rem 0; text-align: center;">
+  <div class="loader" style="justify-content:center;">
+    <div class="loader-dot"></div>
+    <div class="loader-dot"></div>
+    <div class="loader-dot"></div>
+    <span>loading skill</span>
+  </div>
+</div>
+
+<!-- Skill content -->
+<div id="skill-main" class="hidden">
+  <div class="wrap">
+    <div class="detail-header">
+      <div style="font-family: var(--font-mono); font-size: 0.7rem; color: var(--dim); margin-bottom: 0.5rem;">
+        <a href="/texskills/skills" style="color:var(--dim)">catalog</a> /
+        <span id="detail-id" style="color: var(--muted)"></span>
+      </div>
+      <h1 class="detail-name" id="detail-name">—</h1>
+      <div class="detail-meta-row">
+        <span class="version-badge" id="detail-version">v1.0</span>
+        <span style="font-family:var(--font-mono);font-size:0.72rem;color:var(--dim)">publisher: <span id="detail-publisher" style="color:var(--muted)">—</span></span>
+      </div>
+      <div class="tags" id="detail-tags" style="margin-bottom: 0.75rem;"></div>
+      <p class="detail-desc" id="detail-desc">—</p>
+    </div>
+
+    <div class="detail-layout">
+      <!-- Left column -->
+      <div>
+        <!-- Sparkline -->
+        <div class="sparkline-wrap section" style="padding-top: 0; border-bottom: 1px solid var(--border);">
+          <div class="sparkline-title">invocations — last 30 days</div>
+          <div class="sparkline-canvas-wrap" style="height: 140px;">
+            <canvas id="sparkline" style="width:100%;height:100%;"></canvas>
+          </div>
+        </div>
+
+        <!-- Input schema -->
+        <div class="section hidden" id="schema-section">
+          <div class="section-head" style="margin-bottom: 0.75rem;">
+            <span class="section-title">input schema</span>
+          </div>
+          <div style="border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden;">
+            <table class="schema-table">
+              <thead>
+                <tr>
+                  <th>field</th>
+                  <th>type</th>
+                  <th>description</th>
+                  <th>required</th>
+                </tr>
+              </thead>
+              <tbody id="schema-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Curl example -->
+        <div class="section">
+          <div class="section-head" style="margin-bottom: 0.75rem;">
+            <span class="section-title">invoke via curl</span>
+          </div>
+          <div class="terminal">
+            <div class="terminal-bar">
+              <div class="terminal-dots"><span></span><span></span><span></span></div>
+              <span class="terminal-title">curl example</span>
+              <button class="copy-btn">copy</button>
+            </div>
+            <pre id="curl-pre"></pre>
+          </div>
+        </div>
+
+        <!-- Raw JSON -->
+        <div class="section">
+          <div class="section-head" style="margin-bottom: 0.75rem;">
+            <span class="section-title">raw definition</span>
+            <button class="collapse-btn" data-target="raw-json-wrap">show raw json</button>
+          </div>
+          <div id="raw-json-wrap" class="hidden">
+            <div class="terminal">
+              <div class="terminal-bar">
+                <div class="terminal-dots"><span></span><span></span><span></span></div>
+                <span class="terminal-title">skill.json</span>
+                <button class="copy-btn">copy</button>
+              </div>
+              <pre id="raw-json" style="max-height:400px;overflow-y:auto;"></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right column: stats panel -->
+      <div>
+        <div style="font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.75rem;">stats</div>
+        <div class="stats-panel">
+          <div class="stats-panel-row">
+            <span class="stats-panel-label">invocations</span>
+            <span class="stats-panel-val" id="stat-invocations">—</span>
+          </div>
+          <div class="stats-panel-row">
+            <span class="stats-panel-label">unique callers</span>
+            <span class="stats-panel-val" id="stat-callers">—</span>
+          </div>
+          <div class="stats-panel-row">
+            <span class="stats-panel-label">avg latency</span>
+            <span class="stats-panel-val" id="stat-latency">—</span>
+          </div>
+          <div class="stats-panel-row">
+            <span class="stats-panel-label">success rate</span>
+            <span class="stats-panel-val" id="stat-success">—</span>
+          </div>
+          <div class="stats-panel-row">
+            <span class="stats-panel-label">last used</span>
+            <span class="stats-panel-val" id="stat-last">—</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <footer class="footer">
+    <div class="footer-inner">
+      <span class="footer-text">TexSkills · skill detail</span>
+      <div class="footer-links">
+        <a href="/texskills/skills">catalog</a>
+        <a href="/texskills/docs">docs</a>
+        <a href="https://texflow.work">texflow.work</a>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<script src="/texskills/app.js"></script>
+<script>
+  // Set the skill ID breadcrumb from URL
+  (function () {
+    var parts = window.location.pathname.split('/');
+    var id = parts[parts.length - 1] || parts[parts.length - 2];
+    var el = document.getElementById('detail-id');
+    if (el && id) el.textContent = id;
+  })();
+</script>
+</body>
+</html>
