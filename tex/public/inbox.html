@@ -8,14 +8,14 @@
   <link rel="icon" href="/texflowlogo.png" type="image/png">
   <link rel="stylesheet" href="/tex/style.css">
 </head>
-<body>
+<body class="inbox-page">
   <div class="bg-orbs" aria-hidden="true">
     <div class="bg-orb bg-orb-1"></div>
     <div class="bg-orb bg-orb-2"></div>
     <div class="bg-orb bg-orb-3"></div>
   </div>
 
-  <div class="page-wrap">
+  <div class="page-wrap inbox-wrap">
     <header class="header">
       <a href="/tex/" class="logo-wrap">
         <div class="logo-mark">T</div>
@@ -91,6 +91,13 @@ Group: /stripe alice 25 usd context fee</pre>
     </section>
 
     <section id="app-shell" class="hidden">
+      <div class="card token-bar">
+        <div>
+          <div class="section-title" style="font-size:1rem;">Your TEX token</div>
+          <div class="text-muted" id="token-preview">Copy this token to log into another TEX inbox instance.</div>
+        </div>
+        <button class="btn btn-secondary" id="copy-token-btn" type="button">Copy TEX token</button>
+      </div>
       <div class="shell">
         <aside class="panel sidebar">
           <div class="sidebar-header">

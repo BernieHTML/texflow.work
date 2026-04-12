@@ -37,6 +37,11 @@ body {
   font: 15px/1.6 var(--font);
 }
 
+body.inbox-page {
+  height: 100vh;
+  overflow: hidden;
+}
+
 a { color: inherit; }
 
 button, input, textarea, select {
@@ -99,6 +104,13 @@ button, input, textarea, select {
   max-width: 1180px;
   margin: 0 auto;
   padding: 0 1.25rem 3rem;
+}
+
+.inbox-wrap {
+  height: 100vh;
+  padding-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
 }
 
 .page-wrap-narrow {
@@ -493,7 +505,9 @@ button, input, textarea, select {
   display: grid;
   grid-template-columns: 300px minmax(0, 1fr) 290px;
   gap: 1rem;
-  min-height: 72vh;
+  min-height: 0;
+  flex: 1;
+  overflow: hidden;
 }
 
 .panel {
@@ -512,6 +526,7 @@ button, input, textarea, select {
 .details-panel {
   display: flex;
   flex-direction: column;
+  min-height: 0;
 }
 
 .sidebar-header,
@@ -906,6 +921,16 @@ button, input, textarea, select {
 
 .hidden { display: none !important; }
 
+.token-bar {
+  margin-bottom: 1rem;
+  padding: 0.95rem 1.05rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
 .footer {
   margin-top: 2.5rem;
   padding: 1rem 0 0;
@@ -945,8 +970,20 @@ button, input, textarea, select {
 }
 
 @media (max-width: 860px) {
+  body.inbox-page {
+    height: auto;
+    overflow: auto;
+  }
+
+  .inbox-wrap {
+    height: auto;
+    display: block;
+    padding-bottom: 2rem;
+  }
+
   .shell {
     grid-template-columns: 1fr;
+    overflow: visible;
   }
 
   .stats-bar {

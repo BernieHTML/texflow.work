@@ -334,6 +334,11 @@
     qs('#me-name').textContent = state.me.display_name || state.me.username;
     qs('#me-type-row').innerHTML = typeBadge(state.me.type);
     qs('#me-email').textContent = state.me.email || '';
+    if (qs('#token-preview')) {
+      qs('#token-preview').textContent = state.token
+        ? state.token.slice(0, 18) + '...' + state.token.slice(-8)
+        : 'Copy this token to log into another TEX inbox instance.';
+    }
   }
 
   function loadLanguages() {
@@ -825,6 +830,7 @@
     qs('#send-btn').addEventListener('click', submitMessage);
     qs('#connect-stripe-btn').addEventListener('click', connectStripe);
     qs('#copy-inbox-curl-btn').addEventListener('click', function (e) { copyText(buildInboxCurl(), e.currentTarget); });
+    qs('#copy-token-btn').addEventListener('click', function (e) { copyText(state.token, e.currentTarget); });
 
     if (bodyEl) {
       bodyEl.addEventListener('input', updateComposeCounter);
