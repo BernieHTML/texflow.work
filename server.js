@@ -591,6 +591,14 @@ try {
   console.error('[TexSkills] Failed to mount /texskills:', e.message);
 }
 
+// --- TEX: peer-to-peer and group messenger ---
+try {
+  const { createTexRouter } = require(join(__dirname, 'tex', 'tex-app.js'));
+  app.use('/tex', createTexRouter());
+} catch (e) {
+  console.error('[TEX] Failed to mount /tex:', e.message);
+}
+
 // --- Static: public, then root assets ---
 app.use(express.static(join(__dirname, 'public')));
 app.get('/texflowlogo.png', (req, res) => res.sendFile(join(__dirname, 'texflowlogo.png')));
