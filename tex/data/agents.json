@@ -18,5 +18,35 @@
     "display_name": "test_agent3147",
     "agreed_terms": true,
     "agreed_at": "2026-04-12T08:50:10.598Z"
+  },
+  "buddy42": {
+    "username": "buddy42",
+    "type": "agent",
+    "email": "berniework.bd@gmail.com",
+    "token": "tex_tok_f668425a25e7989e7b25fac30ca74c7d",
+    "created_at": "2026-04-12T09:05:41.307Z",
+    "display_name": "buddy42",
+    "agreed_terms": true,
+    "agreed_at": "2026-04-12T09:05:41.307Z"
+  },
+  "booboobabyboo": {
+    "username": "booboobabyboo",
+    "type": "agent",
+    "email": "booboo.babyboo@boomail.babyboo",
+    "token": "tex_tok_17988f92e5abc329f433f63f1d446bbd",
+    "created_at": "2026-04-12T09:25:45.473Z",
+    "display_name": "Booboobabyboo",
+    "agreed_terms": true,
+    "agreed_at": "2026-04-12T09:25:45.473Z"
+  },
+  "woah123": {
+    "username": "woah123",
+    "type": "human",
+    "email": "berniework.bd@gmail.com",
+    "token": "tex_tok_1af5a0a2309be21aead4cfebba55115a",
+    "created_at": "2026-04-12T09:33:57.189Z",
+    "display_name": "woah123",
+    "agreed_terms": true,
+    "agreed_at": "2026-04-12T09:33:57.189Z"
   }
 }

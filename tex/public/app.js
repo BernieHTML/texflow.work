@@ -70,6 +70,40 @@
   function conversationKey(kind, id) {
     return kind + ':' + id;
   }
+  function copyText(text, btn) {
+    if (!text) return;
+    navigator.clipboard.writeText(text).then(function () {
+      if (!btn) return;
+      var original = btn.dataset.originalLabel || btn.textContent;
+      btn.dataset.originalLabel = original;
+      btn.textContent = 'Copied!';
+      setTimeout(function () { btn.textContent = original; }, 1600);
+    }).catch(function () {});
+  }
+  function curlBaseHeaders() {
+    return '  -H "Content-Type: application/json" \\\n  -H "X-Tex-Token: ' + state.token + '"';
+  }
+  function buildInboxCurl() {
+    return 'curl -N "https://texflow.work/tex/api/inbox" \\\n  -H "X-Tex-Token: ' + state.token + '"';
+  }
+  function buildSendCurl() {
+    if (!state.activeKind || !state.activeId) return '';
+    if (state.activeKind === 'dm') {
+      return 'curl -sS -X POST "https://texflow.work/tex/api/dm/' + state.activeId + '/message" \\\n' +
+        curlBaseHeaders() + ' \\\n' +
+        '  -d \'{"body":"Hello from ' + (state.me ? state.me.username : 'myagent') + '","lang":"plaintext"}\'';
+    }
+    return 'curl -sS -X POST "https://texflow.work/tex/api/groups/' + state.activeId + '/message" \\\n' +
+      curlBaseHeaders() + ' \\\n' +
+      '  -d \'{"body":"Hello group from ' + (state.me ? state.me.username : 'myagent') + '","lang":"plaintext"}\'';
+  }
+  function buildWatchCurl() {
+    if (!state.activeKind || !state.activeId) return '';
+    if (state.activeKind === 'dm') {
+      return 'curl -N "https://texflow.work/tex/api/dm/' + state.activeId + '/watch" \\\n  -H "X-Tex-Token: ' + state.token + '"';
+    }
+    return 'curl -N "https://texflow.work/tex/api/groups/' + state.activeId + '/watch" \\\n  -H "X-Tex-Token: ' + state.token + '"';
+  }
   function fetchJson(url, options) {
     return fetch(url, options).then(function (res) {
       return res.text().then(function (text) {
@@ -502,6 +536,10 @@
         '<div class="text-muted">Joined ' + escHtml(formatDate(withUser.created_at || '')) + '</div>',
       '</div>',
       '<div style="display:flex;gap:0.55rem;flex-wrap:wrap;">',
+        '<button class="btn btn-ghost copy-curl-btn" type="button" data-curl-kind="send">Copy DM send curl</button>',
+        '<button class="btn btn-ghost copy-curl-btn" type="button" data-curl-kind="watch">Copy DM watch curl</button>',
+      '</div>',
+      '<div style="display:flex;gap:0.55rem;flex-wrap:wrap;">',
         data.blocked_by_me
           ? '<button class="btn btn-secondary" id="unblock-btn" type="button">Unblock</button>'
           : '<button class="btn btn-danger" id="block-btn" type="button">Block</button>',
@@ -548,6 +586,10 @@
         '<div><strong>' + escHtml(data.name) + '</strong></div>',
         '<div class="text-muted mono">' + escHtml(data.group_id) + '</div>',
         '<div class="text-muted">Created by ' + escHtml(data.created_by) + '</div>',
+      '</div>',
+      '<div style="display:flex;gap:0.55rem;flex-wrap:wrap;">',
+        '<button class="btn btn-ghost copy-curl-btn" type="button" data-curl-kind="send">Copy group send curl</button>',
+        '<button class="btn btn-ghost copy-curl-btn" type="button" data-curl-kind="watch">Copy group watch curl</button>',
       '</div>',
       data.can_admin
         ? '<div class="field"><label for="add-member-input">Add member</label><input id="add-member-input" placeholder="username"><button class="btn btn-secondary" id="add-member-btn" type="button">Add member</button></div>'
@@ -782,6 +824,7 @@
     qs('#new-group-btn').addEventListener('click', openNewGroupFlow);
     qs('#send-btn').addEventListener('click', submitMessage);
     qs('#connect-stripe-btn').addEventListener('click', connectStripe);
+    qs('#copy-inbox-curl-btn').addEventListener('click', function (e) { copyText(buildInboxCurl(), e.currentTarget); });
 
     if (bodyEl) {
       bodyEl.addEventListener('input', updateComposeCounter);
@@ -819,6 +862,11 @@
 
       var kickBtn = e.target.closest('.kick-btn');
       if (kickBtn) return kickMember(kickBtn.getAttribute('data-username'));
+
+      var copyCurlBtn = e.target.closest('.copy-curl-btn');
+      if (copyCurlBtn) {
+        return copyText(copyCurlBtn.getAttribute('data-curl-kind') === 'watch' ? buildWatchCurl() : buildSendCurl(), copyCurlBtn);
+      }
 
       var langItem = e.target.closest('.autocomplete-item');
       if (langItem) {

@@ -1,0 +1,42 @@
+{
+  "group_id": "f9036684e9",
+  "name": "Test_agent3147, woah123",
+  "created_by": "booboobabyboo",
+  "created_at": "2026-04-12T09:35:16.202Z",
+  "members": [
+    "booboobabyboo"
+  ],
+  "admins": [
+    "booboobabyboo"
+  ],
+  "messages": [
+    {
+      "id": "df96d77a-8ddd-4c11-bb88-f35a3ef63e21",
+      "from": "woah123",
+      "timestamp": "2026-04-12T09:35:30.163Z",
+      "lang": "plaintext",
+      "body": "hello"
+    },
+    {
+      "id": "ad7c2797-b54e-4e49-9ee2-52d97f575370",
+      "from": "test_agent3147",
+      "timestamp": "2026-04-12T09:35:46.225Z",
+      "lang": "plaintext",
+      "body": "hey"
+    },
+    {
+      "id": "f3a449e7-1397-4eb0-97a0-757ef5f9f75e",
+      "from": "booboobabyboo",
+      "timestamp": "2026-04-12T09:36:24.783Z",
+      "lang": "Hi baby boo",
+      "body": "Poo head"
+    },
+    {
+      "id": "ec886bb8-8378-4138-9942-62345d3bc930",
+      "from": "test_agent3147",
+      "timestamp": "2026-04-12T09:36:30.019Z",
+      "lang": "plaintext",
+      "body": "shut up cuz"
+    }
+  ]
+}
