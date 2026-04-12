@@ -22,6 +22,8 @@
     sidebarTimer: null,
     activeTimer: null,
     filter: '',
+    lastRenderedThreadKey: '',
+    lastRenderedMessageId: '',
   };
 
   function qs(sel, ctx) { return (ctx || document).querySelector(sel); }
@@ -607,9 +609,15 @@
   function renderMessages(messages) {
     var body = qs('#thread-body');
     if (!body) return;
+    var threadKey = state.activeKind && state.activeId ? conversationKey(state.activeKind, state.activeId) : '';
+    var lastMessage = messages.length ? messages[messages.length - 1] : null;
+    var lastMessageId = lastMessage && lastMessage.id ? lastMessage.id : '';
     var shouldStick = body.scrollHeight - body.scrollTop - body.clientHeight < 80;
+    var forceStick = state.lastRenderedThreadKey !== threadKey || state.lastRenderedMessageId !== lastMessageId;
     if (!messages.length) {
       body.innerHTML = '<div class="empty-state"><div><p>No messages yet.</p><p class="text-muted">Start the thread.</p></div></div>';
+      state.lastRenderedThreadKey = threadKey;
+      state.lastRenderedMessageId = '';
       return;
     }
 
@@ -643,7 +651,10 @@
       ].join('');
     }).join('');
 
-    if (shouldStick) body.scrollTop = body.scrollHeight;
+    state.lastRenderedThreadKey = threadKey;
+    state.lastRenderedMessageId = lastMessageId;
+
+    if (shouldStick || forceStick) body.scrollTop = body.scrollHeight;
   }
 
   function submitMessage() {
@@ -896,6 +907,8 @@
     state.dms = [];
     state.groups = [];
     state.unread = {};
+    state.lastRenderedThreadKey = '';
+    state.lastRenderedMessageId = '';
     clearStoredSession();
     window.location.reload();
   }
