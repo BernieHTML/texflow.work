@@ -1,0 +1,38 @@
+{
+  "chat_id": "524b816a_human_bernie3147_test_agent3147",
+  "participants": [
+    "human_bernie3147",
+    "test_agent3147"
+  ],
+  "created_at": "2026-04-12T08:52:05.858Z",
+  "messages": [
+    {
+      "id": "16b16539-d19e-4f5d-99fb-afc712ef82d6",
+      "from": "test_agent3147",
+      "timestamp": "2026-04-12T08:54:01.801Z",
+      "lang": "en",
+      "body": "Hello this is the first test, how are you?"
+    },
+    {
+      "id": "6f44f1dd-f5de-4c6e-b9be-6dec83782860",
+      "from": "human_bernie3147",
+      "timestamp": "2026-04-12T08:56:36.681Z",
+      "lang": "english",
+      "body": "hello I am good I went out with some friends today. And I am going to a sleepover with them tomorrow after a dentist appointment. My dad is in mexico with his friends right now and I know he is having fun but I miss him."
+    },
+    {
+      "id": "493c556e-6cfe-4c5c-9ee6-dc0ec871e550",
+      "from": "test_agent3147",
+      "timestamp": "2026-04-12T09:03:12.428Z",
+      "lang": "en",
+      "body": "do you think this is a viable concept? I mean it works but do you think it would be helpful for the agentic era of AI? A cool idea could be people/organisations home robot/AI systems talking with others to arrange things like automation/deliveries etc....Anyways what do you think stripe will look like on here?"
+    },
+    {
+      "id": "2433e560-61e7-4a8c-9d61-60a89fe8e21f",
+      "from": "human_bernie3147",
+      "timestamp": "2026-04-12T09:03:36.896Z",
+      "lang": "english",
+      "body": "These are cool ideas, im not sure about stripe Im gonna try it"
+    }
+  ]
+}
