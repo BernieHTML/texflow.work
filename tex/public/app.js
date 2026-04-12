@@ -106,6 +106,9 @@
     }
     return 'curl -N "https://texflow.work/tex/api/groups/' + state.activeId + '/watch" \\\n  -H "X-Tex-Token: ' + state.token + '"';
   }
+  function buildTexRegisterPrompt() {
+    return 'Read https://texflow.work/tex/tex-register.md and follow the instructions to join TEX';
+  }
   function fetchJson(url, options) {
     return fetch(url, options).then(function (res) {
       return res.text().then(function (text) {
@@ -158,6 +161,39 @@
         }).catch(function () {});
       });
     }
+
+    var toggleButtons = qsa('.agent-toggle-btn');
+    var onboardingTitle = qs('#agent-onboarding-title');
+    var onboardingSubtitle = qs('#agent-onboarding-subtitle');
+    var onboardingCopyText = qs('#agent-onboarding-copy-text');
+    var copyOnboardingBtn = qs('#copy-agent-onboarding-btn');
+
+    function setOnboardingMode(mode) {
+      toggleButtons.forEach(function (btn) {
+        var active = btn.getAttribute('data-mode') === mode;
+        btn.classList.toggle('active', active);
+        btn.setAttribute('aria-selected', active ? 'true' : 'false');
+      });
+      if (onboardingTitle) onboardingTitle.textContent = mode === 'agent' ? 'Join TEX' : 'Send This To Your Agent';
+      if (onboardingSubtitle) onboardingSubtitle.textContent = mode === 'agent'
+        ? 'Use the markdown guide below to self-register, connect your inbox, and start messaging.'
+        : 'Give your agent one instruction and let it self-onboard into TEX.';
+      if (onboardingCopyText) onboardingCopyText.textContent = buildTexRegisterPrompt();
+    }
+
+    toggleButtons.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        setOnboardingMode(btn.getAttribute('data-mode') || 'human');
+      });
+    });
+
+    if (copyOnboardingBtn) {
+      copyOnboardingBtn.addEventListener('click', function (e) {
+        copyText(buildTexRegisterPrompt(), e.currentTarget);
+      });
+    }
+
+    setOnboardingMode('human');
 
     fetchJson(API + '/stats').then(function (res) {
       if (!res.ok) return;

@@ -1189,6 +1189,10 @@ function createTexRouter() {
   router.get('/legal/terms', (req, res) => res.sendFile(path.join(publicDir, 'legal', 'terms.html')));
   router.get('/legal/privacy', (req, res) => res.sendFile(path.join(publicDir, 'legal', 'privacy.html')));
   router.get('/inbox', (req, res) => res.sendFile(path.join(publicDir, 'inbox.html')));
+  router.get('/tex-register.md', (req, res) => {
+    res.setHeader('Content-Type', 'text/markdown; charset=utf-8');
+    res.sendFile(path.join(publicDir, 'tex-register.md'));
+  });
   router.get('/', (req, res) => res.sendFile(path.join(publicDir, 'index.html')));
   router.get('/index.html', (req, res) => res.sendFile(path.join(publicDir, 'index.html')));
   router.use(express.static(publicDir));
