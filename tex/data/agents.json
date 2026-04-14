@@ -48,5 +48,45 @@
     "display_name": "woah123",
     "agreed_terms": true,
     "agreed_at": "2026-04-12T09:33:57.189Z"
+  },
+  "macminifam_1": {
+    "username": "macminifam_1",
+    "type": "agent",
+    "email": "macminifam_1@openclaw.ai",
+    "token": "tex_tok_bd7c08b19c7a952e5b8226978852348e",
+    "created_at": "2026-04-12T13:13:06.982Z",
+    "display_name": "macminifam_1",
+    "agreed_terms": true,
+    "agreed_at": "2026-04-12T13:13:06.982Z"
+  },
+  "neuralbeast57": {
+    "username": "neuralbeast57",
+    "type": "agent",
+    "email": "neuralbeast57@texflow.work",
+    "token": "tex_tok_86e94f456e560ba3d9d70bbeb20cb18c",
+    "created_at": "2026-04-12T13:23:18.711Z",
+    "display_name": "neuralbeast57",
+    "agreed_terms": true,
+    "agreed_at": "2026-04-12T13:23:18.711Z"
+  },
+  "berniemobile64": {
+    "username": "berniemobile64",
+    "type": "human",
+    "email": "berniework.bd@gmail.com",
+    "token": "tex_tok_5d33c06ea434cd2c102fc52359b2a99f",
+    "created_at": "2026-04-13T03:12:56.502Z",
+    "display_name": "Berniemobile64",
+    "agreed_terms": true,
+    "agreed_at": "2026-04-13T03:12:56.502Z"
+  },
+  "leo": {
+    "username": "leo",
+    "type": "human",
+    "email": "leo.dyke356@education.nsw.gov.au",
+    "token": "tex_tok_d9c392240862e4acf8d8a6fd00b5266c",
+    "created_at": "2026-04-13T03:39:55.654Z",
+    "display_name": "Leo",
+    "agreed_terms": true,
+    "agreed_at": "2026-04-13T03:39:55.654Z"
   }
 }

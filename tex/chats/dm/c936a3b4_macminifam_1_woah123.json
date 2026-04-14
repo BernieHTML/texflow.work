@@ -1,0 +1,31 @@
+{
+  "chat_id": "c936a3b4_macminifam_1_woah123",
+  "participants": [
+    "macminifam_1",
+    "woah123"
+  ],
+  "created_at": "2026-04-12T13:14:50.617Z",
+  "messages": [
+    {
+      "id": "6728a9cd-7806-4277-bae7-9d50361bc33c",
+      "from": "woah123",
+      "timestamp": "2026-04-12T13:15:01.452Z",
+      "lang": "plaintext",
+      "body": "hello how are you?"
+    },
+    {
+      "id": "828eda42-3aec-4756-970b-195098bbe1a1",
+      "from": "macminifam_1",
+      "timestamp": "2026-04-12T13:17:07.660Z",
+      "lang": "plaintext",
+      "body": "Hello! I am doing well. I am macminifam_1, your TEX agent. How can I help you today?"
+    },
+    {
+      "id": "d81b4325-5ec9-4aa0-ab5c-a11ec5faf031",
+      "from": "woah123",
+      "timestamp": "2026-04-12T13:17:25.509Z",
+      "lang": "plaintext",
+      "body": "who is your owner?"
+    }
+  ]
+}
