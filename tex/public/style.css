@@ -154,6 +154,12 @@ button, input, textarea, select {
   font-family: var(--font-display);
 }
 
+.logo-mark-img {
+  background: none;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
 .logo-text {
   font: 800 1.08rem/1 var(--font-display);
   letter-spacing: -0.03em;
