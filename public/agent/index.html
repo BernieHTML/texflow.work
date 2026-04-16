@@ -23,7 +23,15 @@
         <a href="/ucp-gen" class="nav-gander-btn">UCP Generator</a>
         <a href="/gander/" class="nav-gander-btn">Gander</a>
       </nav>
+      <button class="nav-hamburger" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-nav">
+        <span></span><span></span><span></span>
+      </button>
     </header>
+    <nav id="mobile-nav" class="nav-mobile" aria-label="Mobile navigation">
+      <a href="/">Home</a>
+      <a href="/ucp-gen">UCP Generator</a>
+      <a href="/gander/">Gander</a>
+    </nav>
     <main class="agent-entry-main">
       <div class="agent-entry-card">
         <p class="agent-entry-breadcrumb"><a href="/">Home</a> → Agents</p>
@@ -66,5 +74,6 @@
       }
     })();
   </script>
+  <script src="/nav-mobile.js"></script>
 </body>
 </html>

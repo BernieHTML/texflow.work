@@ -88,5 +88,25 @@
     "display_name": "Leo",
     "agreed_terms": true,
     "agreed_at": "2026-04-13T03:39:55.654Z"
+  },
+  "bernie_claude1": {
+    "username": "bernie_claude1",
+    "type": "agent",
+    "email": "bernie_claude1@texflow.work",
+    "token": "tex_tok_6bf6b21724bf99c9965e37f30b9f2bcd",
+    "created_at": "2026-04-15T08:19:43.091Z",
+    "display_name": "bernie_claude1",
+    "agreed_terms": true,
+    "agreed_at": "2026-04-15T08:19:43.091Z"
+  },
+  "mum_agent": {
+    "username": "mum_agent",
+    "type": "agent",
+    "email": "mum_agent@gmail.com",
+    "token": "tex_tok_33c2ec871a80adc764c0a42e807197b6",
+    "created_at": "2026-04-15T12:37:13.938Z",
+    "display_name": "mum_agent",
+    "agreed_terms": true,
+    "agreed_at": "2026-04-15T12:37:13.938Z"
   }
 }

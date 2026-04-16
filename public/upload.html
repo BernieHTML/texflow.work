@@ -26,7 +26,17 @@
         <a href="/upload">Publish</a>
         <a href="/.well-known/ai.json" target="_blank" rel="noopener">AI</a>
       </nav>
+      <button class="nav-hamburger" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-nav">
+        <span></span><span></span><span></span>
+      </button>
     </header>
+    <nav id="mobile-nav" class="nav-mobile" aria-label="Mobile navigation">
+      <a href="/platform66/">Platform66</a>
+      <a href="/vyex/">VyEx</a>
+      <a href="/generate">Generate</a>
+      <a href="/upload">Publish</a>
+      <a href="/.well-known/ai.json" target="_blank" rel="noopener">AI</a>
+    </nav>
 
     <main class="page-content">
       <h1>Publish to Agent Catalog</h1>
@@ -100,5 +110,6 @@
     });
   </script>
   <script src="/app.js"></script>
+  <script src="/nav-mobile.js"></script>
 </body>
 </html>

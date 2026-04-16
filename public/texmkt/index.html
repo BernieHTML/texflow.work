@@ -783,6 +783,71 @@
     .onboard-form { padding: 32px 24px; }
   }
 
+  /* Hamburger */
+  .nav-hamburger {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 6px;
+    border-radius: 6px;
+    color: var(--silver);
+    transition: color 0.2s;
+  }
+  .nav-hamburger:hover { color: var(--cream); }
+  .nav-hamburger span {
+    display: block;
+    width: 22px;
+    height: 2px;
+    background: currentColor;
+    border-radius: 2px;
+    transition: transform 0.25s, opacity 0.25s;
+    transform-origin: center;
+  }
+  .nav-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .nav-hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+  .nav-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  .nav-mobile-menu {
+    display: none;
+    position: fixed;
+    top: 72px;
+    left: 16px;
+    right: 16px;
+    z-index: 200;
+    background: rgba(8, 8, 12, 0.97);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    padding: 12px;
+    backdrop-filter: blur(20px);
+    flex-direction: column;
+    gap: 2px;
+    animation: tmNavIn 0.18s ease;
+  }
+  @keyframes tmNavIn {
+    from { opacity: 0; transform: translateY(-8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .nav-mobile-menu.open { display: flex; }
+  .nav-mobile-menu a {
+    display: block;
+    padding: 12px 16px;
+    color: var(--silver);
+    text-decoration: none;
+    border-radius: 8px;
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    transition: background 0.18s, color 0.18s;
+  }
+  .nav-mobile-menu a:hover {
+    background: rgba(255,255,255,0.06);
+    color: var(--cream);
+  }
+
   /* Responsive */
   @media (max-width: 900px) {
     nav { padding: 24px 30px; }
@@ -792,6 +857,7 @@
     .endpoint-container { grid-template-columns: 1fr; gap: 48px; }
     .commission-inner { grid-template-columns: 1fr; gap: 60px; }
     .nav-links { display: none; }
+    .nav-hamburger { display: flex; }
     footer { flex-direction: column; gap: 16px; text-align: center; }
   }
 </style>
@@ -808,7 +874,18 @@
     <li><a href="#commission">Revenue</a></li>
     <li><a href="https://texflow.work">← texflow.work</a></li>
   </ul>
+  <button class="nav-hamburger" aria-label="Open menu" aria-expanded="false" aria-controls="texmkt-mobile-nav">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
+<div id="texmkt-mobile-nav" class="nav-mobile-menu" aria-label="Mobile navigation">
+  <a href="#how">How It Works</a>
+  <a href="#audience">For Whom</a>
+  <a href="#endpoint">The Endpoint</a>
+  <a href="#onboard">List Your Store</a>
+  <a href="#commission">Revenue</a>
+  <a href="https://texflow.work">← texflow.work</a>
+</div>
 
 <!-- HERO -->
 <section class="hero">
@@ -1251,6 +1328,34 @@
   }, { threshold: 0.15 });
 
   document.querySelectorAll('.flow-step, .audience-card, .stream').forEach(el => observer.observe(el));
+
+  // Mobile nav toggle
+  (function () {
+    var btn = document.querySelector('.nav-hamburger');
+    var menu = document.getElementById('texmkt-mobile-nav');
+    if (!btn || !menu) return;
+    btn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var open = menu.classList.toggle('open');
+      btn.classList.toggle('open', open);
+      btn.setAttribute('aria-expanded', String(open));
+    });
+    document.addEventListener('click', function (e) {
+      if (!btn.contains(e.target) && !menu.contains(e.target)) {
+        menu.classList.remove('open');
+        btn.classList.remove('open');
+        btn.setAttribute('aria-expanded', 'false');
+      }
+    });
+    // Close on anchor link click
+    menu.querySelectorAll('a').forEach(function (a) {
+      a.addEventListener('click', function () {
+        menu.classList.remove('open');
+        btn.classList.remove('open');
+        btn.setAttribute('aria-expanded', 'false');
+      });
+    });
+  })();
 </script>
 </body>
 </html>

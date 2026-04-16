@@ -22,7 +22,14 @@
         <a href="/platform66/">Platform66</a>
         <a href="/vyex/">VyEx</a>
       </nav>
+      <button class="nav-hamburger" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-nav">
+        <span></span><span></span><span></span>
+      </button>
     </header>
+    <nav id="mobile-nav" class="nav-mobile" aria-label="Mobile navigation">
+      <a href="/platform66/">Platform66</a>
+      <a href="/vyex/">VyEx</a>
+    </nav>
 
     <main class="vy-page">
       <div class="vy-container">
@@ -108,5 +115,6 @@
       if (header) window.addEventListener('scroll', function () { header.classList.toggle('scrolled', window.scrollY > 20); });
     })();
   </script>
+  <script src="/nav-mobile.js"></script>
 </body>
 </html>

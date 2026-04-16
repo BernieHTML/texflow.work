@@ -139,7 +139,16 @@
           <a href="/agent">Agents</a>
         </nav>
       </div>
+      <button class="nav-hamburger" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-nav">
+        <span></span><span></span><span></span>
+      </button>
     </header>
+    <nav id="mobile-nav" class="nav-mobile" aria-label="Mobile navigation">
+      <a href="/ucp-gen">UCP Generator</a>
+      <a href="/gander/">Gander</a>
+      <a href="/">Home</a>
+      <a href="/agent">Agents</a>
+    </nav>
 
     <main class="ucp-page">
       <p class="ucp-kicker">TexFlow · UCP Tools</p>
@@ -445,5 +454,6 @@
       if (hdr) window.addEventListener('scroll', function () { hdr.classList.toggle('scrolled', window.scrollY > 20); }, { passive: true });
     })();
   </script>
+  <script src="/nav-mobile.js"></script>
 </body>
 </html>

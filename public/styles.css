@@ -689,6 +689,108 @@ a.nav-gander-btn:active {
   to { transform: rotate(360deg); }
 }
 
+/* ----- Mobile hamburger ----- */
+.nav-hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.4rem;
+  border-radius: 8px;
+  color: var(--text);
+  transition: background 0.2s;
+  flex-shrink: 0;
+}
+
+.nav-hamburger:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.nav-hamburger span {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: currentColor;
+  border-radius: 2px;
+  transition: transform 0.25s, opacity 0.25s, scale 0.25s;
+  transform-origin: center;
+}
+
+.nav-hamburger.open span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.nav-hamburger.open span:nth-child(2) {
+  opacity: 0;
+  transform: scaleX(0);
+}
+
+.nav-hamburger.open span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+.nav-mobile {
+  display: none;
+  position: fixed;
+  top: 4.25rem;
+  left: 0.75rem;
+  right: 0.75rem;
+  z-index: 99;
+  background: rgba(17, 19, 24, 0.97);
+  border: 1px solid rgba(59, 130, 246, 0.15);
+  border-radius: 16px;
+  padding: 0.75rem;
+  backdrop-filter: blur(20px);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.45),
+    0 0 0 1px rgba(255, 255, 255, 0.04);
+  flex-direction: column;
+  gap: 0.15rem;
+  animation: navMobileIn 0.18s ease;
+}
+
+@keyframes navMobileIn {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.nav-mobile.open {
+  display: flex;
+}
+
+.nav-mobile a,
+.nav-mobile button.nav-mobile-item {
+  display: block;
+  width: 100%;
+  padding: 0.72rem 1rem;
+  color: var(--text);
+  text-decoration: none;
+  border-radius: 10px;
+  font-size: 0.93rem;
+  font-weight: 500;
+  font-family: var(--font-sans);
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.18s, color 0.18s;
+}
+
+.nav-mobile a:hover,
+.nav-mobile button.nav-mobile-item:hover {
+  background: rgba(59, 130, 246, 0.1);
+  color: var(--accent);
+}
+
+.nav-mobile-divider {
+  height: 1px;
+  background: var(--border);
+  margin: 0.35rem 0;
+}
+
 /* ----- Responsive ----- */
 @media (max-width: 900px) {
   .agent-entry-nav-text {
@@ -709,23 +811,13 @@ a.nav-gander-btn:active {
     padding: 0.5rem 1rem;
   }
 
-  .header-end {
-    gap: 0.45rem;
+  .header-end,
+  .header .nav {
+    display: none !important;
   }
 
-  a.nav-gander-btn {
-    padding: 0.38rem 0.85rem;
-    font-size: 0.78rem;
-  }
-
-  .nav a {
-    padding: 0.4rem 0.75rem;
-    font-size: 0.85rem;
-  }
-
-  .agent-entry-nav-btn {
-    padding: 0.35rem 0.6rem;
-    font-size: 0.75rem;
+  .nav-hamburger {
+    display: flex;
   }
 
   .hero {

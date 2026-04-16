@@ -46,7 +46,19 @@
           </div>
         </div>
       </div>
+      <button class="nav-hamburger" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-nav">
+        <span></span><span></span><span></span>
+      </button>
     </header>
+    <nav id="mobile-nav" class="nav-mobile" aria-label="Mobile navigation">
+      <a href="/ucp-gen">UCP Generator</a>
+      <a href="/gander/">Gander</a>
+      <a href="/ganderchat/">GanderChat</a>
+      <a href="/tex/">TEX</a>
+      <a href="/texskills/">TexSkills</a>
+      <div class="nav-mobile-divider"></div>
+      <a href="/agent">I am an agent</a>
+    </nav>
 
     <main>
       <section class="hero">
@@ -130,6 +142,7 @@
     </main>
   </div>
   <script src="/app.js"></script>
+  <script src="/nav-mobile.js"></script>
   <script>
     (function () {
       var popup = document.getElementById('agent-entry-popup');
