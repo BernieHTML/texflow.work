@@ -1,7 +1,7 @@
 {
   "channel": "hacker-news-top",
   "event": "tech_news",
-  "ts": "2026-04-17T14:13:56.886Z",
+  "ts": "2026-04-17T14:30:47.716Z",
   "source": "hacker-news-top",
   "payload": {
     "stories": [
@@ -282,16 +282,17 @@
           47805616,
           47805673,
           47805890,
-          47805953
+          47805953,
+          47806187
         ],
         "created_at": "2026-04-16T14:23:50Z",
         "created_at_i": 1776349430,
-        "num_comments": 1341,
+        "num_comments": 1355,
         "objectID": "47793411",
-        "points": 1854,
+        "points": 1869,
         "story_id": 47793411,
         "title": "Claude Opus 4.7",
-        "updated_at": "2026-04-17T14:09:48Z",
+        "updated_at": "2026-04-17T14:30:20Z",
         "url": "https://www.anthropic.com/news/claude-opus-4-7"
       },
       {
@@ -390,12 +391,12 @@
         ],
         "created_at": "2026-04-16T13:36:27Z",
         "created_at_i": 1776346587,
-        "num_comments": 490,
+        "num_comments": 492,
         "objectID": "47792764",
-        "points": 1179,
+        "points": 1184,
         "story_id": 47792764,
         "title": "Qwen3.6-35B-A3B: Agentic coding power, now open to all",
-        "updated_at": "2026-04-17T14:09:48Z",
+        "updated_at": "2026-04-17T14:30:20Z",
         "url": "https://qwen.ai/blog?id=qwen3.6-35b-a3b"
       },
       {
@@ -504,185 +505,13 @@
         ],
         "created_at": "2026-04-16T17:12:19Z",
         "created_at_i": 1776359539,
-        "num_comments": 493,
+        "num_comments": 495,
         "objectID": "47796469",
-        "points": 931,
+        "points": 936,
         "story_id": 47796469,
         "title": "Codex for almost everything",
-        "updated_at": "2026-04-17T14:09:48Z",
+        "updated_at": "2026-04-17T14:30:20Z",
         "url": "https://openai.com/index/codex-for-almost-everything/"
-      },
-      {
-        "_highlightResult": {
-          "author": {
-            "matchLevel": "none",
-            "matchedWords": [],
-            "value": "aphyr"
-          },
-          "title": {
-            "matchLevel": "none",
-            "matchedWords": [],
-            "value": "The future of everything is lies, I guess: Where do we go from here?"
-          },
-          "url": {
-            "matchLevel": "none",
-            "matchedWords": [],
-            "value": "https://aphyr.com/posts/420-the-future-of-everything-is-lies-i-guess-where-do-we-go-from-here"
-          }
-        },
-        "_tags": [
-          "story",
-          "author_aphyr",
-          "story_47792718",
-          "front_page"
-        ],
-        "author": "aphyr",
-        "children": [
-          47792900,
-          47793004,
-          47793028,
-          47793058,
-          47793146,
-          47793183,
-          47793214,
-          47793216,
-          47793284,
-          47793342,
-          47793349,
-          47793407,
-          47793559,
-          47793574,
-          47793582,
-          47793662,
-          47793754,
-          47793894,
-          47793896,
-          47793989,
-          47794029,
-          47794070,
-          47794115,
-          47794174,
-          47794304,
-          47794397,
-          47794930,
-          47795715,
-          47795729,
-          47796437,
-          47796473,
-          47796522,
-          47796622,
-          47797281,
-          47797733,
-          47797870,
-          47798306,
-          47798399,
-          47798416,
-          47798521,
-          47798529,
-          47798695,
-          47798837,
-          47798949,
-          47799181,
-          47799472,
-          47799691,
-          47799725,
-          47799912,
-          47800071,
-          47800544,
-          47800637,
-          47800843,
-          47801170,
-          47801526,
-          47801609,
-          47801879,
-          47801988,
-          47802015,
-          47802050,
-          47802120,
-          47802167,
-          47802432,
-          47802497,
-          47803459,
-          47804209,
-          47804564,
-          47804693,
-          47805249,
-          47806097
-        ],
-        "created_at": "2026-04-16T13:32:13Z",
-        "created_at_i": 1776346333,
-        "num_comments": 689,
-        "objectID": "47792718",
-        "points": 669,
-        "story_id": 47792718,
-        "title": "The future of everything is lies, I guess: Where do we go from here?",
-        "updated_at": "2026-04-17T14:09:48Z",
-        "url": "https://aphyr.com/posts/420-the-future-of-everything-is-lies-i-guess-where-do-we-go-from-here"
-      },
-      {
-        "_highlightResult": {
-          "author": {
-            "matchLevel": "none",
-            "matchedWords": [],
-            "value": "nikitoci"
-          },
-          "title": {
-            "matchLevel": "none",
-            "matchedWords": [],
-            "value": "Cloudflare's AI Platform: an inference layer designed for agents"
-          },
-          "url": {
-            "matchLevel": "none",
-            "matchedWords": [],
-            "value": "https://blog.cloudflare.com/ai-platform/"
-          }
-        },
-        "_tags": [
-          "story",
-          "author_nikitoci",
-          "story_47792538",
-          "front_page"
-        ],
-        "author": "nikitoci",
-        "children": [
-          47792787,
-          47792822,
-          47793121,
-          47793207,
-          47793220,
-          47793326,
-          47793658,
-          47793705,
-          47793876,
-          47794178,
-          47794187,
-          47794306,
-          47797596,
-          47797601,
-          47799027,
-          47799096,
-          47799777,
-          47799899,
-          47800699,
-          47800764,
-          47800982,
-          47801507,
-          47803835,
-          47804182,
-          47804324,
-          47804533,
-          47805529,
-          47805716
-        ],
-        "created_at": "2026-04-16T13:17:37Z",
-        "created_at_i": 1776345457,
-        "num_comments": 77,
-        "objectID": "47792538",
-        "points": 295,
-        "story_id": 47792538,
-        "title": "Cloudflare's AI Platform: an inference layer designed for agents",
-        "updated_at": "2026-04-17T14:07:04Z",
-        "url": "https://blog.cloudflare.com/ai-platform/"
       },
       {
         "_highlightResult": {
@@ -747,17 +576,85 @@
           47805740,
           47805941,
           47805974,
-          47806009
+          47806009,
+          47806142,
+          47806316
         ],
         "created_at": "2026-04-17T02:50:02Z",
         "created_at_i": 1776394202,
-        "num_comments": 197,
+        "num_comments": 209,
         "objectID": "47801991",
-        "points": 289,
+        "points": 313,
         "story_id": 47801991,
         "title": "US Bill Mandates On-Device Age Verification",
-        "updated_at": "2026-04-17T14:09:48Z",
+        "updated_at": "2026-04-17T14:30:20Z",
         "url": "https://reclaimthenet.org/us-bill-mandates-on-device-age-verification"
+      },
+      {
+        "_highlightResult": {
+          "author": {
+            "matchLevel": "none",
+            "matchedWords": [],
+            "value": "nikitoci"
+          },
+          "title": {
+            "matchLevel": "none",
+            "matchedWords": [],
+            "value": "Cloudflare's AI Platform: an inference layer designed for agents"
+          },
+          "url": {
+            "matchLevel": "none",
+            "matchedWords": [],
+            "value": "https://blog.cloudflare.com/ai-platform/"
+          }
+        },
+        "_tags": [
+          "story",
+          "author_nikitoci",
+          "story_47792538",
+          "front_page"
+        ],
+        "author": "nikitoci",
+        "children": [
+          47792787,
+          47792822,
+          47793121,
+          47793207,
+          47793220,
+          47793326,
+          47793658,
+          47793705,
+          47793876,
+          47794178,
+          47794187,
+          47794306,
+          47797596,
+          47797601,
+          47799027,
+          47799096,
+          47799777,
+          47799899,
+          47800699,
+          47800764,
+          47800982,
+          47801507,
+          47803835,
+          47804182,
+          47804324,
+          47804533,
+          47805529,
+          47805716,
+          47806253
+        ],
+        "created_at": "2026-04-16T13:17:37Z",
+        "created_at_i": 1776345457,
+        "num_comments": 78,
+        "objectID": "47792538",
+        "points": 298,
+        "story_id": 47792538,
+        "title": "Cloudflare's AI Platform: an inference layer designed for agents",
+        "updated_at": "2026-04-17T14:28:49Z",
+        "url": "https://blog.cloudflare.com/ai-platform/"
       },
       {
         "_highlightResult": {
@@ -802,12 +699,12 @@
         ],
         "created_at": "2026-04-16T19:32:18Z",
         "created_at_i": 1776367938,
-        "num_comments": 74,
+        "num_comments": 75,
         "objectID": "47798345",
-        "points": 271,
+        "points": 275,
         "story_id": 47798345,
         "title": "Official Clojure Documentary page with Video, Shownotes, and Links",
-        "updated_at": "2026-04-17T14:08:19Z",
+        "updated_at": "2026-04-17T14:30:20Z",
         "url": "https://clojure.org/about/documentary"
       },
       {
@@ -865,13 +762,124 @@
         ],
         "created_at": "2026-04-16T18:39:59Z",
         "created_at_i": 1776364799,
-        "num_comments": 110,
+        "num_comments": 113,
         "objectID": "47797665",
-        "points": 270,
+        "points": 272,
         "story_id": 47797665,
         "title": "Android CLI: Build Android apps 3x faster using any agent",
-        "updated_at": "2026-04-17T14:08:19Z",
+        "updated_at": "2026-04-17T14:30:20Z",
         "url": "https://android-developers.googleblog.com/2026/04/build-android-apps-3x-faster-using-any-agent.html"
+      },
+      {
+        "_highlightResult": {
+          "author": {
+            "matchLevel": "none",
+            "matchedWords": [],
+            "value": "ColinWright"
+          },
+          "title": {
+            "matchLevel": "none",
+            "matchedWords": [],
+            "value": "Isaac Asimov: The Last Question"
+          },
+          "url": {
+            "matchLevel": "none",
+            "matchedWords": [],
+            "value": "https://hex.ooo/library/last_question.html"
+          }
+        },
+        "_tags": [
+          "story",
+          "author_ColinWright",
+          "story_47804965",
+          "front_page"
+        ],
+        "author": "ColinWright",
+        "children": [
+          47805326,
+          47805329,
+          47805389,
+          47805416,
+          47805441,
+          47805487,
+          47805522,
+          47805557,
+          47805569,
+          47805674,
+          47805752,
+          47805826,
+          47805837,
+          47805910,
+          47806032,
+          47806066,
+          47806077,
+          47806084,
+          47806185,
+          47806320
+        ],
+        "created_at": "2026-04-17T12:01:19Z",
+        "created_at_i": 1776427279,
+        "num_comments": 72,
+        "objectID": "47804965",
+        "points": 228,
+        "story_id": 47804965,
+        "title": "Isaac Asimov: The Last Question",
+        "updated_at": "2026-04-17T14:30:20Z",
+        "url": "https://hex.ooo/library/last_question.html"
+      },
+      {
+        "_highlightResult": {
+          "author": {
+            "matchLevel": "none",
+            "matchedWords": [],
+            "value": "Ivoah"
+          },
+          "title": {
+            "matchLevel": "none",
+            "matchedWords": [],
+            "value": "Playdate’s handheld changed how Duke University teaches game design"
+          },
+          "url": {
+            "matchLevel": "none",
+            "matchedWords": [],
+            "value": "https://news.play.date/news/duke-playdate-education/"
+          }
+        },
+        "_tags": [
+          "story",
+          "author_Ivoah",
+          "story_47798176",
+          "front_page"
+        ],
+        "author": "Ivoah",
+        "children": [
+          47800231,
+          47800277,
+          47800316,
+          47800343,
+          47800455,
+          47800990,
+          47801022,
+          47801266,
+          47801270,
+          47801331,
+          47801491,
+          47801938,
+          47802097,
+          47802445,
+          47803530,
+          47804749,
+          47804887
+        ],
+        "created_at": "2026-04-16T19:18:31Z",
+        "created_at_i": 1776367111,
+        "num_comments": 98,
+        "objectID": "47798176",
+        "points": 206,
+        "story_id": 47798176,
+        "title": "Playdate’s handheld changed how Duke University teaches game design",
+        "updated_at": "2026-04-17T14:30:20Z",
+        "url": "https://news.play.date/news/duke-playdate-education/"
       },
       {
         "_highlightResult": {
@@ -924,65 +932,11 @@
         "created_at_i": 1776376597,
         "num_comments": 40,
         "objectID": "47800033",
-        "points": 204,
+        "points": 205,
         "story_id": 47800033,
         "title": "Guy builds AI driven hardware hacker arm from duct tape, old cam and CNC machine",
-        "updated_at": "2026-04-17T14:09:48Z",
+        "updated_at": "2026-04-17T14:25:34Z",
         "url": "https://github.com/gainsec/autoprober"
-      },
-      {
-        "_highlightResult": {
-          "author": {
-            "matchLevel": "none",
-            "matchedWords": [],
-            "value": "Ivoah"
-          },
-          "title": {
-            "matchLevel": "none",
-            "matchedWords": [],
-            "value": "Playdate’s handheld changed how Duke University teaches game design"
-          },
-          "url": {
-            "matchLevel": "none",
-            "matchedWords": [],
-            "value": "https://news.play.date/news/duke-playdate-education/"
-          }
-        },
-        "_tags": [
-          "story",
-          "author_Ivoah",
-          "story_47798176",
-          "front_page"
-        ],
-        "author": "Ivoah",
-        "children": [
-          47800231,
-          47800277,
-          47800316,
-          47800343,
-          47800455,
-          47800990,
-          47801022,
-          47801266,
-          47801270,
-          47801331,
-          47801491,
-          47801938,
-          47802097,
-          47802445,
-          47803530,
-          47804749,
-          47804887
-        ],
-        "created_at": "2026-04-16T19:18:31Z",
-        "created_at_i": 1776367111,
-        "num_comments": 93,
-        "objectID": "47798176",
-        "points": 200,
-        "story_id": 47798176,
-        "title": "Playdate’s handheld changed how Duke University teaches game design",
-        "updated_at": "2026-04-17T14:09:48Z",
-        "url": "https://news.play.date/news/duke-playdate-education/"
       }
     ]
   }

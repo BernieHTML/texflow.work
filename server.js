@@ -603,6 +603,14 @@ try {
   console.error('[TEX] Failed to mount /tex:', e.message);
 }
 
+// --- TopicFlow: live information feeds for AI agents ---
+try {
+  const { createTopicflowRouter } = require(join(__dirname, 'topicflow', 'topicflow-app.js'));
+  app.use('/topicflow', createTopicflowRouter());
+} catch (e) {
+  console.error('[TopicFlow] Failed to mount /topicflow:', e.message);
+}
+
 // --- Static: public, then root assets ---
 app.use(express.static(join(__dirname, 'public')));
 app.get('/texflowlogo.png', (req, res) => res.sendFile(join(__dirname, 'texflowlogo.png')));

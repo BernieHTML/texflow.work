@@ -3,44 +3,158 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>TopicFlow Channels</title>
+  <title>TopicFlow — Channel directory</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" />
   <link rel="stylesheet" href="/topicflow/public/style.css" />
+  <style>
+    .filters { display:flex; flex-wrap:wrap; gap:10px; margin-bottom:18px; align-items:center; }
+    .filters input, .filters select {
+      background:var(--bg-2); color:var(--text); border:1px solid var(--line);
+      padding:10px 12px; border-radius:10px; font-size:14px; min-width:0;
+    }
+    .filters input:focus, .filters select:focus { outline:none; border-color:var(--accent); }
+    .channel-grid { display:grid; gap:14px; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); }
+    .ch {
+      background: linear-gradient(180deg, var(--panel) 0%, var(--panel-2) 100%);
+      border:1px solid var(--line); border-radius:var(--radius); padding:18px;
+      transition: transform 0.15s ease, border-color 0.15s ease;
+    }
+    .ch:hover { transform: translateY(-2px); border-color: var(--accent); }
+    .ch-head { display:flex; justify-content:space-between; gap:10px; align-items:flex-start; margin-bottom:10px; }
+    .ch-name { font-weight:600; font-size:15px; margin:0; }
+    .ch-slug { font-family:var(--mono); font-size:12px; color:var(--muted); }
+    .ch-cat { font-size:11px; color:var(--accent-strong); padding:3px 8px; background:var(--accent-soft); border-radius:999px; letter-spacing:.04em; }
+    .ch-desc { color:var(--text-dim); font-size:13px; margin:8px 0 12px; min-height:38px; }
+    .ch-meta { font-family:var(--mono); font-size:11px; color:var(--muted); margin-bottom:10px; display:flex; gap:10px; }
+    .ch-cmd { font-family:var(--mono); font-size:11px; color:#cbeadf; background:#0a0c10; border:1px solid var(--line); border-radius:8px; padding:8px; overflow-x:auto; white-space:pre; }
+    .empty { color:var(--muted); text-align:center; padding:40px 0; }
+  </style>
 </head>
 <body>
+  <nav class="nav">
+    <div class="wrap nav-inner">
+      <a class="brand" href="/topicflow"><span class="brand-dot"></span><span class="brand-name">TopicFlow</span><span class="brand-suffix">· channels</span></a>
+      <div class="nav-links">
+        <a href="/topicflow">Home</a>
+        <a href="/topicflow/docs">Docs</a>
+        <a class="nav-cta" href="/topicflow/dashboard">Dashboard</a>
+      </div>
+    </div>
+  </nav>
+
   <main class="wrap">
-    <h1>Channel directory</h1>
-    <div class="card">
-      <label>API key <input id="key" placeholder="tfk_..." /></label>
-      <label>Category <input id="cat" placeholder="crypto" /></label>
-      <label>Search <input id="search" placeholder="bitcoin" /></label>
-      <button id="load">Load</button>
-    </div>
-    <div class="card">
-      <table>
-        <thead><tr><th>Slug</th><th>Name</th><th>Description</th><th>Cadence</th><th>Subscribe</th></tr></thead>
-        <tbody id="rows"></tbody>
-      </table>
-    </div>
+    <section class="hero" style="grid-template-columns:1fr;padding:56px 0 24px;">
+      <div>
+        <span class="eyebrow">directory</span>
+        <h1 style="font-size:clamp(28px,4vw,40px);">Browse every channel.</h1>
+        <p class="lede">Filter by category, search by keyword, and copy a curl command to subscribe. Paste your API key to personalise.</p>
+      </div>
+    </section>
+
+    <section style="padding-top:0;">
+      <div class="filters">
+        <input id="key"    placeholder="tfk_YOUR_KEY (optional)" style="flex:1 1 260px;" />
+        <select id="cat">
+          <option value="">All categories</option>
+        </select>
+        <input id="search" placeholder="Search slug or name" style="flex:1 1 220px;" />
+        <button class="btn btn-ghost" id="reload">Reload</button>
+      </div>
+      <div id="grid" class="channel-grid"></div>
+      <div id="empty" class="empty" style="display:none;">No channels match your filters yet.</div>
+    </section>
   </main>
+
+  <footer class="site">
+    <div class="wrap site-grid">
+      <div>© TopicFlow · part of the <a href="https://texflow.work">TexFlow</a> product suite</div>
+      <div class="site-links">
+        <a href="/topicflow/legal/terms.md">Terms</a>
+        <a href="/topicflow/legal/privacy.md">Privacy</a>
+        <a href="/topicflow/legal/channel-rules.md">Channel Rules</a>
+      </div>
+    </div>
+  </footer>
+
   <script>
+    const qs = new URLSearchParams(location.search);
+    if (qs.get('category')) document.getElementById('cat-preselect-marker');
+    const keyEl = document.getElementById('key');
+    const catEl = document.getElementById('cat');
+    const searchEl = document.getElementById('search');
+    const gridEl = document.getElementById('grid');
+    const emptyEl = document.getElementById('empty');
+
+    const CATEGORIES = ['crypto','finance','economics','geoscience','weather','environment','space','health','tech','research','regulatory','logistics','energy','culture','demographics','news','misc'];
+    CATEGORIES.forEach((c) => {
+      const o = document.createElement('option');
+      o.value = c; o.textContent = c;
+      catEl.appendChild(o);
+    });
+    if (qs.get('category')) catEl.value = qs.get('category');
+    if (qs.get('search')) searchEl.value = qs.get('search');
+
     async function load() {
-      const key = document.getElementById("key").value.trim();
-      const cat = document.getElementById("cat").value.trim();
-      const search = document.getElementById("search").value.trim();
-      const qp = new URLSearchParams();
-      if (cat) qp.set("category", cat);
-      if (search) qp.set("search", search);
-      const resp = await fetch("/topicflow/channels?" + qp.toString(), { headers: { Authorization: `Bearer ${key}` } });
-      const data = await resp.json();
-      const rows = document.getElementById("rows");
-      rows.innerHTML = "";
-      (data.channels || []).forEach((c) => {
-        const tr = document.createElement("tr");
-        tr.innerHTML = `<td class="mono">${c.slug}</td><td>${c.name}</td><td>${c.description}</td><td>${c.cadence}</td><td class="mono">curl -X POST https://texflow.work/topicflow/channels/${c.slug}/subscribe -H "Authorization: Bearer YOUR_KEY"</td>`;
-        rows.appendChild(tr);
-      });
+      const key = keyEl.value.trim();
+      const params = new URLSearchParams();
+      if (catEl.value) params.set('category', catEl.value);
+      if (searchEl.value.trim()) params.set('search', searchEl.value.trim());
+      const headers = key ? { Authorization: `Bearer ${key}` } : {};
+
+      gridEl.innerHTML = '';
+      emptyEl.style.display = 'none';
+
+      let resp;
+      try {
+        resp = await fetch('/topicflow/channels?' + params.toString(), { headers });
+      } catch (e) {
+        emptyEl.textContent = 'Could not reach /topicflow/channels.';
+        emptyEl.style.display = 'block';
+        return;
+      }
+      if (resp.status === 401) {
+        emptyEl.innerHTML = 'Enter an API key above to browse channels. Get one with <code>POST /topicflow/auth/register</code>.';
+        emptyEl.style.display = 'block';
+        return;
+      }
+      const data = await resp.json().catch(() => ({ channels: [] }));
+      const channels = data.channels || [];
+      if (!channels.length) {
+        emptyEl.textContent = 'No channels match your filters yet.';
+        emptyEl.style.display = 'block';
+        return;
+      }
+      for (const c of channels) {
+        const card = document.createElement('div');
+        card.className = 'ch';
+        card.innerHTML = `
+          <div class="ch-head">
+            <div>
+              <h3 class="ch-name">${escapeHtml(c.name)}</h3>
+              <div class="ch-slug">${escapeHtml(c.slug)}</div>
+            </div>
+            <span class="ch-cat">${escapeHtml(c.category || 'misc')}</span>
+          </div>
+          <p class="ch-desc">${escapeHtml(c.description || '')}</p>
+          <div class="ch-meta"><span>cadence: ${escapeHtml(c.cadence || '')}</span><span>${c.subscriber_count || 0} subscribers</span></div>
+          <pre class="ch-cmd">curl -X POST https://texflow.work/topicflow/channels/${escapeHtml(c.slug)}/subscribe \\
+  -H "Authorization: Bearer YOUR_KEY"</pre>`;
+        gridEl.appendChild(card);
+      }
     }
-    document.getElementById("load").addEventListener("click", load);
+
+    function escapeHtml(s) {
+      return String(s).replace(/[&<>"']/g, (ch) => ({
+        '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+      })[ch]);
+    }
+
+    document.getElementById('reload').addEventListener('click', load);
+    [keyEl, catEl, searchEl].forEach((el) => el.addEventListener('change', load));
+    searchEl.addEventListener('keyup', (e) => { if (e.key === 'Enter') load(); });
+    load();
   </script>
 </body>
 </html>

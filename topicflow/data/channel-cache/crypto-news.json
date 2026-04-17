@@ -1,57 +1,11 @@
 {
   "channel": "crypto-news",
   "event": "update",
-  "ts": "2026-04-17T14:13:46.164Z",
+  "ts": "2026-04-17T14:30:39.495Z",
   "source": "crypto-news",
   "payload": {
-    "articles": [
-      {
-        "title": "FCA confirms motor finance redress scheme",
-        "link": "https://www.fca.org.uk/news/statements/fca-confirms-motor-finance-redress-scheme",
-        "description": "We are going ahead with a scheme to compensate motor finance customers who were treated unfairly.\n\nCourts have found that firms broke the law by failing to disclose important information to customers.",
-        "pubDate": "2026-04-17T14:09:16.799Z",
-        "source": "UK FCA Crypto",
-        "sourceKey": "uk_fca_crypto",
-        "category": "geopolitical",
-        "timeAgo": "just now",
-        "author": "Fca",
-        "authorSlug": "fca",
-        "contentType": "news",
-        "credibility": 0.6,
-        "reputation": 50
-      },
-      {
-        "title": "Millions of car finance customers to get payouts this year as FCA goes ahead with compensation scheme",
-        "link": "https://www.fca.org.uk/news/press-releases/millions-car-finance-customers-payouts-fca-goes-ahead-compensation-scheme",
-        "description": "Millions of motor finance customers will receive compensation this year under an FCA scheme for those treated unfairly by firms who broke the law by failing to disclose important information.\n\nConsume",
-        "pubDate": "2026-04-17T14:09:16.799Z",
-        "source": "UK FCA Crypto",
-        "sourceKey": "uk_fca_crypto",
-        "category": "geopolitical",
-        "timeAgo": "just now",
-        "author": "Fca",
-        "authorSlug": "fca",
-        "contentType": "news",
-        "credibility": 0.6,
-        "reputation": 50
-      },
-      {
-        "title": "Shojin Financial Services Limited enters administration",
-        "link": "https://www.fca.org.uk/news/news-stories/shojin-financial-services-limited-enters-administration",
-        "description": "Shojin Financial Services Limited (Shojin) is a crowdfunding platform authorised and regulated by the FCA.\n\nShojin allowed customers to make investments that were used to fund loans toward property de",
-        "pubDate": "2026-04-17T14:09:16.799Z",
-        "source": "UK FCA Crypto",
-        "sourceKey": "uk_fca_crypto",
-        "category": "geopolitical",
-        "timeAgo": "just now",
-        "author": "Fca",
-        "authorSlug": "fca",
-        "contentType": "news",
-        "credibility": 0.6,
-        "reputation": 50
-      }
-    ],
-    "totalCount": 6895,
+    "articles": [],
+    "totalCount": 0,
     "sources": [
       "CoinDesk",
       "The Block",
@@ -412,12 +366,12 @@
       "CryptoDnes",
       "CypherHunter Blog"
     ],
-    "fetchedAt": "2026-04-17T14:13:46.140Z",
+    "fetchedAt": "2026-04-17T14:30:39.469Z",
     "pagination": {
       "page": 1,
       "perPage": 10,
-      "totalPages": 690,
-      "hasMore": true
+      "totalPages": 0,
+      "hasMore": false
     },
     "lang": "en",
     "availableLanguages": [
@@ -519,10 +473,10 @@
       "trading"
     ],
     "free_tier": true,
-    "total": 3,
+    "total": 0,
     "upgrade": "https://cryptocurrency.cv/premium",
     "_meta": {
-      "responseTimeMs": 12
+      "responseTimeMs": 2430
     }
   }
 }

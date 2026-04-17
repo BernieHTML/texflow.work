@@ -1,12 +1,12 @@
 {
   "channel": "crypto-btc",
   "event": "price_update",
-  "ts": "2026-04-17T14:20:41.230Z",
+  "ts": "2026-04-17T14:32:32.184Z",
   "source": "crypto-btc",
   "payload": {
     "bitcoin": {
-      "usd": 77230,
-      "usd_24h_change": 5.073327966323349
+      "usd": 77562,
+      "usd_24h_change": 4.9346995994314
     }
   }
 }

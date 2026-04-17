@@ -1,7 +1,7 @@
 {
   "channel": "exchange-status",
   "event": "update",
-  "ts": "2026-04-17T14:13:57.020Z",
+  "ts": "2026-04-17T14:30:47.807Z",
   "source": "exchange-status",
   "payload": {
     "items": [
@@ -16,7 +16,7 @@
         "has_trading_incentive": false,
         "trust_score": 10,
         "trust_score_rank": 1,
-        "trade_volume_24h_btc": 190846.21530951912
+        "trade_volume_24h_btc": 189626.5285775112
       },
       {
         "id": "bybit_spot",
@@ -29,7 +29,7 @@
         "has_trading_incentive": false,
         "trust_score": 10,
         "trust_score_rank": 2,
-        "trade_volume_24h_btc": 36939.978509593304
+        "trade_volume_24h_btc": 36654.346681250914
       },
       {
         "id": "okex",
@@ -42,7 +42,7 @@
         "has_trading_incentive": false,
         "trust_score": 10,
         "trust_score_rank": 3,
-        "trade_volume_24h_btc": 33520.62129486617
+        "trade_volume_24h_btc": 33410.84292979699
       },
       {
         "id": "gdax",
@@ -55,7 +55,7 @@
         "has_trading_incentive": false,
         "trust_score": 10,
         "trust_score_rank": 4,
-        "trade_volume_24h_btc": 30088.32653808909
+        "trade_volume_24h_btc": 31375.950251592854
       },
       {
         "id": "gate",
@@ -68,7 +68,7 @@
         "has_trading_incentive": false,
         "trust_score": 10,
         "trust_score_rank": 5,
-        "trade_volume_24h_btc": 21871.296159388705
+        "trade_volume_24h_btc": 21881.90328857181
       },
       {
         "id": "bitget",
@@ -81,7 +81,7 @@
         "has_trading_incentive": false,
         "trust_score": 10,
         "trust_score_rank": 6,
-        "trade_volume_24h_btc": 16090.092133706381
+        "trade_volume_24h_btc": 15956.321658591572
       },
       {
         "id": "mxc",
@@ -94,7 +94,7 @@
         "has_trading_incentive": false,
         "trust_score": 10,
         "trust_score_rank": 7,
-        "trade_volume_24h_btc": 15620.08102015614
+        "trade_volume_24h_btc": 15532.74559167683
       },
       {
         "id": "kraken",
@@ -107,7 +107,7 @@
         "has_trading_incentive": false,
         "trust_score": 10,
         "trust_score_rank": 8,
-        "trade_volume_24h_btc": 15083.369934371256
+        "trade_volume_24h_btc": 15218.389411495813
       },
       {
         "id": "kucoin",
@@ -120,7 +120,7 @@
         "has_trading_incentive": false,
         "trust_score": 9,
         "trust_score_rank": 9,
-        "trade_volume_24h_btc": 34660.068662278725
+        "trade_volume_24h_btc": 34731.03652224732
       },
       {
         "id": "crypto_com",
@@ -133,7 +133,7 @@
         "has_trading_incentive": false,
         "trust_score": 9,
         "trust_score_rank": 10,
-        "trade_volume_24h_btc": 24084.46840465129
+        "trade_volume_24h_btc": 24018.775989014313
       }
     ]
   }

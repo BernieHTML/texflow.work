@@ -1,7 +1,7 @@
 {
   "channel": "power-grid-us",
   "event": "update",
-  "ts": "2026-04-17T14:13:57.130Z",
+  "ts": "2026-04-17T14:30:47.987Z",
   "source": "power-grid-us",
   "payload": {
     "error": {

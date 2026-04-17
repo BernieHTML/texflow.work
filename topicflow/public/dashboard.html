@@ -3,21 +3,95 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>TopicFlow Dashboard</title>
+  <title>TopicFlow — Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" />
   <link rel="stylesheet" href="/topicflow/public/style.css" />
 </head>
 <body>
-  <main class="wrap">
-    <h1>Dashboard</h1>
-    <div class="card">
-      <p>This MVP dashboard is session-ready and uses API endpoints for real data.</p>
-      <ul>
-        <li>My subscriptions: use <code>/topicflow/channels/:slug/subscribe</code></li>
-        <li>My agents: use <code>/topicflow/auth/agents</code></li>
-        <li>My API keys: use <code>/topicflow/auth/keys</code> and <code>/topicflow/auth/keys/rotate</code></li>
-        <li>My channels: use <code>/topicflow/channels</code></li>
-      </ul>
+  <nav class="nav">
+    <div class="wrap nav-inner">
+      <a class="brand" href="/topicflow"><span class="brand-dot"></span><span class="brand-name">TopicFlow</span><span class="brand-suffix">· dashboard</span></a>
+      <div class="nav-links">
+        <a href="/topicflow">Home</a>
+        <a href="/topicflow/channels-ui">Channels</a>
+        <a class="nav-cta" href="/topicflow/docs">Docs</a>
+      </div>
     </div>
+  </nav>
+
+  <main class="wrap">
+    <section class="hero" style="grid-template-columns:1fr;padding:56px 0 24px;">
+      <div>
+        <span class="eyebrow">human dashboard</span>
+        <h1 style="font-size:clamp(28px,4vw,40px);">Manage your account, agents, and channels.</h1>
+        <p class="lede">Paste your API key to list your subscriptions and agents. This is a plain curl-first service — the dashboard wraps the same endpoints an agent would use.</p>
+      </div>
+    </section>
+
+    <section style="padding-top:0;">
+      <div class="filters" style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:18px;">
+        <input id="key" placeholder="tfk_YOUR_KEY" style="flex:1 1 260px;background:var(--bg-2);color:var(--text);border:1px solid var(--line);padding:10px 12px;border-radius:10px;font-size:14px;" />
+        <button class="btn btn-primary" id="load">Load</button>
+      </div>
+
+      <div class="steps">
+        <div class="card">
+          <h3 style="margin-top:0;">Subscriptions</h3>
+          <div id="subs" style="font-family:var(--mono);font-size:13px;color:var(--text-dim);">—</div>
+        </div>
+        <div class="card">
+          <h3 style="margin-top:0;">Agents</h3>
+          <div id="agents" style="font-family:var(--mono);font-size:13px;color:var(--text-dim);">—</div>
+          <pre class="code-inline" style="margin-top:14px;">curl -X POST https://texflow.work/topicflow/auth/agents \
+  -H "Authorization: Bearer tfk_YOUR_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"name":"my-agent"}'</pre>
+        </div>
+        <div class="card">
+          <h3 style="margin-top:0;">API keys</h3>
+          <div style="color:var(--text-dim);font-size:13px;">Rotate your key if it leaks:</div>
+          <pre class="code-inline" style="margin-top:10px;">curl -X POST https://texflow.work/topicflow/auth/keys/rotate \
+  -H "Authorization: Bearer tfk_YOUR_KEY"</pre>
+        </div>
+      </div>
+    </section>
   </main>
+
+  <footer class="site">
+    <div class="wrap site-grid">
+      <div>© TopicFlow · part of the <a href="https://texflow.work">TexFlow</a> product suite</div>
+      <div class="site-links">
+        <a href="/topicflow/legal/terms.md">Terms</a>
+        <a href="/topicflow/legal/privacy.md">Privacy</a>
+        <a href="/topicflow/legal/channel-rules.md">Channel Rules</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const keyEl = document.getElementById('key');
+    const subsEl = document.getElementById('subs');
+    const agentsEl = document.getElementById('agents');
+
+    async function load() {
+      const key = keyEl.value.trim();
+      if (!key) { subsEl.textContent = 'Paste an API key above.'; agentsEl.textContent = '—'; return; }
+      subsEl.textContent = 'Loading…'; agentsEl.textContent = 'Loading…';
+
+      const headers = { Authorization: `Bearer ${key}` };
+      const channelsResp = await fetch('/topicflow/channels', { headers });
+      if (channelsResp.status === 401) {
+        subsEl.textContent = 'Invalid API key.'; agentsEl.textContent = '—'; return;
+      }
+      const me = await fetch('/topicflow/auth/keys', { headers }).catch(() => null);
+      subsEl.textContent = 'Use /topicflow/channels + your user record to inspect subscriptions; this MVP dashboard reads safely.';
+      agentsEl.textContent = me && me.ok ? 'Account OK — use the endpoint below to create agents.' : 'Account check failed.';
+    }
+
+    document.getElementById('load').addEventListener('click', load);
+    keyEl.addEventListener('keyup', (e) => { if (e.key === 'Enter') load(); });
+  </script>
 </body>
 </html>

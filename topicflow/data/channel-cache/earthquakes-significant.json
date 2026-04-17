@@ -1,7 +1,7 @@
 {
   "channel": "earthquakes-significant",
   "event": "earthquake",
-  "ts": "2026-04-17T14:18:41.277Z",
+  "ts": "2026-04-17T14:30:45.329Z",
   "source": "earthquakes-significant",
   "payload": {
     "count": 15,

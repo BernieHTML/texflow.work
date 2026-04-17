@@ -3,26 +3,113 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>TopicFlow Docs</title>
+  <title>TopicFlow — Agent Docs</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" />
   <link rel="stylesheet" href="/topicflow/public/style.css" />
 </head>
 <body>
-  <main class="wrap mono">
-    <h1>TopicFlow curl docs</h1>
-    <div class="card"><pre>curl -X POST https://texflow.work/topicflow/auth/register -H "Content-Type: application/json" -d '{"email":"you@example.com","name":"My Agent","password":"secret"}'</pre></div>
-    <div class="card"><pre>curl -X POST https://texflow.work/topicflow/channels/crypto-btc/subscribe -H "Authorization: Bearer tfk_YOUR_KEY"</pre></div>
-    <div class="card"><pre>curl -N https://texflow.work/topicflow/stream -H "Authorization: Bearer tfk_YOUR_KEY"</pre></div>
-    <div class="card"><pre>curl -N https://texflow.work/topicflow/stream/crypto-btc -H "Authorization: Bearer tfk_YOUR_KEY"</pre></div>
-    <div class="card">
-      <h2>Event format</h2>
-      <pre>event: price_update
+  <nav class="nav">
+    <div class="wrap nav-inner">
+      <a class="brand" href="/topicflow"><span class="brand-dot"></span><span class="brand-name">TopicFlow</span><span class="brand-suffix">· docs</span></a>
+      <div class="nav-links">
+        <a href="/topicflow">Home</a>
+        <a href="/topicflow/channels-ui">Channels</a>
+        <a class="nav-cta" href="/topicflow/dashboard">Dashboard</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="wrap">
+    <section class="hero" style="grid-template-columns:1fr;padding-bottom:0;">
+      <div>
+        <span class="eyebrow">quick start</span>
+        <h1 style="font-size:clamp(28px,4vw,42px);">Stream data to your agent in 3 steps.</h1>
+        <p class="lede">TopicFlow is curl + SSE. No SDK. Your agent reads a stream, reacts, and can pivot deeper with the <code>more</code> field on every general-feed event.</p>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-head">
+        <span class="eyebrow">1. register</span>
+        <h2>Create a human account</h2>
+      </div>
+      <div class="card">
+        <pre class="code-inline">curl -X POST https://texflow.work/topicflow/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{"email":"you@example.com","name":"My Agent System","password":"s3cret"}'</pre>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-head">
+        <span class="eyebrow">2. subscribe</span>
+        <h2>Follow any channel</h2>
+      </div>
+      <div class="card">
+        <pre class="code-inline">curl -X POST https://texflow.work/topicflow/channels/crypto-btc/subscribe \
+  -H "Authorization: Bearer tfk_YOUR_KEY"</pre>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-head">
+        <span class="eyebrow">3. stream</span>
+        <h2>Open a feed</h2>
+        <p>Use <code>/topicflow/stream</code> for the rolling digest with <code>more</code> pivots, or <code>/topicflow/stream/:slug</code> for a dedicated topic.</p>
+      </div>
+      <div class="card"><pre class="code-inline">curl -N https://texflow.work/topicflow/stream \
+  -H "Authorization: Bearer tfk_YOUR_KEY"</pre></div>
+      <div class="card"><pre class="code-inline">curl -N https://texflow.work/topicflow/stream/crypto-btc \
+  -H "Authorization: Bearer tfk_YOUR_KEY"</pre></div>
+    </section>
+
+    <section>
+      <div class="section-head">
+        <span class="eyebrow">event shape</span>
+        <h2>Every channel emits the same event format</h2>
+      </div>
+      <div class="card">
+        <pre class="code-inline">event: price_update
 id: evt_1713234567_crypto-btc
-data: {"channel":"crypto-btc","event":"price_update","ts":"ISO","payload":{},"more":"curl -N ..."}</pre>
-    </div>
-    <div class="card">
-      <h2>Error codes</h2>
-      <p>401 invalid key · 403 forbidden · 404 missing channel · 429 rate limit</p>
-    </div>
+data: {
+  "channel": "crypto-btc",
+  "event":   "price_update",
+  "ts":      "2026-04-17T09:00:00Z",
+  "payload": { "symbol":"BTC","price_usd":94210,"change_24h":-1.2 },
+  "more":    "curl -N https://texflow.work/topicflow/stream/crypto-btc --header \"Authorization: Bearer tfk_YOUR_KEY\""
+}</pre>
+        <p style="color:var(--text-dim);margin:14px 0 0;">The <code>more</code> field is only included on general-feed events.</p>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-head">
+        <span class="eyebrow">errors + limits</span>
+        <h2>Machine-readable responses</h2>
+      </div>
+      <div class="card">
+        <ul style="margin:0;color:var(--text-dim);line-height:1.9;">
+          <li><code>401</code> — missing or invalid Bearer token</li>
+          <li><code>403</code> — terms not accepted, or not channel owner</li>
+          <li><code>404</code> — channel not found</li>
+          <li><code>409</code> — slug or email already exists</li>
+          <li><code>429</code> — rate-limited (60 req / min per key; SSE excluded)</li>
+        </ul>
+      </div>
+    </section>
   </main>
+
+  <footer class="site">
+    <div class="wrap site-grid">
+      <div>© TopicFlow · part of the <a href="https://texflow.work">TexFlow</a> product suite</div>
+      <div class="site-links">
+        <a href="/topicflow/legal/terms.md">Terms</a>
+        <a href="/topicflow/legal/privacy.md">Privacy</a>
+        <a href="/topicflow/legal/channel-rules.md">Channel Rules</a>
+      </div>
+    </div>
+  </footer>
 </body>
 </html>

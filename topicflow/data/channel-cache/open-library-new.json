@@ -1,22 +1,18 @@
 {
   "channel": "open-library-new",
   "event": "update",
-  "ts": "2026-04-17T14:13:57.070Z",
+  "ts": "2026-04-17T14:30:47.902Z",
   "source": "open-library-new",
   "payload": {
     "items": [
       {
-        "id": "168842092",
-        "kind": "edit-book",
-        "timestamp": "2026-04-17T14:13:56.339536",
-        "comment": "import existing book",
+        "id": "168842901",
+        "kind": "update",
+        "timestamp": "2026-04-17T14:30:46.316177",
+        "comment": "set source_records based on initial machine_comment",
         "changes": [
           {
-            "key": "/books/OL13011406M",
-            "revision": 3
-          },
-          {
-            "key": "/works/OL23689258W",
+            "key": "/books/OL20713504M",
             "revision": 2
           }
         ],
@@ -27,14 +23,48 @@
         "data": {}
       },
       {
-        "id": "168842091",
+        "id": "168842900",
+        "kind": "edit-book",
+        "timestamp": "2026-04-17T14:30:45.255903",
+        "comment": "import existing book",
+        "changes": [
+          {
+            "key": "/books/OL58157505M",
+            "revision": 2
+          }
+        ],
+        "author": {
+          "key": "/people/horncBot"
+        },
+        "ip": null,
+        "data": {}
+      },
+      {
+        "id": "168842899",
+        "kind": "edit-book",
+        "timestamp": "2026-04-17T14:30:44.235197",
+        "comment": "import existing book",
+        "changes": [
+          {
+            "key": "/books/OL53468349M",
+            "revision": 2
+          }
+        ],
+        "author": {
+          "key": "/people/horncBot"
+        },
+        "ip": null,
+        "data": {}
+      },
+      {
+        "id": "168842898",
         "kind": "update",
-        "timestamp": "2026-04-17T14:13:55.991580",
+        "timestamp": "2026-04-17T14:30:43.645445",
         "comment": "set source_records based on initial machine_comment",
         "changes": [
           {
-            "key": "/books/OL20580762M",
-            "revision": 5
+            "key": "/books/OL20713272M",
+            "revision": 2
           }
         ],
         "author": {
@@ -44,64 +74,18 @@
         "data": {}
       },
       {
-        "id": "168842090",
-        "kind": "add-book",
-        "timestamp": "2026-04-17T14:13:53.792139",
-        "comment": "import new book",
-        "changes": [
-          {
-            "key": "/works/OL45162476W",
-            "revision": 1
-          },
-          {
-            "key": "/books/OL61583960M",
-            "revision": 1
-          }
-        ],
-        "author": {
-          "key": "/people/horncBot"
-        },
-        "ip": null,
-        "data": {}
-      },
-      {
-        "id": "168842089",
+        "id": "168842897",
         "kind": "update",
-        "timestamp": "2026-04-17T14:13:53.444997",
+        "timestamp": "2026-04-17T14:30:41.124903",
         "comment": "set source_records based on initial machine_comment",
         "changes": [
           {
-            "key": "/books/OL20580698M",
-            "revision": 5
+            "key": "/books/OL20712722M",
+            "revision": 3
           }
         ],
         "author": {
           "key": "/people/horncBot"
-        },
-        "ip": null,
-        "data": {}
-      },
-      {
-        "id": "168842088",
-        "kind": "new-account",
-        "timestamp": "2026-04-17T14:13:52.951892",
-        "comment": "Created new account.",
-        "changes": [
-          {
-            "key": "/people/sk_julfikar_ali",
-            "revision": 1
-          },
-          {
-            "key": "/people/sk_julfikar_ali/usergroup",
-            "revision": 1
-          },
-          {
-            "key": "/people/sk_julfikar_ali/permission",
-            "revision": 1
-          }
-        ],
-        "author": {
-          "key": "/people/sk_julfikar_ali"
         },
         "ip": null,
         "data": {}

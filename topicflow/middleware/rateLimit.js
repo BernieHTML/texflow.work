@@ -7,7 +7,10 @@ const limiter = rateLimit({
   standardHeaders: true,
   legacyHeaders: false,
   keyGenerator: (req) => parseBearer(req) || req.ip,
-  skip: (req) => req.path.startsWith("/topicflow/stream"),
+  skip: (req) => {
+    const p = req.originalUrl || req.path || "";
+    return p.startsWith("/topicflow/stream") || p.startsWith("/stream");
+  },
 });
 
 module.exports = { limiter };

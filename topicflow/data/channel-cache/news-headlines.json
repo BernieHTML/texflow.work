@@ -1,7 +1,7 @@
 {
   "channel": "news-headlines",
   "event": "update",
-  "ts": "2026-04-17T14:13:56.583Z",
+  "ts": "2026-04-17T14:30:47.460Z",
   "source": "news-headlines",
   "payload": {
     "status": "error",

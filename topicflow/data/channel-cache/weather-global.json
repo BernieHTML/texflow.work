@@ -1,14 +1,14 @@
 {
   "channel": "weather-global",
   "event": "weather",
-  "ts": "2026-04-17T14:13:56.948Z",
+  "ts": "2026-04-17T14:30:47.773Z",
   "source": "weather-global",
   "payload": {
-    "time": "2026-04-17T14:00",
+    "time": "2026-04-17T14:30",
     "interval": 900,
     "temperature": 28.1,
-    "windspeed": 10,
-    "winddirection": 139,
+    "windspeed": 10.5,
+    "winddirection": 142,
     "is_day": 1,
     "weathercode": 80
   }
