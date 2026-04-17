@@ -1,0 +1,12 @@
+{
+  "channel": "crypto-eth",
+  "event": "price_update",
+  "ts": "2026-04-17T14:20:41.246Z",
+  "source": "crypto-eth",
+  "payload": {
+    "ethereum": {
+      "usd": 2430.17,
+      "usd_24h_change": 5.84800702953536
+    }
+  }
+}

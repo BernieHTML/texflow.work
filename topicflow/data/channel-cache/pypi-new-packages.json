@@ -1,0 +1,88 @@
+{
+  "channel": "pypi-new-packages",
+  "event": "rss_update",
+  "ts": "2026-04-17T14:13:56.534Z",
+  "source": "pypi-new-packages",
+  "payload": {
+    "items": [
+      {
+        "title": "boto-lite added to PyPI",
+        "link": "https://pypi.org/project/boto-lite/",
+        "guid": "https://pypi.org/project/boto-lite/",
+        "description": "A minimal, zero-dependency (beyond boto3) Python facade over AWS S3, SQS, and Secrets Manager.",
+        "author": "eng.a7md.hashim@gmail.com",
+        "pubDate": "Thu, 16 Apr 2026 21:09:30 GMT"
+      },
+      {
+        "title": "rss2podcast added to PyPI",
+        "link": "https://pypi.org/project/rss2podcast/",
+        "guid": "https://pypi.org/project/rss2podcast/",
+        "description": "Turn an RSS feed into a podcast by synthesizing entries with Piper TTS",
+        "author": "max@23.tf",
+        "pubDate": "Thu, 16 Apr 2026 21:04:12 GMT"
+      },
+      {
+        "title": "phonetic-decoding added to PyPI",
+        "link": "https://pypi.org/project/phonetic-decoding/",
+        "guid": "https://pypi.org/project/phonetic-decoding/",
+        "description": "Runtime: lexicons, PocketSphinx alignment, CLI. Train-time (SphinxTrain/ARCTIC, future CTC) uses the same package editable in-repo — see docs/PACKAGING_RUNTIME_AND_TRAIN.md.",
+        "pubDate": "Thu, 16 Apr 2026 21:03:53 GMT"
+      },
+      {
+        "title": "engstats added to PyPI",
+        "link": "https://pypi.org/project/engstats/",
+        "guid": "https://pypi.org/project/engstats/",
+        "description": "A companion package for probability and statistics for engineers",
+        "author": "moses.chan@northwestern.edu",
+        "pubDate": "Thu, 16 Apr 2026 21:03:44 GMT"
+      },
+      {
+        "title": "sigil-lang added to PyPI",
+        "link": "https://pypi.org/project/sigil-lang/",
+        "guid": "https://pypi.org/project/sigil-lang/",
+        "description": "A programming language for LLM-to-LLM communication that transpiles to Python",
+        "pubDate": "Thu, 16 Apr 2026 21:01:17 GMT"
+      },
+      {
+        "title": "cartorio-certidao-mcp added to PyPI",
+        "link": "https://pypi.org/project/cartorio-certidao-mcp/",
+        "guid": "https://pypi.org/project/cartorio-certidao-mcp/",
+        "description": "MCP server para gerenciamento de certidoes de cartorio - permite que IAs solicitem, alterem, concluam e consultem certidoes.",
+        "author": "nao-responder@cartoriocriciuma.com.br",
+        "pubDate": "Thu, 16 Apr 2026 21:00:18 GMT"
+      },
+      {
+        "title": "tensorvolk added to PyPI",
+        "link": "https://pypi.org/project/tensorvolk/",
+        "guid": "https://pypi.org/project/tensorvolk/",
+        "description": "Утилита для вывода",
+        "author": "your@email.com",
+        "pubDate": "Thu, 16 Apr 2026 20:59:58 GMT"
+      },
+      {
+        "title": "agentshield-fw added to PyPI",
+        "link": "https://pypi.org/project/agentshield-fw/",
+        "guid": "https://pypi.org/project/agentshield-fw/",
+        "description": "The runtime firewall for AI agents. Protect any agent in 3 lines of code.",
+        "author": "avinashamudala@gmail.com",
+        "pubDate": "Thu, 16 Apr 2026 20:58:02 GMT"
+      },
+      {
+        "title": "agis-models added to PyPI",
+        "link": "https://pypi.org/project/agis-models/",
+        "guid": "https://pypi.org/project/agis-models/",
+        "description": "Agentic Grammar and Interface Specification (AGIS) â€” agtp.io",
+        "author": "chris@nomotic.ai",
+        "pubDate": "Thu, 16 Apr 2026 20:55:27 GMT"
+      },
+      {
+        "title": "agis-designer added to PyPI",
+        "link": "https://pypi.org/project/agis-designer/",
+        "guid": "https://pypi.org/project/agis-designer/",
+        "description": "Agentic Grammar and Interface Specification (AGIS) â€” agtp.io",
+        "author": "chris@nomotic.ai",
+        "pubDate": "Thu, 16 Apr 2026 20:55:18 GMT"
+      }
+    ]
+  }
+}

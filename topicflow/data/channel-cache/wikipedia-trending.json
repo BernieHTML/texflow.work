@@ -1,0 +1,14 @@
+{
+  "channel": "wikipedia-trending",
+  "event": "update",
+  "ts": "2026-04-17T14:13:57.010Z",
+  "source": "wikipedia-trending",
+  "payload": {
+    "detail": "The date(s) you used are valid, but we either do not have data for those date(s), or the project you asked for is not loaded yet. Please check documentation for more information",
+    "method": "get",
+    "status": 404,
+    "title": "Not Found",
+    "type": "about:blank",
+    "uri": "/metrics/pageviews/top/en.wikipedia/all-access/2026/04/17"
+  }
+}

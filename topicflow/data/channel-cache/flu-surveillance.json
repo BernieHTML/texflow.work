@@ -1,0 +1,14 @@
+{
+  "channel": "flu-surveillance",
+  "event": "update",
+  "ts": "2026-04-17T14:13:56.939Z",
+  "source": "flu-surveillance",
+  "payload": {
+    "code": "dataset.missing",
+    "error": true,
+    "message": "Not found",
+    "data": {
+      "id": "pkqy-w4ch"
+    }
+  }
+}

@@ -1,0 +1,71 @@
+{
+  "channel": "earthquakes-significant",
+  "event": "earthquake",
+  "ts": "2026-04-17T14:18:41.277Z",
+  "source": "earthquakes-significant",
+  "payload": {
+    "count": 15,
+    "quakes": [
+      {
+        "mag": 5.4,
+        "place": "northern Mid-Atlantic Ridge",
+        "time": 1776429566641,
+        "depth_km": 10
+      },
+      {
+        "mag": 4.6,
+        "place": "49 km SE of Severo-Kuril’sk, Russia",
+        "time": 1776429432403,
+        "depth_km": 70.766
+      },
+      {
+        "mag": 4.7,
+        "place": "119 km W of Ternate, Indonesia",
+        "time": 1776421275146,
+        "depth_km": 32.187
+      },
+      {
+        "mag": 4.9,
+        "place": "6 km NNE of Gigaquit, Philippines",
+        "time": 1776408436592,
+        "depth_km": 116.727
+      },
+      {
+        "mag": 4.9,
+        "place": "24 km SE of Calingasta, Argentina",
+        "time": 1776406788260,
+        "depth_km": 112.404
+      },
+      {
+        "mag": 4.5,
+        "place": "106 km WNW of Candelaria, Argentina",
+        "time": 1776393514619,
+        "depth_km": 130.041
+      },
+      {
+        "mag": 4.7,
+        "place": "19 km E of Nejapa de Madero, Mexico",
+        "time": 1776387481935,
+        "depth_km": 57.338
+      },
+      {
+        "mag": 4.5,
+        "place": "150 km W of Neiafu, Tonga",
+        "time": 1776382728195,
+        "depth_km": 219.87
+      },
+      {
+        "mag": 5.1,
+        "place": "north of Ascension Island",
+        "time": 1776375985134,
+        "depth_km": 10
+      },
+      {
+        "mag": 5.2,
+        "place": "north of Ascension Island",
+        "time": 1776371802256,
+        "depth_km": 10
+      }
+    ]
+  }
+}

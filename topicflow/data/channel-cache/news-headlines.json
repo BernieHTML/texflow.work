@@ -1,0 +1,13 @@
+{
+  "channel": "news-headlines",
+  "event": "update",
+  "ts": "2026-04-17T14:13:56.583Z",
+  "source": "news-headlines",
+  "payload": {
+    "status": "error",
+    "results": {
+      "message": "The provided API key is not valid.",
+      "code": "Unauthorized"
+    }
+  }
+}

@@ -1,0 +1,820 @@
+{
+  "channel": "macro-world-bank",
+  "event": "update",
+  "ts": "2026-04-17T14:14:28.128Z",
+  "source": "macro-world-bank",
+  "payload": {
+    "items": [
+      {
+        "page": 1,
+        "pages": 6,
+        "per_page": 50,
+        "total": 266,
+        "sourceid": "2",
+        "lastupdated": "2026-04-08"
+      },
+      [
+        {
+          "indicator": {
+            "id": "NY.GDP.MKTP.CD",
+            "value": "GDP (current US$)"
+          },
+          "country": {
+            "id": "ZH",
+            "value": "Africa Eastern and Southern"
+          },
+          "countryiso3code": "AFE",
+          "date": "2024",
+          "value": 1242693542929.85,
+          "unit": "",
+          "obs_status": "",
+          "decimal": 0
+        },
+        {
+          "indicator": {
+            "id": "NY.GDP.MKTP.CD",
+            "value": "GDP (current US$)"
+          },
+          "country": {
+            "id": "ZI",
+            "value": "Africa Western and Central"
+          },
+          "countryiso3code": "AFW",
+          "date": "2024",
+          "value": 736384961061.523,
+          "unit": "",
+          "obs_status": "",
+          "decimal": 0
+        },
+        {
+          "indicator": {
+            "id": "NY.GDP.MKTP.CD",
+            "value": "GDP (current US$)"
+          },
+          "country": {
+            "id": "1A",
+            "value": "Arab World"
+          },
+          "countryiso3code": "ARB",
+          "date": "2024",
+          "value": 3735881442514.34,
+          "unit": "",
+          "obs_status": "",
+          "decimal": 0
+        },
+        {
+          "indicator": {
+            "id": "NY.GDP.MKTP.CD",
+            "value": "GDP (current US$)"
+          },
+          "country": {
+            "id": "S3",
+            "value": "Caribbean small states"
+          },
+          "countryiso3code": "CSS",
+          "date": "2024",
+          "value": 90344593407.0488,
+          "unit": "",
+          "obs_status": "",
+          "decimal": 0
+        },
+        {
+          "indicator": {
+            "id": "NY.GDP.MKTP.CD",
+            "value": "GDP (current US$)"
+          },
+          "country": {
+            "id": "B8",
+            "value": "Central Europe and the Baltics"
+          },
+          "countryiso3code": "CEB",
+          "date": "2024",
+          "value": 2462005273603.48,
+          "unit": "",
+          "obs_status": "",
+          "decimal": 0
+        },
+        {
+          "indicator": {
+            "id": "NY.GDP.MKTP.CD",
+            "value": "GDP (current US$)"
+          },
+          "country": {
+            "id": "V2",
+            "value": "Early-demographic dividend"
+          },
+          "countryiso3code": "EAR",
+          "date": "2024",
+          "value": 15808304487948.1,
+          "unit": "",
+          "obs_status": "",
+          "decimal": 0
+        },
+        {
+          "indicator": {
+            "id": "NY.GDP.MKTP.CD",
+            "value": "GDP (current US$)"
+          },
+          "country": {
+            "id": "Z4",
+            "value": "East Asia & Pacific"
+          },
+          "countryiso3code": "EAS",
+          "date": "2024",
+          "value": 32017179839273,
+          "unit": "",
+          "obs_status": "",
+          "decimal": 0
+        },
+        {
+          "indicator": {
+            "id": "NY.GDP.MKTP.CD",
+            "value": "GDP (current US$)"
+          },
+          "country": {
+            "id": "4E",
+            "value": "East Asia & Pacific (excluding high income)"
+          },
+          "countryiso3code": "EAP",
+          "date": "2024",
+          "value": 22260810771875.1,
+          "unit": "",
+          "obs_status": "",
+          "decimal": 0
+        },
+        {
+          "indicator": {
+            "id": "NY.GDP.MKTP.CD",
+            "value": "GDP (current US$)"
+          },
+          "country": {
+            "id": "T4",
+            "value": "East Asia & Pacific (IDA & IBRD countries)"
+          },
+          "countryiso3code": "TEA",
+          "date": "2024",
+          "value": 22233362919728.4,
+          "unit": "",
+          "obs_status": "",
+          "decimal": 0
+        },
+        {
+          "indicator": {
+            "id": "NY.GDP.MKTP.CD",
+            "value": "GDP (current US$)"
+          },
+          "country": {
+            "id": "XC",
+            "value": "Euro area"
+          },
+          "countryiso3code": "EMU",
+          "date": "2024",
+          "value": 16485444160371,
+          "unit": "",
+          "obs_status": "",
+          "decimal": 0
+        },
+        {
+          "indicator": {
+            "id": "NY.GDP.MKTP.CD",
+            "value": "GDP (current US$)"
+          },
+          "country": {
+            "id": "Z7",
+            "value": "Europe & Central Asia"
+          },
+          "countryiso3code": "ECS",
+          "date": "2024",
+          "value": 29291828957768.8,
+          "unit": "",
+          "obs_status": "",
+          "decimal": 0
+        },
+        {
+          "indicator": {
+            "id": "NY.GDP.MKTP.CD",
+            "value": "GDP (current US$)"
+          },
+          "country": {
+            "id": "7E",
+            "value": "Europe & Central Asia (excluding high income)"
+          },
+          "countryiso3code": "ECA",
+          "date": "2024",
+          "value": 2451180144505.47,
+          "unit": "",
+          "obs_status": "",
+          "decimal": 0
+        },
+        {
+          "indicator": {
+            "id": "NY.GDP.MKTP.CD",
+            "value": "GDP (current US$)"
+          },
+          "country": {
+            "id": "T7",
+            "value": "Europe & Central Asia (IDA & IBRD countries)"
+          },
+          "countryiso3code": "TEC",
+          "date": "2024",
+          "value": 6131674441421.64,
+          "unit": "",
+          "obs_status": "",
+          "decimal": 0
+        },
+        {
+          "indicator": {
+            "id": "NY.GDP.MKTP.CD",
+            "value": "GDP (current US$)"
+          },
+          "country": {
+            "id": "EU",
+            "value": "European Union"
+          },
+          "countryiso3code": "EUU",
+          "date": "2024",
+          "value": 19497115588443.6,
+          "unit": "",
+          "obs_status": "",
+          "decimal": 0
+        },
+        {
+          "indicator": {
+            "id": "NY.GDP.MKTP.CD",
+            "value": "GDP (current US$)"
+          },
+          "country": {
+            "id": "F1",
+            "value": "Fragile and conflict affected situations"
+          },
+          "countryiso3code": "FCS",
+          "date": "2024",
+          "value": 1652895518697.74,
+          "unit": "",
+          "obs_status": "",
+          "decimal": 0
+        },
+        {
+          "indicator": {
+            "id": "NY.GDP.MKTP.CD",
+            "value": "GDP (current US$)"
+          },
+          "country": {
+            "id": "XE",
+            "value": "Heavily indebted poor countries (HIPC)"
+          },
+          "countryiso3code": "HPC",
+          "date": "2024",
+          "value": 1145111349262.57,
+          "unit": "",
+          "obs_status": "",
+          "decimal": 0
+        },
+        {
+          "indicator": {
+            "id": "NY.GDP.MKTP.CD",
+            "value": "GDP (current US$)"
+          },
+          "country": {
+            "id": "XD",
+            "value": "High income"
+          },
+          "countryiso3code": "",
+          "date": "2024",
+          "value": 71321142708251.2,
+          "unit": "",
+          "obs_status": "",
+          "decimal": 0
+        },
+        {
+          "indicator": {
+            "id": "NY.GDP.MKTP.CD",
+            "value": "GDP (current US$)"
+          },
+          "country": {
+            "id": "XF",
+            "value": "IBRD only"
+          },
+          "countryiso3code": "IBD",
+          "date": "2024",
+          "value": 40930410371533.4,
+          "unit": "",
+          "obs_status": "",
+          "decimal": 0
+        },
+        {
+          "indicator": {
+            "id": "NY.GDP.MKTP.CD",
+            "value": "GDP (current US$)"
+          },
+          "country": {
+            "id": "ZT",
+            "value": "IDA & IBRD total"
+          },
+          "countryiso3code": "IBT",
+          "date": "2024",
+          "value": 43823204664493.9,
+          "unit": "",
+          "obs_status": "",
+          "decimal": 0
+        },
+        {
+          "indicator": {
+            "id": "NY.GDP.MKTP.CD",
+            "value": "GDP (current US$)"
+          },
+          "country": {
+            "id": "XH",
+            "value": "IDA blend"
+          },
+          "countryiso3code": "IDB",
+          "date": "2024",
+          "value": 1117411942661.72,
+          "unit": "",
+          "obs_status": "",
+          "decimal": 0
+        },
+        {
+          "indicator": {
+            "id": "NY.GDP.MKTP.CD",
+            "value": "GDP (current US$)"
+          },
+          "country": {
+            "id": "XI",
+            "value": "IDA only"
+          },
+          "countryiso3code": "IDX",
+          "date": "2024",
+          "value": 1775382350298.79,
+          "unit": "",
+          "obs_status": "",
+          "decimal": 0
+        },
+        {
+          "indicator": {
+            "id": "NY.GDP.MKTP.CD",
+            "value": "GDP (current US$)"
+          },
+          "country": {
+            "id": "XG",
+            "value": "IDA total"
+          },
+          "countryiso3code": "IDA",
+          "date": "2024",
+          "value": 2892794292960.5,
+          "unit": "",
+          "obs_status": "",
+          "decimal": 0
+        },
+        {
+          "indicator": {
+            "id": "NY.GDP.MKTP.CD",
+            "value": "GDP (current US$)"
+          },
+          "country": {
+            "id": "V3",
+            "value": "Late-demographic dividend"
+          },
+          "countryiso3code": "LTE",
+          "date": "2024",
+          "value": 29979152245112.6,
+          "unit": "",
+          "obs_status": "",
+          "decimal": 0
+        },
+        {
+          "indicator": {
+            "id": "NY.GDP.MKTP.CD",
+            "value": "GDP (current US$)"
+          },
+          "country": {
+            "id": "ZJ",
+            "value": "Latin America & Caribbean"
+          },
+          "countryiso3code": "LCN",
+          "date": "2024",
+          "value": 7110323254687.35,
+          "unit": "",
+          "obs_status": "",
+          "decimal": 0
+        },
+        {
+          "indicator": {
+            "id": "NY.GDP.MKTP.CD",
+            "value": "GDP (current US$)"
+          },
+          "country": {
+            "id": "XJ",
+            "value": "Latin America & Caribbean (excluding high income)"
+          },
+          "countryiso3code": "LAC",
+          "date": "2024",
+          "value": 6168787362595.33,
+          "unit": "",
+          "obs_status": "",
+          "decimal": 0
+        },
+        {
+          "indicator": {
+            "id": "NY.GDP.MKTP.CD",
+            "value": "GDP (current US$)"
+          },
+          "country": {
+            "id": "T2",
+            "value": "Latin America & the Caribbean (IDA & IBRD countries)"
+          },
+          "countryiso3code": "TLA",
+          "date": "2024",
+          "value": 6776899040059.78,
+          "unit": "",
+          "obs_status": "",
+          "decimal": 0
+        },
+        {
+          "indicator": {
+            "id": "NY.GDP.MKTP.CD",
+            "value": "GDP (current US$)"
+          },
+          "country": {
+            "id": "XL",
+            "value": "Least developed countries: UN classification"
+          },
+          "countryiso3code": "LDC",
+          "date": "2024",
+          "value": 1536272727812.71,
+          "unit": "",
+          "obs_status": "",
+          "decimal": 0
+        },
+        {
+          "indicator": {
+            "id": "NY.GDP.MKTP.CD",
+            "value": "GDP (current US$)"
+          },
+          "country": {
+            "id": "XO",
+            "value": "Low & middle income"
+          },
+          "countryiso3code": "LMY",
+          "date": "2024",
+          "value": 39397098753614.4,
+          "unit": "",
+          "obs_status": "",
+          "decimal": 0
+        },
+        {
+          "indicator": {
+            "id": "NY.GDP.MKTP.CD",
+            "value": "GDP (current US$)"
+          },
+          "country": {
+            "id": "XM",
+            "value": "Low income"
+          },
+          "countryiso3code": "",
+          "date": "2024",
+          "value": 469282282632.522,
+          "unit": "",
+          "obs_status": "",
+          "decimal": 0
+        },
+        {
+          "indicator": {
+            "id": "NY.GDP.MKTP.CD",
+            "value": "GDP (current US$)"
+          },
+          "country": {
+            "id": "XN",
+            "value": "Lower middle income"
+          },
+          "countryiso3code": "",
+          "date": "2024",
+          "value": 7941312381464.46,
+          "unit": "",
+          "obs_status": "",
+          "decimal": 0
+        },
+        {
+          "indicator": {
+            "id": "NY.GDP.MKTP.CD",
+            "value": "GDP (current US$)"
+          },
+          "country": {
+            "id": "ZQ",
+            "value": "Middle East, North Africa, Afghanistan & Pakistan"
+          },
+          "countryiso3code": "MEA",
+          "date": "2024",
+          "value": 5094721946852.29,
+          "unit": "",
+          "obs_status": "",
+          "decimal": 0
+        },
+        {
+          "indicator": {
+            "id": "NY.GDP.MKTP.CD",
+            "value": "GDP (current US$)"
+          },
+          "country": {
+            "id": "XQ",
+            "value": "Middle East, North Africa, Afghanistan & Pakistan (excluding high income)"
+          },
+          "countryiso3code": "MNA",
+          "date": "2024",
+          "value": 2203604227426.38,
+          "unit": "",
+          "obs_status": "",
+          "decimal": 0
+        },
+        {
+          "indicator": {
+            "id": "NY.GDP.MKTP.CD",
+            "value": "GDP (current US$)"
+          },
+          "country": {
+            "id": "T3",
+            "value": "Middle East, North Africa, Afghanistan & Pakistan (IDA & IBRD)"
+          },
+          "countryiso3code": "TMN",
+          "date": "2024",
+          "value": 2189893127426.38,
+          "unit": "",
+          "obs_status": "",
+          "decimal": 0
+        },
+        {
+          "indicator": {
+            "id": "NY.GDP.MKTP.CD",
+            "value": "GDP (current US$)"
+          },
+          "country": {
+            "id": "XP",
+            "value": "Middle income"
+          },
+          "countryiso3code": "MIC",
+          "date": "2024",
+          "value": 38925709373017.6,
+          "unit": "",
+          "obs_status": "",
+          "decimal": 0
+        },
+        {
+          "indicator": {
+            "id": "NY.GDP.MKTP.CD",
+            "value": "GDP (current US$)"
+          },
+          "country": {
+            "id": "XU",
+            "value": "North America"
+          },
+          "countryiso3code": "NAC",
+          "date": "2024",
+          "value": 31003826557365,
+          "unit": "",
+          "obs_status": "",
+          "decimal": 0
+        },
+        {
+          "indicator": {
+            "id": "NY.GDP.MKTP.CD",
+            "value": "GDP (current US$)"
+          },
+          "country": {
+            "id": "XY",
+            "value": "Not classified"
+          },
+          "countryiso3code": "",
+          "date": "2024",
+          "value": null,
+          "unit": "",
+          "obs_status": "",
+          "decimal": 0
+        },
+        {
+          "indicator": {
+            "id": "NY.GDP.MKTP.CD",
+            "value": "GDP (current US$)"
+          },
+          "country": {
+            "id": "OE",
+            "value": "OECD members"
+          },
+          "countryiso3code": "OED",
+          "date": "2024",
+          "value": 67500141717526.4,
+          "unit": "",
+          "obs_status": "",
+          "decimal": 0
+        },
+        {
+          "indicator": {
+            "id": "NY.GDP.MKTP.CD",
+            "value": "GDP (current US$)"
+          },
+          "country": {
+            "id": "S4",
+            "value": "Other small states"
+          },
+          "countryiso3code": "OSS",
+          "date": "2024",
+          "value": 208127281931.64,
+          "unit": "",
+          "obs_status": "",
+          "decimal": 0
+        },
+        {
+          "indicator": {
+            "id": "NY.GDP.MKTP.CD",
+            "value": "GDP (current US$)"
+          },
+          "country": {
+            "id": "S2",
+            "value": "Pacific island small states"
+          },
+          "countryiso3code": "PSS",
+          "date": "2024",
+          "value": 12124739862.5303,
+          "unit": "",
+          "obs_status": "",
+          "decimal": 0
+        },
+        {
+          "indicator": {
+            "id": "NY.GDP.MKTP.CD",
+            "value": "GDP (current US$)"
+          },
+          "country": {
+            "id": "V4",
+            "value": "Post-demographic dividend"
+          },
+          "countryiso3code": "PST",
+          "date": "2024",
+          "value": 62787810951925.4,
+          "unit": "",
+          "obs_status": "",
+          "decimal": 0
+        },
+        {
+          "indicator": {
+            "id": "NY.GDP.MKTP.CD",
+            "value": "GDP (current US$)"
+          },
+          "country": {
+            "id": "V1",
+            "value": "Pre-demographic dividend"
+          },
+          "countryiso3code": "PRE",
+          "date": "2024",
+          "value": 1510802883684.15,
+          "unit": "",
+          "obs_status": "",
+          "decimal": 0
+        },
+        {
+          "indicator": {
+            "id": "NY.GDP.MKTP.CD",
+            "value": "GDP (current US$)"
+          },
+          "country": {
+            "id": "S1",
+            "value": "Small states"
+          },
+          "countryiso3code": "SST",
+          "date": "2024",
+          "value": 310642066645.913,
+          "unit": "",
+          "obs_status": "",
+          "decimal": 0
+        },
+        {
+          "indicator": {
+            "id": "NY.GDP.MKTP.CD",
+            "value": "GDP (current US$)"
+          },
+          "country": {
+            "id": "8S",
+            "value": "South Asia"
+          },
+          "countryiso3code": "SAS",
+          "date": "2024",
+          "value": 4512296631866.32,
+          "unit": "",
+          "obs_status": "",
+          "decimal": 0
+        },
+        {
+          "indicator": {
+            "id": "NY.GDP.MKTP.CD",
+            "value": "GDP (current US$)"
+          },
+          "country": {
+            "id": "T5",
+            "value": "South Asia (IDA & IBRD)"
+          },
+          "countryiso3code": "TSA",
+          "date": "2024",
+          "value": 4512296631866.31,
+          "unit": "",
+          "obs_status": "",
+          "decimal": 0
+        },
+        {
+          "indicator": {
+            "id": "NY.GDP.MKTP.CD",
+            "value": "GDP (current US$)"
+          },
+          "country": {
+            "id": "ZG",
+            "value": "Sub-Saharan Africa"
+          },
+          "countryiso3code": "SSF",
+          "date": "2024",
+          "value": 1979078503991.37,
+          "unit": "",
+          "obs_status": "",
+          "decimal": 0
+        },
+        {
+          "indicator": {
+            "id": "NY.GDP.MKTP.CD",
+            "value": "GDP (current US$)"
+          },
+          "country": {
+            "id": "ZF",
+            "value": "Sub-Saharan Africa (excluding high income)"
+          },
+          "countryiso3code": "SSA",
+          "date": "2024",
+          "value": 1827170966475.93,
+          "unit": "",
+          "obs_status": "",
+          "decimal": 0
+        },
+        {
+          "indicator": {
+            "id": "NY.GDP.MKTP.CD",
+            "value": "GDP (current US$)"
+          },
+          "country": {
+            "id": "T6",
+            "value": "Sub-Saharan Africa (IDA & IBRD countries)"
+          },
+          "countryiso3code": "TSS",
+          "date": "2024",
+          "value": 1979078503991.37,
+          "unit": "",
+          "obs_status": "",
+          "decimal": 0
+        },
+        {
+          "indicator": {
+            "id": "NY.GDP.MKTP.CD",
+            "value": "GDP (current US$)"
+          },
+          "country": {
+            "id": "XT",
+            "value": "Upper middle income"
+          },
+          "countryiso3code": "",
+          "date": "2024",
+          "value": 30986054597959.2,
+          "unit": "",
+          "obs_status": "",
+          "decimal": 0
+        },
+        {
+          "indicator": {
+            "id": "NY.GDP.MKTP.CD",
+            "value": "GDP (current US$)"
+          },
+          "country": {
+            "id": "1W",
+            "value": "World"
+          },
+          "countryiso3code": "WLD",
+          "date": "2024",
+          "value": 110982661180013,
+          "unit": "",
+          "obs_status": "",
+          "decimal": 0
+        },
+        {
+          "indicator": {
+            "id": "NY.GDP.MKTP.CD",
+            "value": "GDP (current US$)"
+          },
+          "country": {
+            "id": "AF",
+            "value": "Afghanistan"
+          },
+          "countryiso3code": "AFG",
+          "date": "2024",
+          "value": null,
+          "unit": "",
+          "obs_status": "",
+          "decimal": 0
+        }
+      ]
+    ]
+  }
+}

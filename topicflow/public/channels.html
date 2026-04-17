@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TopicFlow Channels</title>
+  <link rel="stylesheet" href="/topicflow/public/style.css" />
+</head>
+<body>
+  <main class="wrap">
+    <h1>Channel directory</h1>
+    <div class="card">
+      <label>API key <input id="key" placeholder="tfk_..." /></label>
+      <label>Category <input id="cat" placeholder="crypto" /></label>
+      <label>Search <input id="search" placeholder="bitcoin" /></label>
+      <button id="load">Load</button>
+    </div>
+    <div class="card">
+      <table>
+        <thead><tr><th>Slug</th><th>Name</th><th>Description</th><th>Cadence</th><th>Subscribe</th></tr></thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </div>
+  </main>
+  <script>
+    async function load() {
+      const key = document.getElementById("key").value.trim();
+      const cat = document.getElementById("cat").value.trim();
+      const search = document.getElementById("search").value.trim();
+      const qp = new URLSearchParams();
+      if (cat) qp.set("category", cat);
+      if (search) qp.set("search", search);
+      const resp = await fetch("/topicflow/channels?" + qp.toString(), { headers: { Authorization: `Bearer ${key}` } });
+      const data = await resp.json();
+      const rows = document.getElementById("rows");
+      rows.innerHTML = "";
+      (data.channels || []).forEach((c) => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `<td class="mono">${c.slug}</td><td>${c.name}</td><td>${c.description}</td><td>${c.cadence}</td><td class="mono">curl -X POST https://texflow.work/topicflow/channels/${c.slug}/subscribe -H "Authorization: Bearer YOUR_KEY"</td>`;
+        rows.appendChild(tr);
+      });
+    }
+    document.getElementById("load").addEventListener("click", load);
+  </script>
+</body>
+</html>

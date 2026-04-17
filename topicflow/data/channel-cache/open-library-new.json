@@ -1,0 +1,111 @@
+{
+  "channel": "open-library-new",
+  "event": "update",
+  "ts": "2026-04-17T14:13:57.070Z",
+  "source": "open-library-new",
+  "payload": {
+    "items": [
+      {
+        "id": "168842092",
+        "kind": "edit-book",
+        "timestamp": "2026-04-17T14:13:56.339536",
+        "comment": "import existing book",
+        "changes": [
+          {
+            "key": "/books/OL13011406M",
+            "revision": 3
+          },
+          {
+            "key": "/works/OL23689258W",
+            "revision": 2
+          }
+        ],
+        "author": {
+          "key": "/people/horncBot"
+        },
+        "ip": null,
+        "data": {}
+      },
+      {
+        "id": "168842091",
+        "kind": "update",
+        "timestamp": "2026-04-17T14:13:55.991580",
+        "comment": "set source_records based on initial machine_comment",
+        "changes": [
+          {
+            "key": "/books/OL20580762M",
+            "revision": 5
+          }
+        ],
+        "author": {
+          "key": "/people/horncBot"
+        },
+        "ip": null,
+        "data": {}
+      },
+      {
+        "id": "168842090",
+        "kind": "add-book",
+        "timestamp": "2026-04-17T14:13:53.792139",
+        "comment": "import new book",
+        "changes": [
+          {
+            "key": "/works/OL45162476W",
+            "revision": 1
+          },
+          {
+            "key": "/books/OL61583960M",
+            "revision": 1
+          }
+        ],
+        "author": {
+          "key": "/people/horncBot"
+        },
+        "ip": null,
+        "data": {}
+      },
+      {
+        "id": "168842089",
+        "kind": "update",
+        "timestamp": "2026-04-17T14:13:53.444997",
+        "comment": "set source_records based on initial machine_comment",
+        "changes": [
+          {
+            "key": "/books/OL20580698M",
+            "revision": 5
+          }
+        ],
+        "author": {
+          "key": "/people/horncBot"
+        },
+        "ip": null,
+        "data": {}
+      },
+      {
+        "id": "168842088",
+        "kind": "new-account",
+        "timestamp": "2026-04-17T14:13:52.951892",
+        "comment": "Created new account.",
+        "changes": [
+          {
+            "key": "/people/sk_julfikar_ali",
+            "revision": 1
+          },
+          {
+            "key": "/people/sk_julfikar_ali/usergroup",
+            "revision": 1
+          },
+          {
+            "key": "/people/sk_julfikar_ali/permission",
+            "revision": 1
+          }
+        ],
+        "author": {
+          "key": "/people/sk_julfikar_ali"
+        },
+        "ip": null,
+        "data": {}
+      }
+    ]
+  }
+}

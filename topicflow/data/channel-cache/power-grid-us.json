@@ -1,0 +1,12 @@
+{
+  "channel": "power-grid-us",
+  "event": "update",
+  "ts": "2026-04-17T14:13:57.130Z",
+  "source": "power-grid-us",
+  "payload": {
+    "error": {
+      "code": "API_KEY_INVALID",
+      "message": "An invalid api_key was supplied. Get one at https://api.eia.gov:443"
+    }
+  }
+}

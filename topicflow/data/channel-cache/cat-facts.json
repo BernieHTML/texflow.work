@@ -1,0 +1,10 @@
+{
+  "channel": "cat-facts",
+  "event": "fact",
+  "ts": "2026-04-17T14:18:41.358Z",
+  "source": "cat-facts",
+  "payload": {
+    "fact": "Cats are extremely sensitive to vibrations. Cats are said to detect earthquake tremors 10 or 15 minutes before humans can.",
+    "length": 122
+  }
+}

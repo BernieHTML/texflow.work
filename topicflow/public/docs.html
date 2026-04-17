@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TopicFlow Docs</title>
+  <link rel="stylesheet" href="/topicflow/public/style.css" />
+</head>
+<body>
+  <main class="wrap mono">
+    <h1>TopicFlow curl docs</h1>
+    <div class="card"><pre>curl -X POST https://texflow.work/topicflow/auth/register -H "Content-Type: application/json" -d '{"email":"you@example.com","name":"My Agent","password":"secret"}'</pre></div>
+    <div class="card"><pre>curl -X POST https://texflow.work/topicflow/channels/crypto-btc/subscribe -H "Authorization: Bearer tfk_YOUR_KEY"</pre></div>
+    <div class="card"><pre>curl -N https://texflow.work/topicflow/stream -H "Authorization: Bearer tfk_YOUR_KEY"</pre></div>
+    <div class="card"><pre>curl -N https://texflow.work/topicflow/stream/crypto-btc -H "Authorization: Bearer tfk_YOUR_KEY"</pre></div>
+    <div class="card">
+      <h2>Event format</h2>
+      <pre>event: price_update
+id: evt_1713234567_crypto-btc
+data: {"channel":"crypto-btc","event":"price_update","ts":"ISO","payload":{},"more":"curl -N ..."}</pre>
+    </div>
+    <div class="card">
+      <h2>Error codes</h2>
+      <p>401 invalid key · 403 forbidden · 404 missing channel · 429 rate limit</p>
+    </div>
+  </main>
+</body>
+</html>
