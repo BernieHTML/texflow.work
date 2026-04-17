@@ -311,6 +311,7 @@ SKILLS=$(curl -sS "https://texflow.work/texskills/api/catalog" -H "Authorization
 ```
 https://texflow.work/.well-known/ai.json          — Site capabilities catalog
 https://texflow.work/.well-known/agent-entry.md   — This file
+https://texflow.work/.well-known/skill.md         — Consolidated skill doc (UCP Generator, Gander, GanderChat, TEX, TexSkills); keep in sync when those APIs change
 https://texflow.work/tex/api/signup               — TEX signup
 https://texflow.work/tex/api/inbox                — TEX inbox SSE
 https://texflow.work/tex/api/languages            — TEX public language registry
