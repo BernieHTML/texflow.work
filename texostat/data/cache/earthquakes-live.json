@@ -1,11 +1,22 @@
 {
   "channel": "earthquakes-live",
   "event": "earthquake_update",
-  "ts": "2026-04-21T10:32:32.384Z",
+  "ts": "2026-04-21T11:15:00.730Z",
   "source": "USGS Earthquake Hazards Program",
   "payload": {
-    "count": 56,
+    "count": 53,
     "events": [
+      {
+        "id": "us6000srtd",
+        "magnitude": 5.7,
+        "place": "Balleny Islands region",
+        "depth_km": 10,
+        "lat": -62.0123,
+        "lon": 164.998,
+        "ts": "2026-04-21T10:30:27.397Z",
+        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us6000srtd",
+        "felt_reports": null
+      },
       {
         "id": "pr2026111001",
         "magnitude": 3.57,
@@ -577,50 +588,6 @@
         "ts": "2026-04-20T11:28:58.377Z",
         "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us6000srjl",
         "felt_reports": null
-      },
-      {
-        "id": "nn00915825",
-        "magnitude": 2.67,
-        "place": "18 km SE of Silver Springs, Nevada",
-        "depth_km": 7.4169,
-        "lat": 39.2787,
-        "lon": -119.0981,
-        "ts": "2026-04-20T11:09:57.546Z",
-        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/nn00915825",
-        "felt_reports": 0
-      },
-      {
-        "id": "nc75348512",
-        "magnitude": 2.65,
-        "place": "61 km W of Petrolia, CA",
-        "depth_km": 12.1199998855591,
-        "lat": 40.3595008850098,
-        "lon": -125.008666992188,
-        "ts": "2026-04-20T10:50:00.840Z",
-        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/nc75348512",
-        "felt_reports": null
-      },
-      {
-        "id": "us6000srj9",
-        "magnitude": 5,
-        "place": "111 km E of Yamada, Japan",
-        "depth_km": 47.565,
-        "lat": 39.4819,
-        "lon": 143.2471,
-        "ts": "2026-04-20T10:44:16.040Z",
-        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us6000srj9",
-        "felt_reports": null
-      },
-      {
-        "id": "nc75348507",
-        "magnitude": 4.66,
-        "place": "52 km W of Petrolia, CA",
-        "depth_km": 13.63,
-        "lat": 40.3466666666667,
-        "lon": -124.901,
-        "ts": "2026-04-20T10:41:33.940Z",
-        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/nc75348507",
-        "felt_reports": 9
       }
     ]
   }

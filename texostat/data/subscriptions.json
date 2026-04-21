@@ -5,5 +5,11 @@
       "crypto-btc",
       "earthquakes-live"
     ]
+  },
+  {
+    "userId": "woah123",
+    "channels": [
+      "crypto-btc"
+    ]
   }
 ]

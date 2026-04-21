@@ -1,7 +1,29 @@
 {
   "channel": "crypto-news",
   "event": "news_update",
-  "ts": "2026-04-21T10:30:01.083Z",
+  "ts": "2026-04-21T11:10:01.121Z",
   "source": "cryptocurrency.cv",
-  "payload": []
+  "payload": [
+    {
+      "title": "FCA and Bank seek members for their Transaction and Post-trade Reporting Taskforce",
+      "source": "UK FCA Crypto",
+      "url": "https://www.fca.org.uk/news/news-stories/fca-and-bank-seek-members-their-transaction-and-post-trade-reporting-taskforce",
+      "published_at": null,
+      "tickers": []
+    },
+    {
+      "title": "FCA confirms motor finance redress scheme",
+      "source": "UK FCA Crypto",
+      "url": "https://www.fca.org.uk/news/statements/fca-confirms-motor-finance-redress-scheme",
+      "published_at": null,
+      "tickers": []
+    },
+    {
+      "title": "Millions of car finance customers to get payouts this year as FCA goes ahead with compensation scheme",
+      "source": "UK FCA Crypto",
+      "url": "https://www.fca.org.uk/news/press-releases/millions-car-finance-customers-payouts-fca-goes-ahead-compensation-scheme",
+      "published_at": null,
+      "tickers": []
+    }
+  ]
 }
