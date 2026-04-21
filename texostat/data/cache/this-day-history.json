@@ -1,0 +1,28 @@
+{
+  "channel": "this-day-history",
+  "event": "history_update",
+  "ts": "2026-04-21T10:32:39.783Z",
+  "source": "history.muffinlabs.com",
+  "payload": [
+    {
+      "year": "753 BC",
+      "event": "Romulus founds Rome (traditional date)."
+    },
+    {
+      "year": "43 BC",
+      "event": "Battle of Mutina: Mark Antony is again defeated in battle by Aulus Hirtius, who is killed. Antony fails to capture Mutina and Decimus Brutus is murdered shortly after."
+    },
+    {
+      "year": "900",
+      "event": "The Laguna Copperplate Inscription (the earliest known written document found in what is now the Philippines): the Commander-in-Chief of the Kingdom of Tondo, as represented by the Honourable Jayadewa, Lord Minister of Pailah, pardons from all debt the Honourable Namwaran and his relations."
+    },
+    {
+      "year": "1092",
+      "event": "The Diocese of Pisa is elevated to the rank of metropolitan archdiocese by Pope Urban II"
+    },
+    {
+      "year": "1506",
+      "event": "The three-day Lisbon Massacre comes to an end with the slaughter of over 1,900 suspected Jews by Portuguese Catholics."
+    }
+  ]
+}

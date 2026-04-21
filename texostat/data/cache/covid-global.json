@@ -1,0 +1,16 @@
+{
+  "channel": "covid-global",
+  "event": "covid_update",
+  "ts": "2026-04-21T10:32:35.893Z",
+  "source": "disease.sh /v3/covid-19/all",
+  "payload": {
+    "cases": 704753890,
+    "deaths": 7010681,
+    "recovered": 675619811,
+    "active": 22123398,
+    "critical": 34794,
+    "cases_per_million": 90413,
+    "deaths_per_million": 899.4,
+    "last_updated": "2026-04-21T10:31:02.528Z"
+  }
+}

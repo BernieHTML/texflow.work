@@ -1,0 +1,220 @@
+{
+  "channel": "earthquakes-significant",
+  "event": "earthquake_update",
+  "ts": "2026-04-21T10:32:32.513Z",
+  "source": "USGS Earthquake Hazards Program",
+  "payload": {
+    "count": 19,
+    "events": [
+      {
+        "id": "us6000srs6",
+        "magnitude": 5.4,
+        "place": "146 km E of Miyako, Japan",
+        "depth_km": 10,
+        "lat": 39.8481,
+        "lon": 143.6273,
+        "ts": "2026-04-21T05:29:09.335Z",
+        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us6000srs6",
+        "felt_reports": null
+      },
+      {
+        "id": "us6000srs5",
+        "magnitude": 4.7,
+        "place": "150 km E of Miyako, Japan",
+        "depth_km": 10,
+        "lat": 39.862,
+        "lon": 143.6712,
+        "ts": "2026-04-21T05:19:56.456Z",
+        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us6000srs5",
+        "felt_reports": null
+      },
+      {
+        "id": "us6000srrc",
+        "magnitude": 5.5,
+        "place": "35 km WNW of Pante Makasar, Timor Leste",
+        "depth_km": 77.167,
+        "lat": -9.068,
+        "lon": 124.0863,
+        "ts": "2026-04-21T03:17:07.811Z",
+        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us6000srrc",
+        "felt_reports": 2
+      },
+      {
+        "id": "us6000srr7",
+        "magnitude": 4.8,
+        "place": "107 km ENE of Miyako, Japan",
+        "depth_km": 35.352,
+        "lat": 39.8608,
+        "lon": 143.1656,
+        "ts": "2026-04-21T02:35:47.967Z",
+        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us6000srr7",
+        "felt_reports": null
+      },
+      {
+        "id": "us6000srr2",
+        "magnitude": 5.2,
+        "place": "7 km WNW of Cotacachi, Ecuador",
+        "depth_km": 129.427,
+        "lat": 0.3364,
+        "lon": -78.3232,
+        "ts": "2026-04-21T02:22:21.410Z",
+        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us6000srr2",
+        "felt_reports": 9
+      },
+      {
+        "id": "us6000srr3",
+        "magnitude": 4.7,
+        "place": "164 km SE of Petropavlovsk-Kamchatsky, Russia",
+        "depth_km": 23.354,
+        "lat": 52.0097,
+        "lon": 160.3252,
+        "ts": "2026-04-21T02:17:48.029Z",
+        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us6000srr3",
+        "felt_reports": null
+      },
+      {
+        "id": "us6000srqj",
+        "magnitude": 5,
+        "place": "53 km E of Wāngjing, India",
+        "depth_km": 100.552,
+        "lat": 24.6039,
+        "lon": 94.5961,
+        "ts": "2026-04-21T00:29:35.894Z",
+        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us6000srqj",
+        "felt_reports": 15
+      },
+      {
+        "id": "us6000srqi",
+        "magnitude": 4.5,
+        "place": "106 km WNW of Ambon, Indonesia",
+        "depth_km": 119.215,
+        "lat": -3.4874,
+        "lon": 127.2516,
+        "ts": "2026-04-21T00:17:49.906Z",
+        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us6000srqi",
+        "felt_reports": null
+      },
+      {
+        "id": "us6000srqg",
+        "magnitude": 4.7,
+        "place": "59 km SE of Mawlaik, Burma (Myanmar)",
+        "depth_km": 107.807,
+        "lat": 23.219,
+        "lon": 94.7634,
+        "ts": "2026-04-21T00:08:27.796Z",
+        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us6000srqg",
+        "felt_reports": null
+      },
+      {
+        "id": "us6000srpn",
+        "magnitude": 4.6,
+        "place": "off the coast of Ecuador",
+        "depth_km": 10,
+        "lat": 1.1357,
+        "lon": -85.3693,
+        "ts": "2026-04-20T21:59:56.780Z",
+        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us6000srpn",
+        "felt_reports": null
+      },
+      {
+        "id": "us6000srpg",
+        "magnitude": 4.5,
+        "place": "144 km SW of Tual, Indonesia",
+        "depth_km": 10,
+        "lat": -6.6633,
+        "lon": 131.9536,
+        "ts": "2026-04-20T21:25:54.920Z",
+        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us6000srpg",
+        "felt_reports": null
+      },
+      {
+        "id": "us6000srph",
+        "magnitude": 4.5,
+        "place": "35 km SE of Dumabato, Philippines",
+        "depth_km": 10,
+        "lat": 16.0782,
+        "lon": 121.926,
+        "ts": "2026-04-20T21:07:20.795Z",
+        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us6000srph",
+        "felt_reports": null
+      },
+      {
+        "id": "us6000srn6",
+        "magnitude": 5.3,
+        "place": "166 km W of Abepura, Indonesia",
+        "depth_km": 10,
+        "lat": -2.374,
+        "lon": 139.1482,
+        "ts": "2026-04-20T18:47:05.797Z",
+        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us6000srn6",
+        "felt_reports": null
+      },
+      {
+        "id": "us6000srka",
+        "magnitude": 4.7,
+        "place": "112 km ENE of Miyako, Japan",
+        "depth_km": 34.135,
+        "lat": 39.856,
+        "lon": 143.2291,
+        "ts": "2026-04-20T14:15:29.099Z",
+        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us6000srka",
+        "felt_reports": null
+      },
+      {
+        "id": "us6000srjx",
+        "magnitude": 5.1,
+        "place": "129 km E of Yamada, Japan",
+        "depth_km": 10,
+        "lat": 39.5889,
+        "lon": 143.4485,
+        "ts": "2026-04-20T12:56:45.171Z",
+        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us6000srjx",
+        "felt_reports": null
+      },
+      {
+        "id": "us6000srjn",
+        "magnitude": 4.6,
+        "place": "14 km ESE of Sulangan, Philippines",
+        "depth_km": 35,
+        "lat": 10.8663,
+        "lon": 125.9345,
+        "ts": "2026-04-20T11:44:37.901Z",
+        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us6000srjn",
+        "felt_reports": 1
+      },
+      {
+        "id": "us6000srjl",
+        "magnitude": 4.5,
+        "place": "93 km E of Miyako, Japan",
+        "depth_km": 24.628,
+        "lat": 39.6552,
+        "lon": 143.035,
+        "ts": "2026-04-20T11:28:58.377Z",
+        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us6000srjl",
+        "felt_reports": null
+      },
+      {
+        "id": "us6000srj9",
+        "magnitude": 5,
+        "place": "111 km E of Yamada, Japan",
+        "depth_km": 47.565,
+        "lat": 39.4819,
+        "lon": 143.2471,
+        "ts": "2026-04-20T10:44:16.040Z",
+        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us6000srj9",
+        "felt_reports": null
+      },
+      {
+        "id": "nc75348507",
+        "magnitude": 4.66,
+        "place": "52 km W of Petrolia, CA",
+        "depth_km": 13.63,
+        "lat": 40.3466666666667,
+        "lon": -124.901,
+        "ts": "2026-04-20T10:41:33.940Z",
+        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/nc75348507",
+        "felt_reports": 9
+      }
+    ]
+  }
+}

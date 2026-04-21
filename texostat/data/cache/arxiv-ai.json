@@ -1,0 +1,130 @@
+{
+  "channel": "arxiv-ai",
+  "event": "papers_update",
+  "ts": "2026-04-21T10:32:36.403Z",
+  "source": "arXiv RSS cs.AI",
+  "payload": [
+    {
+      "id": "2604.15456",
+      "title": "DeepER-Med: Advancing Deep Evidence-Based Research in Medicine Through Agentic AI",
+      "authors": [
+        "Zhizheng Wang",
+        "Chih-Hsuan Wei",
+        "Joey Chan",
+        "Robert Leaman",
+        "Chi-Ping Day"
+      ],
+      "abstract_truncated": "arXiv:2604.15456v1 Announce Type: new \nAbstract: Trustworthiness and transparency are essential for the clinical adoption of artificial intelligence (AI) in healthcare and biomedical research. Recent deep research systems aim to accelerate evidence-grounded scientific discovery by integrating AI agents with multi-hop information retrieval, reasoning, and synthesis. However, most existing systems l",
+      "submitted": "Tue, 21 Apr 2026 00:00:00 -0400",
+      "url": "https://arxiv.org/abs/2604.15456"
+    },
+    {
+      "id": "2604.15495",
+      "title": "GIST: Multimodal Knowledge Extraction and Spatial Grounding via Intelligent Semantic Topology",
+      "authors": [
+        "Shivendra Agrawal",
+        "Bradley Hayes"
+      ],
+      "abstract_truncated": "arXiv:2604.15495v1 Announce Type: new \nAbstract: Navigating complex, densely packed environments like retail stores, warehouses, and hospitals poses a significant spatial grounding challenge for humans and embodied AI. In these spaces, dense visual features quickly become stale given the quasi-static nature of items, and long-tail semantic distributions challenge traditional computer vision. While",
+      "submitted": "Tue, 21 Apr 2026 00:00:00 -0400",
+      "url": "https://arxiv.org/abs/2604.15495"
+    },
+    {
+      "id": "2604.15514",
+      "title": "Bureaucratic Silences: What the Canadian AI Register Reveals, Omits, and Obscures",
+      "authors": [
+        "Dipto Das",
+        "Christelle Tessono",
+        "Syed Ishtiaque Ahmed",
+        "Shion Guha"
+      ],
+      "abstract_truncated": "arXiv:2604.15514v1 Announce Type: new \nAbstract: In November 2025, the Government of Canada operationalized its commitment to transparency by releasing its first Federal AI Register. In this paper, we argue that such registers are not neutral mirrors of government activity, but active instruments of ontological design that configure the boundaries of accountability. We analyzed the Register's comp",
+      "submitted": "Tue, 21 Apr 2026 00:00:00 -0400",
+      "url": "https://arxiv.org/abs/2604.15514"
+    },
+    {
+      "id": "2604.15529",
+      "title": "LACE: Lattice Attention for Cross-thread Exploration",
+      "authors": [
+        "Yang Li",
+        "Zirui Zhang",
+        "Yang Liu",
+        "Chengzhi Mao"
+      ],
+      "abstract_truncated": "arXiv:2604.15529v1 Announce Type: new \nAbstract: Current large language models reason in isolation. Although it is common to sample multiple reasoning paths in parallel, these trajectories do not interact, and often fail in the same redundant ways. We introduce LACE, a framework that transforms reasoning from a collection of independent trials into a coordinated, parallel process. By repurposing t",
+      "submitted": "Tue, 21 Apr 2026 00:00:00 -0400",
+      "url": "https://arxiv.org/abs/2604.15529"
+    },
+    {
+      "id": "2604.15558",
+      "title": "Preregistered Belief Revision Contracts",
+      "authors": [
+        "Saad Alqithami"
+      ],
+      "abstract_truncated": "arXiv:2604.15558v1 Announce Type: new \nAbstract: Deliberative multi-agent systems allow agents to exchange messages and revise beliefs over time. While this interaction is meant to improve performance, it can also create dangerous conformity effects: agreement, confidence, prestige, or majority size may be treated as if they were evidence, producing high-confidence convergence to false conclusions",
+      "submitted": "Tue, 21 Apr 2026 00:00:00 -0400",
+      "url": "https://arxiv.org/abs/2604.15558"
+    },
+    {
+      "id": "2604.15559",
+      "title": "Subliminal Transfer of Unsafe Behaviors in AI Agent Distillation",
+      "authors": [
+        "Jacob Dang",
+        "Brian Y. Xie",
+        "Omar G. Younis"
+      ],
+      "abstract_truncated": "arXiv:2604.15559v1 Announce Type: new \nAbstract: Recent work on subliminal learning demonstrates that language models can transmit semantic traits through data that is semantically unrelated to those traits. However, it remains unclear whether behavioral traits can transfer in agentic systems, where policies are learned from trajectories rather than static text. In this work, we provide the first ",
+      "submitted": "Tue, 21 Apr 2026 00:00:00 -0400",
+      "url": "https://arxiv.org/abs/2604.15559"
+    },
+    {
+      "id": "2604.15709",
+      "title": "Bilevel Optimization of Agent Skills via Monte Carlo Tree Search",
+      "authors": [
+        "Chenyi Huang",
+        "Haoting Zhang",
+        "Jingxu Xu",
+        "Zeyu Zheng",
+        "Yunduan Lin"
+      ],
+      "abstract_truncated": "arXiv:2604.15709v1 Announce Type: new \nAbstract: Agent \\texttt{skills} are structured collections of instructions, tools, and supporting resources that help large language model (LLM) agents perform particular classes of tasks. Empirical evidence shows that the design of \\texttt{skills} can materially affect agent task performance, yet systematically optimizing \\texttt{skills} remains challenging.",
+      "submitted": "Tue, 21 Apr 2026 00:00:00 -0400",
+      "url": "https://arxiv.org/abs/2604.15709"
+    },
+    {
+      "id": "2604.15719",
+      "title": "The World Leaks the Future: Harness Evolution for Future Prediction Agents",
+      "authors": [
+        "Chuyang Wei",
+        "Maohang Gao",
+        "Zhixin Han",
+        "Kefei Chen",
+        "Yu Zhuang"
+      ],
+      "abstract_truncated": "arXiv:2604.15719v2 Announce Type: new \nAbstract: Many consequential decisions must be made before the relevant outcome is known. Such problems are commonly framed as future prediction, where an LLM agent must form a prediction for an unresolved question using only the public information available at the prediction time. The setting is difficult because public evidence evolves while useful supervis",
+      "submitted": "Tue, 21 Apr 2026 00:00:00 -0400",
+      "url": "https://arxiv.org/abs/2604.15719"
+    },
+    {
+      "id": "2604.15726",
+      "title": "LLM Reasoning Is Latent, Not the Chain of Thought",
+      "authors": [
+        "Wenshuo Wang"
+      ],
+      "abstract_truncated": "arXiv:2604.15726v1 Announce Type: new \nAbstract: This position paper argues that large language model (LLM) reasoning should be studied as latent-state trajectory formation rather than as faithful surface chain-of-thought (CoT). This matters because claims about faithfulness, interpretability, reasoning benchmarks, and inference-time intervention all depend on what the field takes the primary obje",
+      "submitted": "Tue, 21 Apr 2026 00:00:00 -0400",
+      "url": "https://arxiv.org/abs/2604.15726"
+    },
+    {
+      "id": "2604.15727",
+      "title": "Structured Abductive-Deductive-Inductive Reasoning for LLMs via Algebraic Invariants",
+      "authors": [
+        "Sankalp Gilda",
+        "Shlok Gilda"
+      ],
+      "abstract_truncated": "arXiv:2604.15727v1 Announce Type: new \nAbstract: Large language models exhibit systematic limitations in structured logical reasoning: they conflate hypothesis generation with verification, cannot distinguish conjecture from validated knowledge, and allow weak reasoning steps to propagate unchecked through inference chains. We present a symbolic reasoning scaffold that operationalizes Peirce's tri",
+      "submitted": "Tue, 21 Apr 2026 00:00:00 -0400",
+      "url": "https://arxiv.org/abs/2604.15727"
+    }
+  ]
+}

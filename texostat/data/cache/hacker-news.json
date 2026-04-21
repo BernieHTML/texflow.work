@@ -1,0 +1,98 @@
+{
+  "channel": "hacker-news",
+  "event": "hn_update",
+  "ts": "2026-04-21T10:32:36.120Z",
+  "source": "HN Algolia /search",
+  "payload": [
+    {
+      "rank": 1,
+      "title": "John Ternus to become Apple CEO",
+      "url": "https://www.apple.com/newsroom/2026/04/tim-cook-to-become-apple-executive-chairman-john-ternus-to-become-apple-ceo/",
+      "score": 1819,
+      "comments": 969,
+      "author": "schappim",
+      "age_hours": 14
+    },
+    {
+      "rank": 2,
+      "title": "All phones sold in the EU to have replaceable batteries from 2027",
+      "url": "https://www.theolivepress.es/spain-news/2026/04/20/eu-to-force-replaceable-batteries-in-phones-and-tablets-from-2027/",
+      "score": 1280,
+      "comments": 1065,
+      "author": "ramonga",
+      "age_hours": 21
+    },
+    {
+      "rank": 3,
+      "title": "Qwen3.6-Max-Preview: Smarter, Sharper, Still Evolving",
+      "url": "https://qwen.ai/blog?id=qwen3.6-max-preview",
+      "score": 627,
+      "comments": 333,
+      "author": "mfiguiere",
+      "age_hours": 20
+    },
+    {
+      "rank": 4,
+      "title": "ggsql: A Grammar of Graphics for SQL",
+      "url": "https://opensource.posit.co/blog/2026-04-20_ggsql_alpha_release/",
+      "score": 417,
+      "comments": 80,
+      "author": "thomasp85",
+      "age_hours": 22
+    },
+    {
+      "rank": 5,
+      "title": "Kimi vendor verifier – verify accuracy of inference providers",
+      "url": "https://www.kimi.com/blog/kimi-vendor-verifier",
+      "score": 259,
+      "comments": 25,
+      "author": "Alifatisk",
+      "age_hours": 16
+    },
+    {
+      "rank": 6,
+      "title": "WebUSB Extension for Firefox",
+      "url": "https://github.com/ArcaneNibble/awawausb",
+      "score": 244,
+      "comments": 217,
+      "author": "tuananh",
+      "age_hours": 23
+    },
+    {
+      "rank": 7,
+      "title": "Brussels launched an age checking app. Hackers took 2 minutes to break it",
+      "url": "https://www.politico.eu/article/eu-brussels-launched-age-checking-app-hackers-say-took-them-2-minutes-break-it/",
+      "score": 238,
+      "comments": 135,
+      "author": "axbyte",
+      "age_hours": 26
+    },
+    {
+      "rank": 8,
+      "title": "Jujutsu megamerges for fun and profit",
+      "url": "https://isaaccorbrey.com/notes/jujutsu-megamerges-for-fun-and-profit",
+      "score": 230,
+      "comments": 116,
+      "author": "icorbrey",
+      "age_hours": 13
+    },
+    {
+      "rank": 9,
+      "title": "Quantum Computers Are Not a Threat to 128-Bit Symmetric Keys",
+      "url": "https://words.filippo.io/128-bits/",
+      "score": 229,
+      "comments": 81,
+      "author": "hasheddan",
+      "age_hours": 18
+    },
+    {
+      "rank": 10,
+      "title": "Anthropic says OpenClaw-style Claude CLI usage is allowed again",
+      "url": "https://docs.openclaw.ai/providers/anthropic",
+      "score": 204,
+      "comments": 124,
+      "author": "jmsflknr",
+      "age_hours": 7
+    }
+  ]
+}

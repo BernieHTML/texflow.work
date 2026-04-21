@@ -1,0 +1,128 @@
+{
+  "channel": "macro-world-bank",
+  "event": "gdp_update",
+  "ts": "2026-04-21T10:32:32.234Z",
+  "source": "World Bank NY.GDP.MKTP.CD",
+  "payload": [
+    {
+      "country": "Africa Eastern and Southern",
+      "country_code": "AFE",
+      "year": "2024",
+      "gdp_usd": 1242693542929.85
+    },
+    {
+      "country": "Africa Western and Central",
+      "country_code": "AFW",
+      "year": "2024",
+      "gdp_usd": 736384961061.523
+    },
+    {
+      "country": "Arab World",
+      "country_code": "ARB",
+      "year": "2024",
+      "gdp_usd": 3735881442514.34
+    },
+    {
+      "country": "Caribbean small states",
+      "country_code": "CSS",
+      "year": "2024",
+      "gdp_usd": 90344593407.0488
+    },
+    {
+      "country": "Central Europe and the Baltics",
+      "country_code": "CEB",
+      "year": "2024",
+      "gdp_usd": 2462005273603.48
+    },
+    {
+      "country": "Early-demographic dividend",
+      "country_code": "EAR",
+      "year": "2024",
+      "gdp_usd": 15808304487948.1
+    },
+    {
+      "country": "East Asia & Pacific",
+      "country_code": "EAS",
+      "year": "2024",
+      "gdp_usd": 32017179839273
+    },
+    {
+      "country": "East Asia & Pacific (excluding high income)",
+      "country_code": "EAP",
+      "year": "2024",
+      "gdp_usd": 22260810771875.1
+    },
+    {
+      "country": "East Asia & Pacific (IDA & IBRD countries)",
+      "country_code": "TEA",
+      "year": "2024",
+      "gdp_usd": 22233362919728.4
+    },
+    {
+      "country": "Euro area",
+      "country_code": "EMU",
+      "year": "2024",
+      "gdp_usd": 16485444160371
+    },
+    {
+      "country": "Europe & Central Asia",
+      "country_code": "ECS",
+      "year": "2024",
+      "gdp_usd": 29291828957768.8
+    },
+    {
+      "country": "Europe & Central Asia (excluding high income)",
+      "country_code": "ECA",
+      "year": "2024",
+      "gdp_usd": 2451180144505.47
+    },
+    {
+      "country": "Europe & Central Asia (IDA & IBRD countries)",
+      "country_code": "TEC",
+      "year": "2024",
+      "gdp_usd": 6131674441421.64
+    },
+    {
+      "country": "European Union",
+      "country_code": "EUU",
+      "year": "2024",
+      "gdp_usd": 19497115588443.6
+    },
+    {
+      "country": "Fragile and conflict affected situations",
+      "country_code": "FCS",
+      "year": "2024",
+      "gdp_usd": 1652895518697.74
+    },
+    {
+      "country": "Heavily indebted poor countries (HIPC)",
+      "country_code": "HPC",
+      "year": "2024",
+      "gdp_usd": 1145111349262.57
+    },
+    {
+      "country": "High income",
+      "country_code": "",
+      "year": "2024",
+      "gdp_usd": 71321142708251.2
+    },
+    {
+      "country": "IBRD only",
+      "country_code": "IBD",
+      "year": "2024",
+      "gdp_usd": 40930410371533.4
+    },
+    {
+      "country": "IDA & IBRD total",
+      "country_code": "IBT",
+      "year": "2024",
+      "gdp_usd": 43823204664493.9
+    },
+    {
+      "country": "IDA blend",
+      "country_code": "IDB",
+      "year": "2024",
+      "gdp_usd": 1117411942661.72
+    }
+  ]
+}

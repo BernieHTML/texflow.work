@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TexoStat — Live data feeds for AI agents</title>
+  <meta name="description" content="Subscribe to 50 real-time data channels — crypto, space, earthquakes, news, finance and more. One curl command per channel." />
+  <link rel="stylesheet" href="/texostat/style.css" />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%231D9E75'/><text y='22' x='5' font-size='18' font-family='monospace' fill='%23000'>T</text></svg>" />
+</head>
+<body>
+
+<nav>
+  <div class="container nav-inner">
+    <a href="/texostat" class="nav-logo">Texo<span>Stat</span></a>
+    <div class="nav-links">
+      <a href="#channels">Channels</a>
+      <a href="#how">How it works</a>
+      <a href="/texostat/legal/terms.md">Terms</a>
+      <a href="/texostat/legal/privacy.md">Privacy</a>
+      <a href="/tex">TEX &rarr;</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ===== HERO ===== -->
+<section class="hero">
+  <div class="container">
+    <h1 class="hero-title">TexoStat</h1>
+    <p class="hero-tagline">
+      <strong>Live data feeds for AI agents.</strong><br>
+      Subscribe once. Stream forever.
+    </p>
+    <div class="hero-curl">curl -N https://texflow.work/texostat/stream \
+  -H "Authorization: Bearer YOUR_TEX_TOKEN"</div>
+    <a href="#channels" class="btn">Browse channels &rarr;</a>
+  </div>
+</section>
+
+<!-- ===== HOW IT WORKS ===== -->
+<section class="how-it-works" id="how">
+  <div class="container">
+    <div class="section-label">How it works</div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-text">Subscribe to a channel with one curl command — use your TEX token, no extra sign-up needed.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-text">Open your feed — events stream in as they happen, one JSON object per event.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-text">Each general feed event includes a <code>more</code> field pointing to that channel's dedicated stream for deeper data.</div>
+      </div>
+    </div>
+
+    <div class="sample-output">
+      <h3>Example — general feed output</h3>
+      <div class="sample-code"><span class="evt-type">event: price_update</span>
+<span class="evt-field">id:</span> <span class="evt-val">evt_1745123460_crypto-btc</span>
+<span class="evt-field">data:</span> {
+  <span class="evt-field">"channel":</span> <span class="evt-val">"crypto-btc"</span>,
+  <span class="evt-field">"event":</span>   <span class="evt-val">"price_update"</span>,
+  <span class="evt-field">"ts":</span>      <span class="evt-val">"2026-04-21T09:01:00Z"</span>,
+  <span class="evt-field">"source":</span>  <span class="evt-val">"CoinGecko /coins/bitcoin"</span>,
+  <span class="evt-field">"payload":</span> { <span class="evt-val">"symbol": "BTC", "price_usd": 94210.42, ...</span> },
+  <span class="evt-more">"more":</span>    <span class="evt-more">"curl -N .../stream/crypto-btc -H \"Authorization: Bearer TOKEN\""</span>
+}
+
+<span class="evt-type">event: earthquake_update</span>
+<span class="evt-field">id:</span> <span class="evt-val">evt_1745123465_earthquakes-live</span>
+<span class="evt-field">data:</span> {
+  <span class="evt-field">"channel":</span> <span class="evt-val">"earthquakes-live"</span>,
+  <span class="evt-field">"payload":</span> { <span class="evt-val">"count": 42, "events": [...]</span> },
+  <span class="evt-more">"more":</span>    <span class="evt-more">"curl -N .../stream/earthquakes-live -H \"Authorization: Bearer TOKEN\""</span>
+}</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CHANNEL DIRECTORY ===== -->
+<section class="channel-directory" id="channels">
+  <div class="container">
+    <div class="dir-header">
+      <h2>Channel directory</h2>
+      <span class="channel-count" id="channel-count">— channels</span>
+    </div>
+
+    <div class="filters">
+      <div class="search-wrap">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+        </svg>
+        <input type="search" id="channel-search" placeholder="Search channels…" autocomplete="off" />
+      </div>
+      <div class="cat-pills" id="cat-pills">
+        <button class="cat-pill active" data-cat="all">All</button>
+        <button class="cat-pill" data-cat="crypto">Crypto</button>
+        <button class="cat-pill" data-cat="finance">Finance</button>
+        <button class="cat-pill" data-cat="space">Space</button>
+        <button class="cat-pill" data-cat="environment">Environment</button>
+        <button class="cat-pill" data-cat="health">Health</button>
+        <button class="cat-pill" data-cat="tech">Tech</button>
+        <button class="cat-pill" data-cat="research">Research</button>
+        <button class="cat-pill" data-cat="regulatory">Regulatory</button>
+        <button class="cat-pill" data-cat="logistics">Logistics</button>
+        <button class="cat-pill" data-cat="misc">Misc</button>
+      </div>
+    </div>
+
+    <div id="channel-grid">
+      <div class="no-results">Loading channels…</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <div class="container footer-inner">
+    <div class="footer-brand">TexoStat &mdash; part of the TexFlow suite</div>
+    <div class="footer-links">
+      <a href="/texostat/legal/terms.md">Terms</a>
+      <a href="/texostat/legal/privacy.md">Privacy</a>
+      <a href="https://texflow.work">texflow.work</a>
+      <a href="/tex">TEX</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function () {
+  const BASE = '/texostat';
+  let channels = [];
+  let activeCategory = 'all';
+  let searchQuery = '';
+
+  function cadenceLabel(c) {
+    const map = {
+      '30s': '30 sec', '60s': '1 min', '5min': '5 min', '10min': '10 min',
+      '15min': '15 min', '30min': '30 min', '1hr': '1 hr',
+      'daily': 'daily', 'weekly': 'weekly', 'realtime': 'realtime',
+    };
+    return map[c] || c;
+  }
+
+  function catClass(cat) {
+    const valid = ['crypto','finance','space','environment','health','tech','research','regulatory','logistics','misc','custom'];
+    return valid.includes(cat) ? 'cat-' + cat : 'cat-misc';
+  }
+
+  function escapeHtml(str) {
+    return String(str || '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  function renderCard(ch) {
+    const slug = escapeHtml(ch.slug);
+    const name = escapeHtml(ch.name);
+    const desc = escapeHtml(ch.description);
+    const source = escapeHtml(ch.source || '');
+    const cat = escapeHtml(ch.category);
+    const cadence = escapeHtml(cadenceLabel(ch.cadence));
+    const subCount = ch.subscriber_count || 0;
+    const isVerified = ch.verified;
+    const token = 'YOUR_TEX_TOKEN';
+    const subscribeCmd = `curl -X POST https://texflow.work/texostat/channels/${slug}/subscribe -H "Authorization: Bearer ${token}"`;
+    const streamCmd = `curl -N https://texflow.work/texostat/stream/${slug} -H "Authorization: Bearer ${token}"`;
+
+    return `<div class="channel-card">
+  <div class="card-top">
+    <div class="card-name">${name}</div>
+    <div class="card-badges">
+      <span class="cat-badge ${catClass(ch.category)}">${cat}</span>
+      <span class="cadence-badge">${cadence}</span>
+    </div>
+  </div>
+  <div class="card-desc">${desc}</div>
+  ${source ? `<div class="card-source">${source}</div>` : ''}
+  <div class="card-curls">
+    <div class="curl-row">
+      <span class="curl-label">Subscribe</span>
+      <code class="curl-block" title="Click to copy" onclick="copyCmd(this)">${escapeHtml(subscribeCmd)}</code>
+    </div>
+    <div class="curl-row">
+      <span class="curl-label">Stream</span>
+      <code class="curl-block" title="Click to copy" onclick="copyCmd(this)">${escapeHtml(streamCmd)}</code>
+    </div>
+  </div>
+  <div class="card-footer">
+    <span class="subscriber-count">
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      ${subCount} subscriber${subCount !== 1 ? 's' : ''}
+    </span>
+    ${isVerified ? '<span class="verified-badge">✓ verified</span>' : '<span></span>'}
+  </div>
+</div>`;
+  }
+
+  function applyFilters() {
+    return channels.filter((ch) => {
+      const matchCat = activeCategory === 'all' || ch.category === activeCategory;
+      const q = searchQuery.toLowerCase();
+      const matchQ = !q || (
+        (ch.name || '').toLowerCase().includes(q) ||
+        (ch.description || '').toLowerCase().includes(q) ||
+        (ch.slug || '').toLowerCase().includes(q)
+      );
+      return matchCat && matchQ;
+    });
+  }
+
+  function renderChannels(filtered) {
+    const grid = document.getElementById('channel-grid');
+    const count = document.getElementById('channel-count');
+    if (!filtered.length) {
+      grid.innerHTML = '<div class="no-results">No channels match your search.</div>';
+      count.textContent = '0 channels';
+      return;
+    }
+    grid.innerHTML = filtered.map(renderCard).join('');
+    count.textContent = filtered.length + ' channel' + (filtered.length !== 1 ? 's' : '');
+  }
+
+  window.copyCmd = function (el) {
+    const text = el.textContent;
+    navigator.clipboard.writeText(text).then(() => {
+      const prev = el.textContent;
+      el.textContent = 'Copied!';
+      setTimeout(() => { el.textContent = prev; }, 1500);
+    }).catch(() => {});
+  };
+
+  // Category pill clicks
+  document.getElementById('cat-pills').addEventListener('click', (e) => {
+    const pill = e.target.closest('[data-cat]');
+    if (!pill) return;
+    document.querySelectorAll('.cat-pill').forEach((p) => p.classList.remove('active'));
+    pill.classList.add('active');
+    activeCategory = pill.dataset.cat;
+    renderChannels(applyFilters());
+  });
+
+  // Search input
+  document.getElementById('channel-search').addEventListener('input', (e) => {
+    searchQuery = e.target.value.trim();
+    renderChannels(applyFilters());
+  });
+
+  // Load channels
+  document.addEventListener('DOMContentLoaded', () => {
+    fetch(BASE + '/channels')
+      .then((r) => r.json())
+      .then((data) => {
+        channels = Array.isArray(data) ? data : [];
+        renderChannels(applyFilters());
+      })
+      .catch(() => {
+        document.getElementById('channel-grid').innerHTML =
+          '<div class="no-results">Could not load channels. Is TexoStat running?</div>';
+      });
+  });
+})();
+</script>
+
+</body>
+</html>

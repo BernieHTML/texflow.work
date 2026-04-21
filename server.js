@@ -5,7 +5,7 @@ import Stripe from 'stripe';
 import { existsSync } from 'fs';
 import { readFile, writeFile, readdir, mkdir } from 'fs/promises';
 import { join, dirname } from 'path';
-import { fileURLToPath } from 'url';
+import { fileURLToPath, pathToFileURL } from 'url';
 import { spawn } from 'child_process';
 import { v4 as uuidv4 } from 'uuid';
 import { transformShopifyProduct, fetchShopifyProducts, slugifyMerchant } from './scripts/texmkt-shopify.js';
@@ -602,6 +602,14 @@ try {
 } catch (e) {
   console.error('[TEX] Failed to mount /tex:', e.message);
 }
+
+// --- TexoStat: live data feed service (ESM, dynamic import) ---
+import(pathToFileURL(join(__dirname, 'texostat', 'server.js')).href).then(({ default: texoStatApp }) => {
+  app.use('/texostat', texoStatApp);
+  console.log('[TexoStat] Mounted at /texostat');
+}).catch((e) => {
+  console.error('[TexoStat] Failed to mount /texostat:', e.message);
+});
 
 // --- Static: public, then root assets ---
 app.use(express.static(join(__dirname, 'public')));

@@ -1,0 +1,121 @@
+{
+  "channel": "arxiv-physics",
+  "event": "papers_update",
+  "ts": "2026-04-21T10:32:36.574Z",
+  "source": "arXiv RSS physics",
+  "payload": [
+    {
+      "id": "2604.16444",
+      "title": "Comment on electromagnetic noise cancellation in low-field MRI systems (arXiv:2509.05955v1, 2406.17804v3, 2210.06730v2, and related works)",
+      "authors": [
+        "Joseba Alonso",
+        "Jos\\'e M. Algar\\'in",
+        "Teresa Guallart-Naval"
+      ],
+      "abstract_truncated": "arXiv:2604.16444v1 Announce Type: new \nAbstract: In this Comment, we discuss recent approaches to electromagnetic interference (EMI) mitigation in low-field Magnetic Resonance Imaging (LF-MRI), as presented in arXiv preprints 2509.05955v1, 2406.17804v3, or 2210.06730v2. These and other works explore noise cancellation strategies based on external sensing coils for post-elimination of EMI. We argue",
+      "submitted": "Tue, 21 Apr 2026 00:00:00 -0400",
+      "url": "https://arxiv.org/abs/2604.16444"
+    },
+    {
+      "id": "2604.16449",
+      "title": "Gaussian Field Representations for Turbulent Flow: Compression, Scale Separation, and Physical Fidelity",
+      "authors": [
+        "Dhanush Vittal Shenoy",
+        "Steven H. Frankel"
+      ],
+      "abstract_truncated": "arXiv:2604.16449v1 Announce Type: new \nAbstract: Representing turbulent flow fields in a compact yet physically faithful form remains a central challenge in computational fluid dynamics. We propose a continuous parametric representation based on localized Gaussian primitives, in which the velocity field is modeled as a superposition of kernels with learnable positions, amplitudes, and scales. This",
+      "submitted": "Tue, 21 Apr 2026 00:00:00 -0400",
+      "url": "https://arxiv.org/abs/2604.16449"
+    },
+    {
+      "id": "2604.16454",
+      "title": "Competition of carrier bioresorption and drug release kinetics of vancomycin-loaded silicate macroporous microspheres to determine cell biocompatibility",
+      "authors": [
+        "A. Bolandparvaz Jahromi",
+        "E. Salahinejad"
+      ],
+      "abstract_truncated": "arXiv:2604.16454v1 Announce Type: new \nAbstract: Bioceramic porous microspheres are promising substances for dental and orthopedic bone void filling, tissue engineering and drug delivery applications. In this research, the structure and cytocompatibility of bioactive magnesium-calcium silicate macroporous microspheres loaded with vancomycin hydrochloride, an antibiotic drug, were studied. In this ",
+      "submitted": "Tue, 21 Apr 2026 00:00:00 -0400",
+      "url": "https://arxiv.org/abs/2604.16454"
+    },
+    {
+      "id": "2604.16455",
+      "title": "Drug-delivery Ca-Mg silicate scaffolds encapsulated in PLGA",
+      "authors": [
+        "A. Jadidi",
+        "E. Salahinejad",
+        "E. Sharifi",
+        "L. Tayebi"
+      ],
+      "abstract_truncated": "arXiv:2604.16455v1 Announce Type: new \nAbstract: The aim of this work is to develop dual-functional scaffolds for bone tissue regeneration and local antibiotic delivery applications. In this respect, bioresorbable bredigite (Ca7MgSi4O16) porous scaffolds were fabricated by a foam replica method, loaded with vancomycin hydrochloride and encapsulated in poly lactic-co-glycolic acid (PLGA) coatings. ",
+      "submitted": "Tue, 21 Apr 2026 00:00:00 -0400",
+      "url": "https://arxiv.org/abs/2604.16455"
+    },
+    {
+      "id": "2604.16461",
+      "title": "Modelling Gas-Phase Reaction Kinetics with Guided Particle Diffusion Sampling",
+      "authors": [
+        "Andrew Millard",
+        "Zheng Zhao",
+        "Henrik Pedersen"
+      ],
+      "abstract_truncated": "arXiv:2604.16461v1 Announce Type: new \nAbstract: Physics-guided sampling with diffusion priors has recently shown strong performance in solving complex systems of partial differential equations (PDEs) from sparse observations. However, these methods are typically evaluated on benchmark problems that do not fully demonstrate their ability to generate temporally consistent solutions of time-dependen",
+      "submitted": "Tue, 21 Apr 2026 00:00:00 -0400",
+      "url": "https://arxiv.org/abs/2604.16461"
+    },
+    {
+      "id": "2604.16478",
+      "title": "Doubly Logarithmic Corrections to Radiation Domination from CET {\\Omega}: Theory and Planck/BBN Constraints",
+      "authors": [
+        "Christian Balfagon"
+      ],
+      "abstract_truncated": "arXiv:2604.16478v1 Announce Type: new \nAbstract: We present the CET Omega framework, a causal-informational extension of standard cosmology that predicts a universal doubly logarithmic correction to the radiation energy density in the early Universe. This correction arises naturally from scale-invariant spectral sectors with logarithmically-running infrared scales and represents a low-energy manif",
+      "submitted": "Tue, 21 Apr 2026 00:00:00 -0400",
+      "url": "https://arxiv.org/abs/2604.16478"
+    },
+    {
+      "id": "2604.16494",
+      "title": "Velocity field within a vortex ring with a large elliptical cross section",
+      "authors": [
+        "T. S. Morton"
+      ],
+      "abstract_truncated": "arXiv:2604.16494v1 Announce Type: new \nAbstract: The velocity field within a steady toroidal vortex is found for arbitrary mean core radius and section ellipticity. The problem is solved by transforming to coordinates that define invariant sets. The method allows the properties of the coordinate system metric tensor to be exploited in the continuity equation in order to obtain the solution. The vo",
+      "submitted": "Tue, 21 Apr 2026 00:00:00 -0400",
+      "url": "https://arxiv.org/abs/2604.16494"
+    },
+    {
+      "id": "2604.16495",
+      "title": "Effect of gap width on turbulent transition in Taylor-Couette flow",
+      "authors": [
+        "Chang-Quan Zhou",
+        "Hua-Shu Dou",
+        "Lin Niu",
+        "Wen-Qian Xu"
+      ],
+      "abstract_truncated": "arXiv:2604.16495v1 Announce Type: new \nAbstract: Simulations of the transitional flow in Taylor-Couette configuration are carried out to study the effect of the gap width on turbulent transition. The research results show that, under the same radius and the rotating speed of the inner cylinder, as the gap width increases, the flow becomes more stable. It is discovered that the average velocity dis",
+      "submitted": "Tue, 21 Apr 2026 00:00:00 -0400",
+      "url": "https://arxiv.org/abs/2604.16495"
+    },
+    {
+      "id": "2604.16501",
+      "title": "Design Optimization of eVTOL Propellers using a Viscous-Extension Discrete Vortex Method",
+      "authors": [
+        "Rahul Kumar",
+        "Ramkumar Pathmanabhan"
+      ],
+      "abstract_truncated": "arXiv:2604.16501v1 Announce Type: new \nAbstract: Potential flow theory remains a cornerstone of unsteady aerodynamics due to its computational efficiency in modeling complex flow phenomena. This study presents a significant advancement by integrating a viscous unsteady theory with established numerical vortex methods, creating a hybrid computational tool for low-to-moderate Reynolds number flows. ",
+      "submitted": "Tue, 21 Apr 2026 00:00:00 -0400",
+      "url": "https://arxiv.org/abs/2604.16501"
+    },
+    {
+      "id": "2604.16544",
+      "title": "Comment on \"Angular momentum dynamics of vortex particles in accelerators''",
+      "authors": [
+        "S. S. Baturin"
+      ],
+      "abstract_truncated": "arXiv:2604.16544v1 Announce Type: new \nAbstract: We comment on Ref.[D. Karlovets, D. Grosman, and I. Pavlov, Phys. Rev. Lett. 136, 085002 (2026)], which proposes a BMT-like equation for the mean kinetic orbital angular momentum (OAM) of vortex particles in accelerator fields and draws spin-like conclusions about depolarization, resonances, and control. We show that the proposed closure is not gene",
+      "submitted": "Tue, 21 Apr 2026 00:00:00 -0400",
+      "url": "https://arxiv.org/abs/2604.16544"
+    }
+  ]
+}

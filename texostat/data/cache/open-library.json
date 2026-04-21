@@ -1,0 +1,78 @@
+{
+  "channel": "open-library",
+  "event": "library_update",
+  "ts": "2026-04-21T10:29:19.085Z",
+  "source": "Open Library /recentchanges",
+  "payload": [
+    {
+      "title": "",
+      "author": "/people/zep_hyr",
+      "kind": "update",
+      "timestamp": "2026-04-21T10:29:18.755385",
+      "url": "https://openlibrary.org"
+    },
+    {
+      "title": "set source_records based on initial machine_comment",
+      "author": "/people/horncBot",
+      "kind": "update",
+      "timestamp": "2026-04-21T10:29:17.202991",
+      "url": "https://openlibrary.org"
+    },
+    {
+      "title": "set source_records based on initial machine_comment",
+      "author": "/people/horncBot",
+      "kind": "update",
+      "timestamp": "2026-04-21T10:29:14.462954",
+      "url": "https://openlibrary.org"
+    },
+    {
+      "title": "import existing book",
+      "author": "/people/horncBot",
+      "kind": "edit-book",
+      "timestamp": "2026-04-21T10:29:12.560192",
+      "url": "https://openlibrary.org"
+    },
+    {
+      "title": "import existing book",
+      "author": "/people/horncBot",
+      "kind": "edit-book",
+      "timestamp": "2026-04-21T10:29:11.991123",
+      "url": "https://openlibrary.org"
+    },
+    {
+      "title": "set source_records based on initial machine_comment",
+      "author": "/people/horncBot",
+      "kind": "update",
+      "timestamp": "2026-04-21T10:29:09.502507",
+      "url": "https://openlibrary.org"
+    },
+    {
+      "title": "import new book",
+      "author": "/people/horncBot",
+      "kind": "add-book",
+      "timestamp": "2026-04-21T10:29:06.200421",
+      "url": "https://openlibrary.org"
+    },
+    {
+      "title": "set source_records based on initial machine_comment",
+      "author": "/people/horncBot",
+      "kind": "update",
+      "timestamp": "2026-04-21T10:29:02.336946",
+      "url": "https://openlibrary.org"
+    },
+    {
+      "title": "import existing book",
+      "author": "/people/horncBot",
+      "kind": "edit-book",
+      "timestamp": "2026-04-21T10:28:58.857010",
+      "url": "https://openlibrary.org"
+    },
+    {
+      "title": "",
+      "author": "/people/dor_ian",
+      "kind": "update",
+      "timestamp": "2026-04-21T10:28:56.853361",
+      "url": "https://openlibrary.org"
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "channel": "pubmed-ai-health",
+  "event": "pubmed_update",
+  "ts": "2026-04-21T10:32:36.993Z",
+  "source": "PubMed E-utilities",
+  "payload": [
+    {
+      "pmid": "41951492",
+      "title": null,
+      "journal": null,
+      "pub_date": null,
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41951492/"
+    },
+    {
+      "pmid": "41876289",
+      "title": null,
+      "journal": null,
+      "pub_date": null,
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41876289/"
+    },
+    {
+      "pmid": "41896129",
+      "title": null,
+      "journal": null,
+      "pub_date": null,
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41896129/"
+    },
+    {
+      "pmid": "41896127",
+      "title": null,
+      "journal": null,
+      "pub_date": null,
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41896127/"
+    },
+    {
+      "pmid": "41932848",
+      "title": null,
+      "journal": null,
+      "pub_date": null,
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41932848/"
+    }
+  ]
+}

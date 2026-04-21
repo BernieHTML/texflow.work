@@ -1,0 +1,12 @@
+{
+  "channel": "un-comtrade",
+  "event": "trade_update",
+  "ts": "2026-04-21T10:32:39.412Z",
+  "source": "UN Comtrade Public API",
+  "payload": {
+    "period": null,
+    "reporter_count": null,
+    "total_trade_usd_preview": null,
+    "last_updated": "2026-04-21T10:32:39.412Z"
+  }
+}

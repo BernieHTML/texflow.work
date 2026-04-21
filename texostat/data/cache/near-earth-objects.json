@@ -1,0 +1,98 @@
+{
+  "channel": "near-earth-objects",
+  "event": "neo_update",
+  "ts": "2026-04-21T10:32:40.219Z",
+  "source": "NASA NeoWs",
+  "payload": [
+    {
+      "name": "54071 (2000 GQ146)",
+      "id": "2054071",
+      "estimated_diameter_m": 1959.0250023331,
+      "is_potentially_hazardous": false,
+      "close_approach_date": "2026-04-22",
+      "miss_distance_km": 23600402.220246084,
+      "relative_velocity_kmh": 48094.4195434314
+    },
+    {
+      "name": "434196 (2003 HG2)",
+      "id": "2434196",
+      "estimated_diameter_m": 289.7610313582,
+      "is_potentially_hazardous": true,
+      "close_approach_date": "2026-04-22",
+      "miss_distance_km": 22877260.867016066,
+      "relative_velocity_kmh": 36684.4563838937
+    },
+    {
+      "name": "(2004 PJ2)",
+      "id": "3249141",
+      "estimated_diameter_m": 288.4297003513,
+      "is_potentially_hazardous": true,
+      "close_approach_date": "2026-04-22",
+      "miss_distance_km": 10093294.761546895,
+      "relative_velocity_kmh": 22630.5182498515
+    },
+    {
+      "name": "(2005 YO128)",
+      "id": "3309832",
+      "estimated_diameter_m": 71.4562101727,
+      "is_potentially_hazardous": false,
+      "close_approach_date": "2026-04-22",
+      "miss_distance_km": 66482726.03704227,
+      "relative_velocity_kmh": 49367.355864449
+    },
+    {
+      "name": "612786 (2004 PJ2)",
+      "id": "2612786",
+      "estimated_diameter_m": 303.4170480479,
+      "is_potentially_hazardous": true,
+      "close_approach_date": "2026-04-22",
+      "miss_distance_km": 10093329.363534225,
+      "relative_velocity_kmh": 22630.5146814819
+    },
+    {
+      "name": "(2009 UZ87)",
+      "id": "3472700",
+      "estimated_diameter_m": 39.2681081809,
+      "is_potentially_hazardous": false,
+      "close_approach_date": "2026-04-23",
+      "miss_distance_km": 32391664.39547512,
+      "relative_velocity_kmh": 22770.5632358996
+    },
+    {
+      "name": "(2009 UC19)",
+      "id": "3472366",
+      "estimated_diameter_m": 54.2050786336,
+      "is_potentially_hazardous": false,
+      "close_approach_date": "2026-04-21",
+      "miss_distance_km": 15047308.126819262,
+      "relative_velocity_kmh": 31565.3939694126
+    },
+    {
+      "name": "88710 (2001 SL9)",
+      "id": "2088710",
+      "estimated_diameter_m": 1786.652036697,
+      "is_potentially_hazardous": false,
+      "close_approach_date": "2026-04-26",
+      "miss_distance_km": 29843746.340287156,
+      "relative_velocity_kmh": 53240.7674141233
+    },
+    {
+      "name": "(2010 TM167)",
+      "id": "3549564",
+      "estimated_diameter_m": 375.0075217981,
+      "is_potentially_hazardous": false,
+      "close_approach_date": "2026-04-26",
+      "miss_distance_km": 60817586.12187106,
+      "relative_velocity_kmh": 62224.8631312356
+    },
+    {
+      "name": "376879 (2001 WW1)",
+      "id": "2376879",
+      "estimated_diameter_m": 201.3909630836,
+      "is_potentially_hazardous": false,
+      "close_approach_date": "2026-04-24",
+      "miss_distance_km": 49916526.77053423,
+      "relative_velocity_kmh": 41347.3982966532
+    }
+  ]
+}

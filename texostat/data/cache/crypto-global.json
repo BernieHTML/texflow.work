@@ -1,0 +1,15 @@
+{
+  "channel": "crypto-global",
+  "event": "market_overview",
+  "ts": "2026-04-21T10:17:33.485Z",
+  "source": "CoinGecko /global",
+  "payload": {
+    "total_market_cap_usd": 2655522445359.203,
+    "total_volume_usd": 104442538342.84964,
+    "btc_dominance_pct": 57.66136307259833,
+    "eth_dominance_pct": 10.585643052408761,
+    "active_cryptocurrencies": 17541,
+    "markets": 1473,
+    "market_cap_change_24h_pct": 1.5664388322410578
+  }
+}

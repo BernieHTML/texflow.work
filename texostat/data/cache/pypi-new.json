@@ -1,0 +1,128 @@
+{
+  "channel": "pypi-new",
+  "event": "pypi_update",
+  "ts": "2026-04-21T10:32:36.963Z",
+  "source": "PyPI RSS",
+  "payload": [
+    {
+      "name": "odoo-addon-sale-stock-partner-delivery-window",
+      "version": "added",
+      "description": "Use the partner's 'Delivery schedule preference' in Sales Orders",
+      "author": "support@odoo-community.org",
+      "published_at": "Tue, 21 Apr 2026 10:29:30 GMT",
+      "url": "https://pypi.org/project/odoo-addon-sale-stock-partner-delivery-window/"
+    },
+    {
+      "name": "amit-sharma-neural-heart",
+      "version": "added",
+      "description": "A professional AI assistant with a Neural Heart and Long-Term Memory.",
+      "author": "amit@example.com",
+      "published_at": "Tue, 21 Apr 2026 10:28:48 GMT",
+      "url": "https://pypi.org/project/amit-sharma-neural-heart/"
+    },
+    {
+      "name": "wavcore",
+      "version": "added",
+      "description": "Ultra-fast lossless voice codec — real-time recording, VTXT text serialization, and bit-perfect reconstruction with a C engine.",
+      "author": null,
+      "published_at": "Tue, 21 Apr 2026 10:28:36 GMT",
+      "url": "https://pypi.org/project/wavcore/"
+    },
+    {
+      "name": "jmunch-mcp",
+      "version": "added",
+      "description": "Transparent MCP proxy that reduces token cost of large tool responses via content-aware handles",
+      "author": "j@gravelle.us",
+      "published_at": "Tue, 21 Apr 2026 10:28:35 GMT",
+      "url": "https://pypi.org/project/jmunch-mcp/"
+    },
+    {
+      "name": "sas7bdat-toolkit",
+      "version": "added",
+      "description": "Tools for profiling SAS7BDAT corpora",
+      "author": null,
+      "published_at": "Tue, 21 Apr 2026 10:23:58 GMT",
+      "url": "https://pypi.org/project/sas7bdat-toolkit/"
+    },
+    {
+      "name": "allml",
+      "version": "added",
+      "description": "AllML — All-in-One Machine Learning Library",
+      "author": "bandinvisible8@gmail.com",
+      "published_at": "Tue, 21 Apr 2026 10:20:30 GMT",
+      "url": "https://pypi.org/project/allml/"
+    },
+    {
+      "name": "track-id",
+      "version": "added",
+      "description": "CLI for searching and enriching MP3 metadata from Bandcamp, MusicBrainz, and Discogs",
+      "author": null,
+      "published_at": "Tue, 21 Apr 2026 10:18:40 GMT",
+      "url": "https://pypi.org/project/track-id/"
+    },
+    {
+      "name": "interven-crewai",
+      "version": "added",
+      "description": "CrewAI integration for Interven AI firewall. Scan every tool call your CrewAI agents make — block malicious requests, redact PII/secrets, route risky actions to human approval.",
+      "author": "support@intervensecurity.com",
+      "published_at": "Tue, 21 Apr 2026 10:16:22 GMT",
+      "url": "https://pypi.org/project/interven-crewai/"
+    },
+    {
+      "name": "interven-openai-assistants",
+      "version": "added",
+      "description": "OpenAI Assistants API integration for Interven AI firewall. Scan tool calls the assistant decides to make before your code executes them.",
+      "author": "support@intervensecurity.com",
+      "published_at": "Tue, 21 Apr 2026 10:15:32 GMT",
+      "url": "https://pypi.org/project/interven-openai-assistants/"
+    },
+    {
+      "name": "nalib-infisical",
+      "version": "added",
+      "description": "qana - tiny package - nalibInfisical",
+      "author": "naq0310@gmail.com",
+      "published_at": "Tue, 21 Apr 2026 10:15:07 GMT",
+      "url": "https://pypi.org/project/nalib-infisical/"
+    },
+    {
+      "name": "interven-langchain",
+      "version": "added",
+      "description": "LangChain integration for Interven AI firewall. Scan every tool call your LangChain agent makes before it executes — block malicious requests, redact PII/secrets, route risky actions to human approval",
+      "author": "support@intervensecurity.com",
+      "published_at": "Tue, 21 Apr 2026 10:14:48 GMT",
+      "url": "https://pypi.org/project/interven-langchain/"
+    },
+    {
+      "name": "wpflow",
+      "version": "added",
+      "description": "WordPress operator MCP server — 25 task-scoped tools for Claude and other LLM agents. App-password auth, REST API, local-first, stdio transport.",
+      "author": null,
+      "published_at": "Tue, 21 Apr 2026 10:14:30 GMT",
+      "url": "https://pypi.org/project/wpflow/"
+    },
+    {
+      "name": "subway-mcp-open-api-adapter",
+      "version": "added",
+      "description": "MCP Adapter for Subway Open Platform - Exposes open platform APIs as MCP tools",
+      "author": "vesalius.li@subway.com.cn",
+      "published_at": "Tue, 21 Apr 2026 10:12:52 GMT",
+      "url": "https://pypi.org/project/subway-mcp-open-api-adapter/"
+    },
+    {
+      "name": "hierocode",
+      "version": "added",
+      "description": "A local-first hierarchical coding orchestrator for delegating tasks to local or self-hosted models.",
+      "author": "hello@example.com",
+      "published_at": "Tue, 21 Apr 2026 10:12:06 GMT",
+      "url": "https://pypi.org/project/hierocode/"
+    },
+    {
+      "name": "worksection-api-client",
+      "version": "added",
+      "description": "API client library for Worksection",
+      "author": null,
+      "published_at": "Tue, 21 Apr 2026 10:11:21 GMT",
+      "url": "https://pypi.org/project/worksection-api-client/"
+    }
+  ]
+}

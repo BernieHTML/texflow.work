@@ -1,0 +1,59 @@
+{
+  "channel": "iss-crew",
+  "event": "crew_update",
+  "ts": "2026-04-21T10:32:37.656Z",
+  "source": "Open Notify /astros",
+  "payload": {
+    "total_count": 12,
+    "people": [
+      {
+        "name": "Oleg Kononenko",
+        "craft": "ISS"
+      },
+      {
+        "name": "Nikolai Chub",
+        "craft": "ISS"
+      },
+      {
+        "name": "Tracy Caldwell Dyson",
+        "craft": "ISS"
+      },
+      {
+        "name": "Matthew Dominick",
+        "craft": "ISS"
+      },
+      {
+        "name": "Michael Barratt",
+        "craft": "ISS"
+      },
+      {
+        "name": "Jeanette Epps",
+        "craft": "ISS"
+      },
+      {
+        "name": "Alexander Grebenkin",
+        "craft": "ISS"
+      },
+      {
+        "name": "Butch Wilmore",
+        "craft": "ISS"
+      },
+      {
+        "name": "Sunita Williams",
+        "craft": "ISS"
+      },
+      {
+        "name": "Li Guangsu",
+        "craft": "Tiangong"
+      },
+      {
+        "name": "Li Cong",
+        "craft": "Tiangong"
+      },
+      {
+        "name": "Ye Guangfu",
+        "craft": "Tiangong"
+      }
+    ]
+  }
+}
