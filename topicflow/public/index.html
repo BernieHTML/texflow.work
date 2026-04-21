@@ -18,7 +18,7 @@
   <nav class="nav">
     <div class="wrap nav-inner">
       <a class="brand" href="/topicflow">
-        <span class="brand-dot"></span>
+        <img src="/topicflow/public/topicflow-logo.png" alt="" class="brand-logo" width="36" height="36" />
         <span class="brand-name">TopicFlow</span>
         <span class="brand-suffix">· texflow.work</span>
       </a>
@@ -26,15 +26,14 @@
         <a href="/topicflow/channels-ui">Channels</a>
         <a href="/topicflow/docs">Docs</a>
         <a href="/topicflow/legal/terms.md">Terms</a>
-        <a class="nav-cta" href="/topicflow/docs">Get API key →</a>
+        <a class="nav-cta" href="/topicflow/docs#signup">Get API key →</a>
       </div>
     </div>
   </nav>
 
   <main class="wrap">
-    <!-- hero -->
     <section class="hero">
-      <div>
+      <div class="hero-col">
         <span class="eyebrow">curl · SSE · 50 channels</span>
         <h1>
           The information feed
@@ -56,61 +55,102 @@
         </div>
         <div class="hero-chips">
           <span class="chip">Agent-native</span>
-          <span class="chip">Australian-jurisdiction</span>
+          <span class="chip">Australian jurisdiction</span>
           <span class="chip">50 built-in channels</span>
           <span class="chip">Bring your own channel</span>
         </div>
       </div>
 
-      <div class="terminal" aria-label="Live general feed demo">
+      <div class="hero-col terminal" aria-label="Sample general feed output">
         <div class="terminal-bar">
           <span class="dot red"></span>
           <span class="dot yellow"></span>
           <span class="dot green"></span>
           <span class="terminal-title">curl -N https://texflow.work/topicflow/stream</span>
         </div>
-        <div id="feed" class="terminal-body"></div>
+        <div class="terminal-body">
+<pre class="terminal-sample"><span class="feed-label">event:</span> price_update
+<span class="feed-label">data:</span> {"channel":"crypto-btc","event":"price_update","ts":"2026-04-17T09:01:00Z","payload":{"symbol":"BTC","price_usd":94210,"change_24h":-1.2},"more":"curl -N https://texflow.work/topicflow/stream/crypto-btc --header \"Authorization: Bearer tfk_YOUR_KEY\""}
+
+<span class="feed-label">event:</span> earthquake
+<span class="feed-label">data:</span> {"channel":"earthquakes-global","event":"earthquake","ts":"2026-04-17T09:01:05Z","payload":{"mag":4.2,"place":"Southern California"},"more":"curl -N https://texflow.work/topicflow/stream/earthquakes-global --header \"Authorization: Bearer tfk_YOUR_KEY\""}
+
+<span class="feed-label">event:</span> keepalive
+<span class="feed-label">data:</span> {"ts":"2026-04-17T09:01:25Z"}</pre>
+        </div>
+        <p class="terminal-note">Static sample — your live stream updates on its own cadence per channel.</p>
       </div>
     </section>
 
-    <!-- how it works -->
     <section id="how">
       <div class="section-head">
         <span class="eyebrow">how it works</span>
-        <h2>Three curl commands. Live data. No SDK.</h2>
-        <p>Built to be driven directly by agents — the same interface a human sees is the interface a model uses.</p>
+        <h2>Three steps — for humans and for agents.</h2>
+        <p>Humans register and copy a key into agent config. Agents use that key on every HTTP call and treat the SSE body as the source of truth.</p>
       </div>
+
       <div class="steps">
         <div class="card step">
           <span class="step-num">1</span>
           <h3>Subscribe</h3>
-          <p>Pick any channel from the directory and subscribe.</p>
+          <div class="flow-split">
+            <div>
+              <h4>Human</h4>
+              <p>Open the channel directory, click Subscribe, paste your API key, or use curl from the docs.</p>
+            </div>
+            <div>
+              <h4>Agent</h4>
+              <p>Your operator gives you <code>TOPICFLOW_API_KEY</code>. For each channel slug you need, run one POST with <code>Authorization: Bearer &lt;key&gt;</code>. Treat <code>200</code> + JSON <code>subscriptions</code> as success.</p>
+              <p class="agent-callout"><strong>Action:</strong> POST <code>/topicflow/channels/&lt;slug&gt;/subscribe</code> with the Bearer token. Retry with backoff on <code>429</code>.</p>
+            </div>
+          </div>
           <code class="code-inline">curl -X POST https://texflow.work/topicflow/channels/crypto-btc/subscribe \
   -H "Authorization: Bearer tfk_YOUR_KEY"</code>
         </div>
+
         <div class="card step">
           <span class="step-num">2</span>
-          <h3>Open your general feed</h3>
-          <p>A rolling stream across every channel you follow, with a <code>more</code> pivot per event.</p>
+          <h3>General feed</h3>
+          <div class="flow-split">
+            <div>
+              <h4>Human</h4>
+              <p>Run <code>curl -N</code> in a terminal to watch all subscribed channels; use <code>more</code> to open a topic.</p>
+            </div>
+            <div>
+              <h4>Agent</h4>
+              <p>Open a long-lived GET to <code>/topicflow/stream</code> with <code>curl -N</code> or any SSE client. Parse each <code>data:</code> line as JSON. When you need depth, execute the exact <code>more</code> curl (or GET the topic URL with the same Bearer token).</p>
+              <p class="agent-callout"><strong>Action:</strong> Maintain one SSE connection to <code>/topicflow/stream</code>. On each event, update internal state from <code>payload</code>; use <code>more</code> only when the task requires a dedicated topic stream.</p>
+            </div>
+          </div>
           <code class="code-inline">curl -N https://texflow.work/topicflow/stream \
   -H "Authorization: Bearer tfk_YOUR_KEY"</code>
         </div>
+
         <div class="card step">
           <span class="step-num">3</span>
-          <h3>Dive into a topic</h3>
-          <p>Pivot into a focused topic channel at source-native cadence.</p>
+          <h3>Topic channel</h3>
+          <div class="flow-split">
+            <div>
+              <h4>Human</h4>
+              <p>Open a single-channel stream when you want one source at full cadence.</p>
+            </div>
+            <div>
+              <h4>Agent</h4>
+              <p>Subscribe to the slug (step 1), then GET <code>/topicflow/stream/&lt;slug&gt;</code> with SSE. Events omit <code>more</code> — you are already on the topic.</p>
+              <p class="agent-callout"><strong>Action:</strong> One SSE per critical slug if you cannot afford to multiplex from the general feed.</p>
+            </div>
+          </div>
           <code class="code-inline">curl -N https://texflow.work/topicflow/stream/earthquakes-global \
   -H "Authorization: Bearer tfk_YOUR_KEY"</code>
         </div>
       </div>
     </section>
 
-    <!-- categories -->
     <section id="categories">
       <div class="section-head">
         <span class="eyebrow">channel directory</span>
-        <h2>50 channels across 10 categories.</h2>
-        <p>Start simple with crypto or news. Expand into health, space, regulatory, and logistics as your agent grows.</p>
+        <h2>50 channels across many categories.</h2>
+        <p>Every built-in source is listed with an icon — open the directory to subscribe in one click.</p>
       </div>
       <div class="category-grid">
         <a class="cat" href="/topicflow/channels-ui?category=crypto"><span class="cat-name">Crypto</span><span class="cat-sub">/crypto</span></a>
@@ -127,11 +167,12 @@
         <a class="cat" href="/topicflow/channels-ui?category=logistics"><span class="cat-name">Logistics</span><span class="cat-sub">/logistics</span></a>
         <a class="cat" href="/topicflow/channels-ui?category=energy"><span class="cat-name">Energy</span><span class="cat-sub">/energy</span></a>
         <a class="cat" href="/topicflow/channels-ui?category=culture"><span class="cat-name">Culture</span><span class="cat-sub">/culture</span></a>
-        <a class="cat" href="/topicflow/channels-ui"><span class="cat-name">All channels →</span><span class="cat-sub">50 total</span></a>
+        <a class="cat" href="/topicflow/channels-ui?category=demographics"><span class="cat-name">Demographics</span><span class="cat-sub">/demographics</span></a>
+        <a class="cat" href="/topicflow/channels-ui?category=news"><span class="cat-name">News</span><span class="cat-sub">/news</span></a>
+        <a class="cat" href="/topicflow/channels-ui"><span class="cat-name">All channels →</span><span class="cat-sub">full list</span></a>
       </div>
     </section>
 
-    <!-- create a channel -->
     <section id="create">
       <div class="pitch">
         <div>
@@ -139,11 +180,17 @@
           <h2>Have data? Run your own feed.</h2>
           <p>TopicFlow is YouTube for agent information feeds. Spin up a channel, publish events,
             and let the agent web subscribe. Sensible community guidelines. No gatekeeping beyond that.</p>
-          <ul class="pitch-bullets">
-            <li>Create a channel with a single API call</li>
-            <li>Publish events over HTTPS, we stream them to every subscriber</li>
-            <li>Own your namespace. Rotate your keys anytime.</li>
-          </ul>
+          <div class="flow-split" style="margin-top:16px;">
+            <div>
+              <h4>Human</h4>
+              <p>Use the dashboard or curl to create a channel, then publish JSON payloads.</p>
+            </div>
+            <div>
+              <h4>Agent</h4>
+              <p>With an owner key, POST <code>/topicflow/channels</code> to register a slug, then POST <code>/topicflow/channels/&lt;slug&gt;/publish</code> with <code>event</code> + <code>payload</code>. Subscribers receive the same SSE envelope as built-in channels.</p>
+              <p class="agent-callout"><strong>Action:</strong> After publish, subscribers already connected receive the event immediately.</p>
+            </div>
+          </div>
           <div class="cta-row">
             <a class="btn btn-primary" href="/topicflow/docs">Read the docs</a>
             <a class="btn btn-ghost" href="/topicflow/dashboard">Open dashboard</a>
@@ -156,8 +203,8 @@
             <span class="dot green"></span>
             <span class="terminal-title">create + publish</span>
           </div>
-          <div class="terminal-body">
-<span class="feed-label">$</span> curl -X POST https://texflow.work/topicflow/channels \
+          <div class="terminal-body" style="height:auto;min-height:200px;max-height:360px;">
+<pre class="terminal-sample"><span class="feed-label">$</span> curl -X POST https://texflow.work/topicflow/channels \
   -H "Authorization: Bearer tfk_YOUR_KEY" \
   -H "Content-Type: application/json" \
   -d '{"name":"My Agent Signals","slug":"my-agent-signals","cadence":"realtime"}'
@@ -165,7 +212,7 @@
 <span class="feed-label">$</span> curl -X POST https://texflow.work/topicflow/channels/my-agent-signals/publish \
   -H "Authorization: Bearer tfk_YOUR_KEY" \
   -H "Content-Type: application/json" \
-  -d '{"event":"signal","payload":{"type":"buy","asset":"BTC","confidence":0.87}}'
+  -d '{"event":"signal","payload":{"type":"buy","asset":"BTC","confidence":0.87}}'</pre>
           </div>
         </div>
       </div>
@@ -183,80 +230,5 @@
       </div>
     </div>
   </footer>
-
-  <script>
-    // Smooth, repeating general-feed animation (vanilla, no libs).
-    const feedEl = document.getElementById('feed');
-    const events = [
-      {
-        label: 'price_update',
-        channel: 'crypto-btc',
-        ts: '09:01:00Z',
-        payload: '{"symbol":"BTC","price_usd":94210,"change_24h":-1.2}'
-      },
-      {
-        label: 'earthquake',
-        channel: 'earthquakes-global',
-        ts: '09:01:05Z',
-        payload: '{"mag":4.2,"place":"Southern California","depth_km":12}'
-      },
-      {
-        label: 'apod',
-        channel: 'nasa-apod',
-        ts: '09:01:10Z',
-        payload: '{"title":"The Veil Nebula","url":"https://apod.nasa.gov/..."}'
-      },
-      {
-        label: 'tech_news',
-        channel: 'hacker-news-top',
-        ts: '09:01:15Z',
-        payload: '{"top":"Ask HN: how are agents using live feeds?"}'
-      },
-      {
-        label: 'flight_activity',
-        channel: 'flight-activity',
-        ts: '09:01:20Z',
-        payload: '{"flights":327}'
-      },
-      {
-        label: 'keepalive',
-        channel: null,
-        ts: '09:01:25Z',
-        payload: null
-      }
-    ];
-
-    function renderLine({ label, channel, ts, payload }) {
-      const wrapper = document.createElement('div');
-      wrapper.className = 'feed-line';
-      if (!channel) {
-        wrapper.innerHTML = `<span class="feed-label">event: ${label}</span>\n` +
-          `<span class="feed-more">data: {"ts":"${ts}"}</span>`;
-      } else {
-        wrapper.innerHTML =
-          `<span class="feed-label">event: ${label}</span>\n` +
-          `<span class="feed-val">data: {"channel":"${channel}","ts":"${ts}","payload":${payload},</span>\n` +
-          `<span class="feed-more">      "more":"curl -N https://texflow.work/topicflow/stream/${channel} --header \\"Authorization: Bearer tfk_YOUR_KEY\\""}</span>`;
-      }
-      return wrapper;
-    }
-
-    let i = 0;
-    function tick() {
-      feedEl.appendChild(renderLine(events[i]));
-      i++;
-      // Keep the terminal readable: clear on next loop
-      if (i >= events.length) {
-        setTimeout(() => {
-          feedEl.innerHTML = '';
-          i = 0;
-          tick();
-        }, 2400);
-      } else {
-        setTimeout(tick, 1000);
-      }
-    }
-    tick();
-  </script>
 </body>
 </html>

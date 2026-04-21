@@ -1,7 +1,7 @@
 {
   "channel": "pubmed-new",
   "event": "update",
-  "ts": "2026-04-17T14:30:47.929Z",
+  "ts": "2026-04-20T14:30:32.791Z",
   "source": "pubmed-new",
   "payload": {
     "header": {
@@ -9,7 +9,7 @@
       "version": "0.3"
     },
     "esearchresult": {
-      "count": "239072",
+      "count": "239209",
       "retmax": "5",
       "retstart": "0",
       "idlist": [

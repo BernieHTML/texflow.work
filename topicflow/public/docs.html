@@ -12,11 +12,15 @@
 <body>
   <nav class="nav">
     <div class="wrap nav-inner">
-      <a class="brand" href="/topicflow"><span class="brand-dot"></span><span class="brand-name">TopicFlow</span><span class="brand-suffix">· docs</span></a>
+      <a class="brand" href="/topicflow">
+        <img src="/topicflow/public/topicflow-logo.png" alt="" class="brand-logo" width="36" height="36" />
+        <span class="brand-name">TopicFlow</span>
+        <span class="brand-suffix">· docs</span>
+      </a>
       <div class="nav-links">
         <a href="/topicflow">Home</a>
         <a href="/topicflow/channels-ui">Channels</a>
-        <a class="nav-cta" href="/topicflow/dashboard">Dashboard</a>
+        <a class="nav-cta" href="/topicflow/docs#signup">Signup →</a>
       </div>
     </div>
   </nav>
@@ -26,43 +30,74 @@
       <div>
         <span class="eyebrow">quick start</span>
         <h1 style="font-size:clamp(28px,4vw,42px);">Stream data to your agent in 3 steps.</h1>
-        <p class="lede">TopicFlow is curl + SSE. No SDK. Your agent reads a stream, reacts, and can pivot deeper with the <code>more</code> field on every general-feed event.</p>
+        <p class="lede">TopicFlow is curl + SSE. No SDK. Below each human step is the <strong>agent execution contract</strong>: what you must do programmatically.</p>
       </div>
     </section>
 
-    <section>
+    <section id="signup">
       <div class="section-head">
-        <span class="eyebrow">1. register</span>
-        <h2>Create a human account</h2>
+        <span class="eyebrow">signup &amp; keys</span>
+        <h2>Register once — then configure your agent</h2>
+        <p>Every agent must use a key issued under a human account. Store the key in a secret (env var, vault); never log it in plain text in outputs.</p>
       </div>
       <div class="card">
+        <h3 style="margin-top:0;font-size:15px;">Human — initiate registration</h3>
         <pre class="code-inline">curl -X POST https://texflow.work/topicflow/auth/register \
   -H "Content-Type: application/json" \
   -d '{"email":"you@example.com","name":"My Agent System","password":"s3cret"}'</pre>
+        <p style="color:var(--text-dim);font-size:14px;">Complete terms via <code>POST /topicflow/auth/register/complete</code> with <code>pending_token</code> (see response). You receive an API key once.</p>
+        <h3 style="font-size:15px;margin-top:20px;">Agent — obtain credentials</h3>
+        <p class="agent-callout" style="margin-top:8px;"><strong>Action:</strong> Read <code>TOPICFLOW_API_KEY</code> (or <code>tfk_agt_…</code> for a delegated agent) from the environment your operator configured. Validate it starts with <code>tfk_</code>. If missing, emit a clear error telling the operator to open this docs page at <code>#signup</code>.</p>
+        <pre class="code-inline"># Pseudocode
+if not os.environ.get("TOPICFLOW_API_KEY"):
+    raise ConfigurationError("Set TOPICFLOW_API_KEY; see https://texflow.work/topicflow/docs#signup")</pre>
       </div>
     </section>
 
     <section>
       <div class="section-head">
-        <span class="eyebrow">2. subscribe</span>
+        <span class="eyebrow">1. subscribe</span>
         <h2>Follow any channel</h2>
       </div>
       <div class="card">
+        <h3 style="margin-top:0;font-size:15px;">Human</h3>
         <pre class="code-inline">curl -X POST https://texflow.work/topicflow/channels/crypto-btc/subscribe \
+  -H "Authorization: Bearer tfk_YOUR_KEY"</pre>
+        <h3 style="font-size:15px;margin-top:20px;">Agent</h3>
+        <p class="agent-callout"><strong>Action:</strong> For each required <code>slug</code>, <code>POST https://texflow.work/topicflow/channels/{slug}/subscribe</code> with header <code>Authorization: Bearer &lt;key&gt;</code>. Expect <code>200</code> and JSON <code>subscriptions</code> array. On <code>401</code>, key is wrong or revoked. On <code>404</code>, slug does not exist — refresh channel list from <code>GET /topicflow/channels/catalog</code> (no auth).</p>
+        <pre class="code-inline">curl -s https://texflow.work/topicflow/channels/catalog | jq '.channels[].slug'</pre>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-head">
+        <span class="eyebrow">2. stream</span>
+        <h2>Open a feed</h2>
+        <p>Use <code>/topicflow/stream</code> for the rolling digest with <code>more</code> pivots, or <code>/topicflow/stream/:slug</code> for a dedicated topic.</p>
+      </div>
+      <div class="card">
+        <h3 style="margin-top:0;font-size:15px;">Human</h3>
+        <pre class="code-inline">curl -N https://texflow.work/topicflow/stream \
+  -H "Authorization: Bearer tfk_YOUR_KEY"</pre>
+        <h3 style="font-size:15px;margin-top:20px;">Agent</h3>
+        <p class="agent-callout"><strong>Action:</strong> Open a long-lived HTTP/1.1 GET with <code>Accept: text/event-stream</code> (curl: <code>-N</code>). Parse SSE: lines starting with <code>data:</code> contain JSON. For each event, merge <code>payload</code> into your world model. If <code>more</code> is present and your task needs the topic stream, spawn a child process or second connection using that exact curl or the URL inside it.</p>
+        <pre class="code-inline">curl -N https://texflow.work/topicflow/stream/crypto-btc \
   -H "Authorization: Bearer tfk_YOUR_KEY"</pre>
       </div>
     </section>
 
     <section>
       <div class="section-head">
-        <span class="eyebrow">3. stream</span>
-        <h2>Open a feed</h2>
-        <p>Use <code>/topicflow/stream</code> for the rolling digest with <code>more</code> pivots, or <code>/topicflow/stream/:slug</code> for a dedicated topic.</p>
+        <span class="eyebrow">delegated agent key</span>
+        <h2>Create an agent under a human account</h2>
       </div>
-      <div class="card"><pre class="code-inline">curl -N https://texflow.work/topicflow/stream \
-  -H "Authorization: Bearer tfk_YOUR_KEY"</pre></div>
-      <div class="card"><pre class="code-inline">curl -N https://texflow.work/topicflow/stream/crypto-btc \
-  -H "Authorization: Bearer tfk_YOUR_KEY"</pre></div>
+      <div class="card">
+        <pre class="code-inline">curl -X POST https://texflow.work/topicflow/auth/agents \
+  -H "Authorization: Bearer tfk_HUMAN_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"name":"price-watcher-agent"}'</pre>
+        <p class="agent-callout"><strong>Agent:</strong> If your operator gives you an <code>tfk_agt_…</code> key, use it exactly like a human key for subscribe and stream. You do not call <code>/auth/agents</code> yourself unless you are the account automation.</p>
+      </div>
     </section>
 
     <section>
@@ -81,6 +116,7 @@ data: {
   "more":    "curl -N https://texflow.work/topicflow/stream/crypto-btc --header \"Authorization: Bearer tfk_YOUR_KEY\""
 }</pre>
         <p style="color:var(--text-dim);margin:14px 0 0;">The <code>more</code> field is only included on general-feed events.</p>
+        <p class="agent-callout"><strong>Agent:</strong> Deserialize <code>data</code> as JSON. Required fields for your parser: <code>channel</code>, <code>event</code>, <code>ts</code>, <code>payload</code>. Ignore unknown keys.</p>
       </div>
     </section>
 
@@ -97,6 +133,7 @@ data: {
           <li><code>409</code> — slug or email already exists</li>
           <li><code>429</code> — rate-limited (60 req / min per key; SSE excluded)</li>
         </ul>
+        <p class="agent-callout"><strong>Agent:</strong> On <code>429</code>, exponential backoff. Do not open more than one general-feed SSE per key unless intentional.</p>
       </div>
     </section>
   </main>

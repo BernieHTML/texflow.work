@@ -1,19 +1,69 @@
 {
   "channel": "open-library-new",
   "event": "update",
-  "ts": "2026-04-17T14:30:47.902Z",
+  "ts": "2026-04-21T01:30:35.065Z",
   "source": "open-library-new",
   "payload": {
     "items": [
       {
-        "id": "168842901",
+        "id": "169026210",
+        "kind": "new-account",
+        "timestamp": "2026-04-21T01:30:32.297103",
+        "comment": "Created new account.",
+        "changes": [
+          {
+            "key": "/people/karen_lopez171",
+            "revision": 1
+          },
+          {
+            "key": "/people/karen_lopez171/usergroup",
+            "revision": 1
+          },
+          {
+            "key": "/people/karen_lopez171/permission",
+            "revision": 1
+          }
+        ],
+        "author": {
+          "key": "/people/karen_lopez171"
+        },
+        "ip": null,
+        "data": {}
+      },
+      {
+        "id": "169026209",
+        "kind": "new-account",
+        "timestamp": "2026-04-21T01:30:31.345780",
+        "comment": "Created new account.",
+        "changes": [
+          {
+            "key": "/people/deg152",
+            "revision": 1
+          },
+          {
+            "key": "/people/deg152/usergroup",
+            "revision": 1
+          },
+          {
+            "key": "/people/deg152/permission",
+            "revision": 1
+          }
+        ],
+        "author": {
+          "key": "/people/deg152"
+        },
+        "ip": null,
+        "data": {}
+      },
+      {
+        "id": "169026208",
         "kind": "update",
-        "timestamp": "2026-04-17T14:30:46.316177",
+        "timestamp": "2026-04-21T01:30:29.357217",
         "comment": "set source_records based on initial machine_comment",
         "changes": [
           {
-            "key": "/books/OL20713504M",
-            "revision": 2
+            "key": "/books/OL8382040M",
+            "revision": 5
           }
         ],
         "author": {
@@ -23,65 +73,39 @@
         "data": {}
       },
       {
-        "id": "168842900",
-        "kind": "edit-book",
-        "timestamp": "2026-04-17T14:30:45.255903",
-        "comment": "import existing book",
+        "id": "169026207",
+        "kind": "new-account",
+        "timestamp": "2026-04-21T01:30:24.499307",
+        "comment": "Created new account.",
         "changes": [
           {
-            "key": "/books/OL58157505M",
-            "revision": 2
-          }
-        ],
-        "author": {
-          "key": "/people/horncBot"
-        },
-        "ip": null,
-        "data": {}
-      },
-      {
-        "id": "168842899",
-        "kind": "edit-book",
-        "timestamp": "2026-04-17T14:30:44.235197",
-        "comment": "import existing book",
-        "changes": [
+            "key": "/people/valentin_noya",
+            "revision": 1
+          },
           {
-            "key": "/books/OL53468349M",
-            "revision": 2
+            "key": "/people/valentin_noya/usergroup",
+            "revision": 1
+          },
+          {
+            "key": "/people/valentin_noya/permission",
+            "revision": 1
           }
         ],
         "author": {
-          "key": "/people/horncBot"
+          "key": "/people/valentin_noya"
         },
         "ip": null,
         "data": {}
       },
       {
-        "id": "168842898",
+        "id": "169026206",
         "kind": "update",
-        "timestamp": "2026-04-17T14:30:43.645445",
+        "timestamp": "2026-04-21T01:30:20.224515",
         "comment": "set source_records based on initial machine_comment",
         "changes": [
           {
-            "key": "/books/OL20713272M",
-            "revision": 2
-          }
-        ],
-        "author": {
-          "key": "/people/horncBot"
-        },
-        "ip": null,
-        "data": {}
-      },
-      {
-        "id": "168842897",
-        "kind": "update",
-        "timestamp": "2026-04-17T14:30:41.124903",
-        "comment": "set source_records based on initial machine_comment",
-        "changes": [
-          {
-            "key": "/books/OL20712722M",
-            "revision": 3
+            "key": "/books/OL8381645M",
+            "revision": 6
           }
         ],
         "author": {

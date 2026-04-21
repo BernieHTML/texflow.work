@@ -1,169 +1,167 @@
 {
   "channel": "arxiv-ai",
   "event": "rss_update",
-  "ts": "2026-04-17T14:30:47.622Z",
+  "ts": "2026-04-20T14:30:32.588Z",
   "source": "arxiv-ai",
   "payload": {
     "items": [
       {
-        "title": "Exploration and Exploitation Errors Are Measurable for Language Model Agents",
-        "link": "https://arxiv.org/abs/2604.13151",
-        "description": "arXiv:2604.13151v1 Announce Type: new \nAbstract: Language Model (LM) agents are increasingly used in complex open-ended decision-making tasks, from AI coding to physical AI. A core requirement in these settings is the ability to both explore the problem space and exploit acquired knowledge effectively. However, systematically distinguishing and quantifying exploration and exploitation from observed actions without access to the agent's internal policy remains challenging. To address this, we design controllable environments inspired by practical embodied AI scenarios. Each environment consists of a partially observable 2D grid map and an unknown task Directed Acyclic Graph (DAG). The map generation can be programmatically adjusted to emphasize exploration or exploitation difficulty. To enable policy-agnostic evaluation, we design a metric to quantify exploration and exploitation errors from agent's actions. We evaluate a variety of frontier LM agents and find that even state-of-the-art models struggle on our task, with different models exhibiting distinct failure modes. We further observe that reasoning models solve the task more effectively and show both exploration and exploitation can be significantly improved through minimal harness engineering. We release our code \\href{https://github.com/jjj-madison/measurable-explore-exploit}{here}.",
+        "title": "DeepER-Med: Advancing Deep Evidence-Based Research in Medicine Through Agentic AI",
+        "link": "https://arxiv.org/abs/2604.15456",
+        "description": "arXiv:2604.15456v1 Announce Type: new \nAbstract: Trustworthiness and transparency are essential for the clinical adoption of artificial intelligence (AI) in healthcare and biomedical research. Recent deep research systems aim to accelerate evidence-grounded scientific discovery by integrating AI agents with multi-hop information retrieval, reasoning, and synthesis. However, most existing systems lack explicit and inspectable criteria for evidence appraisal, creating a risk of compounding errors and making it difficult for researchers and clinicians to assess the reliability of their outputs. In parallel, current benchmarking approaches rarely evaluate performance on complex, real-world medical questions. Here, we introduce DeepER-Med, a Deep Evidence-based Research framework for Medicine with an agentic AI system. DeepER-Med frames deep medical research as an explicit and inspectable workflow of evidence-based generation, consisting of three modules: research planning, agentic collaboration, and evidence synthesis. To support realistic evaluation, we also present DeepER-MedQA, an evidence-grounded dataset comprising 100 expert-level research questions derived from authentic medical research scenarios and curated by a multidisciplinary panel of 11 biomedical experts. Expert manual evaluation demonstrates that DeepER-Med consistently outperforms widely used production-grade platforms across multiple criteria, including the generation of novel scientific insights. We further demonstrate the practical utility of DeepER-Med through eight real-world clinical cases. Human clinician assessment indicates that DeepER-Med's conclusions align with clinical recommendations in seven cases, highlighting its potential for medical research and decision support.",
         "guid": {
-          "#text": "oai:arXiv.org:2604.13151v1",
+          "#text": "oai:arXiv.org:2604.15456v1",
           "isPermaLink": "false"
         },
         "category": "cs.AI",
-        "pubDate": "Fri, 17 Apr 2026 00:00:00 -0400",
+        "pubDate": "Mon, 20 Apr 2026 00:00:00 -0400",
         "arxiv:announce_type": "new",
-        "dc:rights": "http://creativecommons.org/licenses/by-nc-sa/4.0/",
-        "dc:creator": "Jaden Park, Jungtaek Kim, Jongwon Jeong, Robert D. Nowak, Kangwook Lee, Yong Jae Lee"
+        "dc:rights": "http://creativecommons.org/licenses/by/4.0/",
+        "dc:creator": "Zhizheng Wang, Chih-Hsuan Wei, Joey Chan, Robert Leaman, Chi-Ping Day, Chuan Wu, Mark A Knepper, Antolin Serrano Farias, Jordina Rincon-Torroella, Hasan Slika, Betty Tyler, Ryan Huu-Tuan Nguyen, Asmita Indurkar, M\\'elanie H\\'ebert, Shubo Tian, Lauren He, Noor Naffakh, Aseem Aseem, Nicholas Wan, Emily Y Chew, Tiarnan D L Keenan, Zhiyong Lu"
       },
       {
-        "title": "SciFi: A Safe, Lightweight, User-Friendly, and Fully Autonomous Agentic AI Workflow for Scientific Applications",
-        "link": "https://arxiv.org/abs/2604.13180",
-        "description": "arXiv:2604.13180v1 Announce Type: new \nAbstract: Recent advances in agentic AI have enabled increasingly autonomous workflows, but existing systems still face substantial challenges in achieving reliable deployment in real-world scientific research. In this work, we present a safe, lightweight, and user-friendly agentic framework for the autonomous execution of well-defined scientific tasks. The framework combines an isolated execution environment, a three-layer agent loop, and a self-assessing do-until mechanism to ensure safe and reliable operation while effectively leveraging large language models of varying capability levels. By focusing on structured tasks with clearly defined context and stopping criteria, the framework supports end-to-end automation with minimal human intervention, enabling researchers to offload routine workloads and devote more effort to creative activities and open-ended scientific inquiry.",
+        "title": "GIST: Multimodal Knowledge Extraction and Spatial Grounding via Intelligent Semantic Topology",
+        "link": "https://arxiv.org/abs/2604.15495",
+        "description": "arXiv:2604.15495v1 Announce Type: new \nAbstract: Navigating complex, densely packed environments like retail stores, warehouses, and hospitals poses a significant spatial grounding challenge for humans and embodied AI. In these spaces, dense visual features quickly become stale given the quasi-static nature of items, and long-tail semantic distributions challenge traditional computer vision. While Vision-Language Models (VLMs) help assistive systems navigate semantically-rich spaces, they still struggle with spatial grounding in cluttered environments. We present GIST (Grounded Intelligent Semantic Topology), a multimodal knowledge extraction pipeline that transforms a consumer-grade mobile point cloud into a semantically annotated navigation topology. Our architecture distills the scene into a 2D occupancy map, extracts its topological layout, and overlays a lightweight semantic layer via intelligent keyframe and semantic selection. We demonstrate the versatility of this structured spatial knowledge through critical downstream Human-AI interaction tasks: (1) an intent-driven Semantic Search engine that actively infers categorical alternatives and zones when exact matches fail; (2) a one-shot Semantic Localizer achieving a 1.04 m top-5 mean translation error; (3) a Zone Classification module that segments the walkable floor plan into high-level semantic regions; and (4) a Visually-Grounded Instruction Generator that synthesizes optimal paths into egocentric, landmark-rich natural language routing. In multi-criteria LLM evaluations, GIST outperforms sequence-based instruction generation baselines. Finally, an in-situ formative evaluation (N=5) yields an 80% navigation success rate relying solely on verbal cues, validating the system's capacity for universal design.",
         "guid": {
-          "#text": "oai:arXiv.org:2604.13180v1",
+          "#text": "oai:arXiv.org:2604.15495v1",
+          "isPermaLink": "false"
+        },
+        "category": [
+          "cs.AI",
+          "cs.CV",
+          "cs.HC",
+          "cs.RO"
+        ],
+        "pubDate": "Mon, 20 Apr 2026 00:00:00 -0400",
+        "arxiv:announce_type": "new",
+        "dc:rights": "http://arxiv.org/licenses/nonexclusive-distrib/1.0/",
+        "dc:creator": "Shivendra Agrawal, Bradley Hayes"
+      },
+      {
+        "title": "Bureaucratic Silences: What the Canadian AI Register Reveals, Omits, and Obscures",
+        "link": "https://arxiv.org/abs/2604.15514",
+        "description": "arXiv:2604.15514v1 Announce Type: new \nAbstract: In November 2025, the Government of Canada operationalized its commitment to transparency by releasing its first Federal AI Register. In this paper, we argue that such registers are not neutral mirrors of government activity, but active instruments of ontological design that configure the boundaries of accountability. We analyzed the Register's complete dataset of 409 systems using the Algorithmic Decision-Making Adapted for the Public Sector (ADMAPS) framework, combining quantitative mapping with deductive qualitative coding. Our findings reveal a sharp divergence between the rhetoric of \"sovereign AI\" and the reality of bureaucratic practice: while 86\\% of systems are deployed internally for efficiency, the Register systematically obscures the human discretion, training, and uncertainty management required to operate them. By privileging technical descriptions over sociotechnical context, the Register constructs an ontology of AI as \"reliable tooling\" rather than \"contestable decision-making.\" We conclude that without a shift in design, such transparency artifacts risk automating accountability into a performative compliance exercise, offering visibility without contestability.",
+        "guid": {
+          "#text": "oai:arXiv.org:2604.15514v1",
+          "isPermaLink": "false"
+        },
+        "category": [
+          "cs.AI",
+          "cs.CY",
+          "cs.HC"
+        ],
+        "pubDate": "Mon, 20 Apr 2026 00:00:00 -0400",
+        "arxiv:announce_type": "new",
+        "dc:rights": "http://creativecommons.org/licenses/by/4.0/",
+        "dc:creator": "Dipto Das, Christelle Tessono, Syed Ishtiaque Ahmed, Shion Guha"
+      },
+      {
+        "title": "LACE: Lattice Attention for Cross-thread Exploration",
+        "link": "https://arxiv.org/abs/2604.15529",
+        "description": "arXiv:2604.15529v1 Announce Type: new \nAbstract: Current large language models reason in isolation. Although it is common to sample multiple reasoning paths in parallel, these trajectories do not interact, and often fail in the same redundant ways. We introduce LACE, a framework that transforms reasoning from a collection of independent trials into a coordinated, parallel process. By repurposing the model architecture to enable cross-thread attention, LACE allows concurrent reasoning paths to share intermediate insights and correct one another during inference. A central challenge is the absence of natural training data that exhibits such collaborative behavior. We address this gap with a synthetic data pipeline that explicitly teaches models to communicate and error-correct across threads. Experiments show that this unified exploration substantially outperforms standard parallel search, improving reasoning accuracy by over 7 points. Our results suggest that large language models can be more effective when parallel reasoning paths are allowed to interact.",
+        "guid": {
+          "#text": "oai:arXiv.org:2604.15529v1",
           "isPermaLink": "false"
         },
         "category": "cs.AI",
-        "pubDate": "Fri, 17 Apr 2026 00:00:00 -0400",
+        "pubDate": "Mon, 20 Apr 2026 00:00:00 -0400",
         "arxiv:announce_type": "new",
         "dc:rights": "http://creativecommons.org/licenses/by-nc-sa/4.0/",
-        "dc:creator": "Qibin Liu, Julia Gonski"
+        "dc:creator": "Yang Li, Zirui Zhang, Yang Liu, Chengzhi Mao"
       },
       {
-        "title": "Numerical Instability and Chaos: Quantifying the Unpredictability of Large Language Models",
-        "link": "https://arxiv.org/abs/2604.13206",
-        "description": "arXiv:2604.13206v1 Announce Type: new \nAbstract: As Large Language Models (LLMs) are increasingly integrated into agentic workflows, their unpredictability stemming from numerical instability has emerged as a critical reliability issue. While recent studies have demonstrated the significant downstream effects of these instabilities, the root causes and underlying mechanisms remain poorly understood. In this paper, we present a rigorous analysis of how unpredictability is rooted in the finite numerical precision of floating-point representations, tracking how rounding errors propagate, amplify, or dissipate through Transformer computation layers. Specifically, we identify a chaotic \"avalanche effect\" in the early layers, where minor perturbations trigger binary outcomes: either rapid amplification or complete attenuation. Beyond specific error instances, we demonstrate that LLMs exhibit universal, scale-dependent chaotic behaviors characterized by three distinct regimes: 1) a stable regime, where perturbations fall below an input-dependent threshold and vanish, resulting in constant outputs; 2) a chaotic regime, where rounding errors dominate and drive output divergence; and 3) a signal-dominated regime, where true input variations override numerical noise. We validate these findings extensively across multiple datasets and model architectures.",
+        "title": "Preregistered Belief Revision Contracts",
+        "link": "https://arxiv.org/abs/2604.15558",
+        "description": "arXiv:2604.15558v1 Announce Type: new \nAbstract: Deliberative multi-agent systems allow agents to exchange messages and revise beliefs over time. While this interaction is meant to improve performance, it can also create dangerous conformity effects: agreement, confidence, prestige, or majority size may be treated as if they were evidence, producing high-confidence convergence to false conclusions. To address this, we introduce PBRC (Preregistered Belief Revision Contracts), a protocol-level mechanism that strictly separates open communication from admissible epistemic change. A PBRC contract publicly fixes first-order evidence triggers, admissible revision operators, a priority rule, and a fallback policy. A non-fallback step is accepted only when it cites a preregistered trigger and provides a nonempty witness set of externally validated evidence tokens. This ensures that every substantive belief change is both enforceable by a router and auditable after the fact. In this paper, (a) we prove that under evidential contracts with conservative fallback, social-only rounds cannot increase confidence and cannot generate purely conformity-driven wrong-but-sure cascades. (b) We show that auditable trigger protocols admit evidential PBRC normal forms that preserve belief trajectories and canonicalized audit traces. (c) We demonstrate that sound enforcement yields epistemic accountability: any change of top hypothesis is attributable to a concrete validated witness set. For token-invariant contracts, (d) we prove that enforced trajectories depend only on token-exposure traces; under flooding dissemination, these traces are characterized exactly by truncated reachability, giving tight diameter bounds for universal evidence closure. Finally, we introduce a companion contractual dynamic doxastic logic to specify trace invariants, and provide simulations illustrating cascade suppression, auditability, and robustness-liveness trade-offs.",
         "guid": {
-          "#text": "oai:arXiv.org:2604.13206v1",
+          "#text": "oai:arXiv.org:2604.15558v1",
+          "isPermaLink": "false"
+        },
+        "category": [
+          "cs.AI",
+          "cs.CL",
+          "cs.LO",
+          "cs.MA"
+        ],
+        "pubDate": "Mon, 20 Apr 2026 00:00:00 -0400",
+        "arxiv:announce_type": "new",
+        "dc:rights": "http://arxiv.org/licenses/nonexclusive-distrib/1.0/",
+        "dc:creator": "Saad Alqithami"
+      },
+      {
+        "title": "Subliminal Transfer of Unsafe Behaviors in AI Agent Distillation",
+        "link": "https://arxiv.org/abs/2604.15559",
+        "description": "arXiv:2604.15559v1 Announce Type: new \nAbstract: Recent work on subliminal learning demonstrates that language models can transmit semantic traits through data that is semantically unrelated to those traits. However, it remains unclear whether behavioral traits can transfer in agentic systems, where policies are learned from trajectories rather than static text. In this work, we provide the first empirical evidence that unsafe agent behaviors can transfer subliminally through model distillation across two complementary experimental settings. In our primary setting, we construct a teacher agent exhibiting a strong deletion bias, a tendency to perform destructive file-system actions via an API-style tool interface, and distill it into a student using only trajectories from ostensibly safe tasks, with all explicit deletion keywords rigorously filtered. In our secondary setting, we replicate the threat model in a native Bash environment, replacing API tool calls with shell commands and operationalizing the bias as a preference for issuing chmod as the first permission-related command over semantically equivalent alternatives such as chown or setfacl. Despite full keyword sanitation in both settings, students inherit measurable behavioral biases. In the API setting the student's deletion rate reaches 100% (versus a 5% baseline) under homogeneous distillation; in the Bash setting the student's chmod-first rate reaches 30%-55% (versus a 0%-10% baseline), with the strongest transfer observed in large-to-small distillation. Our results demonstrate that explicit data sanitation is an insufficient defense, and behavioral biases are encoded implicitly in trajectory dynamics regardless of the tool interface.",
+        "guid": {
+          "#text": "oai:arXiv.org:2604.15559v1",
+          "isPermaLink": "false"
+        },
+        "category": "cs.AI",
+        "pubDate": "Mon, 20 Apr 2026 00:00:00 -0400",
+        "arxiv:announce_type": "new",
+        "dc:rights": "http://creativecommons.org/licenses/by/4.0/",
+        "dc:creator": "Jacob Dang, Brian Y. Xie, Omar G. Younis"
+      },
+      {
+        "title": "Bilevel Optimization of Agent Skills via Monte Carlo Tree Search",
+        "link": "https://arxiv.org/abs/2604.15709",
+        "description": "arXiv:2604.15709v1 Announce Type: new \nAbstract: Agent \\texttt{skills} are structured collections of instructions, tools, and supporting resources that help large language model (LLM) agents perform particular classes of tasks. Empirical evidence shows that the design of \\texttt{skills} can materially affect agent task performance, yet systematically optimizing \\texttt{skills} remains challenging. Since a \\texttt{skill} comprises instructions, tools, and supporting resources in a structured way, optimizing it requires jointly determining both the structure of these components and the content each component contains. This gives rise to a complex decision space with strong interdependence across structure and components. We therefore represent these two coupled decisions as \\texttt{skill} structure and component content, and formulate \\texttt{skill} optimization as a bilevel optimization problem. We propose a bilevel optimization framework in which an outer loop employs Monte Carlo Tree Search to determine the \\texttt{skill} structure, while an inner loop refines the component content within the structure selected by the outer loop. In both loops, we employ LLMs to assist the optimization procedure. We evaluate the proposed framework on an open-source Operations Research Question Answering dataset, and the experimental results suggest that the bilevel optimization framework improves the performance of the agents with the optimized \\texttt{skill}.",
+        "guid": {
+          "#text": "oai:arXiv.org:2604.15709v1",
+          "isPermaLink": "false"
+        },
+        "category": "cs.AI",
+        "pubDate": "Mon, 20 Apr 2026 00:00:00 -0400",
+        "arxiv:announce_type": "new",
+        "dc:rights": "http://creativecommons.org/licenses/by/4.0/",
+        "dc:creator": "Chenyi Huang, Haoting Zhang, Jingxu Xu, Zeyu Zheng, Yunduan Lin"
+      },
+      {
+        "title": "The World Leaks the Future: Harness Evolution for Future Prediction Agents",
+        "link": "https://arxiv.org/abs/2604.15719",
+        "description": "arXiv:2604.15719v1 Announce Type: new \nAbstract: Many consequential decisions must be made before the relevant outcome is known. Such problems are commonly framed as \\emph{future prediction}, where an LLM agent must form a prediction for an unresolved question using only the public information available at the prediction time. The setting is difficult because public evidence evolves while useful supervision arrives only after the question is resolved, so most existing approaches still improve mainly from final outcomes. Yet final outcomes are too coarse to guide earlier factor tracking, evidence gathering and interpretation, or uncertainty handling. When the same unresolved question is revisited over time, temporal contrasts between earlier and later predictions can expose omissions in the earlier prediction process; we call this signal \\emph{internal feedback}. We introduce \\emph{Milkyway}, a self-evolving agent system that keeps the base model fixed and instead updates a persistent \\emph{future prediction harness} for factor tracking, evidence gathering and interpretation, and uncertainty handling. Across repeated predictions on the same unresolved question, \\emph{Milkyway} extracts internal feedback and writes reusable guidance back into the harness, so later predictions on that question can improve before the outcome is known. After the question is resolved, the final outcome provides a \\emph{retrospective check} before the updated harness is carried forward to subsequent questions. On FutureX and FutureWorld, Milkyway achieves the best overall score among the compared methods, improving FutureX from 44.07 to 60.90 and FutureWorld from 62.22 to 77.96.",
+        "guid": {
+          "#text": "oai:arXiv.org:2604.15719v1",
+          "isPermaLink": "false"
+        },
+        "category": "cs.AI",
+        "pubDate": "Mon, 20 Apr 2026 00:00:00 -0400",
+        "arxiv:announce_type": "new",
+        "dc:rights": "http://arxiv.org/licenses/nonexclusive-distrib/1.0/",
+        "dc:creator": "Chuyang Wei (University of Science and Technology of China, Zhongguancun Academy, Beijing, China), Maohang Gao (University of Science and Technology of China, Zhongguancun Academy, Beijing, China), Zhixin Han (Zhongguancun Academy, Beijing, China), Kefei Chen (Zhongguancun Academy, Beijing, China, Tsinghua University), Yu Zhuang (Zhongguancun Academy, Beijing, China), Haoxiang Guan (University of Science and Technology of China, Zhongguancun Academy, Beijing, China), Yanzhi Zhang (Zhongguancun Academy, Beijing, China), Yilin Cheng (Zhongguancun Academy, Beijing, China), Jiyan He (Zhongguancun Academy, Beijing, China), Huanhuan Chen (University of Science and Technology of China), Jian Li (Tsinghua University), Yu Shi (Zhongguancun Academy, Beijing, China), Yitong Duan (Zhongguancun Academy, Beijing, China), Shuxin Zheng (Zhongguancun Academy, Beijing, China)"
+      },
+      {
+        "title": "LLM Reasoning Is Latent, Not the Chain of Thought",
+        "link": "https://arxiv.org/abs/2604.15726",
+        "description": "arXiv:2604.15726v1 Announce Type: new \nAbstract: This position paper argues that large language model (LLM) reasoning should be studied as latent-state trajectory formation rather than as faithful surface chain-of-thought (CoT). This matters because claims about faithfulness, interpretability, reasoning benchmarks, and inference-time intervention all depend on what the field takes the primary object of reasoning to be. We ask what that object should be once three often-confounded factors are separated and formalize three competing hypotheses: H1, reasoning is primarily mediated by latent-state trajectories; H2, reasoning is primarily mediated by explicit surface CoT; and H0, most apparent reasoning gains are better explained by generic serial compute than by any privileged representational object. Reorganizing recent empirical, mechanistic, and survey work under this framework, and adding compute-audited worked exemplars that factorize surface traces, latent interventions, and matched budget expansions, we find that current evidence most strongly supports H1 as a default working hypothesis rather than as a task-independent verdict. We therefore make two recommendations: the field should treat latent-state dynamics as the default object of study for LLM reasoning, and it should evaluate reasoning with designs that explicitly disentangle surface traces, latent states, and serial compute.",
+        "guid": {
+          "#text": "oai:arXiv.org:2604.15726v1",
+          "isPermaLink": "false"
+        },
+        "category": "cs.AI",
+        "pubDate": "Mon, 20 Apr 2026 00:00:00 -0400",
+        "arxiv:announce_type": "new",
+        "dc:rights": "http://creativecommons.org/licenses/by/4.0/",
+        "dc:creator": "Wenshuo Wang"
+      },
+      {
+        "title": "Structured Abductive-Deductive-Inductive Reasoning for LLMs via Algebraic Invariants",
+        "link": "https://arxiv.org/abs/2604.15727",
+        "description": "arXiv:2604.15727v1 Announce Type: new \nAbstract: Large language models exhibit systematic limitations in structured logical reasoning: they conflate hypothesis generation with verification, cannot distinguish conjecture from validated knowledge, and allow weak reasoning steps to propagate unchecked through inference chains. We present a symbolic reasoning scaffold that operationalizes Peirce's tripartite inference -- abduction, deduction, and induction -- as an explicit protocol for LLM-assisted reasoning. The framework enforces logical consistency through five algebraic invariants (the Gamma Quintet), the strongest of which -- the Weakest Link bound -- ensures that no conclusion in a reasoning chain can exceed the reliability of its least-supported premise. This principle, independently grounded as weakest link resolution in possibilistic logic and empirically validated for chain-of-thought reasoning, prevents logical inconsistencies from accumulating across multi-step inference. We verify all invariants through a property-based testing suite of 100 properties and 16 fuzz tests over 10^5+ generated cases, providing a verified reference implementation of the invariants suitable as a foundation for future reasoning benchmarks.",
+        "guid": {
+          "#text": "oai:arXiv.org:2604.15727v1",
           "isPermaLink": "false"
         },
         "category": [
           "cs.AI",
           "cs.LG",
-          "cs.NA",
-          "math.NA"
+          "cs.LO"
         ],
-        "pubDate": "Fri, 17 Apr 2026 00:00:00 -0400",
+        "pubDate": "Mon, 20 Apr 2026 00:00:00 -0400",
         "arxiv:announce_type": "new",
-        "dc:rights": "http://creativecommons.org/licenses/by/4.0/",
-        "dc:creator": "Chashi Mahiul Islam, Alan Villarreal, Mao Nishino, Shaeke Salman, Xiuwen Liu"
-      },
-      {
-        "title": "Optimizing Earth Observation Satellite Schedules under Unknown Operational Constraints: An Active Constraint Acquisition Approach",
-        "link": "https://arxiv.org/abs/2604.13283",
-        "description": "arXiv:2604.13283v1 Announce Type: new \nAbstract: Earth Observation (EO) satellite scheduling (deciding which imaging tasks to perform and when) is a well-studied combinatorial optimization problem. Existing methods typically assume that the operational constraint model is fully specified in advance. In practice, however, constraints governing separation between observations, power budgets, and thermal limits are often embedded in engineering artefacts or high-fidelity simulators rather than in explicit mathematical models. We study EO scheduling under \\emph{unknown constraints}: the objective is known, but feasibility must be learned interactively from a binary oracle. Working with a simplified model restricted to pairwise separation and global capacity constraints, we introduce Conservative Constraint Acquisition~(CCA), a domain-specific procedure designed to identify justified constraints efficiently in practice while limiting unnecessary tightening of the learned model. Embedded in the \\textsc{Learn\\&Optimize} framework, CCA supports an interactive search process that alternates optimization under a learned constraint model with targeted oracle queries. On synthetic instances with up to 50~tasks and dense constraint networks, L\\&O improves over a no-knowledge greedy baseline and uses far fewer main oracle queries than a two-phase acquire-then-solve baseline (FAO). For $n\\leq 30$, the average gap drops from 65--68\\% (Priority Greedy) to 17.7--35.8\\% using L\\&O. At $n{=}50$, where the CP-SAT reference is the best feasible solution found in 120~s, L\\&O improves on FAO on average (17.9\\% vs.\\ 20.3\\%) while using 21.3 main queries instead of 100 and about $5\\times$ less execution time.",
-        "guid": {
-          "#text": "oai:arXiv.org:2604.13283v1",
-          "isPermaLink": "false"
-        },
-        "category": [
-          "cs.AI",
-          "cs.LG"
-        ],
-        "pubDate": "Fri, 17 Apr 2026 00:00:00 -0400",
-        "arxiv:announce_type": "new",
-        "dc:rights": "http://creativecommons.org/licenses/by/4.0/",
-        "dc:creator": "Mohamed-Bachir Belaid"
-      },
-      {
-        "title": "WebXSkill: Skill Learning for Autonomous Web Agents",
-        "link": "https://arxiv.org/abs/2604.13318",
-        "description": "arXiv:2604.13318v1 Announce Type: new \nAbstract: Autonomous web agents powered by large language models (LLMs) have shown promise in completing complex browser tasks, yet they still struggle with long-horizon workflows. A key bottleneck is the grounding gap in existing skill formulations: textual workflow skills provide natural language guidance but cannot be directly executed, while code-based skills are executable but opaque to the agent, offering no step-level understanding for error recovery or adaptation. We introduce WebXSkill, a framework that bridges this gap with executable skills, each pairing a parameterized action program with step-level natural language guidance, enabling both direct execution and agent-driven adaptation. WebXSkill operates in three stages: skill extraction mines reusable action subsequences from readily available synthetic agent trajectories and abstracts them into parameterized skills, skill organization indexes skills into a URL-based graph for context-aware retrieval, and skill deployment exposes two complementary modes, grounded mode for fully automated multi-step execution and guided mode where skills serve as step-by-step instructions that the agent follows with its native planning. On WebArena and WebVoyager, WebXSkill improves task success rate by up to 9.8 and 12.9 points over the baseline, respectively, demonstrating the effectiveness of executable skills for web agents. The code is publicly available at https://github.com/aiming-lab/WebXSkill.",
-        "guid": {
-          "#text": "oai:arXiv.org:2604.13318v1",
-          "isPermaLink": "false"
-        },
-        "category": [
-          "cs.AI",
-          "cs.CL"
-        ],
-        "pubDate": "Fri, 17 Apr 2026 00:00:00 -0400",
-        "arxiv:announce_type": "new",
-        "dc:rights": "http://arxiv.org/licenses/nonexclusive-distrib/1.0/",
-        "dc:creator": "Zhaoyang Wang, Qianhui Wu, Xuchao Zhang, Chaoyun Zhang, Wenlin Yao, Fazle Elahi Faisal, Baolin Peng, Si Qin, Suman Nath, Qingwei Lin, Chetan Bansal, Dongmei Zhang, Saravan Rajmohan, Jianfeng Gao, Huaxiu Yao"
-      },
-      {
-        "title": "Listening Alone, Understanding Together: Collaborative Context Recovery for Privacy-Aware AI",
-        "link": "https://arxiv.org/abs/2604.13348",
-        "description": "arXiv:2604.13348v1 Announce Type: new \nAbstract: We introduce CONCORD, a privacy-aware asynchronous assistant-to-assistant (A2A) framework that leverages collaboration between proactive speech-based AI. As agents evolve from reactive to always-listening assistants, they face a core privacy risk (of capturing non-consenting speakers), which makes their social deployment a challenge. To overcome this, we implement CONCORD, which enforces owner-only speech capture via real-time speaker verification, producing a one-sided transcript that incurs missing context but preserves privacy. We demonstrate that CONCORD can safely recover necessary context through (1) spatio-temporal context resolution, (2) information gap detection, and (3) minimal A2A queries governed by a relationship-aware disclosure. Instead of hallucination-prone inferring, CONCORD treats context recovery as a negotiated safe exchange between assistants. Across a multi-domain dialogue dataset, CONCORD achieves 91.4% recall in gap detection, 96% relationship classification accuracy, and 97% true negative rate in privacy-sensitive disclosure decisions. By reframing always-listening AI as a coordination problem between privacy-preserving agents, CONCORD offers a practical path toward socially deployable proactive conversational agents.",
-        "guid": {
-          "#text": "oai:arXiv.org:2604.13348v1",
-          "isPermaLink": "false"
-        },
-        "category": [
-          "cs.AI",
-          "cs.CR"
-        ],
-        "pubDate": "Fri, 17 Apr 2026 00:00:00 -0400",
-        "arxiv:announce_type": "new",
-        "dc:rights": "http://creativecommons.org/licenses/by/4.0/",
-        "dc:creator": "Tanmay Srivastava, Amartya Basu, Shubham Jain, Vaishnavi Ranganathan"
-      },
-      {
-        "title": "ReSS: Learning Reasoning Models for Tabular Data Prediction via Symbolic Scaffold",
-        "link": "https://arxiv.org/abs/2604.13392",
-        "description": "arXiv:2604.13392v1 Announce Type: new \nAbstract: Tabular data remains prevalent in high-stakes domains such as healthcare and finance, where predictive models are expected to provide both high accuracy and faithful, human-understandable reasoning. While symbolic models offer verifiable logic, they lack semantic expressiveness. Meanwhile, general-purpose LLMs often require specialized fine-tuning to master domain-specific tabular reasoning. To address the dual challenges of scalable data curation and reasoning consistency, we propose ReSS, a systematic framework that bridges symbolic and neural reasoning models. ReSS leverages a decision-tree model to extract instance-level decision paths as symbolic scaffolds. These scaffolds, alongside input features and labels, guide an LLM to generate grounded natural-language reasoning that strictly adheres to the underlying decision logic. The resulting high-quality dataset is used to fine-tune a pretrained LLM into a specialized tabular reasoning model, further enhanced by a scaffold-invariant data augmentation strategy to improve generalization and explainability. To rigorously assess faithfulness, we introduce quantitative metrics including hallucination rate, explanation necessity, and explanation sufficiency. Experimental results on medical and financial benchmarks demonstrate that ReSS-trained models improve traditional decision trees and standard fine-tuning approaches up to $10\\%$ while producing faithful and consistent reasoning",
-        "guid": {
-          "#text": "oai:arXiv.org:2604.13392v1",
-          "isPermaLink": "false"
-        },
-        "category": "cs.AI",
-        "pubDate": "Fri, 17 Apr 2026 00:00:00 -0400",
-        "arxiv:announce_type": "new",
-        "dc:rights": "http://creativecommons.org/licenses/by/4.0/",
-        "dc:creator": "Chenlang Yi, Gang Li, Zizhan Xiong, Tue Minh Cao, Yanmin Gong, My T. Thai, Tianbao Yang"
-      },
-      {
-        "title": "Quantifying and Understanding Uncertainty in Large Reasoning Models",
-        "link": "https://arxiv.org/abs/2604.13395",
-        "description": "arXiv:2604.13395v1 Announce Type: new \nAbstract: Large Reasoning Models (LRMs) have recently demonstrated significant improvements in complex reasoning. While quantifying generation uncertainty in LRMs is crucial, traditional methods are often insufficient because they do not provide finite-sample guarantees for reasoning-answer generation. Conformal prediction (CP) stands out as a distribution-free and model-agnostic methodology that constructs statistically rigorous uncertainty sets. However, existing CP methods ignore the logical connection between the reasoning trace and the final answer. Additionally, prior studies fail to interpret the origins of uncertainty coverage for LRMs as they typically overlook the specific training factors driving valid reasoning. Notably, it is challenging to disentangle reasoning quality from answer correctness when quantifying uncertainty, while simultaneously establishing theoretical guarantees for computationally efficient explanation methods. To address these challenges, we first propose a novel methodology that quantifies uncertainty in the reasoning-answer structure with statistical guarantees. Subsequently, we develop a unified example-to-step explanation framework using Shapley values that identifies a provably sufficient subset of training examples and their key reasoning steps to preserve the guarantees. We also provide theoretical analyses of our proposed methods. Extensive experiments on challenging reasoning datasets verify the effectiveness of the proposed methods.",
-        "guid": {
-          "#text": "oai:arXiv.org:2604.13395v1",
-          "isPermaLink": "false"
-        },
-        "category": [
-          "cs.AI",
-          "cs.LG"
-        ],
-        "pubDate": "Fri, 17 Apr 2026 00:00:00 -0400",
-        "arxiv:announce_type": "new",
-        "dc:rights": "http://creativecommons.org/licenses/by/4.0/",
-        "dc:creator": "Yangyi Li, Chenxu Zhao, Mengdi Huai"
-      },
-      {
-        "title": "Towards Scalable Lightweight GUI Agents via Multi-role Orchestration",
-        "link": "https://arxiv.org/abs/2604.13488",
-        "description": "arXiv:2604.13488v1 Announce Type: new \nAbstract: Autonomous Graphical User Interface (GUI) agents powered by Multimodal Large Language Models (MLLMs) enable digital automation on end-user devices. While scaling both parameters and data has yielded substantial gains, advanced methods still suffer from prohibitive deployment costs on resource-constrained devices. When facing complex in-the-wild scenarios, lightweight GUI agents are bottlenecked by limited capacity and poor task scalability under end-to-end episodic learning, impeding adaptation to multi-agent systems (MAS), while training multiple skill-specific experts remains costly. Can we strike an effective trade-off in this cost-scalability dilemma, enabling lightweight MLLMs to participate in realistic GUI workflows? To address these challenges, we propose the LAMO framework, which endows a lightweight MLLM with GUI-specific knowledge and task scalability, allowing multi-role orchestration to expand its capability boundary for GUI automation. LAMO combines role-oriented data synthesis with a two-stage training recipe: (i) supervised fine-tuning with Perplexity-Weighted Cross-Entropy optimization for knowledge distillation and visual perception enhancement, and (ii) reinforcement learning for role-oriented cooperative exploration. With LAMO, we develop a task-scalable native GUI agent, LAMO-3B, supporting monolithic execution and MAS-style orchestration. When paired with advanced planners as a plug-and-play policy executor, LAMO-3B can continuously benefit from planner advances, enabling a higher performance ceiling. Extensive static and online evaluations validate the effectiveness of our design.",
-        "guid": {
-          "#text": "oai:arXiv.org:2604.13488v1",
-          "isPermaLink": "false"
-        },
-        "category": "cs.AI",
-        "pubDate": "Fri, 17 Apr 2026 00:00:00 -0400",
-        "arxiv:announce_type": "new",
-        "dc:rights": "http://arxiv.org/licenses/nonexclusive-distrib/1.0/",
-        "dc:creator": "Ziwei Wang, Junjie Zheng, Leyang Yang, Sheng Zhou, Xiaoxuan Tang, Zhouhua Fang, Zhiwei Liu, Dajun Chen, Yong Li, Jiajun Bu"
-      },
-      {
-        "title": "RiskWebWorld: A Realistic Interactive Benchmark for GUI Agents in E-commerce Risk Management",
-        "link": "https://arxiv.org/abs/2604.13531",
-        "description": "arXiv:2604.13531v1 Announce Type: new \nAbstract: Graphical User Interface (GUI) agents show strong capabilities for automating web tasks, but existing interactive benchmarks primarily target benign, predictable consumer environments. Their effectiveness in high-stakes, investigative domains such as authentic e-commerce risk management remains underexplored. To bridge this gap, we present RiskWebWorld, the first highly realistic interactive benchmark for evaluating GUI agents in e-commerce risk management. RiskWebWorld features 1,513 tasks sourced from production risk-control pipelines across 8 core domains, and captures the authentic challenges of risk operations on uncooperative websites, partially environmental hijackments. To support scalable evaluation and agentic reinforcement learning (RL), we further build a Gymnasium-compliant infrastructure that decouples policy planning from environment mechanics. Our evaluation across diverse models reveals a dramatic capability gap: top-tier generalist models achieve 49.1% success, while specialized open-weights GUI models lag at near-total failure. This highlights that foundation model scale currently matters more than zero-shot interface grounding in long-horizon professional tasks. We also demonstrate the viability of our infrastructure through agentic RL, which improves open-source models by 16.2%. These results position RiskWebWorld as a practical testbed for developing robust digital workers.",
-        "guid": {
-          "#text": "oai:arXiv.org:2604.13531v1",
-          "isPermaLink": "false"
-        },
-        "category": [
-          "cs.AI",
-          "cs.LG"
-        ],
-        "pubDate": "Fri, 17 Apr 2026 00:00:00 -0400",
-        "arxiv:announce_type": "new",
-        "dc:rights": "http://arxiv.org/licenses/nonexclusive-distrib/1.0/",
-        "dc:creator": "Renqi Chen, Zeyin Tao, Jianming Guo, Jing Wang, Zezhou Xu, Jingzhe Zhu, Qingqing Sun, Tianyi Zhang, Shuai Chen"
+        "dc:rights": "http://creativecommons.org/licenses/by-nc-nd/4.0/",
+        "dc:creator": "Sankalp Gilda, Shlok Gilda"
       }
     ]
   }

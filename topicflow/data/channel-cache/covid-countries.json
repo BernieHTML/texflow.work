@@ -1,12 +1,12 @@
 {
   "channel": "covid-countries",
   "event": "update",
-  "ts": "2026-04-17T14:13:57.375Z",
+  "ts": "2026-04-21T01:30:33.227Z",
   "source": "covid-countries",
   "payload": {
     "items": [
       {
-        "updated": 1776435075814,
+        "updated": 1776734457147,
         "country": "USA",
         "countryInfo": {
           "_id": 840,
@@ -38,7 +38,7 @@
         "criticalPerOneMillion": 2.81
       },
       {
-        "updated": 1776435075816,
+        "updated": 1776734457150,
         "country": "India",
         "countryInfo": {
           "_id": 356,
@@ -70,7 +70,7 @@
         "criticalPerOneMillion": 0
       },
       {
-        "updated": 1776435075818,
+        "updated": 1776734457152,
         "country": "France",
         "countryInfo": {
           "_id": 250,
@@ -102,7 +102,7 @@
         "criticalPerOneMillion": 0
       },
       {
-        "updated": 1776435075820,
+        "updated": 1776734457153,
         "country": "Germany",
         "countryInfo": {
           "_id": 276,
@@ -134,7 +134,7 @@
         "criticalPerOneMillion": 0
       },
       {
-        "updated": 1776435075822,
+        "updated": 1776734457155,
         "country": "Brazil",
         "countryInfo": {
           "_id": 76,
@@ -166,7 +166,7 @@
         "criticalPerOneMillion": 0
       },
       {
-        "updated": 1776435075823,
+        "updated": 1776734457160,
         "country": "S. Korea",
         "countryInfo": {
           "_id": 410,
@@ -198,7 +198,7 @@
         "criticalPerOneMillion": 0
       },
       {
-        "updated": 1776435075828,
+        "updated": 1776734457161,
         "country": "Japan",
         "countryInfo": {
           "_id": 392,
@@ -230,7 +230,7 @@
         "criticalPerOneMillion": 0
       },
       {
-        "updated": 1776435075829,
+        "updated": 1776734457162,
         "country": "Italy",
         "countryInfo": {
           "_id": 380,
@@ -262,7 +262,7 @@
         "criticalPerOneMillion": 0.37
       },
       {
-        "updated": 1776435075830,
+        "updated": 1776734457163,
         "country": "UK",
         "countryInfo": {
           "_id": 826,
@@ -294,7 +294,7 @@
         "criticalPerOneMillion": 0
       },
       {
-        "updated": 1776435075832,
+        "updated": 1776734457165,
         "country": "Russia",
         "countryInfo": {
           "_id": 643,
@@ -326,7 +326,7 @@
         "criticalPerOneMillion": 0
       },
       {
-        "updated": 1776435075834,
+        "updated": 1776734457166,
         "country": "Turkey",
         "countryInfo": {
           "_id": 792,
@@ -358,7 +358,7 @@
         "criticalPerOneMillion": 0
       },
       {
-        "updated": 1776435075835,
+        "updated": 1776734457168,
         "country": "Spain",
         "countryInfo": {
           "_id": 724,
@@ -390,7 +390,7 @@
         "criticalPerOneMillion": 4.94
       },
       {
-        "updated": 1776435075836,
+        "updated": 1776734457169,
         "country": "Australia",
         "countryInfo": {
           "_id": 36,
@@ -422,7 +422,7 @@
         "criticalPerOneMillion": 0.12
       },
       {
-        "updated": 1776435075837,
+        "updated": 1776734457171,
         "country": "Vietnam",
         "countryInfo": {
           "_id": 704,
@@ -454,7 +454,7 @@
         "criticalPerOneMillion": 0
       },
       {
-        "updated": 1776435075839,
+        "updated": 1776734457172,
         "country": "Taiwan",
         "countryInfo": {
           "_id": 158,
@@ -486,7 +486,7 @@
         "criticalPerOneMillion": 0
       },
       {
-        "updated": 1776435075840,
+        "updated": 1776734457173,
         "country": "Argentina",
         "countryInfo": {
           "_id": 32,
@@ -518,7 +518,7 @@
         "criticalPerOneMillion": 0
       },
       {
-        "updated": 1776435075841,
+        "updated": 1776734457175,
         "country": "Netherlands",
         "countryInfo": {
           "_id": 528,
@@ -550,7 +550,7 @@
         "criticalPerOneMillion": 0
       },
       {
-        "updated": 1776435075843,
+        "updated": 1776734457176,
         "country": "Mexico",
         "countryInfo": {
           "_id": 484,
@@ -582,7 +582,7 @@
         "criticalPerOneMillion": 0
       },
       {
-        "updated": 1776435075845,
+        "updated": 1776734457178,
         "country": "Iran",
         "countryInfo": {
           "_id": 364,
@@ -614,7 +614,7 @@
         "criticalPerOneMillion": 0
       },
       {
-        "updated": 1776435075847,
+        "updated": 1776734457180,
         "country": "Indonesia",
         "countryInfo": {
           "_id": 360,

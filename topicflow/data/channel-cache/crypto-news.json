@@ -1,7 +1,7 @@
 {
   "channel": "crypto-news",
   "event": "update",
-  "ts": "2026-04-17T14:30:39.495Z",
+  "ts": "2026-04-21T02:10:50.911Z",
   "source": "crypto-news",
   "payload": {
     "articles": [],
@@ -366,7 +366,7 @@
       "CryptoDnes",
       "CypherHunter Blog"
     ],
-    "fetchedAt": "2026-04-17T14:30:39.469Z",
+    "fetchedAt": "2026-04-21T02:10:50.892Z",
     "pagination": {
       "page": 1,
       "perPage": 10,
@@ -476,7 +476,7 @@
     "total": 0,
     "upgrade": "https://cryptocurrency.cv/premium",
     "_meta": {
-      "responseTimeMs": 2430
+      "responseTimeMs": 18428
     }
   }
 }

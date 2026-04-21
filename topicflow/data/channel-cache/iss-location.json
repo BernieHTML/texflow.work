@@ -1,10 +1,10 @@
 {
   "channel": "iss-location",
   "event": "iss_location",
-  "ts": "2026-04-17T14:32:32.225Z",
+  "ts": "2026-04-21T02:18:35.891Z",
   "source": "iss-location",
   "payload": {
-    "latitude": "-47.8552",
-    "longitude": "114.9506"
+    "latitude": "-26.8724",
+    "longitude": "-44.8542"
   }
 }

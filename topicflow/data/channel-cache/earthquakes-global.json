@@ -1,70 +1,70 @@
 {
   "channel": "earthquakes-global",
   "event": "earthquake",
-  "ts": "2026-04-17T14:30:44.139Z",
+  "ts": "2026-04-21T02:15:32.702Z",
   "source": "earthquakes-global",
   "payload": {
-    "count": 39,
+    "count": 61,
     "quakes": [
       {
-        "mag": 2.65,
-        "place": "18 km ESE of Silver Springs, Nevada",
-        "time": 1776435996431,
-        "depth_km": 9.9558
+        "mag": 2.7,
+        "place": "34 km SW of Ivanof Bay, Alaska",
+        "time": 1776735360683,
+        "depth_km": 80
       },
       {
-        "mag": 2.73,
-        "place": "18 km SE of Silver Springs, Nevada",
-        "time": 1776432866450,
-        "depth_km": 10.5938
+        "mag": 4,
+        "place": "114 km SE of Shima, Japan",
+        "time": 1776733148058,
+        "depth_km": 327.279
       },
       {
-        "mag": 3.42281329293773,
-        "place": "26 km WNW of Ludlow, CA",
-        "time": 1776431022160,
-        "depth_km": 0.430000007152557
+        "mag": 5,
+        "place": "53 km E of Wāngjing, India",
+        "time": 1776731375894,
+        "depth_km": 100.552
       },
       {
-        "mag": 5.4,
-        "place": "northern Mid-Atlantic Ridge",
-        "time": 1776429566641,
-        "depth_km": 10
+        "mag": 2.5,
+        "place": "8 km S of Kanosh, Utah",
+        "time": 1776730866028,
+        "depth_km": 8.539
       },
       {
-        "mag": 4.6,
-        "place": "49 km SE of Severo-Kuril’sk, Russia",
-        "time": 1776429432403,
-        "depth_km": 70.766
-      },
-      {
-        "mag": 4.4,
-        "place": "78 km W of San Antonio de los Cobres, Argentina",
-        "time": 1776423846723,
-        "depth_km": 205.468
+        "mag": 4.5,
+        "place": "106 km WNW of Ambon, Indonesia",
+        "time": 1776730669906,
+        "depth_km": 119.215
       },
       {
         "mag": 4.7,
-        "place": "119 km W of Ternate, Indonesia",
-        "time": 1776421275146,
-        "depth_km": 32.187
+        "place": "59 km SE of Mawlaik, Burma (Myanmar)",
+        "time": 1776730107796,
+        "depth_km": 107.807
       },
       {
-        "mag": 2.7,
-        "place": "29 km E of Beluga, Alaska",
-        "time": 1776420233117,
-        "depth_km": 48.4
+        "mag": 3.15,
+        "place": "92 km NNE of San Juan, Puerto Rico",
+        "time": 1776728218810,
+        "depth_km": 25.92
       },
       {
         "mag": 4.3,
-        "place": "73 km WNW of Sarupathar, India",
-        "time": 1776416017081,
-        "depth_km": 109.148
+        "place": "81 km SW of Paracas, Peru",
+        "time": 1776727601426,
+        "depth_km": 10
       },
       {
-        "mag": 2.83,
-        "place": "14 km S of Volcano, Hawaii",
-        "time": 1776409382350,
-        "depth_km": 0.560000002384186
+        "mag": 2.49,
+        "place": "19 km WSW of Petrolia, CA",
+        "time": 1776725720330,
+        "depth_km": 18.1700000762939
+      },
+      {
+        "mag": 3.3,
+        "place": "off the coast of Oregon",
+        "time": 1776724979963,
+        "depth_km": 10
       }
     ]
   }

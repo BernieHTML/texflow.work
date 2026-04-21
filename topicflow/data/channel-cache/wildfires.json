@@ -1,7 +1,7 @@
 {
   "channel": "wildfires",
   "event": "text_update",
-  "ts": "2026-04-17T14:30:47.429Z",
+  "ts": "2026-04-21T01:30:32.481Z",
   "source": "wildfires",
   "payload": {
     "text": "Invalid MAP_KEY."

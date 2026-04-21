@@ -1,9 +1,9 @@
 {
   "channel": "nasa-apod",
   "event": "text_update",
-  "ts": "2026-04-17T14:31:19.553Z",
+  "ts": "2026-04-20T14:31:00.112Z",
   "source": "nasa-apod",
   "payload": {
-    "text": "upstream connect error or disconnect/reset before headers. retried and the latest reset reason: connection timeout"
+    "text": "upstream connect error or disconnect/reset before headers. reset reason: connection timeout"
   }
 }

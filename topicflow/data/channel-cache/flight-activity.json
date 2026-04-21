@@ -1,9 +1,9 @@
 {
   "channel": "flight-activity",
   "event": "flight_activity",
-  "ts": "2026-04-17T14:30:48.014Z",
+  "ts": "2026-04-21T02:15:33.264Z",
   "source": "flight-activity",
   "payload": {
-    "flights": 17
+    "flights": 0
   }
 }

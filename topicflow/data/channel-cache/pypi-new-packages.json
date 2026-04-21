@@ -1,86 +1,85 @@
 {
   "channel": "pypi-new-packages",
   "event": "rss_update",
-  "ts": "2026-04-17T14:30:47.384Z",
+  "ts": "2026-04-21T02:00:32.300Z",
   "source": "pypi-new-packages",
   "payload": {
     "items": [
       {
-        "title": "monmon added to PyPI",
-        "link": "https://pypi.org/project/monmon/",
-        "guid": "https://pypi.org/project/monmon/",
-        "description": "macOS silicon monitor (E/P cores, GPU, NPU) with a TUI",
-        "author": "gavi.narra@objectgraph.com",
-        "pubDate": "Fri, 17 Apr 2026 14:13:16 GMT"
+        "title": "yaml-quilt added to PyPI",
+        "link": "https://pypi.org/project/yaml-quilt/",
+        "guid": "https://pypi.org/project/yaml-quilt/",
+        "description": "A Python library that enables features such as inheritance, variables, and instantiation in YAML files.",
+        "author": "eshen2210@gmail.com",
+        "pubDate": "Tue, 21 Apr 2026 01:24:21 GMT"
       },
       {
-        "title": "fastscrapy added to PyPI",
-        "link": "https://pypi.org/project/fastscrapy/",
-        "guid": "https://pypi.org/project/fastscrapy/",
-        "description": "Extensible async scraper library for concurrent web scraping with worker pattern",
-        "author": "hi@alexrichter.xyz",
-        "pubDate": "Fri, 17 Apr 2026 14:10:54 GMT"
+        "title": "signalhouse added to PyPI",
+        "link": "https://pypi.org/project/signalhouse/",
+        "guid": "https://pypi.org/project/signalhouse/",
+        "description": "Python SDK for the SignalHouse API",
+        "author": "support@signalhouse.io",
+        "pubDate": "Tue, 21 Apr 2026 01:24:16 GMT"
       },
       {
-        "title": "aieng-template-uv added to PyPI",
-        "link": "https://pypi.org/project/aieng-template-uv/",
-        "guid": "https://pypi.org/project/aieng-template-uv/",
-        "description": "Add your description here",
-        "author": "ai_engineering@vectorinstitute.ai",
-        "pubDate": "Fri, 17 Apr 2026 14:06:11 GMT"
+        "title": "fanfu added to PyPI",
+        "link": "https://pypi.org/project/fanfu/",
+        "guid": "https://pypi.org/project/fanfu/",
+        "description": "Bidirectional converter between GGUF and HuggingFace formats with weight verification",
+        "pubDate": "Tue, 21 Apr 2026 01:23:29 GMT"
       },
       {
-        "title": "pyimaskill added to PyPI",
-        "link": "https://pypi.org/project/pyimaskill/",
-        "guid": "https://pypi.org/project/pyimaskill/",
-        "description": "Python client library for IMA OpenAPI — manage notes and knowledge bases programmatically",
-        "author": "1599121712@qq.com",
-        "pubDate": "Fri, 17 Apr 2026 14:05:14 GMT"
+        "title": "pymedplum added to PyPI",
+        "link": "https://pypi.org/project/pymedplum/",
+        "guid": "https://pypi.org/project/pymedplum/",
+        "description": "Python SDK for Medplum with typed FHIR models and an optional MCP server.",
+        "pubDate": "Tue, 21 Apr 2026 01:21:33 GMT"
       },
       {
-        "title": "bigaxiron added to PyPI",
-        "link": "https://pypi.org/project/bigaxiron/",
-        "guid": "https://pypi.org/project/bigaxiron/",
-        "description": "Enc Axiron",
-        "pubDate": "Fri, 17 Apr 2026 14:04:32 GMT"
+        "title": "aws-radar added to PyPI",
+        "link": "https://pypi.org/project/aws-radar/",
+        "guid": "https://pypi.org/project/aws-radar/",
+        "description": "AWS resource inventory scanner and draw.io architecture diagram generator",
+        "author": "you@example.com",
+        "pubDate": "Tue, 21 Apr 2026 01:21:26 GMT"
       },
       {
-        "title": "deepalpha-bot added to PyPI",
-        "link": "https://pypi.org/project/deepalpha-bot/",
-        "guid": "https://pypi.org/project/deepalpha-bot/",
-        "description": "AI-powered crypto trading bot. 3-model ML consensus, Triple Barrier labeling, auto risk management. Supports Bybit, Bitget, Hyperliquid.",
-        "author": "info@deepalphabot.com",
-        "pubDate": "Fri, 17 Apr 2026 14:02:03 GMT"
+        "title": "foxtrotcommunications-forge-core added to PyPI",
+        "link": "https://pypi.org/project/foxtrotcommunications-forge-core/",
+        "guid": "https://pypi.org/project/foxtrotcommunications-forge-core/",
+        "description": "Automatically decompose nested JSON in your data warehouse into normalized dbt models",
+        "pubDate": "Tue, 21 Apr 2026 01:20:18 GMT"
       },
       {
-        "title": "netgear-tool added to PyPI",
-        "link": "https://pypi.org/project/netgear-tool/",
-        "guid": "https://pypi.org/project/netgear-tool/",
-        "description": "Python SDK and CLI for Netgear Smart Managed Plus switches",
-        "author": "gjfrancis@protonmail.com",
-        "pubDate": "Fri, 17 Apr 2026 14:00:42 GMT"
+        "title": "galaxy_graph added to PyPI",
+        "link": "https://pypi.org/project/galaxy-graph/",
+        "guid": "https://pypi.org/project/galaxy-graph/",
+        "description": "Graph creation and management",
+        "author": "linarphy@linarphy.net",
+        "pubDate": "Tue, 21 Apr 2026 01:12:47 GMT"
       },
       {
-        "title": "litdet added to PyPI",
-        "link": "https://pypi.org/project/litdet/",
-        "guid": "https://pypi.org/project/litdet/",
-        "description": "An auto-ML python library for computer vision based on pytorch lightning and hydra.",
-        "author": "loic.tetrel@kitware.com, louis.pagnier@kitware.com",
-        "pubDate": "Fri, 17 Apr 2026 13:56:21 GMT"
+        "title": "SciColours added to PyPI",
+        "link": "https://pypi.org/project/scicolours/",
+        "guid": "https://pypi.org/project/scicolours/",
+        "description": "A simple package for generating spatially uniform preset colour maps and tools for calculating the CIEDE2000 to help generate custom maps",
+        "author": "jakenoble507@gmail.com",
+        "pubDate": "Tue, 21 Apr 2026 01:12:12 GMT"
       },
       {
-        "title": "pyarrlib added to PyPI",
-        "link": "https://pypi.org/project/pyarrlib/",
-        "guid": "https://pypi.org/project/pyarrlib/",
-        "description": "this module can help you work with arrays",
-        "pubDate": "Fri, 17 Apr 2026 13:55:46 GMT"
+        "title": "discord-lookup added to PyPI",
+        "link": "https://pypi.org/project/discord-lookup/",
+        "guid": "https://pypi.org/project/discord-lookup/",
+        "description": "CLI tool and Python library for Discord user lookup",
+        "author": "tebetpaulo91@yahoo.com",
+        "pubDate": "Tue, 21 Apr 2026 01:03:07 GMT"
       },
       {
-        "title": "smart-parallel added to PyPI",
-        "link": "https://pypi.org/project/smart-parallel/",
-        "guid": "https://pypi.org/project/smart-parallel/",
-        "description": "Automatically choose between threads and processes for parallel execution",
-        "pubDate": "Fri, 17 Apr 2026 13:52:27 GMT"
+        "title": "typra added to PyPI",
+        "link": "https://pypi.org/project/typra/",
+        "guid": "https://pypi.org/project/typra/",
+        "description": "Python bindings for Typra, a typed embedded database.",
+        "pubDate": "Tue, 21 Apr 2026 01:01:47 GMT"
       }
     ]
   }

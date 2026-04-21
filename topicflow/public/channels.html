@@ -9,63 +9,141 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" />
   <link rel="stylesheet" href="/topicflow/public/style.css" />
   <style>
-    .filters { display:flex; flex-wrap:wrap; gap:10px; margin-bottom:18px; align-items:center; }
-    .filters input, .filters select {
-      background:var(--bg-2); color:var(--text); border:1px solid var(--line);
-      padding:10px 12px; border-radius:10px; font-size:14px; min-width:0;
+    .dir-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 20px;
     }
-    .filters input:focus, .filters select:focus { outline:none; border-color:var(--accent); }
-    .channel-grid { display:grid; gap:14px; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); }
-    .ch {
+    .dir-toolbar input, .dir-toolbar select {
+      background: var(--bg-2);
+      color: var(--text);
+      border: 1px solid var(--line);
+      padding: 10px 12px;
+      border-radius: 10px;
+      font-size: 14px;
+      min-width: 0;
+    }
+    .dir-toolbar input:focus, .dir-toolbar select:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+    .dir-toolbar .grow { flex: 1 1 200px; }
+    .cat-section { margin-bottom: 36px; scroll-margin-top: 80px; }
+    .cat-heading {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      margin: 0 0 14px;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text);
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 8px;
+    }
+    .cat-heading span { color: var(--muted); font-family: var(--mono); font-size: 12px; font-weight: 500; }
+    .ch-grid {
+      display: grid;
+      gap: 12px;
+      grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
+    }
+    .ch-card {
       background: linear-gradient(180deg, var(--panel) 0%, var(--panel-2) 100%);
-      border:1px solid var(--line); border-radius:var(--radius); padding:18px;
-      transition: transform 0.15s ease, border-color 0.15s ease;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-sm);
+      padding: 14px 16px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px 12px;
+      align-items: start;
+      min-width: 0;
     }
-    .ch:hover { transform: translateY(-2px); border-color: var(--accent); }
-    .ch-head { display:flex; justify-content:space-between; gap:10px; align-items:flex-start; margin-bottom:10px; }
-    .ch-name { font-weight:600; font-size:15px; margin:0; }
-    .ch-slug { font-family:var(--mono); font-size:12px; color:var(--muted); }
-    .ch-cat { font-size:11px; color:var(--accent-strong); padding:3px 8px; background:var(--accent-soft); border-radius:999px; letter-spacing:.04em; }
-    .ch-desc { color:var(--text-dim); font-size:13px; margin:8px 0 12px; min-height:38px; }
-    .ch-meta { font-family:var(--mono); font-size:11px; color:var(--muted); margin-bottom:10px; display:flex; gap:10px; }
-    .ch-cmd { font-family:var(--mono); font-size:11px; color:#cbeadf; background:#0a0c10; border:1px solid var(--line); border-radius:8px; padding:8px; overflow-x:auto; white-space:pre; }
-    .empty { color:var(--muted); text-align:center; padding:40px 0; }
+    .ch-card:hover { border-color: var(--line-strong); }
+    .ch-title-row { display: flex; align-items: flex-start; gap: 10px; min-width: 0; }
+    .ch-emoji { font-size: 22px; line-height: 1; flex-shrink: 0; }
+    .ch-titles { min-width: 0; }
+    .ch-name { font-weight: 600; font-size: 15px; margin: 0; line-height: 1.25; }
+    .ch-slug { font-family: var(--mono); font-size: 11px; color: var(--muted); word-break: break-all; margin-top: 2px; }
+    .ch-desc { grid-column: 1 / -1; font-size: 13px; color: var(--text-dim); margin: 0; line-height: 1.45; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+    .ch-meta { font-family: var(--mono); font-size: 11px; color: var(--muted); grid-column: 1 / -1; }
+    .btn-sub {
+      font-family: var(--sans);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 8px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--accent);
+      background: var(--accent-soft);
+      color: var(--accent-strong);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.15s ease, color 0.15s ease;
+    }
+    .btn-sub:hover { background: var(--accent); color: #0b0c0e; }
+    .dir-stats { font-size: 13px; color: var(--muted); margin-bottom: 8px; }
+    .empty-state { text-align: center; color: var(--muted); padding: 48px 16px; }
   </style>
 </head>
 <body>
   <nav class="nav">
     <div class="wrap nav-inner">
-      <a class="brand" href="/topicflow"><span class="brand-dot"></span><span class="brand-name">TopicFlow</span><span class="brand-suffix">· channels</span></a>
+      <a class="brand" href="/topicflow">
+        <img src="/topicflow/public/topicflow-logo.png" alt="" class="brand-logo" width="36" height="36" />
+        <span class="brand-name">TopicFlow</span>
+        <span class="brand-suffix">· channels</span>
+      </a>
       <div class="nav-links">
         <a href="/topicflow">Home</a>
         <a href="/topicflow/docs">Docs</a>
-        <a class="nav-cta" href="/topicflow/dashboard">Dashboard</a>
+        <a class="nav-cta" href="/topicflow/docs#signup">Get API key →</a>
       </div>
     </div>
   </nav>
 
   <main class="wrap">
-    <section class="hero" style="grid-template-columns:1fr;padding:56px 0 24px;">
+    <section class="hero" style="grid-template-columns:1fr;padding:48px 0 16px;">
       <div>
         <span class="eyebrow">directory</span>
-        <h1 style="font-size:clamp(28px,4vw,40px);">Browse every channel.</h1>
-        <p class="lede">Filter by category, search by keyword, and copy a curl command to subscribe. Paste your API key to personalise.</p>
+        <h1 style="font-size:clamp(26px,4vw,38px);margin-bottom:12px;">All channels — subscribe with one click.</h1>
+        <p class="lede" style="max-width:62ch;">Fifty built-in data sources, grouped by category. Agents: use Subscribe and paste your Bearer token. No key yet? Open signup in the docs first.</p>
       </div>
     </section>
 
     <section style="padding-top:0;">
-      <div class="filters">
-        <input id="key"    placeholder="tfk_YOUR_KEY (optional)" style="flex:1 1 260px;" />
-        <select id="cat">
+      <div class="dir-toolbar">
+        <select id="cat" aria-label="Filter by category" style="flex:1 1 160px;max-width:240px;">
           <option value="">All categories</option>
         </select>
-        <input id="search" placeholder="Search slug or name" style="flex:1 1 220px;" />
-        <button class="btn btn-ghost" id="reload">Reload</button>
+        <input id="search" class="grow" type="search" placeholder="Search name or slug…" autocomplete="off" />
+        <button type="button" class="btn btn-ghost" id="reload">Reload</button>
       </div>
-      <div id="grid" class="channel-grid"></div>
-      <div id="empty" class="empty" style="display:none;">No channels match your filters yet.</div>
+      <p class="dir-stats" id="stats">Loading…</p>
+      <div id="root"></div>
+      <div id="empty" class="empty-state" style="display:none;">No channels match your filters.</div>
     </section>
   </main>
+
+  <div id="modal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-hidden="true">
+    <div class="modal-panel">
+      <div class="modal-head">
+        <h3 id="modal-title">Subscribe</h3>
+        <p id="modal-sub">Paste your TopicFlow API key (<code>tfk_…</code>). It is sent only to TopicFlow over HTTPS.</p>
+      </div>
+      <div class="modal-body">
+        <label for="token">Bearer token</label>
+        <input id="token" name="token" type="password" autocomplete="off" placeholder="tfk_…" />
+        <div class="modal-actions">
+          <button type="button" class="btn btn-ghost" id="modal-cancel">Cancel</button>
+          <button type="button" class="btn btn-primary" id="modal-confirm">Subscribe</button>
+        </div>
+        <p class="modal-msg" id="modal-msg" aria-live="polite"></p>
+      </div>
+      <div class="modal-foot">
+        No key yet? <a href="/topicflow/docs#signup">Docs &amp; signup →</a>
+      </div>
+    </div>
+  </div>
 
   <footer class="site">
     <div class="wrap site-grid">
@@ -79,82 +157,195 @@
   </footer>
 
   <script>
-    const qs = new URLSearchParams(location.search);
-    if (qs.get('category')) document.getElementById('cat-preselect-marker');
-    const keyEl = document.getElementById('key');
-    const catEl = document.getElementById('cat');
-    const searchEl = document.getElementById('search');
-    const gridEl = document.getElementById('grid');
-    const emptyEl = document.getElementById('empty');
+    (function () {
+      const qs = new URLSearchParams(location.search);
+      const catEl = document.getElementById('cat');
+      const searchEl = document.getElementById('search');
+      const rootEl = document.getElementById('root');
+      const emptyEl = document.getElementById('empty');
+      const statsEl = document.getElementById('stats');
+      const modal = document.getElementById('modal');
+      const tokenEl = document.getElementById('token');
+      const modalTitle = document.getElementById('modal-title');
+      const modalSub = document.getElementById('modal-sub');
+      const modalMsg = document.getElementById('modal-msg');
+      let pendingSlug = null;
+      let pendingName = '';
 
-    const CATEGORIES = ['crypto','finance','economics','geoscience','weather','environment','space','health','tech','research','regulatory','logistics','energy','culture','demographics','news','misc'];
-    CATEGORIES.forEach((c) => {
-      const o = document.createElement('option');
-      o.value = c; o.textContent = c;
-      catEl.appendChild(o);
-    });
-    if (qs.get('category')) catEl.value = qs.get('category');
-    if (qs.get('search')) searchEl.value = qs.get('search');
-
-    async function load() {
-      const key = keyEl.value.trim();
-      const params = new URLSearchParams();
-      if (catEl.value) params.set('category', catEl.value);
-      if (searchEl.value.trim()) params.set('search', searchEl.value.trim());
-      const headers = key ? { Authorization: `Bearer ${key}` } : {};
-
-      gridEl.innerHTML = '';
-      emptyEl.style.display = 'none';
-
-      let resp;
+      const LS_KEY = 'topicflow_api_key';
       try {
-        resp = await fetch('/topicflow/channels?' + params.toString(), { headers });
-      } catch (e) {
-        emptyEl.textContent = 'Could not reach /topicflow/channels.';
-        emptyEl.style.display = 'block';
-        return;
-      }
-      if (resp.status === 401) {
-        emptyEl.innerHTML = 'Enter an API key above to browse channels. Get one with <code>POST /topicflow/auth/register</code>.';
-        emptyEl.style.display = 'block';
-        return;
-      }
-      const data = await resp.json().catch(() => ({ channels: [] }));
-      const channels = data.channels || [];
-      if (!channels.length) {
-        emptyEl.textContent = 'No channels match your filters yet.';
-        emptyEl.style.display = 'block';
-        return;
-      }
-      for (const c of channels) {
-        const card = document.createElement('div');
-        card.className = 'ch';
-        card.innerHTML = `
-          <div class="ch-head">
-            <div>
-              <h3 class="ch-name">${escapeHtml(c.name)}</h3>
-              <div class="ch-slug">${escapeHtml(c.slug)}</div>
-            </div>
-            <span class="ch-cat">${escapeHtml(c.category || 'misc')}</span>
-          </div>
-          <p class="ch-desc">${escapeHtml(c.description || '')}</p>
-          <div class="ch-meta"><span>cadence: ${escapeHtml(c.cadence || '')}</span><span>${c.subscriber_count || 0} subscribers</span></div>
-          <pre class="ch-cmd">curl -X POST https://texflow.work/topicflow/channels/${escapeHtml(c.slug)}/subscribe \\
-  -H "Authorization: Bearer YOUR_KEY"</pre>`;
-        gridEl.appendChild(card);
-      }
-    }
+        const saved = localStorage.getItem(LS_KEY);
+        if (saved) tokenEl.value = saved;
+      } catch (e) {}
 
-    function escapeHtml(s) {
-      return String(s).replace(/[&<>"']/g, (ch) => ({
-        '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
-      })[ch]);
-    }
+      function openModal(slug, displayName, emoji) {
+        pendingSlug = slug;
+        pendingName = displayName || slug;
+        modalMsg.textContent = '';
+        modalMsg.className = 'modal-msg';
+        modalTitle.textContent = 'Subscribe · ' + (emoji ? emoji + ' ' : '') + pendingName;
+        modalSub.innerHTML = 'Channel <code style="color:var(--accent-strong);">' + escapeHtml(slug) + '</code> — POST with your Bearer token.';
+        modal.classList.add('is-open');
+        modal.setAttribute('aria-hidden', 'false');
+        tokenEl.focus();
+      }
 
-    document.getElementById('reload').addEventListener('click', load);
-    [keyEl, catEl, searchEl].forEach((el) => el.addEventListener('change', load));
-    searchEl.addEventListener('keyup', (e) => { if (e.key === 'Enter') load(); });
-    load();
+      function closeModal() {
+        modal.classList.remove('is-open');
+        modal.setAttribute('aria-hidden', 'true');
+        pendingSlug = null;
+      }
+
+      function escapeHtml(s) {
+        return String(s).replace(/[&<>"']/g, function (ch) {
+          return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[ch];
+        });
+      }
+
+      function groupByCategory(channels) {
+        const m = new Map();
+        for (const c of channels) {
+          const k = c.category || 'misc';
+          if (!m.has(k)) m.set(k, []);
+          m.get(k).push(c);
+        }
+        for (const arr of m.values()) {
+          arr.sort(function (a, b) { return a.name.localeCompare(b.name); });
+        }
+        return m;
+      }
+
+      function fillCategorySelect(categories) {
+        const preserved = catEl.value || qs.get('category') || '';
+        catEl.innerHTML = '<option value="">All categories</option>';
+        categories.sort().forEach(function (c) {
+          const o = document.createElement('option');
+          o.value = c;
+          o.textContent = c;
+          catEl.appendChild(o);
+        });
+        if (preserved && [...catEl.options].some(function (o) { return o.value === preserved; })) {
+          catEl.value = preserved;
+        }
+      }
+
+      async function load() {
+        rootEl.innerHTML = '';
+        emptyEl.style.display = 'none';
+        statsEl.textContent = 'Loading…';
+        const params = new URLSearchParams();
+        if (catEl.value) params.set('category', catEl.value);
+        if (searchEl.value.trim()) params.set('search', searchEl.value.trim());
+        let data;
+        try {
+          const r = await fetch('/topicflow/channels/catalog?' + params.toString());
+          data = await r.json();
+        } catch (e) {
+          statsEl.textContent = '';
+          emptyEl.textContent = 'Could not load catalog.';
+          emptyEl.style.display = 'block';
+          return;
+        }
+        const channels = data.channels || [];
+        statsEl.textContent = channels.length + ' channel' + (channels.length === 1 ? '' : 's') + (data.count != null ? ' (API count ' + data.count + ')' : '');
+
+        if (!channels.length) {
+          emptyEl.style.display = 'block';
+          return;
+        }
+
+        const cats = [...new Set(channels.map(function (c) { return c.category || 'misc'; }))];
+        fillCategorySelect(cats);
+
+        const grouped = groupByCategory(channels);
+        const order = [...grouped.keys()].sort();
+        for (const cat of order) {
+          const section = document.createElement('section');
+          section.className = 'cat-section';
+          section.id = 'cat-' + cat;
+          const h = document.createElement('h2');
+          h.className = 'cat-heading';
+          h.innerHTML = escapeHtml(cat) + ' <span>· ' + grouped.get(cat).length + '</span>';
+          section.appendChild(h);
+          const grid = document.createElement('div');
+          grid.className = 'ch-grid';
+          for (const c of grouped.get(cat)) {
+            const card = document.createElement('article');
+            card.className = 'ch-card';
+            const em = c.emoji || '';
+            card.innerHTML =
+              '<div class="ch-title-row">' +
+                '<span class="ch-emoji" aria-hidden="true">' + em + '</span>' +
+                '<div class="ch-titles">' +
+                  '<p class="ch-name">' + escapeHtml(c.name) + '</p>' +
+                  '<p class="ch-slug">' + escapeHtml(c.slug) + '</p>' +
+                '</div>' +
+              '</div>' +
+              '<button type="button" class="btn-sub" data-subscribe="' + escapeHtml(c.slug) + '" data-name="' + escapeHtml(c.name) + '" data-emoji="' + escapeHtml(em) + '">Subscribe</button>' +
+              '<p class="ch-desc">' + escapeHtml(c.description || '') + '</p>' +
+              '<p class="ch-meta">cadence: ' + escapeHtml(c.cadence || '') + ' · subscribers: ' + (c.subscriber_count != null ? c.subscriber_count : 0) + '</p>';
+            grid.appendChild(card);
+          }
+          section.appendChild(grid);
+          rootEl.appendChild(section);
+        }
+
+        rootEl.querySelectorAll('[data-subscribe]').forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            openModal(btn.getAttribute('data-subscribe'), btn.getAttribute('data-name'), btn.getAttribute('data-emoji'));
+          });
+        });
+      }
+
+      document.getElementById('reload').addEventListener('click', load);
+      catEl.addEventListener('change', load);
+      searchEl.addEventListener('input', function () {
+        clearTimeout(searchEl._t);
+        searchEl._t = setTimeout(load, 280);
+      });
+
+      document.getElementById('modal-cancel').addEventListener('click', closeModal);
+      modal.addEventListener('click', function (e) {
+        if (e.target === modal) closeModal();
+      });
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && modal.classList.contains('is-open')) closeModal();
+      });
+
+      document.getElementById('modal-confirm').addEventListener('click', async function () {
+        const key = tokenEl.value.trim();
+        if (!pendingSlug) return;
+        if (!key) {
+          modalMsg.textContent = 'Enter your API key.';
+          modalMsg.className = 'modal-msg err';
+          return;
+        }
+        modalMsg.textContent = 'Subscribing…';
+        modalMsg.className = 'modal-msg';
+        try {
+          const r = await fetch('/topicflow/channels/' + encodeURIComponent(pendingSlug) + '/subscribe', {
+            method: 'POST',
+            headers: { Authorization: 'Bearer ' + key },
+          });
+          const body = await r.json().catch(function () { return {}; });
+          if (!r.ok) {
+            modalMsg.textContent = (body && body.error) ? body.error : ('HTTP ' + r.status);
+            modalMsg.className = 'modal-msg err';
+            return;
+          }
+          try { localStorage.setItem(LS_KEY, key); } catch (e) {}
+          modalMsg.textContent = 'Subscribed to ' + pendingSlug + '.';
+          modalMsg.className = 'modal-msg ok';
+          setTimeout(closeModal, 900);
+        } catch (e) {
+          modalMsg.textContent = 'Network error.';
+          modalMsg.className = 'modal-msg err';
+        }
+      });
+
+      if (qs.get('search')) searchEl.value = qs.get('search');
+      load();
+    })();
   </script>
 </body>
 </html>

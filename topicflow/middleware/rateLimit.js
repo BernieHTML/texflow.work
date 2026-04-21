@@ -9,7 +9,9 @@ const limiter = rateLimit({
   keyGenerator: (req) => parseBearer(req) || req.ip,
   skip: (req) => {
     const p = req.originalUrl || req.path || "";
-    return p.startsWith("/topicflow/stream") || p.startsWith("/stream");
+    if (p.startsWith("/topicflow/stream") || p.startsWith("/stream")) return true;
+    if (p.includes("/channels/catalog")) return true;
+    return false;
   },
 });
 

@@ -1,70 +1,70 @@
 {
   "channel": "earthquakes-significant",
   "event": "earthquake",
-  "ts": "2026-04-17T14:30:45.329Z",
+  "ts": "2026-04-21T02:15:32.751Z",
   "source": "earthquakes-significant",
   "payload": {
-    "count": 15,
+    "count": 20,
     "quakes": [
       {
-        "mag": 5.4,
-        "place": "northern Mid-Atlantic Ridge",
-        "time": 1776429566641,
+        "mag": 5,
+        "place": "53 km E of Wāngjing, India",
+        "time": 1776731375894,
+        "depth_km": 100.552
+      },
+      {
+        "mag": 4.5,
+        "place": "106 km WNW of Ambon, Indonesia",
+        "time": 1776730669906,
+        "depth_km": 119.215
+      },
+      {
+        "mag": 4.7,
+        "place": "59 km SE of Mawlaik, Burma (Myanmar)",
+        "time": 1776730107796,
+        "depth_km": 107.807
+      },
+      {
+        "mag": 4.6,
+        "place": "off the coast of Ecuador",
+        "time": 1776722396780,
+        "depth_km": 10
+      },
+      {
+        "mag": 4.5,
+        "place": "144 km SW of Tual, Indonesia",
+        "time": 1776720354920,
+        "depth_km": 10
+      },
+      {
+        "mag": 4.5,
+        "place": "35 km SE of Dumabato, Philippines",
+        "time": 1776719240795,
+        "depth_km": 10
+      },
+      {
+        "mag": 5.3,
+        "place": "166 km W of Abepura, Indonesia",
+        "time": 1776710825797,
+        "depth_km": 10
+      },
+      {
+        "mag": 4.7,
+        "place": "112 km ENE of Miyako, Japan",
+        "time": 1776694529099,
+        "depth_km": 34.135
+      },
+      {
+        "mag": 5.1,
+        "place": "129 km E of Yamada, Japan",
+        "time": 1776689805171,
         "depth_km": 10
       },
       {
         "mag": 4.6,
-        "place": "49 km SE of Severo-Kuril’sk, Russia",
-        "time": 1776429432403,
-        "depth_km": 70.766
-      },
-      {
-        "mag": 4.7,
-        "place": "119 km W of Ternate, Indonesia",
-        "time": 1776421275146,
-        "depth_km": 32.187
-      },
-      {
-        "mag": 4.9,
-        "place": "6 km NNE of Gigaquit, Philippines",
-        "time": 1776408436592,
-        "depth_km": 116.727
-      },
-      {
-        "mag": 4.9,
-        "place": "24 km SE of Calingasta, Argentina",
-        "time": 1776406788260,
-        "depth_km": 112.404
-      },
-      {
-        "mag": 4.5,
-        "place": "106 km WNW of Candelaria, Argentina",
-        "time": 1776393514619,
-        "depth_km": 130.041
-      },
-      {
-        "mag": 4.7,
-        "place": "19 km E of Nejapa de Madero, Mexico",
-        "time": 1776387481935,
-        "depth_km": 57.338
-      },
-      {
-        "mag": 4.5,
-        "place": "150 km W of Neiafu, Tonga",
-        "time": 1776382728195,
-        "depth_km": 219.87
-      },
-      {
-        "mag": 5.1,
-        "place": "north of Ascension Island",
-        "time": 1776375985134,
-        "depth_km": 10
-      },
-      {
-        "mag": 5.2,
-        "place": "north of Ascension Island",
-        "time": 1776371802256,
-        "depth_km": 10
+        "place": "14 km ESE of Sulangan, Philippines",
+        "time": 1776685477901,
+        "depth_km": 35
       }
     ]
   }

@@ -1,7 +1,7 @@
 {
   "channel": "air-quality-global",
   "event": "update",
-  "ts": "2026-04-17T14:30:47.179Z",
+  "ts": "2026-04-21T02:00:32.270Z",
   "source": "air-quality-global",
   "payload": {
     "message": "Gone. Version 1 and Version 2 API endpoints are retired and no longer available. Please migrate to Version 3 endpoints."

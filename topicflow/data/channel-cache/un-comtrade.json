@@ -1,10 +1,10 @@
 {
   "channel": "un-comtrade",
   "event": "update",
-  "ts": "2026-04-17T14:30:50.836Z",
+  "ts": "2026-04-20T14:30:35.469Z",
   "source": "un-comtrade",
   "payload": {
-    "elapsedTime": "0.93 secs",
+    "elapsedTime": "1.63 secs",
     "count": 500,
     "data": [
       {

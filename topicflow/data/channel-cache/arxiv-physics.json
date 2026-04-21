@@ -1,176 +1,165 @@
 {
   "channel": "arxiv-physics",
   "event": "rss_update",
-  "ts": "2026-04-17T14:30:47.704Z",
+  "ts": "2026-04-20T14:30:32.625Z",
   "source": "arxiv-physics",
   "payload": {
     "items": [
       {
-        "title": "Iron spin crossover in ferropericlase and its effect on lower-mantle thermal conductivity",
-        "link": "https://arxiv.org/abs/2604.14183",
-        "description": "arXiv:2604.14183v1 Announce Type: new \nAbstract: Thermal conductivity of Earths lower mantle controls heat transfer across the core-mantle boundary (CMB) and strongly influences mantle convection. We report direct measurements of the thermal conductivity of single-crystal ferropericlase (Mg$_{1-x}$Fe$_x$O, $x = 0.09$-0.13), the second most abundant lower-mantle mineral, using optical laser flash and X-ray free-electron laser heating in diamond-anvil cells up to $\\sim2200$~K and 130~GPa. These experiments provide the first conductivity data for ferropericlase at simultaneous lower-mantle pressures and temperatures. A marked reduction in conductivity between 60 and 100~GPa at $\\sim1700$~K is consistent with the iron spin crossover. Combined with our previous results for Fe- and Fe,Al-bearing bridgmanite, the data define a lower-mantle conductivity profile that increases with pressure to $\\sim10$~W\\,m$^{-1}$\\,K$^{-1}$ near the CMB, constraining mantle heat flux, plume buoyancy, and long-term geodynamic evolution.",
+        "title": "What causes the magnetic curvature drift?",
+        "link": "https://arxiv.org/abs/2604.15354",
+        "description": "arXiv:2604.15354v1 Announce Type: new \nAbstract: When asked what causes the magnetic curvature drift of a charged particle moving in a curving magnetic field, people respond that there is an `F-cross-B' motion of the `guiding center' due to the centrifugal force on the particle as it follows the magnetic field line. This and similar explanations `beg the question' by assuming that the particle follows the field line. In a curving magnetic field, however, a particle moving parallel to the field direction soon won't be. The convective rotation of the field along the particle trajectory ensures that the Lorentz force switches on, and the resulting acceleration rotates the velocity vector back into alignment periodically. The gyration is not symmetric about the field vector, and the resulting velocity offset is the curvature drift. This explanation is guided by Newton's second law of motion in vector notation. It provides a single framework for explaining the three guiding-centre motions of a charged particle in a static nonuniform magnetic field: curvature drift, mirror reflection in a magnetic bottle, and gradient-B drift. The curvature drift case is illustrated by numerical simulation of a test particle in a purely curving magnetic field. The discussion is motivated with the aim of providing insight to instructors of electricity and magnetism or plasma physics at the intermediate to advanced undergraduate level.",
         "guid": {
-          "#text": "oai:arXiv.org:2604.14183v1",
-          "isPermaLink": "false"
-        },
-        "category": [
-          "physics.geo-ph",
-          "cond-mat.mtrl-sci"
-        ],
-        "pubDate": "Fri, 17 Apr 2026 00:00:00 -0400",
-        "arxiv:announce_type": "new",
-        "dc:rights": "http://creativecommons.org/licenses/by/4.0/",
-        "dc:creator": "Alexander F. Goncharov, Irina Chuvashova, Eric Edmund, JungFu Lin, Zena Younes, Nicolas Jaisle, Axel Phelipeau, Carmen Sanchez-Valle, Christoph Otzen, Clemens Prescher, Hanns-Peter Liermann, Nico Giordano, James McHardy, Karen Appel, Michal Andrzejewski, S. V. Rahul, Minxue Tang, Jolanta Sztuk-Dambietz, Thomas Michelat, Torsten Laurus, Malcolm McMahon, Mark Robertson, Rachel Husband, Efim Kolesnikov, Sebastien Merkel, Silvia Boccato, Carsten Baehtz, Guillaume Morard, Emma S. Bullock, Cornelius Strohm, Zuzana Konopkova, Ryan Stewart McWilliams"
-      },
-      {
-        "title": "Correlative Microstructural Analysis of a Weathered Nantan Meteorite Fragment",
-        "link": "https://arxiv.org/abs/2604.14187",
-        "description": "arXiv:2604.14187v1 Announce Type: new \nAbstract: The weathering of iron-rich phases within meteorites is a multi-stage process that significantly alters the microstructure and chemical composition based both on the environmental condition at the location of landing and the exposure time since the fall. This work investigates the resulting phases of this process in a correlative and comparative manner using a naturally weathered Nantan meteorite fragment. Techniques including X-ray Photoelectron Spectroscopy, Energy Dispersive X-ray Spectroscopy, and X-ray Fluorescence Spectroscopy were used for compositional determination and X-ray Diffraction and Electron Backscatter Diffraction for phase determination and microstructural analysis.\n  Use of these techniques revealed the meteorite matrix to be predominantly composed of magnetite, with distinct regions of high Ni content. The grain structure was found to be very fine (approx. 5 $\\mu$m) in areas of high Ni ($\\geq$2.6 at%) content with a visible boundary of 100-200 $\\mu$m extending into the low Ni ($\\leq$0.9 at%) regions, wherein the grains averaged 10s of $\\mu$m in size. Other common products of weathering, including goethite, lepidocrocite, and feroxyhyte, were also found within the matrix alongside Ni(OH)$_2$. Additionally, a brecciated phase was found within the sample and appeared to be a large cohenite grain which exhibits signs of aqueous weathering, including in a vein-like structure, composed of NiO and magnetite, and deposits of iron and nickel carbonates. These results indicate that the distinct matrix regions formed through the weathering mechanism of discrete primary phases, with the high Ni regions forming from aqueous alteration of kamacite and the low Ni regions forming from direct dissolution and oxidation of the source Fe-Ni metal.",
-        "guid": {
-          "#text": "oai:arXiv.org:2604.14187v1",
-          "isPermaLink": "false"
-        },
-        "category": [
-          "physics.geo-ph",
-          "astro-ph.EP",
-          "cond-mat.mtrl-sci"
-        ],
-        "pubDate": "Fri, 17 Apr 2026 00:00:00 -0400",
-        "arxiv:announce_type": "new",
-        "dc:rights": "http://creativecommons.org/licenses/by-nc-nd/4.0/",
-        "dc:creator": "Graeme J. Francolini, Brendan V. Dyck, Paul Mack, Ben Britton"
-      },
-      {
-        "title": "Grading the Unspoken: Evaluating Tacit Reasoning in Quantum Field Theory and String Theory with LLMs",
-        "link": "https://arxiv.org/abs/2604.14188",
-        "description": "arXiv:2604.14188v1 Announce Type: new \nAbstract: Large language models have demonstrated impressive performance across many domains of mathematics and physics. One natural question is whether such models can support research in highly abstract theoretical fields such as quantum field theory and string theory. Evaluating this possibility faces an immediate challenge: correctness in these domains is layered, tacit, and fundamentally non-binary. Standard answer-matching metrics fail to capture whether intermediate conceptual steps are properly reconstructed or whether implicit structural constraints are respected. We construct a compact expert-curated dataset of twelve questions spanning core areas of quantum field theory and string theory, and introduce a five-level grading rubric separating statement correctness, key concept awareness, reasoning chain presence, tacit step reconstruction, and enrichment. Evaluating multiple contemporary LLMs, we observe near-ceiling performance on explicit derivations within stable conceptual frames, but systematic degradation when tasks require reconstruction of omitted reasoning steps or reorganization of representations under global consistency constraints. These failures are driven not only by missing intermediate steps, but by an instability in representation selection: models often fail to identify the correct conceptual framing required to resolve implicit tensions. We argue that highly abstract theoretical physics provides a uniquely sensitive lens on the epistemic limits of current evaluation paradigms.",
-        "guid": {
-          "#text": "oai:arXiv.org:2604.14188v1",
-          "isPermaLink": "false"
-        },
-        "category": [
-          "physics.comp-ph",
-          "cs.AI",
-          "cs.CL",
-          "hep-th"
-        ],
-        "pubDate": "Fri, 17 Apr 2026 00:00:00 -0400",
-        "arxiv:announce_type": "new",
-        "dc:rights": "http://arxiv.org/licenses/nonexclusive-distrib/1.0/",
-        "dc:creator": "Xingyang Yu, Yinghuan Zhang, Yufei Zhang, Zijun Cui"
-      },
-      {
-        "title": "SWEEP (Seismic Wave Equation Exploration Platform): A Unified Solver Framework for Differentiable Wave Physics",
-        "link": "https://arxiv.org/abs/2604.14189",
-        "description": "arXiv:2604.14189v1 Announce Type: new \nAbstract: SWEEP (Seismic Wave Equation Exploration Platform) is a unified and extensible wave equation solver library designed for wavefield modeling and inversion. It supports a wide range of wave propagation engines, including acoustic, elastic, attenuative, VTI, TTI, and their Born approximations, among others. With a built-in support for automatic differentiation, the framework enables seamless implementation of full-waveform inversion (FWI), least-squares reverse time migration (LSRTM), and other gradient-based optimization methods. It also features a plug-and-play architecture, allowing easy integration and flexible combination of custom loss functions, multi-GPU computation, neural networks, and more. This makes Sweep a powerful and customizable platform for tackling advanced seismic inverse problems.",
-        "guid": {
-          "#text": "oai:arXiv.org:2604.14189v1",
+          "#text": "oai:arXiv.org:2604.15354v1",
           "isPermaLink": "false"
         },
         "category": [
           "physics.gen-ph",
-          "physics.comp-ph"
+          "physics.plasm-ph"
         ],
-        "pubDate": "Fri, 17 Apr 2026 00:00:00 -0400",
+        "pubDate": "Mon, 20 Apr 2026 00:00:00 -0400",
         "arxiv:announce_type": "new",
-        "dc:rights": "http://creativecommons.org/licenses/by/4.0/",
-        "dc:creator": "Shaowen Wang, Tariq Alkhalifah"
+        "dc:rights": "http://arxiv.org/licenses/nonexclusive-distrib/1.0/",
+        "dc:creator": "Johnathan K. Burchill"
       },
       {
-        "title": "A Local Gauge-Covariant Formulation of Classical Dynamics",
-        "link": "https://arxiv.org/abs/2604.14190",
-        "description": "arXiv:2604.14190v1 Announce Type: new \nAbstract: Classical dynamical laws are conventionally formulated as closed evolution equations defined on fixed geometric backgrounds and a global time parameter. We develop a formulation in which neither prescribed evolution laws nor an external clock are assumed a priori. Grounded in the principles of conservation, locality of interaction, and independent local frame freedom, the framework treats spatial geometry as a relational structure that may evolve together with the state. We introduce a notion of local incompatibility defined as the covariant difference between neighboring states under a dynamical transport connection. Because the transport relations are not fixed, restoring compatibility requires the joint adaptation of both state variables and transport geometry. We show that locality, gauge covariance, and coercivity strongly restrict the admissible form of this incompatibility and lead to a simple, globally additive, gauge-invariant quadratic measure of mismatch. Admissible dynamics are then defined as the asynchronous, finite-rate relaxation of this measure, without assuming a predefined action principle. A global time description appears only as an effective coarse-grained limit of this local relaxation process. In appropriate limits, the resulting compatibility-restoration dynamics recovers familiar continuum equations, including diffusion, incompressible Navier--Stokes, and the Amp\\`ere--Maxwell relation. In this sense, dynamics arises from the coupled evolution of state and transport geometry toward local gauge consistency. The formulation provides a constructive framework in which effective physical laws emerge from local relational constraints.",
+        "title": "Simultaneous PW-scale laser driven MeV X-ray and neutron beam characterization for dual radiography capability",
+        "link": "https://arxiv.org/abs/2604.15365",
+        "description": "arXiv:2604.15365v1 Announce Type: new \nAbstract: Laser-driven, high-brilliance secondary sources (electrons, ions, neutrons, X-rays) open new perspectives for compact material probing and imaging of high-speed events. A key advantage is their ability to perform multiplexed probing, as these sources are generated simultaneously in a single shot using a single laser beam. Here, we report the first quantitative measurements of photon spectra (0.1--100 MeV) and angular distributions in the petawatt interaction regime, using an ultra-intense ($>10^{21}\\,\\rm W/cm^2$), ultra-short (24~fs) laser pulse. These results are complemented by the characterization of simultaneously produced MeV neutrons. We demonstrate that these neutrons, once moderated, can enable in-depth material identification via resonance transmission analysis. This work highlights the potential of compact, ultrashort-pulse PW lasers for dual neutron and X-ray radiography of dense materials.",
         "guid": {
-          "#text": "oai:arXiv.org:2604.14190v1",
+          "#text": "oai:arXiv.org:2604.15365v1",
+          "isPermaLink": "false"
+        },
+        "category": [
+          "physics.ins-det",
+          "physics.plasm-ph"
+        ],
+        "pubDate": "Mon, 20 Apr 2026 00:00:00 -0400",
+        "arxiv:announce_type": "new",
+        "dc:rights": "http://arxiv.org/licenses/nonexclusive-distrib/1.0/",
+        "dc:creator": "I. Cohen, W. Yao, N. Mirkovic, P. Antici, G. Auge, P. -G. Bleotu, T. Catabi, S. N. Chen, A. Ciardi, F. Condamine, E. d`Humieres, Q. Ducasse, G. Fauvel, R. Gambicchia, G. Giubega, L. Gremillet, M. Gugiu, V. Iancu, R. Leli`evre, L. T. Mix, Y. Ristic, D. Sangwan, M. Sheats, F. Trompier, L. Tudor, S. Turiel, G. Verstraeten, T. Vinchon, I. Pomerantz, O. Tesileanu, J. Fuchs"
+      },
+      {
+        "title": "Equations of motion of the mass centers in a scalar theory of gravity with a preferred frame",
+        "link": "https://arxiv.org/abs/2604.15397",
+        "description": "arXiv:2604.15397v1 Announce Type: new \nAbstract: The theory considered interprets gravity as a pressure force. Thus, the scalar gravitational field defines the gravity acceleration field. However, it also determines the relation between the flat ``background metric'' and a curved ``physical metric''. Here we derive the equations of motion of the mass centers of a system of weakly gravitating bodies in the second version of that theory. We use the framework which was built and used for the first version. Namely, we use an asymptotic scheme of post-Newtonian (PN) approximation to derive the local (field) PN equations, and by integration inside the bodies we deduce from those local equations the equations of motion of the mass centers, using also an asymptotic framework for the good separation between the different bodies.",
+        "guid": {
+          "#text": "oai:arXiv.org:2604.15397v1",
           "isPermaLink": "false"
         },
         "category": "physics.gen-ph",
-        "pubDate": "Fri, 17 Apr 2026 00:00:00 -0400",
+        "pubDate": "Mon, 20 Apr 2026 00:00:00 -0400",
         "arxiv:announce_type": "new",
         "dc:rights": "http://creativecommons.org/licenses/by/4.0/",
-        "dc:creator": "Gunjan Auti, Hirofumi Daiguji, Gouhei Tanaka"
+        "arxiv:DOI": "10.7546/jgsp-75-2026-1-19",
+        "arxiv:journal_reference": "J. Geom. Symmetry Phys. 75, 1-19 (2026)",
+        "dc:creator": "Mayeul Arminjon"
       },
       {
-        "title": "Toward buoyancy-driven flow at Campi Flegrei: coupled phase change and asymmetric geometry",
-        "link": "https://arxiv.org/abs/2604.14196",
-        "description": "arXiv:2604.14196v1 Announce Type: new \nAbstract: Bradyseism at Campi Flegrei is usually interpreted in terms of hydrothermal pressurization and magmatic degassing. Fluid flow, often treated as a passive response to pressure accumulation, is commonly modeled using simplified geometries and homogeneous permeability fields. We introduce a model in which phase transition, structural heterogeneity and geometric asymmetry jointly influence fluid flow and pressure distribution within a heterogeneous subsurface environment. We hypothesize that coupling among phase change, density gradients and flows may follow a mechanism similar to the self-propulsion observed in asymmetric floating bodies like melting ice blocks, where phase change generates buoyancy-driven currents along their inclined surfaces and net motion in the opposite direction. We simulate pressure evolution in a shallow gas-rich reservoir subject to time-dependent forcing and hydraulic relaxation, coupled to buoyancy-enhanced Darcy flow along prescribed preferential pathways. Our numerical simulations, grounded in reported deformation rates and seismicity depths at Campi Flegrei, reproduce temporal variations in uplift and the persistence of spatially localized flow. Within this framework, asymmetric geometry may promote channelized upward transport, while phase change may enhance buoyancy and contribute to pressure redistribution. Our model predicts nonlinear uplift acceleration, shallow localized seismicity and velocity scaling with pressure and buoyancy. Integration with existing multiphase models would enable the examination of how buoyancy-driven flows influence pressure evolution and deformation during volcanic unrest.",
+        "title": "Endwall and leading-edge film cooling of turbine blades in a hydrogen-fueled rotating detonation combustor-turbine coupled system",
+        "link": "https://arxiv.org/abs/2604.15401",
+        "description": "arXiv:2604.15401v1 Announce Type: new \nAbstract: This study performs a three-dimensional numerical simulation of the coupled flow field in a hydrogen-air rotating detonation combustor (RDC)-turbine system to evaluate the effectiveness of different film cooling strategies for the turbine blades. The results demonstrate that combining the endwall cooling with leading-edge film cooling effectively reduces blade surface temperatures while improving turbine flow field stability and blade protection. For endwall cooling, numerical simulations compare circular and slot hole configurations. Circular holes consume less cooling air than slot holes while maintaining comparable cooling performance, making them the preferred choice. For the leading-edge film cooling, both the vertical and the vertical-inclined schemes are examined. The vertical-inclined scheme demonstrates higher cooling efficiency and improved secondary flow attachment, ensuring greater stability under the oscillatory effects of the detonation flow. Additionally, the flow fields of film-cooled turbine blades with and without the propagation of the rotating detonation wave are compared, revealing that the upstream rotating detonation flow field facilitates the downstream diffusion of secondary film cooling jets.",
         "guid": {
-          "#text": "oai:arXiv.org:2604.14196v1",
+          "#text": "oai:arXiv.org:2604.15401v1",
           "isPermaLink": "false"
         },
-        "category": "physics.geo-ph",
-        "pubDate": "Fri, 17 Apr 2026 00:00:00 -0400",
+        "category": "physics.flu-dyn",
+        "pubDate": "Mon, 20 Apr 2026 00:00:00 -0400",
         "arxiv:announce_type": "new",
-        "dc:rights": "http://creativecommons.org/licenses/by/4.0/",
-        "dc:creator": "Arturo Tozzi"
+        "dc:rights": "http://arxiv.org/licenses/nonexclusive-distrib/1.0/",
+        "arxiv:DOI": "10.1016/j.energy.2025.138307",
+        "arxiv:journal_reference": "Energy 335 (2025) 138307",
+        "dc:creator": "Yeqi Zhou, Songbai Yao, Jingtian Yu, Weijia Qian, Ping Wang, Wenwu Zhang"
       },
       {
-        "title": "LSTM-PINN for Steady-State Electrothermal Transport: Preserving Multi-Field Consis tency in Strongly Coupled Heat and Fluid Flow",
-        "link": "https://arxiv.org/abs/2604.14201",
-        "description": "arXiv:2604.14201v1 Announce Type: new \nAbstract: Steady-state electrothermal systems involve strongly coupled heat transfer, fluid flow, and electric-potential transport, creating severe numerical challenges for standard physics-informed neural networks (PINNs) due to stark disparities in gradient scales and residual stiffnesses across the physical fields. To resolve these multiphysics bottlenecks, we introduce a Long Short-Term Memory PINN (LSTM-PINN) framework that utilizes a depth-recursive memory mechanism to preserve long-range spatial feature dependencies and maintain strict cross-field consistency. The proposed architecture is rigorously evaluated against conventional and attention-based networks across a unified five-field formulation encompassing four complex convective and drag regimes: Boussinesq electrothermal flow, drift-potential gauge-constrained transport, strong buoyancy-coupled convection, and Brinkman--Forchheimer drift. Quantitative and visual analyses demonstrate that LSTM-PINN successfully suppresses non-physical artifacts and structural distortions, yielding the highest thermodynamic fidelity and consistently outperforming state-of-the-art baselines in global error metrics. Ultimately, this memory-enhanced approach provides a highly robust and accurate computational baseline for capturing localized boundary layers and complex energy-momentum feedback in advanced electrothermal energy systems.",
+        "title": "The Metric Fossil: Emergent Spacetime from Asymmetric Projection",
+        "link": "https://arxiv.org/abs/2604.15404",
+        "description": "arXiv:2604.15404v1 Announce Type: new \nAbstract: This paper develops a conditional framework for understanding the emergence of measurable physical structure from a pre-metric domain. Contemporary physics provides powerful and precise descriptions of relations among already-defined observables, yet offers comparatively little on the prior question of how observability, separability, and metric structure themselves arise. I propose that if three-dimensional spacetime is the result of an asymmetric projection from a non-orientable pre-geometric regime grounded in a minimal invariant, then a determinate and internally constrained set of consequences follows. These include: time reinterpreted as projection asymmetry rather than as a dimension or entropy gradient; matter as stabilised residue of projection rather than ontological primitive; quantum correlation as pre-separable unity dissolved by non-orientable topology; black holes as regimes of projection saturation rather than information sinks; dark matter as structured lag in the projection process rather than undetected particle species; and gravity as metric tension at sites of high projection density. The framework does not claim empirical confirmation. Its claim is that the proposal is internally coherent, structurally constrained, capable of generating non-trivial research directions, and that several phenomena currently treated as anomalous or paradoxical become expected consequences of the architecture rather than problems requiring additional postulates. An annex presents candidate formal objects and identifies research obligations for each consequence.",
         "guid": {
-          "#text": "oai:arXiv.org:2604.14201v1",
+          "#text": "oai:arXiv.org:2604.15404v1",
+          "isPermaLink": "false"
+        },
+        "category": "physics.hist-ph",
+        "pubDate": "Mon, 20 Apr 2026 00:00:00 -0400",
+        "arxiv:announce_type": "new",
+        "dc:rights": "http://creativecommons.org/licenses/by-nc-nd/4.0/",
+        "dc:creator": "Jonathon Sendall"
+      },
+      {
+        "title": "The nEXO Radioassay Program",
+        "link": "https://arxiv.org/abs/2604.15406",
+        "description": "arXiv:2604.15406v1 Announce Type: new \nAbstract: Material radioactivity compilations, such as the one presented here, are important enablers of science. They are useful for the selection of radiopure materials used in the design and construction of low-energy rare-event search experiments. They allow researchers developing such experiments to save time on material studies and avoid costly duplication of effort. The data presented here were generated in support of the planned nEXO double-beta decay search. This work contains among the most restrictive constraints on the natural radioactivity content of materials of general interest to the low-radioactivity community, found in any tabulation of this kind. In this study, various techniques were employed; they are described here.",
+        "guid": {
+          "#text": "oai:arXiv.org:2604.15406v1",
           "isPermaLink": "false"
         },
         "category": [
-          "physics.comp-ph",
-          "physics.flu-dyn"
+          "physics.ins-det",
+          "nucl-ex"
         ],
-        "pubDate": "Fri, 17 Apr 2026 00:00:00 -0400",
-        "arxiv:announce_type": "new",
-        "dc:rights": "http://arxiv.org/licenses/nonexclusive-distrib/1.0/",
-        "dc:creator": "Yuqing Zhou, Ze Tao, Hanxuan Wang, Fujun Liu"
-      },
-      {
-        "title": "ML-based approach to classification and generation of structured light propagation in turbulent media",
-        "link": "https://arxiv.org/abs/2604.14208",
-        "description": "arXiv:2604.14208v1 Announce Type: new \nAbstract: This work develops machine learning approaches to classify structured light wave beams developing random speckle disturbances as they propagate through turbulent atmospheres. Beam propagation is modeled by the numerical simulation of a stochastic paraxial equation. We design convolutional neural networks tailored for this specific application and use them for a classification model with one-hot encoding. To address the challenge of potentially limited available data, we develop a prediction-based generative diffusion model to provide additional data during classifier training. We show that a Bregman distance minimization during the learning step improves the quality of the generation of high-frequency modes.",
-        "guid": {
-          "#text": "oai:arXiv.org:2604.14208v1",
-          "isPermaLink": "false"
-        },
-        "category": [
-          "physics.optics",
-          "cs.LG",
-          "math.OC",
-          "physics.comp-ph"
-        ],
-        "pubDate": "Fri, 17 Apr 2026 00:00:00 -0400",
-        "arxiv:announce_type": "new",
-        "dc:rights": "http://arxiv.org/licenses/nonexclusive-distrib/1.0/",
-        "dc:creator": "Aokun Wang, Anjali Nair, Zhongjian Wang, Guillaume Bal"
-      },
-      {
-        "title": "On Computational CUDA Studies of Black Hole Shadows",
-        "link": "https://arxiv.org/abs/2604.14213",
-        "description": "arXiv:2604.14213v1 Announce Type: new \nAbstract: Combining high-performance CUDA numerical codes with the Hamilton--Jacobi formalism, we investigate the shadows properties of rotating charged Euler--Heisenberg black holes in the presence of global monopoles. Then, we discuss the associated energy emission rate by varying the involved black hole parameters. As a result, we show that both the shadow structure and the energy emission rate depend on the global monopole parameter, the electric charge, and the rotation parameter. However, we observe that the Euler--Heisenberg nonlinear parameter does not significantly affect either the shadow or the energy emission rate. In order to reconcile the present theoretical predictions with the shadow observations reported by the Event Horizon Telescope collaboration, we employ a CUDA-based computational approach to establish strict bounds on the GM parameter, the electric charge, and the rotation parameter.",
-        "guid": {
-          "#text": "oai:arXiv.org:2604.14213v1",
-          "isPermaLink": "false"
-        },
-        "category": [
-          "physics.gen-ph",
-          "gr-qc",
-          "hep-th"
-        ],
-        "pubDate": "Fri, 17 Apr 2026 00:00:00 -0400",
+        "pubDate": "Mon, 20 Apr 2026 00:00:00 -0400",
         "arxiv:announce_type": "new",
         "dc:rights": "http://creativecommons.org/licenses/by/4.0/",
-        "dc:creator": "S. E. Baddis, A. Belhaj, H. Belmahi, S. E. Ennadifi, M. Jemri"
+        "dc:creator": "R. MacLellan, P. Acharya, B. Aharmim, S. Alcantar Anguiano, A. Anker, I. J. Arnquist, D. Auty, T. Bhatta, D. Chernyak, J. S. Choe, B. Cleveland, J. Daughhetee, A. Der Mesrobian-Kabakian, Y. Y. Ding, M. L. di Vacri, J. Farine, A. D. French, O. Gileva, R. Gornea, K. Harouaka, K. P. Hobbs, E. W. Hoppe, L. K. S. Horkley, M. Hughes, L. Kieser, A. Larson, I. Lawson, E. K. Lee, D. S. Leonard, K. M. Melby, B. Mong, O. Nusair, D. Pacesila, A. Piepke, N. D. Rocco, R. Saldanha, A. B. M. R. Sazzad, T. D. Schlieder, K. S. Thommasson, R. H. M. Tsang, V. Veeraraghavan, C. Vivo-Vilches, J. Vuilleumier, L. J. Wen, J. Zhao, A. Amy, A. Atencio, J. Bane, V. Belov, A. Bolotnikov, P. A. Breur, J. P. Brodsky, E. Brown, T. Brunner, B. Burnell, E. Caden, G. F. Cao, L. Q. Cao, D. Cesmecioglu, M. Chiu, R. Collister, E. Coulthard, T. Daniels, L. Darroch, M. J. Dolinski, B. Eckert, A. Emara, N. Fatemighomi, W. Fairbank, B. Foust, D. Gallacher, N. Gallice, A. Gaur, G. Giacomini, W. Gillis, F. Girard, A. Gorham, G. Gratta, C. A. Hardy, M. Heffner, E. Hein, J. D. Holt, A. Iverson, A. Karelin, D. Keblbeck, I. Kotov, A. Kuchenkov, K. S. Kumar, M. B. Latif, S. Lavoie, B. G. Lenardo, K. K. H. Leung, H. Lewis, X. Li, Z. Li, C. Licciardi, R. Lindsay, S. Majidi, C. Malbrunot, M. Marquis, C J. Masbou, M. Medina-Peregrina, S. Mngonyama, D. C. Moore, X. E. Ngwadla, K. Ni, A. Nolan, J. C. Nzobadila Ondze, A. Odian, J. L. Orrell, G. S. Ortega, C. T. Overman, L. Pagani, A. Pena-Perez, H. Peltz Smalley, A. Pocar, E. Raguzin, R. Rai, H. Rasiwala, D. Ray, A. M. Remnant, G. Richardson, V. Riot, R. Ross, P. C. Rowson, S. Sangiorgio, D. R. Seiner, S. Sekula, T. Shetty, L. Si, K. Skarpaas, V. Stekhanov, X. L. Sun, S. Thibado, A. Todd, T. Totev, S. Triambak, O. A. Tyuka, T. Vallivilayil John, E. van Bruggen, S. Viel, Q. D. Wang, M. Watts, W. Wei, S. Wilde, X. M. Wu, H. Xu, H. B. Yang, L. Yang, M. Yu, O. Zeldovich"
       },
       {
-        "title": "Potentials and Challenges of Cryoseismology with Fiber Optic Sensing in the High Arctic: A pilot experiment in Hornsund, Svalbard",
-        "link": "https://arxiv.org/abs/2604.14226",
-        "description": "arXiv:2604.14226v1 Announce Type: new \nAbstract: Distributed Acoustic Sensing (DAS) has emerged as a promising tool for environmental and cryoseismological studies, yet its performance under the extreme conditions of the High Arctic remains poorly documented. Here we report on a multi-season DAS experiment conducted across tundra and glacier environments in Hornsund, Svalbard, using 9\\,km of fiber-optic cable. The study combines a description of the deployment strategy, instrumentation, and operational constraints with an exploratory analysis of the recorded data to assess the types of cryospheric processes that can be captured with DAS. We document logistical, environmental, and technical challenges and provides guidelines for future experiments, including issues related to coupling, noise sources, cable integrity, and seasonal accessibility. Furthermore, we demonstrate how the dataset can be used for detecting permafrost freezing using noise interferometry, locating icequakes and calving events, as well as monitoring runoff from river-induced seismic noise. The experiment provides a field-based reference for the design and interpretation of future DAS studies in Arctic environments and highlights considerations relevant for long-term cryoseismological monitoring.",
+        "title": "SHIELD: A Reference Gas-Driven Permeation Platform for Hydrogen Permeation Studies",
+        "link": "https://arxiv.org/abs/2604.15407",
+        "description": "arXiv:2604.15407v1 Announce Type: new \nAbstract: A gas-driven permeation (GDP) platform, SHIELD (Salt-compatible Hydrogen barrier Investigation and EvaLuation for fusion Devices), has been developed to measure hydrogen transport properties in structural materials under controlled thermal and pressure conditions. The system is designed to minimise experimental uncertainties associated with leaks, temperature instability, and pressure measurement, while providing reproducible conditions for permeation experiments. The rig operates in a static GDP configuration with independent upstream and downstream volumes, enabling precise control of driving pressure and accurate measurement of downstream pressure rise. An openly documented data acquisition and processing framework is implemented to ensure data traceability and reproducibility. The platform's performance is demonstrated by hydrogen permeation measurements on 316 stainless steel and AISI 1018 low-carbon steel over the temperature range of \\SIrange{100}{600}{\\degreeCelsius}. Steady-state permeation fluxes are extracted from linear downstream pressure rise and used to determine permeability. The measured permeability exhibits Arrhenius behaviour and agrees well with published literature data for both materials. Permeability measurements are shown to be robust and reproducible. These results demonstrate that SHIELD provides a reliable reference platform for hydrogen permeation measurements and is well-suited to evaluating permeation barrier coatings and advanced materials for fusion applications.",
         "guid": {
-          "#text": "oai:arXiv.org:2604.14226v1",
+          "#text": "oai:arXiv.org:2604.15407v1",
           "isPermaLink": "false"
         },
-        "category": "physics.geo-ph",
-        "pubDate": "Fri, 17 Apr 2026 00:00:00 -0400",
+        "category": [
+          "physics.ins-det",
+          "cond-mat.mtrl-sci"
+        ],
+        "pubDate": "Mon, 20 Apr 2026 00:00:00 -0400",
         "arxiv:announce_type": "new",
-        "dc:rights": "http://arxiv.org/licenses/nonexclusive-distrib/1.0/",
-        "dc:creator": "Wojciech Gajek, Max Benke, Andreas W\\\"ustefeld, Andreas K\\\"ohler, Charlotte Bruland, Alfred Hanssen"
+        "dc:rights": "http://creativecommons.org/licenses/by/4.0/",
+        "dc:creator": "James Dark, Colin Weaver, Remi Delaporte-Mathurin, Sara Ferry, Kevin B. Woller"
+      },
+      {
+        "title": "Optical Theorem for Measuring the Acoustic Extinction Cross Section of Helmholtz Resonators",
+        "link": "https://arxiv.org/abs/2604.15413",
+        "description": "arXiv:2604.15413v1 Announce Type: new \nAbstract: The optical theorem is a powerful tool of scattering theory that directly relates the extinction cross section of a scatterer to its forward scattering amplitude. While widely used in electromagnetism and optics, its application in acoustics has remained limited, primarily due to experimental challenges. These include the finite size of practical sound sources and the stringent requirements for detecting weak scattered signals. In this work, we analyze these limitations and develop a robust methodology for measuring the acoustic extinction cross section under realistic conditions, including non-ideal anechoic environments. The approach is applied to Helmholtz resonators, enabling high-precision measurements even in the presence of pronounced standing-wave resonances. The results demonstrate that, when combined with appropriate data processing, the optical theorem provides a simple and reliable tool for characterizing acoustic resonators, opening new opportunities for quantitative analysis of acoustic scattering and absorption phenomena.",
+        "guid": {
+          "#text": "oai:arXiv.org:2604.15413v1",
+          "isPermaLink": "false"
+        },
+        "category": "physics.class-ph",
+        "pubDate": "Mon, 20 Apr 2026 00:00:00 -0400",
+        "arxiv:announce_type": "new",
+        "dc:rights": "http://creativecommons.org/licenses/by/4.0/",
+        "dc:creator": "Vladimir Igoshin, Daniil Klimov, Yuri Utkin, Sergey Ermakov, Mikhail Kuzmin, Andrey Bogdanov, Yong Li, Mihail Petrov"
+      },
+      {
+        "title": "Component-Based Reduced-Order Modeling Framework for Rocket Combustion Dynamics in Multi-Injector Configurations",
+        "link": "https://arxiv.org/abs/2604.15467",
+        "description": "arXiv:2604.15467v1 Announce Type: new \nAbstract: Even with the most advanced computational capabilities, high-fidelity (e.g., large-eddy) simulations of large-scale rocket engines remain far out of reach. In the current work, we develop and establish a component-based reduced-order modeling (CBROM) framework to enable accurate and efficient parametric modeling of large-scale rocket engines by geometrically decomposing a single domain into a combination of several representative components, including injectors, combustor and nozzle. Individual component-based reduced-order models (ROMs) are trained for each component with fabricated system-level responses enforced through carefully formulated boundary conditions during the training, which only require high-fidelity simulations of a much smaller computational domain, thereby significantly reducing the costs of ROM training. The trained component-based ROMs are then coupled together to enable full-system simulations. Specifically, we pursue an advanced adaptive ROM formulation leveraging a model-form preserving least-squares with variable transformation (MP-LSVT) projection to construct the component-based ROMs. The CBROM framework is evaluated using a seven-injector model rocket combustor configuration that exhibits self-excited combustion dynamics with distinct characteristics that vary with flow condition and geometric variations. The framework is demonstrated to provide accurate parametric predictions of the changes in dynamic behaviors, expressed in the spectra from dynamic mode decomposition (DMD) analysis and features in the time-averaged and RMS fields of target state variables.",
+        "guid": {
+          "#text": "oai:arXiv.org:2604.15467v1",
+          "isPermaLink": "false"
+        },
+        "category": "physics.flu-dyn",
+        "pubDate": "Mon, 20 Apr 2026 00:00:00 -0400",
+        "arxiv:announce_type": "new",
+        "dc:rights": "http://creativecommons.org/licenses/by/4.0/",
+        "dc:creator": "Brody Gatza, Cheng Huang"
+      },
+      {
+        "title": "Quantum-Well-Metasurface to Maximize Nonlinear Polarization",
+        "link": "https://arxiv.org/abs/2604.15476",
+        "description": "arXiv:2604.15476v1 Announce Type: new \nAbstract: Nonlinear frequency conversion unlocks technologies ranging from telecommunications to quantum computation; however, weak nonlinearities and architectures that resist miniaturization currently limit devices. Here, we combine a bandstructure-engineered GaAs/AlGaAs heterostructure with a high quality factor dielectric metasurface to simultaneously tailor the intrinsic nonlinear susceptibility and optimize the electromagnetic field within the heterostructure. By engineering a resonant interband transition, we realize a large second-order nonlinear tensor element, 1.6 nm/V at 1.57 um wavelength. We then make it free-space-accessible and boost the effective nonlinearity to ~ 14 nm/V using a metasurface patterned on the material. Our proof-of-concept experiment establishes that interband transition engineering and metasurfaces accessing otherwise unusable nonlinear tensor elements enable giant effective nonlinearities in the near-infrared to visible spectrum. This addresses material and device-level constraints in nonlinear photonics, providing a scalable route to compact, efficient devices.",
+        "guid": {
+          "#text": "oai:arXiv.org:2604.15476v1",
+          "isPermaLink": "false"
+        },
+        "category": "physics.optics",
+        "pubDate": "Mon, 20 Apr 2026 00:00:00 -0400",
+        "arxiv:announce_type": "new",
+        "dc:rights": "http://creativecommons.org/licenses/by/4.0/",
+        "dc:creator": "Pernille Undrum Fathi, Irene Occhiodori, Patrick Devaney, Amberly Ricks, Rithvik Ramesh, Yiwei Ju, Moaz Waqar, Theodore P. Letsou, Christina M. Sp\\\"agele, Hyunseung Jung, Igal Brener, Xiaoqing Pan, Marcus Ossiander, Seth R. Bank, Federico Capasso"
       }
     ]
   }

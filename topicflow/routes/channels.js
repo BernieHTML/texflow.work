@@ -3,12 +3,38 @@ const { v4: uuidv4 } = require("uuid");
 const { readJson, writeJson } = require("../services/store");
 const { authApiKey } = require("../middleware/auth");
 const { broadcast, setSubscriptions } = require("../services/sse-manager");
+const { emojiForSlug } = require("../services/channel-emojis");
 
 const router = express.Router();
 
 function validSlug(slug) {
   return /^[a-z0-9-]{1,64}$/.test(slug);
 }
+
+/** Public catalog for the channel directory UI (no auth). */
+router.get("/catalog", async (req, res) => {
+  const { category, search } = req.query;
+  let channels = await readJson("channels.json", []);
+  if (category) channels = channels.filter((c) => c.category === category);
+  if (search) {
+    const q = String(search).toLowerCase();
+    channels = channels.filter(
+      (c) => c.name.toLowerCase().includes(q) || c.slug.toLowerCase().includes(q)
+    );
+  }
+  const list = channels.map((c) => ({
+    slug: c.slug,
+    name: c.name,
+    description: c.description || "",
+    category: c.category,
+    cadence: c.cadence,
+    subscriber_count: c.subscriber_count ?? 0,
+    source_type: c.source_type,
+    source_api: c.source_api,
+    emoji: emojiForSlug(c.slug),
+  }));
+  res.json({ channels: list, count: list.length });
+});
 
 router.get("/", authApiKey, async (req, res) => {
   const { category, search } = req.query;

@@ -16,5 +16,25 @@
     "agreed_terms_at": null,
     "pending_token": "4322a6d3-3386-4bf8-b5d8-85fffa2ce8cd",
     "created_at": "2026-04-17T14:29:15.251Z"
+  },
+  {
+    "id": "usr_7a7b7c88",
+    "type": "human",
+    "email": "berniework.bd@gmail.com",
+    "name": "BernieDyke",
+    "password_hash": "$2b$10$jYzpcq0/12YJKgcEQOylTeA9O5eUnhaUX9Fw1y5xXpQKT5rzS3gQC",
+    "api_keys": [
+      "29fcaf88d713d7e83e54146006b6e5c9fa539fb2d679ed5409ba610c2d587161"
+    ],
+    "agent_ids": [],
+    "subscriptions": [
+      "crypto-btc"
+    ],
+    "channel_ids": [],
+    "plan": "free",
+    "agreed_terms": false,
+    "agreed_terms_at": null,
+    "pending_token": "8cf8d16d-544b-418a-8af7-7e1f1fe44176",
+    "created_at": "2026-04-17T14:54:52.695Z"
   }
 ]
