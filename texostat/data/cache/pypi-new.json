@@ -1,128 +1,128 @@
 {
   "channel": "pypi-new",
   "event": "pypi_update",
-  "ts": "2026-04-22T11:30:00.216Z",
+  "ts": "2026-04-22T12:30:00.311Z",
   "source": "PyPI RSS",
   "payload": [
     {
-      "name": "sharle",
+      "name": "sql-feature-store",
       "version": "added",
-      "description": "SHarLe (Spec-Harness-Learning): a framework for spec-driven harness-based learning with LLMs.",
-      "author": "mrive052@gmail.com",
-      "published_at": "Wed, 22 Apr 2026 11:25:24 GMT",
-      "url": "https://pypi.org/project/sharle/"
+      "description": "Lightweight online feature store backed by a SQL database (currently PostgreSQL) with a pandas API: automatic table creation, column migration, upserts, and chunked reads.",
+      "author": "mark.jad@live.com",
+      "published_at": "Wed, 22 Apr 2026 12:21:44 GMT",
+      "url": "https://pypi.org/project/sql-feature-store/"
     },
     {
-      "name": "id-structure-mapper",
+      "name": "shiftstat",
       "version": "added",
-      "description": "None",
+      "description": "Scientific tooling and benchmark workflows for reliability under tabular distribution shift.",
+      "author": "mehdioudghiri@outlook.com",
+      "published_at": "Wed, 22 Apr 2026 12:21:37 GMT",
+      "url": "https://pypi.org/project/shiftstat/"
+    },
+    {
+      "name": "ust-dk-naver-news-crawler",
+      "version": "added",
+      "description": "Add your description here",
       "author": null,
-      "published_at": "Wed, 22 Apr 2026 11:24:06 GMT",
-      "url": "https://pypi.org/project/id-structure-mapper/"
+      "published_at": "Wed, 22 Apr 2026 12:20:07 GMT",
+      "url": "https://pypi.org/project/ust-dk-naver-news-crawler/"
     },
     {
-      "name": "pen-compare",
+      "name": "amongapi",
       "version": "added",
-      "description": "Public web tool for cross-system editor selection in therapeutic genome engineering",
-      "author": "anees.ahmed2022@vitstudent.ac.in",
-      "published_at": "Wed, 22 Apr 2026 11:22:37 GMT",
-      "url": "https://pypi.org/project/pen-compare/"
-    },
-    {
-      "name": "pen-assemble",
-      "version": "added",
-      "description": "Computational hypothesis generation for chimeric non-DSB editors",
-      "author": "anees.ahmed2022@vitstudent.ac.in",
-      "published_at": "Wed, 22 Apr 2026 11:22:19 GMT",
-      "url": "https://pypi.org/project/pen-assemble/"
-    },
-    {
-      "name": "pen-score",
-      "version": "added",
-      "description": "Physics-informed scoring function for non-destructive genome-writing potential",
-      "author": "anees.ahmed2022@vitstudent.ac.in",
-      "published_at": "Wed, 22 Apr 2026 11:22:04 GMT",
-      "url": "https://pypi.org/project/pen-score/"
-    },
-    {
-      "name": "mech-class",
-      "version": "added",
-      "description": "Mechanism-aware classification of DNA-modifying enzymes",
-      "author": "anees.ahmed2022@vitstudent.ac.in",
-      "published_at": "Wed, 22 Apr 2026 11:20:45 GMT",
-      "url": "https://pypi.org/project/mech-class/"
-    },
-    {
-      "name": "genome-atlas",
-      "version": "added",
-      "description": "Unified knowledge graph and embedding space for programmable genome-writing enzymes",
-      "author": "anees.ahmed2022@vitstudent.ac.in",
-      "published_at": "Wed, 22 Apr 2026 11:20:39 GMT",
-      "url": "https://pypi.org/project/genome-atlas/"
-    },
-    {
-      "name": "pen-core",
-      "version": "added",
-      "description": "Shared core library for the PEN-STACK infrastructure",
-      "author": "anees.ahmed2022@vitstudent.ac.in",
-      "published_at": "Wed, 22 Apr 2026 11:20:32 GMT",
-      "url": "https://pypi.org/project/pen-core/"
-    },
-    {
-      "name": "echemplot",
-      "version": "added",
-      "description": "OSS Python toolkit for TOYO battery cycler data (charge/discharge, dQ/dV, cycle stats). Installable from PyPI into Origin's embedded Python.",
-      "author": "tomooki0414@gmail.com",
-      "published_at": "Wed, 22 Apr 2026 11:16:49 GMT",
-      "url": "https://pypi.org/project/echemplot/"
-    },
-    {
-      "name": "csv-dataclass-gen",
-      "version": "added",
-      "description": "Generate Python dataclasses, loaders, from CSV/TSV files",
-      "author": "kin.hin.wong.c@gmail.com",
-      "published_at": "Wed, 22 Apr 2026 11:16:08 GMT",
-      "url": "https://pypi.org/project/csv-dataclass-gen/"
-    },
-    {
-      "name": "askrow-py",
-      "version": "added",
-      "description": "Simple, Safe User Input for Python",
-      "author": "yotlab.team@gmail.com",
-      "published_at": "Wed, 22 Apr 2026 11:10:05 GMT",
-      "url": "https://pypi.org/project/askrow-py/"
-    },
-    {
-      "name": "lattics",
-      "version": "added",
-      "description": "Lattice-based Cellular Simulation",
-      "author": "kissdanieldezso@gmail.com",
-      "published_at": "Wed, 22 Apr 2026 11:08:30 GMT",
-      "url": "https://pypi.org/project/lattics/"
-    },
-    {
-      "name": "pip-audit-html",
-      "version": "added",
-      "description": "Convert pip-audit JSON reports into readable HTML reports",
+      "description": "Unofficial Among us API for AmongBot",
       "author": null,
-      "published_at": "Wed, 22 Apr 2026 11:08:11 GMT",
-      "url": "https://pypi.org/project/pip-audit-html/"
+      "published_at": "Wed, 22 Apr 2026 12:19:09 GMT",
+      "url": "https://pypi.org/project/amongapi/"
     },
     {
-      "name": "is-burner-email",
+      "name": "hex-flow-core",
       "version": "added",
-      "description": "Fast, offline burner / disposable email detection with three-list (blacklist/whitelist/graylist) classification.",
-      "author": null,
-      "published_at": "Wed, 22 Apr 2026 11:06:56 GMT",
-      "url": "https://pypi.org/project/is-burner-email/"
+      "description": "HEXFELLOW hex-flow Core",
+      "author": "dzr159@gmail.com",
+      "published_at": "Wed, 22 Apr 2026 12:18:51 GMT",
+      "url": "https://pypi.org/project/hex-flow-core/"
     },
     {
-      "name": "pycdmon",
+      "name": "swop",
       "version": "added",
-      "description": "Professional Python client for the cdmon Domains & DNS API",
+      "description": "A Python package for inspection utilities",
+      "author": "your.email@example.com, tom@sapletta.com",
+      "published_at": "Wed, 22 Apr 2026 12:16:13 GMT",
+      "url": "https://pypi.org/project/swop/"
+    },
+    {
+      "name": "llm-cache-router",
+      "version": "added",
+      "description": "Semantic cache, multi-provider LLM router and cost tracker (OpenAI, Anthropic, Gemini, Ollama, MiniMax, Qwen)",
+      "author": "valenchits@icloud.com",
+      "published_at": "Wed, 22 Apr 2026 12:16:00 GMT",
+      "url": "https://pypi.org/project/llm-cache-router/"
+    },
+    {
+      "name": "a2a-t-sdk",
+      "version": "added",
+      "description": "Python A2A SDK for Telecom Scenarios",
       "author": null,
-      "published_at": "Wed, 22 Apr 2026 11:04:02 GMT",
-      "url": "https://pypi.org/project/pycdmon/"
+      "published_at": "Wed, 22 Apr 2026 12:14:14 GMT",
+      "url": "https://pypi.org/project/a2a-t-sdk/"
+    },
+    {
+      "name": "atomic-rag-lib",
+      "version": "added",
+      "description": "A modular, research-backed RAG building block library",
+      "author": "rohin.patel@outlook.com",
+      "published_at": "Wed, 22 Apr 2026 12:14:08 GMT",
+      "url": "https://pypi.org/project/atomic-rag-lib/"
+    },
+    {
+      "name": "chaelsea-naver-news-crawler",
+      "version": "added",
+      "description": "Add your description here",
+      "author": "chaelsea000@gmail.com",
+      "published_at": "Wed, 22 Apr 2026 12:14:08 GMT",
+      "url": "https://pypi.org/project/chaelsea-naver-news-crawler/"
+    },
+    {
+      "name": "wani-naver-news-crawler",
+      "version": "added",
+      "description": "Add your description here",
+      "author": null,
+      "published_at": "Wed, 22 Apr 2026 12:13:41 GMT",
+      "url": "https://pypi.org/project/wani-naver-news-crawler/"
+    },
+    {
+      "name": "kaeri-dycho-naver-news-crawler",
+      "version": "added",
+      "description": "Add your description here",
+      "author": null,
+      "published_at": "Wed, 22 Apr 2026 12:13:27 GMT",
+      "url": "https://pypi.org/project/kaeri-dycho-naver-news-crawler/"
+    },
+    {
+      "name": "kitech-choi-naver-news-crawler",
+      "version": "added",
+      "description": "Add your description here",
+      "author": null,
+      "published_at": "Wed, 22 Apr 2026 12:13:21 GMT",
+      "url": "https://pypi.org/project/kitech-choi-naver-news-crawler/"
+    },
+    {
+      "name": "kisti-flydog-naver-news-crawler4444",
+      "version": "added",
+      "description": "Add your description here",
+      "author": null,
+      "published_at": "Wed, 22 Apr 2026 12:13:13 GMT",
+      "url": "https://pypi.org/project/kisti-flydog-naver-news-crawler4444/"
+    },
+    {
+      "name": "kisti-dmseo-260422-naver-news-crawler",
+      "version": "added",
+      "description": "Add your description here",
+      "author": null,
+      "published_at": "Wed, 22 Apr 2026 12:13:10 GMT",
+      "url": "https://pypi.org/project/kisti-dmseo-260422-naver-news-crawler/"
     }
   ]
 }

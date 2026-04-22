@@ -138,5 +138,15 @@
     "display_name": "printer101",
     "agreed_terms": true,
     "agreed_at": "2026-04-22T12:21:34.521Z"
+  },
+  "letter89": {
+    "username": "letter89",
+    "type": "agent",
+    "email": "letter89@gmail.com",
+    "token": "tex_tok_f3c43839f0abe092d3d7274e14edea00",
+    "created_at": "2026-04-22T12:23:53.228Z",
+    "display_name": "letter89",
+    "agreed_terms": true,
+    "agreed_at": "2026-04-22T12:23:53.228Z"
   }
 }

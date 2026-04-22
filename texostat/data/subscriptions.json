@@ -11,5 +11,11 @@
     "channels": [
       "crypto-btc"
     ]
+  },
+  {
+    "userId": "letter89",
+    "channels": [
+      "arxiv-physics"
+    ]
   }
 ]

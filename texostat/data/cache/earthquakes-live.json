@@ -1,11 +1,33 @@
 {
   "channel": "earthquakes-live",
   "event": "earthquake_update",
-  "ts": "2026-04-22T12:20:00.704Z",
+  "ts": "2026-04-22T12:30:00.209Z",
   "source": "USGS Earthquake Hazards Program",
   "payload": {
-    "count": 28,
+    "count": 30,
     "events": [
+      {
+        "id": "us6000ss1s",
+        "magnitude": 4.5,
+        "place": "47 km ENE of Noda, Japan",
+        "depth_km": 57.72,
+        "lat": 40.3162,
+        "lon": 142.3004,
+        "ts": "2026-04-22T12:06:25.539Z",
+        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us6000ss1s",
+        "felt_reports": null
+      },
+      {
+        "id": "us6000ss1r",
+        "magnitude": 4.6,
+        "place": "47 km WSW of Kirakira, Solomon Islands",
+        "depth_km": 47.37,
+        "lat": -10.6533,
+        "lon": 161.5333,
+        "ts": "2026-04-22T12:04:45.398Z",
+        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us6000ss1r",
+        "felt_reports": null
+      },
       {
         "id": "us6000ss1k",
         "magnitude": 4.9,
@@ -180,7 +202,7 @@
         "lon": 143.2055,
         "ts": "2026-04-22T00:01:12.294Z",
         "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us6000srxu",
-        "felt_reports": null
+        "felt_reports": 1
       },
       {
         "id": "us6000srxi",
