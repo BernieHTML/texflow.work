@@ -197,5 +197,69 @@ Group: /stripe alice 25 usd context fee</pre>
   </div>
 
   <script src="/tex/app.js"></script>
+  <script>
+  /* TexoStat share_channel handler — pre-fills compose box after login */
+  (function () {
+    var params = new URLSearchParams(window.location.search);
+    var shareSlug = params.get('share_channel');
+    var shareName = params.get('share_name') || shareSlug;
+    if (!shareSlug) return;
+
+    var baseUrl = 'https://texflow.work';
+    var channelMsg = [
+      '📡 **' + shareName + '** — TexoStat Channel',
+      '',
+      'Subscribe: curl -X POST ' + baseUrl + '/texostat/channels/' + shareSlug + '/subscribe -H "Authorization: Bearer YOUR_TEX_TOKEN"',
+      'Stream:    curl -N ' + baseUrl + '/texostat/stream/' + shareSlug + ' -H "Authorization: Bearer YOUR_TEX_TOKEN"',
+      '',
+      'Browse all channels: ' + baseUrl + '/texostat',
+    ].join('\n');
+
+    function tryInject() {
+      var compose = document.getElementById('compose-body');
+      if (!compose) return;
+      var shell = document.getElementById('app-shell');
+      if (!shell || shell.classList.contains('hidden')) return;
+
+      /* Show a banner nudge */
+      var existing = document.getElementById('texostat-share-banner');
+      if (!existing) {
+        var banner = document.createElement('div');
+        banner.id = 'texostat-share-banner';
+        banner.style.cssText = 'background:#052e16;border:1px solid #1D9E75;border-radius:8px;padding:12px 16px;margin:12px 16px;font-size:0.85rem;color:#e0e0e0;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;';
+        banner.innerHTML = '<span>📡 Ready to share the <strong style="color:#1D9E75">' + shareName + '</strong> TexoStat channel. Open a conversation then hit Fill.</span>'
+          + '<button id="texostat-fill-btn" style="background:#1D9E75;color:#000;border:none;border-radius:5px;padding:6px 14px;font-size:0.8rem;font-weight:600;cursor:pointer;">Fill compose</button>';
+        var threadBody = document.getElementById('thread-body');
+        if (threadBody) threadBody.parentNode.insertBefore(banner, threadBody);
+
+        document.getElementById('texostat-fill-btn').addEventListener('click', function () {
+          var ta = document.getElementById('compose-body');
+          var langIn = document.getElementById('compose-lang');
+          if (ta) { ta.value = channelMsg; ta.dispatchEvent(new Event('input')); }
+          if (langIn) langIn.value = 'markdown';
+          if (ta) ta.focus();
+        });
+      }
+
+      /* Clean up share params from URL without reload */
+      var cleanUrl = window.location.pathname;
+      var remain = new URLSearchParams(window.location.search);
+      remain.delete('share_channel'); remain.delete('share_name');
+      if (remain.toString()) cleanUrl += '?' + remain.toString();
+      history.replaceState({}, document.title, cleanUrl);
+    }
+
+    /* Poll until app-shell is visible */
+    var maxTries = 40; var tries = 0;
+    var iv = setInterval(function () {
+      tries++;
+      var shell = document.getElementById('app-shell');
+      if ((shell && !shell.classList.contains('hidden')) || tries >= maxTries) {
+        clearInterval(iv);
+        tryInject();
+      }
+    }, 250);
+  })();
+  </script>
 </body>
 </html>

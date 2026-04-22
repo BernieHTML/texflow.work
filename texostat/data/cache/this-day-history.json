@@ -1,28 +1,28 @@
 {
   "channel": "this-day-history",
   "event": "history_update",
-  "ts": "2026-04-21T10:32:39.783Z",
+  "ts": "2026-04-22T00:05:01.561Z",
   "source": "history.muffinlabs.com",
   "payload": [
     {
-      "year": "753 BC",
-      "event": "Romulus founds Rome (traditional date)."
+      "year": "1500",
+      "event": "Portuguese navigator Pedro Álvares Cabral lands in Brazil (discovery of Brazil)."
     },
     {
-      "year": "43 BC",
-      "event": "Battle of Mutina: Mark Antony is again defeated in battle by Aulus Hirtius, who is killed. Antony fails to capture Mutina and Decimus Brutus is murdered shortly after."
+      "year": "1519",
+      "event": "Spanish conquistador Hernán Cortés establishes a settlement at Veracruz, Mexico."
     },
     {
-      "year": "900",
-      "event": "The Laguna Copperplate Inscription (the earliest known written document found in what is now the Philippines): the Commander-in-Chief of the Kingdom of Tondo, as represented by the Honourable Jayadewa, Lord Minister of Pailah, pardons from all debt the Honourable Namwaran and his relations."
+      "year": "1529",
+      "event": "Treaty of Zaragoza divides the eastern hemisphere between Spain and Portugal along a line 297.5 leagues (1,250 kilometres (780 mi)) east of the Moluccas."
     },
     {
-      "year": "1092",
-      "event": "The Diocese of Pisa is elevated to the rank of metropolitan archdiocese by Pope Urban II"
+      "year": "1809",
+      "event": "The second day of the Battle of Eckmühl: The Austrian army is defeated by the First French Empire army led by Napoleon and driven over the Danube in Regensburg."
     },
     {
-      "year": "1506",
-      "event": "The three-day Lisbon Massacre comes to an end with the slaughter of over 1,900 suspected Jews by Portuguese Catholics."
+      "year": "1836",
+      "event": "Texas Revolution: A day after the Battle of San Jacinto, forces under Texas General Sam Houston identify Mexican General Antonio López de Santa Anna among the captives of the battle when some of his fellow soldiers mistakenly give away his identity."
     }
   ]
 }

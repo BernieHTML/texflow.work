@@ -1,98 +1,98 @@
 {
   "channel": "hacker-news",
   "event": "hn_update",
-  "ts": "2026-04-21T11:15:00.959Z",
+  "ts": "2026-04-22T11:15:00.777Z",
   "source": "HN Algolia /search",
   "payload": [
     {
       "rank": 1,
-      "title": "John Ternus to become Apple CEO",
-      "url": "https://www.apple.com/newsroom/2026/04/tim-cook-to-become-apple-executive-chairman-john-ternus-to-become-apple-ceo/",
-      "score": 1846,
-      "comments": 998,
-      "author": "schappim",
-      "age_hours": 15
-    },
-    {
-      "rank": 2,
-      "title": "All phones sold in the EU to have replaceable batteries from 2027",
-      "url": "https://www.theolivepress.es/spain-news/2026/04/20/eu-to-force-replaceable-batteries-in-phones-and-tablets-from-2027/",
-      "score": 1297,
-      "comments": 1088,
-      "author": "ramonga",
-      "age_hours": 22
-    },
-    {
-      "rank": 3,
-      "title": "Qwen3.6-Max-Preview: Smarter, Sharper, Still Evolving",
-      "url": "https://qwen.ai/blog?id=qwen3.6-max-preview",
-      "score": 630,
-      "comments": 335,
-      "author": "mfiguiere",
-      "age_hours": 21
-    },
-    {
-      "rank": 4,
-      "title": "ggsql: A Grammar of Graphics for SQL",
-      "url": "https://opensource.posit.co/blog/2026-04-20_ggsql_alpha_release/",
-      "score": 421,
-      "comments": 80,
-      "author": "thomasp85",
-      "age_hours": 22
-    },
-    {
-      "rank": 5,
-      "title": "Kimi vendor verifier – verify accuracy of inference providers",
-      "url": "https://www.kimi.com/blog/kimi-vendor-verifier",
-      "score": 262,
-      "comments": 25,
-      "author": "Alifatisk",
+      "title": "Framework Laptop 13 Pro",
+      "url": "https://frame.work/laptop13pro",
+      "score": 1298,
+      "comments": 650,
+      "author": "Trollmann",
       "age_hours": 17
     },
     {
+      "rank": 2,
+      "title": "Laws of Software Engineering",
+      "url": "https://lawsofsoftwareengineering.com",
+      "score": 1036,
+      "comments": 475,
+      "author": "milanm081",
+      "age_hours": 24
+    },
+    {
+      "rank": 3,
+      "title": "ChatGPT Images 2.0",
+      "url": "https://openai.com/index/introducing-chatgpt-images-2-0/",
+      "score": 856,
+      "comments": 690,
+      "author": "wahnfrieden",
+      "age_hours": 16
+    },
+    {
+      "rank": 4,
+      "title": "SpaceX says it has agreement to acquire Cursor for $60B",
+      "url": "https://twitter.com/spacex/status/2046713419978453374",
+      "score": 621,
+      "comments": 760,
+      "author": "dmarcos",
+      "age_hours": 13
+    },
+    {
+      "rank": 5,
+      "title": "Meta to start capturing employee mouse movements, keystrokes for AI training",
+      "url": "https://www.reuters.com/sustainability/boards-policy-regulation/meta-start-capturing-employee-mouse-movements-keystrokes-ai-training-data-2026-04-21/",
+      "score": 579,
+      "comments": 416,
+      "author": "dlx",
+      "age_hours": 18
+    },
+    {
       "rank": 6,
-      "title": "Brussels launched an age checking app. Hackers took 2 minutes to break it",
-      "url": "https://www.politico.eu/article/eu-brussels-launched-age-checking-app-hackers-say-took-them-2-minutes-break-it/",
-      "score": 241,
-      "comments": 141,
-      "author": "axbyte",
-      "age_hours": 26
+      "title": "Changes to GitHub Copilot individual plans",
+      "url": "https://github.blog/news-insights/company-news/changes-to-github-copilot-individual-plans/",
+      "score": 462,
+      "comments": 187,
+      "author": "zorrn",
+      "age_hours": 41
     },
     {
       "rank": 7,
-      "title": "Quantum Computers Are Not a Threat to 128-Bit Symmetric Keys",
-      "url": "https://words.filippo.io/128-bits/",
-      "score": 235,
-      "comments": 82,
-      "author": "hasheddan",
-      "age_hours": 19
+      "title": "Acetaminophen vs. ibuprofen",
+      "url": "https://asteriskmag.com/issues/14/the-mystery-in-the-medicine-cabinet",
+      "score": 415,
+      "comments": 271,
+      "author": "nkurz",
+      "age_hours": 44
     },
     {
       "rank": 8,
-      "title": "Jujutsu megamerges for fun and profit",
-      "url": "https://isaaccorbrey.com/notes/jujutsu-megamerges-for-fun-and-profit",
-      "score": 233,
-      "comments": 121,
-      "author": "icorbrey",
-      "age_hours": 14
+      "title": "Making RAM at Home [video]",
+      "url": "https://www.youtube.com/watch?v=h6GWikWlAQA",
+      "score": 378,
+      "comments": 112,
+      "author": "kaipereira",
+      "age_hours": 36
     },
     {
       "rank": 9,
-      "title": "Anthropic says OpenClaw-style Claude CLI usage is allowed again",
-      "url": "https://docs.openclaw.ai/providers/anthropic",
-      "score": 220,
-      "comments": 142,
-      "author": "jmsflknr",
-      "age_hours": 8
+      "title": "Edit store price tags using Flipper Zero",
+      "url": "https://github.com/i12bp8/TagTinker",
+      "score": 340,
+      "comments": 312,
+      "author": "trueduke",
+      "age_hours": 74
     },
     {
       "rank": 10,
-      "title": "How to make a fast dynamic language interpreter",
-      "url": "https://zef-lang.dev/implementation",
-      "score": 180,
-      "comments": 30,
-      "author": "pizlonator",
-      "age_hours": 10
+      "title": "The Vercel breach: OAuth attack exposes risk in platform environment variables",
+      "url": "https://www.trendmicro.com/en_us/research/26/d/vercel-breach-oauth-supply-chain.html",
+      "score": 317,
+      "comments": 109,
+      "author": "queenelvis",
+      "age_hours": 18
     }
   ]
 }

@@ -1,128 +1,128 @@
 {
   "channel": "pypi-new",
   "event": "pypi_update",
-  "ts": "2026-04-21T11:00:00.452Z",
+  "ts": "2026-04-22T11:00:01.102Z",
   "source": "PyPI RSS",
   "payload": [
     {
-      "name": "odoo-addon-sale-stock-partner-delivery-window",
+      "name": "dendroviz",
       "version": "added",
-      "description": "Use the partner's 'Delivery schedule preference' in Sales Orders",
-      "author": "support@odoo-community.org",
-      "published_at": "Tue, 21 Apr 2026 10:29:30 GMT",
-      "url": "https://pypi.org/project/odoo-addon-sale-stock-partner-delivery-window/"
-    },
-    {
-      "name": "amit-sharma-neural-heart",
-      "version": "added",
-      "description": "A professional AI assistant with a Neural Heart and Long-Term Memory.",
-      "author": "amit@example.com",
-      "published_at": "Tue, 21 Apr 2026 10:28:48 GMT",
-      "url": "https://pypi.org/project/amit-sharma-neural-heart/"
-    },
-    {
-      "name": "wavcore",
-      "version": "added",
-      "description": "Ultra-fast lossless voice codec — real-time recording, VTXT text serialization, and bit-perfect reconstruction with a C engine.",
+      "description": "Generate dendrogram scaffolding CSV and SVG from rooted tree data.",
       "author": null,
-      "published_at": "Tue, 21 Apr 2026 10:28:36 GMT",
-      "url": "https://pypi.org/project/wavcore/"
+      "published_at": "Wed, 22 Apr 2026 10:28:43 GMT",
+      "url": "https://pypi.org/project/dendroviz/"
     },
     {
-      "name": "jmunch-mcp",
+      "name": "sphinx-latex-render",
       "version": "added",
-      "description": "Transparent MCP proxy that reduces token cost of large tool responses via content-aware handles",
-      "author": "j@gravelle.us",
-      "published_at": "Tue, 21 Apr 2026 10:28:35 GMT",
-      "url": "https://pypi.org/project/jmunch-mcp/"
-    },
-    {
-      "name": "sas7bdat-toolkit",
-      "version": "added",
-      "description": "Tools for profiling SAS7BDAT corpora",
+      "description": "A Sphinx extension to render latex even in md compatible with markdown preview enhanced for vscode",
       "author": null,
-      "published_at": "Tue, 21 Apr 2026 10:23:58 GMT",
-      "url": "https://pypi.org/project/sas7bdat-toolkit/"
+      "published_at": "Wed, 22 Apr 2026 10:28:17 GMT",
+      "url": "https://pypi.org/project/sphinx-latex-render/"
     },
     {
-      "name": "allml",
+      "name": "jsonclark",
       "version": "added",
-      "description": "AllML — All-in-One Machine Learning Library",
-      "author": "bandinvisible8@gmail.com",
-      "published_at": "Tue, 21 Apr 2026 10:20:30 GMT",
-      "url": "https://pypi.org/project/allml/"
+      "description": "Add your description here",
+      "author": "nahuel.deofsse@ibm.com",
+      "published_at": "Wed, 22 Apr 2026 10:25:35 GMT",
+      "url": "https://pypi.org/project/jsonclark/"
     },
     {
-      "name": "track-id",
+      "name": "pyqt5-data-tools",
       "version": "added",
-      "description": "CLI for searching and enriching MP3 metadata from Bandcamp, MusicBrainz, and Discogs",
+      "description": "Готовое приложение-шаблон для управления отелем",
+      "author": "katya.goryacheva.06@mail.ru",
+      "published_at": "Wed, 22 Apr 2026 10:25:34 GMT",
+      "url": "https://pypi.org/project/pyqt5-data-tools/"
+    },
+    {
+      "name": "zihangzzz-polaris-mcp",
+      "version": "added",
+      "description": "Local MCP memory layer for AI coding agents",
       "author": null,
-      "published_at": "Tue, 21 Apr 2026 10:18:40 GMT",
-      "url": "https://pypi.org/project/track-id/"
+      "published_at": "Wed, 22 Apr 2026 10:24:58 GMT",
+      "url": "https://pypi.org/project/zihangzzz-polaris-mcp/"
     },
     {
-      "name": "interven-crewai",
+      "name": "sphinx-filter",
       "version": "added",
-      "description": "CrewAI integration for Interven AI firewall. Scan every tool call your CrewAI agents make — block malicious requests, redact PII/secrets, route risky actions to human approval.",
-      "author": "support@intervensecurity.com",
-      "published_at": "Tue, 21 Apr 2026 10:16:22 GMT",
-      "url": "https://pypi.org/project/interven-crewai/"
-    },
-    {
-      "name": "interven-openai-assistants",
-      "version": "added",
-      "description": "OpenAI Assistants API integration for Interven AI firewall. Scan tool calls the assistant decides to make before your code executes them.",
-      "author": "support@intervensecurity.com",
-      "published_at": "Tue, 21 Apr 2026 10:15:32 GMT",
-      "url": "https://pypi.org/project/interven-openai-assistants/"
-    },
-    {
-      "name": "nalib-infisical",
-      "version": "added",
-      "description": "qana - tiny package - nalibInfisical",
-      "author": "naq0310@gmail.com",
-      "published_at": "Tue, 21 Apr 2026 10:15:07 GMT",
-      "url": "https://pypi.org/project/nalib-infisical/"
-    },
-    {
-      "name": "interven-langchain",
-      "version": "added",
-      "description": "LangChain integration for Interven AI firewall. Scan every tool call your LangChain agent makes before it executes — block malicious requests, redact PII/secrets, route risky actions to human approval",
-      "author": "support@intervensecurity.com",
-      "published_at": "Tue, 21 Apr 2026 10:14:48 GMT",
-      "url": "https://pypi.org/project/interven-langchain/"
-    },
-    {
-      "name": "wpflow",
-      "version": "added",
-      "description": "WordPress operator MCP server — 25 task-scoped tools for Claude and other LLM agents. App-password auth, REST API, local-first, stdio transport.",
+      "description": "A Sphinx extension to include or exclude sections based on a filter configuration.",
       "author": null,
-      "published_at": "Tue, 21 Apr 2026 10:14:30 GMT",
-      "url": "https://pypi.org/project/wpflow/"
+      "published_at": "Wed, 22 Apr 2026 10:24:36 GMT",
+      "url": "https://pypi.org/project/sphinx-filter/"
     },
     {
-      "name": "subway-mcp-open-api-adapter",
+      "name": "petri-bloom",
       "version": "added",
-      "description": "MCP Adapter for Subway Open Platform - Exposes open platform APIs as MCP tools",
-      "author": "vesalius.li@subway.com.cn",
-      "published_at": "Tue, 21 Apr 2026 10:12:52 GMT",
-      "url": "https://pypi.org/project/subway-mcp-open-api-adapter/"
-    },
-    {
-      "name": "hierocode",
-      "version": "added",
-      "description": "A local-first hierarchical coding orchestrator for delegating tasks to local or self-hosted models.",
-      "author": "hello@example.com",
-      "published_at": "Tue, 21 Apr 2026 10:12:06 GMT",
-      "url": "https://pypi.org/project/hierocode/"
-    },
-    {
-      "name": "worksection-api-client",
-      "version": "added",
-      "description": "API client library for Worksection",
+      "description": "Framework for generating behavioral evaluations of frontier AI models.",
       "author": null,
-      "published_at": "Tue, 21 Apr 2026 10:11:21 GMT",
-      "url": "https://pypi.org/project/worksection-api-client/"
+      "published_at": "Wed, 22 Apr 2026 10:22:12 GMT",
+      "url": "https://pypi.org/project/petri-bloom/"
+    },
+    {
+      "name": "pycontextdb",
+      "version": "added",
+      "description": "The unified context layer for AI agents — replacing the patchwork with a memory operating system",
+      "author": "gaurav@saaslabs.co",
+      "published_at": "Wed, 22 Apr 2026 10:18:37 GMT",
+      "url": "https://pypi.org/project/pycontextdb/"
+    },
+    {
+      "name": "perplexity-polza-mcp-server",
+      "version": "added",
+      "description": "An MCP server for Perplexity models through the Polza.ai chat API",
+      "author": null,
+      "published_at": "Wed, 22 Apr 2026 10:18:14 GMT",
+      "url": "https://pypi.org/project/perplexity-polza-mcp-server/"
+    },
+    {
+      "name": "aif-parser",
+      "version": "added",
+      "description": "Reference parser for the Agent Instruction Format (AIF)",
+      "author": "augusto.natiello@gmail.com",
+      "published_at": "Wed, 22 Apr 2026 10:18:02 GMT",
+      "url": "https://pypi.org/project/aif-parser/"
+    },
+    {
+      "name": "vpmx",
+      "version": "added",
+      "description": "Virtual Package Manager — resumable, trackable script orchestration for VPS and local environments",
+      "author": "mohammed.k@mohammed-alkebsi.dev",
+      "published_at": "Wed, 22 Apr 2026 10:17:34 GMT",
+      "url": "https://pypi.org/project/vpmx/"
+    },
+    {
+      "name": "seedance-polza-mcp-server",
+      "version": "added",
+      "description": "MCP server for ByteDance Seedance video generation through Polza.ai",
+      "author": null,
+      "published_at": "Wed, 22 Apr 2026 10:14:16 GMT",
+      "url": "https://pypi.org/project/seedance-polza-mcp-server/"
+    },
+    {
+      "name": "demo-gate",
+      "version": "added",
+      "description": "Lightweight shared-key access gate for FastAPI-based demo apps",
+      "author": null,
+      "published_at": "Wed, 22 Apr 2026 10:11:09 GMT",
+      "url": "https://pypi.org/project/demo-gate/"
+    },
+    {
+      "name": "agent-learner",
+      "version": "added",
+      "description": "Reusable self-learning engine for agent workflows",
+      "author": null,
+      "published_at": "Wed, 22 Apr 2026 10:10:26 GMT",
+      "url": "https://pypi.org/project/agent-learner/"
+    },
+    {
+      "name": "pakunoda",
+      "version": "added",
+      "description": "Extract Volatility 3 ISF profiles from raw Linux memory dumps via BTF and kallsyms",
+      "author": "anonymous@example.com",
+      "published_at": "Wed, 22 Apr 2026 10:09:28 GMT",
+      "url": "https://pypi.org/project/pakunoda/"
     }
   ]
 }

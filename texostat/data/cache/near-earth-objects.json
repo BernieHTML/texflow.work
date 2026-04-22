@@ -1,7 +1,7 @@
 {
   "channel": "near-earth-objects",
   "event": "neo_update",
-  "ts": "2026-04-21T10:32:40.219Z",
+  "ts": "2026-04-22T00:05:02.004Z",
   "source": "NASA NeoWs",
   "payload": [
     {
@@ -41,58 +41,58 @@
       "relative_velocity_kmh": 49367.355864449
     },
     {
-      "name": "612786 (2004 PJ2)",
-      "id": "2612786",
-      "estimated_diameter_m": 303.4170480479,
-      "is_potentially_hazardous": true,
+      "name": "(2011 TK5)",
+      "id": "3581556",
+      "estimated_diameter_m": 155.6108871884,
+      "is_potentially_hazardous": false,
       "close_approach_date": "2026-04-22",
-      "miss_distance_km": 10093329.363534225,
-      "relative_velocity_kmh": 22630.5146814819
+      "miss_distance_km": 73640984.14646184,
+      "relative_velocity_kmh": 72682.0285130341
     },
     {
-      "name": "(2009 UZ87)",
-      "id": "3472700",
-      "estimated_diameter_m": 39.2681081809,
+      "name": "(2014 BG25)",
+      "id": "3656929",
+      "estimated_diameter_m": 51.7654482198,
       "is_potentially_hazardous": false,
-      "close_approach_date": "2026-04-23",
-      "miss_distance_km": 32391664.39547512,
-      "relative_velocity_kmh": 22770.5632358996
+      "close_approach_date": "2026-04-22",
+      "miss_distance_km": 36114053.352105975,
+      "relative_velocity_kmh": 44153.9187117124
     },
     {
-      "name": "(2009 UC19)",
-      "id": "3472366",
-      "estimated_diameter_m": 54.2050786336,
+      "name": "(2017 TG4)",
+      "id": "3785765",
+      "estimated_diameter_m": 85.9092601232,
       "is_potentially_hazardous": false,
-      "close_approach_date": "2026-04-21",
-      "miss_distance_km": 15047308.126819262,
-      "relative_velocity_kmh": 31565.3939694126
+      "close_approach_date": "2026-04-22",
+      "miss_distance_km": 43140040.33098448,
+      "relative_velocity_kmh": 70818.0515430602
     },
     {
-      "name": "88710 (2001 SL9)",
-      "id": "2088710",
-      "estimated_diameter_m": 1786.652036697,
+      "name": "(2019 RL3)",
+      "id": "3843842",
+      "estimated_diameter_m": 279.2800919383,
       "is_potentially_hazardous": false,
-      "close_approach_date": "2026-04-26",
-      "miss_distance_km": 29843746.340287156,
-      "relative_velocity_kmh": 53240.7674141233
+      "close_approach_date": "2026-04-22",
+      "miss_distance_km": 30064365.305396687,
+      "relative_velocity_kmh": 71425.8902751239
     },
     {
-      "name": "(2010 TM167)",
-      "id": "3549564",
-      "estimated_diameter_m": 375.0075217981,
+      "name": "(2020 DR4)",
+      "id": "54006023",
+      "estimated_diameter_m": 6.6686815462,
       "is_potentially_hazardous": false,
-      "close_approach_date": "2026-04-26",
-      "miss_distance_km": 60817586.12187106,
-      "relative_velocity_kmh": 62224.8631312356
+      "close_approach_date": "2026-04-22",
+      "miss_distance_km": 58265408.92556548,
+      "relative_velocity_kmh": 68283.5634820166
     },
     {
-      "name": "376879 (2001 WW1)",
-      "id": "2376879",
-      "estimated_diameter_m": 201.3909630836,
+      "name": "(2020 OA6)",
+      "id": "54049856",
+      "estimated_diameter_m": 35.8129403019,
       "is_potentially_hazardous": false,
-      "close_approach_date": "2026-04-24",
-      "miss_distance_km": 49916526.77053423,
-      "relative_velocity_kmh": 41347.3982966532
+      "close_approach_date": "2026-04-22",
+      "miss_distance_km": 47889222.3927599,
+      "relative_velocity_kmh": 73322.8667711075
     }
   ]
 }

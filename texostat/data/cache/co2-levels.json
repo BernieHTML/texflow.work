@@ -1,12 +1,12 @@
 {
   "channel": "co2-levels",
   "event": "co2_update",
-  "ts": "2026-04-21T10:32:36.821Z",
+  "ts": "2026-04-22T00:05:01.018Z",
   "source": "NOAA GML Mauna Loa",
   "payload": {
-    "date": "2026-04-19",
-    "co2_ppm": 430.36,
-    "one_year_ago_ppm": 430,
+    "date": "2026-04-20",
+    "co2_ppm": 429.93,
+    "one_year_ago_ppm": 430.36,
     "ten_years_ago_ppm": null,
     "since_1800_ppm": null
   }
