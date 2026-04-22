@@ -99,15 +99,15 @@
     "last_poll": "2026-04-22T12:32:15.943Z"
   },
   "iss-location": {
-    "total_polls": 122,
+    "total_polls": 123,
     "total_connections": 0,
     "daily": {
       "2026-04-22": {
-        "polls": 122,
+        "polls": 123,
         "connections": 0
       }
     },
-    "last_poll": "2026-04-22T12:32:16.037Z"
+    "last_poll": "2026-04-22T12:32:46.039Z"
   },
   "ocean-sst": {
     "total_polls": 2,
