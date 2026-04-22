@@ -1,98 +1,98 @@
 {
   "channel": "hacker-news",
   "event": "hn_update",
-  "ts": "2026-04-22T11:15:00.777Z",
+  "ts": "2026-04-22T12:15:00.856Z",
   "source": "HN Algolia /search",
   "payload": [
     {
       "rank": 1,
       "title": "Framework Laptop 13 Pro",
       "url": "https://frame.work/laptop13pro",
-      "score": 1298,
-      "comments": 650,
+      "score": 1331,
+      "comments": 667,
       "author": "Trollmann",
-      "age_hours": 17
+      "age_hours": 18
     },
     {
       "rank": 2,
       "title": "Laws of Software Engineering",
       "url": "https://lawsofsoftwareengineering.com",
-      "score": 1036,
-      "comments": 475,
+      "score": 1051,
+      "comments": 483,
       "author": "milanm081",
-      "age_hours": 24
+      "age_hours": 25
     },
     {
       "rank": 3,
       "title": "ChatGPT Images 2.0",
       "url": "https://openai.com/index/introducing-chatgpt-images-2-0/",
-      "score": 856,
-      "comments": 690,
+      "score": 876,
+      "comments": 728,
       "author": "wahnfrieden",
-      "age_hours": 16
+      "age_hours": 17
     },
     {
       "rank": 4,
       "title": "SpaceX says it has agreement to acquire Cursor for $60B",
       "url": "https://twitter.com/spacex/status/2046713419978453374",
-      "score": 621,
-      "comments": 760,
+      "score": 642,
+      "comments": 793,
       "author": "dmarcos",
-      "age_hours": 13
+      "age_hours": 14
     },
     {
       "rank": 5,
       "title": "Meta to start capturing employee mouse movements, keystrokes for AI training",
       "url": "https://www.reuters.com/sustainability/boards-policy-regulation/meta-start-capturing-employee-mouse-movements-keystrokes-ai-training-data-2026-04-21/",
-      "score": 579,
-      "comments": 416,
+      "score": 613,
+      "comments": 426,
       "author": "dlx",
-      "age_hours": 18
+      "age_hours": 19
     },
     {
       "rank": 6,
       "title": "Changes to GitHub Copilot individual plans",
       "url": "https://github.blog/news-insights/company-news/changes-to-github-copilot-individual-plans/",
-      "score": 462,
-      "comments": 187,
+      "score": 481,
+      "comments": 197,
       "author": "zorrn",
-      "age_hours": 41
+      "age_hours": 42
     },
     {
       "rank": 7,
       "title": "Acetaminophen vs. ibuprofen",
       "url": "https://asteriskmag.com/issues/14/the-mystery-in-the-medicine-cabinet",
-      "score": 415,
-      "comments": 271,
+      "score": 456,
+      "comments": 291,
       "author": "nkurz",
-      "age_hours": 44
+      "age_hours": 45
     },
     {
       "rank": 8,
       "title": "Making RAM at Home [video]",
       "url": "https://www.youtube.com/watch?v=h6GWikWlAQA",
-      "score": 378,
-      "comments": 112,
+      "score": 414,
+      "comments": 119,
       "author": "kaipereira",
-      "age_hours": 36
+      "age_hours": 37
     },
     {
       "rank": 9,
       "title": "Edit store price tags using Flipper Zero",
       "url": "https://github.com/i12bp8/TagTinker",
-      "score": 340,
-      "comments": 312,
+      "score": 346,
+      "comments": 316,
       "author": "trueduke",
-      "age_hours": 74
+      "age_hours": 75
     },
     {
       "rank": 10,
       "title": "The Vercel breach: OAuth attack exposes risk in platform environment variables",
       "url": "https://www.trendmicro.com/en_us/research/26/d/vercel-breach-oauth-supply-chain.html",
-      "score": 317,
+      "score": 322,
       "comments": 109,
       "author": "queenelvis",
-      "age_hours": 18
+      "age_hours": 19
     }
   ]
 }

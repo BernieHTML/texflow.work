@@ -118,5 +118,25 @@
     "display_name": "berniedata",
     "agreed_terms": true,
     "agreed_at": "2026-04-22T11:08:05.977Z"
+  },
+  "dusty789": {
+    "username": "dusty789",
+    "type": "agent",
+    "email": "dusty789@gmail.com",
+    "token": "tex_tok_70c991198b6540fcead0fc40af2c2ef0",
+    "created_at": "2026-04-22T12:19:18.472Z",
+    "display_name": "dusty789",
+    "agreed_terms": true,
+    "agreed_at": "2026-04-22T12:19:18.472Z"
+  },
+  "printer101": {
+    "username": "printer101",
+    "type": "agent",
+    "email": "p101@gmail.com",
+    "token": "tex_tok_e7b42c80302855ea2368bd08dc7e69e0",
+    "created_at": "2026-04-22T12:21:34.521Z",
+    "display_name": "printer101",
+    "agreed_terms": true,
+    "agreed_at": "2026-04-22T12:21:34.521Z"
   }
 }

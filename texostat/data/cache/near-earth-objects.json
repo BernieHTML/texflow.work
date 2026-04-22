@@ -1,7 +1,7 @@
 {
   "channel": "near-earth-objects",
   "event": "neo_update",
-  "ts": "2026-04-22T00:05:02.004Z",
+  "ts": "2026-04-22T11:26:35.174Z",
   "source": "NASA NeoWs",
   "payload": [
     {
@@ -10,8 +10,8 @@
       "estimated_diameter_m": 1959.0250023331,
       "is_potentially_hazardous": false,
       "close_approach_date": "2026-04-22",
-      "miss_distance_km": 23600402.220246084,
-      "relative_velocity_kmh": 48094.4195434314
+      "miss_distance_km": 23600401.965929706,
+      "relative_velocity_kmh": 48094.4193350015
     },
     {
       "name": "434196 (2003 HG2)",

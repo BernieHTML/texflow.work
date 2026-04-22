@@ -1,108 +1,108 @@
 {
   "channel": "wikipedia-trending",
   "event": "wikipedia_update",
-  "ts": "2026-04-21T10:32:39.190Z",
+  "ts": "2026-04-22T11:26:33.768Z",
   "source": "Wikimedia Pageviews API",
   "payload": [
     {
       "rank": 1,
       "article": "Main Page",
-      "views": 6925830
+      "views": 6864181
     },
     {
       "rank": 2,
       "article": "Special:Search",
-      "views": 1107488
+      "views": 1172198
     },
     {
       "rank": 3,
       "article": "Nahui Ollin",
-      "views": 858084
+      "views": 909531
     },
     {
       "rank": 4,
-      "article": "WrestleMania 42",
-      "views": 627138
+      "article": "John Ternus",
+      "views": 413418
     },
     {
       "rank": 5,
-      "article": "Patrick Muldoon",
-      "views": 557394
+      "article": "Wikipedia:Featured pictures",
+      "views": 327766
     },
     {
       "rank": 6,
-      "article": "Wikipedia:Featured pictures",
-      "views": 336594
+      "article": "Patrick Muldoon",
+      "views": 252759
     },
     {
       "rank": 7,
-      "article": "John Ternus",
-      "views": 264850
+      "article": "Patti Davis",
+      "views": 178454
     },
     {
       "rank": 8,
-      "article": ".xxx",
-      "views": 151125
+      "article": "D4vd",
+      "views": 164758
     },
     {
       "rank": 9,
-      "article": "Euphoria (American TV series)",
-      "views": 148994
+      "article": "Tim Cook",
+      "views": 159781
     },
     {
       "rank": 10,
-      "article": "2026 Bulgarian parliamentary election",
-      "views": 145729
+      "article": "Alan Osmond",
+      "views": 153008
     },
     {
       "rank": 11,
       "article": "List of highest-grossing Indian films",
-      "views": 141422
+      "views": 152373
     },
     {
       "rank": 12,
-      "article": "Dhurandhar: The Revenge",
-      "views": 139792
+      "article": ".xxx",
+      "views": 139782
     },
     {
       "rank": 13,
-      "article": "D4vd",
-      "views": 137656
+      "article": "Dhurandhar: The Revenge",
+      "views": 136551
     },
     {
       "rank": 14,
       "article": "Deaths in 2026",
-      "views": 135661
+      "views": 134035
     },
     {
       "rank": 15,
-      "article": "Brock Lesnar",
-      "views": 126890
+      "article": "Olly Robbins",
+      "views": 119550
     },
     {
       "rank": 16,
-      "article": "Bhooth Bangla",
-      "views": 123457
+      "article": "Michael (2026 film)",
+      "views": 113819
     },
     {
       "rank": 17,
-      "article": "Homosexuality in Japan",
-      "views": 119617
+      "article": "Euphoria (American TV series)",
+      "views": 109624
     },
     {
       "rank": 18,
       "article": "ChatGPT",
-      "views": 115942
+      "views": 106511
     },
     {
       "rank": 19,
-      "article": "Beef (TV series)",
-      "views": 110781
+      "article": "Belvidere, Kansas",
+      "views": 101802
     },
     {
       "rank": 20,
-      "article": "Neatsville, Kentucky",
-      "views": 106157
+      "article": "Slovenia at the 2016 European Athletics Championships",
+      "views": 100526
     }
   ]
 }

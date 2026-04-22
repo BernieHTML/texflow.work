@@ -5,6 +5,7 @@ import fetch from 'node-fetch';
 import cron from 'node-cron';
 import { normalise } from './normaliser.js';
 import { broadcast, broadcastError } from './sse-manager.js';
+import { recordPoll } from './analytics.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const cacheDir = join(__dirname, '..', 'data', 'cache');
@@ -141,6 +142,7 @@ async function fetchChannel(channel) {
     const { eventName, payload } = normalise(channel.slug, rawData);
     writeCache(channel.slug, payload);
     broadcast(channel.slug, eventName, payload, baseUrl);
+    recordPoll(channel.slug);
   } catch (err) {
     try { clearTimeout(timeout); } catch (_) {}
     const errMsg = err.name === 'AbortError' ? 'fetch timeout' : err.message;

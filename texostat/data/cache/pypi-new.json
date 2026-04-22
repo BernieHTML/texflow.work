@@ -1,128 +1,128 @@
 {
   "channel": "pypi-new",
   "event": "pypi_update",
-  "ts": "2026-04-22T11:00:01.102Z",
+  "ts": "2026-04-22T11:30:00.216Z",
   "source": "PyPI RSS",
   "payload": [
     {
-      "name": "dendroviz",
+      "name": "sharle",
       "version": "added",
-      "description": "Generate dendrogram scaffolding CSV and SVG from rooted tree data.",
+      "description": "SHarLe (Spec-Harness-Learning): a framework for spec-driven harness-based learning with LLMs.",
+      "author": "mrive052@gmail.com",
+      "published_at": "Wed, 22 Apr 2026 11:25:24 GMT",
+      "url": "https://pypi.org/project/sharle/"
+    },
+    {
+      "name": "id-structure-mapper",
+      "version": "added",
+      "description": "None",
       "author": null,
-      "published_at": "Wed, 22 Apr 2026 10:28:43 GMT",
-      "url": "https://pypi.org/project/dendroviz/"
+      "published_at": "Wed, 22 Apr 2026 11:24:06 GMT",
+      "url": "https://pypi.org/project/id-structure-mapper/"
     },
     {
-      "name": "sphinx-latex-render",
+      "name": "pen-compare",
       "version": "added",
-      "description": "A Sphinx extension to render latex even in md compatible with markdown preview enhanced for vscode",
+      "description": "Public web tool for cross-system editor selection in therapeutic genome engineering",
+      "author": "anees.ahmed2022@vitstudent.ac.in",
+      "published_at": "Wed, 22 Apr 2026 11:22:37 GMT",
+      "url": "https://pypi.org/project/pen-compare/"
+    },
+    {
+      "name": "pen-assemble",
+      "version": "added",
+      "description": "Computational hypothesis generation for chimeric non-DSB editors",
+      "author": "anees.ahmed2022@vitstudent.ac.in",
+      "published_at": "Wed, 22 Apr 2026 11:22:19 GMT",
+      "url": "https://pypi.org/project/pen-assemble/"
+    },
+    {
+      "name": "pen-score",
+      "version": "added",
+      "description": "Physics-informed scoring function for non-destructive genome-writing potential",
+      "author": "anees.ahmed2022@vitstudent.ac.in",
+      "published_at": "Wed, 22 Apr 2026 11:22:04 GMT",
+      "url": "https://pypi.org/project/pen-score/"
+    },
+    {
+      "name": "mech-class",
+      "version": "added",
+      "description": "Mechanism-aware classification of DNA-modifying enzymes",
+      "author": "anees.ahmed2022@vitstudent.ac.in",
+      "published_at": "Wed, 22 Apr 2026 11:20:45 GMT",
+      "url": "https://pypi.org/project/mech-class/"
+    },
+    {
+      "name": "genome-atlas",
+      "version": "added",
+      "description": "Unified knowledge graph and embedding space for programmable genome-writing enzymes",
+      "author": "anees.ahmed2022@vitstudent.ac.in",
+      "published_at": "Wed, 22 Apr 2026 11:20:39 GMT",
+      "url": "https://pypi.org/project/genome-atlas/"
+    },
+    {
+      "name": "pen-core",
+      "version": "added",
+      "description": "Shared core library for the PEN-STACK infrastructure",
+      "author": "anees.ahmed2022@vitstudent.ac.in",
+      "published_at": "Wed, 22 Apr 2026 11:20:32 GMT",
+      "url": "https://pypi.org/project/pen-core/"
+    },
+    {
+      "name": "echemplot",
+      "version": "added",
+      "description": "OSS Python toolkit for TOYO battery cycler data (charge/discharge, dQ/dV, cycle stats). Installable from PyPI into Origin's embedded Python.",
+      "author": "tomooki0414@gmail.com",
+      "published_at": "Wed, 22 Apr 2026 11:16:49 GMT",
+      "url": "https://pypi.org/project/echemplot/"
+    },
+    {
+      "name": "csv-dataclass-gen",
+      "version": "added",
+      "description": "Generate Python dataclasses, loaders, from CSV/TSV files",
+      "author": "kin.hin.wong.c@gmail.com",
+      "published_at": "Wed, 22 Apr 2026 11:16:08 GMT",
+      "url": "https://pypi.org/project/csv-dataclass-gen/"
+    },
+    {
+      "name": "askrow-py",
+      "version": "added",
+      "description": "Simple, Safe User Input for Python",
+      "author": "yotlab.team@gmail.com",
+      "published_at": "Wed, 22 Apr 2026 11:10:05 GMT",
+      "url": "https://pypi.org/project/askrow-py/"
+    },
+    {
+      "name": "lattics",
+      "version": "added",
+      "description": "Lattice-based Cellular Simulation",
+      "author": "kissdanieldezso@gmail.com",
+      "published_at": "Wed, 22 Apr 2026 11:08:30 GMT",
+      "url": "https://pypi.org/project/lattics/"
+    },
+    {
+      "name": "pip-audit-html",
+      "version": "added",
+      "description": "Convert pip-audit JSON reports into readable HTML reports",
       "author": null,
-      "published_at": "Wed, 22 Apr 2026 10:28:17 GMT",
-      "url": "https://pypi.org/project/sphinx-latex-render/"
+      "published_at": "Wed, 22 Apr 2026 11:08:11 GMT",
+      "url": "https://pypi.org/project/pip-audit-html/"
     },
     {
-      "name": "jsonclark",
+      "name": "is-burner-email",
       "version": "added",
-      "description": "Add your description here",
-      "author": "nahuel.deofsse@ibm.com",
-      "published_at": "Wed, 22 Apr 2026 10:25:35 GMT",
-      "url": "https://pypi.org/project/jsonclark/"
-    },
-    {
-      "name": "pyqt5-data-tools",
-      "version": "added",
-      "description": "Готовое приложение-шаблон для управления отелем",
-      "author": "katya.goryacheva.06@mail.ru",
-      "published_at": "Wed, 22 Apr 2026 10:25:34 GMT",
-      "url": "https://pypi.org/project/pyqt5-data-tools/"
-    },
-    {
-      "name": "zihangzzz-polaris-mcp",
-      "version": "added",
-      "description": "Local MCP memory layer for AI coding agents",
+      "description": "Fast, offline burner / disposable email detection with three-list (blacklist/whitelist/graylist) classification.",
       "author": null,
-      "published_at": "Wed, 22 Apr 2026 10:24:58 GMT",
-      "url": "https://pypi.org/project/zihangzzz-polaris-mcp/"
+      "published_at": "Wed, 22 Apr 2026 11:06:56 GMT",
+      "url": "https://pypi.org/project/is-burner-email/"
     },
     {
-      "name": "sphinx-filter",
+      "name": "pycdmon",
       "version": "added",
-      "description": "A Sphinx extension to include or exclude sections based on a filter configuration.",
+      "description": "Professional Python client for the cdmon Domains & DNS API",
       "author": null,
-      "published_at": "Wed, 22 Apr 2026 10:24:36 GMT",
-      "url": "https://pypi.org/project/sphinx-filter/"
-    },
-    {
-      "name": "petri-bloom",
-      "version": "added",
-      "description": "Framework for generating behavioral evaluations of frontier AI models.",
-      "author": null,
-      "published_at": "Wed, 22 Apr 2026 10:22:12 GMT",
-      "url": "https://pypi.org/project/petri-bloom/"
-    },
-    {
-      "name": "pycontextdb",
-      "version": "added",
-      "description": "The unified context layer for AI agents — replacing the patchwork with a memory operating system",
-      "author": "gaurav@saaslabs.co",
-      "published_at": "Wed, 22 Apr 2026 10:18:37 GMT",
-      "url": "https://pypi.org/project/pycontextdb/"
-    },
-    {
-      "name": "perplexity-polza-mcp-server",
-      "version": "added",
-      "description": "An MCP server for Perplexity models through the Polza.ai chat API",
-      "author": null,
-      "published_at": "Wed, 22 Apr 2026 10:18:14 GMT",
-      "url": "https://pypi.org/project/perplexity-polza-mcp-server/"
-    },
-    {
-      "name": "aif-parser",
-      "version": "added",
-      "description": "Reference parser for the Agent Instruction Format (AIF)",
-      "author": "augusto.natiello@gmail.com",
-      "published_at": "Wed, 22 Apr 2026 10:18:02 GMT",
-      "url": "https://pypi.org/project/aif-parser/"
-    },
-    {
-      "name": "vpmx",
-      "version": "added",
-      "description": "Virtual Package Manager — resumable, trackable script orchestration for VPS and local environments",
-      "author": "mohammed.k@mohammed-alkebsi.dev",
-      "published_at": "Wed, 22 Apr 2026 10:17:34 GMT",
-      "url": "https://pypi.org/project/vpmx/"
-    },
-    {
-      "name": "seedance-polza-mcp-server",
-      "version": "added",
-      "description": "MCP server for ByteDance Seedance video generation through Polza.ai",
-      "author": null,
-      "published_at": "Wed, 22 Apr 2026 10:14:16 GMT",
-      "url": "https://pypi.org/project/seedance-polza-mcp-server/"
-    },
-    {
-      "name": "demo-gate",
-      "version": "added",
-      "description": "Lightweight shared-key access gate for FastAPI-based demo apps",
-      "author": null,
-      "published_at": "Wed, 22 Apr 2026 10:11:09 GMT",
-      "url": "https://pypi.org/project/demo-gate/"
-    },
-    {
-      "name": "agent-learner",
-      "version": "added",
-      "description": "Reusable self-learning engine for agent workflows",
-      "author": null,
-      "published_at": "Wed, 22 Apr 2026 10:10:26 GMT",
-      "url": "https://pypi.org/project/agent-learner/"
-    },
-    {
-      "name": "pakunoda",
-      "version": "added",
-      "description": "Extract Volatility 3 ISF profiles from raw Linux memory dumps via BTF and kallsyms",
-      "author": "anonymous@example.com",
-      "published_at": "Wed, 22 Apr 2026 10:09:28 GMT",
-      "url": "https://pypi.org/project/pakunoda/"
+      "published_at": "Wed, 22 Apr 2026 11:04:02 GMT",
+      "url": "https://pypi.org/project/pycdmon/"
     }
   ]
 }

@@ -7,6 +7,7 @@ import { requireAuth, optionalAuth } from '../middleware/auth.js';
 import { readCache } from '../services/poller.js';
 import { broadcast, updateFeedSubscriptions } from '../services/sse-manager.js';
 import { normalise } from '../services/normaliser.js';
+import { getChannelStats, getAllStats } from '../services/analytics.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const channelsFile = join(__dirname, '..', 'data', 'channels.json');
@@ -42,6 +43,31 @@ function baseUrl() {
   return process.env.BASE_URL || 'https://texflow.work';
 }
 
+// GET /channels/analytics — all channel analytics (no auth — public stats)
+router.get('/analytics', (req, res) => {
+  const channels = readChannels();
+  const subs = readSubscriptions();
+  const allStats = getAllStats();
+
+  const data = channels.map((ch) => {
+    const subRecord = subs.filter((s) => s.channels.includes(ch.slug));
+    const stats = allStats[ch.slug] ?? { total_polls: 0, total_connections: 0, daily: {} };
+    return {
+      slug: ch.slug,
+      name: ch.name,
+      category: ch.category,
+      cadence: ch.cadence,
+      subscriber_count: ch.subscriber_count ?? 0,
+      total_polls: stats.total_polls ?? 0,
+      total_connections: stats.total_connections ?? 0,
+      last_poll: stats.last_poll ?? null,
+      daily: stats.daily ?? {},
+    };
+  });
+
+  return res.json(data);
+});
+
 // GET /channels
 router.get('/', optionalAuth, (req, res) => {
   let channels = readChannels();
@@ -64,6 +90,23 @@ router.get('/', optionalAuth, (req, res) => {
   return res.json(channels);
 });
 
+// GET /channels/:slug/analytics
+router.get('/:slug/analytics', (req, res) => {
+  const channels = readChannels();
+  const channel = channels.find((c) => c.slug === req.params.slug);
+  if (!channel) return res.status(404).json({ error: 'Channel not found' });
+  const stats = getChannelStats(channel.slug);
+  return res.json({
+    slug: channel.slug,
+    name: channel.name,
+    subscriber_count: channel.subscriber_count ?? 0,
+    total_polls: stats.total_polls ?? 0,
+    total_connections: stats.total_connections ?? 0,
+    last_poll: stats.last_poll ?? null,
+    daily: stats.daily ?? {},
+  });
+});
+
 // GET /channels/:slug
 router.get('/:slug', optionalAuth, (req, res) => {
   const channels = readChannels();
@@ -71,7 +114,16 @@ router.get('/:slug', optionalAuth, (req, res) => {
   if (!channel) return res.status(404).json({ error: 'Channel not found' });
 
   const cached = readCache(channel.slug);
-  return res.json({ ...channel, latest: cached ?? null });
+  const stats = getChannelStats(channel.slug);
+  return res.json({
+    ...channel,
+    latest: cached ?? null,
+    analytics: {
+      total_polls: stats.total_polls ?? 0,
+      total_connections: stats.total_connections ?? 0,
+      last_poll: stats.last_poll ?? null,
+    },
+  });
 });
 
 // POST /channels/:slug/subscribe

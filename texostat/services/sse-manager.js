@@ -3,6 +3,7 @@
  * channelClients: Map<slug, Set<res>>
  * feedClients:    Map<userId, { res, subscriptions: Set<slug> }>
  */
+import { recordConnection } from './analytics.js';
 
 const channelClients = new Map();
 const feedClients = new Map();
@@ -39,6 +40,7 @@ function writeComment(res) {
 export function addChannelClient(slug, res) {
   if (!channelClients.has(slug)) channelClients.set(slug, new Set());
   channelClients.get(slug).add(res);
+  recordConnection(slug);
 
   res.writeHead(200, sseHeaders());
   writeComment(res);

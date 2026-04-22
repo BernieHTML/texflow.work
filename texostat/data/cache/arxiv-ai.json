@@ -1,130 +1,133 @@
 {
   "channel": "arxiv-ai",
   "event": "papers_update",
-  "ts": "2026-04-22T00:05:01.213Z",
+  "ts": "2026-04-22T11:26:30.987Z",
   "source": "arXiv RSS cs.AI",
   "payload": [
     {
-      "id": "2604.15456",
-      "title": "DeepER-Med: Advancing Deep Evidence-Based Research in Medicine Through Agentic AI",
+      "id": "2604.18645",
+      "title": "On Solving the Multiple Variable Gapped Longest Common Subsequence Problem",
       "authors": [
-        "Zhizheng Wang",
-        "Chih-Hsuan Wei",
-        "Joey Chan",
-        "Robert Leaman",
-        "Chi-Ping Day"
+        "Marko Djukanovi\\'c",
+        "Nikola Balaban",
+        "Christian Blum",
+        "Aleksandar Kartelj",
+        "Sa\\v{s}o D\\v{z}eroski"
       ],
-      "abstract_truncated": "arXiv:2604.15456v1 Announce Type: new \nAbstract: Trustworthiness and transparency are essential for the clinical adoption of artificial intelligence (AI) in healthcare and biomedical research. Recent deep research systems aim to accelerate evidence-grounded scientific discovery by integrating AI agents with multi-hop information retrieval, reasoning, and synthesis. However, most existing systems l",
-      "submitted": "Tue, 21 Apr 2026 00:00:00 -0400",
-      "url": "https://arxiv.org/abs/2604.15456"
+      "abstract_truncated": "arXiv:2604.18645v1 Announce Type: new \nAbstract: This paper addresses the Variable Gapped Longest Common Subsequence (VGLCS) problem, a generalization of the classical LCS problem involving flexible gap constraints between consecutive solutions' characters. The problem arises in molecular sequence comparison, where structural distance constraints between residues must be respected, and in time-ser",
+      "submitted": "Wed, 22 Apr 2026 00:00:00 -0400",
+      "url": "https://arxiv.org/abs/2604.18645"
     },
     {
-      "id": "2604.15495",
-      "title": "GIST: Multimodal Knowledge Extraction and Spatial Grounding via Intelligent Semantic Topology",
+      "id": "2604.18724",
+      "title": "Beyond One Output: Visualizing and Comparing Distributions of Language Model Generations",
       "authors": [
-        "Shivendra Agrawal",
-        "Bradley Hayes"
+        "Emily Reif",
+        "Claire Yang",
+        "Jared Hwang",
+        "Deniz Nazar",
+        "Noah Smith"
       ],
-      "abstract_truncated": "arXiv:2604.15495v1 Announce Type: new \nAbstract: Navigating complex, densely packed environments like retail stores, warehouses, and hospitals poses a significant spatial grounding challenge for humans and embodied AI. In these spaces, dense visual features quickly become stale given the quasi-static nature of items, and long-tail semantic distributions challenge traditional computer vision. While",
-      "submitted": "Tue, 21 Apr 2026 00:00:00 -0400",
-      "url": "https://arxiv.org/abs/2604.15495"
+      "abstract_truncated": "arXiv:2604.18724v1 Announce Type: new \nAbstract: Users typically interact with and evaluate language models via single outputs, but each output is just one sample from a broad distribution of possible completions. This interaction hides distributional structure such as modes, uncommon edge cases, and sensitivity to small prompt changes, leading users to over-generalize from anecdotes when iteratin",
+      "submitted": "Wed, 22 Apr 2026 00:00:00 -0400",
+      "url": "https://arxiv.org/abs/2604.18724"
     },
     {
-      "id": "2604.15514",
-      "title": "Bureaucratic Silences: What the Canadian AI Register Reveals, Omits, and Obscures",
+      "id": "2604.18789",
+      "title": "ARES: Adaptive Red-Teaming and End-to-End Repair of Policy-Reward System",
       "authors": [
-        "Dipto Das",
-        "Christelle Tessono",
-        "Syed Ishtiaque Ahmed",
-        "Shion Guha"
+        "Jiacheng Liang",
+        "Yao Ma",
+        "Tharindu Kumarage",
+        "Satyapriya Krishna",
+        "Rahul Gupta"
       ],
-      "abstract_truncated": "arXiv:2604.15514v1 Announce Type: new \nAbstract: In November 2025, the Government of Canada operationalized its commitment to transparency by releasing its first Federal AI Register. In this paper, we argue that such registers are not neutral mirrors of government activity, but active instruments of ontological design that configure the boundaries of accountability. We analyzed the Register's comp",
-      "submitted": "Tue, 21 Apr 2026 00:00:00 -0400",
-      "url": "https://arxiv.org/abs/2604.15514"
+      "abstract_truncated": "arXiv:2604.18789v1 Announce Type: new \nAbstract: Reinforcement Learning from Human Feedback (RLHF) is central to aligning Large Language Models (LLMs), yet it introduces a critical vulnerability: an imperfect Reward Model (RM) can become a single point of failure when it fails to penalize unsafe behaviors. While existing red-teaming approaches primarily target policy-level weaknesses, they overloo",
+      "submitted": "Wed, 22 Apr 2026 00:00:00 -0400",
+      "url": "https://arxiv.org/abs/2604.18789"
     },
     {
-      "id": "2604.15529",
-      "title": "LACE: Lattice Attention for Cross-thread Exploration",
+      "id": "2604.18805",
+      "title": "AI scientists produce results without reasoning scientifically",
       "authors": [
-        "Yang Li",
-        "Zirui Zhang",
-        "Yang Liu",
-        "Chengzhi Mao"
+        "Marti\\~no R\\'ios-Garc\\'ia",
+        "Nawaf Alampara",
+        "Chandan Gupta",
+        "Indrajeet Mandal",
+        "Sajid Mannan"
       ],
-      "abstract_truncated": "arXiv:2604.15529v1 Announce Type: new \nAbstract: Current large language models reason in isolation. Although it is common to sample multiple reasoning paths in parallel, these trajectories do not interact, and often fail in the same redundant ways. We introduce LACE, a framework that transforms reasoning from a collection of independent trials into a coordinated, parallel process. By repurposing t",
-      "submitted": "Tue, 21 Apr 2026 00:00:00 -0400",
-      "url": "https://arxiv.org/abs/2604.15529"
+      "abstract_truncated": "arXiv:2604.18805v1 Announce Type: new \nAbstract: Large language model (LLM)-based systems are increasingly deployed to conduct scientific research autonomously, yet whether their reasoning adheres to the epistemic norms that make scientific inquiry self-correcting is poorly understood. Here, we evaluate LLM-based scientific agents across eight domains, spanning workflow execution to hypothesis-dri",
+      "submitted": "Wed, 22 Apr 2026 00:00:00 -0400",
+      "url": "https://arxiv.org/abs/2604.18805"
     },
     {
-      "id": "2604.15558",
-      "title": "Preregistered Belief Revision Contracts",
+      "id": "2604.18838",
+      "title": "Quantum inspired qubit qutrit neural networks for real time financial forecasting",
       "authors": [
-        "Saad Alqithami"
+        "Kanishk Bakshi",
+        "Kathiravan Srinivasan"
       ],
-      "abstract_truncated": "arXiv:2604.15558v1 Announce Type: new \nAbstract: Deliberative multi-agent systems allow agents to exchange messages and revise beliefs over time. While this interaction is meant to improve performance, it can also create dangerous conformity effects: agreement, confidence, prestige, or majority size may be treated as if they were evidence, producing high-confidence convergence to false conclusions",
-      "submitted": "Tue, 21 Apr 2026 00:00:00 -0400",
-      "url": "https://arxiv.org/abs/2604.15558"
+      "abstract_truncated": "arXiv:2604.18838v1 Announce Type: new \nAbstract: This research investigates the performance and efficacy of machine learning models in stock prediction, comparing Artificial Neural Networks (ANNs), Quantum Qubit-based Neural Networks (QQBNs), and Quantum Qutrit-based Neural Networks (QQTNs). By outlining methodologies, architectures, and training procedures, the study highlights significant differ",
+      "submitted": "Wed, 22 Apr 2026 00:00:00 -0400",
+      "url": "https://arxiv.org/abs/2604.18838"
     },
     {
-      "id": "2604.15559",
-      "title": "Subliminal Transfer of Unsafe Behaviors in AI Agent Distillation",
+      "id": "2604.18847",
+      "title": "Human-Guided Harm Recovery for Computer Use Agents",
       "authors": [
-        "Jacob Dang",
-        "Brian Y. Xie",
-        "Omar G. Younis"
+        "Christy Li",
+        "Sky CH-Wang",
+        "Andi Peng",
+        "Andreea Bobu"
       ],
-      "abstract_truncated": "arXiv:2604.15559v1 Announce Type: new \nAbstract: Recent work on subliminal learning demonstrates that language models can transmit semantic traits through data that is semantically unrelated to those traits. However, it remains unclear whether behavioral traits can transfer in agentic systems, where policies are learned from trajectories rather than static text. In this work, we provide the first ",
-      "submitted": "Tue, 21 Apr 2026 00:00:00 -0400",
-      "url": "https://arxiv.org/abs/2604.15559"
+      "abstract_truncated": "arXiv:2604.18847v1 Announce Type: new \nAbstract: As LM agents gain the ability to execute actions on real computer systems, we need ways to not only prevent harmful actions at scale but also effectively remediate harm when prevention fails. We formalize a solution to this neglected challenge in post-execution safeguards as harm recovery: the problem of optimally steering an agent from a harmful st",
+      "submitted": "Wed, 22 Apr 2026 00:00:00 -0400",
+      "url": "https://arxiv.org/abs/2604.18847"
     },
     {
-      "id": "2604.15709",
-      "title": "Bilevel Optimization of Agent Skills via Monte Carlo Tree Search",
+      "id": "2604.18873",
+      "title": "From Natural Language to Executable Narsese: A Neuro-Symbolic Benchmark and Pipeline for Reasoning with NARS",
       "authors": [
-        "Chenyi Huang",
-        "Haoting Zhang",
-        "Jingxu Xu",
-        "Zeyu Zheng",
-        "Yunduan Lin"
+        "Mina Gabriel",
+        "Pei Wang"
       ],
-      "abstract_truncated": "arXiv:2604.15709v1 Announce Type: new \nAbstract: Agent \\texttt{skills} are structured collections of instructions, tools, and supporting resources that help large language model (LLM) agents perform particular classes of tasks. Empirical evidence shows that the design of \\texttt{skills} can materially affect agent task performance, yet systematically optimizing \\texttt{skills} remains challenging.",
-      "submitted": "Tue, 21 Apr 2026 00:00:00 -0400",
-      "url": "https://arxiv.org/abs/2604.15709"
+      "abstract_truncated": "arXiv:2604.18873v1 Announce Type: new \nAbstract: Large language models (LLMs) are highly capable at language generation, but they remain unreliable when reasoning requires explicit symbolic structure, multi-step inference, and interpretable uncertainty. This paper presents a neuro-symbolic framework for translating natural-language reasoning problems into executable formal representations using fi",
+      "submitted": "Wed, 22 Apr 2026 00:00:00 -0400",
+      "url": "https://arxiv.org/abs/2604.18873"
     },
     {
-      "id": "2604.15719",
-      "title": "The World Leaks the Future: Harness Evolution for Future Prediction Agents",
+      "id": "2604.18874",
+      "title": "How Adversarial Environments Mislead Agentic AI?",
       "authors": [
-        "Chuyang Wei",
-        "Maohang Gao",
-        "Zhixin Han",
-        "Kefei Chen",
-        "Yu Zhuang"
+        "Zhonghao Zhan",
+        "Huichi Zhou",
+        "Zhenhao Li",
+        "Peiyuan Jing",
+        "Krinos Li"
       ],
-      "abstract_truncated": "arXiv:2604.15719v2 Announce Type: new \nAbstract: Many consequential decisions must be made before the relevant outcome is known. Such problems are commonly framed as future prediction, where an LLM agent must form a prediction for an unresolved question using only the public information available at the prediction time. The setting is difficult because public evidence evolves while useful supervis",
-      "submitted": "Tue, 21 Apr 2026 00:00:00 -0400",
-      "url": "https://arxiv.org/abs/2604.15719"
+      "abstract_truncated": "arXiv:2604.18874v1 Announce Type: new \nAbstract: Tool-integrated agents are deployed on the premise that external tools ground their outputs in reality. Yet this very reliance creates a critical attack surface. Current evaluations benchmark capability in benign settings, asking \"can the agent use tools correctly\" but never \"what if the tools lie\". We identify this Trust Gap: agents are evaluated f",
+      "submitted": "Wed, 22 Apr 2026 00:00:00 -0400",
+      "url": "https://arxiv.org/abs/2604.18874"
     },
     {
-      "id": "2604.15726",
-      "title": "LLM Reasoning Is Latent, Not the Chain of Thought",
+      "id": "2604.18882",
+      "title": "Formally Verified Patent Analysis via Dependent Type Theory: Machine-Checkable Certificates from a Hybrid AI + Lean 4 Pipeline",
       "authors": [
-        "Wenshuo Wang"
+        "George Koomullil"
       ],
-      "abstract_truncated": "arXiv:2604.15726v1 Announce Type: new \nAbstract: This position paper argues that large language model (LLM) reasoning should be studied as latent-state trajectory formation rather than as faithful surface chain-of-thought (CoT). This matters because claims about faithfulness, interpretability, reasoning benchmarks, and inference-time intervention all depend on what the field takes the primary obje",
-      "submitted": "Tue, 21 Apr 2026 00:00:00 -0400",
-      "url": "https://arxiv.org/abs/2604.15726"
+      "abstract_truncated": "arXiv:2604.18882v1 Announce Type: new \nAbstract: We present a formally verified framework for patent analysis as a hybrid AI + Lean 4 pipeline. The DAG-coverage core (Algorithm 1b) is fully machine-verified once bounded match scores are fixed. Freedom-to-operate, claim-construction sensitivity, cross-claim consistency, and doctrine-of-equivalents analyses are formalized at the specification level ",
+      "submitted": "Wed, 22 Apr 2026 00:00:00 -0400",
+      "url": "https://arxiv.org/abs/2604.18882"
     },
     {
-      "id": "2604.15727",
-      "title": "Structured Abductive-Deductive-Inductive Reasoning for LLMs via Algebraic Invariants",
+      "id": "2604.18916",
+      "title": "Error-free Training for MedMNIST Datasets",
       "authors": [
-        "Sankalp Gilda",
-        "Shlok Gilda"
+        "Bo Deng"
       ],
-      "abstract_truncated": "arXiv:2604.15727v1 Announce Type: new \nAbstract: Large language models exhibit systematic limitations in structured logical reasoning: they conflate hypothesis generation with verification, cannot distinguish conjecture from validated knowledge, and allow weak reasoning steps to propagate unchecked through inference chains. We present a symbolic reasoning scaffold that operationalizes Peirce's tri",
-      "submitted": "Tue, 21 Apr 2026 00:00:00 -0400",
-      "url": "https://arxiv.org/abs/2604.15727"
+      "abstract_truncated": "arXiv:2604.18916v1 Announce Type: new \nAbstract: In this paper, we introduce a new concept called Artificial Special Intelligence by which Machine Learning models for the classification problem can be trained error-free, thus acquiring the capability of not making repeated mistakes. The method is applied to 18 MedMNIST biomedical datasets. Except for three datasets, which suffer from the double-la",
+      "submitted": "Wed, 22 Apr 2026 00:00:00 -0400",
+      "url": "https://arxiv.org/abs/2604.18916"
     }
   ]
 }

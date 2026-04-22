@@ -1,11 +1,22 @@
 {
   "channel": "earthquakes-live",
   "event": "earthquake_update",
-  "ts": "2026-04-22T11:15:00.494Z",
+  "ts": "2026-04-22T12:20:00.704Z",
   "source": "USGS Earthquake Hazards Program",
   "payload": {
-    "count": 27,
+    "count": 28,
     "events": [
+      {
+        "id": "us6000ss1k",
+        "magnitude": 4.9,
+        "place": "160 km SE of Khovd, Mongolia",
+        "depth_km": 10,
+        "lat": 46.8378,
+        "lon": 92.8983,
+        "ts": "2026-04-22T11:11:46.916Z",
+        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us6000ss1k",
+        "felt_reports": null
+      },
       {
         "id": "us6000ss1b",
         "magnitude": 4.2,

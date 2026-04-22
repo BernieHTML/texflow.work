@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TexoStat Analytics</title>
+  <link rel="stylesheet" href="/texostat/style.css" />
+  <style>
+    .analytics-hero { padding: 48px 0 32px; border-bottom: 1px solid var(--border); }
+    .analytics-hero h1 { font-family: var(--font-mono); font-size: 1.8rem; font-weight: 700; color: var(--accent); margin-bottom: 8px; }
+    .analytics-hero p { color: var(--muted); font-size: 0.9rem; }
+
+    .stat-cards { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 12px; margin: 32px 0 40px; }
+    @media(max-width:768px){ .stat-cards { grid-template-columns: repeat(2,1fr); } }
+    @media(max-width:480px){ .stat-cards { grid-template-columns: 1fr; } }
+
+    .stat-card { background: var(--bg-2); border: 1px solid var(--border); border-radius: 8px; padding: 20px; }
+    .stat-card-label { font-size: 0.72rem; font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 8px; }
+    .stat-card-value { font-family: var(--font-mono); font-size: 1.8rem; font-weight: 700; color: var(--accent); line-height: 1; }
+    .stat-card-sub { font-size: 0.75rem; color: var(--muted); margin-top: 4px; }
+
+    .section-label { font-family: var(--font-mono); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--accent); margin-bottom: 16px; }
+
+    .channel-table { width: 100%; border-collapse: collapse; }
+    .channel-table th { font-size: 0.72rem; font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); text-align: left; padding: 8px 12px; border-bottom: 1px solid var(--border); white-space: nowrap; }
+    .channel-table td { padding: 12px 12px; border-bottom: 1px solid #1e1e1e; font-size: 0.85rem; vertical-align: middle; }
+    .channel-table tr:hover td { background: var(--bg-2); }
+    .channel-table tr:last-child td { border-bottom: none; }
+
+    .tbl-name { font-weight: 500; }
+    .tbl-name a { color: var(--text); text-decoration: none; }
+    .tbl-name a:hover { color: var(--accent); }
+    .tbl-num { font-family: var(--font-mono); font-size: 0.82rem; color: var(--accent); }
+    .tbl-zero { color: var(--muted); }
+    .tbl-ts { font-family: var(--font-mono); font-size: 0.72rem; color: var(--muted); }
+
+    .bar-wrap { width: 100%; background: var(--bg-3); border-radius: 4px; height: 6px; overflow: hidden; min-width: 60px; }
+    .bar-fill { height: 100%; background: var(--accent); border-radius: 4px; transition: width 0.4s; }
+
+    .sort-btn { background: none; border: none; color: var(--muted); cursor: pointer; font-size: 0.72rem; font-family: var(--font-mono); padding: 0 4px; }
+    .sort-btn.active { color: var(--accent); }
+
+    .cat-filter-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
+
+    .detail-panel { display: none; }
+    .detail-panel.open { display: block; margin-bottom: 40px; }
+    .detail-panel-inner { background: var(--bg-2); border: 1px solid var(--border); border-radius: 8px; padding: 24px; }
+    .detail-title { font-family: var(--font-mono); font-size: 1rem; font-weight: 600; color: var(--accent); margin-bottom: 16px; }
+    .daily-grid { display: grid; grid-template-columns: repeat(7, minmax(0,1fr)); gap: 6px; }
+    @media(max-width:600px){ .daily-grid { grid-template-columns: repeat(4,1fr); } }
+    .day-cell { background: var(--bg-3); border: 1px solid var(--border); border-radius: 4px; padding: 8px 6px; text-align: center; }
+    .day-cell-date { font-size: 0.65rem; font-family: var(--font-mono); color: var(--muted); margin-bottom: 4px; }
+    .day-cell-polls { font-size: 0.8rem; font-family: var(--font-mono); color: var(--accent); }
+    .day-cell-conn { font-size: 0.7rem; color: var(--muted); }
+
+    .loading-msg { text-align: center; color: var(--muted); padding: 60px 0; font-family: var(--font-mono); font-size: 0.9rem; }
+    .table-wrap { overflow-x: auto; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="container nav-inner">
+    <a href="/texostat" class="nav-logo">Texo<span>Stat</span></a>
+    <div class="nav-links">
+      <a href="/texostat">Channels</a>
+      <a href="/texostat/analytics" style="color:var(--accent);">Analytics</a>
+      <a href="/texostat/legal/terms.md">Terms</a>
+      <a href="/tex">TEX &rarr;</a>
+    </div>
+  </div>
+</nav>
+
+<section class="analytics-hero">
+  <div class="container">
+    <h1>Analytics</h1>
+    <p>Live channel performance — subscriber counts, poll requests and stream connections.</p>
+  </div>
+</section>
+
+<div class="container" style="padding-top:0; padding-bottom:80px;">
+
+  <!-- Summary stat cards -->
+  <div class="stat-cards" id="summary-cards">
+    <div class="stat-card"><div class="stat-card-label">Total channels</div><div class="stat-card-value" id="s-channels">—</div></div>
+    <div class="stat-card"><div class="stat-card-label">Total subscribers</div><div class="stat-card-value" id="s-subs">—</div></div>
+    <div class="stat-card"><div class="stat-card-label">Total polls</div><div class="stat-card-value" id="s-polls">—</div></div>
+    <div class="stat-card"><div class="stat-card-label">Total stream connections</div><div class="stat-card-value" id="s-conns">—</div></div>
+  </div>
+
+  <!-- Detail panel (shown when a row is clicked) -->
+  <div class="detail-panel" id="detail-panel">
+    <div class="detail-panel-inner">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+        <div class="detail-title" id="detail-title"></div>
+        <button onclick="closeDetail()" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:1.1rem;">✕</button>
+      </div>
+      <div class="section-label" style="margin-bottom:12px;">Last 30 days — polls per day</div>
+      <div class="daily-grid" id="daily-grid"></div>
+    </div>
+  </div>
+
+  <!-- Channel table -->
+  <div class="section-label">All channels</div>
+
+  <div class="cat-filter-row" id="cat-filter-row">
+    <button class="cat-pill active" data-cat="all">All</button>
+  </div>
+
+  <div class="table-wrap">
+    <table class="channel-table" id="channel-table">
+      <thead>
+        <tr>
+          <th>Channel</th>
+          <th>Category</th>
+          <th>Cadence</th>
+          <th>
+            <button class="sort-btn active" data-sort="subscriber_count" id="sort-subs">Subscribers ↕</button>
+          </th>
+          <th>
+            <button class="sort-btn" data-sort="total_polls" id="sort-polls">Polls ↕</button>
+          </th>
+          <th>
+            <button class="sort-btn" data-sort="total_connections" id="sort-conns">Connections ↕</button>
+          </th>
+          <th>Last poll</th>
+          <th>Activity</th>
+        </tr>
+      </thead>
+      <tbody id="table-body">
+        <tr><td colspan="8" class="loading-msg">Loading analytics…</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<footer>
+  <div class="container footer-inner">
+    <div class="footer-brand">TexoStat Analytics</div>
+    <div class="footer-links">
+      <a href="/texostat">Channels</a>
+      <a href="https://texflow.work">texflow.work</a>
+      <a href="/tex">TEX</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function () {
+  const BASE = '/texostat';
+  let allData = [];
+  let activeCategory = 'all';
+  let sortKey = 'subscriber_count';
+  let sortDir = -1; // -1 = desc
+
+  function fmt(n) { return n == null ? '—' : Number(n).toLocaleString(); }
+  function timeAgo(iso) {
+    if (!iso) return '—';
+    const diff = Date.now() - new Date(iso).getTime();
+    const m = Math.floor(diff / 60000);
+    if (m < 2) return 'just now';
+    if (m < 60) return m + 'm ago';
+    const h = Math.floor(m / 60);
+    if (h < 24) return h + 'h ago';
+    return Math.floor(h / 24) + 'd ago';
+  }
+
+  function catClass(cat) {
+    const valid = ['crypto','finance','space','environment','health','tech','research','regulatory','logistics','misc','custom'];
+    return valid.includes(cat) ? 'cat-' + cat : 'cat-misc';
+  }
+
+  function maxVal(data, key) {
+    return Math.max(1, ...data.map(d => d[key] || 0));
+  }
+
+  function renderSummary(data) {
+    document.getElementById('s-channels').textContent = fmt(data.length);
+    document.getElementById('s-subs').textContent = fmt(data.reduce((a, d) => a + (d.subscriber_count || 0), 0));
+    document.getElementById('s-polls').textContent = fmt(data.reduce((a, d) => a + (d.total_polls || 0), 0));
+    document.getElementById('s-conns').textContent = fmt(data.reduce((a, d) => a + (d.total_connections || 0), 0));
+  }
+
+  function renderCategories(data) {
+    const cats = ['all', ...new Set(data.map(d => d.category))].filter(Boolean);
+    const row = document.getElementById('cat-filter-row');
+    row.innerHTML = cats.map(c =>
+      `<button class="cat-pill${c === activeCategory ? ' active' : ''}" data-cat="${c}">${c === 'all' ? 'All' : c}</button>`
+    ).join('');
+    row.addEventListener('click', e => {
+      const btn = e.target.closest('[data-cat]');
+      if (!btn) return;
+      activeCategory = btn.dataset.cat;
+      renderTable();
+      row.querySelectorAll('.cat-pill').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+    });
+  }
+
+  function renderTable() {
+    const filtered = activeCategory === 'all'
+      ? allData
+      : allData.filter(d => d.category === activeCategory);
+
+    const sorted = [...filtered].sort((a, b) => {
+      return sortDir * ((b[sortKey] || 0) - (a[sortKey] || 0));
+    });
+
+    const maxPoll = maxVal(sorted, 'total_polls');
+    const maxConn = maxVal(sorted, 'total_connections');
+    const maxSub  = maxVal(sorted, 'subscriber_count');
+
+    const body = document.getElementById('table-body');
+    if (!sorted.length) {
+      body.innerHTML = '<tr><td colspan="8" class="loading-msg">No channels found.</td></tr>';
+      return;
+    }
+
+    body.innerHTML = sorted.map(d => {
+      const polls = d.total_polls || 0;
+      const conns = d.total_connections || 0;
+      const subs  = d.subscriber_count || 0;
+      const barPct = w => Math.round((w / (maxPoll || 1)) * 100);
+
+      return `<tr onclick="openDetail('${d.slug}')" style="cursor:pointer;">
+  <td class="tbl-name"><a href="/texostat/channels/${d.slug}" onclick="event.stopPropagation()">${d.name}</a></td>
+  <td><span class="cat-badge ${catClass(d.category)}">${d.category}</span></td>
+  <td class="tbl-ts">${d.cadence}</td>
+  <td class="${subs ? 'tbl-num' : 'tbl-zero'}">${fmt(subs)}</td>
+  <td class="${polls ? 'tbl-num' : 'tbl-zero'}">${fmt(polls)}</td>
+  <td class="${conns ? 'tbl-num' : 'tbl-zero'}">${fmt(conns)}</td>
+  <td class="tbl-ts">${timeAgo(d.last_poll)}</td>
+  <td style="min-width:80px;">
+    <div class="bar-wrap"><div class="bar-fill" style="width:${Math.round((polls/maxPoll)*100)}%"></div></div>
+  </td>
+</tr>`;
+    }).join('');
+  }
+
+  // Sort buttons
+  document.querySelectorAll('.sort-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const key = btn.dataset.sort;
+      if (sortKey === key) { sortDir *= -1; }
+      else { sortKey = key; sortDir = -1; }
+      document.querySelectorAll('.sort-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      btn.textContent = btn.textContent.replace(' ↑', '').replace(' ↓', '') + (sortDir === -1 ? ' ↓' : ' ↑');
+      renderTable();
+    });
+  });
+
+  // Detail panel
+  window.openDetail = function(slug) {
+    const d = allData.find(x => x.slug === slug);
+    if (!d) return;
+    document.getElementById('detail-title').textContent = d.name + ' — daily breakdown';
+
+    const daily = d.daily || {};
+    const days = Object.keys(daily).sort().slice(-30);
+
+    if (!days.length) {
+      document.getElementById('daily-grid').innerHTML = '<div style="color:var(--muted);font-size:0.82rem;font-family:var(--font-mono);">No daily data yet.</div>';
+    } else {
+      document.getElementById('daily-grid').innerHTML = days.map(day => {
+        const entry = daily[day] || {};
+        return `<div class="day-cell">
+  <div class="day-cell-date">${day.slice(5)}</div>
+  <div class="day-cell-polls">${entry.polls || 0}</div>
+  <div class="day-cell-conn">${entry.connections || 0} conn</div>
+</div>`;
+      }).join('');
+    }
+
+    document.getElementById('detail-panel').classList.add('open');
+    document.getElementById('detail-panel').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
+  window.closeDetail = function() {
+    document.getElementById('detail-panel').classList.remove('open');
+  };
+
+  // Auto-refresh every 30s
+  function load() {
+    fetch(BASE + '/channels/analytics')
+      .then(r => r.json())
+      .then(data => {
+        allData = Array.isArray(data) ? data : [];
+        renderSummary(allData);
+        renderCategories(allData);
+        renderTable();
+      })
+      .catch(() => {
+        document.getElementById('table-body').innerHTML =
+          '<tr><td colspan="8" class="loading-msg">Could not load analytics.</td></tr>';
+      });
+  }
+
+  load();
+  setInterval(load, 30000);
+})();
+</script>
+</body>
+</html>

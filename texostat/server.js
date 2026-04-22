@@ -13,6 +13,7 @@ dotenv.config({ path: join(__dirname, '.env') });
 import channelsRouter from './routes/channels.js';
 import streamRouter from './routes/stream.js';
 import texBridgeRouter from './routes/tex-bridge.js';
+import analyticsRouter from './routes/analytics.js';
 import { startPoller } from './services/poller.js';
 import { connectionCount } from './services/sse-manager.js';
 
@@ -50,6 +51,7 @@ app.use(express.static(join(__dirname, 'public')));
 app.use('/channels', channelsRouter);
 app.use('/stream', streamRouter);
 app.use('/share', texBridgeRouter);
+app.use('/analytics', analyticsRouter);
 
 // Health
 app.get('/health', (req, res) => {

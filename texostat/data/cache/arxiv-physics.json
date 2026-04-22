@@ -1,121 +1,128 @@
 {
   "channel": "arxiv-physics",
   "event": "papers_update",
-  "ts": "2026-04-22T00:05:01.127Z",
+  "ts": "2026-04-22T11:26:31.247Z",
   "source": "arXiv RSS physics",
   "payload": [
     {
-      "id": "2604.16444",
-      "title": "Comment on electromagnetic noise cancellation in low-field MRI systems (arXiv:2509.05955v1, 2406.17804v3, 2210.06730v2, and related works)",
+      "id": "2604.18594",
+      "title": "New symmetry in higher curvature spacetimes",
       "authors": [
-        "Joseba Alonso",
-        "Jos\\'e M. Algar\\'in",
-        "Teresa Guallart-Naval"
+        "Alcides Garat"
       ],
-      "abstract_truncated": "arXiv:2604.16444v1 Announce Type: new \nAbstract: In this Comment, we discuss recent approaches to electromagnetic interference (EMI) mitigation in low-field Magnetic Resonance Imaging (LF-MRI), as presented in arXiv preprints 2509.05955v1, 2406.17804v3, or 2210.06730v2. These and other works explore noise cancellation strategies based on external sensing coils for post-elimination of EMI. We argue",
-      "submitted": "Tue, 21 Apr 2026 00:00:00 -0400",
-      "url": "https://arxiv.org/abs/2604.16444"
+      "abstract_truncated": "arXiv:2604.18594v1 Announce Type: new \nAbstract: New symmetries have been found in Einstein-Maxwell spacetimes. New symmetries have also been found in imperfect fluid curved spacetimes. We will prove in this paper that we can extend these symmetries to spacetimes with higher curvature terms. Higher curvature theories are in many cases associated to dark energy for instance. We provide further just",
+      "submitted": "Wed, 22 Apr 2026 00:00:00 -0400",
+      "url": "https://arxiv.org/abs/2604.18594"
     },
     {
-      "id": "2604.16449",
-      "title": "Gaussian Field Representations for Turbulent Flow: Compression, Scale Separation, and Physical Fidelity",
+      "id": "2604.18596",
+      "title": "Large language models converge on competitive rationality but diverge on cooperation across providers and generations",
       "authors": [
-        "Dhanush Vittal Shenoy",
-        "Steven H. Frankel"
+        "Felipe M. Affonso"
       ],
-      "abstract_truncated": "arXiv:2604.16449v1 Announce Type: new \nAbstract: Representing turbulent flow fields in a compact yet physically faithful form remains a central challenge in computational fluid dynamics. We propose a continuous parametric representation based on localized Gaussian primitives, in which the velocity field is modeled as a superposition of kernels with learnable positions, amplitudes, and scales. This",
-      "submitted": "Tue, 21 Apr 2026 00:00:00 -0400",
-      "url": "https://arxiv.org/abs/2604.16449"
+      "abstract_truncated": "arXiv:2604.18596v1 Announce Type: new \nAbstract: As language models are deployed as autonomous agents that negotiate, cooperate, and compete on behalf of human principals, their strategic dispositions acquire direct economic consequences. Here we show, across 51,906 game-theoretic trials generating 826,990 strategic decisions from 25 large language models spanning seven developers and 38 canonical",
+      "submitted": "Wed, 22 Apr 2026 00:00:00 -0400",
+      "url": "https://arxiv.org/abs/2604.18596"
     },
     {
-      "id": "2604.16454",
-      "title": "Competition of carrier bioresorption and drug release kinetics of vancomycin-loaded silicate macroporous microspheres to determine cell biocompatibility",
+      "id": "2604.18604",
+      "title": "Engineering quantum optical responses of microtubules through tryptophan-network simulations and ultraviolet spectroscopy",
       "authors": [
-        "A. Bolandparvaz Jahromi",
-        "E. Salahinejad"
+        "Lea Gassab",
+        "Travis J. A. Craddock"
       ],
-      "abstract_truncated": "arXiv:2604.16454v1 Announce Type: new \nAbstract: Bioceramic porous microspheres are promising substances for dental and orthopedic bone void filling, tissue engineering and drug delivery applications. In this research, the structure and cytocompatibility of bioactive magnesium-calcium silicate macroporous microspheres loaded with vancomycin hydrochloride, an antibiotic drug, were studied. In this ",
-      "submitted": "Tue, 21 Apr 2026 00:00:00 -0400",
-      "url": "https://arxiv.org/abs/2604.16454"
+      "abstract_truncated": "arXiv:2604.18604v1 Announce Type: new \nAbstract: Microtubules host dense ultraviolet-absorbing aromatic networks, suggesting an opportunity to engineer their optical response for biotechnology. Here we assess the feasibility of tuning microtubule fluorescence by combining an excitonic radiative-coupling model with molecular-dynamics-derived microtubule-like assemblies and steady-state absorbance a",
+      "submitted": "Wed, 22 Apr 2026 00:00:00 -0400",
+      "url": "https://arxiv.org/abs/2604.18604"
     },
     {
-      "id": "2604.16455",
-      "title": "Drug-delivery Ca-Mg silicate scaffolds encapsulated in PLGA",
+      "id": "2604.18608",
+      "title": "A physicist-friendly primer on the Hamiltonian for quantum sensing in proteins: analytical expressions and insights for a toy model of the radical-pair mechanism",
       "authors": [
-        "A. Jadidi",
-        "E. Salahinejad",
-        "E. Sharifi",
-        "L. Tayebi"
+        "Clarice D. Aiello",
+        "Brian L. Ross",
+        "Alessandro Lodesani",
+        "Morgan L. Sosa"
       ],
-      "abstract_truncated": "arXiv:2604.16455v1 Announce Type: new \nAbstract: The aim of this work is to develop dual-functional scaffolds for bone tissue regeneration and local antibiotic delivery applications. In this respect, bioresorbable bredigite (Ca7MgSi4O16) porous scaffolds were fabricated by a foam replica method, loaded with vancomycin hydrochloride and encapsulated in poly lactic-co-glycolic acid (PLGA) coatings. ",
-      "submitted": "Tue, 21 Apr 2026 00:00:00 -0400",
-      "url": "https://arxiv.org/abs/2604.16455"
+      "abstract_truncated": "arXiv:2604.18608v1 Announce Type: new \nAbstract: Electron spin-dependent chemical reactions in proteins, often discussed under the 'radical-pair mechanism', remain the leading microscopic proposal for magnetic field sensing in biology. Yet the essential physics is often obscured by the complexity of realistic models. In this work, we present a physicist-friendly primer on the simplest radical-pair",
+      "submitted": "Wed, 22 Apr 2026 00:00:00 -0400",
+      "url": "https://arxiv.org/abs/2604.18608"
     },
     {
-      "id": "2604.16461",
-      "title": "Modelling Gas-Phase Reaction Kinetics with Guided Particle Diffusion Sampling",
+      "id": "2604.18656",
+      "title": "It's all in your head -- fine-tuning arguments do not require aleatoric uncertainty",
       "authors": [
-        "Andrew Millard",
-        "Zheng Zhao",
-        "Henrik Pedersen"
+        "Andrew Fowlie"
       ],
-      "abstract_truncated": "arXiv:2604.16461v1 Announce Type: new \nAbstract: Physics-guided sampling with diffusion priors has recently shown strong performance in solving complex systems of partial differential equations (PDEs) from sparse observations. However, these methods are typically evaluated on benchmark problems that do not fully demonstrate their ability to generate temporally consistent solutions of time-dependen",
-      "submitted": "Tue, 21 Apr 2026 00:00:00 -0400",
-      "url": "https://arxiv.org/abs/2604.16461"
+      "abstract_truncated": "arXiv:2604.18656v1 Announce Type: new \nAbstract: Prompted by misconceptions in the recent literature, we review the justifications for naturalness arguments and Occam's razor found in Bayesian statistics. We discuss the automatic Occam's razor that emerges in Bayesian formalism, bringing together points of view from diverse fields, including statistics, social sciences, physics and machine learnin",
+      "submitted": "Wed, 22 Apr 2026 00:00:00 -0400",
+      "url": "https://arxiv.org/abs/2604.18656"
     },
     {
-      "id": "2604.16478",
-      "title": "Doubly Logarithmic Corrections to Radiation Domination from CET {\\Omega}: Theory and Planck/BBN Constraints",
+      "id": "2604.18681",
+      "title": "Floquet engineering of spin-spin interactions in a hybrid atomic system",
       "authors": [
-        "Christian Balfagon"
+        "Daniel Gavilan-Martin",
+        "Grzegorz {\\L}ukasiewicz",
+        "Vincent Sch\\\"afer",
+        "Mikhail Padniuk",
+        "Adam Stefa\\'nski"
       ],
-      "abstract_truncated": "arXiv:2604.16478v1 Announce Type: new \nAbstract: We present the CET Omega framework, a causal-informational extension of standard cosmology that predicts a universal doubly logarithmic correction to the radiation energy density in the early Universe. This correction arises naturally from scale-invariant spectral sectors with logarithmically-running infrared scales and represents a low-energy manif",
-      "submitted": "Tue, 21 Apr 2026 00:00:00 -0400",
-      "url": "https://arxiv.org/abs/2604.16478"
+      "abstract_truncated": "arXiv:2604.18681v1 Announce Type: new \nAbstract: We demonstrate dynamical control of the effective spin-spin interaction, dominated by Fermi-contact interaction, in a hybrid spin system via parametric modulation. We show that, in an alkali-noble-gas comagnetometer, periodic modulation of the direction of the electron spin polarization with respect to the nuclear polarization leads to a Floquet-ind",
+      "submitted": "Wed, 22 Apr 2026 00:00:00 -0400",
+      "url": "https://arxiv.org/abs/2604.18681"
     },
     {
-      "id": "2604.16494",
-      "title": "Velocity field within a vortex ring with a large elliptical cross section",
+      "id": "2604.18727",
+      "title": "Skillful Global Ocean Emulation and the Role of Correlation-Aware Loss",
       "authors": [
-        "T. S. Morton"
+        "Niraj Agarwal",
+        "Timothy A. Smith",
+        "Sergey Frolov",
+        "Laura C. Slivinski"
       ],
-      "abstract_truncated": "arXiv:2604.16494v1 Announce Type: new \nAbstract: The velocity field within a steady toroidal vortex is found for arbitrary mean core radius and section ellipticity. The problem is solved by transforming to coordinates that define invariant sets. The method allows the properties of the coordinate system metric tensor to be exploited in the continuity equation in order to obtain the solution. The vo",
-      "submitted": "Tue, 21 Apr 2026 00:00:00 -0400",
-      "url": "https://arxiv.org/abs/2604.16494"
+      "abstract_truncated": "arXiv:2604.18727v1 Announce Type: new \nAbstract: Machine learning emulators have shown extraordinary skill in forecasting atmospheric states, and their application to global ocean dynamics offers similar promise. Here, we adapt the GraphCast architecture into a dedicated ocean-only emulator, driven by prescribed atmospheric conditions, for medium-range predictions. The emulator is trained on NOAA'",
+      "submitted": "Wed, 22 Apr 2026 00:00:00 -0400",
+      "url": "https://arxiv.org/abs/2604.18727"
     },
     {
-      "id": "2604.16495",
-      "title": "Effect of gap width on turbulent transition in Taylor-Couette flow",
+      "id": "2604.18755",
+      "title": "Opinion polarization from compression-based decision making where agents optimize local complexity and global simplicity",
       "authors": [
-        "Chang-Quan Zhou",
-        "Hua-Shu Dou",
-        "Lin Niu",
-        "Wen-Qian Xu"
+        "Alina Dubovskaya",
+        "David J. P. O'Sullivan",
+        "Michael Quayle"
       ],
-      "abstract_truncated": "arXiv:2604.16495v1 Announce Type: new \nAbstract: Simulations of the transitional flow in Taylor-Couette configuration are carried out to study the effect of the gap width on turbulent transition. The research results show that, under the same radius and the rotating speed of the inner cylinder, as the gap width increases, the flow becomes more stable. It is discovered that the average velocity dis",
-      "submitted": "Tue, 21 Apr 2026 00:00:00 -0400",
-      "url": "https://arxiv.org/abs/2604.16495"
+      "abstract_truncated": "arXiv:2604.18755v1 Announce Type: new \nAbstract: Understanding social polarization requires integrating insights from psychology, sociology, and complex systems science. Agent-based modeling provides a natural framework to combine perspectives from different fields and explore how individual cognition shapes collective outcomes. This study introduces a novel agent-based model that integrates two c",
+      "submitted": "Wed, 22 Apr 2026 00:00:00 -0400",
+      "url": "https://arxiv.org/abs/2604.18755"
     },
     {
-      "id": "2604.16501",
-      "title": "Design Optimization of eVTOL Propellers using a Viscous-Extension Discrete Vortex Method",
+      "id": "2604.18772",
+      "title": "Low noise resonant amplification by optical injection-locking and residual phase noise cancellation",
       "authors": [
-        "Rahul Kumar",
-        "Ramkumar Pathmanabhan"
+        "Y. Lange Simmons",
+        "James Greenberg",
+        "Brendan M. Heffernan",
+        "Antoine Rolland"
       ],
-      "abstract_truncated": "arXiv:2604.16501v1 Announce Type: new \nAbstract: Potential flow theory remains a cornerstone of unsteady aerodynamics due to its computational efficiency in modeling complex flow phenomena. This study presents a significant advancement by integrating a viscous unsteady theory with established numerical vortex methods, creating a hybrid computational tool for low-to-moderate Reynolds number flows. ",
-      "submitted": "Tue, 21 Apr 2026 00:00:00 -0400",
-      "url": "https://arxiv.org/abs/2604.16501"
+      "abstract_truncated": "arXiv:2604.18772v1 Announce Type: new \nAbstract: We demonstrate a low noise, high-gain, resonant optical amplifier that combines injection locking with feed-forward cancellation of residual phase noise. The wavelength-agnostic architecture uses a commercial semiconductor diode laser as a power amplifier while preserving the spectral purity of a weak reference. Although injection locking enforces p",
+      "submitted": "Wed, 22 Apr 2026 00:00:00 -0400",
+      "url": "https://arxiv.org/abs/2604.18772"
     },
     {
-      "id": "2604.16544",
-      "title": "Comment on \"Angular momentum dynamics of vortex particles in accelerators''",
+      "id": "2604.18787",
+      "title": "System Size Dependence of Collisionless Reconnection Rate",
       "authors": [
-        "S. S. Baturin"
+        "Yi-Min Huang",
+        "Naoki Bessho",
+        "Li-Jen Chen",
+        "Judith T. Karpen",
+        "Amitava Bhattacharjee"
       ],
-      "abstract_truncated": "arXiv:2604.16544v1 Announce Type: new \nAbstract: We comment on Ref.[D. Karlovets, D. Grosman, and I. Pavlov, Phys. Rev. Lett. 136, 085002 (2026)], which proposes a BMT-like equation for the mean kinetic orbital angular momentum (OAM) of vortex particles in accelerator fields and draws spin-like conclusions about depolarization, resonances, and control. We show that the proposed closure is not gene",
-      "submitted": "Tue, 21 Apr 2026 00:00:00 -0400",
-      "url": "https://arxiv.org/abs/2604.16544"
+      "abstract_truncated": "arXiv:2604.18787v1 Announce Type: new \nAbstract: It is a widely accepted paradigm that collisionless magnetic reconnection proceeds at a universal fast rate of $\\sim0.1$ when normalized to a properly defined reconnecting magnetic field and Alfv\\'en speed, effectively independent of the macroscopic system size. This conclusion, derived primarily from kinetic simulations of classical Harris current ",
+      "submitted": "Wed, 22 Apr 2026 00:00:00 -0400",
+      "url": "https://arxiv.org/abs/2604.18787"
     }
   ]
 }

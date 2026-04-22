@@ -1,7 +1,7 @@
 {
   "channel": "co2-levels",
   "event": "co2_update",
-  "ts": "2026-04-22T00:05:01.018Z",
+  "ts": "2026-04-22T11:26:28.342Z",
   "source": "NOAA GML Mauna Loa",
   "payload": {
     "date": "2026-04-20",

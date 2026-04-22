@@ -590,6 +590,19 @@ footer {
 }
 .share-inbox-link { align-self: flex-start; }
 
+/* ===== CONVERSATION PICKER ===== */
+.share-conv-label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); font-family: var(--font-mono); margin-bottom: 8px; margin-top: 4px; }
+.share-conv-list { max-height: 200px; overflow-y: auto; border: 1px solid var(--border); border-radius: 8px; margin-bottom: 12px; }
+.conv-item { display: flex; align-items: center; gap: 10px; padding: 11px 14px; cursor: pointer; border-bottom: 1px solid #1a1a1a; transition: background 0.15s; }
+.conv-item:last-child { border-bottom: none; }
+.conv-item:hover { background: var(--bg-3); }
+.conv-item.selected { background: rgba(29,158,117,0.12); border-left: 3px solid var(--accent); }
+.conv-type-badge { font-size: 0.65rem; font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); background: var(--bg-3); border: 1px solid var(--border); border-radius: 3px; padding: 2px 5px; white-space: nowrap; }
+.conv-label { font-size: 0.85rem; font-weight: 500; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.conv-sub { font-size: 0.72rem; color: var(--muted); white-space: nowrap; }
+.inline-link { background: none; border: none; color: var(--accent); cursor: pointer; text-decoration: underline; font-size: inherit; padding: 0; }
+.poll-count { color: var(--muted); font-size: 0.78rem; }
+
 /* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
   #channel-grid { grid-template-columns: 1fr; }
