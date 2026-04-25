@@ -1,128 +1,129 @@
 {
   "channel": "arxiv-physics",
   "event": "papers_update",
-  "ts": "2026-04-22T12:23:18.225Z",
+  "ts": "2026-04-25T00:05:01.147Z",
   "source": "arXiv RSS physics",
   "payload": [
     {
-      "id": "2604.18594",
-      "title": "New symmetry in higher curvature spacetimes",
+      "id": "2604.20872",
+      "title": "Dynamical Model for the Sustainable Development Goals",
       "authors": [
-        "Alcides Garat"
+        "Alberto Garc\\'ia-Rodr\\'iguez",
+        "Tzipe Govezensky",
+        "Julia Tag\\\"ue\\~na",
+        "Kimmo K. Kaski",
+        "Rafael A. Barrio"
       ],
-      "abstract_truncated": "arXiv:2604.18594v1 Announce Type: new \nAbstract: New symmetries have been found in Einstein-Maxwell spacetimes. New symmetries have also been found in imperfect fluid curved spacetimes. We will prove in this paper that we can extend these symmetries to spacetimes with higher curvature terms. Higher curvature theories are in many cases associated to dark energy for instance. We provide further just",
-      "submitted": "Wed, 22 Apr 2026 00:00:00 -0400",
-      "url": "https://arxiv.org/abs/2604.18594"
+      "abstract_truncated": "arXiv:2604.20872v1 Announce Type: new \nAbstract: The 2030 Agenda for Sustainable Development of the United Nations outlines 17 goals as global challenges for countries of the world to address in their development. However, the progress of countries towards these goals has been much slower than expected. In a previous study, we analyzed the data over two decades (2000--2022), using unsupervised mac",
+      "submitted": "Fri, 24 Apr 2026 00:00:00 -0400",
+      "url": "https://arxiv.org/abs/2604.20872"
     },
     {
-      "id": "2604.18596",
-      "title": "Large language models converge on competitive rationality but diverge on cooperation across providers and generations",
+      "id": "2604.20876",
+      "title": "High-Accuracy Numerical Solutions of Particle Motion in Static Magnetic Fields",
       "authors": [
-        "Felipe M. Affonso"
+        "Heather Jiles",
+        "Robert Weigel"
       ],
-      "abstract_truncated": "arXiv:2604.18596v1 Announce Type: new \nAbstract: As language models are deployed as autonomous agents that negotiate, cooperate, and compete on behalf of human principals, their strategic dispositions acquire direct economic consequences. Here we show, across 51,906 game-theoretic trials generating 826,990 strategic decisions from 25 large language models spanning seven developers and 38 canonical",
-      "submitted": "Wed, 22 Apr 2026 00:00:00 -0400",
-      "url": "https://arxiv.org/abs/2604.18596"
+      "abstract_truncated": "arXiv:2604.20876v1 Announce Type: new \nAbstract: The Parker-Sochacki (PS) method is investigated as an alternative to Runge-Kutta (RK) methods for solving the Lorentz equations of motion for a charged particle in a static magnetic field. Traditional methods, including fixed-time-step fourth-order RK, adaptive Dormand-Prince RK, and Gauss-Legendre Runge-Kutta (RKG), advance the solution by sampling",
+      "submitted": "Fri, 24 Apr 2026 00:00:00 -0400",
+      "url": "https://arxiv.org/abs/2604.20876"
     },
     {
-      "id": "2604.18604",
-      "title": "Engineering quantum optical responses of microtubules through tryptophan-network simulations and ultraviolet spectroscopy",
+      "id": "2604.20879",
+      "title": "From transient shocks to unexpected outcomes: disruptive drivers in scenario pathways",
       "authors": [
-        "Lea Gassab",
-        "Travis J. A. Craddock"
+        "Andrew G. Ross"
       ],
-      "abstract_truncated": "arXiv:2604.18604v1 Announce Type: new \nAbstract: Microtubules host dense ultraviolet-absorbing aromatic networks, suggesting an opportunity to engineer their optical response for biotechnology. Here we assess the feasibility of tuning microtubule fluorescence by combining an excitonic radiative-coupling model with molecular-dynamics-derived microtubule-like assemblies and steady-state absorbance a",
-      "submitted": "Wed, 22 Apr 2026 00:00:00 -0400",
-      "url": "https://arxiv.org/abs/2604.18604"
+      "abstract_truncated": "arXiv:2604.20879v1 Announce Type: new \nAbstract: Scenario pathways (e.g. for the energy transition) often use a single trajectory or a band. That is not sufficient when one needs to understand why outcomes differ and under what stress or uncertainty they arise. Doing so requires tracking disequilibrium along pathways, comparing runs across \"worlds\" or storylines, and surfacing outcomes that are un",
+      "submitted": "Fri, 24 Apr 2026 00:00:00 -0400",
+      "url": "https://arxiv.org/abs/2604.20879"
     },
     {
-      "id": "2604.18608",
-      "title": "A physicist-friendly primer on the Hamiltonian for quantum sensing in proteins: analytical expressions and insights for a toy model of the radical-pair mechanism",
+      "id": "2604.20881",
+      "title": "High-Fidelity Reconstruction of Charge Boundary Layers and Sharp Interfaces in Electro-Thermal-Convective Flows via Residual-Attention PINNs",
       "authors": [
-        "Clarice D. Aiello",
-        "Brian L. Ross",
-        "Alessandro Lodesani",
-        "Morgan L. Sosa"
+        "Baitong Zhou",
+        "Ze Tao",
+        "Ke Xu",
+        "Fujun Liu",
+        "Xuan Fang"
       ],
-      "abstract_truncated": "arXiv:2604.18608v1 Announce Type: new \nAbstract: Electron spin-dependent chemical reactions in proteins, often discussed under the 'radical-pair mechanism', remain the leading microscopic proposal for magnetic field sensing in biology. Yet the essential physics is often obscured by the complexity of realistic models. In this work, we present a physicist-friendly primer on the simplest radical-pair",
-      "submitted": "Wed, 22 Apr 2026 00:00:00 -0400",
-      "url": "https://arxiv.org/abs/2604.18608"
+      "abstract_truncated": "arXiv:2604.20881v1 Announce Type: new \nAbstract: Accurate reconstruction of localized extreme structures remains a critical bottleneck in the physics-informed modeling of electro-thermal-convective flows. Although conventional physics-informed neural networks effectively capture smooth global dynamics, they frequently suffer from numerical diffusion and distortion when attempting to resolve sharp ",
+      "submitted": "Fri, 24 Apr 2026 00:00:00 -0400",
+      "url": "https://arxiv.org/abs/2604.20881"
     },
     {
-      "id": "2604.18656",
-      "title": "It's all in your head -- fine-tuning arguments do not require aleatoric uncertainty",
+      "id": "2604.20885",
+      "title": "From Physical Difference to Meaning: A Constructor-Theoretic Framework for Prebiotic Information in Casimir-Lifshitz-Coupled Protocell Clusters",
       "authors": [
-        "Andrew Fowlie"
+        "Michael Massoth"
       ],
-      "abstract_truncated": "arXiv:2604.18656v1 Announce Type: new \nAbstract: Prompted by misconceptions in the recent literature, we review the justifications for naturalness arguments and Occam's razor found in Bayesian statistics. We discuss the automatic Occam's razor that emerges in Bayesian formalism, bringing together points of view from diverse fields, including statistics, social sciences, physics and machine learnin",
-      "submitted": "Wed, 22 Apr 2026 00:00:00 -0400",
-      "url": "https://arxiv.org/abs/2604.18656"
+      "abstract_truncated": "arXiv:2604.20885v1 Announce Type: new \nAbstract: This paper develops a physical framework for the prebiotic emergence of information and meaning. Building on Constructor Theory, we define information as a reproducible physical difference and meaning as a difference with stable functional consequences. Casimir-Lifshitz-coupled protocell clusters serve as a minimal model that exhibits reproducible a",
+      "submitted": "Fri, 24 Apr 2026 00:00:00 -0400",
+      "url": "https://arxiv.org/abs/2604.20885"
     },
     {
-      "id": "2604.18681",
-      "title": "Floquet engineering of spin-spin interactions in a hybrid atomic system",
+      "id": "2604.20886",
+      "title": "KinetiDiff: Docking-Guided Diffusion for De Novo ACVR1 Inhibitor Design in Fibrodysplasia Ossificans Progressiva",
       "authors": [
-        "Daniel Gavilan-Martin",
-        "Grzegorz {\\L}ukasiewicz",
-        "Vincent Sch\\\"afer",
-        "Mikhail Padniuk",
-        "Adam Stefa\\'nski"
+        "Aaryan Patel"
       ],
-      "abstract_truncated": "arXiv:2604.18681v1 Announce Type: new \nAbstract: We demonstrate dynamical control of the effective spin-spin interaction, dominated by Fermi-contact interaction, in a hybrid spin system via parametric modulation. We show that, in an alkali-noble-gas comagnetometer, periodic modulation of the direction of the electron spin polarization with respect to the nuclear polarization leads to a Floquet-ind",
-      "submitted": "Wed, 22 Apr 2026 00:00:00 -0400",
-      "url": "https://arxiv.org/abs/2604.18681"
+      "abstract_truncated": "arXiv:2604.20886v1 Announce Type: new \nAbstract: We present KinetiDiff, a structure-based framework for de novo kinase inhibitor design that integrates a Geometry-Complete Diffusion Model with real-time AutoDock Vina gradient guidance. By injecting physics-based docking gradients into the diffusion denoising loop, KinetiDiff steers molecule generation toward high-affinity conformations for ACVR1 (",
+      "submitted": "Fri, 24 Apr 2026 00:00:00 -0400",
+      "url": "https://arxiv.org/abs/2604.20886"
     },
     {
-      "id": "2604.18727",
-      "title": "Skillful Global Ocean Emulation and the Role of Correlation-Aware Loss",
+      "id": "2604.20896",
+      "title": "From Anomaly to Candidate Technosignature: The Threshold Problem of the Loeb Scale",
       "authors": [
-        "Niraj Agarwal",
-        "Timothy A. Smith",
-        "Sergey Frolov",
-        "Laura C. Slivinski"
+        "Konrad Szocik",
+        "Abraham Loeb"
       ],
-      "abstract_truncated": "arXiv:2604.18727v1 Announce Type: new \nAbstract: Machine learning emulators have shown extraordinary skill in forecasting atmospheric states, and their application to global ocean dynamics offers similar promise. Here, we adapt the GraphCast architecture into a dedicated ocean-only emulator, driven by prescribed atmospheric conditions, for medium-range predictions. The emulator is trained on NOAA'",
-      "submitted": "Wed, 22 Apr 2026 00:00:00 -0400",
-      "url": "https://arxiv.org/abs/2604.18727"
+      "abstract_truncated": "arXiv:2604.20896v1 Announce Type: new \nAbstract: Recent work on the Loeb Scale has provided astronomy a structured framework for assessing anomalous interstellar objects, including a quantitative mapping of a classification ranking, its evolution with the addition of data, and a broader observational strategy for firming its verdict. What remains unclear is the epistemic and methodological meaning",
+      "submitted": "Fri, 24 Apr 2026 00:00:00 -0400",
+      "url": "https://arxiv.org/abs/2604.20896"
     },
     {
-      "id": "2604.18755",
-      "title": "Opinion polarization from compression-based decision making where agents optimize local complexity and global simplicity",
+      "id": "2604.20939",
+      "title": "Deep Reinforcement Learning for Optimizing Angle Selection and Dose Allocation in CT Reconstruction",
       "authors": [
-        "Alina Dubovskaya",
-        "David J. P. O'Sullivan",
-        "Michael Quayle"
+        "Tianyuan Wang",
+        "Dani\\\"el M. Pelt",
+        "Felix Lucka",
+        "Tristan van Leeuwen",
+        "K. Joost Batenburg"
       ],
-      "abstract_truncated": "arXiv:2604.18755v1 Announce Type: new \nAbstract: Understanding social polarization requires integrating insights from psychology, sociology, and complex systems science. Agent-based modeling provides a natural framework to combine perspectives from different fields and explore how individual cognition shapes collective outcomes. This study introduces a novel agent-based model that integrates two c",
-      "submitted": "Wed, 22 Apr 2026 00:00:00 -0400",
-      "url": "https://arxiv.org/abs/2604.18755"
+      "abstract_truncated": "arXiv:2604.20939v1 Announce Type: new \nAbstract: Traditional X-ray computed tomography (CT) scanning strategies typically select projection angles uniformly and allocate dose equally. In practice, however, CT scans often need to be fast, radiation-efficient, and adaptive. Sparse-view tomography addresses these requirements by reducing both the number of angles and the total dose budget. Under such",
+      "submitted": "Fri, 24 Apr 2026 00:00:00 -0400",
+      "url": "https://arxiv.org/abs/2604.20939"
     },
     {
-      "id": "2604.18772",
-      "title": "Low noise resonant amplification by optical injection-locking and residual phase noise cancellation",
+      "id": "2604.20963",
+      "title": "Turbulence Mode Decomposition and Anisotropy in Magnetically Dominated Collisionless Plasmas",
       "authors": [
-        "Y. Lange Simmons",
-        "James Greenberg",
-        "Brendan M. Heffernan",
-        "Antoine Rolland"
+        "Samuel T. Sebastian",
+        "Siyao Xu",
+        "Yue Hu",
+        "Luca Comisso",
+        "Saikat Das"
       ],
-      "abstract_truncated": "arXiv:2604.18772v1 Announce Type: new \nAbstract: We demonstrate a low noise, high-gain, resonant optical amplifier that combines injection locking with feed-forward cancellation of residual phase noise. The wavelength-agnostic architecture uses a commercial semiconductor diode laser as a power amplifier while preserving the spectral purity of a weak reference. Although injection locking enforces p",
-      "submitted": "Wed, 22 Apr 2026 00:00:00 -0400",
-      "url": "https://arxiv.org/abs/2604.18772"
+      "abstract_truncated": "arXiv:2604.20963v1 Announce Type: new \nAbstract: We use the 3D fully kinetic simulation to study different turbulence modes and turbulence anisotropy of relativistic turbulence in magnetically dominated collisionless plasmas. We extend the method developed by Cho & Lazarian (2002) for decomposing non-relativistic magnetohydrodynamic (MHD) turbulence into Alfv\\'en, fast, and slow modes to the regim",
+      "submitted": "Fri, 24 Apr 2026 00:00:00 -0400",
+      "url": "https://arxiv.org/abs/2604.20963"
     },
     {
-      "id": "2604.18787",
-      "title": "System Size Dependence of Collisionless Reconnection Rate",
+      "id": "2604.20969",
+      "title": "Engineering molecular potential energy surfaces using magnetic cavity quantum electrodynamics",
       "authors": [
-        "Yi-Min Huang",
-        "Naoki Bessho",
-        "Li-Jen Chen",
-        "Judith T. Karpen",
-        "Amitava Bhattacharjee"
+        "Lukas Weber",
+        "Leonardo dos Anjos Cunha",
+        "Johannes Flick",
+        "Shiwei Zhang"
       ],
-      "abstract_truncated": "arXiv:2604.18787v1 Announce Type: new \nAbstract: It is a widely accepted paradigm that collisionless magnetic reconnection proceeds at a universal fast rate of $\\sim0.1$ when normalized to a properly defined reconnecting magnetic field and Alfv\\'en speed, effectively independent of the macroscopic system size. This conclusion, derived primarily from kinetic simulations of classical Harris current ",
-      "submitted": "Wed, 22 Apr 2026 00:00:00 -0400",
-      "url": "https://arxiv.org/abs/2604.18787"
+      "abstract_truncated": "arXiv:2604.20969v1 Announce Type: new \nAbstract: We investigate the effects of coupling a quantum-magnetic cavity field to molecules. Our high-precision auxiliary-field quantum Monte Carlo calculations capture the effect of the cavity field in the presence of electron correlations, and their interplay and competition. In H$_2$, we find that a strong enough cavity coupling makes the original bound ",
+      "submitted": "Fri, 24 Apr 2026 00:00:00 -0400",
+      "url": "https://arxiv.org/abs/2604.20969"
     }
   ]
 }

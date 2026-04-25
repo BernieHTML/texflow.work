@@ -1,28 +1,28 @@
 {
   "channel": "this-day-history",
   "event": "history_update",
-  "ts": "2026-04-22T12:23:21.380Z",
+  "ts": "2026-04-25T00:05:01.447Z",
   "source": "history.muffinlabs.com",
   "payload": [
     {
-      "year": "1500",
-      "event": "Portuguese navigator Pedro Álvares Cabral lands in Brazil (discovery of Brazil)."
+      "year": "404 BC",
+      "event": "Admiral Lysander and King Pausanias of Sparta blockade Athens and bring the Peloponnesian War to a successful conclusion."
     },
     {
-      "year": "1519",
-      "event": "Spanish conquistador Hernán Cortés establishes a settlement at Veracruz, Mexico."
+      "year": "775",
+      "event": "The Battle of Bagrevand puts an end to an Armenian rebellion against the Abbasid Caliphate. Muslim control over the South Caucasus is solidified and its Islamization begins, while several major Armenian nakharar families lose power and their remnants flee to the Byzantine Empire."
     },
     {
-      "year": "1529",
-      "event": "Treaty of Zaragoza divides the eastern hemisphere between Spain and Portugal along a line 297.5 leagues (1,250 kilometres (780 mi)) east of the Moluccas."
+      "year": "799",
+      "event": "After mistreatment and disfigurement by the citizens of Rome, Pope Leo III flees to the Frankish court of king Charlemagne at Paderborn for protection."
     },
     {
-      "year": "1809",
-      "event": "The second day of the Battle of Eckmühl: The Austrian army is defeated by the First French Empire army led by Napoleon and driven over the Danube in Regensburg."
+      "year": "1134",
+      "event": "The name Zagreb was mentioned for the first time in the Felician Charter relating to the establishment of the Zagreb Bishopric around 1094."
     },
     {
-      "year": "1836",
-      "event": "Texas Revolution: A day after the Battle of San Jacinto, forces under Texas General Sam Houston identify Mexican General Antonio López de Santa Anna among the captives of the battle when some of his fellow soldiers mistakenly give away his identity."
+      "year": "1607",
+      "event": "Eighty Years' War: The Dutch fleet destroys the anchored Spanish fleet at Gibraltar."
     }
   ]
 }

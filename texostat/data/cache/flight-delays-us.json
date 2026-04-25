@@ -1,7 +1,7 @@
 {
   "channel": "flight-delays-us",
   "event": "delays_update",
-  "ts": "2026-04-22T12:30:00.435Z",
+  "ts": "2026-04-25T05:30:00.643Z",
   "source": "FAA NASSTATUS",
   "payload": []
 }

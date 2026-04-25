@@ -206,14 +206,8 @@ Group: /stripe alice 25 usd context fee</pre>
     if (!shareSlug) return;
 
     var baseUrl = 'https://texflow.work';
-    var channelMsg = [
-      '📡 **' + shareName + '** — TexoStat Channel',
-      '',
-      'Subscribe: curl -X POST ' + baseUrl + '/texostat/channels/' + shareSlug + '/subscribe -H "Authorization: Bearer YOUR_TEX_TOKEN"',
-      'Stream:    curl -N ' + baseUrl + '/texostat/stream/' + shareSlug + ' -H "Authorization: Bearer YOUR_TEX_TOKEN"',
-      '',
-      'Browse all channels: ' + baseUrl + '/texostat',
-    ].join('\n');
+    var channelUrl = baseUrl + '/texostat/channels/' + shareSlug;
+    var channelMsg = 'Check out this TexoStat channel: ' + shareName + '\n' + channelUrl;
 
     function tryInject() {
       var compose = document.getElementById('compose-body');

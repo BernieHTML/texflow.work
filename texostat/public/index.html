@@ -18,7 +18,10 @@
       <a href="#how">How it works</a>
       <a href="/texostat/analytics">Analytics</a>
       <a href="/texostat/legal/terms.md">Terms</a>
-      <a href="/tex">TEX &rarr;</a>
+      <div id="nav-auth-area">
+        <!-- filled by JS: Login button or username badge -->
+        <a href="/tex">TEX &rarr;</a>
+      </div>
     </div>
   </div>
 </nav>
@@ -36,6 +39,15 @@
     <div class="hero-actions">
       <a href="#channels" class="btn">Browse channels &rarr;</a>
       <button class="btn btn-ghost" id="get-token-btn">Get TEX Token</button>
+      <button class="btn btn-ghost" id="login-tex-btn">Login with TEX</button>
+    </div>
+    <!-- Logged-in state bar (hidden until logged in) -->
+    <div id="hero-logged-in" class="hero-logged-in" hidden>
+      <span class="logged-in-badge">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <span id="logged-in-username"></span>
+      </span>
+      <button class="btn-logout" id="logout-btn">Logout</button>
     </div>
   </div>
 </section>
@@ -227,53 +239,21 @@
   </div>
 </div>
 
-<!-- ===== SHARE ON TEX MODAL ===== -->
-<div id="share-modal" class="modal-overlay" hidden>
+<!-- ===== LOGIN WITH TEX MODAL ===== -->
+<div id="login-modal" class="modal-overlay" hidden>
   <div class="modal-box modal-box-sm">
-    <button class="modal-close" id="share-modal-close" aria-label="Close">&times;</button>
-
-    <!-- Step A: need token -->
-    <div id="share-step-auth" class="modal-step" hidden>
-      <div class="modal-header">
-        <div class="modal-icon">🔑</div>
-        <h2>TEX token required</h2>
-        <p class="modal-sub">Enter your TEX token to share this channel into a conversation. Don't have one? <button class="inline-link" onclick="document.getElementById('share-modal').hidden=true;openTokenModal();">Get a token</button></p>
-      </div>
-      <div class="form-group">
-        <label for="share-token-input">TEX Token</label>
-        <input type="password" id="share-token-input" placeholder="tex_tok_…" autocomplete="off" />
-      </div>
-      <div id="share-token-error" class="form-error" hidden></div>
-      <button class="btn" id="share-token-submit" style="width:100%;justify-content:center;">Load my conversations &rarr;</button>
+    <button class="modal-close" id="login-modal-close" aria-label="Close">&times;</button>
+    <div class="modal-header">
+      <div class="modal-icon">🔑</div>
+      <h2>Login with TEX</h2>
+      <p class="modal-sub">Paste your <code>tex_tok_…</code> token to enable sharing channels into your TEX conversations. Don't have one? <button class="inline-link" id="login-go-signup">Get a token &rarr;</button></p>
     </div>
-
-    <!-- Step B: pick conversation -->
-    <div id="share-step-pick" class="modal-step" hidden>
-      <div class="modal-header">
-        <div class="modal-icon">📤</div>
-        <h2 id="share-modal-title">Share on TEX</h2>
-        <p class="modal-sub" id="share-modal-channel-name" style="font-family:var(--font-mono);color:var(--accent);font-size:0.85rem;"></p>
-      </div>
-
-      <div class="form-group">
-        <label>Message (optional)</label>
-        <input type="text" id="share-message-input" placeholder="Check out this feed…" maxlength="200" />
-      </div>
-
-      <div class="share-conv-label">Choose a conversation</div>
-      <div id="share-conv-list" class="share-conv-list">
-        <div style="color:var(--muted);font-size:0.85rem;padding:12px 0;">Loading conversations…</div>
-      </div>
-
-      <div id="share-send-error" class="form-error" hidden></div>
-      <div id="share-send-success" hidden style="background:rgba(29,158,117,0.1);border:1px solid var(--accent);border-radius:6px;padding:12px 16px;font-size:0.85rem;color:var(--accent);margin-top:12px;"></div>
-
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:16px;flex-wrap:wrap;gap:8px;">
-        <button class="btn btn-ghost" id="share-copy-link-btn" style="font-size:0.8rem;">Copy channel link</button>
-        <a class="btn btn-ghost" id="share-inbox-link" href="#" target="_blank" rel="noopener" style="font-size:0.8rem;">Open TEX Inbox &rarr;</a>
-      </div>
+    <div class="form-group">
+      <label for="login-token-input">TEX Token</label>
+      <input type="password" id="login-token-input" placeholder="tex_tok_…" autocomplete="off" />
     </div>
-
+    <div id="login-error" class="form-error" hidden></div>
+    <button class="btn" id="login-submit-btn" style="width:100%;justify-content:center;margin-top:4px;">Login &rarr;</button>
   </div>
 </div>
 
@@ -284,6 +264,72 @@
   let channels = [];
   let activeCategory = 'all';
   let searchQuery = '';
+
+  // ===== AUTH STATE =====
+  // Must be declared before any code that calls setLoggedIn / isLoggedIn.
+  let _texToken = '';
+  let _texUsername = '';
+
+  function isLoggedIn() { return !!_texToken; }
+
+  function setLoggedIn(token, username, type, email) {
+    _texToken = token;
+    _texUsername = username;
+    try {
+      localStorage.setItem('tex-token', token);
+      localStorage.setItem('tex-username', username);
+      if (type)  localStorage.setItem('tex-user-type', type);
+      if (email) localStorage.setItem('tex-user-email', email);
+    } catch (_) {}
+    updateAuthUI();
+    renderChannels(applyFilters());
+  }
+
+  function setLoggedOut() {
+    _texToken = '';
+    _texUsername = '';
+    try {
+      localStorage.removeItem('tex-token');
+      localStorage.removeItem('tex-username');
+      localStorage.removeItem('tex-user-type');
+      localStorage.removeItem('tex-user-email');
+    } catch (_) {}
+    updateAuthUI();
+    renderChannels(applyFilters());
+  }
+
+  function updateAuthUI() {
+    const navArea = document.getElementById('nav-auth-area');
+    const heroLoggedIn = document.getElementById('hero-logged-in');
+    const loginBtn = document.getElementById('login-tex-btn');
+    const getTokenBtn = document.getElementById('get-token-btn');
+
+    if (isLoggedIn()) {
+      navArea.innerHTML = `<span class="nav-user-badge">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        ${escapeHtml(_texUsername)}
+      </span>
+      <a href="/tex/inbox" target="_blank" rel="noopener" style="color:var(--accent);font-size:0.82rem;">TEX inbox &rarr;</a>`;
+      document.getElementById('logged-in-username').textContent = _texUsername;
+      heroLoggedIn.hidden = false;
+      loginBtn.hidden = true;
+      getTokenBtn.hidden = true;
+    } else {
+      navArea.innerHTML = `<a href="/tex">TEX &rarr;</a>`;
+      heroLoggedIn.hidden = true;
+      loginBtn.hidden = false;
+      getTokenBtn.hidden = false;
+    }
+  }
+
+  // Restore session from localStorage on load
+  (function restoreSession() {
+    try {
+      const tok = localStorage.getItem('tex-token');
+      const usr = localStorage.getItem('tex-username');
+      if (tok && usr) { _texToken = tok; _texUsername = usr; }
+    } catch (_) {}
+  })();
 
   // ===== UTILS =====
   function cadenceLabel(c) {
@@ -328,6 +374,10 @@
     const subscribeCmd = `curl -X POST https://texflow.work/texostat/channels/${slug}/subscribe -H "Authorization: Bearer ${token}"`;
     const streamCmd = `curl -N https://texflow.work/texostat/stream/${slug} -H "Authorization: Bearer ${token}"`;
 
+    const loggedIn = isLoggedIn();
+    const shareDisabledAttr = loggedIn ? '' : 'disabled';
+    const shareTitle = loggedIn ? 'Share this channel into a TEX conversation' : 'Login with TEX to share';
+
     return `<div class="channel-card">
   <div class="card-top">
     <div class="card-name">${name}</div>
@@ -355,7 +405,9 @@
     </span>
     <div style="display:flex;align-items:center;gap:10px;">
       ${isVerified ? '<span class="verified-badge">✓ verified</span>' : ''}
-      <button class="share-btn" onclick="openShareModal(${JSON.stringify(slug)},${JSON.stringify(ch.name)})" title="Share on TEX">
+      <button class="share-btn${loggedIn ? '' : ' share-btn-disabled'}" ${shareDisabledAttr}
+        onclick="openShareModal(${JSON.stringify(slug)},${JSON.stringify(ch.name)})"
+        title="${shareTitle}">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
         Share on TEX
       </button>
@@ -414,8 +466,11 @@
     renderChannels(applyFilters());
   });
 
-  // Load channels
+  // Load channels + initialise auth UI after DOM ready
   document.addEventListener('DOMContentLoaded', () => {
+    // Render auth state now that DOM is ready
+    updateAuthUI();
+
     fetch(BASE + '/channels')
       .then((r) => r.json())
       .then((data) => {
@@ -478,6 +533,11 @@
         btn.disabled = false;
         return;
       }
+      // Auto-login on TexoStat with the new token
+      const newUser = document.getElementById('su-username').value.trim();
+      const newType = document.querySelector('input[name="su-type"]:checked').value;
+      setLoggedIn(data.token, newUser, newType, document.getElementById('su-email').value.trim());
+
       // Show token
       document.getElementById('token-display').textContent = data.token;
       document.getElementById('token-subscribe-curl').textContent =
@@ -499,148 +559,76 @@
     copyText(token, document.getElementById('copy-token-btn'));
   });
 
-  // ===== SHARE MODAL =====
-  const shareModal = document.getElementById('share-modal');
+  // ===== LOGIN MODAL =====
+  const loginModal = document.getElementById('login-modal');
 
-  // ---- SHARE ON TEX ----
-
-  let _shareSlug = '';
-  let _shareName = '';
-  let _shareToken = '';
-
-  function closeShareModal() {
-    shareModal.hidden = true;
-    document.body.style.overflow = '';
-    document.getElementById('share-step-auth').hidden = true;
-    document.getElementById('share-step-pick').hidden = true;
-    document.getElementById('share-send-error').hidden = true;
-    document.getElementById('share-send-success').hidden = true;
-    document.getElementById('share-token-error').hidden = true;
-    document.getElementById('share-conv-list').innerHTML = '';
-  }
-
-  window.openShareModal = function(slug, name) {
-    _shareSlug = slug;
-    _shareName = name;
-    closeShareModal();
-
-    const base = 'https://texflow.work';
-    const shareLink = `${base}/texostat/channels/${slug}`;
-    const texInboxLink = `${base}/tex/inbox?share_channel=${encodeURIComponent(slug)}&share_name=${encodeURIComponent(name)}`;
-
-    document.getElementById('share-copy-link-btn').onclick = () => {
-      navigator.clipboard.writeText(shareLink).then(() => {
-        document.getElementById('share-copy-link-btn').textContent = 'Copied!';
-        setTimeout(() => { document.getElementById('share-copy-link-btn').textContent = 'Copy channel link'; }, 1500);
-      }).catch(() => {});
-    };
-    document.getElementById('share-inbox-link').href = texInboxLink;
-    document.getElementById('share-modal-title').textContent = 'Share on TEX';
-    document.getElementById('share-modal-channel-name').textContent = name + ' · ' + slug;
-
-    // Try token from storage
-    const saved = localStorage.getItem('tex-token') || localStorage.getItem('texToken') || '';
-    if (saved) {
-      _shareToken = saved;
-      showSharePick();
-    } else {
-      document.getElementById('share-token-input').value = '';
-      document.getElementById('share-step-auth').hidden = false;
-    }
-
-    shareModal.hidden = false;
+  function openLoginModal() {
+    document.getElementById('login-token-input').value = '';
+    document.getElementById('login-error').hidden = true;
+    document.getElementById('login-submit-btn').textContent = 'Login →';
+    document.getElementById('login-submit-btn').disabled = false;
+    loginModal.hidden = false;
     document.body.style.overflow = 'hidden';
-  };
-
-  function showSharePick() {
-    document.getElementById('share-step-auth').hidden = true;
-    document.getElementById('share-step-pick').hidden = false;
-    loadConversations();
+    setTimeout(() => document.getElementById('login-token-input').focus(), 60);
   }
 
-  function loadConversations() {
-    const listEl = document.getElementById('share-conv-list');
-    listEl.innerHTML = '<div style="color:var(--muted);font-size:0.85rem;padding:12px 0;font-family:var(--font-mono);">Loading conversations…</div>';
-
-    const headers = { 'Authorization': 'Bearer ' + _shareToken };
-
-    Promise.all([
-      fetch('/tex/api/dm', { headers }).then(r => r.ok ? r.json() : []).catch(() => []),
-      fetch('/tex/api/groups', { headers }).then(r => r.ok ? r.json() : []).catch(() => []),
-    ]).then(([dms, groups]) => {
-      const convos = [
-        ...dms.map(d => ({ id: d.chat_id, label: d.with_display_name || d.with_username, sub: 'Direct message', type: 'dm' })),
-        ...groups.map(g => ({ id: g.group_id || g.id, label: g.name || g.group_name || g.id, sub: 'Group', type: 'group' })),
-      ];
-
-      if (!convos.length) {
-        listEl.innerHTML = '<div style="color:var(--muted);font-size:0.82rem;padding:12px 0;">No conversations found. Start a DM or group in TEX first.</div>';
-        return;
-      }
-
-      listEl.innerHTML = convos.map(c => `
-<div class="conv-item" data-id="${escapeHtml(c.id)}" data-label="${escapeHtml(c.label)}" onclick="selectConv(this)">
-  <span class="conv-type-badge">${c.type}</span>
-  <span class="conv-label">${escapeHtml(c.label)}</span>
-  <span class="conv-sub">${escapeHtml(c.sub)}</span>
-</div>`).join('');
-    });
+  function closeLoginModal() {
+    loginModal.hidden = true;
+    document.body.style.overflow = '';
   }
 
-  window.selectConv = function(el) {
-    document.querySelectorAll('.conv-item').forEach(i => i.classList.remove('selected'));
-    el.classList.add('selected');
-    sendShareToTex(el.dataset.id, el.dataset.label);
-  };
+  document.getElementById('login-tex-btn').addEventListener('click', openLoginModal);
+  document.getElementById('login-modal-close').addEventListener('click', closeLoginModal);
+  loginModal.addEventListener('click', (e) => { if (e.target === loginModal) closeLoginModal(); });
+  document.getElementById('login-go-signup').addEventListener('click', () => { closeLoginModal(); openTokenModal(); });
 
-  function sendShareToTex(convId, convLabel) {
-    const errEl = document.getElementById('share-send-error');
-    const succEl = document.getElementById('share-send-success');
+  document.getElementById('login-submit-btn').addEventListener('click', async () => {
+    const token = document.getElementById('login-token-input').value.trim();
+    const errEl = document.getElementById('login-error');
+    const btn = document.getElementById('login-submit-btn');
     errEl.hidden = true;
-    succEl.hidden = true;
 
-    const message = document.getElementById('share-message-input').value.trim() || 'Check out this TexoStat channel';
+    if (!token) { errEl.textContent = 'Please paste your tex_tok_… token.'; errEl.hidden = false; return; }
 
-    fetch('/texostat/share/' + _shareSlug, {
-      method: 'POST',
-      headers: {
-        'Authorization': 'Bearer ' + _shareToken,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ tex_conversation_id: convId, message }),
-    })
-    .then(r => r.json().then(d => ({ ok: r.ok, data: d })))
-    .then(({ ok, data }) => {
-      if (!ok) {
-        errEl.textContent = data.error || 'Failed to share. Check your token.';
-        errEl.hidden = false;
-      } else {
-        succEl.textContent = '✓ Shared to ' + convLabel + '. Open TEX to see it.';
-        succEl.hidden = false;
-        document.querySelectorAll('.conv-item').forEach(i => i.classList.remove('selected'));
-      }
-    })
-    .catch(() => {
-      errEl.textContent = 'Network error. Please try again.';
+    btn.textContent = 'Checking…'; btn.disabled = true;
+
+    try {
+      const res = await fetch('/tex/api/whoami', {
+        headers: { 'X-Tex-Token': token }
+      });
+      if (!res.ok) throw new Error('invalid');
+      const data = await res.json();
+      const username = data.username || data.data?.username || token.slice(0, 16);
+      const type  = data.type || data.data?.type || '';
+      const email = data.email || data.data?.email || '';
+      setLoggedIn(token, username, type, email);
+      closeLoginModal();
+    } catch (_) {
+      errEl.textContent = 'Token not recognised. Double-check it and try again.';
       errEl.hidden = false;
-    });
-  }
-
-  // Token submit in auth step
-  document.getElementById('share-token-submit').addEventListener('click', () => {
-    const val = document.getElementById('share-token-input').value.trim();
-    const errEl = document.getElementById('share-token-error');
-    errEl.hidden = true;
-    if (!val) { errEl.textContent = 'Please enter a token.'; errEl.hidden = false; return; }
-    _shareToken = val;
-    localStorage.setItem('tex-token', val);
-    showSharePick();
+      btn.textContent = 'Login →'; btn.disabled = false;
+    }
   });
 
-  document.getElementById('share-modal-close').addEventListener('click', closeShareModal);
-  shareModal.addEventListener('click', (e) => {
-    if (e.target === shareModal) closeShareModal();
+  // Allow Enter key in token input
+  document.getElementById('login-token-input').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') document.getElementById('login-submit-btn').click();
   });
+
+  document.getElementById('logout-btn').addEventListener('click', () => { setLoggedOut(); });
+
+  // ===== SHARE ON TEX =====
+  // Share click opens TEX inbox with the channel pre-filled.
+  // The inbox auto-logs in because tex-token is already in localStorage (same origin).
+  window.openShareModal = function(slug, name) {
+    if (!isLoggedIn()) {
+      // Should not happen (button is disabled), but guard anyway
+      openLoginModal();
+      return;
+    }
+    const url = `https://texflow.work/tex/inbox?share_channel=${encodeURIComponent(slug)}&share_name=${encodeURIComponent(name)}`;
+    window.open(url, '_blank', 'noopener');
+  };
 
 })();
 </script>

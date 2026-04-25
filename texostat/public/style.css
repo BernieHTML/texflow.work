@@ -590,6 +590,17 @@ footer {
 }
 .share-inbox-link { align-self: flex-start; }
 
+/* ===== AUTH / LOGIN STATE ===== */
+.hero-logged-in { display: flex; align-items: center; gap: 16px; margin-top: 16px; padding: 10px 16px; background: rgba(29,158,117,0.08); border: 1px solid rgba(29,158,117,0.25); border-radius: 8px; width: fit-content; }
+.logged-in-badge { display: flex; align-items: center; gap: 7px; font-size: 0.85rem; color: var(--accent); font-family: var(--font-mono); }
+.btn-logout { background: none; border: 1px solid var(--border); color: var(--muted); border-radius: 5px; padding: 4px 12px; font-size: 0.78rem; cursor: pointer; transition: border-color 0.15s, color 0.15s; }
+.btn-logout:hover { border-color: #e55; color: #e55; }
+
+.nav-user-badge { display: flex; align-items: center; gap: 6px; font-size: 0.8rem; color: var(--accent); font-family: var(--font-mono); white-space: nowrap; }
+
+.share-btn-disabled { opacity: 0.35; cursor: not-allowed !important; }
+.share-btn-disabled:hover { background: transparent !important; color: var(--muted) !important; }
+
 /* ===== CONVERSATION PICKER ===== */
 .share-conv-label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); font-family: var(--font-mono); margin-bottom: 8px; margin-top: 4px; }
 .share-conv-list { max-height: 200px; overflow-y: auto; border: 1px solid var(--border); border-radius: 8px; margin-bottom: 12px; }

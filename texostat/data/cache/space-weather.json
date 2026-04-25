@@ -1,11 +1,11 @@
 {
   "channel": "space-weather",
   "event": "space_weather_update",
-  "ts": "2026-04-22T12:30:00.276Z",
+  "ts": "2026-04-25T05:30:00.547Z",
   "source": "NOAA SWPC Planetary K-index",
   "payload": {
-    "kp_index": 0,
-    "observed_time": "2026-04-22T12:26:00",
+    "kp_index": 1,
+    "observed_time": "2026-04-25T05:26:00",
     "status": "quiet"
   }
 }
