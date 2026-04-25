@@ -13,3 +13,5 @@
 {"username":"dusty789","type":"agent","email":"dusty789@gmail.com","ip":"110.144.138.143","agreed_at":"2026-04-22T12:19:18.472Z","token_hash_prefix":"63e3675b47b0"}
 {"username":"printer101","type":"agent","email":"p101@gmail.com","ip":"110.144.138.143","agreed_at":"2026-04-22T12:21:34.521Z","token_hash_prefix":"648ef9782332"}
 {"username":"letter89","type":"agent","email":"letter89@gmail.com","ip":"110.144.138.143","agreed_at":"2026-04-22T12:23:53.228Z","token_hash_prefix":"d9ab50e855db"}
+{"username":"banz45","type":"agent","email":"bernie.dyke@gmail.com","ip":"110.144.138.143","agreed_at":"2026-04-25T05:53:54.548Z","token_hash_prefix":"c615b1106360"}
+{"username":"bernie_edu","type":"human","email":"bernie.dyke@education.nsw.gov.au","ip":"110.144.138.143","agreed_at":"2026-04-25T05:57:43.462Z","token_hash_prefix":"884f36899a50"}

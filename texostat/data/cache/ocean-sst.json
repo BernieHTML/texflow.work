@@ -1,7 +1,7 @@
 {
   "channel": "ocean-sst",
   "event": "sst_update",
-  "ts": "2026-04-25T00:05:01.462Z",
+  "ts": "2026-04-25T05:45:53.421Z",
   "source": "NOAA ERDDAP SST",
   "payload": {
     "date": "2026-04-25",

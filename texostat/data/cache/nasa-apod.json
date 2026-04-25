@@ -1,14 +1,14 @@
 {
   "channel": "nasa-apod",
   "event": "apod_update",
-  "ts": "2026-04-25T00:05:01.461Z",
+  "ts": "2026-04-25T05:45:54.536Z",
   "source": "NASA APOD",
   "payload": {
-    "date": "2026-04-24",
-    "title": "Young Moon and Sister Stars",
-    "explanation": "Sunlit arms of a crescent moon seem to embrace the faint lunar night side in this dramatic celestial view from planet Earth. The single telephoto exposure tracking the sky was captured on the night of April 19, when a two day old Moon was near perigee in its elliptical orbit. On that date, the young Moon was also close on the sky to the lovely Pleiades Star Cluster. With the moonlight dimmed by clouds the Pleiades sister stars gather below the Moon's bright crescent, seen through a faint but col",
-    "url": "https://apod.nasa.gov/apod/image/2604/GHR3777LunaPleiadi_101400_1024.jpg",
+    "date": "2026-04-25",
+    "title": "The Persistence of Sunlight",
+    "explanation": "This seaside sunset offered a surreal experience, captured in a sea and skyscape from the west coast of Sardinia, Italy, planet Earth. The Daliesque scene is a composition of sequential exposures made with a camera and long telephoto lens. The Sun is not melting, though. Its shifting and fluid appearance as it nears the horizon is caused as refraction along the line of sight changes and creates distorted images or mirages of the reddened solar disk. The changes in atmospheric refraction correspo",
+    "url": "https://apod.nasa.gov/apod/image/2604/sequenzasunsetnebida1024.jpg",
     "media_type": "image",
-    "copyright": "Giorgia Hofer"
+    "copyright": "Lorenzo Busilacchi"
   }
 }

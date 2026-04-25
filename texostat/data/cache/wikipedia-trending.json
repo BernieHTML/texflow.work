@@ -1,108 +1,108 @@
 {
   "channel": "wikipedia-trending",
   "event": "wikipedia_update",
-  "ts": "2026-04-22T12:39:53.335Z",
+  "ts": "2026-04-25T05:45:58.298Z",
   "source": "Wikimedia Pageviews API",
   "payload": [
     {
       "rank": 1,
       "article": "Main Page",
-      "views": 6864181
+      "views": 7007739
     },
     {
       "rank": 2,
-      "article": "Special:Search",
-      "views": 1172198
+      "article": "Nahui Ollin",
+      "views": 1123937
     },
     {
       "rank": 3,
-      "article": "Nahui Ollin",
-      "views": 909531
+      "article": "Special:Search",
+      "views": 1084107
     },
     {
       "rank": 4,
-      "article": "John Ternus",
-      "views": 413418
+      "article": "2026 NFL draft",
+      "views": 366855
     },
     {
       "rank": 5,
       "article": "Wikipedia:Featured pictures",
-      "views": 327766
+      "views": 320124
     },
     {
       "rank": 6,
-      "article": "Patrick Muldoon",
-      "views": 252759
+      "article": "Michael (2026 film)",
+      "views": 251066
     },
     {
       "rank": 7,
-      "article": "Patti Davis",
-      "views": 178454
+      "article": "Michael Jackson",
+      "views": 186806
     },
     {
       "rank": 8,
-      "article": "D4vd",
-      "views": 164758
+      "article": "Fernando Mendoza",
+      "views": 184559
     },
     {
       "rank": 9,
-      "article": "Tim Cook",
-      "views": 159781
+      "article": "2026 West Bengal Legislative Assembly election",
+      "views": 179835
     },
     {
       "rank": 10,
-      "article": "Alan Osmond",
-      "views": 153008
+      "article": "2026 Tamil Nadu Legislative Assembly election",
+      "views": 176191
     },
     {
       "rank": 11,
-      "article": "List of highest-grossing Indian films",
-      "views": 152373
+      "article": "Jaafar Jackson",
+      "views": 155199
     },
     {
       "rank": 12,
-      "article": ".xxx",
-      "views": 139782
+      "article": "Raghav Chadha",
+      "views": 146735
     },
     {
       "rank": 13,
-      "article": "Dhurandhar: The Revenge",
-      "views": 136551
+      "article": "List of highest-grossing Indian films",
+      "views": 135367
     },
     {
       "rank": 14,
-      "article": "Deaths in 2026",
-      "views": 134035
+      "article": "Mary Ajami",
+      "views": 130642
     },
     {
       "rank": 15,
-      "article": "Olly Robbins",
-      "views": 119550
+      "article": "Dianna Russini",
+      "views": 127216
     },
     {
       "rank": 16,
-      "article": "Michael (2026 film)",
-      "views": 113819
+      "article": "Deaths in 2026",
+      "views": 126760
     },
     {
       "rank": 17,
-      "article": "Euphoria (American TV series)",
-      "views": 109624
+      "article": "Dhurandhar: The Revenge",
+      "views": 121315
     },
     {
       "rank": 18,
-      "article": "ChatGPT",
-      "views": 106511
+      "article": "Apex (2026 film)",
+      "views": 119988
     },
     {
       "rank": 19,
-      "article": "Belvidere, Kansas",
-      "views": 101802
+      "article": ".xxx",
+      "views": 117599
     },
     {
       "rank": 20,
-      "article": "Slovenia at the 2016 European Athletics Championships",
-      "views": 100526
+      "article": "D4vd",
+      "views": 110288
     }
   ]
 }

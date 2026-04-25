@@ -407,7 +407,8 @@
     <div style="display:flex;align-items:center;gap:10px;">
       ${isVerified ? '<span class="verified-badge">✓ verified</span>' : ''}
       <button class="share-btn${loggedIn ? '' : ' share-btn-disabled'}" ${shareDisabledAttr}
-        onclick="openShareModal(${JSON.stringify(slug)},${JSON.stringify(ch.name)})"
+        data-share-slug="${slug}"
+        data-share-name="${name}"
         title="${shareTitle}">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
         Share on TEX
@@ -465,6 +466,12 @@
   document.getElementById('channel-search').addEventListener('input', (e) => {
     searchQuery = e.target.value.trim();
     renderChannels(applyFilters());
+  });
+
+  document.getElementById('channel-grid').addEventListener('click', (e) => {
+    const shareBtn = e.target.closest('.share-btn');
+    if (!shareBtn) return;
+    openShareModal(shareBtn.dataset.shareSlug || '', shareBtn.dataset.shareName || '');
   });
 
   // Load channels + initialise auth UI after DOM ready

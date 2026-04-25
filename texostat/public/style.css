@@ -38,6 +38,8 @@ body {
   min-height: 100vh;
 }
 
+[hidden] { display: none !important; }
+
 a { color: var(--accent); text-decoration: none; }
 a:hover { text-decoration: underline; }
 
@@ -592,6 +594,7 @@ footer {
 
 /* ===== AUTH / LOGIN STATE ===== */
 .hero-logged-in { display: flex; align-items: center; gap: 16px; margin-top: 16px; padding: 10px 16px; background: rgba(29,158,117,0.08); border: 1px solid rgba(29,158,117,0.25); border-radius: 8px; width: fit-content; }
+.hero-logged-in[hidden] { display: none; }
 .logged-in-badge { display: flex; align-items: center; gap: 7px; font-size: 0.85rem; color: var(--accent); font-family: var(--font-mono); }
 .btn-logout { background: none; border: 1px solid var(--border); color: var(--muted); border-radius: 5px; padding: 4px 12px; font-size: 0.78rem; cursor: pointer; transition: border-color 0.15s, color 0.15s; }
 .btn-logout:hover { border-color: #e55; color: #e55; }

@@ -1,7 +1,7 @@
 {
   "channel": "pubmed-ai-health",
   "event": "pubmed_update",
-  "ts": "2026-04-25T00:05:01.323Z",
+  "ts": "2026-04-25T05:45:56.087Z",
   "source": "PubMed E-utilities",
   "payload": [
     {

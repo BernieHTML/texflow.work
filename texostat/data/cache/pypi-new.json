@@ -1,9 +1,41 @@
 {
   "channel": "pypi-new",
   "event": "pypi_update",
-  "ts": "2026-04-25T05:30:00.548Z",
+  "ts": "2026-04-25T05:45:56.019Z",
   "source": "PyPI RSS",
   "payload": [
+    {
+      "name": "psift",
+      "version": "added",
+      "description": "A terminal tabular data explorer.",
+      "author": null,
+      "published_at": "Sat, 25 Apr 2026 05:24:25 GMT",
+      "url": "https://pypi.org/project/psift/"
+    },
+    {
+      "name": "maldaagenticore",
+      "version": "added",
+      "description": "Production-grade Python library for building scalable agentic AI systems",
+      "author": null,
+      "published_at": "Sat, 25 Apr 2026 05:05:48 GMT",
+      "url": "https://pypi.org/project/maldaagenticore/"
+    },
+    {
+      "name": "lasandbox",
+      "version": "added",
+      "description": "Python SDK for LaSandbox",
+      "author": "admin@lasandbox.eu",
+      "published_at": "Sat, 25 Apr 2026 05:05:21 GMT",
+      "url": "https://pypi.org/project/lasandbox/"
+    },
+    {
+      "name": "diterlib-islptng",
+      "version": "added",
+      "description": "A functional, array-oriented, tacit programming esolang run via Python interpreter",
+      "author": null,
+      "published_at": "Sat, 25 Apr 2026 05:00:12 GMT",
+      "url": "https://pypi.org/project/diterlib-islptng/"
+    },
     {
       "name": "gthmath",
       "version": "added",
@@ -45,6 +77,14 @@
       "url": "https://pypi.org/project/basedpython/"
     },
     {
+      "name": "omni-wst-core",
+      "version": "added",
+      "description": "OmniPulse WST/JTFS C++/CUDA perceptual hashing engine",
+      "author": null,
+      "published_at": "Sat, 25 Apr 2026 04:37:02 GMT",
+      "url": "https://pypi.org/project/omni-wst-core/"
+    },
+    {
       "name": "carl-core",
       "version": "added",
       "description": "Coherence math primitives for CARL (Coherence-Aware Reinforcement Learning)",
@@ -83,46 +123,6 @@
       "author": "your@email.com",
       "published_at": "Sat, 25 Apr 2026 04:21:34 GMT",
       "url": "https://pypi.org/project/kodokids-jp/"
-    },
-    {
-      "name": "flowception",
-      "version": "added",
-      "description": "Tools to work with flows as defined in the specification document",
-      "author": "nullhack@users.noreply.github.com",
-      "published_at": "Sat, 25 Apr 2026 04:16:31 GMT",
-      "url": "https://pypi.org/project/flowception/"
-    },
-    {
-      "name": "arx-arrowcpp-sources",
-      "version": "added",
-      "description": "Bundled Apache Arrow C++ source release for the Arx ecosystem",
-      "author": "ivan.ogasawara@gmail.com",
-      "published_at": "Sat, 25 Apr 2026 04:05:01 GMT",
-      "url": "https://pypi.org/project/arx-arrowcpp-sources/"
-    },
-    {
-      "name": "cannabismath",
-      "version": "added",
-      "description": "Cross-platform cannabis math library for potency, dosing, pricing, taxes, rounding, and retail calculations.",
-      "author": null,
-      "published_at": "Sat, 25 Apr 2026 04:04:38 GMT",
-      "url": "https://pypi.org/project/cannabismath/"
-    },
-    {
-      "name": "linkedin-job-search-scraper",
-      "version": "added",
-      "description": "None",
-      "author": "umair.shahab.ahmed@gmail.com",
-      "published_at": "Sat, 25 Apr 2026 04:04:02 GMT",
-      "url": "https://pypi.org/project/linkedin-job-search-scraper/"
-    },
-    {
-      "name": "crypto-guide-n28i49",
-      "version": "added",
-      "description": "链上世界：从数据透明到价值互联的深层变革",
-      "author": null,
-      "published_at": "Sat, 25 Apr 2026 04:01:12 GMT",
-      "url": "https://pypi.org/project/crypto-guide-n28i49/"
     }
   ]
 }

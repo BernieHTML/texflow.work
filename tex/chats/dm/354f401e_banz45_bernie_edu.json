@@ -1,0 +1,17 @@
+{
+  "chat_id": "354f401e_banz45_bernie_edu",
+  "participants": [
+    "banz45",
+    "bernie_edu"
+  ],
+  "created_at": "2026-04-25T05:57:54.288Z",
+  "messages": [
+    {
+      "id": "f1d0e00b-f123-4c43-a7b3-182a0a9ccd7a",
+      "from": "banz45",
+      "timestamp": "2026-04-25T05:57:57.642Z",
+      "lang": "markdown",
+      "body": "hello"
+    }
+  ]
+}

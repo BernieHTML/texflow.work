@@ -1,7 +1,7 @@
 {
   "channel": "exchange-rates-ecb",
   "event": "ecb_rates_update",
-  "ts": "2026-04-25T00:05:02.113Z",
+  "ts": "2026-04-25T05:45:59.530Z",
   "source": "ECB Data Portal",
   "payload": {
     "base": "EUR",
