@@ -1,98 +1,98 @@
 {
   "channel": "hacker-news",
   "event": "hn_update",
-  "ts": "2026-04-25T05:30:00.786Z",
+  "ts": "2026-04-25T05:45:01.358Z",
   "source": "HN Algolia /search",
   "payload": [
     {
       "rank": 1,
       "title": "DeepSeek v4",
       "url": "https://api-docs.deepseek.com/news/news260424",
-      "score": 1861,
-      "comments": 1447,
+      "score": 1866,
+      "comments": 1449,
       "author": "impact_sy",
-      "age_hours": 26
+      "age_hours": 27
     },
     {
       "rank": 2,
-      "title": "Google plans to invest up to $40B in Anthropic",
-      "url": "https://www.bloomberg.com/news/articles/2026-04-24/google-plans-to-invest-up-to-40-billion-in-anthropic",
-      "score": 454,
-      "comments": 476,
-      "author": "elffjs",
-      "age_hours": 13
+      "title": "I cancelled Claude: Token issues, declining quality, and poor support",
+      "url": "https://nickyreinert.de/en/2026/2026-04-24-claude-critics/",
+      "score": 841,
+      "comments": 497,
+      "author": "y42",
+      "age_hours": 14
     },
     {
       "rank": 3,
+      "title": "Google plans to invest up to $40B in Anthropic",
+      "url": "https://www.bloomberg.com/news/articles/2026-04-24/google-plans-to-invest-up-to-40-billion-in-anthropic",
+      "score": 468,
+      "comments": 476,
+      "author": "elffjs",
+      "age_hours": 14
+    },
+    {
+      "rank": 4,
       "title": "Sabotaging projects by overthinking, scope creep, and structural diffing",
       "url": "https://kevinlynagh.com/newsletter/2026_04_overthinking/",
-      "score": 390,
-      "comments": 103,
+      "score": 392,
+      "comments": 104,
       "author": "alcazar",
       "age_hours": 15
     },
     {
-      "rank": 4,
+      "rank": 5,
       "title": "How to be anti-social – a guide to incoherent and isolating social experiences",
       "url": "https://nate.leaflet.pub/3mk4xkaxobc2p",
-      "score": 332,
-      "comments": 308,
+      "score": 335,
+      "comments": 309,
       "author": "calcifer",
       "age_hours": 19
     },
     {
-      "rank": 5,
+      "rank": 6,
       "title": "MacBook Neo and how the iPad should be",
       "url": "https://craigmod.com/essays/ipad_neo/",
-      "score": 239,
-      "comments": 133,
+      "score": 241,
+      "comments": 135,
       "author": "jen729w",
       "age_hours": 49
     },
     {
-      "rank": 6,
+      "rank": 7,
       "title": "My audio interface has SSH enabled by default",
       "url": "https://hhh.hn/rodecaster-duo-fw/",
-      "score": 198,
-      "comments": 59,
+      "score": 201,
+      "comments": 62,
       "author": "hhh",
       "age_hours": 10
     },
     {
-      "rank": 7,
+      "rank": 8,
       "title": "The Classic American Diner",
       "url": "https://blogs.loc.gov/picturethis/2026/04/the-classic-american-diner/",
-      "score": 192,
+      "score": 193,
       "comments": 117,
       "author": "NaOH",
-      "age_hours": 10
-    },
-    {
-      "rank": 8,
-      "title": "There Will Be a Scientific Theory of Deep Learning",
-      "url": "https://arxiv.org/abs/2604.21691",
-      "score": 183,
-      "comments": 74,
-      "author": "jamie-simon",
       "age_hours": 11
     },
     {
       "rank": 9,
-      "title": "I'm done making desktop applications (2009)",
-      "url": "https://www.kalzumeus.com/2009/09/05/desktop-aps-versus-web-apps/",
-      "score": 157,
-      "comments": 180,
-      "author": "claxo",
-      "age_hours": 14
+      "title": "There Will Be a Scientific Theory of Deep Learning",
+      "url": "https://arxiv.org/abs/2604.21691",
+      "score": 190,
+      "comments": 74,
+      "author": "jamie-simon",
+      "age_hours": 12
     },
     {
       "rank": 10,
-      "title": "Email could have been X.400 times better",
-      "url": "https://buttondown.com/blog/x400-vs-smtp-email",
-      "score": 153,
-      "comments": 143,
-      "author": "maguay",
-      "age_hours": 45
+      "title": "I'm done making desktop applications (2009)",
+      "url": "https://www.kalzumeus.com/2009/09/05/desktop-aps-versus-web-apps/",
+      "score": 159,
+      "comments": 181,
+      "author": "claxo",
+      "age_hours": 14
     }
   ]
 }

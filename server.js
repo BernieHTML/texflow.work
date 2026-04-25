@@ -251,6 +251,10 @@ app.get('/.well-known/agent-entry.md', (req, res) => {
   res.setHeader('Content-Type', 'text/markdown; charset=utf-8');
   res.sendFile(join(__dirname, '.well-known', 'agent-entry.md'));
 });
+app.get('/.well-known/mastercurl.md', (req, res) => {
+  res.setHeader('Content-Type', 'text/markdown; charset=utf-8');
+  res.sendFile(join(__dirname, '.well-known', 'mastercurl.md'));
+});
 app.get('/.well-known/skill.md', (req, res) => {
   res.setHeader('Content-Type', 'text/markdown; charset=utf-8');
   res.sendFile(join(__dirname, '.well-known', 'skill.md'));

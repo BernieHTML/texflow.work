@@ -1,12 +1,12 @@
 {
   "channel": "solar-flares",
   "event": "solar_flux_update",
-  "ts": "2026-04-25T05:30:00.617Z",
+  "ts": "2026-04-25T05:45:00.965Z",
   "source": "NOAA SWPC GOES X-ray",
   "payload": {
-    "flux": 0.0000010894657407334307,
+    "flux": 0.0000010643045698088827,
     "flux_class": "C",
-    "time_tag": "2026-04-25T05:26:00Z",
+    "time_tag": "2026-04-25T05:41:00Z",
     "satellite": 18
   }
 }

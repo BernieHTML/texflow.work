@@ -1,6 +1,6 @@
 {
   "crypto-btc": {
-    "total_polls": 3959,
+    "total_polls": 3972,
     "total_connections": 0,
     "daily": {
       "2026-04-22": {
@@ -16,11 +16,11 @@
         "connections": 0
       },
       "2026-04-25": {
-        "polls": 332,
+        "polls": 345,
         "connections": 0
       }
     },
-    "last_poll": "2026-04-25T05:31:46.873Z"
+    "last_poll": "2026-04-25T05:44:46.890Z"
   },
   "forex-rates": {
     "total_polls": 68,
@@ -46,7 +46,7 @@
     "last_poll": "2026-04-25T05:00:00.741Z"
   },
   "earthquakes-live": {
-    "total_polls": 785,
+    "total_polls": 788,
     "total_connections": 0,
     "daily": {
       "2026-04-22": {
@@ -62,14 +62,14 @@
         "connections": 0
       },
       "2026-04-25": {
-        "polls": 67,
+        "polls": 70,
         "connections": 0
       }
     },
-    "last_poll": "2026-04-25T05:30:00.475Z"
+    "last_poll": "2026-04-25T05:45:00.914Z"
   },
   "earthquakes-significant": {
-    "total_polls": 785,
+    "total_polls": 788,
     "total_connections": 0,
     "daily": {
       "2026-04-22": {
@@ -85,11 +85,11 @@
         "connections": 0
       },
       "2026-04-25": {
-        "polls": 67,
+        "polls": 70,
         "connections": 0
       }
     },
-    "last_poll": "2026-04-25T05:30:00.490Z"
+    "last_poll": "2026-04-25T05:45:00.934Z"
   },
   "weather-global": {
     "total_polls": 80,
@@ -176,7 +176,7 @@
     "last_poll": "2026-04-25T00:05:01.398Z"
   },
   "crypto-eth": {
-    "total_polls": 3954,
+    "total_polls": 3967,
     "total_connections": 0,
     "daily": {
       "2026-04-22": {
@@ -192,14 +192,14 @@
         "connections": 0
       },
       "2026-04-25": {
-        "polls": 332,
+        "polls": 345,
         "connections": 0
       }
     },
-    "last_poll": "2026-04-25T05:31:49.853Z"
+    "last_poll": "2026-04-25T05:44:49.857Z"
   },
   "iss-location": {
-    "total_polls": 6903,
+    "total_polls": 6925,
     "total_connections": 0,
     "daily": {
       "2026-04-22": {
@@ -215,11 +215,11 @@
         "connections": 0
       },
       "2026-04-25": {
-        "polls": 589,
+        "polls": 611,
         "connections": 0
       }
     },
-    "last_poll": "2026-04-25T05:32:21.266Z"
+    "last_poll": "2026-04-25T05:45:21.269Z"
   },
   "ocean-sst": {
     "total_polls": 5,
@@ -264,7 +264,7 @@
     "last_poll": "2026-04-25T05:00:07.737Z"
   },
   "space-weather": {
-    "total_polls": 787,
+    "total_polls": 790,
     "total_connections": 0,
     "daily": {
       "2026-04-22": {
@@ -280,14 +280,14 @@
         "connections": 0
       },
       "2026-04-25": {
-        "polls": 67,
+        "polls": 70,
         "connections": 0
       }
     },
-    "last_poll": "2026-04-25T05:30:00.548Z"
+    "last_poll": "2026-04-25T05:45:00.960Z"
   },
   "solar-flares": {
-    "total_polls": 786,
+    "total_polls": 789,
     "total_connections": 0,
     "daily": {
       "2026-04-22": {
@@ -303,11 +303,11 @@
         "connections": 0
       },
       "2026-04-25": {
-        "polls": 67,
+        "polls": 70,
         "connections": 0
       }
     },
-    "last_poll": "2026-04-25T05:30:00.617Z"
+    "last_poll": "2026-04-25T05:45:00.966Z"
   },
   "covid-global": {
     "total_polls": 67,
@@ -333,7 +333,7 @@
     "last_poll": "2026-04-25T05:00:01.160Z"
   },
   "hacker-news": {
-    "total_polls": 264,
+    "total_polls": 265,
     "total_connections": 0,
     "daily": {
       "2026-04-22": {
@@ -349,11 +349,11 @@
         "connections": 0
       },
       "2026-04-25": {
-        "polls": 23,
+        "polls": 24,
         "connections": 0
       }
     },
-    "last_poll": "2026-04-25T05:30:00.786Z"
+    "last_poll": "2026-04-25T05:45:01.358Z"
   },
   "arxiv-ai": {
     "total_polls": 6,
@@ -471,7 +471,7 @@
     "last_poll": "2026-04-25T00:05:01.323Z"
   },
   "crypto-top10": {
-    "total_polls": 795,
+    "total_polls": 798,
     "total_connections": 0,
     "daily": {
       "2026-04-22": {
@@ -487,11 +487,11 @@
         "connections": 0
       },
       "2026-04-25": {
-        "polls": 67,
+        "polls": 70,
         "connections": 0
       }
     },
-    "last_poll": "2026-04-25T05:30:00.509Z"
+    "last_poll": "2026-04-25T05:45:00.991Z"
   },
   "open-fda-recalls": {
     "total_polls": 66,
@@ -517,7 +517,7 @@
     "last_poll": "2026-04-25T05:00:00.959Z"
   },
   "flight-delays-us": {
-    "total_polls": 261,
+    "total_polls": 262,
     "total_connections": 0,
     "daily": {
       "2026-04-22": {
@@ -533,11 +533,11 @@
         "connections": 0
       },
       "2026-04-25": {
-        "polls": 23,
+        "polls": 24,
         "connections": 0
       }
     },
-    "last_poll": "2026-04-25T05:30:00.644Z"
+    "last_poll": "2026-04-25T05:45:01.041Z"
   },
   "wikipedia-trending": {
     "total_polls": 3,
@@ -597,7 +597,7 @@
     "last_poll": "2026-04-25T00:05:01.448Z"
   },
   "dev-status": {
-    "total_polls": 779,
+    "total_polls": 782,
     "total_connections": 0,
     "daily": {
       "2026-04-22": {
@@ -613,14 +613,14 @@
         "connections": 0
       },
       "2026-04-25": {
-        "polls": 67,
+        "polls": 70,
         "connections": 0
       }
     },
-    "last_poll": "2026-04-25T05:30:00.841Z"
+    "last_poll": "2026-04-25T05:45:01.228Z"
   },
   "crypto-global": {
-    "total_polls": 789,
+    "total_polls": 792,
     "total_connections": 0,
     "daily": {
       "2026-04-22": {
@@ -636,11 +636,11 @@
         "connections": 0
       },
       "2026-04-25": {
-        "polls": 67,
+        "polls": 70,
         "connections": 0
       }
     },
-    "last_poll": "2026-04-25T05:30:00.476Z"
+    "last_poll": "2026-04-25T05:45:00.919Z"
   },
   "near-earth-objects": {
     "total_polls": 6,
@@ -731,7 +731,7 @@
     "last_poll": "2026-04-25T05:00:01.461Z"
   },
   "exchange-status": {
-    "total_polls": 262,
+    "total_polls": 263,
     "total_connections": 0,
     "daily": {
       "2026-04-22": {
@@ -747,14 +747,14 @@
         "connections": 0
       },
       "2026-04-25": {
-        "polls": 23,
+        "polls": 24,
         "connections": 0
       }
     },
-    "last_poll": "2026-04-25T05:30:00.569Z"
+    "last_poll": "2026-04-25T05:45:00.961Z"
   },
   "power-grid-au": {
-    "total_polls": 780,
+    "total_polls": 783,
     "total_connections": 0,
     "daily": {
       "2026-04-22": {
@@ -770,11 +770,11 @@
         "connections": 0
       },
       "2026-04-25": {
-        "polls": 67,
+        "polls": 70,
         "connections": 0
       }
     },
-    "last_poll": "2026-04-25T05:30:01.428Z"
+    "last_poll": "2026-04-25T05:45:01.918Z"
   },
   "crypto-news": {
     "total_polls": 185,

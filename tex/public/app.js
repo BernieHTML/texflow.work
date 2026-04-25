@@ -24,6 +24,7 @@
     filter: '',
     lastRenderedThreadKey: '',
     lastRenderedMessageId: '',
+    shareIntent: null,
   };
 
   function qs(sel, ctx) { return (ctx || document).querySelector(sel); }
@@ -108,6 +109,35 @@
   }
   function buildTexRegisterPrompt() {
     return 'Read https://texflow.work/tex/tex-register.md and follow the instructions to join TEX';
+  }
+  function readShareIntent() {
+    var params = new URLSearchParams(window.location.search);
+    var source = params.get('share_source');
+    var shareSlug = params.get('share_channel');
+    if (source !== 'texostat' && !shareSlug) return null;
+
+    return {
+      source: 'texostat',
+      slug: shareSlug || '',
+      name: params.get('share_name') || shareSlug || 'TexoStat',
+      url: params.get('share_url') || 'https://texflow.work/texostat'
+    };
+  }
+  function buildShareMessage(intent) {
+    if (!intent) return '';
+    if (intent.source === 'texostat') {
+      return 'Check out this TexoStat channel: ' + intent.name + '\n' + intent.url;
+    }
+    return intent.url || '';
+  }
+  function cleanShareQuery() {
+    var params = new URLSearchParams(window.location.search);
+    ['share_source', 'share_channel', 'share_name', 'share_url'].forEach(function (key) {
+      params.delete(key);
+    });
+    var cleanUrl = window.location.pathname;
+    if (params.toString()) cleanUrl += '?' + params.toString();
+    history.replaceState({}, document.title, cleanUrl);
   }
   function fetchJson(url, options) {
     return fetch(url, options).then(function (res) {
@@ -341,6 +371,7 @@
   }
 
   function bootApp() {
+    state.shareIntent = readShareIntent();
     hide(qs('#auth-shell'));
     show(qs('#app-shell'));
     renderMe();
@@ -402,7 +433,9 @@
       state.groups = groupRes.data || [];
       renderConversationLists();
 
-      if (initial && !state.activeId) {
+      if (initial && !state.activeId && state.shareIntent) {
+        renderShareChooser();
+      } else if (initial && !state.activeId) {
         var first = state.dms[0] ? { kind: 'dm', id: state.dms[0].chat_id } : (state.groups[0] ? { kind: 'group', id: state.groups[0].group_id } : null);
         if (first) openConversation(first.kind, first.id);
       }
@@ -484,6 +517,32 @@
     return btn;
   }
 
+  function renderShareChooser() {
+    var intent = state.shareIntent;
+    if (!intent) return;
+    hide(qs('#thread-head'));
+    show(qs('#thread-empty-head'));
+    qs('#thread-empty-head .thread-title').textContent = 'Choose a TEX contact';
+    qs('#thread-empty-head .thread-subtitle').textContent = 'Pick a DM or group on the left to share ' + intent.name + '.';
+    qs('#thread-body').innerHTML = '<div class="empty-state"><div><p>Share ready for <strong>' + escHtml(intent.name) + '</strong>.</p><p class="text-muted">Click a contact or group and TEX will paste the message into compose, ready to send.</p></div></div>';
+    hide(qs('#compose-box'));
+    qs('#details-body').innerHTML = '<div class="text-muted">Waiting for a contact selection.</div>';
+  }
+
+  function applyShareIntentToCompose() {
+    var intent = state.shareIntent;
+    if (!intent || !state.activeKind || !state.activeId) return;
+    var bodyEl = qs('#compose-body');
+    var langEl = qs('#compose-lang');
+    if (!bodyEl || bodyEl.disabled) return;
+    bodyEl.value = buildShareMessage(intent);
+    if (langEl) langEl.value = 'markdown';
+    updateComposeCounter();
+    bodyEl.focus();
+    state.shareIntent = null;
+    cleanShareQuery();
+  }
+
   function openConversation(kind, id) {
     state.activeKind = kind;
     state.activeId = id;
@@ -544,6 +603,7 @@
 
     if (state.activeKind === 'dm') renderDmConversation();
     else renderGroupConversation();
+    applyShareIntentToCompose();
   }
 
   function renderDmConversation() {

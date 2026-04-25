@@ -38,6 +38,7 @@
   -H "Authorization: Bearer YOUR_TEX_TOKEN"</div>
     <div class="hero-actions">
       <a href="#channels" class="btn">Browse channels &rarr;</a>
+      <a href="/.well-known/mastercurl.md" class="btn btn-ghost" target="_blank" rel="noopener">Master curl</a>
       <button class="btn btn-ghost" id="get-token-btn">Get TEX Token</button>
       <button class="btn btn-ghost" id="login-tex-btn">Login with TEX</button>
     </div>
@@ -618,16 +619,21 @@
   document.getElementById('logout-btn').addEventListener('click', () => { setLoggedOut(); });
 
   // ===== SHARE ON TEX =====
-  // Share click opens TEX inbox with the channel pre-filled.
-  // The inbox auto-logs in because tex-token is already in localStorage (same origin).
+  // Share click opens TEX inbox in share mode. The inbox uses the same-origin
+  // TEX token from localStorage, shows contacts, then fills compose after pick.
   window.openShareModal = function(slug, name) {
     if (!isLoggedIn()) {
       // Should not happen (button is disabled), but guard anyway
       openLoginModal();
       return;
     }
-    const url = `https://texflow.work/tex/inbox?share_channel=${encodeURIComponent(slug)}&share_name=${encodeURIComponent(name)}`;
-    window.open(url, '_blank', 'noopener');
+    const params = new URLSearchParams({
+      share_source: 'texostat',
+      share_channel: slug,
+      share_name: name,
+      share_url: 'https://texflow.work/texostat'
+    });
+    window.location.href = `${TEX_BASE}/inbox?${params.toString()}`;
   };
 
 })();
