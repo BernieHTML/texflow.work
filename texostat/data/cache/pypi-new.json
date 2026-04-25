@@ -1,9 +1,57 @@
 {
   "channel": "pypi-new",
   "event": "pypi_update",
-  "ts": "2026-04-25T05:45:56.019Z",
+  "ts": "2026-04-25T06:00:01.013Z",
   "source": "PyPI RSS",
   "payload": [
+    {
+      "name": "fileTreeCommand",
+      "version": "added",
+      "description": "None",
+      "author": "173288240@qq.com",
+      "published_at": "Sat, 25 Apr 2026 05:45:33 GMT",
+      "url": "https://pypi.org/project/filetreecommand/"
+    },
+    {
+      "name": "notebookpkg",
+      "version": "added",
+      "description": "A package manager for Jupyter notebook templates",
+      "author": null,
+      "published_at": "Sat, 25 Apr 2026 05:42:04 GMT",
+      "url": "https://pypi.org/project/notebookpkg/"
+    },
+    {
+      "name": "haon-worker",
+      "version": "added",
+      "description": "HAON PowerHub Marketplace — Worker Client (rent GPU compute via P2P WebRTC)",
+      "author": "alpha@haon.run",
+      "published_at": "Sat, 25 Apr 2026 05:39:45 GMT",
+      "url": "https://pypi.org/project/haon-worker/"
+    },
+    {
+      "name": "prwg",
+      "version": "added",
+      "description": "None",
+      "author": null,
+      "published_at": "Sat, 25 Apr 2026 05:34:13 GMT",
+      "url": "https://pypi.org/project/prwg/"
+    },
+    {
+      "name": "git-reflow",
+      "version": "added",
+      "description": "None",
+      "author": "andre.savioli@icloud.com",
+      "published_at": "Sat, 25 Apr 2026 05:32:31 GMT",
+      "url": "https://pypi.org/project/git-reflow/"
+    },
+    {
+      "name": "grape-image-search",
+      "version": "added",
+      "description": "Find images matching keywords using CLIP. Like grep, but for images.",
+      "author": "mikegraham@gmail.com",
+      "published_at": "Sat, 25 Apr 2026 05:32:14 GMT",
+      "url": "https://pypi.org/project/grape-image-search/"
+    },
     {
       "name": "psift",
       "version": "added",
@@ -75,54 +123,6 @@
       "author": null,
       "published_at": "Sat, 25 Apr 2026 04:38:38 GMT",
       "url": "https://pypi.org/project/basedpython/"
-    },
-    {
-      "name": "omni-wst-core",
-      "version": "added",
-      "description": "OmniPulse WST/JTFS C++/CUDA perceptual hashing engine",
-      "author": null,
-      "published_at": "Sat, 25 Apr 2026 04:37:02 GMT",
-      "url": "https://pypi.org/project/omni-wst-core/"
-    },
-    {
-      "name": "carl-core",
-      "version": "added",
-      "description": "Coherence math primitives for CARL (Coherence-Aware Reinforcement Learning)",
-      "author": "tej@terminals.tech",
-      "published_at": "Sat, 25 Apr 2026 04:35:20 GMT",
-      "url": "https://pypi.org/project/carl-core/"
-    },
-    {
-      "name": "vibecheck-ai-tool",
-      "version": "added",
-      "description": "Understand the code your AI wrote",
-      "author": null,
-      "published_at": "Sat, 25 Apr 2026 04:33:10 GMT",
-      "url": "https://pypi.org/project/vibecheck-ai-tool/"
-    },
-    {
-      "name": "daobidao",
-      "version": "added",
-      "description": "叨逼叨 - 跨平台本地语音输入工具(中英日韩粤,Qwen3-ASR ONNX 本地推理)",
-      "author": "pkuyplijing@gmail.com",
-      "published_at": "Sat, 25 Apr 2026 04:33:04 GMT",
-      "url": "https://pypi.org/project/daobidao/"
-    },
-    {
-      "name": "advancedtextcleaner",
-      "version": "added",
-      "description": "A modular, fully-configurable NLP text cleaning function with 15+ toggleable steps.",
-      "author": null,
-      "published_at": "Sat, 25 Apr 2026 04:31:12 GMT",
-      "url": "https://pypi.org/project/advancedtextcleaner/"
-    },
-    {
-      "name": "kodokids-jp",
-      "version": "added",
-      "description": "ひらがなでまなべる子ども向けプログラミング言語",
-      "author": "your@email.com",
-      "published_at": "Sat, 25 Apr 2026 04:21:34 GMT",
-      "url": "https://pypi.org/project/kodokids-jp/"
     }
   ]
 }

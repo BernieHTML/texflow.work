@@ -1,7 +1,7 @@
 {
   "channel": "earthquakes-live",
   "event": "earthquake_update",
-  "ts": "2026-04-25T05:55:00.735Z",
+  "ts": "2026-04-25T06:00:00.930Z",
   "source": "USGS Earthquake Hazards Program",
   "payload": {
     "count": 45,

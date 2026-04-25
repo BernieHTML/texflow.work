@@ -1,7 +1,7 @@
 {
   "channel": "hacker-news",
   "event": "hn_update",
-  "ts": "2026-04-25T05:45:55.219Z",
+  "ts": "2026-04-25T06:00:01.337Z",
   "source": "HN Algolia /search",
   "payload": [
     {
@@ -9,90 +9,90 @@
       "title": "DeepSeek v4",
       "url": "https://api-docs.deepseek.com/news/news260424",
       "score": 1866,
-      "comments": 1449,
+      "comments": 1450,
       "author": "impact_sy",
       "age_hours": 27
     },
     {
       "rank": 2,
-      "title": "I cancelled Claude: Token issues, declining quality, and poor support",
-      "url": "https://nickyreinert.de/en/2026/2026-04-24-claude-critics/",
-      "score": 841,
-      "comments": 497,
-      "author": "y42",
-      "age_hours": 14
-    },
-    {
-      "rank": 3,
       "title": "Google plans to invest up to $40B in Anthropic",
       "url": "https://www.bloomberg.com/news/articles/2026-04-24/google-plans-to-invest-up-to-40-billion-in-anthropic",
-      "score": 468,
-      "comments": 476,
+      "score": 477,
+      "comments": 481,
       "author": "elffjs",
       "age_hours": 14
     },
     {
-      "rank": 4,
+      "rank": 3,
       "title": "Sabotaging projects by overthinking, scope creep, and structural diffing",
       "url": "https://kevinlynagh.com/newsletter/2026_04_overthinking/",
-      "score": 392,
+      "score": 393,
       "comments": 104,
       "author": "alcazar",
-      "age_hours": 15
+      "age_hours": 16
     },
     {
-      "rank": 5,
+      "rank": 4,
       "title": "How to be anti-social – a guide to incoherent and isolating social experiences",
       "url": "https://nate.leaflet.pub/3mk4xkaxobc2p",
-      "score": 335,
-      "comments": 309,
+      "score": 336,
+      "comments": 311,
       "author": "calcifer",
       "age_hours": 19
     },
     {
-      "rank": 6,
+      "rank": 5,
       "title": "MacBook Neo and how the iPad should be",
       "url": "https://craigmod.com/essays/ipad_neo/",
-      "score": 241,
+      "score": 243,
       "comments": 135,
       "author": "jen729w",
       "age_hours": 49
     },
     {
-      "rank": 7,
+      "rank": 6,
       "title": "My audio interface has SSH enabled by default",
       "url": "https://hhh.hn/rodecaster-duo-fw/",
-      "score": 201,
-      "comments": 62,
+      "score": 203,
+      "comments": 64,
       "author": "hhh",
       "age_hours": 10
     },
     {
-      "rank": 8,
+      "rank": 7,
       "title": "The Classic American Diner",
       "url": "https://blogs.loc.gov/picturethis/2026/04/the-classic-american-diner/",
-      "score": 193,
+      "score": 195,
       "comments": 117,
       "author": "NaOH",
       "age_hours": 11
     },
     {
-      "rank": 9,
+      "rank": 8,
       "title": "There Will Be a Scientific Theory of Deep Learning",
       "url": "https://arxiv.org/abs/2604.21691",
-      "score": 190,
-      "comments": 74,
+      "score": 191,
+      "comments": 75,
       "author": "jamie-simon",
       "age_hours": 12
     },
     {
-      "rank": 10,
+      "rank": 9,
       "title": "I'm done making desktop applications (2009)",
       "url": "https://www.kalzumeus.com/2009/09/05/desktop-aps-versus-web-apps/",
       "score": 159,
-      "comments": 181,
+      "comments": 182,
       "author": "claxo",
       "age_hours": 14
+    },
+    {
+      "rank": 10,
+      "title": "Email could have been X.400 times better",
+      "url": "https://buttondown.com/blog/x400-vs-smtp-email",
+      "score": 156,
+      "comments": 146,
+      "author": "maguay",
+      "age_hours": 46
     }
   ]
 }

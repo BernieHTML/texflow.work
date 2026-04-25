@@ -1,7 +1,7 @@
 {
   "channel": "crypto-global",
   "event": "market_overview",
-  "ts": "2026-04-25T05:55:00.749Z",
+  "ts": "2026-04-25T06:00:00.921Z",
   "source": "CoinGecko /global",
   "payload": {
     "total_market_cap_usd": 2672980826275.934,
