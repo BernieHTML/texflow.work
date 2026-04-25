@@ -1,11 +1,33 @@
 {
   "channel": "earthquakes-live",
   "event": "earthquake_update",
-  "ts": "2026-04-25T06:00:00.930Z",
+  "ts": "2026-04-25T07:25:00.589Z",
   "source": "USGS Earthquake Hazards Program",
   "payload": {
-    "count": 45,
+    "count": 43,
     "events": [
+      {
+        "id": "pr71514623",
+        "magnitude": 3.03,
+        "place": "49 km NW of San Antonio, Puerto Rico",
+        "depth_km": 24.65,
+        "lat": 18.7865,
+        "lon": -67.4551666666667,
+        "ts": "2026-04-25T07:02:10.350Z",
+        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/pr71514623",
+        "felt_reports": null
+      },
+      {
+        "id": "us6000ssrm",
+        "magnitude": 4.5,
+        "place": "238 km ESE of Attu Station, Alaska",
+        "depth_km": 10,
+        "lat": 52.2239,
+        "lon": 176.5528,
+        "ts": "2026-04-25T05:18:45.076Z",
+        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us6000ssrm",
+        "felt_reports": null
+      },
       {
         "id": "nn00916381",
         "magnitude": 2.64,
@@ -456,50 +478,6 @@
         "ts": "2026-04-24T07:26:31.285Z",
         "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us6000ssib",
         "felt_reports": null
-      },
-      {
-        "id": "us6000ssid",
-        "magnitude": 4.4,
-        "place": "99 km SE of Pyapon, Burma (Myanmar)",
-        "depth_km": 10,
-        "lat": 15.7265,
-        "lon": 96.402,
-        "ts": "2026-04-24T07:03:04.863Z",
-        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us6000ssid",
-        "felt_reports": null
-      },
-      {
-        "id": "us6000ssi3",
-        "magnitude": 4.2,
-        "place": "22 km SSW of Sitia, Greece",
-        "depth_km": 10,
-        "lat": 35.0161,
-        "lon": 26.0352,
-        "ts": "2026-04-24T06:37:54.538Z",
-        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us6000ssi3",
-        "felt_reports": null
-      },
-      {
-        "id": "us6000ssi0",
-        "magnitude": 4.2,
-        "place": "12 km E of Kentrí, Greece",
-        "depth_km": 10,
-        "lat": 35.0153,
-        "lon": 25.8923,
-        "ts": "2026-04-24T06:32:26.689Z",
-        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us6000ssi0",
-        "felt_reports": null
-      },
-      {
-        "id": "us6000ssht",
-        "magnitude": 4.3,
-        "place": "26 km SE of Ierápetra, Greece",
-        "depth_km": 10,
-        "lat": 34.8712,
-        "lon": 25.9733,
-        "ts": "2026-04-24T06:14:31.204Z",
-        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us6000ssht",
-        "felt_reports": 0
       }
     ]
   }

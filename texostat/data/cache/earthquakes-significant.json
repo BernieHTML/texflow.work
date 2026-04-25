@@ -1,11 +1,22 @@
 {
   "channel": "earthquakes-significant",
   "event": "earthquake_update",
-  "ts": "2026-04-25T06:00:00.931Z",
+  "ts": "2026-04-25T07:25:00.609Z",
   "source": "USGS Earthquake Hazards Program",
   "payload": {
-    "count": 15,
+    "count": 16,
     "events": [
+      {
+        "id": "us6000ssrm",
+        "magnitude": 4.5,
+        "place": "238 km ESE of Attu Station, Alaska",
+        "depth_km": 10,
+        "lat": 52.2239,
+        "lon": 176.5528,
+        "ts": "2026-04-25T05:18:45.076Z",
+        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us6000ssrm",
+        "felt_reports": null
+      },
       {
         "id": "us6000ssr1",
         "magnitude": 4.5,

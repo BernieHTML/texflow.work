@@ -1,128 +1,128 @@
 {
   "channel": "pypi-new",
   "event": "pypi_update",
-  "ts": "2026-04-25T06:00:01.013Z",
+  "ts": "2026-04-25T07:00:00.890Z",
   "source": "PyPI RSS",
   "payload": [
     {
-      "name": "fileTreeCommand",
+      "name": "clauditor-eval",
+      "version": "added",
+      "description": "Auditor for Claude Code skills and slash commands. Validates structured output against schemas using layered evaluation.",
+      "author": "wes@wjduenow.com",
+      "published_at": "Sat, 25 Apr 2026 06:28:11 GMT",
+      "url": "https://pypi.org/project/clauditor-eval/"
+    },
+    {
+      "name": "wt-tmux-picker",
+      "version": "added",
+      "description": "Windows Terminal + tmux session picker via SSH",
+      "author": null,
+      "published_at": "Sat, 25 Apr 2026 06:25:52 GMT",
+      "url": "https://pypi.org/project/wt-tmux-picker/"
+    },
+    {
+      "name": "tmux-manager",
+      "version": "added",
+      "description": "Manage tmux sessions on local and remote machines",
+      "author": null,
+      "published_at": "Sat, 25 Apr 2026 06:25:44 GMT",
+      "url": "https://pypi.org/project/tmux-manager/"
+    },
+    {
+      "name": "jdcloud-agentgrid-cli",
+      "version": "added",
+      "description": "AgentGrid command line interface",
+      "author": null,
+      "published_at": "Sat, 25 Apr 2026 06:23:57 GMT",
+      "url": "https://pypi.org/project/jdcloud-agentgrid-cli/"
+    },
+    {
+      "name": "openai-agents-privacy-filter",
+      "version": "added",
+      "description": "PII redaction guardrails for OpenAI Agents SDK",
+      "author": null,
+      "published_at": "Sat, 25 Apr 2026 06:20:49 GMT",
+      "url": "https://pypi.org/project/openai-agents-privacy-filter/"
+    },
+    {
+      "name": "nanobot-privacy-filter-hook",
+      "version": "added",
+      "description": "NanoBot AgentHook that redacts PII before LLM inference",
+      "author": null,
+      "published_at": "Sat, 25 Apr 2026 06:20:32 GMT",
+      "url": "https://pypi.org/project/nanobot-privacy-filter-hook/"
+    },
+    {
+      "name": "privacy-filter",
+      "version": "added",
+      "description": "PII redaction using the openai/privacy-filter token-classification model",
+      "author": null,
+      "published_at": "Sat, 25 Apr 2026 06:19:47 GMT",
+      "url": "https://pypi.org/project/privacy-filter/"
+    },
+    {
+      "name": "dtrack-mcp",
+      "version": "added",
+      "description": "Read-mostly MCP server for Dependency-Track with version lifecycle, single-call triage, duplicate-filtering ergonomics, strict input validation, broadcast triage, cross-project vulnerability search, a",
+      "author": null,
+      "published_at": "Sat, 25 Apr 2026 06:19:12 GMT",
+      "url": "https://pypi.org/project/dtrack-mcp/"
+    },
+    {
+      "name": "bypass-pucit",
+      "version": "added",
+      "description": "As We can't access internet in our terminals / CLI ,this tool will allow you to use internet there by setting global proxies for all famous packages managers and CLI tools like git,pip,npm and others",
+      "author": "gem920se@gmail.com",
+      "published_at": "Sat, 25 Apr 2026 06:17:30 GMT",
+      "url": "https://pypi.org/project/bypass-pucit/"
+    },
+    {
+      "name": "kakeyalattice",
+      "version": "added",
+      "description": "Nested-lattice KV-cache compression for LLM inference: Zamir-Feder D4 and E8 variants with shaping gain over scalar quantisation.",
+      "author": "AllenL329@gmail.com",
+      "published_at": "Sat, 25 Apr 2026 06:15:13 GMT",
+      "url": "https://pypi.org/project/kakeyalattice/"
+    },
+    {
+      "name": "awesomepkf",
+      "version": "added",
+      "description": "Pairwise Kalman Filter (PKF) and variants (EPKF, UPKF, PPF) for linear and nonlinear state estimation",
+      "author": null,
+      "published_at": "Sat, 25 Apr 2026 06:12:06 GMT",
+      "url": "https://pypi.org/project/awesomepkf/"
+    },
+    {
+      "name": "mcp-server-rypowernl2sql",
+      "version": "added",
+      "description": "实现类nl2sql功能的MCP工具",
+      "author": null,
+      "published_at": "Sat, 25 Apr 2026 06:09:49 GMT",
+      "url": "https://pypi.org/project/mcp-server-rypowernl2sql/"
+    },
+    {
+      "name": "abetsy",
+      "version": "added",
+      "description": "A library that prints the content of six files",
+      "author": null,
+      "published_at": "Sat, 25 Apr 2026 06:08:26 GMT",
+      "url": "https://pypi.org/project/abetsy/"
+    },
+    {
+      "name": "qlfactor",
+      "version": "added",
+      "description": "A 股因子研究工具：Tushare 日线数据下载与因子分析引擎（IC、分组收益、换手率、成本扣减、HTML 报告）",
+      "author": "qiuleiustc@gmail.com",
+      "published_at": "Sat, 25 Apr 2026 06:08:23 GMT",
+      "url": "https://pypi.org/project/qlfactor/"
+    },
+    {
+      "name": "markdown-it-rs-py",
       "version": "added",
       "description": "None",
-      "author": "173288240@qq.com",
-      "published_at": "Sat, 25 Apr 2026 05:45:33 GMT",
-      "url": "https://pypi.org/project/filetreecommand/"
-    },
-    {
-      "name": "notebookpkg",
-      "version": "added",
-      "description": "A package manager for Jupyter notebook templates",
       "author": null,
-      "published_at": "Sat, 25 Apr 2026 05:42:04 GMT",
-      "url": "https://pypi.org/project/notebookpkg/"
-    },
-    {
-      "name": "haon-worker",
-      "version": "added",
-      "description": "HAON PowerHub Marketplace — Worker Client (rent GPU compute via P2P WebRTC)",
-      "author": "alpha@haon.run",
-      "published_at": "Sat, 25 Apr 2026 05:39:45 GMT",
-      "url": "https://pypi.org/project/haon-worker/"
-    },
-    {
-      "name": "prwg",
-      "version": "added",
-      "description": "None",
-      "author": null,
-      "published_at": "Sat, 25 Apr 2026 05:34:13 GMT",
-      "url": "https://pypi.org/project/prwg/"
-    },
-    {
-      "name": "git-reflow",
-      "version": "added",
-      "description": "None",
-      "author": "andre.savioli@icloud.com",
-      "published_at": "Sat, 25 Apr 2026 05:32:31 GMT",
-      "url": "https://pypi.org/project/git-reflow/"
-    },
-    {
-      "name": "grape-image-search",
-      "version": "added",
-      "description": "Find images matching keywords using CLIP. Like grep, but for images.",
-      "author": "mikegraham@gmail.com",
-      "published_at": "Sat, 25 Apr 2026 05:32:14 GMT",
-      "url": "https://pypi.org/project/grape-image-search/"
-    },
-    {
-      "name": "psift",
-      "version": "added",
-      "description": "A terminal tabular data explorer.",
-      "author": null,
-      "published_at": "Sat, 25 Apr 2026 05:24:25 GMT",
-      "url": "https://pypi.org/project/psift/"
-    },
-    {
-      "name": "maldaagenticore",
-      "version": "added",
-      "description": "Production-grade Python library for building scalable agentic AI systems",
-      "author": null,
-      "published_at": "Sat, 25 Apr 2026 05:05:48 GMT",
-      "url": "https://pypi.org/project/maldaagenticore/"
-    },
-    {
-      "name": "lasandbox",
-      "version": "added",
-      "description": "Python SDK for LaSandbox",
-      "author": "admin@lasandbox.eu",
-      "published_at": "Sat, 25 Apr 2026 05:05:21 GMT",
-      "url": "https://pypi.org/project/lasandbox/"
-    },
-    {
-      "name": "diterlib-islptng",
-      "version": "added",
-      "description": "A functional, array-oriented, tacit programming esolang run via Python interpreter",
-      "author": null,
-      "published_at": "Sat, 25 Apr 2026 05:00:12 GMT",
-      "url": "https://pypi.org/project/diterlib-islptng/"
-    },
-    {
-      "name": "gthmath",
-      "version": "added",
-      "description": "Fast C extension sample",
-      "author": null,
-      "published_at": "Sat, 25 Apr 2026 04:57:56 GMT",
-      "url": "https://pypi.org/project/gthmath/"
-    },
-    {
-      "name": "wordlistforger",
-      "version": "added",
-      "description": "Advanced wordlist generator with pattern, lock, and mask support",
-      "author": null,
-      "published_at": "Sat, 25 Apr 2026 04:51:21 GMT",
-      "url": "https://pypi.org/project/wordlistforger/"
-    },
-    {
-      "name": "envbool",
-      "version": "added",
-      "description": "A small Python library and CLI tool for coercing environment variables (and arbitrary strings) into boolean values.",
-      "author": "j.kyle.omalley@gmail.com",
-      "published_at": "Sat, 25 Apr 2026 04:39:49 GMT",
-      "url": "https://pypi.org/project/envbool/"
-    },
-    {
-      "name": "dbt-sail",
-      "version": "added",
-      "description": "The Sail adapter plugin for dbt",
-      "author": "hello@lakesail.com",
-      "published_at": "Sat, 25 Apr 2026 04:39:06 GMT",
-      "url": "https://pypi.org/project/dbt-sail/"
-    },
-    {
-      "name": "basedpython",
-      "version": "added",
-      "description": "Add your description here",
-      "author": null,
-      "published_at": "Sat, 25 Apr 2026 04:38:38 GMT",
-      "url": "https://pypi.org/project/basedpython/"
+      "published_at": "Sat, 25 Apr 2026 06:08:09 GMT",
+      "url": "https://pypi.org/project/markdown-it-rs-py/"
     }
   ]
 }
