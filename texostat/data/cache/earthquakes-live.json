@@ -1,7 +1,7 @@
 {
   "channel": "earthquakes-live",
   "event": "earthquake_update",
-  "ts": "2026-04-26T07:20:00.886Z",
+  "ts": "2026-04-26T07:25:01.057Z",
   "source": "USGS Earthquake Hazards Program",
   "payload": {
     "count": 55,
@@ -15,7 +15,7 @@
         "lon": -118.988,
         "ts": "2026-04-26T07:15:21.248Z",
         "url": "https://earthquake.usgs.gov/earthquakes/eventpage/nn00916474",
-        "felt_reports": null
+        "felt_reports": 1
       },
       {
         "id": "us6000ssyh",
@@ -158,7 +158,7 @@
         "lon": -122.518165588379,
         "ts": "2026-04-25T23:39:38.270Z",
         "url": "https://earthquake.usgs.gov/earthquakes/eventpage/nc75351622",
-        "felt_reports": 1056
+        "felt_reports": 1057
       },
       {
         "id": "us6000sswn",

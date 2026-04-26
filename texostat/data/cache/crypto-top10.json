@@ -1,96 +1,96 @@
 {
   "channel": "crypto-top10",
   "event": "market_update",
-  "ts": "2026-04-26T07:20:00.938Z",
+  "ts": "2026-04-26T07:25:01.104Z",
   "source": "CoinGecko /coins/markets",
   "payload": [
     {
       "rank": 1,
       "symbol": "BTC",
       "name": "Bitcoin",
-      "price_usd": 78017,
-      "market_cap_usd": 1562204468854,
-      "volume_24h_usd": 17304246079,
-      "change_1h_pct": 0.05353224944499518,
-      "change_24h_pct": 0.65635,
-      "change_7d_pct": 3.2388657933188973
+      "price_usd": 78029,
+      "market_cap_usd": 1562221923602,
+      "volume_24h_usd": 17130586644,
+      "change_1h_pct": 0.06210452632969183,
+      "change_24h_pct": 0.64073,
+      "change_7d_pct": 3.2536698165287024
     },
     {
       "rank": 2,
       "symbol": "ETH",
       "name": "Ethereum",
-      "price_usd": 2330.28,
-      "market_cap_usd": 281227375401,
-      "volume_24h_usd": 6687063266,
-      "change_1h_pct": 0.0366488133142786,
-      "change_24h_pct": 0.64376,
-      "change_7d_pct": -0.13208038992378626
+      "price_usd": 2330.72,
+      "market_cap_usd": 281241697736,
+      "volume_24h_usd": 6336846937,
+      "change_1h_pct": 0.02360832242701235,
+      "change_24h_pct": 0.65078,
+      "change_7d_pct": -0.11330311244540825
     },
     {
       "rank": 3,
       "symbol": "USDT",
       "name": "Tether",
       "price_usd": 1,
-      "market_cap_usd": 189823076828,
-      "volume_24h_usd": 30421370258,
-      "change_1h_pct": 0.004109783138044257,
-      "change_24h_pct": 0.0018,
-      "change_7d_pct": -0.01072466307870995
+      "market_cap_usd": 189816393130,
+      "volume_24h_usd": 30447083266,
+      "change_1h_pct": -0.0021743629296806614,
+      "change_24h_pct": -0.00154,
+      "change_7d_pct": -0.0137060771750263
     },
     {
       "rank": 4,
       "symbol": "XRP",
       "name": "XRP",
       "price_usd": 1.43,
-      "market_cap_usd": 88101508196,
-      "volume_24h_usd": 1008487903,
-      "change_1h_pct": 0.13497792291553462,
-      "change_24h_pct": -0.27677,
-      "change_7d_pct": -0.27888634550028363
+      "market_cap_usd": 88125937092,
+      "volume_24h_usd": 1067423511,
+      "change_1h_pct": 0.17280335143129646,
+      "change_24h_pct": -0.29443,
+      "change_7d_pct": -0.2438439153302217
     },
     {
       "rank": 5,
       "symbol": "BNB",
       "name": "BNB",
-      "price_usd": 631.51,
-      "market_cap_usd": 85129668919,
-      "volume_24h_usd": 680132886,
-      "change_1h_pct": -0.09416933957216109,
-      "change_24h_pct": -0.89886,
-      "change_7d_pct": 1.3694823087948602
+      "price_usd": 631.8,
+      "market_cap_usd": 85127883927,
+      "volume_24h_usd": 681665648,
+      "change_1h_pct": 0.002764624116046134,
+      "change_24h_pct": -0.8585,
+      "change_7d_pct": 1.4172834350283436
     },
     {
       "rank": 6,
       "symbol": "USDC",
       "name": "USDC",
-      "price_usd": 0.999974,
-      "market_cap_usd": 77705707828,
-      "volume_24h_usd": 5106272954,
-      "change_1h_pct": 0.01351377965144959,
-      "change_24h_pct": 0.01346,
-      "change_7d_pct": 0.0015667699725942109
+      "price_usd": 0.999787,
+      "market_cap_usd": 77692061416,
+      "volume_24h_usd": 5107875686,
+      "change_1h_pct": -0.0022360219828611765,
+      "change_24h_pct": -0.0058,
+      "change_7d_pct": -0.017110922645093368
     },
     {
       "rank": 7,
       "symbol": "SOL",
       "name": "Solana",
-      "price_usd": 86.52,
-      "market_cap_usd": 49819624960,
-      "volume_24h_usd": 1815834800,
-      "change_1h_pct": 0.032534796418692724,
-      "change_24h_pct": 0.1936,
-      "change_7d_pct": 1.1612201535747575
+      "price_usd": 86.51,
+      "market_cap_usd": 49823198497,
+      "volume_24h_usd": 1811526747,
+      "change_1h_pct": 0.0755179267478846,
+      "change_24h_pct": 0.1705,
+      "change_7d_pct": 1.1532080792910795
     },
     {
       "rank": 8,
       "symbol": "TRX",
       "name": "TRON",
-      "price_usd": 0.323853,
-      "market_cap_usd": 30694465466,
-      "volume_24h_usd": 368096554,
-      "change_1h_pct": 0.02186608173769306,
-      "change_24h_pct": 0.06465,
-      "change_7d_pct": -1.4228251702228132
+      "price_usd": 0.323857,
+      "market_cap_usd": 30697299932,
+      "volume_24h_usd": 368311916,
+      "change_1h_pct": 0.037708718854756865,
+      "change_24h_pct": 0.0664,
+      "change_7d_pct": -1.4215177386496647
     },
     {
       "rank": 9,
@@ -107,12 +107,12 @@
       "rank": 10,
       "symbol": "DOGE",
       "name": "Dogecoin",
-      "price_usd": 0.098521,
-      "market_cap_usd": 15170503978,
-      "volume_24h_usd": 831883741,
-      "change_1h_pct": 0.12433198886332353,
-      "change_24h_pct": 0.00198,
-      "change_7d_pct": 3.838914555420886
+      "price_usd": 0.098588,
+      "market_cap_usd": 15179395838,
+      "volume_24h_usd": 846677275,
+      "change_1h_pct": 0.22639733516434143,
+      "change_24h_pct": -0.10318,
+      "change_7d_pct": 3.9095112413064554
     }
   ]
 }

@@ -1,7 +1,7 @@
 {
   "channel": "earthquakes-significant",
   "event": "earthquake_update",
-  "ts": "2026-04-26T07:20:00.885Z",
+  "ts": "2026-04-26T07:25:01.113Z",
   "source": "USGS Earthquake Hazards Program",
   "payload": {
     "count": 16,
