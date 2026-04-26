@@ -1,10 +1,10 @@
 {
   "channel": "ocean-sst",
   "event": "sst_update",
-  "ts": "2026-04-25T05:45:53.421Z",
+  "ts": "2026-04-26T00:05:00.866Z",
   "source": "NOAA ERDDAP SST",
   "payload": {
-    "date": "2026-04-25",
+    "date": "2026-04-26",
     "global_mean_anomaly_c": null,
     "hottest_region": null,
     "coldest_region": null,

@@ -1,128 +1,128 @@
 {
   "channel": "pypi-new",
   "event": "pypi_update",
-  "ts": "2026-04-25T07:00:00.890Z",
+  "ts": "2026-04-26T07:00:00.433Z",
   "source": "PyPI RSS",
   "payload": [
     {
-      "name": "clauditor-eval",
+      "name": "pymuvera",
       "version": "added",
-      "description": "Auditor for Claude Code skills and slash commands. Validates structured output against schemas using layered evaluation.",
-      "author": "wes@wjduenow.com",
-      "published_at": "Sat, 25 Apr 2026 06:28:11 GMT",
-      "url": "https://pypi.org/project/clauditor-eval/"
-    },
-    {
-      "name": "wt-tmux-picker",
-      "version": "added",
-      "description": "Windows Terminal + tmux session picker via SSH",
+      "description": "Fixed Dimensional Encodings for multi-vector retrieval (MUVERA) — Python port of Google's graph-mining implementation",
       "author": null,
-      "published_at": "Sat, 25 Apr 2026 06:25:52 GMT",
-      "url": "https://pypi.org/project/wt-tmux-picker/"
+      "published_at": "Sun, 26 Apr 2026 06:28:11 GMT",
+      "url": "https://pypi.org/project/pymuvera/"
     },
     {
-      "name": "tmux-manager",
+      "name": "ghafi",
       "version": "added",
-      "description": "Manage tmux sessions on local and remote machines",
+      "description": "ghafi — GitHub Agent First Interface; an AgentCulture manager.",
       "author": null,
-      "published_at": "Sat, 25 Apr 2026 06:25:44 GMT",
-      "url": "https://pypi.org/project/tmux-manager/"
+      "published_at": "Sun, 26 Apr 2026 06:25:17 GMT",
+      "url": "https://pypi.org/project/ghafi/"
     },
     {
-      "name": "jdcloud-agentgrid-cli",
+      "name": "druid-to-pinot-migrator",
       "version": "added",
-      "description": "AgentGrid command line interface",
+      "description": "Migrate Apache Druid ingestion specs to Apache Pinot artifacts.",
       "author": null,
-      "published_at": "Sat, 25 Apr 2026 06:23:57 GMT",
-      "url": "https://pypi.org/project/jdcloud-agentgrid-cli/"
+      "published_at": "Sun, 26 Apr 2026 06:21:30 GMT",
+      "url": "https://pypi.org/project/druid-to-pinot-migrator/"
     },
     {
-      "name": "openai-agents-privacy-filter",
+      "name": "unitygraph",
       "version": "added",
-      "description": "PII redaction guardrails for OpenAI Agents SDK",
+      "description": "Autonomous Unity developer system for Claude Code -- knowledge graph, context injection, and behavior model.",
       "author": null,
-      "published_at": "Sat, 25 Apr 2026 06:20:49 GMT",
-      "url": "https://pypi.org/project/openai-agents-privacy-filter/"
+      "published_at": "Sun, 26 Apr 2026 06:16:46 GMT",
+      "url": "https://pypi.org/project/unitygraph/"
     },
     {
-      "name": "nanobot-privacy-filter-hook",
+      "name": "sheltron",
       "version": "added",
-      "description": "NanoBot AgentHook that redacts PII before LLM inference",
+      "description": "Sidecar safety and security kernel for local agent systems",
       "author": null,
-      "published_at": "Sat, 25 Apr 2026 06:20:32 GMT",
-      "url": "https://pypi.org/project/nanobot-privacy-filter-hook/"
+      "published_at": "Sun, 26 Apr 2026 06:13:28 GMT",
+      "url": "https://pypi.org/project/sheltron/"
     },
     {
-      "name": "privacy-filter",
+      "name": "cosmolkit",
       "version": "added",
-      "description": "PII redaction using the openai/privacy-filter token-classification model",
+      "description": "Python bindings for COSMolKit",
       "author": null,
-      "published_at": "Sat, 25 Apr 2026 06:19:47 GMT",
-      "url": "https://pypi.org/project/privacy-filter/"
+      "published_at": "Sun, 26 Apr 2026 06:12:35 GMT",
+      "url": "https://pypi.org/project/cosmolkit/"
     },
     {
-      "name": "dtrack-mcp",
+      "name": "secretsguardian",
       "version": "added",
-      "description": "Read-mostly MCP server for Dependency-Track with version lifecycle, single-call triage, duplicate-filtering ergonomics, strict input validation, broadcast triage, cross-project vulnerability search, a",
+      "description": "A secure drop-in replacement for python-decouple with startup validation",
       "author": null,
-      "published_at": "Sat, 25 Apr 2026 06:19:12 GMT",
-      "url": "https://pypi.org/project/dtrack-mcp/"
+      "published_at": "Sun, 26 Apr 2026 06:06:40 GMT",
+      "url": "https://pypi.org/project/secretsguardian/"
     },
     {
-      "name": "bypass-pucit",
+      "name": "scruby-fts",
       "version": "added",
-      "description": "As We can't access internet in our terminals / CLI ,this tool will allow you to use internet there by setting global proxies for all famous packages managers and CLI tools like git,pip,npm and others",
-      "author": "gem920se@gmail.com",
-      "published_at": "Sat, 25 Apr 2026 06:17:30 GMT",
-      "url": "https://pypi.org/project/bypass-pucit/"
+      "description": "Plugin for Scruby - Full-text search with Manticore Search.",
+      "author": "kebasyaty@gmail.com",
+      "published_at": "Sun, 26 Apr 2026 06:05:21 GMT",
+      "url": "https://pypi.org/project/scruby-fts/"
     },
     {
-      "name": "kakeyalattice",
+      "name": "Emilve",
       "version": "added",
-      "description": "Nested-lattice KV-cache compression for LLM inference: Zamir-Feder D4 and E8 variants with shaping gain over scalar quantisation.",
-      "author": "AllenL329@gmail.com",
-      "published_at": "Sat, 25 Apr 2026 06:15:13 GMT",
-      "url": "https://pypi.org/project/kakeyalattice/"
-    },
-    {
-      "name": "awesomepkf",
-      "version": "added",
-      "description": "Pairwise Kalman Filter (PKF) and variants (EPKF, UPKF, PPF) for linear and nonlinear state estimation",
+      "description": "A library to hack Python syntax: Case Sensitivity, Braces, and Auto-Installation.",
       "author": null,
-      "published_at": "Sat, 25 Apr 2026 06:12:06 GMT",
-      "url": "https://pypi.org/project/awesomepkf/"
+      "published_at": "Sun, 26 Apr 2026 05:52:13 GMT",
+      "url": "https://pypi.org/project/emilve/"
     },
     {
-      "name": "mcp-server-rypowernl2sql",
+      "name": "pyhaul",
       "version": "added",
-      "description": "实现类nl2sql功能的MCP工具",
+      "description": "Resumable, cursor-based, CDN-safe HTTP downloads for Python",
       "author": null,
-      "published_at": "Sat, 25 Apr 2026 06:09:49 GMT",
-      "url": "https://pypi.org/project/mcp-server-rypowernl2sql/"
+      "published_at": "Sun, 26 Apr 2026 05:48:57 GMT",
+      "url": "https://pypi.org/project/pyhaul/"
     },
     {
-      "name": "abetsy",
+      "name": "rlaif-mcp",
       "version": "added",
-      "description": "A library that prints the content of six files",
+      "description": "MCP server exposing a rate-limited PiShock shock tool.",
+      "author": "a9lim@protonmail.com",
+      "published_at": "Sun, 26 Apr 2026 05:46:47 GMT",
+      "url": "https://pypi.org/project/rlaif-mcp/"
+    },
+    {
+      "name": "steward-cli",
+      "version": "added",
+      "description": "Steward — aligns and maintains resident agents across Culture projects.",
       "author": null,
-      "published_at": "Sat, 25 Apr 2026 06:08:26 GMT",
-      "url": "https://pypi.org/project/abetsy/"
+      "published_at": "Sun, 26 Apr 2026 05:33:40 GMT",
+      "url": "https://pypi.org/project/steward-cli/"
     },
     {
-      "name": "qlfactor",
+      "name": "mangadex-exporter",
       "version": "added",
-      "description": "A 股因子研究工具：Tushare 日线数据下载与因子分析引擎（IC、分组收益、换手率、成本扣减、HTML 报告）",
-      "author": "qiuleiustc@gmail.com",
-      "published_at": "Sat, 25 Apr 2026 06:08:23 GMT",
-      "url": "https://pypi.org/project/qlfactor/"
+      "description": "Export your MangaDex library to MyAnimeList and AniList — with scores, statuses, and chapter progress",
+      "author": "mail@spidey.in",
+      "published_at": "Sun, 26 Apr 2026 05:33:39 GMT",
+      "url": "https://pypi.org/project/mangadex-exporter/"
     },
     {
-      "name": "markdown-it-rs-py",
+      "name": "piki-cli",
       "version": "added",
-      "description": "None",
+      "description": "Team wiki context hub for coding agents",
       "author": null,
-      "published_at": "Sat, 25 Apr 2026 06:08:09 GMT",
-      "url": "https://pypi.org/project/markdown-it-rs-py/"
+      "published_at": "Sun, 26 Apr 2026 05:30:23 GMT",
+      "url": "https://pypi.org/project/piki-cli/"
+    },
+    {
+      "name": "pm5190-mcp",
+      "version": "added",
+      "description": "MCP server for controlling the Philips PM5190 LF synthesizer via AR488 serial-to-GPIB",
+      "author": null,
+      "published_at": "Sun, 26 Apr 2026 05:28:50 GMT",
+      "url": "https://pypi.org/project/pm5190-mcp/"
     }
   ]
 }

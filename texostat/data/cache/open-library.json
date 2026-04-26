@@ -1,77 +1,77 @@
 {
   "channel": "open-library",
   "event": "library_update",
-  "ts": "2026-04-25T07:00:01.094Z",
+  "ts": "2026-04-26T07:00:00.652Z",
   "source": "Open Library /recentchanges",
   "payload": [
     {
-      "title": "set source_records based on initial machine_comment",
-      "author": "/people/horncBot",
+      "title": "Created new account.",
+      "author": "/people/qurat_ul_ain_fatima483",
+      "kind": "new-account",
+      "timestamp": "2026-04-26T06:59:37.684255",
+      "url": "https://openlibrary.org"
+    },
+    {
+      "title": "Created new account.",
+      "author": "/people/damian_benson",
+      "kind": "new-account",
+      "timestamp": "2026-04-26T06:59:06.248961",
+      "url": "https://openlibrary.org"
+    },
+    {
+      "title": "Created new account.",
+      "author": "/people/raseena_latheef",
+      "kind": "new-account",
+      "timestamp": "2026-04-26T06:59:03.395206",
+      "url": "https://openlibrary.org"
+    },
+    {
+      "title": "",
+      "author": "/people/anypaintbynumber",
       "kind": "update",
-      "timestamp": "2026-04-25T07:00:00.046874",
+      "timestamp": "2026-04-26T06:59:03.031373",
       "url": "https://openlibrary.org"
     },
     {
-      "title": "import new book",
-      "author": "/people/horncBot",
-      "kind": "add-book",
-      "timestamp": "2026-04-25T06:59:59.997489",
+      "title": "Created new account.",
+      "author": "/people/go88_s_eu_com",
+      "kind": "new-account",
+      "timestamp": "2026-04-26T06:58:52.825819",
       "url": "https://openlibrary.org"
     },
     {
-      "title": "import existing book",
-      "author": "/people/horncBot",
-      "kind": "edit-book",
-      "timestamp": "2026-04-25T06:59:58.409598",
+      "title": "Created new account.",
+      "author": "/people/anypaintbynumber",
+      "kind": "new-account",
+      "timestamp": "2026-04-26T06:58:37.546100",
       "url": "https://openlibrary.org"
     },
     {
-      "title": "import existing book",
-      "author": "/people/horncBot",
-      "kind": "edit-book",
-      "timestamp": "2026-04-25T06:59:58.148391",
+      "title": "Created new account.",
+      "author": "/people/jesindhasri_t_bsc_cyber_security",
+      "kind": "new-account",
+      "timestamp": "2026-04-26T06:58:24.968821",
       "url": "https://openlibrary.org"
     },
     {
-      "title": "set source_records based on initial machine_comment",
-      "author": "/people/horncBot",
-      "kind": "update",
-      "timestamp": "2026-04-25T06:59:57.500468",
+      "title": "Created new account.",
+      "author": "/people/ahesanur_rahaman",
+      "kind": "new-account",
+      "timestamp": "2026-04-26T06:58:23.470413",
       "url": "https://openlibrary.org"
     },
     {
-      "title": "set source_records based on initial machine_comment",
-      "author": "/people/horncBot",
-      "kind": "update",
-      "timestamp": "2026-04-25T06:59:55.072111",
+      "title": "Created new account.",
+      "author": "/people/alwin_prince_a",
+      "kind": "new-account",
+      "timestamp": "2026-04-26T06:57:43.859441",
       "url": "https://openlibrary.org"
     },
     {
-      "title": "import existing book",
-      "author": "/people/horncBot",
-      "kind": "edit-book",
-      "timestamp": "2026-04-25T06:59:54.270033",
-      "url": "https://openlibrary.org"
-    },
-    {
-      "title": "import existing book",
-      "author": "/people/horncBot",
-      "kind": "edit-book",
-      "timestamp": "2026-04-25T06:59:53.322955",
-      "url": "https://openlibrary.org"
-    },
-    {
-      "title": "import existing book",
-      "author": "/people/horncBot",
-      "kind": "edit-book",
-      "timestamp": "2026-04-25T06:59:53.030338",
-      "url": "https://openlibrary.org"
-    },
-    {
-      "title": "set source_records based on initial machine_comment",
-      "author": "/people/horncBot",
-      "kind": "update",
-      "timestamp": "2026-04-25T06:59:52.617162",
+      "title": "Created new account.",
+      "author": "/people/keenanreesor",
+      "kind": "new-account",
+      "timestamp": "2026-04-26T06:57:43.069925",
       "url": "https://openlibrary.org"
     }
   ]

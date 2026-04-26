@@ -1,7 +1,7 @@
 {
   "channel": "nasa-apod",
   "event": "apod_update",
-  "ts": "2026-04-25T05:45:54.536Z",
+  "ts": "2026-04-26T00:05:00.867Z",
   "source": "NASA APOD",
   "payload": {
     "date": "2026-04-25",

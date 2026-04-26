@@ -1,98 +1,98 @@
 {
   "channel": "hacker-news",
   "event": "hn_update",
-  "ts": "2026-04-25T07:15:00.629Z",
+  "ts": "2026-04-26T07:15:01.036Z",
   "source": "HN Algolia /search",
   "payload": [
     {
       "rank": 1,
-      "title": "DeepSeek v4",
-      "url": "https://api-docs.deepseek.com/news/news260424",
-      "score": 1878,
-      "comments": 1463,
-      "author": "impact_sy",
-      "age_hours": 28
+      "title": "New 10 GbE USB adapters are cooler, smaller, cheaper",
+      "url": "https://www.jeffgeerling.com/blog/2026/new-10-gbe-usb-adapters-cooler-smaller-cheaper/",
+      "score": 574,
+      "comments": 340,
+      "author": "calcifer",
+      "age_hours": 25
     },
     {
       "rank": 2,
-      "title": "Google plans to invest up to $40B in Anthropic",
-      "url": "https://www.bloomberg.com/news/articles/2026-04-24/google-plans-to-invest-up-to-40-billion-in-anthropic",
-      "score": 520,
-      "comments": 507,
-      "author": "elffjs",
-      "age_hours": 15
+      "title": "1-Bit Hokusai's \"The Great Wave\" (2023)",
+      "url": "https://www.hypertalking.com/2023/05/08/1-bit-pixel-art-of-hokusais-the-great-wave-off-kanagawa/",
+      "score": 565,
+      "comments": 89,
+      "author": "stephen-hill",
+      "age_hours": 89
     },
     {
       "rank": 3,
-      "title": "Sabotaging projects by overthinking, scope creep, and structural diffing",
-      "url": "https://kevinlynagh.com/newsletter/2026_04_overthinking/",
-      "score": 409,
-      "comments": 105,
-      "author": "alcazar",
-      "age_hours": 17
+      "title": "The Free Universal Construction Kit",
+      "url": "https://fffff.at/free-universal-construction-kit/",
+      "score": 304,
+      "comments": 64,
+      "author": "robinhouston",
+      "age_hours": 96
     },
     {
       "rank": 4,
-      "title": "MacBook Neo and how the iPad should be",
-      "url": "https://craigmod.com/essays/ipad_neo/",
-      "score": 253,
-      "comments": 140,
-      "author": "jen729w",
-      "age_hours": 51
+      "title": "Amateur armed with ChatGPT solves an Erdős problem",
+      "url": "https://www.scientificamerican.com/article/amateur-armed-with-chatgpt-vibe-maths-a-60-year-old-problem/",
+      "score": 295,
+      "comments": 184,
+      "author": "pr337h4m",
+      "age_hours": 14
     },
     {
       "rank": 5,
-      "title": "My audio interface has SSH enabled by default",
-      "url": "https://hhh.hn/rodecaster-duo-fw/",
-      "score": 220,
-      "comments": 72,
-      "author": "hhh",
-      "age_hours": 12
+      "title": "USB Cheat Sheet (2022)",
+      "url": "https://fabiensanglard.net/usbcheat/index.html",
+      "score": 264,
+      "comments": 55,
+      "author": "gwerbret",
+      "age_hours": 9
     },
     {
       "rank": 6,
-      "title": "There Will Be a Scientific Theory of Deep Learning",
-      "url": "https://arxiv.org/abs/2604.21691",
-      "score": 204,
-      "comments": 79,
-      "author": "jamie-simon",
-      "age_hours": 13
+      "title": "Using coding assistance tools to revive projects you never were going to finish",
+      "url": "https://blog.matthewbrunelle.com/its-ok-to-use-coding-assistance-tools-to-revive-the-projects-you-never-were-going-to-finish/",
+      "score": 250,
+      "comments": 145,
+      "author": "speckx",
+      "age_hours": 15
     },
     {
       "rank": 7,
-      "title": "The Classic American Diner",
-      "url": "https://blogs.loc.gov/picturethis/2026/04/the-classic-american-diner/",
-      "score": 202,
-      "comments": 122,
-      "author": "NaOH",
-      "age_hours": 12
+      "title": "Why has there been so little progress on Alzheimer's disease?",
+      "url": "https://freakonomics.com/podcast/why-has-there-been-so-little-progress-on-alzheimers-disease/",
+      "score": 194,
+      "comments": 99,
+      "author": "chiefalchemist",
+      "age_hours": 7
     },
     {
       "rank": 8,
-      "title": "Firefox Has Integrated Brave's Adblock Engine",
-      "url": "https://itsfoss.com/news/firefox-ships-brave-adblock-engine/",
-      "score": 166,
-      "comments": 72,
-      "author": "nreece",
-      "age_hours": 5
+      "title": "Tell HN: An app is silently installing itself on my iPhone every day",
+      "url": "https://news.ycombinator.com/item?id=47906253",
+      "score": 194,
+      "comments": 90,
+      "author": "_-x-_",
+      "age_hours": 6
     },
     {
       "rank": 9,
-      "title": "Email could have been X.400 times better",
-      "url": "https://buttondown.com/blog/x400-vs-smtp-email",
-      "score": 163,
-      "comments": 148,
-      "author": "maguay",
-      "age_hours": 47
+      "title": "OpenAI Privacy Filter",
+      "url": "https://openai.com/index/introducing-openai-privacy-filter/",
+      "score": 189,
+      "comments": 32,
+      "author": "tanelpoder",
+      "age_hours": 79
     },
     {
       "rank": 10,
-      "title": "Iliad fragment found in Roman-era mummy",
-      "url": "https://www.thehistoryblog.com/archives/75877",
-      "score": 159,
-      "comments": 46,
-      "author": "wise_blood",
-      "age_hours": 65
+      "title": "Martin Galway's music source files from 1980's Commodore 64 games",
+      "url": "https://github.com/MartinGalway/C64_music",
+      "score": 172,
+      "comments": 25,
+      "author": "ingve",
+      "age_hours": 20
     }
   ]
 }

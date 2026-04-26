@@ -1,28 +1,28 @@
 {
   "channel": "this-day-history",
   "event": "history_update",
-  "ts": "2026-04-25T05:45:58.867Z",
+  "ts": "2026-04-26T00:05:00.791Z",
   "source": "history.muffinlabs.com",
   "payload": [
     {
-      "year": "404 BC",
-      "event": "Admiral Lysander and King Pausanias of Sparta blockade Athens and bring the Peloponnesian War to a successful conclusion."
+      "year": "1336",
+      "event": "Francesco Petrarca (Petrarch) ascends Mont Ventoux."
     },
     {
-      "year": "775",
-      "event": "The Battle of Bagrevand puts an end to an Armenian rebellion against the Abbasid Caliphate. Muslim control over the South Caucasus is solidified and its Islamization begins, while several major Armenian nakharar families lose power and their remnants flee to the Byzantine Empire."
+      "year": "1478",
+      "event": "The Pazzi family attack on Lorenzo de' Medici in order to displace the ruling Medici family kills his brother Giuliano during High Mass in Florence Cathedral."
     },
     {
-      "year": "799",
-      "event": "After mistreatment and disfigurement by the citizens of Rome, Pope Leo III flees to the Frankish court of king Charlemagne at Paderborn for protection."
-    },
-    {
-      "year": "1134",
-      "event": "The name Zagreb was mentioned for the first time in the Felician Charter relating to the establishment of the Zagreb Bishopric around 1094."
+      "year": "1564",
+      "event": "Playwright William Shakespeare is baptized in Stratford-upon-Avon, Warwickshire, England (date of birth is unknown)."
     },
     {
       "year": "1607",
-      "event": "Eighty Years' War: The Dutch fleet destroys the anchored Spanish fleet at Gibraltar."
+      "event": "The Virginia Company colonists make landfall at Cape Henry."
+    },
+    {
+      "year": "1721",
+      "event": "A massive earthquake devastates the Iranian city of Tabriz."
     }
   ]
 }

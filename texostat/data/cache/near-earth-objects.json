@@ -1,7 +1,7 @@
 {
   "channel": "near-earth-objects",
   "event": "neo_update",
-  "ts": "2026-04-25T05:45:59.456Z",
+  "ts": "2026-04-26T00:05:01.241Z",
   "source": "NASA NeoWs",
   "payload": [
     {
@@ -73,8 +73,8 @@
       "estimated_diameter_m": 128.836814636,
       "is_potentially_hazardous": false,
       "close_approach_date": "2026-05-02",
-      "miss_distance_km": 17972926.231689464,
-      "relative_velocity_kmh": 39269.8747707181
+      "miss_distance_km": 17972956.465418994,
+      "relative_velocity_kmh": 39269.9266039728
     },
     {
       "name": "(2026 FZ3)",
