@@ -1,128 +1,128 @@
 {
   "channel": "pypi-new",
   "event": "pypi_update",
-  "ts": "2026-04-26T07:00:00.433Z",
+  "ts": "2026-04-27T05:00:00.502Z",
   "source": "PyPI RSS",
   "payload": [
     {
-      "name": "pymuvera",
+      "name": "taquant",
       "version": "added",
-      "description": "Fixed Dimensional Encodings for multi-vector retrieval (MUVERA) — Python port of Google's graph-mining implementation",
+      "description": "High-performance technical indicator library",
       "author": null,
-      "published_at": "Sun, 26 Apr 2026 06:28:11 GMT",
-      "url": "https://pypi.org/project/pymuvera/"
+      "published_at": "Mon, 27 Apr 2026 04:28:43 GMT",
+      "url": "https://pypi.org/project/taquant/"
     },
     {
-      "name": "ghafi",
+      "name": "mohrcircleplotter",
       "version": "added",
-      "description": "ghafi — GitHub Agent First Interface; an AgentCulture manager.",
+      "description": "Python library to plot Mohr's circle for visualization and analysis",
       "author": null,
-      "published_at": "Sun, 26 Apr 2026 06:25:17 GMT",
-      "url": "https://pypi.org/project/ghafi/"
+      "published_at": "Mon, 27 Apr 2026 04:23:46 GMT",
+      "url": "https://pypi.org/project/mohrcircleplotter/"
     },
     {
-      "name": "druid-to-pinot-migrator",
+      "name": "parquetize",
       "version": "added",
-      "description": "Migrate Apache Druid ingestion specs to Apache Pinot artifacts.",
+      "description": "Apache Parquet Home Lib",
+      "author": "asinerum.com@gmail.com",
+      "published_at": "Mon, 27 Apr 2026 04:21:58 GMT",
+      "url": "https://pypi.org/project/parquetize/"
+    },
+    {
+      "name": "tenor-tui",
+      "version": "added",
+      "description": "A terminal UI for browsing stock options chains",
+      "author": "jayrav13@gmail.com",
+      "published_at": "Mon, 27 Apr 2026 04:18:24 GMT",
+      "url": "https://pypi.org/project/tenor-tui/"
+    },
+    {
+      "name": "zmag",
+      "version": "added",
+      "description": "Add your description here",
+      "author": "23062270+hlop3z@users.noreply.github.com",
+      "published_at": "Mon, 27 Apr 2026 04:12:58 GMT",
+      "url": "https://pypi.org/project/zmag/"
+    },
+    {
+      "name": "ledblast",
+      "version": "added",
+      "description": "LED BLASTER — terminal colour-shooter game",
       "author": null,
-      "published_at": "Sun, 26 Apr 2026 06:21:30 GMT",
-      "url": "https://pypi.org/project/druid-to-pinot-migrator/"
+      "published_at": "Mon, 27 Apr 2026 04:08:38 GMT",
+      "url": "https://pypi.org/project/ledblast/"
     },
     {
-      "name": "unitygraph",
+      "name": "framekit-cli",
       "version": "added",
-      "description": "Autonomous Unity developer system for Claude Code -- knowledge graph, context injection, and behavior model.",
+      "description": "Headless-first media workflow toolkit",
       "author": null,
-      "published_at": "Sun, 26 Apr 2026 06:16:46 GMT",
-      "url": "https://pypi.org/project/unitygraph/"
+      "published_at": "Mon, 27 Apr 2026 04:03:16 GMT",
+      "url": "https://pypi.org/project/framekit-cli/"
     },
     {
-      "name": "sheltron",
+      "name": "gmail-manager",
       "version": "added",
-      "description": "Sidecar safety and security kernel for local agent systems",
+      "description": "Local-first Gmail bulk manager: real RFC 8058 unsubscribe sweeps, mass delete, archive/restore/block, subscription registry. CLI + web GUI.",
+      "author": "killianmiller6@gmail.com",
+      "published_at": "Mon, 27 Apr 2026 04:02:51 GMT",
+      "url": "https://pypi.org/project/gmail-manager/"
+    },
+    {
+      "name": "chain-receipt-sdk",
+      "version": "added",
+      "description": "Chain-Receipt SDK — emit, verify, replay, and chain Receipts (v1.0.0) from LangChain runnables, agent loops, or any Python callable. Methodology dependency for the Calibrated Chain-Determinism paper.",
+      "author": "marshall.miller3@outlook.com",
+      "published_at": "Mon, 27 Apr 2026 04:00:38 GMT",
+      "url": "https://pypi.org/project/chain-receipt-sdk/"
+    },
+    {
+      "name": "uerl",
+      "version": "added",
+      "description": "Modular RL infrastructure platform for Unreal Engine 5 environments",
+      "author": "garyguo2004@gmail.com, chenkevin2010@gmail.com",
+      "published_at": "Mon, 27 Apr 2026 03:59:52 GMT",
+      "url": "https://pypi.org/project/uerl/"
+    },
+    {
+      "name": "my-java-cli",
+      "version": "added",
+      "description": "None",
       "author": null,
-      "published_at": "Sun, 26 Apr 2026 06:13:28 GMT",
-      "url": "https://pypi.org/project/sheltron/"
+      "published_at": "Mon, 27 Apr 2026 03:53:25 GMT",
+      "url": "https://pypi.org/project/my-java-cli/"
     },
     {
-      "name": "cosmolkit",
+      "name": "torch-dataloader-utils",
       "version": "added",
-      "description": "Python bindings for COSMolKit",
+      "description": "Lightweight PyTorch DataLoader for structured data on cloud object storage",
       "author": null,
-      "published_at": "Sun, 26 Apr 2026 06:12:35 GMT",
-      "url": "https://pypi.org/project/cosmolkit/"
+      "published_at": "Mon, 27 Apr 2026 03:52:10 GMT",
+      "url": "https://pypi.org/project/torch-dataloader-utils/"
     },
     {
-      "name": "secretsguardian",
+      "name": "chain-receipt-core",
       "version": "added",
-      "description": "A secure drop-in replacement for python-decouple with startup validation",
-      "author": null,
-      "published_at": "Sun, 26 Apr 2026 06:06:40 GMT",
-      "url": "https://pypi.org/project/secretsguardian/"
+      "description": "Reference implementation of the Chain-Receipt v1.0.0 spec — canonical JSON, SHA-256 receipt hash, Ed25519 signing, chain integrity, replay-attestation primitives.",
+      "author": "marshall.miller3@outlook.com",
+      "published_at": "Mon, 27 Apr 2026 03:50:46 GMT",
+      "url": "https://pypi.org/project/chain-receipt-core/"
     },
     {
-      "name": "scruby-fts",
+      "name": "scitex-dsp",
       "version": "added",
-      "description": "Plugin for Scruby - Full-text search with Manticore Search.",
-      "author": "kebasyaty@gmail.com",
-      "published_at": "Sun, 26 Apr 2026 06:05:21 GMT",
-      "url": "https://pypi.org/project/scruby-fts/"
+      "description": "Digital signal processing (PAC, Hilbert, Wavelet, filters, demo signals, …) — standalone module from the SciTeX ecosystem",
+      "author": "ywatanabe@scitex.ai",
+      "published_at": "Mon, 27 Apr 2026 03:49:54 GMT",
+      "url": "https://pypi.org/project/scitex-dsp/"
     },
     {
-      "name": "Emilve",
+      "name": "model-metadata-central",
       "version": "added",
-      "description": "A library to hack Python syntax: Case Sensitivity, Braces, and Auto-Installation.",
-      "author": null,
-      "published_at": "Sun, 26 Apr 2026 05:52:13 GMT",
-      "url": "https://pypi.org/project/emilve/"
-    },
-    {
-      "name": "pyhaul",
-      "version": "added",
-      "description": "Resumable, cursor-based, CDN-safe HTTP downloads for Python",
-      "author": null,
-      "published_at": "Sun, 26 Apr 2026 05:48:57 GMT",
-      "url": "https://pypi.org/project/pyhaul/"
-    },
-    {
-      "name": "rlaif-mcp",
-      "version": "added",
-      "description": "MCP server exposing a rate-limited PiShock shock tool.",
-      "author": "a9lim@protonmail.com",
-      "published_at": "Sun, 26 Apr 2026 05:46:47 GMT",
-      "url": "https://pypi.org/project/rlaif-mcp/"
-    },
-    {
-      "name": "steward-cli",
-      "version": "added",
-      "description": "Steward — aligns and maintains resident agents across Culture projects.",
-      "author": null,
-      "published_at": "Sun, 26 Apr 2026 05:33:40 GMT",
-      "url": "https://pypi.org/project/steward-cli/"
-    },
-    {
-      "name": "mangadex-exporter",
-      "version": "added",
-      "description": "Export your MangaDex library to MyAnimeList and AniList — with scores, statuses, and chapter progress",
-      "author": "mail@spidey.in",
-      "published_at": "Sun, 26 Apr 2026 05:33:39 GMT",
-      "url": "https://pypi.org/project/mangadex-exporter/"
-    },
-    {
-      "name": "piki-cli",
-      "version": "added",
-      "description": "Team wiki context hub for coding agents",
-      "author": null,
-      "published_at": "Sun, 26 Apr 2026 05:30:23 GMT",
-      "url": "https://pypi.org/project/piki-cli/"
-    },
-    {
-      "name": "pm5190-mcp",
-      "version": "added",
-      "description": "MCP server for controlling the Philips PM5190 LF synthesizer via AR488 serial-to-GPIB",
-      "author": null,
-      "published_at": "Sun, 26 Apr 2026 05:28:50 GMT",
-      "url": "https://pypi.org/project/pm5190-mcp/"
+      "description": "Typed registry of LLM model metadata for Python — context windows, pricing, provider routing.",
+      "author": "era@lakera.ai",
+      "published_at": "Mon, 27 Apr 2026 03:46:58 GMT",
+      "url": "https://pypi.org/project/model-metadata-central/"
     }
   ]
 }

@@ -1,0 +1,36 @@
+[
+  {
+    "user_id": "ellipsemaster",
+    "handle": "ellipsemaster@texflow.work",
+    "world": [
+      "iss-location",
+      "crypto-btc"
+    ],
+    "circle": []
+  },
+  {
+    "user_id": "240page",
+    "handle": "240page@texflow.work",
+    "world": [],
+    "circle": []
+  },
+  {
+    "user_id": "banz45",
+    "handle": "banz45@texflow.work",
+    "world": [
+      "crypto-btc",
+      "iss-location"
+    ],
+    "circle": [
+      "ell_ch_c5de9ff161b9"
+    ]
+  },
+  {
+    "user_id": "tex_master3147",
+    "handle": "tex_master3147@texflow.work",
+    "world": [],
+    "circle": [
+      "ell_ch_1e6c6f6c5b56"
+    ]
+  }
+]

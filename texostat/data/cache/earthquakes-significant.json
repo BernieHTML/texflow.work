@@ -1,11 +1,66 @@
 {
   "channel": "earthquakes-significant",
   "event": "earthquake_update",
-  "ts": "2026-04-26T07:25:01.113Z",
+  "ts": "2026-04-27T05:10:00.658Z",
   "source": "USGS Earthquake Hazards Program",
   "payload": {
-    "count": 16,
+    "count": 6,
     "events": [
+      {
+        "id": "us6000st1m",
+        "magnitude": 6.1,
+        "place": "18 km W of Sarabetsu, Japan",
+        "depth_km": 81,
+        "lat": 42.6311,
+        "lon": 142.9615,
+        "ts": "2026-04-26T20:23:55.561Z",
+        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us6000st1m",
+        "felt_reports": 14
+      },
+      {
+        "id": "us6000st16",
+        "magnitude": 4.5,
+        "place": "111 km WNW of Türkmenbaşy, Turkmenistan",
+        "depth_km": 10,
+        "lat": 40.311,
+        "lon": 51.7016,
+        "ts": "2026-04-26T17:09:17.927Z",
+        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us6000st16",
+        "felt_reports": null
+      },
+      {
+        "id": "us6000st11",
+        "magnitude": 5,
+        "place": "77 km ENE of Miyako, Japan",
+        "depth_km": 35,
+        "lat": 39.9892,
+        "lon": 142.7328,
+        "ts": "2026-04-26T16:57:22.275Z",
+        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us6000st11",
+        "felt_reports": null
+      },
+      {
+        "id": "us6000st08",
+        "magnitude": 4.7,
+        "place": "218 km WNW of Severo-Kuril’sk, Russia",
+        "depth_km": 358.243,
+        "lat": 51.4865,
+        "lon": 153.283,
+        "ts": "2026-04-26T13:23:02.103Z",
+        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us6000st08",
+        "felt_reports": null
+      },
+      {
+        "id": "us6000sszu",
+        "magnitude": 4.6,
+        "place": "31 km E of Parapat, Indonesia",
+        "depth_km": 183.434,
+        "lat": 2.623,
+        "lon": 99.2195,
+        "ts": "2026-04-26T11:52:25.631Z",
+        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us6000sszu",
+        "felt_reports": null
+      },
       {
         "id": "us6000ssyh",
         "magnitude": 4.7,
@@ -16,171 +71,6 @@
         "ts": "2026-04-26T06:43:53.060Z",
         "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us6000ssyh",
         "felt_reports": null
-      },
-      {
-        "id": "us6000ssxr",
-        "magnitude": 4.6,
-        "place": "78 km SE of Akutan, Alaska",
-        "depth_km": 43.38,
-        "lat": 53.7119,
-        "lon": -164.8126,
-        "ts": "2026-04-26T04:26:59.156Z",
-        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us6000ssxr",
-        "felt_reports": 1
-      },
-      {
-        "id": "us6000ssxt",
-        "magnitude": 5.9,
-        "place": "168 km SE of Khovd, Mongolia",
-        "depth_km": 10,
-        "lat": 46.7887,
-        "lon": 92.9681,
-        "ts": "2026-04-26T04:23:24.102Z",
-        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us6000ssxt",
-        "felt_reports": 1
-      },
-      {
-        "id": "us6000ssxk",
-        "magnitude": 4.5,
-        "place": "227 km ESE of Attu Station, Alaska",
-        "depth_km": 10,
-        "lat": 52.2084,
-        "lon": 176.3712,
-        "ts": "2026-04-26T03:28:29.064Z",
-        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us6000ssxk",
-        "felt_reports": null
-      },
-      {
-        "id": "us6000sswn",
-        "magnitude": 4.9,
-        "place": "Kermadec Islands, New Zealand",
-        "depth_km": 73.664,
-        "lat": -30.2935,
-        "lon": -177.8716,
-        "ts": "2026-04-25T23:35:19.847Z",
-        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us6000sswn",
-        "felt_reports": null
-      },
-      {
-        "id": "us6000sswe",
-        "magnitude": 4.7,
-        "place": "177 km S of Pagar Alam, Indonesia",
-        "depth_km": 35,
-        "lat": -5.633,
-        "lon": 103.2816,
-        "ts": "2026-04-25T23:00:58.746Z",
-        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us6000sswe",
-        "felt_reports": null
-      },
-      {
-        "id": "us6000ssvu",
-        "magnitude": 4.8,
-        "place": "108 km ENE of Miyako, Japan",
-        "depth_km": 35,
-        "lat": 39.8948,
-        "lon": 143.1612,
-        "ts": "2026-04-25T20:41:32.778Z",
-        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us6000ssvu",
-        "felt_reports": null
-      },
-      {
-        "id": "us6000ssvq",
-        "magnitude": 5,
-        "place": "82 km SSW of Paracas, Peru",
-        "depth_km": 10,
-        "lat": -14.5752,
-        "lon": -76.4954,
-        "ts": "2026-04-25T20:14:39.279Z",
-        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us6000ssvq",
-        "felt_reports": 2
-      },
-      {
-        "id": "us6000ssve",
-        "magnitude": 4.9,
-        "place": "14 km ENE of Kentrí, Greece",
-        "depth_km": 10,
-        "lat": 35.0771,
-        "lon": 25.9054,
-        "ts": "2026-04-25T19:49:58.244Z",
-        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us6000ssve",
-        "felt_reports": 2
-      },
-      {
-        "id": "us6000ssuz",
-        "magnitude": 4.6,
-        "place": "165 km SE of Bitung, Indonesia",
-        "depth_km": 27.288,
-        "lat": 0.2021,
-        "lon": 125.9627,
-        "ts": "2026-04-25T17:40:24.367Z",
-        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us6000ssuz",
-        "felt_reports": null
-      },
-      {
-        "id": "us6000ssu2",
-        "magnitude": 4.5,
-        "place": "156 km E of Petropavlovsk-Kamchatsky, Russia",
-        "depth_km": 10,
-        "lat": 52.9203,
-        "lon": 160.9454,
-        "ts": "2026-04-25T13:22:05.912Z",
-        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us6000ssu2",
-        "felt_reports": null
-      },
-      {
-        "id": "us6000sst4",
-        "magnitude": 5.2,
-        "place": "34 km SE of Vilyuchinsk, Russia",
-        "depth_km": 87.83,
-        "lat": 52.6755,
-        "lon": 158.6924,
-        "ts": "2026-04-25T10:20:21.431Z",
-        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us6000sst4",
-        "felt_reports": 1
-      },
-      {
-        "id": "us6000sst2",
-        "magnitude": 4.6,
-        "place": "22 km WSW of Tournavista, Peru",
-        "depth_km": 136.967,
-        "lat": -8.9734,
-        "lon": -74.9018,
-        "ts": "2026-04-25T09:53:40.539Z",
-        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us6000sst2",
-        "felt_reports": null
-      },
-      {
-        "id": "us6000sssz",
-        "magnitude": 4.7,
-        "place": "35 km NW of Teeli, Russia",
-        "depth_km": 10,
-        "lat": 51.2238,
-        "lon": 89.8293,
-        "ts": "2026-04-25T09:40:38.381Z",
-        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us6000sssz",
-        "felt_reports": 1
-      },
-      {
-        "id": "us6000ssss",
-        "magnitude": 4.6,
-        "place": "250 km WNW of Tual, Indonesia",
-        "depth_km": 130.592,
-        "lat": -5.0454,
-        "lon": 130.5676,
-        "ts": "2026-04-25T09:07:07.123Z",
-        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us6000ssss",
-        "felt_reports": null
-      },
-      {
-        "id": "us6000sssg",
-        "magnitude": 5.4,
-        "place": "83 km SE of Akutan, Alaska",
-        "depth_km": 35,
-        "lat": 53.5884,
-        "lon": -164.9144,
-        "ts": "2026-04-25T08:05:56.204Z",
-        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us6000sssg",
-        "felt_reports": 11
       }
     ]
   }

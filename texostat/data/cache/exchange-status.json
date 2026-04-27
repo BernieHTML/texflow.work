@@ -1,14 +1,14 @@
 {
   "channel": "exchange-status",
   "event": "exchange_update",
-  "ts": "2026-04-26T07:15:00.763Z",
+  "ts": "2026-04-27T05:00:00.452Z",
   "source": "CoinGecko /exchanges",
   "payload": [
     {
       "id": "binance",
       "name": "Binance",
       "trust_score": 10,
-      "volume_24h_btc": 50503.53982403036,
+      "volume_24h_btc": 73013.10965609594,
       "country": "Cayman Islands",
       "year_established": 2017,
       "has_trading_incentive": false
@@ -17,25 +17,16 @@
       "id": "bybit_spot",
       "name": "Bybit",
       "trust_score": 10,
-      "volume_24h_btc": 14175.24913386583,
+      "volume_24h_btc": 24268.48715298398,
       "country": "British Virgin Islands",
       "year_established": 2018,
-      "has_trading_incentive": false
-    },
-    {
-      "id": "okex",
-      "name": "OKX",
-      "trust_score": 10,
-      "volume_24h_btc": 9368.407509166806,
-      "country": "Seychelles",
-      "year_established": 2017,
       "has_trading_incentive": false
     },
     {
       "id": "gate",
       "name": "Gate",
       "trust_score": 10,
-      "volume_24h_btc": 9183.148643326414,
+      "volume_24h_btc": 14467.023273946648,
       "country": "Panama",
       "year_established": 2013,
       "has_trading_incentive": false
@@ -44,16 +35,25 @@
       "id": "gdax",
       "name": "Coinbase Exchange",
       "trust_score": 10,
-      "volume_24h_btc": 8759.354523586515,
+      "volume_24h_btc": 13992.71015435106,
       "country": "United States",
       "year_established": 2012,
+      "has_trading_incentive": false
+    },
+    {
+      "id": "okex",
+      "name": "OKX",
+      "trust_score": 10,
+      "volume_24h_btc": 12705.157870166337,
+      "country": "Seychelles",
+      "year_established": 2017,
       "has_trading_incentive": false
     },
     {
       "id": "mxc",
       "name": "MEXC",
       "trust_score": 10,
-      "volume_24h_btc": 7435.155025892041,
+      "volume_24h_btc": 10007.761569096743,
       "country": "Seychelles",
       "year_established": 2018,
       "has_trading_incentive": false
@@ -62,7 +62,7 @@
       "id": "bitget",
       "name": "Bitget",
       "trust_score": 10,
-      "volume_24h_btc": 5971.548238885632,
+      "volume_24h_btc": 8531.657616228118,
       "country": "Seychelles",
       "year_established": 2018,
       "has_trading_incentive": false
@@ -71,7 +71,7 @@
       "id": "kraken",
       "name": "Kraken",
       "trust_score": 10,
-      "volume_24h_btc": 4330.093282424613,
+      "volume_24h_btc": 6003.094728066027,
       "country": "United States",
       "year_established": 2011,
       "has_trading_incentive": false
@@ -80,7 +80,7 @@
       "id": "kucoin",
       "name": "KuCoin",
       "trust_score": 9,
-      "volume_24h_btc": 12011.15755953956,
+      "volume_24h_btc": 17407.982837455336,
       "country": "Seychelles",
       "year_established": 2017,
       "has_trading_incentive": false
@@ -89,7 +89,7 @@
       "id": "huobi",
       "name": "HTX",
       "trust_score": 9,
-      "volume_24h_btc": 11572.23465458211,
+      "volume_24h_btc": 16166.456799078844,
       "country": "Seychelles",
       "year_established": 2013,
       "has_trading_incentive": false
@@ -98,34 +98,34 @@
       "id": "crypto_com",
       "name": "Crypto.com Exchange",
       "trust_score": 9,
-      "volume_24h_btc": 4637.084559012278,
+      "volume_24h_btc": 10678.035550794288,
       "country": "Malta",
       "year_established": 2019,
-      "has_trading_incentive": false
-    },
-    {
-      "id": "bingx",
-      "name": "BingX",
-      "trust_score": 9,
-      "volume_24h_btc": 4458.779160005064,
-      "country": "British Virgin Islands",
-      "year_established": 2018,
       "has_trading_incentive": false
     },
     {
       "id": "bullish_com",
       "name": "Bullish",
       "trust_score": 9,
-      "volume_24h_btc": 3899.030275431097,
+      "volume_24h_btc": 9443.950096745637,
       "country": "Gibraltar",
       "year_established": 2021,
+      "has_trading_incentive": false
+    },
+    {
+      "id": "bingx",
+      "name": "BingX",
+      "trust_score": 9,
+      "volume_24h_btc": 7022.8246838333,
+      "country": "British Virgin Islands",
+      "year_established": 2018,
       "has_trading_incentive": false
     },
     {
       "id": "bitfinex",
       "name": "Bitfinex",
       "trust_score": 9,
-      "volume_24h_btc": 1636.0809593744987,
+      "volume_24h_btc": 3191.4179604606575,
       "country": "British Virgin Islands",
       "year_established": 2012,
       "has_trading_incentive": false
@@ -134,7 +134,7 @@
       "id": "bitstamp",
       "name": "Bitstamp by Robinhood",
       "trust_score": 9,
-      "volume_24h_btc": 971.2307092568308,
+      "volume_24h_btc": 1875.802647626102,
       "country": "Luxembourg",
       "year_established": 2011,
       "has_trading_incentive": false

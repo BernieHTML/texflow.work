@@ -615,6 +615,14 @@ import(pathToFileURL(join(__dirname, 'texostat', 'server.js')).href).then(({ def
   console.error('[TexoStat] Failed to mount /texostat:', e.message);
 });
 
+// --- Ellipse: unified signal inbox (TEX auth + TexoStat world cache) ---
+import(pathToFileURL(join(__dirname, 'ellipse', 'server.js')).href).then(({ default: ellipseApp }) => {
+  app.use('/ellipse', ellipseApp);
+  console.log('[Ellipse] Mounted at /ellipse');
+}).catch((e) => {
+  console.error('[Ellipse] Failed to mount /ellipse:', e.message);
+});
+
 // --- Static: public, then root assets ---
 app.use(express.static(join(__dirname, 'public')));
 app.get('/texflowlogo.png', (req, res) => res.sendFile(join(__dirname, 'texflowlogo.png')));

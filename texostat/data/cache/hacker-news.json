@@ -1,98 +1,98 @@
 {
   "channel": "hacker-news",
   "event": "hn_update",
-  "ts": "2026-04-26T07:15:01.036Z",
+  "ts": "2026-04-27T05:00:00.951Z",
   "source": "HN Algolia /search",
   "payload": [
     {
       "rank": 1,
-      "title": "New 10 GbE USB adapters are cooler, smaller, cheaper",
-      "url": "https://www.jeffgeerling.com/blog/2026/new-10-gbe-usb-adapters-cooler-smaller-cheaper/",
-      "score": 574,
-      "comments": 340,
-      "author": "calcifer",
-      "age_hours": 25
+      "title": "I bought Friendster for $30k – Here's what I'm doing with it",
+      "url": "https://ca98am79.medium.com/i-bought-friendster-for-30k-heres-what-i-m-doing-with-it-d5e8ddb3991d",
+      "score": 564,
+      "comments": 310,
+      "author": "ca98am79",
+      "age_hours": 8
     },
     {
       "rank": 2,
-      "title": "1-Bit Hokusai's \"The Great Wave\" (2023)",
-      "url": "https://www.hypertalking.com/2023/05/08/1-bit-pixel-art-of-hokusais-the-great-wave-off-kanagawa/",
-      "score": 565,
-      "comments": 89,
-      "author": "stephen-hill",
-      "age_hours": 89
+      "title": "An AI agent deleted our production database. The agent's confession is below",
+      "url": "https://twitter.com/lifeof_jer/status/2048103471019434248",
+      "score": 561,
+      "comments": 705,
+      "author": "jeremyccrane",
+      "age_hours": 13
     },
     {
       "rank": 3,
-      "title": "The Free Universal Construction Kit",
-      "url": "https://fffff.at/free-universal-construction-kit/",
-      "score": 304,
-      "comments": 64,
-      "author": "robinhouston",
-      "age_hours": 96
-    },
-    {
-      "rank": 4,
-      "title": "Amateur armed with ChatGPT solves an Erdős problem",
-      "url": "https://www.scientificamerican.com/article/amateur-armed-with-chatgpt-vibe-maths-a-60-year-old-problem/",
-      "score": 295,
-      "comments": 184,
-      "author": "pr337h4m",
-      "age_hours": 14
-    },
-    {
-      "rank": 5,
-      "title": "USB Cheat Sheet (2022)",
-      "url": "https://fabiensanglard.net/usbcheat/index.html",
-      "score": 264,
-      "comments": 55,
-      "author": "gwerbret",
+      "title": "AI should elevate your thinking, not replace it",
+      "url": "https://www.koshyjohn.com/blog/ai-should-elevate-your-thinking-not-replace-it/",
+      "score": 346,
+      "comments": 272,
+      "author": "koshyjohn",
       "age_hours": 9
     },
     {
-      "rank": 6,
-      "title": "Using coding assistance tools to revive projects you never were going to finish",
-      "url": "https://blog.matthewbrunelle.com/its-ok-to-use-coding-assistance-tools-to-revive-the-projects-you-never-were-going-to-finish/",
-      "score": 250,
-      "comments": 145,
-      "author": "speckx",
+      "rank": 4,
+      "title": "Sawe becomes first athlete to run a sub-two-hour marathon in a competitive race",
+      "url": "https://www.bbc.com/sport/athletics/articles/crm1m7e0zwzo",
+      "score": 312,
+      "comments": 216,
+      "author": "berkeleyjunk",
+      "age_hours": 8
+    },
+    {
+      "rank": 5,
+      "title": "SWE-bench Verified no longer measures frontier coding capabilities",
+      "url": "https://openai.com/index/why-we-no-longer-evaluate-swe-bench-verified/",
+      "score": 270,
+      "comments": 154,
+      "author": "kmdupree",
       "age_hours": 15
     },
     {
+      "rank": 6,
+      "title": "Clay PCB Tutorial",
+      "url": "https://feministhackerspaces.cargo.site/Clay-PCB-Tutorial",
+      "score": 206,
+      "comments": 126,
+      "author": "j0r0b0",
+      "age_hours": 13
+    },
+    {
       "rank": 7,
-      "title": "Why has there been so little progress on Alzheimer's disease?",
-      "url": "https://freakonomics.com/podcast/why-has-there-been-so-little-progress-on-alzheimers-disease/",
-      "score": 194,
-      "comments": 99,
-      "author": "chiefalchemist",
-      "age_hours": 7
+      "title": "Fast16: High-precision software sabotage 5 years before Stuxnet",
+      "url": "https://www.sentinelone.com/labs/fast16-mystery-shadowbrokers-reference-reveals-high-precision-software-sabotage-5-years-before-stuxnet/",
+      "score": 196,
+      "comments": 47,
+      "author": "dd23",
+      "age_hours": 9
     },
     {
       "rank": 8,
-      "title": "Tell HN: An app is silently installing itself on my iPhone every day",
-      "url": "https://news.ycombinator.com/item?id=47906253",
-      "score": 194,
-      "comments": 90,
-      "author": "_-x-_",
-      "age_hours": 6
+      "title": "Butterflies are in decline across North America, a look at the Western Monarch",
+      "url": "https://www.smithsonianmag.com/science-nature/butterflies-are-in-dramatic-decline-across-north-america-a-close-look-at-the-western-monarch-shows-why-180988582/",
+      "score": 171,
+      "comments": 53,
+      "author": "1659447091",
+      "age_hours": 8
     },
     {
       "rank": 9,
-      "title": "OpenAI Privacy Filter",
-      "url": "https://openai.com/index/introducing-openai-privacy-filter/",
-      "score": 189,
-      "comments": 32,
-      "author": "tanelpoder",
-      "age_hours": 79
+      "title": "Self-updating screenshots",
+      "url": "https://interblah.net/self-updating-screenshots",
+      "score": 161,
+      "comments": 25,
+      "author": "bjhess",
+      "age_hours": 22
     },
     {
       "rank": 10,
-      "title": "Martin Galway's music source files from 1980's Commodore 64 games",
-      "url": "https://github.com/MartinGalway/C64_music",
-      "score": 172,
-      "comments": 25,
-      "author": "ingve",
-      "age_hours": 20
+      "title": "The Visible Zorker: Zork 1",
+      "url": "https://eblong.com/infocom/visi/zork1/",
+      "score": 119,
+      "comments": 22,
+      "author": "PLenz",
+      "age_hours": 12
     }
   ]
 }

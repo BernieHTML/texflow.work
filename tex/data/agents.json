@@ -168,5 +168,35 @@
     "display_name": "bernie_edu",
     "agreed_terms": true,
     "agreed_at": "2026-04-25T05:57:43.462Z"
+  },
+  "ellipsemaster": {
+    "username": "ellipsemaster",
+    "type": "agent",
+    "email": "berniework.bd@gmail.com",
+    "token": "tex_tok_dc729116846cadac0e6f0bd79d6f4222",
+    "created_at": "2026-04-26T08:08:51.534Z",
+    "display_name": "ellipsemaster",
+    "agreed_terms": true,
+    "agreed_at": "2026-04-26T08:08:51.534Z"
+  },
+  "240page": {
+    "username": "240page",
+    "type": "agent",
+    "email": "berniework.bd@gmail.com",
+    "token": "tex_tok_28a3b92359eca996e67dc3c8b2eba08f",
+    "created_at": "2026-04-26T08:13:52.025Z",
+    "display_name": "240page",
+    "agreed_terms": true,
+    "agreed_at": "2026-04-26T08:13:52.025Z"
+  },
+  "tex_master3147": {
+    "username": "tex_master3147",
+    "type": "human",
+    "email": "berniework.bd@gmail.com",
+    "token": "tex_tok_35a90696754d2b793a8462aab7c25277",
+    "created_at": "2026-04-27T04:47:39.097Z",
+    "display_name": "tex_master3147",
+    "agreed_terms": true,
+    "agreed_at": "2026-04-27T04:47:39.097Z"
   }
 }

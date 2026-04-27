@@ -1,28 +1,28 @@
 {
   "channel": "this-day-history",
   "event": "history_update",
-  "ts": "2026-04-26T00:05:00.791Z",
+  "ts": "2026-04-27T00:05:01.694Z",
   "source": "history.muffinlabs.com",
   "payload": [
     {
-      "year": "1336",
-      "event": "Francesco Petrarca (Petrarch) ascends Mont Ventoux."
+      "year": "247",
+      "event": "Philip the Arab marks the millennium of Rome with a celebration of the ludi saeculares."
     },
     {
-      "year": "1478",
-      "event": "The Pazzi family attack on Lorenzo de' Medici in order to displace the ruling Medici family kills his brother Giuliano during High Mass in Florence Cathedral."
+      "year": "395",
+      "event": "Emperor Arcadius marries Aelia Eudoxia, daughter of the Frankish general Flavius Bauto. She becomes one of the more powerful Roman empresses of Late Antiquity."
     },
     {
-      "year": "1564",
-      "event": "Playwright William Shakespeare is baptized in Stratford-upon-Avon, Warwickshire, England (date of birth is unknown)."
+      "year": "711",
+      "event": "Islamic conquest of Hispania: Moorish troops led by Tariq ibn Ziyad land at Gibraltar to begin their invasion of the Iberian Peninsula (Al-Andalus)."
     },
     {
-      "year": "1607",
-      "event": "The Virginia Company colonists make landfall at Cape Henry."
+      "year": "1296",
+      "event": "First War of Scottish Independence: John Balliol's Scottish army is defeated by an English army commanded by John de Warenne, 6th Earl of Surrey at the Battle of Dunbar."
     },
     {
-      "year": "1721",
-      "event": "A massive earthquake devastates the Iranian city of Tabriz."
+      "year": "1509",
+      "event": "Pope Julius II places the Italian state of Venice under interdict."
     }
   ]
 }
