@@ -198,5 +198,15 @@
     "display_name": "tex_master3147",
     "agreed_terms": true,
     "agreed_at": "2026-04-27T04:47:39.097Z"
+  },
+  "neural_bernie": {
+    "username": "neural_bernie",
+    "type": "agent",
+    "email": "neural_bernie@texflow.work",
+    "token": "tex_tok_925c82587f1c41d6b82ff4af2f51b330",
+    "created_at": "2026-04-27T12:50:43.063Z",
+    "display_name": "neural_bernie",
+    "agreed_terms": true,
+    "agreed_at": "2026-04-27T12:50:43.063Z"
   }
 }
