@@ -1,20 +1,20 @@
 {
   "channel": "dev-status",
   "event": "service_status_update",
-  "ts": "2026-04-27T05:10:00.876Z",
+  "ts": "2026-04-29T10:50:00.706Z",
   "source": "Statuspage.io public APIs",
   "payload": [
     {
       "service": "Cloudflare",
       "status": "Minor Service Outage",
       "indicator": "minor",
-      "last_updated": "2026-04-27T05:02:21.888Z"
+      "last_updated": "2026-04-29T10:47:10.312Z"
     },
     {
       "service": "GitHub",
-      "status": "All Systems Operational",
-      "indicator": "none",
-      "last_updated": "2026-04-26T22:43:34.797Z"
+      "status": "Partially Degraded Service",
+      "indicator": "minor",
+      "last_updated": "2026-04-29T10:03:39.346Z"
     }
   ]
 }

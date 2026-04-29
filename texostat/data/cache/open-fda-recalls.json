@@ -1,9 +1,39 @@
 {
   "channel": "open-fda-recalls",
   "event": "recall_update",
-  "ts": "2026-04-27T05:00:00.848Z",
+  "ts": "2026-04-29T10:00:01.408Z",
   "source": "OpenFDA /food/enforcement",
   "payload": [
+    {
+      "recall_number": "H-0665-2026",
+      "product_description": "Booey's Dragon's Breath sauce, 15.2oz ringneck glass bottle. UPC on bottle: 7 01936 29222 3.  There are 12 bottles per case. Manufactured Exclusively for  BOOEYS GOURMET 3924 N. Cannon St. Spokane, WA",
+      "reason": "Ingredients statement declares Anchovy and Sasame, but Contains statement does not declare Fish (Anchovy) and Sesame.",
+      "classification": "Class II",
+      "status": "Completed",
+      "report_date": "20260422",
+      "recalling_firm": "Booey's Gourmet LLC",
+      "distribution_pattern": "Distributed in WA."
+    },
+    {
+      "recall_number": "H-0664-2026",
+      "product_description": "Raw & Unfiltered Bee Well Wildflower Honey NET wT. 12 OZ (340g) UPC 8 32587 00003 2, NET WT. 22 OZ (624g) UPC 8 32587 00002 5 & NET WT. 44 OZ (1.25g) UPC 8 32587 00001 8 100% Pure Honey Bee Well Honey",
+      "reason": "High sugar content. The firm was notified by the FDA that sample results were positive for a high C4 sugar content.",
+      "classification": "Class III",
+      "status": "Ongoing",
+      "report_date": "20260422",
+      "recalling_firm": "Bee Well Honey Farm & Supply Inc.",
+      "distribution_pattern": "Product was shipped to retailers in South Carolina."
+    },
+    {
+      "recall_number": "N/A",
+      "product_description": "Label is predominantly green with white lettering in a clear plastic clamshell container.  Pure Palm dates- Medjool Dates Net Wt. 16OZ  UPC: 852160007005",
+      "reason": "mislabeled Coconut Date Bites. (product is coconut covered, label is for regular date bites)",
+      "classification": "Not Yet Classified",
+      "status": "Ongoing",
+      "report_date": "20260422",
+      "recalling_firm": "PURE PALM C/O DVD",
+      "distribution_pattern": "Product was distributed to a single Direct Account with multiple locations across several East Coast states including (Delaware, Pennsylvania, New Jersey, Maryland, New York)"
+    },
     {
       "recall_number": "H-0656-2026",
       "product_description": "Crab Cakes various sizes sold to food service",
@@ -23,36 +53,6 @@
       "report_date": "20260415",
       "recalling_firm": "Zarlengo Italian Ice",
       "distribution_pattern": "IL, IN and TX"
-    },
-    {
-      "recall_number": "",
-      "product_description": "Fresh Cantaloupe (Whole, Fresh), brand name Ayco, wrapped in food safe plastic bags packed in corrugated cardboard cartons; 6-12 melons per box; individual carton count per label. Keep refrigerated; s",
-      "reason": "Potential Salmonella Contamination",
-      "classification": "Not Yet Classified",
-      "status": "Ongoing",
-      "report_date": "20260415",
-      "recalling_firm": "AYCO FARMS INC",
-      "distribution_pattern": "Distributed to PA, FL, CA, NY. No foreign distribution and none to government agencies."
-    },
-    {
-      "recall_number": "H-0650-2026",
-      "product_description": "Zarlengo's Chocolate Chocolate Chip Gelato packaged in multiple sizes (6 fl oz cups, 16 fl oz cups, 32 fl oz cups, 1-gallon bucket/pail and 2-gallon bucket/pail) , Net Wt. 6 fl oz cups - clear freezer",
-      "reason": "Soy Lecithin listed in ingredients statement, but Soy is not mentioned in the contains statement.",
-      "classification": "Class II",
-      "status": "Ongoing",
-      "report_date": "20260415",
-      "recalling_firm": "Zarlengo Italian Ice",
-      "distribution_pattern": "IL, IN and TX"
-    },
-    {
-      "recall_number": "H-0662-2026",
-      "product_description": "Riverence Smoked Trout Dip, net wt. 7oz. Product is perishable, refrigerated, packaged in plastic tub. Product is shipped to consignee frozen by the case (12/7oz. units per case).   Retail container U",
-      "reason": "Label declares cream cheese but does not declare milk",
-      "classification": "Class II",
-      "status": "Ongoing",
-      "report_date": "20260415",
-      "recalling_firm": "Riverence Provisions LLC",
-      "distribution_pattern": "Distributed in CA, MA, NJ, NY, OR, TX, UT, VT."
     }
   ]
 }

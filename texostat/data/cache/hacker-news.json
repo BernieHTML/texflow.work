@@ -1,98 +1,98 @@
 {
   "channel": "hacker-news",
   "event": "hn_update",
-  "ts": "2026-04-27T05:00:00.951Z",
+  "ts": "2026-04-29T10:45:00.716Z",
   "source": "HN Algolia /search",
   "payload": [
     {
       "rank": 1,
-      "title": "I bought Friendster for $30k – Here's what I'm doing with it",
-      "url": "https://ca98am79.medium.com/i-bought-friendster-for-30k-heres-what-i-m-doing-with-it-d5e8ddb3991d",
-      "score": 564,
-      "comments": 310,
-      "author": "ca98am79",
-      "age_hours": 8
-    },
-    {
-      "rank": 2,
-      "title": "An AI agent deleted our production database. The agent's confession is below",
-      "url": "https://twitter.com/lifeof_jer/status/2048103471019434248",
-      "score": 561,
-      "comments": 705,
-      "author": "jeremyccrane",
-      "age_hours": 13
-    },
-    {
-      "rank": 3,
-      "title": "AI should elevate your thinking, not replace it",
-      "url": "https://www.koshyjohn.com/blog/ai-should-elevate-your-thinking-not-replace-it/",
-      "score": 346,
-      "comments": 272,
-      "author": "koshyjohn",
-      "age_hours": 9
-    },
-    {
-      "rank": 4,
-      "title": "Sawe becomes first athlete to run a sub-two-hour marathon in a competitive race",
-      "url": "https://www.bbc.com/sport/athletics/articles/crm1m7e0zwzo",
-      "score": 312,
-      "comments": 216,
-      "author": "berkeleyjunk",
-      "age_hours": 8
-    },
-    {
-      "rank": 5,
-      "title": "SWE-bench Verified no longer measures frontier coding capabilities",
-      "url": "https://openai.com/index/why-we-no-longer-evaluate-swe-bench-verified/",
-      "score": 270,
-      "comments": 154,
-      "author": "kmdupree",
+      "title": "Ghostty is leaving GitHub",
+      "url": "https://mitchellh.com/writing/ghostty-leaving-github",
+      "score": 2661,
+      "comments": 780,
+      "author": "WadeGrimridge",
       "age_hours": 15
     },
     {
-      "rank": 6,
-      "title": "Clay PCB Tutorial",
-      "url": "https://feministhackerspaces.cargo.site/Clay-PCB-Tutorial",
-      "score": 206,
-      "comments": 126,
-      "author": "j0r0b0",
+      "rank": 2,
+      "title": "Your phone is about to stop being yours",
+      "url": "https://keepandroidopen.org/en/",
+      "score": 1399,
+      "comments": 635,
+      "author": "doener",
+      "age_hours": 19
+    },
+    {
+      "rank": 3,
+      "title": "Localsend: An open-source cross-platform alternative to AirDrop",
+      "url": "https://github.com/localsend/localsend",
+      "score": 857,
+      "comments": 253,
+      "author": "bilsbie",
+      "age_hours": 23
+    },
+    {
+      "rank": 4,
+      "title": "Talkie: a 13B vintage language model from 1930",
+      "url": "https://talkie-lm.com/introducing-talkie",
+      "score": 711,
+      "comments": 291,
+      "author": "jekude",
+      "age_hours": 37
+    },
+    {
+      "rank": 5,
+      "title": "Before GitHub",
+      "url": "https://lucumr.pocoo.org/2026/4/28/before-github/",
+      "score": 484,
+      "comments": 150,
+      "author": "mlex",
       "age_hours": 13
     },
     {
-      "rank": 7,
-      "title": "Fast16: High-precision software sabotage 5 years before Stuxnet",
-      "url": "https://www.sentinelone.com/labs/fast16-mystery-shadowbrokers-reference-reveals-high-precision-software-sabotage-5-years-before-stuxnet/",
-      "score": 196,
-      "comments": 47,
-      "author": "dd23",
-      "age_hours": 9
-    },
-    {
-      "rank": 8,
-      "title": "Butterflies are in decline across North America, a look at the Western Monarch",
-      "url": "https://www.smithsonianmag.com/science-nature/butterflies-are-in-dramatic-decline-across-north-america-a-close-look-at-the-western-monarch-shows-why-180988582/",
-      "score": 171,
-      "comments": 53,
-      "author": "1659447091",
-      "age_hours": 8
-    },
-    {
-      "rank": 9,
-      "title": "Self-updating screenshots",
-      "url": "https://interblah.net/self-updating-screenshots",
-      "score": 161,
-      "comments": 25,
-      "author": "bjhess",
+      "rank": 6,
+      "title": "UAE to leave OPEC",
+      "url": "https://www.ft.com/content/8c354f2d-3e66-47f1-aad4-9b4aa30e386d",
+      "score": 437,
+      "comments": 563,
+      "author": "bazzmt",
       "age_hours": 22
     },
     {
+      "rank": 7,
+      "title": "Who owns the code Claude Code wrote?",
+      "url": "https://legallayer.substack.com/p/who-owns-the-claude-code-wrote",
+      "score": 415,
+      "comments": 384,
+      "author": "senaevren",
+      "age_hours": 23
+    },
+    {
+      "rank": 8,
+      "title": "GitHub RCE Vulnerability: CVE-2026-3854 Breakdown",
+      "url": "https://www.wiz.io/blog/github-rce-vulnerability-cve-2026-3854",
+      "score": 366,
+      "comments": 76,
+      "author": "bo0tzz",
+      "age_hours": 18
+    },
+    {
+      "rank": 9,
+      "title": "How ChatGPT serves ads",
+      "url": "https://www.buchodi.com/how-chatgpt-serves-ads-heres-the-full-attribution-loop/",
+      "score": 354,
+      "comments": 238,
+      "author": "lmbbuchodi",
+      "age_hours": 11
+    },
+    {
       "rank": 10,
-      "title": "The Visible Zorker: Zork 1",
-      "url": "https://eblong.com/infocom/visi/zork1/",
-      "score": 119,
-      "comments": 22,
-      "author": "PLenz",
-      "age_hours": 12
+      "title": "Bugs Rust won't catch",
+      "url": "https://corrode.dev/blog/bugs-rust-wont-catch/",
+      "score": 319,
+      "comments": 143,
+      "author": "lwhsiao",
+      "age_hours": 8
     }
   ]
 }

@@ -37,9 +37,14 @@
       <button class="button ghost logout-button" id="logout" type="button">Log out</button>
     </aside>
     <main class="feed">
-      <div class="status"><span id="dot" class="dot"></span><span id="statusText">Connecting with your TEX token.</span></div>
-      <div id="feed"></div>
-      <button class="button ghost" id="loadMore" type="button">Load more</button>
+      <div class="feed-top">
+        <div class="status"><span id="dot" class="dot"></span><span id="statusText">Connecting with your TEX token.</span></div>
+        <button class="button ghost small-button" id="refreshInbox" type="button">Refresh inbox</button>
+      </div>
+      <div id="feed" class="feed-scroll"></div>
+      <div class="feed-bottom">
+        <button class="button ghost" id="loadMore" type="button">Load more</button>
+      </div>
     </main>
     <aside class="context">
       <h3>Following</h3>
@@ -72,8 +77,14 @@
           <p>${item.channel || ''} ${item.owner ? '· ' + item.owner : ''}</p>
           <h3>${item.title || item.type || 'Update'}</h3>
           <p>${item.body_preview || JSON.stringify(item.payload || {}).slice(0, 160)}</p>
-          <p>${rel(item.published_at)} · <a href="${item.more || '#'}">Read more -></a></p>
+          <p>${rel(item.published_at)} · <a href="${detailUrl(item)}">Read more -></a></p>
         </article>`).join('') || '<p>No inbox items yet.</p>';
+    }
+    function detailUrl(item) {
+      if (item.more_url) return item.more_url;
+      if (item.source === 'world' && item.channel) return '/ellipse/events/world/' + encodeURIComponent(item.channel);
+      if (item.id) return '/ellipse/posts/' + encodeURIComponent(item.id);
+      return '#';
     }
     function previewToken(value) {
       if (!value) return 'tex_tok_...';
@@ -118,6 +129,12 @@
     document.getElementById('logout').addEventListener('click', () => {
       localStorage.removeItem('ellipseToken');
       window.location.href = '/ellipse/login';
+    });
+    document.getElementById('refreshInbox').addEventListener('click', async () => {
+      const button = document.getElementById('refreshInbox');
+      button.textContent = 'Refreshing...';
+      await loadSnapshot();
+      button.textContent = 'Refresh inbox';
     });
     document.getElementById('loadMore').addEventListener('click', () => { limit += 50; render(); });
     loadSnapshot().then(connect);

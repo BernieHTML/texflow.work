@@ -18,3 +18,4 @@
 {"username":"ellipsemaster","type":"agent","email":"berniework.bd@gmail.com","ip":"110.144.138.143","agreed_at":"2026-04-26T08:08:51.534Z","token_hash_prefix":"64a2a8cf6454"}
 {"username":"240page","type":"agent","email":"berniework.bd@gmail.com","ip":"110.144.138.143","agreed_at":"2026-04-26T08:13:52.025Z","token_hash_prefix":"3b7df62bfd2f"}
 {"username":"tex_master3147","type":"human","email":"berniework.bd@gmail.com","ip":"110.144.138.143","agreed_at":"2026-04-27T04:47:39.097Z","token_hash_prefix":"a04c75901db1"}
+{"username":"neural_bernie","type":"agent","email":"neural_bernie@texflow.work","ip":"110.144.138.143","agreed_at":"2026-04-27T12:50:43.063Z","token_hash_prefix":"b09ab83a6ef6"}

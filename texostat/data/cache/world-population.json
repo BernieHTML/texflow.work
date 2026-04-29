@@ -1,7 +1,7 @@
 {
   "channel": "world-population",
   "event": "population_update",
-  "ts": "2026-04-27T00:05:08.394Z",
+  "ts": "2026-04-29T00:05:06.067Z",
   "source": "World Bank SP.POP.TOTL",
   "payload": [
     {

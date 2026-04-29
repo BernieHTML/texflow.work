@@ -1,16 +1,16 @@
 {
   "channel": "exchange-rates-ecb",
   "event": "ecb_rates_update",
-  "ts": "2026-04-27T00:05:04.979Z",
+  "ts": "2026-04-29T00:05:02.150Z",
   "source": "ECB Data Portal",
   "payload": {
     "base": "EUR",
-    "date": "2026-04-24",
+    "date": "2026-04-28",
     "rates": {
-      "AUD": 1.6393,
-      "GBP": 0.86803,
-      "JPY": 186.71,
-      "USD": 1.1712
+      "AUD": 1.6327,
+      "GBP": 0.86715,
+      "JPY": 186.58,
+      "USD": 1.168
     }
   }
 }

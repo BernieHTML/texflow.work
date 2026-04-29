@@ -1,108 +1,108 @@
 {
   "channel": "wikipedia-trending",
   "event": "wikipedia_update",
-  "ts": "2026-04-26T10:24:50.776Z",
+  "ts": "2026-04-27T05:13:01.713Z",
   "source": "Wikimedia Pageviews API",
   "payload": [
     {
       "rank": 1,
       "article": "Main Page",
-      "views": 6963595
+      "views": 7140718
     },
     {
       "rank": 2,
       "article": "Special:Search",
-      "views": 963195
+      "views": 931673
     },
     {
       "rank": 3,
       "article": "Nahui Ollin",
-      "views": 781718
+      "views": 810725
     },
     {
       "rank": 4,
-      "article": "2026 NFL draft",
-      "views": 319724
+      "article": "Michael (2026 film)",
+      "views": 350796
     },
     {
       "rank": 5,
-      "article": "Michael (2026 film)",
-      "views": 316184
+      "article": "Michael Jackson",
+      "views": 339354
     },
     {
       "rank": 6,
       "article": "Wikipedia:Featured pictures",
-      "views": 308056
+      "views": 307585
     },
     {
       "rank": 7,
-      "article": "Michael Jackson",
-      "views": 288031
+      "article": "Jaafar Jackson",
+      "views": 245752
     },
     {
       "rank": 8,
       "article": "Apex (2026 film)",
-      "views": 228500
+      "views": 236751
     },
     {
       "rank": 9,
-      "article": "Jaafar Jackson",
-      "views": 218032
+      "article": ".xxx",
+      "views": 212053
     },
     {
       "rank": 10,
-      "article": ".xxx",
-      "views": 215975
+      "article": "Sabastian Sawe",
+      "views": 207366
     },
     {
       "rank": 11,
-      "article": "Deaths in 2026",
-      "views": 117815
+      "article": "Weijia Jiang",
+      "views": 161890
     },
     {
       "rank": 12,
-      "article": "List of highest-grossing Indian films",
-      "views": 113786
+      "article": "Attempted assassination of Donald Trump in Pennsylvania",
+      "views": 161582
     },
     {
       "rank": 13,
-      "article": "Jermaine Jackson",
-      "views": 112311
+      "article": "Diego Pavia",
+      "views": 144974
     },
     {
       "rank": 14,
-      "article": "Dhurandhar: The Revenge",
-      "views": 110684
+      "article": "2026 White House Correspondents' dinner shooting",
+      "views": 133935
     },
     {
       "rank": 15,
-      "article": "Neatsville, Kentucky",
-      "views": 109036
+      "article": "Jermaine Jackson",
+      "views": 130064
     },
     {
       "rank": 16,
-      "article": "2026 West Bengal Legislative Assembly election",
-      "views": 108152
+      "article": "Deaths in 2026",
+      "views": 124914
     },
     {
       "rank": 17,
-      "article": "Charlize Theron",
-      "views": 106429
+      "article": "List of United States presidential assassination attempts and plots",
+      "views": 121895
     },
     {
       "rank": 18,
-      "article": "Bogong High Plains",
-      "views": 106067
+      "article": "Dhurandhar: The Revenge",
+      "views": 112922
     },
     {
       "rank": 19,
-      "article": "Raghav Chadha",
-      "views": 100063
+      "article": "List of highest-grossing Indian films",
+      "views": 109668
     },
     {
       "rank": 20,
-      "article": "Limonene",
-      "views": 99656
+      "article": "Hulk Hogan",
+      "views": 108428
     }
   ]
 }

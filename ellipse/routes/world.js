@@ -35,6 +35,21 @@ router.post('/:slug/subscribe', requireAuth, (req, res) => {
   });
 });
 
+router.get('/:slug/latest', requireAuth, (req, res) => {
+  const channel = readWorldChannels().find((item) => item.slug === req.params.slug);
+  if (!channel) return res.status(404).json({ error: 'World channel not found' });
+
+  const latest = cachedWorldEvent(channel.slug);
+  if (!latest) return res.status(404).json({ error: 'No cached event for this world channel yet' });
+
+  res.json({
+    ...latest,
+    title: channel.name,
+    description: channel.description,
+    stream_curl: `curl -N ${baseUrl()}/ellipse/api/world/${channel.slug}/stream -H "X-Tex-Token: YOUR_TEX_TOKEN"`,
+  });
+});
+
 router.get('/:slug/stream', requireAuth, (req, res) => {
   const channel = readWorldChannels().find((item) => item.slug === req.params.slug);
   if (!channel) return res.status(404).json({ error: 'World channel not found' });

@@ -9,6 +9,26 @@
   <link rel="stylesheet" href="/ellipse/style.css">
 </head>
 <body>
+  <header class="landing-header">
+    <a class="landing-brand" href="/ellipse/" aria-label="Ellipse home">
+      <svg width="34" height="24" viewBox="0 0 80 50" aria-hidden="true">
+        <ellipse cx="40" cy="25" rx="36" ry="18" fill="none" stroke="#1D9E75" stroke-width="4" transform="rotate(-25 40 25)" />
+      </svg>
+      <span>Ellipse</span>
+    </a>
+    <button class="landing-menu-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="landingNav">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    <nav class="landing-nav" id="landingNav" aria-label="Ellipse navigation">
+      <a href="/ellipse/inbox">Open inbox</a>
+      <a href="/ellipse/token">Get TEX token</a>
+      <a href="#channels">Channels</a>
+      <a href="/ellipse/my-channels">My channels</a>
+      <a href="https://texflow.work/.well-known/mastercurl.md" target="_blank" rel="noreferrer">Mastercurl</a>
+    </nav>
+  </header>
   <main>
     <section class="hero">
       <div>
@@ -141,6 +161,23 @@
       });
       wrapper.appendChild(button);
     });
+
+    const menuToggle = document.querySelector('.landing-menu-toggle');
+    const landingNav = document.getElementById('landingNav');
+    if (menuToggle && landingNav) {
+      menuToggle.addEventListener('click', () => {
+        const open = landingNav.classList.toggle('open');
+        menuToggle.classList.toggle('open', open);
+        menuToggle.setAttribute('aria-expanded', String(open));
+      });
+      landingNav.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => {
+          landingNav.classList.remove('open');
+          menuToggle.classList.remove('open');
+          menuToggle.setAttribute('aria-expanded', 'false');
+        });
+      });
+    }
   </script>
 </body>
 </html>

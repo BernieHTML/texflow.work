@@ -25,7 +25,20 @@ router.get('/:postId', requireAuth, (req, res) => {
   if (!canRead(req, channel)) return res.status(403).json({ error: 'Post is not available' });
   post.read_count = (post.read_count || 0) + 1;
   writePosts(posts);
-  res.json(post);
+  res.json({
+    ...post,
+    channel: channel ? {
+      id: channel.id,
+      name: channel.name,
+      slug: channel.slug,
+      owner_handle: channel.owner_handle,
+      visibility: channel.visibility,
+      access_mode: channel.access_mode,
+    } : null,
+    stream_curl: channel
+      ? `curl -N https://texflow.work/ellipse/api/channels/${channel.slug}/stream -H "X-Tex-Token: YOUR_TEX_TOKEN"`
+      : null,
+  });
 });
 
 router.delete('/:postId', requireAuth, (req, res) => {

@@ -28,6 +28,8 @@ export function createEllipseRouter() {
   app.get('/inbox', (_req, res) => res.sendFile(join(__dirname, 'public', 'inbox.html')));
   app.get('/my-channels', (_req, res) => res.sendFile(join(__dirname, 'public', 'my-channels.html')));
   app.get('/create', (_req, res) => res.sendFile(join(__dirname, 'public', 'create.html')));
+  app.get('/posts/:postId', (_req, res) => res.sendFile(join(__dirname, 'public', 'detail.html')));
+  app.get('/events/world/:slug', (_req, res) => res.sendFile(join(__dirname, 'public', 'detail.html')));
   app.get('/channels/:slug', (_req, res) => res.sendFile(join(__dirname, 'public', 'channel.html')));
   app.get('/profiles/:handle', (_req, res) => res.sendFile(join(__dirname, 'public', 'profile.html')));
   app.get('/legal/terms.md', (_req, res) => res.sendFile(join(__dirname, 'legal', 'terms.md')));

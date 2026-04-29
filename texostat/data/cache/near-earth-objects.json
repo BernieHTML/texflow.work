@@ -1,7 +1,7 @@
 {
   "channel": "near-earth-objects",
   "event": "neo_update",
-  "ts": "2026-04-27T00:05:02.396Z",
+  "ts": "2026-04-29T00:05:01.540Z",
   "source": "NASA NeoWs",
   "payload": [
     {
@@ -30,15 +30,6 @@
       "close_approach_date": "2026-05-02",
       "miss_distance_km": 57619152.63467283,
       "relative_velocity_kmh": 24495.3832361303
-    },
-    {
-      "name": "(2023 KR1)",
-      "id": "54359402",
-      "estimated_diameter_m": 124.1766612574,
-      "is_potentially_hazardous": false,
-      "close_approach_date": "2026-05-02",
-      "miss_distance_km": 38950745.965192504,
-      "relative_velocity_kmh": 19368.6955578081
     },
     {
       "name": "(2024 JS)",
@@ -73,8 +64,8 @@
       "estimated_diameter_m": 128.836814636,
       "is_potentially_hazardous": false,
       "close_approach_date": "2026-05-02",
-      "miss_distance_km": 17972942.433138788,
-      "relative_velocity_kmh": 39269.8933968128
+      "miss_distance_km": 17973012.34022344,
+      "relative_velocity_kmh": 39270.0297558236
     },
     {
       "name": "(2026 FZ3)",
@@ -88,11 +79,20 @@
     {
       "name": "(2026 GW3)",
       "id": "54607954",
-      "estimated_diameter_m": 36.6977957162,
+      "estimated_diameter_m": 35.7799705504,
       "is_potentially_hazardous": false,
       "close_approach_date": "2026-05-02",
-      "miss_distance_km": 5314867.901923899,
-      "relative_velocity_kmh": 20882.4929350086
+      "miss_distance_km": 5317412.053059841,
+      "relative_velocity_kmh": 20890.9514907897
+    },
+    {
+      "name": "(2026 HU2)",
+      "id": "54609725",
+      "estimated_diameter_m": 90.5815981525,
+      "is_potentially_hazardous": false,
+      "close_approach_date": "2026-05-02",
+      "miss_distance_km": 11388507.95888038,
+      "relative_velocity_kmh": 67096.2770408275
     }
   ]
 }

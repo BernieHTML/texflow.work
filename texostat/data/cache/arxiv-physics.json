@@ -1,7 +1,124 @@
 {
   "channel": "arxiv-physics",
   "event": "papers_update",
-  "ts": "2026-04-27T00:05:01.212Z",
+  "ts": "2026-04-29T00:05:00.660Z",
   "source": "arXiv RSS physics",
-  "payload": []
+  "payload": [
+    {
+      "id": "2604.22798",
+      "title": "On mathematical characterization of a Bessel functions-based passive element in electronic circuits",
+      "authors": [
+        "Ivano Colombaro",
+        "Marc Tudela-Pi"
+      ],
+      "abstract_truncated": "arXiv:2604.22798v1 Announce Type: new \nAbstract: Modeling relaxation phenomena in complex media is central to understanding multiscale dynamics in materials science, bioengineering and condensed matter physics. Existing fractional-order models, while flexible, sometimes lack physical interpretability, closed-form time-domain expressions, and compatibility with physically realizable architectures. ",
+      "submitted": "Tue, 28 Apr 2026 00:00:00 -0400",
+      "url": "https://arxiv.org/abs/2604.22798"
+    },
+    {
+      "id": "2604.22803",
+      "title": "A Diamagnetic, Light-Driven Tesla Engine Based on a Mechanically Displaced, Magnetically Levitated Graphene Disk",
+      "authors": [
+        "Tian Tong",
+        "Feng Lin",
+        "Wei Zhang",
+        "Runjia Li",
+        "Xinxin Xing"
+      ],
+      "abstract_truncated": "arXiv:2604.22803v1 Announce Type: new \nAbstract: Ferromagnetic materials are widely used in Tesla thermomagnetic engines, whereas diamagnetic counterparts have remained unexplored. Here, we demonstrate the first diamagnetic Tesla engine by exploiting the strong diamagnetism of graphene. A graphene disk, fabricated by stacking graphene sheets, serves as the engine wheel. We first show that the conv",
+      "submitted": "Tue, 28 Apr 2026 00:00:00 -0400",
+      "url": "https://arxiv.org/abs/2604.22803"
+    },
+    {
+      "id": "2604.22806",
+      "title": "Significantly enhanced detectability of dark photons with a steady-state excited microwave cavity",
+      "authors": [
+        "S. R. He",
+        "L. Gao",
+        "P. H. Ouyang",
+        "H. Zheng",
+        "X. N. Feng"
+      ],
+      "abstract_truncated": "arXiv:2604.22806v1 Announce Type: new \nAbstract: The resonant cavity system has been widely used to search for the electromagnetic response of dark photons, although its achievable detection sensitivity remains at a relatively low level. In this letter, we propose a feasible approach to significantly improve its achievable detection sensitivity by enhancing the detectability of the dark photon-pho",
+      "submitted": "Tue, 28 Apr 2026 00:00:00 -0400",
+      "url": "https://arxiv.org/abs/2604.22806"
+    },
+    {
+      "id": "2604.22814",
+      "title": "Nonreciprocal Thermophotonic Cooling",
+      "authors": [
+        "Daniel Cui",
+        "Parthiban Santhanam",
+        "Aaswath P. Raman"
+      ],
+      "abstract_truncated": "arXiv:2604.22814v1 Announce Type: new \nAbstract: Solid-state cooling via electroluminescent emission from light-emitting diodes is a promising alternative to thermoelectric and vapor-compression refrigeration, but practical performance remains limited by nonradiative losses and unfavorable tradeoffs between efficiency and cooling power. Thermophotonic (TPX) architectures partially address this by ",
+      "submitted": "Tue, 28 Apr 2026 00:00:00 -0400",
+      "url": "https://arxiv.org/abs/2604.22814"
+    },
+    {
+      "id": "2604.22815",
+      "title": "On Common Misconceptions in Classical Vehicle Dynamics",
+      "authors": [
+        "Massimo Guiggiani"
+      ],
+      "abstract_truncated": "arXiv:2604.22815v1 Announce Type: new \nAbstract: Classical vehicle dynamics contains several widely adopted misconceptions that, while intuitively appealing, may lead to inconsistencies when examined under a rigorous mechanical framework. This paper revisits a number of such misconceptions, clarifying their domains of validity and highlighting potential sources of misunderstanding. The aim is not ",
+      "submitted": "Tue, 28 Apr 2026 00:00:00 -0400",
+      "url": "https://arxiv.org/abs/2604.22815"
+    },
+    {
+      "id": "2604.22845",
+      "title": "Novel Regge-like trajectories for spinning, dilating, hadronic particles",
+      "authors": [
+        "Damianos Iosifidis"
+      ],
+      "abstract_truncated": "arXiv:2604.22845v1 Announce Type: new \nAbstract: We study the of motion of a spinning, dilating particle with hadronic properties moving on a generic geometric background including curvature, torsion, and nonmetricity. In particular, we discuss generalized spin supplementary conditions and also introduce the concept of a shear supplementary condition. Using these, we investigate the evolution of t",
+      "submitted": "Tue, 28 Apr 2026 00:00:00 -0400",
+      "url": "https://arxiv.org/abs/2604.22845"
+    },
+    {
+      "id": "2604.22907",
+      "title": "Fingertip Micro-Motion as a Source of Respiratory Information During Sleep Using Triaxial Accelerometers",
+      "authors": [
+        "Jeanne Lin",
+        "Lily Liu",
+        "Hau-Tieng Wu"
+      ],
+      "abstract_truncated": "arXiv:2604.22907v1 Announce Type: new \nAbstract: Objective: Triaxial accelerometers (TAAs) are widely used in homecare medicine. This study investigates whether TAA signals recorded at the fingertip encode respiratory information, particularly instantaneous respiratory rate (IRR) and respiratory effort, during sleep.\n  Method: We propose an antiderivative-based nonlinear transformation to convert ",
+      "submitted": "Tue, 28 Apr 2026 00:00:00 -0400",
+      "url": "https://arxiv.org/abs/2604.22907"
+    },
+    {
+      "id": "2604.22908",
+      "title": "Electric potential of insulated conducting objects in presence of electric charges -- some exact and approximate results",
+      "authors": [
+        "Karlo Filipan",
+        "Hrvoje \\v{S}tefan\\v{c}i\\'c"
+      ],
+      "abstract_truncated": "arXiv:2604.22908v1 Announce Type: new \nAbstract: Determination of the electric potential of insulated conducting objects is an important problem both theoretically and practically. For an insulated conducting object in the presence of external charges or charges distributed on the object surface, the problem of potential determination is reformulated using a newly introduced $J$ formalism. Using t",
+      "submitted": "Tue, 28 Apr 2026 00:00:00 -0400",
+      "url": "https://arxiv.org/abs/2604.22908"
+    },
+    {
+      "id": "2604.22926",
+      "title": "Material coherence and life cycle of a wildfire-generated stratospheric vortex",
+      "authors": [
+        "F. Andrade-Canto",
+        "F. J. Beron-Vera"
+      ],
+      "abstract_truncated": "arXiv:2604.22926v1 Announce Type: new \nAbstract: Pyro-cumulonimbus convection associated with extreme wildfires can generate long-lived vortical structures in the stratosphere. These structures have been described as coherent, yet a rigorous material characterization has remained lacking. Here we provide such a characterization by applying geodesic vortex detection to reanalysis winds during the 2",
+      "submitted": "Tue, 28 Apr 2026 00:00:00 -0400",
+      "url": "https://arxiv.org/abs/2604.22926"
+    },
+    {
+      "id": "2604.22936",
+      "title": "Charge order, domain order, ideal mixing and absence of demixing in 2D binary mixtures of alcohols",
+      "authors": [
+        "Lydia Chelli",
+        "Aur\\'elien Perera"
+      ],
+      "abstract_truncated": "arXiv:2604.22936v1 Announce Type: new \nAbstract: Binary mixtures of two dimensional, site-based models of alcohols are investigated by computer simulations, with a focus on ideal mixing, local clustering and miscibility trends. Four representative systems are considered: methanol/ethanol, butanol/pentanol, methanol/pentanol, and methanol/octanol. The models retain chemical specificity, while allow",
+      "submitted": "Tue, 28 Apr 2026 00:00:00 -0400",
+      "url": "https://arxiv.org/abs/2604.22936"
+    }
+  ]
 }

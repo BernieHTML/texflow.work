@@ -1,14 +1,14 @@
 {
   "channel": "nasa-apod",
   "event": "apod_update",
-  "ts": "2026-04-27T00:05:01.582Z",
+  "ts": "2026-04-29T00:05:08.291Z",
   "source": "NASA APOD",
   "payload": {
-    "date": "2026-04-26",
-    "title": "Mystic Mountain Monster being Destroyed",
-    "explanation": "Inside the head of this interstellar monster is a star that is slowly destroying it.  The huge monster, actually an inanimate series of pillars of gas and dust, measures light years in length.  The in-head star is not itself visible through the opaque interstellar dust but is bursting out partly by ejecting opposing beams of energetic particles called Herbig-Haro jets.  Located about 7,500 light years away in the Carina Nebula and known informally as Mystic Mountain, the appearance of these pill",
-    "url": "https://apod.nasa.gov/apod/image/2604/MysticPillar_HubbleSchmidt_960.jpg",
+    "date": "2026-04-28",
+    "title": "CG 30: Cometary Globules",
+    "explanation": "They're like mountain peaks, but they are forming stars. Bright-rimmed, flowing shapes gather near the center of this rich starfield toward the borders of the nautical southern constellations Puppis and Vela. Composed of interstellar gas and  dust, the grouping of light-year sized cometary globules is about 1300 light-years distant. Energetic ultraviolet light from nearby hot stars has molded the globules and ionized their bright rims. The globules also stream away from the Vela supernova remnan",
+    "url": "https://apod.nasa.gov/apod/image/2604/CG30Globules_Salamme_960.jpg",
     "media_type": "image",
-    "copyright": null
+    "copyright": "Marcelo Salemme"
   }
 }

@@ -1,28 +1,28 @@
 {
   "channel": "this-day-history",
   "event": "history_update",
-  "ts": "2026-04-27T00:05:01.694Z",
+  "ts": "2026-04-29T00:05:01.104Z",
   "source": "history.muffinlabs.com",
   "payload": [
     {
-      "year": "247",
-      "event": "Philip the Arab marks the millennium of Rome with a celebration of the ludi saeculares."
+      "year": "801",
+      "event": "An earthquake in the Central Apennines hits Rome and Spoleto, damaging the basilica of San Paolo Fuori le Mura."
     },
     {
-      "year": "395",
-      "event": "Emperor Arcadius marries Aelia Eudoxia, daughter of the Frankish general Flavius Bauto. She becomes one of the more powerful Roman empresses of Late Antiquity."
+      "year": "1091",
+      "event": "Battle of Levounion: The Pechenegs are defeated by Byzantine Emperor Alexios I Komnenos."
     },
     {
-      "year": "711",
-      "event": "Islamic conquest of Hispania: Moorish troops led by Tariq ibn Ziyad land at Gibraltar to begin their invasion of the Iberian Peninsula (Al-Andalus)."
+      "year": "1429",
+      "event": "Joan of Arc arrives to relieve the Siege of Orléans."
     },
     {
-      "year": "1296",
-      "event": "First War of Scottish Independence: John Balliol's Scottish army is defeated by an English army commanded by John de Warenne, 6th Earl of Surrey at the Battle of Dunbar."
+      "year": "1483",
+      "event": "Gran Canaria, the main island of the Canary Islands, is conquered by the Kingdom of Castile."
     },
     {
-      "year": "1509",
-      "event": "Pope Julius II places the Italian state of Venice under interdict."
+      "year": "1492",
+      "event": "The Crown's decision to expel the Jews is announced in Zaragoza, Aragon, to the kingdom's procurators."
     }
   ]
 }

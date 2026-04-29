@@ -31,6 +31,8 @@ function circleInboxItems(record) {
         body_preview: String(post.body || '').slice(0, 200),
         published_at: post.published_at,
         subscriber_count: channel?.subscriber_count || 0,
+        more_url: `/ellipse/posts/${post.id}`,
+        stream_curl: `curl -N ${baseUrl()}/ellipse/api/channels/${post.channel_slug}/stream -H "X-Tex-Token: YOUR_TOKEN"`,
         more: `curl -sS ${baseUrl()}/ellipse/api/posts/${post.id} -H "X-Tex-Token: YOUR_TOKEN"`,
       };
     });
@@ -47,6 +49,8 @@ function worldInboxItems(record) {
         ...cached,
         title: channel?.name || slug,
         body_preview: JSON.stringify(cached.payload).slice(0, 200),
+        more_url: `/ellipse/events/world/${slug}`,
+        stream_curl: `curl -N ${baseUrl()}/ellipse/api/world/${slug}/stream -H "X-Tex-Token: YOUR_TOKEN"`,
         more: `curl -N ${baseUrl()}/ellipse/api/world/${slug}/stream -H "X-Tex-Token: YOUR_TOKEN"`,
       };
     })
