@@ -1,7 +1,7 @@
 {
   "channel": "covid-global",
   "event": "covid_update",
-  "ts": "2026-04-29T10:00:03.796Z",
+  "ts": "2026-04-29T11:12:53.615Z",
   "source": "disease.sh /v3/covid-19/all",
   "payload": {
     "cases": 704753890,
@@ -11,6 +11,6 @@
     "critical": 34794,
     "cases_per_million": 90413,
     "deaths_per_million": 899.4,
-    "last_updated": "2026-04-29T09:51:33.406Z"
+    "last_updated": "2026-04-29T11:11:34.139Z"
   }
 }

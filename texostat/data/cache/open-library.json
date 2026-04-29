@@ -1,77 +1,77 @@
 {
   "channel": "open-library",
   "event": "library_update",
-  "ts": "2026-04-29T10:00:01.682Z",
+  "ts": "2026-04-29T11:00:09.365Z",
   "source": "Open Library /recentchanges",
   "payload": [
     {
-      "title": "import new book",
+      "title": "set source_records based on initial machine_comment",
       "author": "/people/horncBot",
-      "kind": "add-book",
-      "timestamp": "2026-04-29T09:59:59.391221",
+      "kind": "default-update",
+      "timestamp": "2026-04-29T11:00:07.470388",
       "url": "https://openlibrary.org"
     },
     {
-      "title": "import new book",
+      "title": "import existing book",
       "author": "/people/horncBot",
-      "kind": "add-book",
-      "timestamp": "2026-04-29T09:59:58.340554",
+      "kind": "edit-book",
+      "timestamp": "2026-04-29T11:00:06.408487",
       "url": "https://openlibrary.org"
     },
     {
-      "title": "import new book",
+      "title": "set source_records based on initial machine_comment",
       "author": "/people/horncBot",
-      "kind": "add-book",
-      "timestamp": "2026-04-29T09:59:52.895838",
+      "kind": "default-update",
+      "timestamp": "2026-04-29T11:00:04.518455",
       "url": "https://openlibrary.org"
     },
     {
       "title": "Created new account.",
-      "author": "/people/alina_javaid526",
+      "author": "/people/ajinkya_apos_s_chanel",
       "kind": "new-account",
-      "timestamp": "2026-04-29T09:59:51.437477",
+      "timestamp": "2026-04-29T11:00:04.350936",
       "url": "https://openlibrary.org"
     },
     {
       "title": "import new book",
       "author": "/people/horncBot",
       "kind": "add-book",
-      "timestamp": "2026-04-29T09:59:50.080588",
+      "timestamp": "2026-04-29T11:00:03.934846",
+      "url": "https://openlibrary.org"
+    },
+    {
+      "title": "set source_records based on initial machine_comment",
+      "author": "/people/horncBot",
+      "kind": "default-update",
+      "timestamp": "2026-04-29T11:00:01.791836",
       "url": "https://openlibrary.org"
     },
     {
       "title": "import new book",
       "author": "/people/horncBot",
       "kind": "add-book",
-      "timestamp": "2026-04-29T09:59:47.559877",
+      "timestamp": "2026-04-29T11:00:00.745802",
       "url": "https://openlibrary.org"
     },
     {
-      "title": "Created new account.",
-      "author": "/people/thomas_curtis124",
-      "kind": "new-account",
-      "timestamp": "2026-04-29T09:59:46.289019",
-      "url": "https://openlibrary.org"
-    },
-    {
-      "title": "import new book",
+      "title": "set source_records based on initial machine_comment",
       "author": "/people/horncBot",
-      "kind": "add-book",
-      "timestamp": "2026-04-29T09:59:43.383167",
+      "kind": "default-update",
+      "timestamp": "2026-04-29T10:59:58.312910",
       "url": "https://openlibrary.org"
     },
     {
-      "title": "import new book",
+      "title": "set source_records based on initial machine_comment",
       "author": "/people/horncBot",
-      "kind": "add-book",
-      "timestamp": "2026-04-29T09:59:40.929924",
+      "kind": "default-update",
+      "timestamp": "2026-04-29T10:59:55.394241",
       "url": "https://openlibrary.org"
     },
     {
-      "title": "Updated list.",
-      "author": "/people/maroon_mytra",
-      "kind": "edit-list-seeds",
-      "timestamp": "2026-04-29T09:59:39.391059",
+      "title": "import existing book",
+      "author": "/people/horncBot",
+      "kind": "edit-book",
+      "timestamp": "2026-04-29T10:59:55.315271",
       "url": "https://openlibrary.org"
     }
   ]

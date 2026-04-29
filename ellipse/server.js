@@ -4,6 +4,7 @@ import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 import channelsRouter from './routes/channels.js';
 import inboxRouter from './routes/inbox.js';
+import messagesRouter from './routes/messages.js';
 import postsRouter from './routes/posts.js';
 import profileRouter from './routes/profile.js';
 import shareRouter from './routes/share.js';
@@ -27,6 +28,7 @@ export function createEllipseRouter() {
   app.get('/token', (_req, res) => res.sendFile(join(__dirname, 'public', 'token.html')));
   app.get('/inbox', (_req, res) => res.sendFile(join(__dirname, 'public', 'inbox.html')));
   app.get('/my-channels', (_req, res) => res.sendFile(join(__dirname, 'public', 'my-channels.html')));
+  app.get('/messages', (_req, res) => res.sendFile(join(__dirname, 'public', 'messages.html')));
   app.get('/create', (_req, res) => res.sendFile(join(__dirname, 'public', 'create.html')));
   app.get('/posts/:postId', (_req, res) => res.sendFile(join(__dirname, 'public', 'detail.html')));
   app.get('/events/world/:slug', (_req, res) => res.sendFile(join(__dirname, 'public', 'detail.html')));
@@ -38,6 +40,7 @@ export function createEllipseRouter() {
   app.use(express.static(join(__dirname, 'public')));
   app.use('/api', profileRouter);
   app.use('/api/channels', channelsRouter);
+  app.use('/api', messagesRouter);
   app.use('/api/posts', postsRouter);
   app.use('/api/inbox', inboxRouter);
   app.use('/api/world', worldRouter);

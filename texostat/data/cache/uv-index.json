@@ -1,7 +1,7 @@
 {
   "channel": "uv-index",
   "event": "uv_update",
-  "ts": "2026-04-29T00:05:01.072Z",
+  "ts": "2026-04-29T11:12:52.346Z",
   "source": "Open-Meteo UV",
   "payload": {
     "date": "2026-04-29",

@@ -1,11 +1,22 @@
 {
   "channel": "earthquakes-live",
   "event": "earthquake_update",
-  "ts": "2026-04-29T10:50:00.405Z",
+  "ts": "2026-04-29T11:15:00.568Z",
   "source": "USGS Earthquake Hazards Program",
   "payload": {
     "count": 45,
     "events": [
+      {
+        "id": "ok2026iilj",
+        "magnitude": 2.53,
+        "place": "7 km N of Verden, Oklahoma",
+        "depth_km": 2.546761274,
+        "lat": 35.15389633,
+        "lon": -98.09485626,
+        "ts": "2026-04-29T11:06:42.858Z",
+        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/ok2026iilj",
+        "felt_reports": null
+      },
       {
         "id": "us7000sgwq",
         "magnitude": 4.4,
@@ -180,7 +191,7 @@
         "lon": -121.1943359375,
         "ts": "2026-04-29T01:35:57.330Z",
         "url": "https://earthquake.usgs.gov/earthquakes/eventpage/nc75353522",
-        "felt_reports": 748
+        "felt_reports": 749
       },
       {
         "id": "us7000sgub",
@@ -489,17 +500,6 @@
         "ts": "2026-04-28T11:58:48.127Z",
         "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us7000sgv0",
         "felt_reports": null
-      },
-      {
-        "id": "us7000sgmz",
-        "magnitude": 4.7,
-        "place": "10 km ENE of Argalastí, Greece",
-        "depth_km": 10,
-        "lat": 39.267,
-        "lon": 23.3291,
-        "ts": "2026-04-28T11:12:23.330Z",
-        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us7000sgmz",
-        "felt_reports": 4
       }
     ]
   }

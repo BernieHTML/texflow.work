@@ -1,7 +1,7 @@
 {
   "channel": "open-fda-recalls",
   "event": "recall_update",
-  "ts": "2026-04-29T10:00:01.408Z",
+  "ts": "2026-04-29T11:12:55.626Z",
   "source": "OpenFDA /food/enforcement",
   "payload": [
     {

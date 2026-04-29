@@ -1,15 +1,15 @@
 {
   "channel": "crypto-global",
   "event": "market_overview",
-  "ts": "2026-04-29T10:50:00.438Z",
+  "ts": "2026-04-29T11:15:00.596Z",
   "source": "CoinGecko /global",
   "payload": {
-    "total_market_cap_usd": 2674065526369.776,
-    "total_volume_usd": 88123719798.58206,
-    "btc_dominance_pct": 58.11659871372606,
-    "eth_dominance_pct": 10.531298729118351,
+    "total_market_cap_usd": 2672513163631.0625,
+    "total_volume_usd": 88496226389.97809,
+    "btc_dominance_pct": 58.12818384857488,
+    "eth_dominance_pct": 10.532287216713042,
     "active_cryptocurrencies": 17505,
     "markets": 1472,
-    "market_cap_change_24h_pct": 1.2297385296285306
+    "market_cap_change_24h_pct": 1.571529272398521
   }
 }

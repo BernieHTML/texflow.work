@@ -209,6 +209,54 @@ p { color: var(--muted); line-height: 1.7; }
   border-radius: 22px;
   padding: 1.4rem;
 }
+.use-case-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+.use-case-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+.use-case-card pre {
+  margin-top: auto;
+}
+.wide-card {
+  grid-column: span 3;
+}
+.messaging-section {
+  max-width: 980px;
+}
+.messaging-hero-card {
+  background:
+    radial-gradient(circle at top left, rgba(29,158,117,0.2), transparent 34rem),
+    linear-gradient(180deg, rgba(255,255,255,0.055), rgba(255,255,255,0.018));
+}
+.messaging-curl-grid {
+  margin-top: 1.5rem;
+}
+.messaging-layout {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  align-items: start;
+}
+.compact-form {
+  margin: 1rem 0 0;
+}
+.message-list {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+.message-room {
+  margin-top: 1rem;
+}
+.message-room textarea {
+  resize: vertical;
+}
 .step-num { color: var(--teal); font-family: var(--mono); font-size: 0.75rem; }
 .terminal-window { max-width: 640px; margin: 2.5rem auto 0; min-height: 330px; }
 .terminal-window .event { color: var(--teal); }
@@ -438,10 +486,19 @@ input, textarea, select {
   .grid-3:not(.how-grid) {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+  .use-case-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .wide-card {
+    grid-column: span 2;
+  }
 }
 
 @media (max-width: 860px) {
-  .grid-3:not(.how-grid), .grid-2, .app-shell, .owner-layout, .settings-grid, .analytics-grid { grid-template-columns: 1fr; }
+  .grid-3:not(.how-grid), .grid-2, .app-shell, .owner-layout, .settings-grid, .analytics-grid, .use-case-grid, .messaging-layout { grid-template-columns: 1fr; }
+  .wide-card {
+    grid-column: span 1;
+  }
   .landing-header {
     top: 0.5rem;
     border-radius: 24px;

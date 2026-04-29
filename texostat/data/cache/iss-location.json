@@ -1,13 +1,13 @@
 {
   "channel": "iss-location",
   "event": "iss_position",
-  "ts": "2026-04-29T10:52:59.019Z",
+  "ts": "2026-04-29T11:16:52.541Z",
   "source": "Open Notify /iss-now",
   "payload": {
-    "lat": 15.381,
-    "lon": -31.977,
+    "lat": -48.4319,
+    "lon": 37.8336,
     "altitude_km": 408,
     "velocity_kmh": 27600,
-    "ts": "2026-04-29T10:52:58.000Z"
+    "ts": "2026-04-29T11:16:52.000Z"
   }
 }

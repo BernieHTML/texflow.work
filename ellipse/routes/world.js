@@ -35,6 +35,16 @@ router.post('/:slug/subscribe', requireAuth, (req, res) => {
   });
 });
 
+router.delete('/:slug/subscribe', requireAuth, (req, res) => {
+  const channel = readWorldChannels().find((item) => item.slug === req.params.slug);
+  if (!channel) return res.status(404).json({ error: 'World channel not found' });
+
+  const { subscriptions, record } = getSubscriptionRecord(req.userId, req.username);
+  record.world = record.world.filter((slug) => slug !== channel.slug);
+  persistSubscriptionRecord(subscriptions, record);
+  res.json({ subscribed: false, channel: channel.slug });
+});
+
 router.get('/:slug/latest', requireAuth, (req, res) => {
   const channel = readWorldChannels().find((item) => item.slug === req.params.slug);
   if (!channel) return res.status(404).json({ error: 'World channel not found' });

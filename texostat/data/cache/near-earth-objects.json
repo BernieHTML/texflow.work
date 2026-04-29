@@ -1,7 +1,7 @@
 {
   "channel": "near-earth-objects",
   "event": "neo_update",
-  "ts": "2026-04-29T00:05:01.540Z",
+  "ts": "2026-04-29T11:12:58.446Z",
   "source": "NASA NeoWs",
   "payload": [
     {
@@ -23,76 +23,76 @@
       "relative_velocity_kmh": 48287.5682847124
     },
     {
-      "name": "(2021 KY1)",
-      "id": "54147412",
-      "estimated_diameter_m": 95.5080501462,
+      "name": "(2003 GR22)",
+      "id": "3152318",
+      "estimated_diameter_m": 218.7963026589,
       "is_potentially_hazardous": false,
-      "close_approach_date": "2026-05-02",
-      "miss_distance_km": 57619152.63467283,
-      "relative_velocity_kmh": 24495.3832361303
+      "close_approach_date": "2026-05-01",
+      "miss_distance_km": 29560376.723512117,
+      "relative_velocity_kmh": 48396.9370289044
     },
     {
-      "name": "(2024 JS)",
-      "id": "54439423",
-      "estimated_diameter_m": 19.771516375,
+      "name": "(2006 PF1)",
+      "id": "3337999",
+      "estimated_diameter_m": 724.5026507569,
       "is_potentially_hazardous": false,
-      "close_approach_date": "2026-05-02",
-      "miss_distance_km": 18938458.380757973,
-      "relative_velocity_kmh": 43229.6645247068
+      "close_approach_date": "2026-05-01",
+      "miss_distance_km": 38489951.1652675,
+      "relative_velocity_kmh": 105613.7462550544
     },
     {
-      "name": "(2024 JM2)",
-      "id": "54439998",
-      "estimated_diameter_m": 104.2413383852,
+      "name": "(2006 UE17)",
+      "id": "3351834",
+      "estimated_diameter_m": 242.1251923687,
       "is_potentially_hazardous": false,
-      "close_approach_date": "2026-05-02",
-      "miss_distance_km": 10380527.623636393,
-      "relative_velocity_kmh": 38436.4787059634
+      "close_approach_date": "2026-05-01",
+      "miss_distance_km": 8675494.696666148,
+      "relative_velocity_kmh": 41223.5744774029
     },
     {
-      "name": "(2025 DG7)",
-      "id": "54520804",
-      "estimated_diameter_m": 220.8207999214,
+      "name": "(2014 WF6)",
+      "id": "3696402",
+      "estimated_diameter_m": 77.9901900722,
       "is_potentially_hazardous": false,
-      "close_approach_date": "2026-05-02",
-      "miss_distance_km": 29615028.99920369,
-      "relative_velocity_kmh": 26439.3660325972
+      "close_approach_date": "2026-05-01",
+      "miss_distance_km": 41653581.00720598,
+      "relative_velocity_kmh": 95959.9223828867
     },
     {
-      "name": "(2025 VM1)",
-      "id": "54561364",
-      "estimated_diameter_m": 128.836814636,
+      "name": "(2016 YC8)",
+      "id": "3766164",
+      "estimated_diameter_m": 71.4562101727,
       "is_potentially_hazardous": false,
-      "close_approach_date": "2026-05-02",
-      "miss_distance_km": 17973012.34022344,
-      "relative_velocity_kmh": 39270.0297558236
+      "close_approach_date": "2026-05-01",
+      "miss_distance_km": 26548756.94242845,
+      "relative_velocity_kmh": 20661.9661498189
     },
     {
-      "name": "(2026 FZ3)",
-      "id": "54606678",
-      "estimated_diameter_m": 233.9052549134,
+      "name": "(2017 VK13)",
+      "id": "3789382",
+      "estimated_diameter_m": 124.7498346832,
       "is_potentially_hazardous": false,
-      "close_approach_date": "2026-05-02",
-      "miss_distance_km": 28061050.29245768,
-      "relative_velocity_kmh": 56349.1331981874
+      "close_approach_date": "2026-05-01",
+      "miss_distance_km": 48353213.71021234,
+      "relative_velocity_kmh": 75599.4970871899
     },
     {
-      "name": "(2026 GW3)",
-      "id": "54607954",
-      "estimated_diameter_m": 35.7799705504,
+      "name": "(2017 VE14)",
+      "id": "3789401",
+      "estimated_diameter_m": 15.6329154409,
       "is_potentially_hazardous": false,
-      "close_approach_date": "2026-05-02",
-      "miss_distance_km": 5317412.053059841,
-      "relative_velocity_kmh": 20890.9514907897
+      "close_approach_date": "2026-05-01",
+      "miss_distance_km": 38287504.032944314,
+      "relative_velocity_kmh": 34751.1306572811
     },
     {
-      "name": "(2026 HU2)",
-      "id": "54609725",
-      "estimated_diameter_m": 90.5815981525,
+      "name": "(2009 FP28)",
+      "id": "3455314",
+      "estimated_diameter_m": 359.7824532363,
       "is_potentially_hazardous": false,
-      "close_approach_date": "2026-05-02",
-      "miss_distance_km": 11388507.95888038,
-      "relative_velocity_kmh": 67096.2770408275
+      "close_approach_date": "2026-04-30",
+      "miss_distance_km": 14430234.416020053,
+      "relative_velocity_kmh": 40060.7398412417
     }
   ]
 }

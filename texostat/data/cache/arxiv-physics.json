@@ -1,124 +1,119 @@
 {
   "channel": "arxiv-physics",
   "event": "papers_update",
-  "ts": "2026-04-29T00:05:00.660Z",
+  "ts": "2026-04-29T11:12:54.890Z",
   "source": "arXiv RSS physics",
   "payload": [
     {
-      "id": "2604.22798",
-      "title": "On mathematical characterization of a Bessel functions-based passive element in electronic circuits",
+      "id": "2604.24769",
+      "title": "SPARSE -- Efficient High-Resolution SEM Imaging of Rare Microstructural Features Across Large Areas by Selective Rescanning",
       "authors": [
-        "Ivano Colombaro",
-        "Marc Tudela-Pi"
+        "Tom Reclik",
+        "Jan Gerlach",
+        "Maximilian A. Wollenweber",
+        "Yannis P. Korkolis",
+        "Sandra Korte-Kerzel"
       ],
-      "abstract_truncated": "arXiv:2604.22798v1 Announce Type: new \nAbstract: Modeling relaxation phenomena in complex media is central to understanding multiscale dynamics in materials science, bioengineering and condensed matter physics. Existing fractional-order models, while flexible, sometimes lack physical interpretability, closed-form time-domain expressions, and compatibility with physically realizable architectures. ",
-      "submitted": "Tue, 28 Apr 2026 00:00:00 -0400",
-      "url": "https://arxiv.org/abs/2604.22798"
+      "abstract_truncated": "arXiv:2604.24769v1 Announce Type: new \nAbstract: Characterisation of rare microstructural features in scanning electron microscopy (SEM) requires imaging large areas at high resolution. This leads to prohibitively long acquisition times. We present an open-source Python framework that addresses this bottleneck through a two-stage approach: a fast scan identifies regions of interest, which are then",
+      "submitted": "Wed, 29 Apr 2026 00:00:00 -0400",
+      "url": "https://arxiv.org/abs/2604.24769"
     },
     {
-      "id": "2604.22803",
-      "title": "A Diamagnetic, Light-Driven Tesla Engine Based on a Mechanically Displaced, Magnetically Levitated Graphene Disk",
+      "id": "2604.24774",
+      "title": "Multi-modes Bessel-Gaussian-Orbital Angular Momentum Beams Quantum Holography",
       "authors": [
-        "Tian Tong",
-        "Feng Lin",
-        "Wei Zhang",
-        "Runjia Li",
-        "Xinxin Xing"
+        "Jinjin Li",
+        "Chaoying Zhao"
       ],
-      "abstract_truncated": "arXiv:2604.22803v1 Announce Type: new \nAbstract: Ferromagnetic materials are widely used in Tesla thermomagnetic engines, whereas diamagnetic counterparts have remained unexplored. Here, we demonstrate the first diamagnetic Tesla engine by exploiting the strong diamagnetism of graphene. A graphene disk, fabricated by stacking graphene sheets, serves as the engine wheel. We first show that the conv",
-      "submitted": "Tue, 28 Apr 2026 00:00:00 -0400",
-      "url": "https://arxiv.org/abs/2604.22803"
+      "abstract_truncated": "arXiv:2604.24774v1 Announce Type: new \nAbstract: We propose an orbital angular momentum (OAM) quantum holography scheme based on multi-mode Bessel-Gaussian (MBG) beams. Entangled photon pairs are generated through spontaneous parametric down-conversion (SPDC) process, and the axis prism parameters and topological charges of the idler photons are used for encoding to construct Bessel-Gaussian quant",
+      "submitted": "Wed, 29 Apr 2026 00:00:00 -0400",
+      "url": "https://arxiv.org/abs/2604.24774"
     },
     {
-      "id": "2604.22806",
-      "title": "Significantly enhanced detectability of dark photons with a steady-state excited microwave cavity",
+      "id": "2604.24775",
+      "title": "Application of a Mixture of Experts-based Foundation Model to the GlueX DIRC Detector",
       "authors": [
-        "S. R. He",
-        "L. Gao",
-        "P. H. Ouyang",
-        "H. Zheng",
-        "X. N. Feng"
+        "Cristiano Fanelli",
+        "James Giroux",
+        "Cole Granger",
+        "Justin Stevens"
       ],
-      "abstract_truncated": "arXiv:2604.22806v1 Announce Type: new \nAbstract: The resonant cavity system has been widely used to search for the electromagnetic response of dark photons, although its achievable detection sensitivity remains at a relatively low level. In this letter, we propose a feasible approach to significantly improve its achievable detection sensitivity by enhancing the detectability of the dark photon-pho",
-      "submitted": "Tue, 28 Apr 2026 00:00:00 -0400",
-      "url": "https://arxiv.org/abs/2604.22806"
+      "abstract_truncated": "arXiv:2604.24775v1 Announce Type: new \nAbstract: We present a Mixture-of-Experts-based foundation model applied to the GlueX DIRC detector at Jefferson Lab, demonstrating its utility as a unified framework for fast simulation, particle identification, and hit-level noise filtering of Cherenkov photons. By leveraging a single shared transformer backbone across all tasks, the approach eliminates the",
+      "submitted": "Wed, 29 Apr 2026 00:00:00 -0400",
+      "url": "https://arxiv.org/abs/2604.24775"
     },
     {
-      "id": "2604.22814",
-      "title": "Nonreciprocal Thermophotonic Cooling",
+      "id": "2604.24777",
+      "title": "Discrete Boltzmann Statistics: Hawking Radiation, Remnants, and Fluctuation Theorems at Finite Lattice Spacing",
       "authors": [
-        "Daniel Cui",
-        "Parthiban Santhanam",
-        "Aaswath P. Raman"
+        "Abdelmalek Boumali"
       ],
-      "abstract_truncated": "arXiv:2604.22814v1 Announce Type: new \nAbstract: Solid-state cooling via electroluminescent emission from light-emitting diodes is a promising alternative to thermoelectric and vapor-compression refrigeration, but practical performance remains limited by nonradiative losses and unfavorable tradeoffs between efficiency and cooling power. Thermophotonic (TPX) architectures partially address this by ",
-      "submitted": "Tue, 28 Apr 2026 00:00:00 -0400",
-      "url": "https://arxiv.org/abs/2604.22814"
+      "abstract_truncated": "arXiv:2604.24777v1 Announce Type: new \nAbstract: The discrete Boltzmann factor $B_E(\\beta_n)=(1-bE)^n$, introduced by Chung, Hassanabadi, and Boumali, provides a lattice regularization of the canonical weight $e^{-\\beta E}$ and imposes the compact-support condition $E<1/b$. In the present analysis we systematically separate results that follow directly from this bounded thermal weight from those t",
+      "submitted": "Wed, 29 Apr 2026 00:00:00 -0400",
+      "url": "https://arxiv.org/abs/2604.24777"
     },
     {
-      "id": "2604.22815",
-      "title": "On Common Misconceptions in Classical Vehicle Dynamics",
+      "id": "2604.24778",
+      "title": "A unifying physically meaningful relativistic action",
       "authors": [
-        "Massimo Guiggiani"
+        "Y. Friedman"
       ],
-      "abstract_truncated": "arXiv:2604.22815v1 Announce Type: new \nAbstract: Classical vehicle dynamics contains several widely adopted misconceptions that, while intuitively appealing, may lead to inconsistencies when examined under a rigorous mechanical framework. This paper revisits a number of such misconceptions, clarifying their domains of validity and highlighting potential sources of misunderstanding. The aim is not ",
-      "submitted": "Tue, 28 Apr 2026 00:00:00 -0400",
-      "url": "https://arxiv.org/abs/2604.22815"
+      "abstract_truncated": "arXiv:2604.24778v1 Announce Type: new \nAbstract: We introduce a relativistic action that provides a unified and physically meaningful description of particle dynamics in external fields. The proposed action is constructed to be Lorentz covariant and reduces to the standard classical action in the appropriate limit. It incorporates gravitational and electromagnetic interactions within a single fram",
+      "submitted": "Wed, 29 Apr 2026 00:00:00 -0400",
+      "url": "https://arxiv.org/abs/2604.24778"
     },
     {
-      "id": "2604.22845",
-      "title": "Novel Regge-like trajectories for spinning, dilating, hadronic particles",
+      "id": "2604.24779",
+      "title": "Superposition Principle in Relativistic Gravity",
       "authors": [
-        "Damianos Iosifidis"
+        "Y. Friedman"
       ],
-      "abstract_truncated": "arXiv:2604.22845v1 Announce Type: new \nAbstract: We study the of motion of a spinning, dilating particle with hadronic properties moving on a generic geometric background including curvature, torsion, and nonmetricity. In particular, we discuss generalized spin supplementary conditions and also introduce the concept of a shear supplementary condition. Using these, we investigate the evolution of t",
-      "submitted": "Tue, 28 Apr 2026 00:00:00 -0400",
-      "url": "https://arxiv.org/abs/2604.22845"
+      "abstract_truncated": "arXiv:2604.24779v1 Announce Type: new \nAbstract: We develop a framework for superposition in relativistic gravity within Extended Relativity (ER), a Lorentz-covariant theory formulated in flat spacetime. In this approach, gravitational fields are described by deviations from the Minkowski metric associated with individual sources, and multi-source configurations are constructed through a superposi",
+      "submitted": "Wed, 29 Apr 2026 00:00:00 -0400",
+      "url": "https://arxiv.org/abs/2604.24779"
     },
     {
-      "id": "2604.22907",
-      "title": "Fingertip Micro-Motion as a Source of Respiratory Information During Sleep Using Triaxial Accelerometers",
+      "id": "2604.24780",
+      "title": "Entropy, Gravity, and an Apparent Violation of the Second Law",
       "authors": [
-        "Jeanne Lin",
-        "Lily Liu",
-        "Hau-Tieng Wu"
+        "Jorge Pinochet",
+        "Giorgio Sonnino"
       ],
-      "abstract_truncated": "arXiv:2604.22907v1 Announce Type: new \nAbstract: Objective: Triaxial accelerometers (TAAs) are widely used in homecare medicine. This study investigates whether TAA signals recorded at the fingertip encode respiratory information, particularly instantaneous respiratory rate (IRR) and respiratory effort, during sleep.\n  Method: We propose an antiderivative-based nonlinear transformation to convert ",
-      "submitted": "Tue, 28 Apr 2026 00:00:00 -0400",
-      "url": "https://arxiv.org/abs/2604.22907"
+      "abstract_truncated": "arXiv:2604.24780v1 Announce Type: new \nAbstract: An interesting question to explore in physics classes is whether gravity violates the second law of thermodynamics. Standard physics textbooks provide little to no discussion of the relationship between entropy and gravity, and the same is often true of specialized texts. The aim of this work is to address this question by analyzing the behavior of ",
+      "submitted": "Wed, 29 Apr 2026 00:00:00 -0400",
+      "url": "https://arxiv.org/abs/2604.24780"
     },
     {
-      "id": "2604.22908",
-      "title": "Electric potential of insulated conducting objects in presence of electric charges -- some exact and approximate results",
+      "id": "2604.24781",
+      "title": "The landslide drag",
       "authors": [
-        "Karlo Filipan",
-        "Hrvoje \\v{S}tefan\\v{c}i\\'c"
+        "Shiva P. Pudasaini"
       ],
-      "abstract_truncated": "arXiv:2604.22908v1 Announce Type: new \nAbstract: Determination of the electric potential of insulated conducting objects is an important problem both theoretically and practically. For an insulated conducting object in the presence of external charges or charges distributed on the object surface, the problem of potential determination is reformulated using a newly introduced $J$ formalism. Using t",
-      "submitted": "Tue, 28 Apr 2026 00:00:00 -0400",
-      "url": "https://arxiv.org/abs/2604.22908"
+      "abstract_truncated": "arXiv:2604.24781v1 Announce Type: new \nAbstract: Drag is one of the most important energy dissipation mechanisms in nature, including landslides and debris flows. To satisfactorily reproduce laboratory or field data in simulating landslides, often empirical relations or convenient numerical values are used for the drag force coefficient. However, this is just a parameter calibration rather than a ",
+      "submitted": "Wed, 29 Apr 2026 00:00:00 -0400",
+      "url": "https://arxiv.org/abs/2604.24781"
     },
     {
-      "id": "2604.22926",
-      "title": "Material coherence and life cycle of a wildfire-generated stratospheric vortex",
+      "id": "2604.24787",
+      "title": "Effective Observer-Split Source Terms in Rotating Frames and Gravitomagnetic Backgrounds in Extended Aharonov-Bohm Electrodynamics",
       "authors": [
-        "F. Andrade-Canto",
-        "F. J. Beron-Vera"
+        "A. Iadicicco",
+        "G. Modanese",
+        "L. Verolino"
       ],
-      "abstract_truncated": "arXiv:2604.22926v1 Announce Type: new \nAbstract: Pyro-cumulonimbus convection associated with extreme wildfires can generate long-lived vortical structures in the stratosphere. These structures have been described as coherent, yet a rigorous material characterization has remained lacking. Here we provide such a characterization by applying geodesic vortex detection to reanalysis winds during the 2",
-      "submitted": "Tue, 28 Apr 2026 00:00:00 -0400",
-      "url": "https://arxiv.org/abs/2604.22926"
+      "abstract_truncated": "arXiv:2604.24787v1 Announce Type: new \nAbstract: We examine whether rotating frames and stationary gravitomagnetic backgrounds can provide a meaningful link to extended Aharonov-Bohm electrodynamics without invoking microscopic charge non-conservation. For standard generally covariant, locally $U(1)$-invariant matter, the answer at the microscopic level is negative: the physical four-current remai",
+      "submitted": "Wed, 29 Apr 2026 00:00:00 -0400",
+      "url": "https://arxiv.org/abs/2604.24787"
     },
     {
-      "id": "2604.22936",
-      "title": "Charge order, domain order, ideal mixing and absence of demixing in 2D binary mixtures of alcohols",
+      "id": "2604.24795",
+      "title": "Higgs Sector and Flavour Structure in an Algebraic Three-Generation Model with S3 Family Symmetry",
       "authors": [
-        "Lydia Chelli",
-        "Aur\\'elien Perera"
+        "Niels Gresnigt"
       ],
-      "abstract_truncated": "arXiv:2604.22936v1 Announce Type: new \nAbstract: Binary mixtures of two dimensional, site-based models of alcohols are investigated by computer simulations, with a focus on ideal mixing, local clustering and miscibility trends. Four representative systems are considered: methanol/ethanol, butanol/pentanol, methanol/pentanol, and methanol/octanol. The models retain chemical specificity, while allow",
-      "submitted": "Tue, 28 Apr 2026 00:00:00 -0400",
-      "url": "https://arxiv.org/abs/2604.22936"
+      "abstract_truncated": "arXiv:2604.24795v1 Announce Type: new \nAbstract: We extend our previous algebraic construction of three fermion generations in the complex Clifford algebra $\\mathbb{C}\\ell(10)$ by incorporating the Higgs sector. Using the $S_3$ family symmetry that permutes three algebraically distinguished fermion sectors, we construct Higgs components as right-action operators and extract the corresponding Yukaw",
+      "submitted": "Wed, 29 Apr 2026 00:00:00 -0400",
+      "url": "https://arxiv.org/abs/2604.24795"
     }
   ]
 }

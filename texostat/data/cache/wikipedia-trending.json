@@ -1,108 +1,108 @@
 {
   "channel": "wikipedia-trending",
   "event": "wikipedia_update",
-  "ts": "2026-04-27T05:13:01.713Z",
+  "ts": "2026-04-29T11:12:57.313Z",
   "source": "Wikimedia Pageviews API",
   "payload": [
     {
       "rank": 1,
       "article": "Main Page",
-      "views": 7140718
+      "views": 7024760
     },
     {
       "rank": 2,
       "article": "Special:Search",
-      "views": 931673
+      "views": 1112220
     },
     {
       "rank": 3,
-      "article": "Nahui Ollin",
-      "views": 810725
+      "article": "Wikipedia:Featured pictures",
+      "views": 327480
     },
     {
       "rank": 4,
-      "article": "Michael (2026 film)",
-      "views": 350796
+      "article": ".xxx",
+      "views": 283471
     },
     {
       "rank": 5,
       "article": "Michael Jackson",
-      "views": 339354
+      "views": 264743
     },
     {
       "rank": 6,
-      "article": "Wikipedia:Featured pictures",
-      "views": 307585
+      "article": "Michael (2026 film)",
+      "views": 252395
     },
     {
       "rank": 7,
       "article": "Jaafar Jackson",
-      "views": 245752
+      "views": 173863
     },
     {
       "rank": 8,
-      "article": "Apex (2026 film)",
-      "views": 236751
+      "article": "Sabethes cyaneus",
+      "views": 167497
     },
     {
       "rank": 9,
-      "article": ".xxx",
-      "views": 212053
+      "article": "Nathan Lee Chasing His Horse",
+      "views": 160627
     },
     {
       "rank": 10,
-      "article": "Sabastian Sawe",
-      "views": 207366
+      "article": "Cottingley Fairies",
+      "views": 156209
     },
     {
       "rank": 11,
-      "article": "Weijia Jiang",
-      "views": 161890
+      "article": "OPEC",
+      "views": 156191
     },
     {
       "rank": 12,
-      "article": "Attempted assassination of Donald Trump in Pennsylvania",
-      "views": 161582
+      "article": "Michael Olise",
+      "views": 151700
     },
     {
       "rank": 13,
-      "article": "Diego Pavia",
-      "views": 144974
+      "article": "Nahui Ollin",
+      "views": 140534
     },
     {
       "rank": 14,
-      "article": "2026 White House Correspondents' dinner shooting",
-      "views": 133935
+      "article": "2026 West Bengal Legislative Assembly election",
+      "views": 132774
     },
     {
       "rank": 15,
-      "article": "Jermaine Jackson",
-      "views": 130064
+      "article": "Deaths in 2026",
+      "views": 130878
     },
     {
       "rank": 16,
-      "article": "Deaths in 2026",
-      "views": 124914
+      "article": "Euphoria (American TV series)",
+      "views": 127049
     },
     {
       "rank": 17,
-      "article": "List of United States presidential assassination attempts and plots",
-      "views": 121895
+      "article": "Apex (2026 film)",
+      "views": 123003
     },
     {
       "rank": 18,
-      "article": "Dhurandhar: The Revenge",
-      "views": 112922
+      "article": "ChatGPT",
+      "views": 116519
     },
     {
       "rank": 19,
-      "article": "List of highest-grossing Indian films",
-      "views": 109668
+      "article": "Limonene",
+      "views": 109164
     },
     {
       "rank": 20,
-      "article": "Hulk Hogan",
-      "views": 108428
+      "article": "Zoë Kravitz",
+      "views": 106946
     }
   ]
 }

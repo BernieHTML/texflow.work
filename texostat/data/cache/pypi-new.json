@@ -1,128 +1,128 @@
 {
   "channel": "pypi-new",
   "event": "pypi_update",
-  "ts": "2026-04-29T10:30:00.906Z",
+  "ts": "2026-04-29T11:12:55.044Z",
   "source": "PyPI RSS",
   "payload": [
     {
-      "name": "aws-resource-validator-kinesis-video-webrtc-storage",
+      "name": "ttplot",
       "version": "added",
-      "description": "Pydantic v2 models for AWS kinesis_video_webrtc_storage, shipped as a PEP 420 namespace extension of aws-resource-validator.",
-      "author": "alexy.grabov@gmail.com, ytupman@gmail.com",
-      "published_at": "Wed, 29 Apr 2026 09:58:57 GMT",
-      "url": "https://pypi.org/project/aws-resource-validator-kinesis-video-webrtc-storage/"
+      "description": "None",
+      "author": null,
+      "published_at": "Wed, 29 Apr 2026 10:55:30 GMT",
+      "url": "https://pypi.org/project/ttplot/"
     },
     {
-      "name": "aws-resource-validator-kinesis-video-signaling",
+      "name": "MemEdit-G3tFun",
       "version": "added",
-      "description": "Pydantic v2 models for AWS kinesis_video_signaling, shipped as a PEP 420 namespace extension of aws-resource-validator.",
-      "author": "alexy.grabov@gmail.com, ytupman@gmail.com",
-      "published_at": "Wed, 29 Apr 2026 09:58:55 GMT",
-      "url": "https://pypi.org/project/aws-resource-validator-kinesis-video-signaling/"
+      "description": "High-performance Windows Memory Scanner/Editor",
+      "author": "contact@g3tfun.com",
+      "published_at": "Wed, 29 Apr 2026 10:51:02 GMT",
+      "url": "https://pypi.org/project/memedit-g3tfun/"
     },
     {
-      "name": "aws-resource-validator-kinesis-video-media",
+      "name": "arcmesh",
       "version": "added",
-      "description": "Pydantic v2 models for AWS kinesis_video_media, shipped as a PEP 420 namespace extension of aws-resource-validator.",
-      "author": "alexy.grabov@gmail.com, ytupman@gmail.com",
-      "published_at": "Wed, 29 Apr 2026 09:58:54 GMT",
-      "url": "https://pypi.org/project/aws-resource-validator-kinesis-video-media/"
+      "description": "CLI for managing MCP (Model Context Protocol) configurations",
+      "author": null,
+      "published_at": "Wed, 29 Apr 2026 10:48:43 GMT",
+      "url": "https://pypi.org/project/arcmesh/"
     },
     {
-      "name": "aws-resource-validator-kinesis-video-archived-media",
+      "name": "tribulnation-ethereum",
       "version": "added",
-      "description": "Pydantic v2 models for AWS kinesis_video_archived_media, shipped as a PEP 420 namespace extension of aws-resource-validator.",
-      "author": "alexy.grabov@gmail.com, ytupman@gmail.com",
-      "published_at": "Wed, 29 Apr 2026 09:58:53 GMT",
-      "url": "https://pypi.org/project/aws-resource-validator-kinesis-video-archived-media/"
+      "description": "Tribulnation SDK implementation for Ethereum.",
+      "author": "marcel@tribulnation.com",
+      "published_at": "Wed, 29 Apr 2026 10:39:32 GMT",
+      "url": "https://pypi.org/project/tribulnation-ethereum/"
     },
     {
-      "name": "aws-resource-validator-kinesis",
+      "name": "chcode",
       "version": "added",
-      "description": "Pydantic v2 models for AWS kinesis, shipped as a PEP 420 namespace extension of aws-resource-validator.",
-      "author": "alexy.grabov@gmail.com, ytupman@gmail.com",
-      "published_at": "Wed, 29 Apr 2026 09:58:52 GMT",
-      "url": "https://pypi.org/project/aws-resource-validator-kinesis/"
+      "description": "Terminal-based AI coding agent with typer+rich",
+      "author": "minimizeball@foxmail.com",
+      "published_at": "Wed, 29 Apr 2026 10:39:27 GMT",
+      "url": "https://pypi.org/project/chcode/"
     },
     {
-      "name": "aws-resource-validator-keyspacesstreams",
+      "name": "xs-bundle-cn-stock-os",
       "version": "added",
-      "description": "Pydantic v2 models for AWS keyspacesstreams, shipped as a PEP 420 namespace extension of aws-resource-validator.",
-      "author": "alexy.grabov@gmail.com, ytupman@gmail.com",
-      "published_at": "Wed, 29 Apr 2026 09:58:50 GMT",
-      "url": "https://pypi.org/project/aws-resource-validator-keyspacesstreams/"
+      "description": "A-share stock market bundle for xscreener (AKShare-based)",
+      "author": null,
+      "published_at": "Wed, 29 Apr 2026 10:38:56 GMT",
+      "url": "https://pypi.org/project/xs-bundle-cn-stock-os/"
     },
     {
-      "name": "aws-resource-validator-keyspaces",
+      "name": "tribulnation-hyperliquid",
       "version": "added",
-      "description": "Pydantic v2 models for AWS keyspaces, shipped as a PEP 420 namespace extension of aws-resource-validator.",
-      "author": "alexy.grabov@gmail.com, ytupman@gmail.com",
-      "published_at": "Wed, 29 Apr 2026 09:58:49 GMT",
-      "url": "https://pypi.org/project/aws-resource-validator-keyspaces/"
+      "description": "Tribulnation SDK implementation for Hyperliquid.",
+      "author": "marcel@tribulnation.com",
+      "published_at": "Wed, 29 Apr 2026 10:38:08 GMT",
+      "url": "https://pypi.org/project/tribulnation-hyperliquid/"
     },
     {
-      "name": "aws-resource-validator-kendra-ranking",
+      "name": "tribulnation-dydx",
       "version": "added",
-      "description": "Pydantic v2 models for AWS kendra_ranking, shipped as a PEP 420 namespace extension of aws-resource-validator.",
-      "author": "alexy.grabov@gmail.com, ytupman@gmail.com",
-      "published_at": "Wed, 29 Apr 2026 09:58:47 GMT",
-      "url": "https://pypi.org/project/aws-resource-validator-kendra-ranking/"
+      "description": "Tribulnation SDK implementation for dYdX.",
+      "author": "marcel@tribulnation.com",
+      "published_at": "Wed, 29 Apr 2026 10:37:42 GMT",
+      "url": "https://pypi.org/project/tribulnation-dydx/"
     },
     {
-      "name": "aws-resource-validator-kendra",
+      "name": "tribulnation-mexc",
       "version": "added",
-      "description": "Pydantic v2 models for AWS kendra, shipped as a PEP 420 namespace extension of aws-resource-validator.",
-      "author": "alexy.grabov@gmail.com, ytupman@gmail.com",
-      "published_at": "Wed, 29 Apr 2026 09:58:46 GMT",
-      "url": "https://pypi.org/project/aws-resource-validator-kendra/"
+      "description": "Tribulnation SDK implementation for MEXC.",
+      "author": "marcel@tribulnation.com",
+      "published_at": "Wed, 29 Apr 2026 10:35:58 GMT",
+      "url": "https://pypi.org/project/tribulnation-mexc/"
     },
     {
-      "name": "aws-resource-validator-kafkaconnect",
+      "name": "malinakod",
       "version": "added",
-      "description": "Pydantic v2 models for AWS kafkaconnect, shipped as a PEP 420 namespace extension of aws-resource-validator.",
-      "author": "alexy.grabov@gmail.com, ytupman@gmail.com",
-      "published_at": "Wed, 29 Apr 2026 09:58:44 GMT",
-      "url": "https://pypi.org/project/aws-resource-validator-kafkaconnect/"
+      "description": "MalinaKod Deploy System — система развёртывания и управления сервисами",
+      "author": null,
+      "published_at": "Wed, 29 Apr 2026 10:31:59 GMT",
+      "url": "https://pypi.org/project/malinakod/"
     },
     {
-      "name": "aws-resource-validator-kafka",
+      "name": "thoughtleaders-cli",
       "version": "added",
-      "description": "Pydantic v2 models for AWS kafka, shipped as a PEP 420 namespace extension of aws-resource-validator.",
-      "author": "alexy.grabov@gmail.com, ytupman@gmail.com",
-      "published_at": "Wed, 29 Apr 2026 09:58:43 GMT",
-      "url": "https://pypi.org/project/aws-resource-validator-kafka/"
+      "description": "ThoughtLeaders CLI — query sponsorship data, channels, brands, and intelligence",
+      "author": "dev@thoughtleaders.io",
+      "published_at": "Wed, 29 Apr 2026 10:31:16 GMT",
+      "url": "https://pypi.org/project/thoughtleaders-cli/"
     },
     {
-      "name": "aws-resource-validator-ivschat",
+      "name": "phoenix-agent-ai",
       "version": "added",
-      "description": "Pydantic v2 models for AWS ivschat, shipped as a PEP 420 namespace extension of aws-resource-validator.",
-      "author": "alexy.grabov@gmail.com, ytupman@gmail.com",
-      "published_at": "Wed, 29 Apr 2026 09:58:42 GMT",
-      "url": "https://pypi.org/project/aws-resource-validator-ivschat/"
+      "description": "Advanced AI Infrastructure SDK for Agentic Applications",
+      "author": null,
+      "published_at": "Wed, 29 Apr 2026 10:31:08 GMT",
+      "url": "https://pypi.org/project/phoenix-agent-ai/"
     },
     {
-      "name": "aws-resource-validator-ivs-realtime",
+      "name": "odoo-addon-partner-department",
       "version": "added",
-      "description": "Pydantic v2 models for AWS ivs_realtime, shipped as a PEP 420 namespace extension of aws-resource-validator.",
-      "author": "alexy.grabov@gmail.com, ytupman@gmail.com",
-      "published_at": "Wed, 29 Apr 2026 09:58:40 GMT",
-      "url": "https://pypi.org/project/aws-resource-validator-ivs-realtime/"
+      "description": "Adds department as a partner type",
+      "author": "support@odoo-community.org",
+      "published_at": "Wed, 29 Apr 2026 10:31:04 GMT",
+      "url": "https://pypi.org/project/odoo-addon-partner-department/"
     },
     {
-      "name": "aws-resource-validator-ivs",
+      "name": "odoo-addon-product-supplierinfo-indirect-cost",
       "version": "added",
-      "description": "Pydantic v2 models for AWS ivs, shipped as a PEP 420 namespace extension of aws-resource-validator.",
-      "author": "alexy.grabov@gmail.com, ytupman@gmail.com",
-      "published_at": "Wed, 29 Apr 2026 09:58:39 GMT",
-      "url": "https://pypi.org/project/aws-resource-validator-ivs/"
+      "description": "Add indirect cost percent and amount to supplier info",
+      "author": "support@odoo-community.org",
+      "published_at": "Wed, 29 Apr 2026 10:30:24 GMT",
+      "url": "https://pypi.org/project/odoo-addon-product-supplierinfo-indirect-cost/"
     },
     {
-      "name": "aws-resource-validator-iotwireless",
+      "name": "chaoslake",
       "version": "added",
-      "description": "Pydantic v2 models for AWS iotwireless, shipped as a PEP 420 namespace extension of aws-resource-validator.",
-      "author": "alexy.grabov@gmail.com, ytupman@gmail.com",
-      "published_at": "Wed, 29 Apr 2026 09:58:37 GMT",
-      "url": "https://pypi.org/project/aws-resource-validator-iotwireless/"
+      "description": "Synthetic relational dataset generator with schema-driven chaos controls.",
+      "author": null,
+      "published_at": "Wed, 29 Apr 2026 10:30:13 GMT",
+      "url": "https://pypi.org/project/chaoslake/"
     }
   ]
 }

@@ -1,33 +1,33 @@
 {
   "channel": "hacker-news",
   "event": "hn_update",
-  "ts": "2026-04-29T10:45:00.716Z",
+  "ts": "2026-04-29T11:15:00.793Z",
   "source": "HN Algolia /search",
   "payload": [
     {
       "rank": 1,
       "title": "Ghostty is leaving GitHub",
       "url": "https://mitchellh.com/writing/ghostty-leaving-github",
-      "score": 2661,
-      "comments": 780,
+      "score": 2695,
+      "comments": 791,
       "author": "WadeGrimridge",
-      "age_hours": 15
+      "age_hours": 16
     },
     {
       "rank": 2,
       "title": "Your phone is about to stop being yours",
       "url": "https://keepandroidopen.org/en/",
-      "score": 1399,
-      "comments": 635,
+      "score": 1423,
+      "comments": 646,
       "author": "doener",
-      "age_hours": 19
+      "age_hours": 20
     },
     {
       "rank": 3,
       "title": "Localsend: An open-source cross-platform alternative to AirDrop",
       "url": "https://github.com/localsend/localsend",
-      "score": 857,
-      "comments": 253,
+      "score": 859,
+      "comments": 257,
       "author": "bilsbie",
       "age_hours": 23
     },
@@ -36,7 +36,7 @@
       "title": "Talkie: a 13B vintage language model from 1930",
       "url": "https://talkie-lm.com/introducing-talkie",
       "score": 711,
-      "comments": 291,
+      "comments": 293,
       "author": "jekude",
       "age_hours": 37
     },
@@ -44,17 +44,17 @@
       "rank": 5,
       "title": "Before GitHub",
       "url": "https://lucumr.pocoo.org/2026/4/28/before-github/",
-      "score": 484,
-      "comments": 150,
+      "score": 493,
+      "comments": 151,
       "author": "mlex",
-      "age_hours": 13
+      "age_hours": 14
     },
     {
       "rank": 6,
       "title": "UAE to leave OPEC",
       "url": "https://www.ft.com/content/8c354f2d-3e66-47f1-aad4-9b4aa30e386d",
-      "score": 437,
-      "comments": 563,
+      "score": 445,
+      "comments": 577,
       "author": "bazzmt",
       "age_hours": 22
     },
@@ -62,26 +62,26 @@
       "rank": 7,
       "title": "Who owns the code Claude Code wrote?",
       "url": "https://legallayer.substack.com/p/who-owns-the-claude-code-wrote",
-      "score": 415,
-      "comments": 384,
+      "score": 425,
+      "comments": 388,
       "author": "senaevren",
-      "age_hours": 23
+      "age_hours": 24
     },
     {
       "rank": 8,
       "title": "GitHub RCE Vulnerability: CVE-2026-3854 Breakdown",
       "url": "https://www.wiz.io/blog/github-rce-vulnerability-cve-2026-3854",
-      "score": 366,
-      "comments": 76,
+      "score": 376,
+      "comments": 78,
       "author": "bo0tzz",
-      "age_hours": 18
+      "age_hours": 19
     },
     {
       "rank": 9,
       "title": "How ChatGPT serves ads",
       "url": "https://www.buchodi.com/how-chatgpt-serves-ads-heres-the-full-attribution-loop/",
-      "score": 354,
-      "comments": 238,
+      "score": 362,
+      "comments": 242,
       "author": "lmbbuchodi",
       "age_hours": 11
     },
@@ -89,10 +89,10 @@
       "rank": 10,
       "title": "Bugs Rust won't catch",
       "url": "https://corrode.dev/blog/bugs-rust-wont-catch/",
-      "score": 319,
-      "comments": 143,
+      "score": 339,
+      "comments": 154,
       "author": "lwhsiao",
-      "age_hours": 8
+      "age_hours": 9
     }
   ]
 }

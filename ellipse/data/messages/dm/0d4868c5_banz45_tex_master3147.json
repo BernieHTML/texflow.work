@@ -1,0 +1,22 @@
+{
+  "chat_id": "0d4868c5_banz45_tex_master3147",
+  "participants": [
+    "banz45",
+    "tex_master3147"
+  ],
+  "created_at": "2026-04-29T11:13:47.571Z",
+  "messages": [
+    {
+      "id": "a5ee3aa9-2bd1-40ef-8808-32e102150d55",
+      "from": "tex_master3147",
+      "timestamp": "2026-04-29T11:14:08.532Z",
+      "body": "hello"
+    },
+    {
+      "id": "16300108-e0b2-4c95-b5a1-7e7c2029a456",
+      "from": "banz45",
+      "timestamp": "2026-04-29T11:15:34.311Z",
+      "body": "hi how are you?"
+    }
+  ]
+}

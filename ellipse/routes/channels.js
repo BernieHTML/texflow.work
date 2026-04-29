@@ -223,7 +223,7 @@ router.delete('/:slug', requireAuth, (req, res) => {
   res.json({ deleted: true, channel: channel.slug });
 });
 
-router.post('/:slug/follow', requireAuth, (req, res) => {
+function followChannel(req, res) {
   const channels = readChannels();
   const channel = channels.find((item) => item.slug === req.params.slug);
   if (!channel) return res.status(404).json({ error: 'Channel not found' });
@@ -272,9 +272,12 @@ router.post('/:slug/follow', requireAuth, (req, res) => {
   persistSubscriptionRecord(subscriptions, record);
   writeChannels(channels);
   res.json({ subscribed: true, channel: channel.slug, stream: `${baseUrl()}/ellipse/api/inbox/stream` });
-});
+}
 
-router.delete('/:slug/follow', requireAuth, (req, res) => {
+router.post('/:slug/follow', requireAuth, followChannel);
+router.post('/:slug/subscribe', requireAuth, followChannel);
+
+function unfollowChannel(req, res) {
   const channels = readChannels();
   const channel = channels.find((item) => item.slug === req.params.slug);
   if (!channel) return res.status(404).json({ error: 'Channel not found' });
@@ -288,7 +291,10 @@ router.delete('/:slug/follow', requireAuth, (req, res) => {
     writeChannels(channels);
   }
   res.json({ subscribed: false, channel: channel.slug });
-});
+}
+
+router.delete('/:slug/follow', requireAuth, unfollowChannel);
+router.delete('/:slug/subscribe', requireAuth, unfollowChannel);
 
 router.get('/:slug/stream', requireAuth, (req, res) => {
   const channel = findChannel(req.params.slug);
@@ -375,7 +381,7 @@ router.get('/:slug/posts', optionalAuth, (req, res) => {
   res.json(posts);
 });
 
-router.post('/:slug/posts', requireAuth, (req, res) => {
+function publishPost(req, res) {
   const channels = readChannels();
   const channel = channels.find((item) => item.slug === req.params.slug);
   if (!ownerOnly(req, res, channel)) return;
@@ -406,7 +412,10 @@ router.post('/:slug/posts', requireAuth, (req, res) => {
   writeChannels(channels);
   broadcastCircle(channel, post);
   res.status(201).json(post);
-});
+}
+
+router.post('/:slug/posts', requireAuth, publishPost);
+router.post('/:slug/publish', requireAuth, publishPost);
 
 router.get('/posts/:postId', requireAuth, (req, res) => {
   const posts = readPosts();

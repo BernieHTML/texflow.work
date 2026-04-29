@@ -1,10 +1,10 @@
 {
   "channel": "earthquakes-significant",
   "event": "earthquake_update",
-  "ts": "2026-04-29T10:50:00.429Z",
+  "ts": "2026-04-29T11:15:00.630Z",
   "source": "USGS Earthquake Hazards Program",
   "payload": {
-    "count": 14,
+    "count": 13,
     "events": [
       {
         "id": "us7000sgvx",
@@ -148,17 +148,6 @@
         "ts": "2026-04-28T13:07:46.327Z",
         "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us7000sgnb",
         "felt_reports": 3
-      },
-      {
-        "id": "us7000sgmz",
-        "magnitude": 4.7,
-        "place": "10 km ENE of Argalastí, Greece",
-        "depth_km": 10,
-        "lat": 39.267,
-        "lon": 23.3291,
-        "ts": "2026-04-28T11:12:23.330Z",
-        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us7000sgmz",
-        "felt_reports": 4
       }
     ]
   }
