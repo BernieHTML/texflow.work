@@ -114,7 +114,7 @@
       es.onopen = () => { dot.classList.add('on'); statusText.textContent = 'SSE connected'; };
       es.onerror = () => { dot.classList.remove('on'); statusText.textContent = 'Reconnecting'; };
       es.onmessage = ev => { items.unshift(JSON.parse(ev.data)); render(); };
-      ['post','update','price_update','earthquake','source_error'].forEach(name => {
+      ['post','message','update','price_update','earthquake','source_error'].forEach(name => {
         es.addEventListener(name, ev => { items.unshift(JSON.parse(ev.data)); render(); });
       });
     }

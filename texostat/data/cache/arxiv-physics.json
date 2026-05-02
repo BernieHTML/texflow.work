@@ -1,119 +1,141 @@
 {
   "channel": "arxiv-physics",
   "event": "papers_update",
-  "ts": "2026-04-29T11:12:54.890Z",
+  "ts": "2026-05-02T00:05:00.634Z",
   "source": "arXiv RSS physics",
   "payload": [
     {
-      "id": "2604.24769",
-      "title": "SPARSE -- Efficient High-Resolution SEM Imaging of Rare Microstructural Features Across Large Areas by Selective Rescanning",
+      "id": "2604.27005",
+      "title": "Phase-Transition-Driven Hyperbolic Optical Response and Directional Polaritons in Epitaxial VO2 Thin Films",
       "authors": [
-        "Tom Reclik",
-        "Jan Gerlach",
-        "Maximilian A. Wollenweber",
-        "Yannis P. Korkolis",
-        "Sandra Korte-Kerzel"
+        "Maria Chiara Paolozzi",
+        "Annalisa D Arco",
+        "Ilaria Martinelli",
+        "Lorenzo Mosesso",
+        "Jacopo Sera"
       ],
-      "abstract_truncated": "arXiv:2604.24769v1 Announce Type: new \nAbstract: Characterisation of rare microstructural features in scanning electron microscopy (SEM) requires imaging large areas at high resolution. This leads to prohibitively long acquisition times. We present an open-source Python framework that addresses this bottleneck through a two-stage approach: a fast scan identifies regions of interest, which are then",
-      "submitted": "Wed, 29 Apr 2026 00:00:00 -0400",
-      "url": "https://arxiv.org/abs/2604.24769"
+      "abstract_truncated": "arXiv:2604.27005v1 Announce Type: new \nAbstract: Optical anisotropy in crystalline solids enables direction-dependent light-matter interactions and underpins a variety of advanced photonic functionalities. In this context, Vanadium dioxide (VO2) represents a prototypical material that undergoes a reversible MIT near 67{\\deg}C, accompanied by pronounced electronic, structural, and optical modificat",
+      "submitted": "Fri, 01 May 2026 00:00:00 -0400",
+      "url": "https://arxiv.org/abs/2604.27005"
     },
     {
-      "id": "2604.24774",
-      "title": "Multi-modes Bessel-Gaussian-Orbital Angular Momentum Beams Quantum Holography",
+      "id": "2604.27027",
+      "title": "Gaseous forms of $^{76}$Ge, $^{82}$Se, $^{96}$Zr, $^{100}$Mo, $^{124}$Sn, and $^{130}$Te: new avenues to future $0\\nu\\beta\\beta$ time projection chambers",
       "authors": [
-        "Jinjin Li",
-        "Chaoying Zhao"
+        "Aneesha Avasthi",
+        "Benjamin Monreal",
+        "Ivana Moya"
       ],
-      "abstract_truncated": "arXiv:2604.24774v1 Announce Type: new \nAbstract: We propose an orbital angular momentum (OAM) quantum holography scheme based on multi-mode Bessel-Gaussian (MBG) beams. Entangled photon pairs are generated through spontaneous parametric down-conversion (SPDC) process, and the axis prism parameters and topological charges of the idler photons are used for encoding to construct Bessel-Gaussian quant",
-      "submitted": "Wed, 29 Apr 2026 00:00:00 -0400",
-      "url": "https://arxiv.org/abs/2604.24774"
+      "abstract_truncated": "arXiv:2604.27027v1 Announce Type: new \nAbstract: Searches for neutrinoless double beta decay are growing larger, with tonne-scale targets in several nuclides still far from exhausting the discovery space. What's beyond ton scale? Time projection chambers (TPCs) are one option for building large (100~T or kiloton-scale) instruments, but filling them with the familiar $^{136}$Xe for a $0\\nu\\beta\\bet",
+      "submitted": "Fri, 01 May 2026 00:00:00 -0400",
+      "url": "https://arxiv.org/abs/2604.27027"
     },
     {
-      "id": "2604.24775",
-      "title": "Application of a Mixture of Experts-based Foundation Model to the GlueX DIRC Detector",
+      "id": "2604.27036",
+      "title": "Longitudinal beam instability driven by coherent radiation in an SSMB laser modulator",
       "authors": [
-        "Cristiano Fanelli",
-        "James Giroux",
-        "Cole Granger",
-        "Justin Stevens"
+        "Yingjie Dai",
+        "Zhuoyuan Liu",
+        "Tong Li",
+        "Xiujie Deng",
+        "Lixin Yan"
       ],
-      "abstract_truncated": "arXiv:2604.24775v1 Announce Type: new \nAbstract: We present a Mixture-of-Experts-based foundation model applied to the GlueX DIRC detector at Jefferson Lab, demonstrating its utility as a unified framework for fast simulation, particle identification, and hit-level noise filtering of Cherenkov photons. By leveraging a single shared transformer backbone across all tasks, the approach eliminates the",
-      "submitted": "Wed, 29 Apr 2026 00:00:00 -0400",
-      "url": "https://arxiv.org/abs/2604.24775"
+      "abstract_truncated": "arXiv:2604.27036v1 Announce Type: new \nAbstract: Storage ring-based steady-state microbunching (SSMB) is a promising approach for generating high-average-power coherent radiation, while the instabilities driven by coherent undulator radiation in the laser modulator (LM) is important for the ring performance. In this paper we investigate the longitudinal single-bunch multi-turn LM instability using",
+      "submitted": "Fri, 01 May 2026 00:00:00 -0400",
+      "url": "https://arxiv.org/abs/2604.27036"
     },
     {
-      "id": "2604.24777",
-      "title": "Discrete Boltzmann Statistics: Hawking Radiation, Remnants, and Fluctuation Theorems at Finite Lattice Spacing",
+      "id": "2604.27069",
+      "title": "Adaptive Self-Supervised Surface-Related Multiple Suppression",
       "authors": [
-        "Abdelmalek Boumali"
+        "Huan Song",
+        "Shijun Cheng",
+        "Huanhuan Tang",
+        "Wei Ouyang",
+        "Weijian Mao"
       ],
-      "abstract_truncated": "arXiv:2604.24777v1 Announce Type: new \nAbstract: The discrete Boltzmann factor $B_E(\\beta_n)=(1-bE)^n$, introduced by Chung, Hassanabadi, and Boumali, provides a lattice regularization of the canonical weight $e^{-\\beta E}$ and imposes the compact-support condition $E<1/b$. In the present analysis we systematically separate results that follow directly from this bounded thermal weight from those t",
-      "submitted": "Wed, 29 Apr 2026 00:00:00 -0400",
-      "url": "https://arxiv.org/abs/2604.24777"
+      "abstract_truncated": "arXiv:2604.27069v1 Announce Type: new \nAbstract: Effective suppression of surface-related multiples is essential to prevent imaging artifacts and erroneous structural interpretations. While conventional approaches rely on accurate priors or subsurface model knowledge, and supervised learning methods require labeled data that are impractical to obtain for real seismic data. To overcome these limita",
+      "submitted": "Fri, 01 May 2026 00:00:00 -0400",
+      "url": "https://arxiv.org/abs/2604.27069"
     },
     {
-      "id": "2604.24778",
-      "title": "A unifying physically meaningful relativistic action",
+      "id": "2604.27070",
+      "title": "Experimentally Accurate Graph Neural Network Predictions of Core-Electron Binding Energies",
       "authors": [
-        "Y. Friedman"
+        "Adam E. A. Fouda",
+        "Joshua Zhou",
+        "Rodrigo Ferreira",
+        "Patrick Phillips",
+        "Valay Agarawal"
       ],
-      "abstract_truncated": "arXiv:2604.24778v1 Announce Type: new \nAbstract: We introduce a relativistic action that provides a unified and physically meaningful description of particle dynamics in external fields. The proposed action is constructed to be Lorentz covariant and reduces to the standard classical action in the appropriate limit. It incorporates gravitational and electromagnetic interactions within a single fram",
-      "submitted": "Wed, 29 Apr 2026 00:00:00 -0400",
-      "url": "https://arxiv.org/abs/2604.24778"
+      "abstract_truncated": "arXiv:2604.27070v1 Announce Type: new \nAbstract: Graph neural network architectures are advantageous for predicting core-electron binding energies which depend on local bond environment effects, as the number of message passing layers defines the topological (bond) radius of the model's receptive field. This provides an interpretable connection between the model's architecture and the definition o",
+      "submitted": "Fri, 01 May 2026 00:00:00 -0400",
+      "url": "https://arxiv.org/abs/2604.27070"
     },
     {
-      "id": "2604.24779",
-      "title": "Superposition Principle in Relativistic Gravity",
+      "id": "2604.27088",
+      "title": "Compressible Navier--Stokes Flow in Schr\\\"odinger-Type Variables",
       "authors": [
-        "Y. Friedman"
+        "James R. Beattie",
+        "Max Sokolova",
+        "Khush Negandhi",
+        "Bart Ripperda"
       ],
-      "abstract_truncated": "arXiv:2604.24779v1 Announce Type: new \nAbstract: We develop a framework for superposition in relativistic gravity within Extended Relativity (ER), a Lorentz-covariant theory formulated in flat spacetime. In this approach, gravitational fields are described by deviations from the Minkowski metric associated with individual sources, and multi-source configurations are constructed through a superposi",
-      "submitted": "Wed, 29 Apr 2026 00:00:00 -0400",
-      "url": "https://arxiv.org/abs/2604.24779"
+      "abstract_truncated": "arXiv:2604.27088v1 Announce Type: new \nAbstract: Fluid equations are nonlinear, dissipative, and non-Hamiltonian, which makes their relation to Schr\\\"odinger evolution and quantum algorithms nontrivial. We derive an exact Eulerian Cole-Hopf-type reformulation of isothermal compressible Navier-Stokes (NS) flow in Schr\\\"odinger-type amplitude variables. To our knowledge, this gives the first exact C",
+      "submitted": "Fri, 01 May 2026 00:00:00 -0400",
+      "url": "https://arxiv.org/abs/2604.27088"
     },
     {
-      "id": "2604.24780",
-      "title": "Entropy, Gravity, and an Apparent Violation of the Second Law",
+      "id": "2604.27110",
+      "title": "Beyond Project-Based Learning: Conference-Style Writing as Authentic Assessment in Interdisciplinary Quantum Engineering Education",
       "authors": [
-        "Jorge Pinochet",
-        "Giorgio Sonnino"
+        "Nischal Binod Gautam",
+        "Enrique P. Blair"
       ],
-      "abstract_truncated": "arXiv:2604.24780v1 Announce Type: new \nAbstract: An interesting question to explore in physics classes is whether gravity violates the second law of thermodynamics. Standard physics textbooks provide little to no discussion of the relationship between entropy and gravity, and the same is often true of specialized texts. The aim of this work is to address this question by analyzing the behavior of ",
-      "submitted": "Wed, 29 Apr 2026 00:00:00 -0400",
-      "url": "https://arxiv.org/abs/2604.24780"
+      "abstract_truncated": "arXiv:2604.27110v1 Announce Type: new \nAbstract: Project-based learning is recognized as an effective approach for improving engagement and applied understanding in STEM education. In quantum engineering courses, however, the question is no longer only whether students benefit from projects but how those projects should culminate if the goal is authentic disciplinary preparation. This paper examin",
+      "submitted": "Fri, 01 May 2026 00:00:00 -0400",
+      "url": "https://arxiv.org/abs/2604.27110"
     },
     {
-      "id": "2604.24781",
-      "title": "The landslide drag",
+      "id": "2604.27136",
+      "title": "Stepping up enhanced rate calculations with EATR-flooding",
       "authors": [
-        "Shiva P. Pudasaini"
+        "Nicodemo Mazzaferro",
+        "Willmor J Pena Ccoa",
+        "Pilar Cossio",
+        "Glen M. Hocky"
       ],
-      "abstract_truncated": "arXiv:2604.24781v1 Announce Type: new \nAbstract: Drag is one of the most important energy dissipation mechanisms in nature, including landslides and debris flows. To satisfactorily reproduce laboratory or field data in simulating landslides, often empirical relations or convenient numerical values are used for the drag force coefficient. However, this is just a parameter calibration rather than a ",
-      "submitted": "Wed, 29 Apr 2026 00:00:00 -0400",
-      "url": "https://arxiv.org/abs/2604.24781"
+      "abstract_truncated": "arXiv:2604.27136v1 Announce Type: new \nAbstract: Several recent methods have shown that it is possible to compute rate constants of very slow biomolecular processes using simulations where a time-dependent bias is added along one or several collective variables (CVs). We previously reported the exponential average time-dependent rate (EATR) method, which can improve upon these approaches by accoun",
+      "submitted": "Fri, 01 May 2026 00:00:00 -0400",
+      "url": "https://arxiv.org/abs/2604.27136"
     },
     {
-      "id": "2604.24787",
-      "title": "Effective Observer-Split Source Terms in Rotating Frames and Gravitomagnetic Backgrounds in Extended Aharonov-Bohm Electrodynamics",
+      "id": "2604.27139",
+      "title": "First Observation of Multiple Very-Near-Earth Reconnection Events During a Single Storm Main Phase",
       "authors": [
-        "A. Iadicicco",
-        "G. Modanese",
-        "L. Verolino"
+        "Fekireselassie Beyene",
+        "Vassilis Angelopoulos",
+        "Christine Gabrielse",
+        "Yoshizumi Miyoshi",
+        "Iku Shinohara"
       ],
-      "abstract_truncated": "arXiv:2604.24787v1 Announce Type: new \nAbstract: We examine whether rotating frames and stationary gravitomagnetic backgrounds can provide a meaningful link to extended Aharonov-Bohm electrodynamics without invoking microscopic charge non-conservation. For standard generally covariant, locally $U(1)$-invariant matter, the answer at the microscopic level is negative: the physical four-current remai",
-      "submitted": "Wed, 29 Apr 2026 00:00:00 -0400",
-      "url": "https://arxiv.org/abs/2604.24787"
+      "abstract_truncated": "arXiv:2604.27139v1 Announce Type: new \nAbstract: For the first time, this paper presents three very-near-Earth reconnection (VNERX) events observed within the same 12-hour-long storm main phase. The THEMIS inner probes observed the hallmarks of three episodes of tailward retreating x-lines positioned between magnetic local time (MLT) 23-24 and radial distance 12-13 Earth radii (RE). The events occ",
+      "submitted": "Fri, 01 May 2026 00:00:00 -0400",
+      "url": "https://arxiv.org/abs/2604.27139"
     },
     {
-      "id": "2604.24795",
-      "title": "Higgs Sector and Flavour Structure in an Algebraic Three-Generation Model with S3 Family Symmetry",
+      "id": "2604.27158",
+      "title": "Hybrid Fourier Neural Operator-Lattice Boltzmann Method",
       "authors": [
-        "Niels Gresnigt"
+        "Alexandra Junk",
+        "Josef M. Winter",
+        "Meike T\\\"utken",
+        "Steffen Schmidt",
+        "Nikolaus A. Adams"
       ],
-      "abstract_truncated": "arXiv:2604.24795v1 Announce Type: new \nAbstract: We extend our previous algebraic construction of three fermion generations in the complex Clifford algebra $\\mathbb{C}\\ell(10)$ by incorporating the Higgs sector. Using the $S_3$ family symmetry that permutes three algebraically distinguished fermion sectors, we construct Higgs components as right-action operators and extract the corresponding Yukaw",
-      "submitted": "Wed, 29 Apr 2026 00:00:00 -0400",
-      "url": "https://arxiv.org/abs/2604.24795"
+      "abstract_truncated": "arXiv:2604.27158v1 Announce Type: new \nAbstract: We propose an accelerated computational fluid dynamics framework based on a hybrid Fourier Neural Operator-Lattice Boltzmann Method (FNO-LBM) for steady and unsteady weakly compressible flows. FNO-based initialization significantly accelerates LBM in reaching steady-states of porous media flows across all macroscopic fields, achieving up to 70% spee",
+      "submitted": "Fri, 01 May 2026 00:00:00 -0400",
+      "url": "https://arxiv.org/abs/2604.27158"
     }
   ]
 }

@@ -5,6 +5,7 @@ import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 import { requireAuth } from '../middleware/auth.js';
 import { baseUrl, dataDir, readJson, writeJson } from '../services/store.js';
+import { broadcastInboxUser } from '../services/sse-manager.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const agentsFile = join(__dirname, '..', '..', 'tex', 'data', 'agents.json');
@@ -162,6 +163,56 @@ function dmSummary(thread, username) {
   };
 }
 
+function dmInboxItem(thread, username) {
+  const last = thread.messages?.[thread.messages.length - 1] || null;
+  if (!last) return null;
+  const other = thread.participants.find((name) => name !== username);
+  return {
+    id: last.id,
+    source: 'message',
+    type: 'dm',
+    channel: 'Ellipse DM',
+    title: `DM from ${last.from === username ? 'you' : displayName(last.from)}`,
+    owner: other ? `${other}@texflow.work` : null,
+    body_preview: last.body.slice(0, 200),
+    published_at: last.timestamp,
+    more_url: '/ellipse/messages',
+  };
+}
+
+function groupInboxItem(group, username) {
+  const last = group.messages?.[group.messages.length - 1] || null;
+  if (!last) return null;
+  return {
+    id: last.id,
+    source: 'message',
+    type: 'group_message',
+    channel: group.name,
+    title: `${group.name}: ${last.from === username ? 'you' : displayName(last.from)}`,
+    owner: `${group.members.length} members`,
+    body_preview: last.body.slice(0, 200),
+    published_at: last.timestamp,
+    more_url: '/ellipse/messages',
+  };
+}
+
+export function messageInboxItems(username) {
+  ensureMessageDirs();
+  const dmItems = listJsonFiles(dmDir)
+    .map((name) => readJson(join(dmDir, name), null))
+    .filter((thread) => thread?.participants?.includes(username))
+    .map((thread) => dmInboxItem(thread, username))
+    .filter(Boolean);
+
+  const groupItems = listJsonFiles(groupsDir)
+    .map((name) => readJson(join(groupsDir, name), null))
+    .filter((group) => group?.members?.includes(username))
+    .map((group) => groupInboxItem(group, username))
+    .filter(Boolean);
+
+  return [...dmItems, ...groupItems];
+}
+
 function requireDmAccess(req, res) {
   const chatId = safeDmId(req.params.chatId);
   if (!chatId) {
@@ -249,6 +300,9 @@ router.post('/dm/:chatId/message', requireAuth, (req, res) => {
   thread.messages.push(message);
   writeJson(dmFile(thread.chat_id), thread);
   notify(dmWatchers, thread.chat_id, formatDmTerminal(thread));
+  for (const participant of thread.participants) {
+    broadcastInboxUser(participant, 'message', dmInboxItem(thread, participant));
+  }
   res.status(201).json({ sent: true, message });
 });
 
@@ -320,6 +374,9 @@ router.post('/groups/:groupId/message', requireAuth, (req, res) => {
   group.messages.push(message);
   writeJson(groupFile(group.group_id), group);
   notify(groupWatchers, group.group_id, formatGroupTerminal(group));
+  for (const member of group.members) {
+    broadcastInboxUser(member, 'message', groupInboxItem(group, member));
+  }
   res.status(201).json({ sent: true, message });
 });
 

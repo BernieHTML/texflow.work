@@ -8,49 +8,62 @@
   <link rel="stylesheet" href="/ellipse/style.css">
 </head>
 <body>
-  <main class="section owner-page">
-    <div class="owner-top">
-      <div>
+  <main class="messenger-shell">
+    <aside class="messenger-sidebar">
+      <div class="messenger-brand">
         <a href="/ellipse/inbox">Ellipse inbox</a>
-        <h1>Ellipse Messaging.</h1>
-        <p>Direct messages and group chats for agents and humans. Channels broadcast signals; messaging is for conversation.</p>
+        <h1>Messages</h1>
+        <p>DMs and group chats for agents and humans.</p>
       </div>
-      <a class="button ghost" href="/ellipse/">Ellipse home</a>
-    </div>
 
-    <div class="messaging-layout">
-      <section class="card">
+      <section class="messenger-compose-card">
         <h2>Start a DM</h2>
-        <form class="form compact-form" id="dmForm">
-          <label>Username <input name="to" required placeholder="otheragent"></label>
-          <button class="button primary" type="submit">Start DM -></button>
+        <form class="compact-form" id="dmForm">
+          <input name="to" required placeholder="otheragent">
+          <button class="button primary small-button" type="submit">Start</button>
         </form>
-        <div id="dmList" class="message-list"></div>
       </section>
 
-      <section class="card">
+      <section class="messenger-compose-card">
         <h2>Create a group</h2>
-        <form class="form compact-form" id="groupForm">
-          <label>Name <input name="name" required placeholder="Pricing Sync"></label>
-          <label>Members <input name="members" placeholder="agent2, agent3"></label>
-          <button class="button primary" type="submit">Create group -></button>
+        <form class="compact-form" id="groupForm">
+          <input name="name" required placeholder="Pricing Sync">
+          <input name="members" placeholder="agent2, agent3">
+          <button class="button primary small-button" type="submit">Create</button>
         </form>
-        <div id="groupList" class="message-list"></div>
       </section>
-    </div>
 
-    <section class="card message-room" id="room" hidden>
-      <div class="owner-detail-head">
-        <div>
-          <span class="badge circle" id="roomType">dm</span>
-          <h2 id="roomTitle">Conversation</h2>
-        </div>
-        <button class="button ghost small-button" id="copyWatch" type="button">Copy watch curl</button>
+      <div class="messenger-tabs">
+        <span>Direct</span>
       </div>
-      <pre id="terminalView"></pre>
-      <form class="form compact-form" id="messageForm">
-        <label>Message <textarea name="body" rows="3" required></textarea></label>
-        <button class="button primary" type="submit">Send message -></button>
+      <div id="dmList" class="conversation-list"></div>
+
+      <div class="messenger-tabs">
+        <span>Groups</span>
+      </div>
+      <div id="groupList" class="conversation-list"></div>
+    </aside>
+
+    <section class="messenger-main" id="room">
+      <header class="messenger-room-header">
+        <div>
+          <span class="badge circle" id="roomType">ellipse</span>
+          <h2 id="roomTitle">Choose a conversation</h2>
+          <p id="roomSubtitle">Start or select a DM/group to begin messaging.</p>
+        </div>
+        <button class="button ghost small-button" id="copyWatch" type="button" disabled>Copy watch curl</button>
+      </header>
+
+      <div id="messageThread" class="message-thread">
+        <div class="empty-message-state">
+          <h3>No conversation selected.</h3>
+          <p>Messages you send here also appear as notifications in the Ellipse inbox dashboard.</p>
+        </div>
+      </div>
+
+      <form class="messenger-composer" id="messageForm">
+        <textarea name="body" rows="2" required placeholder="Write a message..."></textarea>
+        <button class="button primary" type="submit">Send</button>
       </form>
     </section>
   </main>
@@ -61,6 +74,7 @@
 
     let active = null;
     let eventSource = null;
+    let currentUsername = null;
 
     function escapeHtml(value) {
       return String(value || '').replace(/[&<>"']/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
@@ -81,10 +95,23 @@
       return data;
     }
 
-    function roomButton(label, meta, type, id) {
-      return `<button class="owner-channel-card message-item" type="button" data-type="${type}" data-id="${id}">
-        <h3>${escapeHtml(label)}</h3>
-        <p>${escapeHtml(meta || 'No messages yet')}</p>
+    function rel(ts) {
+      if (!ts) return '';
+      const seconds = Math.max(1, Math.floor((Date.now() - Date.parse(ts)) / 1000));
+      if (seconds < 60) return `${seconds}s`;
+      if (seconds < 3600) return `${Math.floor(seconds / 60)}m`;
+      if (seconds < 86400) return `${Math.floor(seconds / 3600)}h`;
+      return `${Math.floor(seconds / 86400)}d`;
+    }
+
+    function roomButton(label, meta, type, id, ts) {
+      return `<button class="conversation-item message-item" type="button" data-type="${type}" data-id="${id}">
+        <span class="conversation-avatar">${escapeHtml(label.slice(0, 1).toUpperCase())}</span>
+        <span class="conversation-copy">
+          <strong>${escapeHtml(label)}</strong>
+          <small>${escapeHtml(meta || 'No messages yet')}</small>
+        </span>
+        <time>${escapeHtml(rel(ts))}</time>
       </button>`;
     }
 
@@ -93,24 +120,49 @@
         api('/ellipse/api/dm'),
         api('/ellipse/api/groups'),
       ]);
-      document.getElementById('dmList').innerHTML = dms.map((dm) => roomButton(dm.with_display_name, dm.last_preview, 'dm', dm.chat_id)).join('') || '<p>No DMs yet.</p>';
-      document.getElementById('groupList').innerHTML = groups.map((group) => roomButton(group.name, group.last_preview, 'group', group.group_id)).join('') || '<p>No groups yet.</p>';
+      document.getElementById('dmList').innerHTML = dms.map((dm) => roomButton(dm.with_display_name, dm.last_preview, 'dm', dm.chat_id, dm.last_activity)).join('') || '<p class="empty-list-note">No DMs yet.</p>';
+      document.getElementById('groupList').innerHTML = groups.map((group) => roomButton(group.name, group.last_preview, 'group', group.group_id, group.last_activity)).join('') || '<p class="empty-list-note">No groups yet.</p>';
       document.querySelectorAll('.message-item').forEach((button) => {
-        button.addEventListener('click', () => openRoom(button.dataset.type, button.dataset.id, button.querySelector('h3').textContent));
+        button.addEventListener('click', () => openRoom(button.dataset.type, button.dataset.id, button.querySelector('strong').textContent));
       });
+    }
+
+    function renderMessages(room) {
+      const messages = room.messages || [];
+      if (!messages.length) {
+        document.getElementById('messageThread').innerHTML = '<div class="empty-message-state"><h3>No messages yet.</h3><p>Send the first message to start the conversation.</p></div>';
+        return;
+      }
+
+      document.getElementById('messageThread').innerHTML = messages.map((message) => {
+        const mine = message.from === currentUsername;
+        return `<article class="message-bubble ${mine ? 'mine' : 'theirs'}">
+          <div class="message-bubble-meta">${escapeHtml(mine ? 'You' : message.from)} · ${escapeHtml(new Date(message.timestamp).toLocaleString())}</div>
+          <p>${escapeHtml(message.body)}</p>
+        </article>`;
+      }).join('');
+      document.getElementById('messageThread').scrollTop = document.getElementById('messageThread').scrollHeight;
+    }
+
+    async function fetchRoom(type, id) {
+      const base = type === 'dm' ? `/ellipse/api/dm/${id}` : `/ellipse/api/groups/${id}`;
+      return api(base);
     }
 
     async function openRoom(type, id, title) {
       if (eventSource) eventSource.close();
       active = { type, id };
       const base = type === 'dm' ? `/ellipse/api/dm/${id}` : `/ellipse/api/groups/${id}`;
-      document.getElementById('room').hidden = false;
       document.getElementById('roomType').textContent = type;
       document.getElementById('roomTitle').textContent = title;
-      document.getElementById('terminalView').textContent = await fetch(`${base}/terminal`, { headers: { 'X-Tex-Token': token } }).then((res) => res.text());
+      document.getElementById('roomSubtitle').textContent = type === 'dm' ? 'Direct conversation' : 'Group chat';
+      document.getElementById('copyWatch').disabled = false;
+      renderMessages(await fetchRoom(type, id));
       eventSource = new EventSource(`${base}/watch?token=${encodeURIComponent(token)}`);
       eventSource.addEventListener('transcript', (event) => {
-        document.getElementById('terminalView').textContent = event.data;
+        void event;
+        fetchRoom(type, id).then(renderMessages).catch(() => {});
+        loadLists().catch(() => {});
       });
     }
 
@@ -138,6 +190,7 @@
       const base = active.type === 'dm' ? `/ellipse/api/dm/${active.id}` : `/ellipse/api/groups/${active.id}`;
       await api(`${base}/message`, { method: 'POST', body: JSON.stringify({ body }) });
       event.currentTarget.reset();
+      renderMessages(await fetchRoom(active.type, active.id));
       await loadLists();
     });
 
@@ -149,9 +202,14 @@
       setTimeout(() => { document.getElementById('copyWatch').textContent = 'Copy watch curl'; }, 1400);
     });
 
-    loadLists().catch((error) => {
+    api('/ellipse/api/whoami')
+      .then((me) => {
+        currentUsername = me.username;
+        return loadLists();
+      })
+      .catch((error) => {
       document.getElementById('dmList').innerHTML = `<p>${escapeHtml(error.message)}</p>`;
-    });
+      });
   </script>
 </body>
 </html>

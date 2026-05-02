@@ -1,139 +1,142 @@
 {
   "channel": "arxiv-ai",
   "event": "papers_update",
-  "ts": "2026-04-29T11:12:54.574Z",
+  "ts": "2026-05-02T00:05:00.504Z",
   "source": "arXiv RSS cs.AI",
   "payload": [
     {
-      "id": "2604.22777",
-      "title": "An Intelligent Fault Diagnosis Method for General Aviation Aircraft Based on Multi-Fidelity Digital Twin and FMEA Knowledge Enhancement",
+      "id": "2604.26999",
+      "title": "Compositional Meta-Learning for Mitigating Task Heterogeneity in Physics-Informed Neural Networks",
       "authors": [
-        "Zhihuan Wei",
-        "Yang Hu",
-        "Xinhang Chen",
-        "Yiming Zhang",
-        "Jie Liu"
+        "Beomchul Park",
+        "Minsu Koh",
+        "Heejo Kong",
+        "Seong-Whan Lee"
       ],
-      "abstract_truncated": "arXiv:2604.22777v1 Announce Type: new \nAbstract: Fault diagnosis of general aviation aircraft faces challenges including scarce real fault data, diverse fault types, and weak fault signatures. This paper proposes an intelligent fault diagnosis framework based on multi-fidelity digital twin, integrating four modules: high-fidelity flight dynamics simulation, FMEA-driven fault injection, multi-fidel",
-      "submitted": "Wed, 29 Apr 2026 00:00:00 -0400",
-      "url": "https://arxiv.org/abs/2604.22777"
+      "abstract_truncated": "arXiv:2604.26999v1 Announce Type: new \nAbstract: Physics-informed neural networks (PINNs) approximate solutions of partial differential equations (PDEs) by embedding physical laws into the loss function. In parameterized PDE families, variations in coefficients or boundary/initial conditions define distinct tasks. This makes training individual PINNs for each task computationally prohibitive, whil",
+      "submitted": "Fri, 01 May 2026 00:00:00 -0400",
+      "url": "https://arxiv.org/abs/2604.26999"
     },
     {
-      "id": "2604.22934",
-      "title": "PExA: Parallel Exploration Agent for Complex Text-to-SQL",
+      "id": "2604.27007",
+      "title": "Binary Spiking Neural Networks as Causal Models",
       "authors": [
-        "Tanmay Parekh",
-        "Ella Hofmann-Coyle",
-        "Shuyi Wang",
-        "Sachith Sri Ram Kothur",
-        "Srivas Prasad"
+        "Aditya Kar (CNRS",
+        "IRIT)",
+        "Emiliano Lorini (CNRS",
+        "IRIT)",
+        "Timoth\\'ee Masquelier (CNRS"
       ],
-      "abstract_truncated": "arXiv:2604.22934v1 Announce Type: new \nAbstract: LLM-based agents for text-to-SQL often struggle with latency-performance trade-off, where performance improvements come at the cost of latency or vice versa. We reformulate text-to-SQL generation within the lens of software test coverage where the original query is prepared with a suite of test cases with simpler, atomic SQLs that are executed in pa",
-      "submitted": "Wed, 29 Apr 2026 00:00:00 -0400",
-      "url": "https://arxiv.org/abs/2604.22934"
+      "abstract_truncated": "arXiv:2604.27007v1 Announce Type: new \nAbstract: We provide a causal analysis of Binary Spiking Neural Networks (BSNNs) to explain their behavior. We formally define a BSNN and represent its spiking activity as a binary causal model. Thanks to this causal representation, we are able to explain the output of the network by leveraging logic-based methods. In particular, we show that we can successfu",
+      "submitted": "Fri, 01 May 2026 00:00:00 -0400",
+      "url": "https://arxiv.org/abs/2604.27007"
     },
     {
-      "id": "2604.22951",
-      "title": "The Power of Power Law: Asymmetry Enables Compositional Reasoning",
+      "id": "2604.27082",
+      "title": "When Your LLM Reaches End-of-Life: A Framework for Confident Model Migration in Production Systems",
       "authors": [
-        "Zixuan Wang",
-        "Xingyu Dang",
-        "Jason D. Lee",
-        "Kaifeng Lyu"
+        "Emma Casey",
+        "David Roberts",
+        "David Sim",
+        "Ian Beaver"
       ],
-      "abstract_truncated": "arXiv:2604.22951v1 Announce Type: new \nAbstract: Natural language data follows a power-law distribution, with most knowledge and skills appearing at very low frequency. While a common intuition suggests that reweighting or curating data towards a uniform distribution may help models better learn these long-tail skills, we find a counterintuitive result: across a wide range of compositional reasoni",
-      "submitted": "Wed, 29 Apr 2026 00:00:00 -0400",
-      "url": "https://arxiv.org/abs/2604.22951"
+      "abstract_truncated": "arXiv:2604.27082v1 Announce Type: new \nAbstract: We present a framework for migrating production Large Language Model (LLM) based systems when the underlying model reaches end-of-life or requires replacement. The key contribution is a Bayesian statistical approach that calibrates automated evaluation metrics against human judgments, enabling confident model comparison even with limited manual eval",
+      "submitted": "Fri, 01 May 2026 00:00:00 -0400",
+      "url": "https://arxiv.org/abs/2604.27082"
     },
     {
-      "id": "2604.22958",
-      "title": "On the Existence of an Inverse Solution for Preference-Based Reductions in Argumentation",
+      "id": "2604.27092",
+      "title": "End-to-end autonomous scientific discovery on a real optical platform",
       "authors": [
-        "Alessio Zaninotto",
-        "Bruno Yun",
-        "Nir Oren",
-        "Srdjan Vesic"
+        "Shuxing Yang",
+        "Fujia Chen",
+        "Rui Zhao",
+        "Junyao Wu",
+        "Yize Wang"
       ],
-      "abstract_truncated": "arXiv:2604.22958v1 Announce Type: new \nAbstract: Preference-based argumentation frameworks (PAFs) extend Dung's approach to abstract argumentation (AAFs) by encoding preferences over arguments. Such preferences control the transformation of attacks into defeats, and different approaches to doing so result in different reductions from a PAF to an AAF. In this paper we consider a PAF inverse problem",
-      "submitted": "Wed, 29 Apr 2026 00:00:00 -0400",
-      "url": "https://arxiv.org/abs/2604.22958"
+      "abstract_truncated": "arXiv:2604.27092v1 Announce Type: new \nAbstract: Scientific research has long been human-led, driving new knowledge and transformative technologies through the continual revision of questions, methods and claims as evidence accumulates. Although large language model (LLM)-based agents are beginning to move beyond assisting predefined research workflows, none has yet demonstrated end-to-end autonom",
+      "submitted": "Fri, 01 May 2026 00:00:00 -0400",
+      "url": "https://arxiv.org/abs/2604.27092"
     },
     {
-      "id": "2604.22979",
-      "title": "Towards Causally Interpretable Wi-Fi CSI-Based Human Activity Recognition with Discrete Latent Compression and LTL Rule Extraction",
+      "id": "2604.27096",
+      "title": "Think it, Run it: Autonomous ML pipeline generation via self-healing multi-agent AI",
       "authors": [
-        "Luca Cotti",
-        "Luca Lavazza",
-        "Marco Cominelli",
-        "Liying Han",
-        "Gaofeng Dong"
+        "Adela Bara",
+        "Gabriela Dobrita",
+        "Simona-Vasilica Oprea"
       ],
-      "abstract_truncated": "arXiv:2604.22979v1 Announce Type: new \nAbstract: We address Human Activity Recognition (HAR) utilizing Wi-Fi Channel State Information (CSI) under the joint requirements of causal interpretability, symbolic controllability, and direct operation on high-dimensional raw signals. Deep neural models achieve strong predictive performance on CSI-based HAR (CHAR), yet rely on continuous latent representa",
-      "submitted": "Wed, 29 Apr 2026 00:00:00 -0400",
-      "url": "https://arxiv.org/abs/2604.22979"
+      "abstract_truncated": "arXiv:2604.27096v1 Announce Type: new \nAbstract: The purpose of our paper is to develop a unified multi-agent architecture that automates end-to-end machine learning (ML) pipeline generation from datasets and natural-language (NL) goals, improving efficiency, robustness and explainability. A five-agent system is proposed to handle profiling, intent parsing, microservice recommendation, Directed Ac",
+      "submitted": "Fri, 01 May 2026 00:00:00 -0400",
+      "url": "https://arxiv.org/abs/2604.27096"
     },
     {
-      "id": "2604.23002",
-      "title": "FormalScience: Scalable Human-in-the-Loop Autoformalisation of Science with Agentic Code Generation in Lean",
+      "id": "2604.27126",
+      "title": "Unsupervised Electrofacies Classification and Porosity Characterization in the Offshore Keta Basin Using Wireline Logs",
       "authors": [
-        "Jordan Meadows",
-        "Lan Zhang",
-        "Andre Freitas"
+        "Hamdiya Adams",
+        "Theophilus Ansah-Narh",
+        "Daniel Kwadwo Asiedu",
+        "Bruce Kofi Banoeng-Yakubo",
+        "Marcellin Atemkeng"
       ],
-      "abstract_truncated": "arXiv:2604.23002v1 Announce Type: new \nAbstract: Formalising informal mathematical reasoning into formally verifiable code is a significant challenge for large language models. In scientific fields such as physics, domain-specific machinery (\\textit{e.g.} Dirac notation, vector calculus) imposes additional formalisation challenges that modern LLMs and agentic approaches have yet to tackle. To aid ",
-      "submitted": "Wed, 29 Apr 2026 00:00:00 -0400",
-      "url": "https://arxiv.org/abs/2604.23002"
+      "abstract_truncated": "arXiv:2604.27126v1 Announce Type: new \nAbstract: This study presents an unsupervised machine learning workflow for electrofacies analysis in the offshore Keta Basin, Ghana, where core data are scarce. Six standard wireline logs from Well~C were analysed over a depth interval comprising approximately $11{,}195$ samples. K-means clustering was applied in multivariate log space, with the clustering s",
+      "submitted": "Fri, 01 May 2026 00:00:00 -0400",
+      "url": "https://arxiv.org/abs/2604.27126"
     },
     {
-      "id": "2604.23027",
-      "title": "A Systematic Approach for Large Language Models Debugging",
+      "id": "2604.27132",
+      "title": "TRUST: A Framework for Decentralized AI Service v.0.1",
       "authors": [
-        "Basel Shbita",
-        "Anna Lisa Gentile",
-        "Bing Zhang",
-        "Sungeun An",
-        "Shailja Thakur"
+        "Yu-Chao Huang",
+        "Zhen Tan",
+        "Mohan Zhang",
+        "Pingzhi Li",
+        "Zhuo Zhang"
       ],
-      "abstract_truncated": "arXiv:2604.23027v1 Announce Type: new \nAbstract: Large language models (LLMs) have become central to modern AI workflows, powering applications from open-ended text generation to complex agent-based reasoning. However, debugging these models remains a persistent challenge due to their opaque and probabilistic nature and the difficulty of diagnosing errors across diverse tasks and settings. This pa",
-      "submitted": "Wed, 29 Apr 2026 00:00:00 -0400",
-      "url": "https://arxiv.org/abs/2604.23027"
+      "abstract_truncated": "arXiv:2604.27132v1 Announce Type: new \nAbstract: Large Reasoning Models (LRMs) and Multi-Agent Systems (MAS) in high-stakes domains demand reliable verification, yet centralized approaches suffer four limitations: (1) Robustness, with single points of failure vulnerable to attacks and bias; (2) Scalability, as reasoning complexity creates bottlenecks; (3) Opacity, as hidden auditing erodes trust; ",
+      "submitted": "Fri, 01 May 2026 00:00:00 -0400",
+      "url": "https://arxiv.org/abs/2604.27132"
     },
     {
-      "id": "2604.23049",
-      "title": "A Decoupled Human-in-the-Loop System for Controlled Autonomy in Agentic Workflows",
+      "id": "2604.27134",
+      "title": "Unpacking Vibe Coding: Help-Seeking Processes in Student-AI Interactions While Programming",
       "authors": [
-        "Edward Cheng",
-        "Jeshua Cheng"
+        "Daiana Rinja",
+        "Eduardo Araujo Oliveira",
+        "Sonsoles L\\'opez-Pernas",
+        "Mohammed Saqr",
+        "Marcus Specht"
       ],
-      "abstract_truncated": "arXiv:2604.23049v1 Announce Type: new \nAbstract: AI agents are increasingly deployed to execute tasks and make decisions within agentic workflows, introducing new requirements for safe and controlled autonomy. Prior work has established the importance of human oversight for ensuring transparency, accountability, and trustworthiness in such systems. However, existing implementations of Human-in-the",
-      "submitted": "Wed, 29 Apr 2026 00:00:00 -0400",
-      "url": "https://arxiv.org/abs/2604.23049"
+      "abstract_truncated": "arXiv:2604.27134v1 Announce Type: new \nAbstract: Generative AI is reshaping higher education programming through vibe coding, where students collaborate with AI via natural language rather than writing code line-by-line. We conceptualize this practice as help-seeking, analyzing 19,418 interaction turns from 110 undergraduate students. Using inductive coding and Heterogeneous Transition Network Ana",
+      "submitted": "Fri, 01 May 2026 00:00:00 -0400",
+      "url": "https://arxiv.org/abs/2604.27134"
     },
     {
-      "id": "2604.23057",
-      "title": "Don't Make the LLM Read the Graph: Make the Graph Think",
+      "id": "2604.27150",
+      "title": "Optimal Stop-Loss and Take-Profit Parameterization for Autonomous Trading Agent Swarm",
       "authors": [
-        "Yuqi Sun",
-        "Tianqin Meng",
-        "George Liu",
-        "Yashraj Panwar",
-        "Lakshya Chaudhry"
+        "Nathan Li",
+        "Aikins Laryea",
+        "Yigit Ihlamur"
       ],
-      "abstract_truncated": "arXiv:2604.23057v1 Announce Type: new \nAbstract: We investigate whether explicit belief graphs improve LLM performance in cooperative multi-agent reasoning. Through 3,000+ controlled trials across four LLM families in the cooperative card game Hanabi, we establish four findings. First, integration architecture determines whether belief graphs provide value: as prompt context, graphs are decorative",
-      "submitted": "Wed, 29 Apr 2026 00:00:00 -0400",
-      "url": "https://arxiv.org/abs/2604.23057"
+      "abstract_truncated": "arXiv:2604.27150v1 Announce Type: new \nAbstract: Autonomous crypto trading systems often spend most of their design effort on finding entries, while exits are left to fixed rules that are rarely tested in a systematic way. This paper examines whether better stop-loss and take-profit settings can improve the performance of an autonomous trading agent swarm. Using more than 900 historical trades, we",
+      "submitted": "Fri, 01 May 2026 00:00:00 -0400",
+      "url": "https://arxiv.org/abs/2604.27150"
     },
     {
-      "id": "2604.23072",
-      "title": "Analytica: Soft Propositional Reasoning for Robust and Scalable LLM-Driven Analysis",
+      "id": "2604.27151",
+      "title": "Step-level Optimization for Efficient Computer-use Agents",
       "authors": [
-        "Junyan Cheng",
-        "Kyle Richardson",
-        "Peter Chin"
+        "Jinbiao Wei",
+        "Kangqi Ni",
+        "Yilun Zhao",
+        "Guo Gan",
+        "Arman Cohan"
       ],
-      "abstract_truncated": "arXiv:2604.23072v1 Announce Type: new \nAbstract: Large language model (LLM) agents are increasingly tasked with complex real-world analysis (e.g., in financial forecasting, scientific discovery), yet their reasoning suffers from stochastic instability and lacks a verifiable, compositional structure. To address this, we introduce Analytica, a novel agent architecture built on the principle of Soft ",
-      "submitted": "Wed, 29 Apr 2026 00:00:00 -0400",
-      "url": "https://arxiv.org/abs/2604.23072"
+      "abstract_truncated": "arXiv:2604.27151v1 Announce Type: new \nAbstract: Computer-use agents provide a promising path toward general software automation because they can interact directly with arbitrary graphical user interfaces instead of relying on brittle, application-specific integrations. Despite recent advances in benchmark performance, strong computer-use agents remain expensive and slow in practice, since most sy",
+      "submitted": "Fri, 01 May 2026 00:00:00 -0400",
+      "url": "https://arxiv.org/abs/2604.27151"
     }
   ]
 }

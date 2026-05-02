@@ -110,3 +110,16 @@ export function broadcastWorld(slug, eventName, payload) {
     }
   }
 }
+
+export function broadcastInboxUser(userId, eventName, event) {
+  if (!event) return;
+  const clients = inboxClients.get(userId);
+  if (!clients) return;
+
+  const eventId = event.id || `msg_${Date.now()}_${userId}`;
+  for (const client of clients) {
+    if (client.source === 'all') {
+      writeEvent(client.res, eventName, event, eventId);
+    }
+  }
+}

@@ -1,7 +1,7 @@
 {
   "channel": "covid-countries",
   "event": "covid_countries_update",
-  "ts": "2026-04-29T11:12:54.212Z",
+  "ts": "2026-05-02T14:00:01.520Z",
   "source": "disease.sh /v3/covid-19/countries",
   "payload": [
     {

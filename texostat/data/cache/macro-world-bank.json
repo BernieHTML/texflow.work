@@ -1,7 +1,7 @@
 {
   "channel": "macro-world-bank",
   "event": "gdp_update",
-  "ts": "2026-04-29T11:12:50.746Z",
+  "ts": "2026-05-02T00:05:00.432Z",
   "source": "World Bank NY.GDP.MKTP.CD",
   "payload": [
     {

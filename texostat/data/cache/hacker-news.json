@@ -1,98 +1,98 @@
 {
   "channel": "hacker-news",
   "event": "hn_update",
-  "ts": "2026-04-29T11:15:00.793Z",
+  "ts": "2026-05-02T14:45:01.087Z",
   "source": "HN Algolia /search",
   "payload": [
     {
       "rank": 1,
-      "title": "Ghostty is leaving GitHub",
-      "url": "https://mitchellh.com/writing/ghostty-leaving-github",
-      "score": 2695,
-      "comments": 791,
-      "author": "WadeGrimridge",
-      "age_hours": 16
+      "title": "Ti-84 Evo",
+      "url": "https://education.ti.com/en/products/calculators/graphing-calculators/ti-84-evo",
+      "score": 507,
+      "comments": 414,
+      "author": "thatxliner",
+      "age_hours": 19
     },
     {
       "rank": 2,
-      "title": "Your phone is about to stop being yours",
-      "url": "https://keepandroidopen.org/en/",
-      "score": 1423,
-      "comments": 646,
-      "author": "doener",
-      "age_hours": 20
+      "title": "Why does it take so long to release black fan versions?",
+      "url": "https://www.noctua.at/en/expertise/blog/how-can-it-take-so-long-to-release-black-fan-versions",
+      "score": 438,
+      "comments": 201,
+      "author": "buildbot",
+      "age_hours": 10
     },
     {
       "rank": 3,
-      "title": "Localsend: An open-source cross-platform alternative to AirDrop",
-      "url": "https://github.com/localsend/localsend",
-      "score": 859,
-      "comments": 257,
-      "author": "bilsbie",
-      "age_hours": 23
+      "title": "New research suggests people can communicate and practice skills while dreaming",
+      "url": "https://www.newyorker.com/culture/annals-of-inquiry/its-possible-to-learn-in-our-sleep-should-we",
+      "score": 389,
+      "comments": 228,
+      "author": "XzetaU8",
+      "age_hours": 21
     },
     {
       "rank": 4,
-      "title": "Talkie: a 13B vintage language model from 1930",
-      "url": "https://talkie-lm.com/introducing-talkie",
-      "score": 711,
-      "comments": 293,
-      "author": "jekude",
-      "age_hours": 37
+      "title": "Ask.com has closed",
+      "url": "https://www.ask.com/",
+      "score": 342,
+      "comments": 182,
+      "author": "supermdguy",
+      "age_hours": 11
     },
     {
       "rank": 5,
-      "title": "Before GitHub",
-      "url": "https://lucumr.pocoo.org/2026/4/28/before-github/",
-      "score": 493,
-      "comments": 151,
-      "author": "mlex",
-      "age_hours": 14
+      "title": "Artemis II Photo Timeline",
+      "url": "https://artemistimeline.com/#artemis-ii-walkout-nhq202604010003",
+      "score": 269,
+      "comments": 23,
+      "author": "geerlingguy",
+      "age_hours": 66
     },
     {
       "rank": 6,
-      "title": "UAE to leave OPEC",
-      "url": "https://www.ft.com/content/8c354f2d-3e66-47f1-aad4-9b4aa30e386d",
-      "score": 445,
-      "comments": 577,
-      "author": "bazzmt",
+      "title": "DeepSeek V4–almost on the frontier, a fraction of the price",
+      "url": "https://simonwillison.net/2026/Apr/24/deepseek-v4/",
+      "score": 257,
+      "comments": 151,
+      "author": "indigodaddy",
       "age_hours": 22
     },
     {
       "rank": 7,
-      "title": "Who owns the code Claude Code wrote?",
-      "url": "https://legallayer.substack.com/p/who-owns-the-claude-code-wrote",
-      "score": 425,
-      "comments": 388,
-      "author": "senaevren",
+      "title": "I'm Peter Roberts, immigration attorney who does work for YC and startups. AMA",
+      "url": "https://news.ycombinator.com/item?id=47975676",
+      "score": 177,
+      "comments": 226,
+      "author": "proberts",
       "age_hours": 24
     },
     {
       "rank": 8,
-      "title": "GitHub RCE Vulnerability: CVE-2026-3854 Breakdown",
-      "url": "https://www.wiz.io/blog/github-rce-vulnerability-cve-2026-3854",
-      "score": 376,
-      "comments": 78,
-      "author": "bo0tzz",
-      "age_hours": 19
+      "title": "How fast is a macOS VM, and how small could it be?",
+      "url": "https://eclecticlight.co/2026/05/02/how-fast-is-a-macos-vm-and-how-small-could-it-be/",
+      "score": 118,
+      "comments": 40,
+      "author": "moosia",
+      "age_hours": 5
     },
     {
       "rank": 9,
-      "title": "How ChatGPT serves ads",
-      "url": "https://www.buchodi.com/how-chatgpt-serves-ads-heres-the-full-attribution-loop/",
-      "score": 362,
-      "comments": 242,
-      "author": "lmbbuchodi",
-      "age_hours": 11
+      "title": "A report on burnout in open source software communities (2025) [pdf]",
+      "url": "https://mirandaheath.website/static/oss_burnout_report_mh_25.pdf",
+      "score": 114,
+      "comments": 42,
+      "author": "susam",
+      "age_hours": 15
     },
     {
       "rank": 10,
-      "title": "Bugs Rust won't catch",
-      "url": "https://corrode.dev/blog/bugs-rust-wont-catch/",
-      "score": 339,
-      "comments": 154,
-      "author": "lwhsiao",
-      "age_hours": 9
+      "title": "Why are there both TMP and TEMP environment variables? (2015)",
+      "url": "https://devblogs.microsoft.com/oldnewthing/20150417-00/?p=44213",
+      "score": 101,
+      "comments": 54,
+      "author": "ankitg12",
+      "age_hours": 6
     }
   ]
 }

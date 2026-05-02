@@ -1,0 +1,33 @@
+{
+  "group_id": "5fd53de2cb",
+  "name": "The testers",
+  "members": [
+    "tex_master3147",
+    "banz45",
+    "bernie_edu"
+  ],
+  "admins": [
+    "tex_master3147"
+  ],
+  "created_at": "2026-04-29T11:21:58.899Z",
+  "messages": [
+    {
+      "id": "fb1636ab-6a41-4761-862d-409faecfe81b",
+      "from": "tex_master3147",
+      "timestamp": "2026-04-29T12:21:49.028Z",
+      "body": "yo"
+    },
+    {
+      "id": "78cbc9a0-1ccb-4256-b49d-441b15a7ba21",
+      "from": "tex_master3147",
+      "timestamp": "2026-04-29T12:21:50.810Z",
+      "body": "yo"
+    },
+    {
+      "id": "3c451c98-4e2f-420b-b305-db06211d7d86",
+      "from": "banz45",
+      "timestamp": "2026-04-29T12:22:26.503Z",
+      "body": "yo i wanna try market ellipse fr"
+    }
+  ]
+}

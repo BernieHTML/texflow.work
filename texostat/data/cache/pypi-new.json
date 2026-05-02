@@ -1,128 +1,128 @@
 {
   "channel": "pypi-new",
   "event": "pypi_update",
-  "ts": "2026-04-29T11:12:55.044Z",
+  "ts": "2026-05-02T14:30:00.606Z",
   "source": "PyPI RSS",
   "payload": [
     {
-      "name": "ttplot",
+      "name": "accela-mcp",
       "version": "added",
-      "description": "None",
+      "description": "Model Context Protocol server for the Accela Construct API",
       "author": null,
-      "published_at": "Wed, 29 Apr 2026 10:55:30 GMT",
-      "url": "https://pypi.org/project/ttplot/"
+      "published_at": "Sat, 02 May 2026 13:58:59 GMT",
+      "url": "https://pypi.org/project/accela-mcp/"
     },
     {
-      "name": "MemEdit-G3tFun",
+      "name": "proxmox-ve-mcp",
       "version": "added",
-      "description": "High-performance Windows Memory Scanner/Editor",
-      "author": "contact@g3tfun.com",
-      "published_at": "Wed, 29 Apr 2026 10:51:02 GMT",
-      "url": "https://pypi.org/project/memedit-g3tfun/"
+      "description": "MCP server for Proxmox VE management",
+      "author": "artur@akmalov.com",
+      "published_at": "Sat, 02 May 2026 13:57:01 GMT",
+      "url": "https://pypi.org/project/proxmox-ve-mcp/"
     },
     {
-      "name": "arcmesh",
+      "name": "prama",
       "version": "added",
-      "description": "CLI for managing MCP (Model Context Protocol) configurations",
+      "description": "Sclite-backed WER/CER evaluation engine for ASR outputs.",
+      "author": "1695587905@qq.com",
+      "published_at": "Sat, 02 May 2026 13:55:40 GMT",
+      "url": "https://pypi.org/project/prama/"
+    },
+    {
+      "name": "airflow-providers-orchesjob",
+      "version": "added",
+      "description": "Apache Airflow provider for orchesjob – lightweight idempotent job runner",
       "author": null,
-      "published_at": "Wed, 29 Apr 2026 10:48:43 GMT",
-      "url": "https://pypi.org/project/arcmesh/"
+      "published_at": "Sat, 02 May 2026 13:52:19 GMT",
+      "url": "https://pypi.org/project/airflow-providers-orchesjob/"
     },
     {
-      "name": "tribulnation-ethereum",
+      "name": "dvara",
       "version": "added",
-      "description": "Tribulnation SDK implementation for Ethereum.",
-      "author": "marcel@tribulnation.com",
-      "published_at": "Wed, 29 Apr 2026 10:39:32 GMT",
-      "url": "https://pypi.org/project/tribulnation-ethereum/"
+      "description": "High-speed malicious URL detection using a Bloom Filter",
+      "author": "you@example.com",
+      "published_at": "Sat, 02 May 2026 13:51:53 GMT",
+      "url": "https://pypi.org/project/dvara/"
     },
     {
-      "name": "chcode",
+      "name": "grokfeed",
       "version": "added",
-      "description": "Terminal-based AI coding agent with typer+rich",
-      "author": "minimizeball@foxmail.com",
-      "published_at": "Wed, 29 Apr 2026 10:39:27 GMT",
-      "url": "https://pypi.org/project/chcode/"
+      "description": "Hacker News + Reddit + lobste.rs terminal feed viewer",
+      "author": "eamarkou@gmail.com",
+      "published_at": "Sat, 02 May 2026 13:49:34 GMT",
+      "url": "https://pypi.org/project/grokfeed/"
     },
     {
-      "name": "xs-bundle-cn-stock-os",
+      "name": "newpack-venu",
       "version": "added",
-      "description": "A-share stock market bundle for xscreener (AKShare-based)",
+      "description": "A small package for to welcome",
+      "author": "venubhagam4@gmail.com",
+      "published_at": "Sat, 02 May 2026 13:42:24 GMT",
+      "url": "https://pypi.org/project/newpack-venu/"
+    },
+    {
+      "name": "attestseal-x402",
+      "version": "added",
+      "description": "AttestSeal trust attestation headers for x402 / AP2 / MPP payment protocols. Drop-in middleware for FastAPI/Flask/aiohttp servers and a verifier for httpx/aiohttp clients.",
+      "author": "alu@attestseal.com",
+      "published_at": "Sat, 02 May 2026 13:42:08 GMT",
+      "url": "https://pypi.org/project/attestseal-x402/"
+    },
+    {
+      "name": "naqsha",
+      "version": "added",
+      "description": "Inspectable Python agent runtime with strict tool contracts, QAOA traces, and durable memory ports.",
       "author": null,
-      "published_at": "Wed, 29 Apr 2026 10:38:56 GMT",
-      "url": "https://pypi.org/project/xs-bundle-cn-stock-os/"
+      "published_at": "Sat, 02 May 2026 13:37:25 GMT",
+      "url": "https://pypi.org/project/naqsha/"
     },
     {
-      "name": "tribulnation-hyperliquid",
+      "name": "mcp-ssh-live",
       "version": "added",
-      "description": "Tribulnation SDK implementation for Hyperliquid.",
-      "author": "marcel@tribulnation.com",
-      "published_at": "Wed, 29 Apr 2026 10:38:08 GMT",
-      "url": "https://pypi.org/project/tribulnation-hyperliquid/"
-    },
-    {
-      "name": "tribulnation-dydx",
-      "version": "added",
-      "description": "Tribulnation SDK implementation for dYdX.",
-      "author": "marcel@tribulnation.com",
-      "published_at": "Wed, 29 Apr 2026 10:37:42 GMT",
-      "url": "https://pypi.org/project/tribulnation-dydx/"
-    },
-    {
-      "name": "tribulnation-mexc",
-      "version": "added",
-      "description": "Tribulnation SDK implementation for MEXC.",
-      "author": "marcel@tribulnation.com",
-      "published_at": "Wed, 29 Apr 2026 10:35:58 GMT",
-      "url": "https://pypi.org/project/tribulnation-mexc/"
-    },
-    {
-      "name": "malinakod",
-      "version": "added",
-      "description": "MalinaKod Deploy System — система развёртывания и управления сервисами",
+      "description": "Interactive, streaming SSH tool for LLM agents via MCP (Model Context Protocol)",
       "author": null,
-      "published_at": "Wed, 29 Apr 2026 10:31:59 GMT",
-      "url": "https://pypi.org/project/malinakod/"
+      "published_at": "Sat, 02 May 2026 13:36:08 GMT",
+      "url": "https://pypi.org/project/mcp-ssh-live/"
     },
     {
-      "name": "thoughtleaders-cli",
+      "name": "ErisPulse-BiliParser",
       "version": "added",
-      "description": "ThoughtLeaders CLI — query sponsorship data, channels, brands, and intelligence",
-      "author": "dev@thoughtleaders.io",
-      "published_at": "Wed, 29 Apr 2026 10:31:16 GMT",
-      "url": "https://pypi.org/project/thoughtleaders-cli/"
+      "description": "B站视频解析模块，自动解析视频链接并展示详细信息、热门评论与弹幕",
+      "author": "wsu2059@qq.com",
+      "published_at": "Sat, 02 May 2026 13:28:53 GMT",
+      "url": "https://pypi.org/project/erispulse-biliparser/"
     },
     {
-      "name": "phoenix-agent-ai",
+      "name": "agent-wiki-cli",
       "version": "added",
-      "description": "Advanced AI Infrastructure SDK for Agentic Applications",
+      "description": "CLI tool to maintain hybrid LLM Wikis for multi-language projects.",
+      "author": "denissvgn@gmail.com",
+      "published_at": "Sat, 02 May 2026 13:27:53 GMT",
+      "url": "https://pypi.org/project/agent-wiki-cli/"
+    },
+    {
+      "name": "gmaprium",
+      "version": "added",
+      "description": "Folium-style Python helpers for rendering Google Maps.",
       "author": null,
-      "published_at": "Wed, 29 Apr 2026 10:31:08 GMT",
-      "url": "https://pypi.org/project/phoenix-agent-ai/"
+      "published_at": "Sat, 02 May 2026 13:27:47 GMT",
+      "url": "https://pypi.org/project/gmaprium/"
     },
     {
-      "name": "odoo-addon-partner-department",
+      "name": "quisium",
       "version": "added",
-      "description": "Adds department as a partner type",
-      "author": "support@odoo-community.org",
-      "published_at": "Wed, 29 Apr 2026 10:31:04 GMT",
-      "url": "https://pypi.org/project/odoo-addon-partner-department/"
-    },
-    {
-      "name": "odoo-addon-product-supplierinfo-indirect-cost",
-      "version": "added",
-      "description": "Add indirect cost percent and amount to supplier info",
-      "author": "support@odoo-community.org",
-      "published_at": "Wed, 29 Apr 2026 10:30:24 GMT",
-      "url": "https://pypi.org/project/odoo-addon-product-supplierinfo-indirect-cost/"
-    },
-    {
-      "name": "chaoslake",
-      "version": "added",
-      "description": "Synthetic relational dataset generator with schema-driven chaos controls.",
+      "description": "Production-grade security middleware for LLM calls — prompt injection detection, output validation, and tool-call enforcement.",
       "author": null,
-      "published_at": "Wed, 29 Apr 2026 10:30:13 GMT",
-      "url": "https://pypi.org/project/chaoslake/"
+      "published_at": "Sat, 02 May 2026 13:26:11 GMT",
+      "url": "https://pypi.org/project/quisium/"
+    },
+    {
+      "name": "alcanza-check",
+      "version": "added",
+      "description": "A comprehensive network connectivity checker CLI (ICMP, TCP, DNS, SSL).",
+      "author": "benhanan.subendran@gmail.com",
+      "published_at": "Sat, 02 May 2026 13:22:43 GMT",
+      "url": "https://pypi.org/project/alcanza-check/"
     }
   ]
 }

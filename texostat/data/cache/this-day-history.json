@@ -1,28 +1,28 @@
 {
   "channel": "this-day-history",
   "event": "history_update",
-  "ts": "2026-04-29T11:12:57.895Z",
+  "ts": "2026-05-02T00:05:00.857Z",
   "source": "history.muffinlabs.com",
   "payload": [
     {
-      "year": "801",
-      "event": "An earthquake in the Central Apennines hits Rome and Spoleto, damaging the basilica of San Paolo Fuori le Mura."
+      "year": "1194",
+      "event": "King Richard I of England gives Portsmouth its first royal charter."
     },
     {
-      "year": "1091",
-      "event": "Battle of Levounion: The Pechenegs are defeated by Byzantine Emperor Alexios I Komnenos."
+      "year": "1230",
+      "event": "William de Braose is hanged by Prince Llywelyn the Great."
     },
     {
-      "year": "1429",
-      "event": "Joan of Arc arrives to relieve the Siege of Orléans."
+      "year": "1536",
+      "event": "Anne Boleyn, Queen of England, is arrested and imprisoned on charges of adultery, incest, treason and witchcraft."
     },
     {
-      "year": "1483",
-      "event": "Gran Canaria, the main island of the Canary Islands, is conquered by the Kingdom of Castile."
+      "year": "1559",
+      "event": "John Knox returns from exile to Scotland to become the leader of the nascent Scottish Reformation."
     },
     {
-      "year": "1492",
-      "event": "The Crown's decision to expel the Jews is announced in Zaragoza, Aragon, to the kingdom's procurators."
+      "year": "1568",
+      "event": "Mary, Queen of Scots, escapes from Lochleven Castle."
     }
   ]
 }

@@ -3,6 +3,7 @@ import { requireAuth } from '../middleware/auth.js';
 import { addInboxClient, writeEvent } from '../services/sse-manager.js';
 import { cachedWorldEvent } from '../services/texostat-bridge.js';
 import { rankInbox } from '../services/ranker.js';
+import { messageInboxItems } from './messages.js';
 import {
   baseUrl,
   getSubscriptionRecord,
@@ -12,6 +13,10 @@ import {
 } from '../services/store.js';
 
 const router = Router();
+
+function inboxEventName(item) {
+  return item.source === 'message' ? 'message' : item.type || 'post';
+}
 
 function circleInboxItems(record) {
   const channels = readChannels();
@@ -61,7 +66,7 @@ router.get('/', requireAuth, (req, res) => {
   const { record } = getSubscriptionRecord(req.userId, req.username);
   const limit = Math.min(100, Math.max(1, Number(req.query.limit || 50)));
   const offset = Math.max(0, Number(req.query.offset || 0));
-  const items = rankInbox([...circleInboxItems(record), ...worldInboxItems(record)]);
+  const items = rankInbox([...circleInboxItems(record), ...worldInboxItems(record), ...messageInboxItems(req.username)]);
   res.json({
     handle: req.handle,
     limit,
@@ -80,10 +85,10 @@ function stream(source) {
       ? worldInboxItems(record)
       : source === 'circle'
         ? circleInboxItems(record)
-        : [...worldInboxItems(record), ...circleInboxItems(record)];
+        : [...worldInboxItems(record), ...circleInboxItems(record), ...messageInboxItems(req.username)];
 
     for (const item of rankInbox(initial).slice(0, 20)) {
-      writeEvent(res, item.type || 'post', item, item.id || `cached_${item.channel}`);
+      writeEvent(res, inboxEventName(item), item, item.id || `cached_${item.channel}`);
     }
   };
 }
