@@ -1,7 +1,7 @@
 {
   "channel": "power-grid-au",
   "event": "aemo_update",
-  "ts": "2026-05-03T02:00:01.470Z",
+  "ts": "2026-05-03T03:00:02.188Z",
   "source": "AEMO ELEC_NEM_SUMMARY",
   "payload": {
     "region": null,
@@ -9,6 +9,6 @@
     "generation_mw": null,
     "price_aud_mwh": null,
     "renewable_pct": null,
-    "ts": "2026-05-03T02:00:01.470Z"
+    "ts": "2026-05-03T03:00:02.188Z"
   }
 }

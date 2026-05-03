@@ -1,128 +1,128 @@
 {
   "channel": "pypi-new",
   "event": "pypi_update",
-  "ts": "2026-05-03T02:00:00.327Z",
+  "ts": "2026-05-03T03:00:01.301Z",
   "source": "PyPI RSS",
   "payload": [
     {
-      "name": "activelog-agent",
+      "name": "codemule",
       "version": "added",
-      "description": "Fitness Guardian for activelog.ai — wearable health → PLATO → wellness insights",
+      "description": "None",
       "author": null,
-      "published_at": "Sun, 03 May 2026 01:29:46 GMT",
-      "url": "https://pypi.org/project/activelog-agent/"
+      "published_at": "Sun, 03 May 2026 02:24:48 GMT",
+      "url": "https://pypi.org/project/codemule/"
     },
     {
-      "name": "reallog-agent",
+      "name": "agentguard-ai-muaz-iqubal-muaz",
       "version": "added",
-      "description": "Vision Turbo-Shell for reallog.ai — camera vision → PLATO → agent",
+      "description": "Detect runaway AI costs before they hit production (STILL IN DEVELOPING PHASE)",
       "author": null,
-      "published_at": "Sun, 03 May 2026 01:29:31 GMT",
-      "url": "https://pypi.org/project/reallog-agent/"
+      "published_at": "Sun, 03 May 2026 02:23:39 GMT",
+      "url": "https://pypi.org/project/agentguard-ai-muaz-iqubal-muaz/"
     },
     {
-      "name": "rpr-cli",
+      "name": "gore-geolang",
       "version": "added",
-      "description": "RPR CLI -- React Python Rust monorepo scaffolding orchestrator",
+      "description": "GeoLang - 你的专属编程语言",
+      "author": "author@geolang.dev",
+      "published_at": "Sun, 03 May 2026 02:23:38 GMT",
+      "url": "https://pypi.org/project/gore-geolang/"
+    },
+    {
+      "name": "branchdiff",
+      "version": "added",
+      "description": "Placeholder",
       "author": null,
-      "published_at": "Sun, 03 May 2026 01:24:53 GMT",
-      "url": "https://pypi.org/project/rpr-cli/"
+      "published_at": "Sun, 03 May 2026 02:19:39 GMT",
+      "url": "https://pypi.org/project/branchdiff/"
     },
     {
-      "name": "xauditor",
+      "name": "ftree-kg",
       "version": "added",
-      "description": "Repository-wide white-box auditing CLI",
+      "description": "KGModule for file tree knowledge graphs",
+      "author": "suchanek@flux-frontiers.com",
+      "published_at": "Sun, 03 May 2026 02:16:30 GMT",
+      "url": "https://pypi.org/project/ftree-kg/"
+    },
+    {
+      "name": "AMDead",
+      "version": "added",
+      "description": "A new project created from git-repokit-template",
+      "author": "djdarcy@users.noreply.github.com",
+      "published_at": "Sun, 03 May 2026 02:09:54 GMT",
+      "url": "https://pypi.org/project/amdead/"
+    },
+    {
+      "name": "e501-fixer",
+      "version": "added",
+      "description": "Automatic string literal wrapping for PEP 8 E501 compliance",
+      "author": "cameronrout@gmail.com",
+      "published_at": "Sun, 03 May 2026 02:05:09 GMT",
+      "url": "https://pypi.org/project/e501-fixer/"
+    },
+    {
+      "name": "gpodder-fastapi-router",
+      "version": "added",
+      "description": "Pluggable FastAPI router that implements the gpodder.net (mygpo) HTTP API.",
       "author": null,
-      "published_at": "Sun, 03 May 2026 01:22:33 GMT",
-      "url": "https://pypi.org/project/xauditor/"
+      "published_at": "Sun, 03 May 2026 02:03:03 GMT",
+      "url": "https://pypi.org/project/gpodder-fastapi-router/"
     },
     {
-      "name": "xauditor-coder-service",
+      "name": "drkmttr",
       "version": "added",
-      "description": "HTTP microservice that wraps the Claude Code CLI for xauditor's repo-global verification stage.",
+      "description": "Pre-release Python package placeholder for the darkmatter platform",
       "author": null,
-      "published_at": "Sun, 03 May 2026 01:22:32 GMT",
-      "url": "https://pypi.org/project/xauditor-coder-service/"
+      "published_at": "Sun, 03 May 2026 02:02:22 GMT",
+      "url": "https://pypi.org/project/drkmttr/"
     },
     {
-      "name": "graphene-django-realtime",
+      "name": "llm-context-router",
       "version": "added",
-      "description": "Reuse your graphene-django schema as the single source of truth for WebSocket payloads.",
+      "description": "Scope your AI context before it explodes",
+      "author": "sal@saildev.org",
+      "published_at": "Sun, 03 May 2026 02:01:02 GMT",
+      "url": "https://pypi.org/project/llm-context-router/"
+    },
+    {
+      "name": "gisweep",
+      "version": "added",
+      "description": "GIS vulnerability scanner — ArcGIS REST, embedded maps, secret detection, KVKK/GDPR-aware",
+      "author": "mentalistler@mit.tc",
+      "published_at": "Sun, 03 May 2026 01:58:17 GMT",
+      "url": "https://pypi.org/project/gisweep/"
+    },
+    {
+      "name": "businesslog-agent",
+      "version": "added",
+      "description": "businesslog domain agent for PLATO fleet",
       "author": null,
-      "published_at": "Sun, 03 May 2026 01:19:33 GMT",
-      "url": "https://pypi.org/project/graphene-django-realtime/"
+      "published_at": "Sun, 03 May 2026 01:54:26 GMT",
+      "url": "https://pypi.org/project/businesslog-agent/"
     },
     {
-      "name": "fishinglog-agent",
+      "name": "activeledger-agent",
       "version": "added",
-      "description": "Captain's Mate for fishinglog.ai - PLATO-based fishing log agent",
-      "author": "fleet@cocapn.com",
-      "published_at": "Sun, 03 May 2026 01:19:29 GMT",
-      "url": "https://pypi.org/project/fishinglog-agent/"
-    },
-    {
-      "name": "asctl",
-      "version": "added",
-      "description": "Android Screen Control Tool - 黑屏而不锁屏的 Android 屏幕控制工具",
-      "author": "yanwuning@live.cn",
-      "published_at": "Sun, 03 May 2026 01:12:32 GMT",
-      "url": "https://pypi.org/project/asctl/"
-    },
-    {
-      "name": "accountpilot",
-      "version": "added",
-      "description": "Unified per-machine account sync framework — email, iMessage, calendar, and more",
-      "author": "ardaeren13@gmail.com",
-      "published_at": "Sun, 03 May 2026 01:09:15 GMT",
-      "url": "https://pypi.org/project/accountpilot/"
-    },
-    {
-      "name": "voxy-linux",
-      "version": "added",
-      "description": "Local offline voice dictation for Linux",
+      "description": "activeledger domain agent for PLATO fleet",
       "author": null,
-      "published_at": "Sun, 03 May 2026 01:08:55 GMT",
-      "url": "https://pypi.org/project/voxy-linux/"
+      "published_at": "Sun, 03 May 2026 01:54:09 GMT",
+      "url": "https://pypi.org/project/activeledger-agent/"
     },
     {
-      "name": "amrita_plugin_memory",
+      "name": "personallog-agent",
       "version": "added",
-      "description": "Amrita长期记忆插件",
+      "description": "personallog domain agent for PLATO fleet",
       "author": null,
-      "published_at": "Sun, 03 May 2026 01:06:18 GMT",
-      "url": "https://pypi.org/project/amrita-plugin-memory/"
+      "published_at": "Sun, 03 May 2026 01:53:54 GMT",
+      "url": "https://pypi.org/project/personallog-agent/"
     },
     {
-      "name": "crypto-guide-iewuur",
+      "name": "playerlog-agent",
       "version": "added",
-      "description": "币安新币挖矿：如何把握链上资产增值新机遇",
+      "description": "playerlog domain agent for PLATO fleet",
       "author": null,
-      "published_at": "Sun, 03 May 2026 01:01:44 GMT",
-      "url": "https://pypi.org/project/crypto-guide-iewuur/"
-    },
-    {
-      "name": "invisasm",
-      "version": "added",
-      "description": "An assembler for the programming language InvisLang.",
-      "author": null,
-      "published_at": "Sun, 03 May 2026 00:55:29 GMT",
-      "url": "https://pypi.org/project/invisasm/"
-    },
-    {
-      "name": "web-ui-component-spec-mcp",
-      "version": "added",
-      "description": "MCP server for the Web UI Component Specification — behavioral specs, tests, and principles for web UI component libraries",
-      "author": "gcsebas99@gmail.com",
-      "published_at": "Sun, 03 May 2026 00:39:59 GMT",
-      "url": "https://pypi.org/project/web-ui-component-spec-mcp/"
-    },
-    {
-      "name": "invislang",
-      "version": "added",
-      "description": "An imperative, stack-based programming language based off Whitespace called InvisLang.",
-      "author": null,
-      "published_at": "Sun, 03 May 2026 00:33:32 GMT",
-      "url": "https://pypi.org/project/invislang/"
+      "published_at": "Sun, 03 May 2026 01:53:39 GMT",
+      "url": "https://pypi.org/project/playerlog-agent/"
     }
   ]
 }

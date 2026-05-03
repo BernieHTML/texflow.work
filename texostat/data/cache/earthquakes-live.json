@@ -1,11 +1,22 @@
 {
   "channel": "earthquakes-live",
   "event": "earthquake_update",
-  "ts": "2026-05-03T02:00:00.231Z",
+  "ts": "2026-05-03T03:00:01.122Z",
   "source": "USGS Earthquake Hazards Program",
   "payload": {
     "count": 43,
     "events": [
+      {
+        "id": "aka2026irnkob",
+        "magnitude": 3.1,
+        "place": "67 km SE of Pedro Bay, Alaska",
+        "depth_km": 110.2,
+        "lat": 59.359,
+        "lon": -153.251,
+        "ts": "2026-05-03T02:22:02.060Z",
+        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/aka2026irnkob",
+        "felt_reports": null
+      },
       {
         "id": "nc75355867",
         "magnitude": 3.28,
@@ -49,6 +60,17 @@
         "ts": "2026-05-02T23:27:42.930Z",
         "url": "https://earthquake.usgs.gov/earthquakes/eventpage/nc75355817",
         "felt_reports": 1
+      },
+      {
+        "id": "us7000shvf",
+        "magnitude": 4.1,
+        "place": "254 km SE of Latung, Philippines",
+        "depth_km": 603.767,
+        "lat": 3.5972,
+        "lon": 122.1802,
+        "ts": "2026-05-02T23:05:58.101Z",
+        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us7000shvf",
+        "felt_reports": null
       },
       {
         "id": "pr71515473",
@@ -268,7 +290,7 @@
         "lon": -119.0998,
         "ts": "2026-05-02T14:09:35.804Z",
         "url": "https://earthquake.usgs.gov/earthquakes/eventpage/nn00917352",
-        "felt_reports": 17
+        "felt_reports": 18
       },
       {
         "id": "us7000shst",
@@ -455,28 +477,6 @@
         "lon": -65.621,
         "ts": "2026-05-02T03:50:46.210Z",
         "url": "https://earthquake.usgs.gov/earthquakes/eventpage/pr71515358",
-        "felt_reports": null
-      },
-      {
-        "id": "nn00917260",
-        "magnitude": 2.97,
-        "place": "17 km SE of Silver Springs, Nevada",
-        "depth_km": 10.3264,
-        "lat": 39.3115,
-        "lon": -119.0707,
-        "ts": "2026-05-02T02:49:28.775Z",
-        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/nn00917260",
-        "felt_reports": 4
-      },
-      {
-        "id": "us7000shnl",
-        "magnitude": 5.1,
-        "place": "south of the Fiji Islands",
-        "depth_km": 532.819,
-        "lat": -24.4373,
-        "lon": 178.8233,
-        "ts": "2026-05-02T02:06:36.139Z",
-        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us7000shnl",
         "felt_reports": null
       }
     ]

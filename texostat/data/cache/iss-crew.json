@@ -1,7 +1,7 @@
 {
   "channel": "iss-crew",
   "event": "crew_update",
-  "ts": "2026-05-03T02:00:03.362Z",
+  "ts": "2026-05-03T03:00:01.040Z",
   "source": "Open Notify /astros",
   "payload": {
     "total_count": 12,

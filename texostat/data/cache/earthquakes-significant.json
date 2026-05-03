@@ -1,10 +1,10 @@
 {
   "channel": "earthquakes-significant",
   "event": "earthquake_update",
-  "ts": "2026-05-03T02:00:00.220Z",
+  "ts": "2026-05-03T03:00:01.120Z",
   "source": "USGS Earthquake Hazards Program",
   "payload": {
-    "count": 12,
+    "count": 11,
     "events": [
       {
         "id": "us7000shut",
@@ -125,17 +125,6 @@
         "lon": -67.4096,
         "ts": "2026-05-02T03:57:00.734Z",
         "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us7000shpb",
-        "felt_reports": null
-      },
-      {
-        "id": "us7000shnl",
-        "magnitude": 5.1,
-        "place": "south of the Fiji Islands",
-        "depth_km": 532.819,
-        "lat": -24.4373,
-        "lon": 178.8233,
-        "ts": "2026-05-02T02:06:36.139Z",
-        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us7000shnl",
         "felt_reports": null
       }
     ]
