@@ -1,11 +1,264 @@
 {
   "channel": "earthquakes-live",
   "event": "earthquake_update",
-  "ts": "2026-05-02T14:50:00.957Z",
+  "ts": "2026-05-03T02:00:00.231Z",
   "source": "USGS Earthquake Hazards Program",
   "payload": {
-    "count": 36,
+    "count": 43,
     "events": [
+      {
+        "id": "nc75355867",
+        "magnitude": 3.28,
+        "place": "4 km E of Covelo, CA",
+        "depth_km": 5.6100001335144,
+        "lat": 39.798168182373,
+        "lon": -123.199836730957,
+        "ts": "2026-05-03T00:37:43.750Z",
+        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/nc75355867",
+        "felt_reports": 2
+      },
+      {
+        "id": "pr71515503",
+        "magnitude": 3.23,
+        "place": "49 km NNW of San Antonio, Puerto Rico",
+        "depth_km": 6.08,
+        "lat": 18.8908333333333,
+        "lon": -67.3118333333333,
+        "ts": "2026-05-03T00:35:22.420Z",
+        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/pr71515503",
+        "felt_reports": null
+      },
+      {
+        "id": "pr71515483",
+        "magnitude": 2.71,
+        "place": "2 km NW of Tallaboa, Puerto Rico",
+        "depth_km": 11.61,
+        "lat": 18.0096666666667,
+        "lon": -66.7276666666667,
+        "ts": "2026-05-02T23:30:17.140Z",
+        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/pr71515483",
+        "felt_reports": null
+      },
+      {
+        "id": "nc75355817",
+        "magnitude": 2.55,
+        "place": "20 km SE of Livermore, CA",
+        "depth_km": 2.71000003814697,
+        "lat": 37.5736656188965,
+        "lon": -121.59033203125,
+        "ts": "2026-05-02T23:27:42.930Z",
+        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/nc75355817",
+        "felt_reports": 1
+      },
+      {
+        "id": "pr71515473",
+        "magnitude": 3.05,
+        "place": "6 km WSW of Charlotte Amalie, U.S. Virgin Islands",
+        "depth_km": 119.54,
+        "lat": 18.3275,
+        "lon": -64.9921666666667,
+        "ts": "2026-05-02T22:48:17.300Z",
+        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/pr71515473",
+        "felt_reports": null
+      },
+      {
+        "id": "tx2026ipwale",
+        "magnitude": 2.5,
+        "place": "2 km E of Pearsall, Texas",
+        "depth_km": 6.8599,
+        "lat": 28.894,
+        "lon": -99.065,
+        "ts": "2026-05-02T22:42:19.674Z",
+        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/tx2026ipwale",
+        "felt_reports": null
+      },
+      {
+        "id": "ci41239999",
+        "magnitude": 2.67,
+        "place": "2 km NE of Fillmore, CA",
+        "depth_km": 10,
+        "lat": 34.4101666666667,
+        "lon": -118.907833333333,
+        "ts": "2026-05-02T21:50:48.370Z",
+        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/ci41239999",
+        "felt_reports": 7
+      },
+      {
+        "id": "us7000shut",
+        "magnitude": 5.1,
+        "place": "9 km WNW of Hicks Bay, New Zealand",
+        "depth_km": 35,
+        "lat": -37.5613,
+        "lon": 178.2023,
+        "ts": "2026-05-02T21:19:13.344Z",
+        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us7000shut",
+        "felt_reports": 7
+      },
+      {
+        "id": "us7000shur",
+        "magnitude": 4.2,
+        "place": "176 km N of Metinaro, Timor Leste",
+        "depth_km": 488.06,
+        "lat": -6.9374,
+        "lon": 125.6528,
+        "ts": "2026-05-02T21:07:58.184Z",
+        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us7000shur",
+        "felt_reports": null
+      },
+      {
+        "id": "aka2026irbrwg",
+        "magnitude": 3.1,
+        "place": "83 km SW of Nikolski, Alaska",
+        "depth_km": 8.9,
+        "lat": 52.392,
+        "lon": -169.716,
+        "ts": "2026-05-02T20:33:56.589Z",
+        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/aka2026irbrwg",
+        "felt_reports": null
+      },
+      {
+        "id": "aka2026irbufd",
+        "magnitude": 3.1,
+        "place": "80 km SW of Nikolski, Alaska",
+        "depth_km": 9,
+        "lat": 52.438,
+        "lon": -169.729,
+        "ts": "2026-05-02T20:33:04.075Z",
+        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/aka2026irbufd",
+        "felt_reports": null
+      },
+      {
+        "id": "nc75355712",
+        "magnitude": 2.81,
+        "place": "16 km S of Tres Pinos, CA",
+        "depth_km": 5.6100001335144,
+        "lat": 36.6484985351562,
+        "lon": -121.304000854492,
+        "ts": "2026-05-02T20:32:20.080Z",
+        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/nc75355712",
+        "felt_reports": null
+      },
+      {
+        "id": "aka2026irbjwy",
+        "magnitude": 3.9,
+        "place": "82 km SW of Nikolski, Alaska",
+        "depth_km": 16.7,
+        "lat": 52.468,
+        "lon": -169.811,
+        "ts": "2026-05-02T20:21:31.788Z",
+        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/aka2026irbjwy",
+        "felt_reports": null
+      },
+      {
+        "id": "pr71515463",
+        "magnitude": 3.17,
+        "place": "56 km NNW of San Antonio, Puerto Rico",
+        "depth_km": 13.13,
+        "lat": 18.9801666666667,
+        "lon": -67.2436666666667,
+        "ts": "2026-05-02T19:35:47.440Z",
+        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/pr71515463",
+        "felt_reports": null
+      },
+      {
+        "id": "us7000shug",
+        "magnitude": 4.4,
+        "place": "88 km WSW of Basco, Philippines",
+        "depth_km": 36.966,
+        "lat": 20.237,
+        "lon": 121.1553,
+        "ts": "2026-05-02T19:16:20.047Z",
+        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us7000shug",
+        "felt_reports": null
+      },
+      {
+        "id": "ci41239895",
+        "magnitude": 2.51,
+        "place": "1 km NE of Fillmore, CA",
+        "depth_km": 9.38,
+        "lat": 34.4098333333333,
+        "lon": -118.909,
+        "ts": "2026-05-02T19:01:08.970Z",
+        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/ci41239895",
+        "felt_reports": 1
+      },
+      {
+        "id": "nc75355622",
+        "magnitude": 2.61,
+        "place": "16 km S of Tres Pinos, CA",
+        "depth_km": 6.03999996185303,
+        "lat": 36.6468315124512,
+        "lon": -121.298835754395,
+        "ts": "2026-05-02T16:44:29.310Z",
+        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/nc75355622",
+        "felt_reports": null
+      },
+      {
+        "id": "us7000shtx",
+        "magnitude": 4.2,
+        "place": "138 km S of Puerto San José, Guatemala",
+        "depth_km": 10,
+        "lat": 12.6759,
+        "lon": -90.8558,
+        "ts": "2026-05-02T16:21:04.930Z",
+        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us7000shtx",
+        "felt_reports": null
+      },
+      {
+        "id": "us7000shtp",
+        "magnitude": 4.3,
+        "place": "1 km NE of Grenada North, New Zealand",
+        "depth_km": 41.773,
+        "lat": -41.1829,
+        "lon": 174.852,
+        "ts": "2026-05-02T15:15:18.106Z",
+        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us7000shtp",
+        "felt_reports": 3
+      },
+      {
+        "id": "us7000shtq",
+        "magnitude": 4.6,
+        "place": "245 km SSW of Cilacap, Indonesia",
+        "depth_km": 10,
+        "lat": -9.7023,
+        "lon": 107.9939,
+        "ts": "2026-05-02T15:00:32.178Z",
+        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us7000shtq",
+        "felt_reports": null
+      },
+      {
+        "id": "us7000shtg",
+        "magnitude": 4.4,
+        "place": "40 km N of Claveria, Philippines",
+        "depth_km": 34.806,
+        "lat": 18.9692,
+        "lon": 121.0549,
+        "ts": "2026-05-02T14:26:08.900Z",
+        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us7000shtg",
+        "felt_reports": null
+      },
+      {
+        "id": "us7000shti",
+        "magnitude": 4.6,
+        "place": "55 km E of Kokopo, Papua New Guinea",
+        "depth_km": 61.973,
+        "lat": -4.2751,
+        "lon": 152.7606,
+        "ts": "2026-05-02T14:15:34.556Z",
+        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us7000shti",
+        "felt_reports": null
+      },
+      {
+        "id": "pr71515448",
+        "magnitude": 3.08,
+        "place": "2 km ESE of Boquerón, Puerto Rico",
+        "depth_km": 12.95,
+        "lat": 18.016,
+        "lon": -67.145,
+        "ts": "2026-05-02T14:13:57.340Z",
+        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/pr71515448",
+        "felt_reports": 1
+      },
       {
         "id": "nn00917352",
         "magnitude": 3.45,
@@ -15,7 +268,7 @@
         "lon": -119.0998,
         "ts": "2026-05-02T14:09:35.804Z",
         "url": "https://earthquake.usgs.gov/earthquakes/eventpage/nn00917352",
-        "felt_reports": 8
+        "felt_reports": 17
       },
       {
         "id": "us7000shst",
@@ -70,7 +323,7 @@
         "lon": -117.593833333333,
         "ts": "2026-05-02T10:10:46.040Z",
         "url": "https://earthquake.usgs.gov/earthquakes/eventpage/ci41239439",
-        "felt_reports": 136
+        "felt_reports": 149
       },
       {
         "id": "pr71515428",
@@ -92,7 +345,7 @@
         "lon": 135.4857,
         "ts": "2026-05-02T09:28:40.989Z",
         "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us7000shs2",
-        "felt_reports": 29
+        "felt_reports": 31
       },
       {
         "id": "us7000shrs",
@@ -114,6 +367,17 @@
         "lon": -103.2923,
         "ts": "2026-05-02T07:34:21.749Z",
         "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us7000shr9",
+        "felt_reports": null
+      },
+      {
+        "id": "aka2026iqblxz",
+        "magnitude": 3.3,
+        "place": "199 km S of Atka, Alaska",
+        "depth_km": 4.5,
+        "lat": 50.436,
+        "lon": -173.676,
+        "ts": "2026-05-02T07:23:18.525Z",
+        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/aka2026iqblxz",
         "felt_reports": null
       },
       {
@@ -158,7 +422,7 @@
         "lon": -66.5123,
         "ts": "2026-05-02T05:04:56.485Z",
         "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us7000shps",
-        "felt_reports": 2
+        "felt_reports": 3
       },
       {
         "id": "hv74950247",
@@ -213,193 +477,6 @@
         "lon": 178.8233,
         "ts": "2026-05-02T02:06:36.139Z",
         "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us7000shnl",
-        "felt_reports": null
-      },
-      {
-        "id": "pr2026122000",
-        "magnitude": 3.77,
-        "place": "161 km NNE of Cruz Bay, U.S. Virgin Islands",
-        "depth_km": 44,
-        "lat": 19.7251,
-        "lon": -64.335,
-        "ts": "2026-05-02T01:24:45.880Z",
-        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/pr2026122000",
-        "felt_reports": null
-      },
-      {
-        "id": "us7000shnf",
-        "magnitude": 4.4,
-        "place": "92 km ESE of Kuqa, China",
-        "depth_km": 10,
-        "lat": 41.3576,
-        "lon": 83.9345,
-        "ts": "2026-05-02T01:14:54.168Z",
-        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us7000shnf",
-        "felt_reports": null
-      },
-      {
-        "id": "nn00917231",
-        "magnitude": 2.97,
-        "place": "17 km SE of Silver Springs, Nevada",
-        "depth_km": 9.4377,
-        "lat": 39.3089,
-        "lon": -119.0694,
-        "ts": "2026-05-02T00:04:58.046Z",
-        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/nn00917231",
-        "felt_reports": 1
-      },
-      {
-        "id": "nc75355267",
-        "magnitude": 2.67,
-        "place": "39 km S of Hayfork, CA",
-        "depth_km": 39.3800010681152,
-        "lat": 40.2068328857422,
-        "lon": -123.123664855957,
-        "ts": "2026-05-01T23:31:46.320Z",
-        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/nc75355267",
-        "felt_reports": null
-      },
-      {
-        "id": "us7000shn0",
-        "magnitude": 4.4,
-        "place": "99 km ESE of Kuqa, China",
-        "depth_km": 10,
-        "lat": 41.3088,
-        "lon": 83.994,
-        "ts": "2026-05-01T22:17:56.787Z",
-        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us7000shn0",
-        "felt_reports": null
-      },
-      {
-        "id": "us7000shmg",
-        "magnitude": 4.2,
-        "place": "218 km ESE of Kushimoto, Japan",
-        "depth_km": 359.516,
-        "lat": 32.4477,
-        "lon": 137.783,
-        "ts": "2026-05-01T21:13:36.115Z",
-        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us7000shmg",
-        "felt_reports": null
-      },
-      {
-        "id": "nn00917199",
-        "magnitude": 2.53,
-        "place": "20 km ESE of Silver Springs, Nevada",
-        "depth_km": 8.3452,
-        "lat": 39.3412,
-        "lon": -119.0126,
-        "ts": "2026-05-01T20:10:29.858Z",
-        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/nn00917199",
-        "felt_reports": 2
-      },
-      {
-        "id": "us7000shlt",
-        "magnitude": 4.3,
-        "place": "Kermadec Islands, New Zealand",
-        "depth_km": 142.158,
-        "lat": -30.529,
-        "lon": -178.5514,
-        "ts": "2026-05-01T19:16:27.856Z",
-        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us7000shlt",
-        "felt_reports": null
-      },
-      {
-        "id": "aka2026ipcunu",
-        "magnitude": 3,
-        "place": "24 km WNW of Susitna, Alaska",
-        "depth_km": 70.7,
-        "lat": 61.621,
-        "lon": -150.941,
-        "ts": "2026-05-01T19:04:38.571Z",
-        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/aka2026ipcunu",
-        "felt_reports": 1
-      },
-      {
-        "id": "us7000shll",
-        "magnitude": 4.8,
-        "place": "198 km NE of Lospalos, Timor Leste",
-        "depth_km": 172.365,
-        "lat": -7.3789,
-        "lon": 128.3922,
-        "ts": "2026-05-01T18:52:47.403Z",
-        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us7000shll",
-        "felt_reports": null
-      },
-      {
-        "id": "pr71515328",
-        "magnitude": 3.28,
-        "place": "41 km N of Culebra, Puerto Rico",
-        "depth_km": 30.36,
-        "lat": 18.6755,
-        "lon": -65.3183333333333,
-        "ts": "2026-05-01T17:58:01.590Z",
-        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/pr71515328",
-        "felt_reports": null
-      },
-      {
-        "id": "us7000shpm",
-        "magnitude": 3.2,
-        "place": "4 km SW of Villa Canales, Guatemala",
-        "depth_km": 10,
-        "lat": 14.4565,
-        "lon": -90.562,
-        "ts": "2026-05-01T17:50:51.737Z",
-        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us7000shpm",
-        "felt_reports": null
-      },
-      {
-        "id": "us7000shl7",
-        "magnitude": 4.8,
-        "place": "47 km S of Nemuro, Japan",
-        "depth_km": 38.766,
-        "lat": 42.8985,
-        "lon": 145.534,
-        "ts": "2026-05-01T17:19:24.791Z",
-        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us7000shl7",
-        "felt_reports": null
-      },
-      {
-        "id": "aka2026ioxpbn",
-        "magnitude": 4.4,
-        "place": "236 km ESE of Attu Station, Alaska",
-        "depth_km": 86.4,
-        "lat": 51.763,
-        "lon": 176.171,
-        "ts": "2026-05-01T16:27:50.607Z",
-        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/aka2026ioxpbn",
-        "felt_reports": null
-      },
-      {
-        "id": "ci41238815",
-        "magnitude": 2.63,
-        "place": "35 km ENE of Ensenada, B.C., MX",
-        "depth_km": 22.45,
-        "lat": 32.0011666666667,
-        "lon": -116.281666666667,
-        "ts": "2026-05-01T16:16:22.120Z",
-        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/ci41238815",
-        "felt_reports": null
-      },
-      {
-        "id": "pr2026121000",
-        "magnitude": 3.45,
-        "place": "5 km WNW of Mayagüez, Puerto Rico",
-        "depth_km": 25,
-        "lat": 18.2231,
-        "lon": -67.1823,
-        "ts": "2026-05-01T15:57:56.770Z",
-        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/pr2026121000",
-        "felt_reports": null
-      },
-      {
-        "id": "pr71515308",
-        "magnitude": 3.16,
-        "place": "68 km N of Hatillo, Puerto Rico",
-        "depth_km": 26.93,
-        "lat": 19.107,
-        "lon": -66.7895,
-        "ts": "2026-05-01T14:57:01.130Z",
-        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/pr71515308",
         "felt_reports": null
       }
     ]

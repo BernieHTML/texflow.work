@@ -1,14 +1,14 @@
 {
   "channel": "weather-global",
   "event": "weather_update",
-  "ts": "2026-05-02T14:30:12.553Z",
+  "ts": "2026-05-03T01:30:13.107Z",
   "source": "Open-Meteo /forecast",
   "payload": {
     "location": "London (51.5°N, 0°E)",
-    "temperature_c": 21.6,
-    "windspeed_kmh": 3.2,
-    "winddirection_deg": 106,
+    "temperature_c": 14.3,
+    "windspeed_kmh": 10.8,
+    "winddirection_deg": 216,
     "weathercode": 3,
-    "is_day": true
+    "is_day": false
   }
 }

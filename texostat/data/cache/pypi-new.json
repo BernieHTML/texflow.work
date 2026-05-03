@@ -1,128 +1,128 @@
 {
   "channel": "pypi-new",
   "event": "pypi_update",
-  "ts": "2026-05-02T14:30:00.606Z",
+  "ts": "2026-05-03T02:00:00.327Z",
   "source": "PyPI RSS",
   "payload": [
     {
-      "name": "accela-mcp",
+      "name": "activelog-agent",
       "version": "added",
-      "description": "Model Context Protocol server for the Accela Construct API",
+      "description": "Fitness Guardian for activelog.ai — wearable health → PLATO → wellness insights",
       "author": null,
-      "published_at": "Sat, 02 May 2026 13:58:59 GMT",
-      "url": "https://pypi.org/project/accela-mcp/"
+      "published_at": "Sun, 03 May 2026 01:29:46 GMT",
+      "url": "https://pypi.org/project/activelog-agent/"
     },
     {
-      "name": "proxmox-ve-mcp",
+      "name": "reallog-agent",
       "version": "added",
-      "description": "MCP server for Proxmox VE management",
-      "author": "artur@akmalov.com",
-      "published_at": "Sat, 02 May 2026 13:57:01 GMT",
-      "url": "https://pypi.org/project/proxmox-ve-mcp/"
-    },
-    {
-      "name": "prama",
-      "version": "added",
-      "description": "Sclite-backed WER/CER evaluation engine for ASR outputs.",
-      "author": "1695587905@qq.com",
-      "published_at": "Sat, 02 May 2026 13:55:40 GMT",
-      "url": "https://pypi.org/project/prama/"
-    },
-    {
-      "name": "airflow-providers-orchesjob",
-      "version": "added",
-      "description": "Apache Airflow provider for orchesjob – lightweight idempotent job runner",
+      "description": "Vision Turbo-Shell for reallog.ai — camera vision → PLATO → agent",
       "author": null,
-      "published_at": "Sat, 02 May 2026 13:52:19 GMT",
-      "url": "https://pypi.org/project/airflow-providers-orchesjob/"
+      "published_at": "Sun, 03 May 2026 01:29:31 GMT",
+      "url": "https://pypi.org/project/reallog-agent/"
     },
     {
-      "name": "dvara",
+      "name": "rpr-cli",
       "version": "added",
-      "description": "High-speed malicious URL detection using a Bloom Filter",
-      "author": "you@example.com",
-      "published_at": "Sat, 02 May 2026 13:51:53 GMT",
-      "url": "https://pypi.org/project/dvara/"
-    },
-    {
-      "name": "grokfeed",
-      "version": "added",
-      "description": "Hacker News + Reddit + lobste.rs terminal feed viewer",
-      "author": "eamarkou@gmail.com",
-      "published_at": "Sat, 02 May 2026 13:49:34 GMT",
-      "url": "https://pypi.org/project/grokfeed/"
-    },
-    {
-      "name": "newpack-venu",
-      "version": "added",
-      "description": "A small package for to welcome",
-      "author": "venubhagam4@gmail.com",
-      "published_at": "Sat, 02 May 2026 13:42:24 GMT",
-      "url": "https://pypi.org/project/newpack-venu/"
-    },
-    {
-      "name": "attestseal-x402",
-      "version": "added",
-      "description": "AttestSeal trust attestation headers for x402 / AP2 / MPP payment protocols. Drop-in middleware for FastAPI/Flask/aiohttp servers and a verifier for httpx/aiohttp clients.",
-      "author": "alu@attestseal.com",
-      "published_at": "Sat, 02 May 2026 13:42:08 GMT",
-      "url": "https://pypi.org/project/attestseal-x402/"
-    },
-    {
-      "name": "naqsha",
-      "version": "added",
-      "description": "Inspectable Python agent runtime with strict tool contracts, QAOA traces, and durable memory ports.",
+      "description": "RPR CLI -- React Python Rust monorepo scaffolding orchestrator",
       "author": null,
-      "published_at": "Sat, 02 May 2026 13:37:25 GMT",
-      "url": "https://pypi.org/project/naqsha/"
+      "published_at": "Sun, 03 May 2026 01:24:53 GMT",
+      "url": "https://pypi.org/project/rpr-cli/"
     },
     {
-      "name": "mcp-ssh-live",
+      "name": "xauditor",
       "version": "added",
-      "description": "Interactive, streaming SSH tool for LLM agents via MCP (Model Context Protocol)",
+      "description": "Repository-wide white-box auditing CLI",
       "author": null,
-      "published_at": "Sat, 02 May 2026 13:36:08 GMT",
-      "url": "https://pypi.org/project/mcp-ssh-live/"
+      "published_at": "Sun, 03 May 2026 01:22:33 GMT",
+      "url": "https://pypi.org/project/xauditor/"
     },
     {
-      "name": "ErisPulse-BiliParser",
+      "name": "xauditor-coder-service",
       "version": "added",
-      "description": "B站视频解析模块，自动解析视频链接并展示详细信息、热门评论与弹幕",
-      "author": "wsu2059@qq.com",
-      "published_at": "Sat, 02 May 2026 13:28:53 GMT",
-      "url": "https://pypi.org/project/erispulse-biliparser/"
-    },
-    {
-      "name": "agent-wiki-cli",
-      "version": "added",
-      "description": "CLI tool to maintain hybrid LLM Wikis for multi-language projects.",
-      "author": "denissvgn@gmail.com",
-      "published_at": "Sat, 02 May 2026 13:27:53 GMT",
-      "url": "https://pypi.org/project/agent-wiki-cli/"
-    },
-    {
-      "name": "gmaprium",
-      "version": "added",
-      "description": "Folium-style Python helpers for rendering Google Maps.",
+      "description": "HTTP microservice that wraps the Claude Code CLI for xauditor's repo-global verification stage.",
       "author": null,
-      "published_at": "Sat, 02 May 2026 13:27:47 GMT",
-      "url": "https://pypi.org/project/gmaprium/"
+      "published_at": "Sun, 03 May 2026 01:22:32 GMT",
+      "url": "https://pypi.org/project/xauditor-coder-service/"
     },
     {
-      "name": "quisium",
+      "name": "graphene-django-realtime",
       "version": "added",
-      "description": "Production-grade security middleware for LLM calls — prompt injection detection, output validation, and tool-call enforcement.",
+      "description": "Reuse your graphene-django schema as the single source of truth for WebSocket payloads.",
       "author": null,
-      "published_at": "Sat, 02 May 2026 13:26:11 GMT",
-      "url": "https://pypi.org/project/quisium/"
+      "published_at": "Sun, 03 May 2026 01:19:33 GMT",
+      "url": "https://pypi.org/project/graphene-django-realtime/"
     },
     {
-      "name": "alcanza-check",
+      "name": "fishinglog-agent",
       "version": "added",
-      "description": "A comprehensive network connectivity checker CLI (ICMP, TCP, DNS, SSL).",
-      "author": "benhanan.subendran@gmail.com",
-      "published_at": "Sat, 02 May 2026 13:22:43 GMT",
-      "url": "https://pypi.org/project/alcanza-check/"
+      "description": "Captain's Mate for fishinglog.ai - PLATO-based fishing log agent",
+      "author": "fleet@cocapn.com",
+      "published_at": "Sun, 03 May 2026 01:19:29 GMT",
+      "url": "https://pypi.org/project/fishinglog-agent/"
+    },
+    {
+      "name": "asctl",
+      "version": "added",
+      "description": "Android Screen Control Tool - 黑屏而不锁屏的 Android 屏幕控制工具",
+      "author": "yanwuning@live.cn",
+      "published_at": "Sun, 03 May 2026 01:12:32 GMT",
+      "url": "https://pypi.org/project/asctl/"
+    },
+    {
+      "name": "accountpilot",
+      "version": "added",
+      "description": "Unified per-machine account sync framework — email, iMessage, calendar, and more",
+      "author": "ardaeren13@gmail.com",
+      "published_at": "Sun, 03 May 2026 01:09:15 GMT",
+      "url": "https://pypi.org/project/accountpilot/"
+    },
+    {
+      "name": "voxy-linux",
+      "version": "added",
+      "description": "Local offline voice dictation for Linux",
+      "author": null,
+      "published_at": "Sun, 03 May 2026 01:08:55 GMT",
+      "url": "https://pypi.org/project/voxy-linux/"
+    },
+    {
+      "name": "amrita_plugin_memory",
+      "version": "added",
+      "description": "Amrita长期记忆插件",
+      "author": null,
+      "published_at": "Sun, 03 May 2026 01:06:18 GMT",
+      "url": "https://pypi.org/project/amrita-plugin-memory/"
+    },
+    {
+      "name": "crypto-guide-iewuur",
+      "version": "added",
+      "description": "币安新币挖矿：如何把握链上资产增值新机遇",
+      "author": null,
+      "published_at": "Sun, 03 May 2026 01:01:44 GMT",
+      "url": "https://pypi.org/project/crypto-guide-iewuur/"
+    },
+    {
+      "name": "invisasm",
+      "version": "added",
+      "description": "An assembler for the programming language InvisLang.",
+      "author": null,
+      "published_at": "Sun, 03 May 2026 00:55:29 GMT",
+      "url": "https://pypi.org/project/invisasm/"
+    },
+    {
+      "name": "web-ui-component-spec-mcp",
+      "version": "added",
+      "description": "MCP server for the Web UI Component Specification — behavioral specs, tests, and principles for web UI component libraries",
+      "author": "gcsebas99@gmail.com",
+      "published_at": "Sun, 03 May 2026 00:39:59 GMT",
+      "url": "https://pypi.org/project/web-ui-component-spec-mcp/"
+    },
+    {
+      "name": "invislang",
+      "version": "added",
+      "description": "An imperative, stack-based programming language based off Whitespace called InvisLang.",
+      "author": null,
+      "published_at": "Sun, 03 May 2026 00:33:32 GMT",
+      "url": "https://pypi.org/project/invislang/"
     }
   ]
 }

@@ -1,28 +1,28 @@
 {
   "channel": "this-day-history",
   "event": "history_update",
-  "ts": "2026-05-02T00:05:00.857Z",
+  "ts": "2026-05-03T00:05:01.136Z",
   "source": "history.muffinlabs.com",
   "payload": [
     {
-      "year": "1194",
-      "event": "King Richard I of England gives Portsmouth its first royal charter."
+      "year": "752",
+      "event": "Mayan king Bird Jaguar IV of Yaxchilan in modern-day Chiapas, Mexico, assumes the throne."
     },
     {
-      "year": "1230",
-      "event": "William de Braose is hanged by Prince Llywelyn the Great."
+      "year": "1481",
+      "event": "The largest of three earthquakes strikes the island of Rhodes and causes an estimated 30,000 casualties."
     },
     {
-      "year": "1536",
-      "event": "Anne Boleyn, Queen of England, is arrested and imprisoned on charges of adultery, incest, treason and witchcraft."
-    },
-    {
-      "year": "1559",
-      "event": "John Knox returns from exile to Scotland to become the leader of the nascent Scottish Reformation."
+      "year": "1491",
+      "event": "Kongo monarch Nkuwu Nzinga is baptised by Portuguese missionaries, adopting the baptismal name of João I."
     },
     {
       "year": "1568",
-      "event": "Mary, Queen of Scots, escapes from Lochleven Castle."
+      "event": "Angered by the brutal onslaught of Spanish troops at Fort Caroline, a French force burns the San Mateo fort and massacres hundreds of Spaniards."
+    },
+    {
+      "year": "1616",
+      "event": "Treaty of Loudun ends a French civil war."
     }
   ]
 }

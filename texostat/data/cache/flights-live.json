@@ -1,11 +1,11 @@
 {
   "channel": "flights-live",
   "event": "flights_update",
-  "ts": "2026-05-02T14:50:01.772Z",
+  "ts": "2026-05-03T01:15:01.378Z",
   "source": "OpenSky Network /states/all",
   "payload": {
     "region": "Europe (48-55°N, -5-15°E)",
-    "aircraft_count": 1099,
-    "ts": "2026-05-02T14:50:01.772Z"
+    "aircraft_count": 104,
+    "ts": "2026-05-03T01:15:01.378Z"
   }
 }

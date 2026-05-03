@@ -1,26 +1,53 @@
 {
   "channel": "near-earth-objects",
   "event": "neo_update",
-  "ts": "2026-05-02T00:05:01.130Z",
+  "ts": "2026-05-03T00:05:01.405Z",
   "source": "NASA NeoWs",
   "payload": [
     {
-      "name": "(2000 EM26)",
-      "id": "3092253",
-      "estimated_diameter_m": 187.0854353059,
-      "is_potentially_hazardous": false,
-      "close_approach_date": "2026-05-02",
-      "miss_distance_km": 40026913.2339793,
-      "relative_velocity_kmh": 75399.3150735719
+      "name": "326290 Akhenaten (1998 HE3)",
+      "id": "2326290",
+      "estimated_diameter_m": 255.882142717,
+      "is_potentially_hazardous": true,
+      "close_approach_date": "2026-05-10",
+      "miss_distance_km": 11003043.510468971,
+      "relative_velocity_kmh": 38923.8954229703
     },
     {
-      "name": "(2016 GA221)",
-      "id": "3751826",
-      "estimated_diameter_m": 171.4115092306,
+      "name": "(2015 EZ6)",
+      "id": "3713071",
+      "estimated_diameter_m": 11.3250461062,
       "is_potentially_hazardous": false,
-      "close_approach_date": "2026-05-02",
-      "miss_distance_km": 15573485.423817122,
-      "relative_velocity_kmh": 48287.5682847124
+      "close_approach_date": "2026-05-10",
+      "miss_distance_km": 34214466.51026757,
+      "relative_velocity_kmh": 35183.1036748955
+    },
+    {
+      "name": "(2016 JX24)",
+      "id": "3753135",
+      "estimated_diameter_m": 49.435619262,
+      "is_potentially_hazardous": false,
+      "close_approach_date": "2026-05-10",
+      "miss_distance_km": 57251093.82363698,
+      "relative_velocity_kmh": 61420.2434615261
+    },
+    {
+      "name": "(2017 WG15)",
+      "id": "3789680",
+      "estimated_diameter_m": 259.4418179074,
+      "is_potentially_hazardous": false,
+      "close_approach_date": "2026-05-10",
+      "miss_distance_km": 74755074.68473065,
+      "relative_velocity_kmh": 52073.0257339904
+    },
+    {
+      "name": "(2024 FT15)",
+      "id": "54439881",
+      "estimated_diameter_m": 152.1387973218,
+      "is_potentially_hazardous": false,
+      "close_approach_date": "2026-05-10",
+      "miss_distance_km": 32265446.802582745,
+      "relative_velocity_kmh": 4979.7683432185
     },
     {
       "name": "(2004 XA45)",
@@ -66,33 +93,6 @@
       "close_approach_date": "2026-05-08",
       "miss_distance_km": 21218744.948928714,
       "relative_velocity_kmh": 76121.2084843415
-    },
-    {
-      "name": "(2002 VU114)",
-      "id": "3143095",
-      "estimated_diameter_m": 163.696720474,
-      "is_potentially_hazardous": false,
-      "close_approach_date": "2026-05-07",
-      "miss_distance_km": 18962018.99809788,
-      "relative_velocity_kmh": 40136.4153087534
-    },
-    {
-      "name": "(2007 HW4)",
-      "id": "3374391",
-      "estimated_diameter_m": 113.2504610618,
-      "is_potentially_hazardous": false,
-      "close_approach_date": "2026-05-07",
-      "miss_distance_km": 45182093.77219913,
-      "relative_velocity_kmh": 65934.0746941741
-    },
-    {
-      "name": "(2018 DT)",
-      "id": "3799712",
-      "estimated_diameter_m": 22.5964377109,
-      "is_potentially_hazardous": false,
-      "close_approach_date": "2026-05-07",
-      "miss_distance_km": 72978230.63629942,
-      "relative_velocity_kmh": 61353.8676308959
     }
   ]
 }
