@@ -1,28 +1,28 @@
 {
   "channel": "this-day-history",
   "event": "history_update",
-  "ts": "2026-05-03T00:05:01.136Z",
+  "ts": "2026-05-04T00:05:00.774Z",
   "source": "history.muffinlabs.com",
   "payload": [
     {
-      "year": "752",
-      "event": "Mayan king Bird Jaguar IV of Yaxchilan in modern-day Chiapas, Mexico, assumes the throne."
+      "year": "1256",
+      "event": "The Augustinian monastic order is constituted at the Lecceto Monastery when Pope Alexander IV issues a papal bull Licet ecclesiae catholicae."
     },
     {
-      "year": "1481",
-      "event": "The largest of three earthquakes strikes the island of Rhodes and causes an estimated 30,000 casualties."
+      "year": "1415",
+      "event": "Religious reformer John Wycliffe is condemned as a heretic at the Council of Constance."
     },
     {
-      "year": "1491",
-      "event": "Kongo monarch Nkuwu Nzinga is baptised by Portuguese missionaries, adopting the baptismal name of João I."
+      "year": "1436",
+      "event": "Assassination of the Swedish rebel (later national hero) Engelbrekt Engelbrektsson (27 April O.S.)."
     },
     {
-      "year": "1568",
-      "event": "Angered by the brutal onslaught of Spanish troops at Fort Caroline, a French force burns the San Mateo fort and massacres hundreds of Spaniards."
+      "year": "1471",
+      "event": "Wars of the Roses: The Battle of Tewkesbury: Edward IV defeats a Lancastrian Army and kills Edward of Westminster, Prince of Wales."
     },
     {
-      "year": "1616",
-      "event": "Treaty of Loudun ends a French civil war."
+      "year": "1493",
+      "event": "In the papal bull Inter caetera, Pope Alexander VI divides the New World between Spain and Portugal along the Line of Demarcation."
     }
   ]
 }

@@ -1,128 +1,128 @@
 {
   "channel": "pypi-new",
   "event": "pypi_update",
-  "ts": "2026-05-03T03:00:01.301Z",
+  "ts": "2026-05-04T11:30:00.937Z",
   "source": "PyPI RSS",
   "payload": [
     {
-      "name": "codemule",
+      "name": "cloudauth-sdk",
       "version": "added",
-      "description": "None",
+      "description": "Cloud Authentication SDK for Python",
+      "author": "auth-support@cloudauth.io",
+      "published_at": "Mon, 04 May 2026 10:59:29 GMT",
+      "url": "https://pypi.org/project/cloudauth-sdk/"
+    },
+    {
+      "name": "reforge-mcp",
+      "version": "added",
+      "description": "MCP server that automatically cleans up messy vibe-coded repositories",
       "author": null,
-      "published_at": "Sun, 03 May 2026 02:24:48 GMT",
-      "url": "https://pypi.org/project/codemule/"
+      "published_at": "Mon, 04 May 2026 10:58:54 GMT",
+      "url": "https://pypi.org/project/reforge-mcp/"
     },
     {
-      "name": "agentguard-ai-muaz-iqubal-muaz",
+      "name": "timeahead-mcp",
       "version": "added",
-      "description": "Detect runaway AI costs before they hit production (STILL IN DEVELOPING PHASE)",
+      "description": "MCP server for timeahead.in — live trust scores for MCP servers",
       "author": null,
-      "published_at": "Sun, 03 May 2026 02:23:39 GMT",
-      "url": "https://pypi.org/project/agentguard-ai-muaz-iqubal-muaz/"
+      "published_at": "Mon, 04 May 2026 10:58:45 GMT",
+      "url": "https://pypi.org/project/timeahead-mcp/"
     },
     {
-      "name": "gore-geolang",
+      "name": "societal-costs-rscripts-publication-plots",
       "version": "added",
-      "description": "GeoLang - 你的专属编程语言",
-      "author": "author@geolang.dev",
-      "published_at": "Sun, 03 May 2026 02:23:38 GMT",
-      "url": "https://pypi.org/project/gore-geolang/"
-    },
-    {
-      "name": "branchdiff",
-      "version": "added",
-      "description": "Placeholder",
+      "description": "Bundle and unpack the societal_costs_r project files",
       "author": null,
-      "published_at": "Sun, 03 May 2026 02:19:39 GMT",
-      "url": "https://pypi.org/project/branchdiff/"
+      "published_at": "Mon, 04 May 2026 10:57:12 GMT",
+      "url": "https://pypi.org/project/societal-costs-rscripts-publication-plots/"
     },
     {
-      "name": "ftree-kg",
+      "name": "fastapi-semcache",
       "version": "added",
-      "description": "KGModule for file tree knowledge graphs",
-      "author": "suchanek@flux-frontiers.com",
-      "published_at": "Sun, 03 May 2026 02:16:30 GMT",
-      "url": "https://pypi.org/project/ftree-kg/"
-    },
-    {
-      "name": "AMDead",
-      "version": "added",
-      "description": "A new project created from git-repokit-template",
-      "author": "djdarcy@users.noreply.github.com",
-      "published_at": "Sun, 03 May 2026 02:09:54 GMT",
-      "url": "https://pypi.org/project/amdead/"
-    },
-    {
-      "name": "e501-fixer",
-      "version": "added",
-      "description": "Automatic string literal wrapping for PEP 8 E501 compliance",
-      "author": "cameronrout@gmail.com",
-      "published_at": "Sun, 03 May 2026 02:05:09 GMT",
-      "url": "https://pypi.org/project/e501-fixer/"
-    },
-    {
-      "name": "gpodder-fastapi-router",
-      "version": "added",
-      "description": "Pluggable FastAPI router that implements the gpodder.net (mygpo) HTTP API.",
+      "description": "Drop in FastAPI middleware/reverse proxy with semantic caching for APIs & LLMs",
       "author": null,
-      "published_at": "Sun, 03 May 2026 02:03:03 GMT",
-      "url": "https://pypi.org/project/gpodder-fastapi-router/"
+      "published_at": "Mon, 04 May 2026 10:56:53 GMT",
+      "url": "https://pypi.org/project/fastapi-semcache/"
     },
     {
-      "name": "drkmttr",
+      "name": "jkey",
       "version": "added",
-      "description": "Pre-release Python package placeholder for the darkmatter platform",
+      "description": "Python library for password management and TOTP verification.",
+      "author": "imjiaoyuan@gmail.com",
+      "published_at": "Mon, 04 May 2026 10:52:31 GMT",
+      "url": "https://pypi.org/project/jkey/"
+    },
+    {
+      "name": "autods-pet",
+      "version": "added",
+      "description": "Automatic and semi-automatic Deauville Score computation from PET/CT images",
+      "author": "sara.peluso5@unibo.it",
+      "published_at": "Mon, 04 May 2026 10:51:12 GMT",
+      "url": "https://pypi.org/project/autods-pet/"
+    },
+    {
+      "name": "cosmicml",
+      "version": "added",
+      "description": "From raw data to model insights — for Earth and beyond.",
+      "author": "deepalimadala@gmail.com",
+      "published_at": "Mon, 04 May 2026 10:50:04 GMT",
+      "url": "https://pypi.org/project/cosmicml/"
+    },
+    {
+      "name": "api-graveyard",
+      "version": "added",
+      "description": "Official Python collector for API Graveyard — automatically tracks your outgoing HTTP dependencies",
       "author": null,
-      "published_at": "Sun, 03 May 2026 02:02:22 GMT",
-      "url": "https://pypi.org/project/drkmttr/"
+      "published_at": "Mon, 04 May 2026 10:47:00 GMT",
+      "url": "https://pypi.org/project/api-graveyard/"
     },
     {
-      "name": "llm-context-router",
+      "name": "wormhole-sdk",
       "version": "added",
-      "description": "Scope your AI context before it explodes",
-      "author": "sal@saildev.org",
-      "published_at": "Sun, 03 May 2026 02:01:02 GMT",
-      "url": "https://pypi.org/project/llm-context-router/"
-    },
-    {
-      "name": "gisweep",
-      "version": "added",
-      "description": "GIS vulnerability scanner — ArcGIS REST, embedded maps, secret detection, KVKK/GDPR-aware",
-      "author": "mentalistler@mit.tc",
-      "published_at": "Sun, 03 May 2026 01:58:17 GMT",
-      "url": "https://pypi.org/project/gisweep/"
-    },
-    {
-      "name": "businesslog-agent",
-      "version": "added",
-      "description": "businesslog domain agent for PLATO fleet",
+      "description": "Wormhole SDK library.",
       "author": null,
-      "published_at": "Sun, 03 May 2026 01:54:26 GMT",
-      "url": "https://pypi.org/project/businesslog-agent/"
+      "published_at": "Mon, 04 May 2026 10:44:46 GMT",
+      "url": "https://pypi.org/project/wormhole-sdk/"
     },
     {
-      "name": "activeledger-agent",
+      "name": "wormhole-core",
       "version": "added",
-      "description": "activeledger domain agent for PLATO fleet",
+      "description": "Wormhole core engine.",
       "author": null,
-      "published_at": "Sun, 03 May 2026 01:54:09 GMT",
-      "url": "https://pypi.org/project/activeledger-agent/"
+      "published_at": "Mon, 04 May 2026 10:43:49 GMT",
+      "url": "https://pypi.org/project/wormhole-core/"
     },
     {
-      "name": "personallog-agent",
+      "name": "archrails-mcp",
       "version": "added",
-      "description": "personallog domain agent for PLATO fleet",
+      "description": "ArchRails MCP — thin local CLI that proxies the cloud handler. The cloud runs the validators; the CLI ships only transport, auth, git-diff capture, and architect-mode YAML editing.",
       "author": null,
-      "published_at": "Sun, 03 May 2026 01:53:54 GMT",
-      "url": "https://pypi.org/project/personallog-agent/"
+      "published_at": "Mon, 04 May 2026 10:41:52 GMT",
+      "url": "https://pypi.org/project/archrails-mcp/"
     },
     {
-      "name": "playerlog-agent",
+      "name": "kingkybel-pyerror",
       "version": "added",
-      "description": "playerlog domain agent for PLATO fleet",
+      "description": "Robust error handling and exception management for Python",
+      "author": "github@kybelksties.com",
+      "published_at": "Mon, 04 May 2026 10:39:44 GMT",
+      "url": "https://pypi.org/project/kingkybel-pyerror/"
+    },
+    {
+      "name": "agent-foundry-local",
+      "version": "added",
+      "description": "Local-first AI agent platform with formal handoff protocol for regulated industries",
+      "author": "vilius@agenticflow.dev",
+      "published_at": "Mon, 04 May 2026 10:38:59 GMT",
+      "url": "https://pypi.org/project/agent-foundry-local/"
+    },
+    {
+      "name": "convo-recall",
+      "version": "added",
+      "description": "Searchable memory for AI coding-agent sessions (Claude/Gemini/Codex) — FTS5 + vector hybrid search",
       "author": null,
-      "published_at": "Sun, 03 May 2026 01:53:39 GMT",
-      "url": "https://pypi.org/project/playerlog-agent/"
+      "published_at": "Mon, 04 May 2026 10:34:45 GMT",
+      "url": "https://pypi.org/project/convo-recall/"
     }
   ]
 }

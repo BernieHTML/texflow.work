@@ -1,11 +1,11 @@
 {
   "channel": "uv-index",
   "event": "uv_update",
-  "ts": "2026-05-03T00:05:01.110Z",
+  "ts": "2026-05-04T00:05:00.842Z",
   "source": "Open-Meteo UV",
   "payload": {
-    "date": "2026-05-03",
-    "uv_index_max": 3.3,
+    "date": "2026-05-04",
+    "uv_index_max": 3.45,
     "uv_category": "moderate"
   }
 }

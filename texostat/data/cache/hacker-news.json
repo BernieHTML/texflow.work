@@ -1,98 +1,98 @@
 {
   "channel": "hacker-news",
   "event": "hn_update",
-  "ts": "2026-05-03T03:00:01.880Z",
+  "ts": "2026-05-04T11:45:00.635Z",
   "source": "HN Algolia /search",
   "payload": [
     {
       "rank": 1,
-      "title": "VS Code inserting 'Co-Authored-by Copilot' into commits regardless of usage",
-      "url": "https://github.com/microsoft/vscode/pull/310226",
-      "score": 871,
-      "comments": 412,
-      "author": "indrora",
-      "age_hours": 7
+      "title": "Mercedes-Benz commits to bringing back physical buttons",
+      "url": "https://www.drive.com.au/news/mercedes-benz-commits-to-bringing-back-phycial-buttons/",
+      "score": 731,
+      "comments": 406,
+      "author": "teleforce",
+      "age_hours": 21
     },
     {
       "rank": 2,
-      "title": "NetHack 5.0.0",
-      "url": "https://nethack.org/v500/release.html",
-      "score": 389,
-      "comments": 120,
-      "author": "rsaarelm",
-      "age_hours": 9
+      "title": "DeepClaude – Claude Code agent loop with DeepSeek V4 Pro",
+      "url": "https://github.com/aattaran/deepclaude",
+      "score": 499,
+      "comments": 200,
+      "author": "alattaran",
+      "age_hours": 14
     },
     {
       "rank": 3,
-      "title": "Dav2d",
-      "url": "https://code.videolan.org/videolan/dav2d",
-      "score": 350,
-      "comments": 112,
-      "author": "dabinat",
-      "age_hours": 9
-    },
-    {
-      "rank": 4,
-      "title": "California to begin ticketing driverless cars that violate traffic laws",
-      "url": "https://www.bbc.com/news/articles/clypjx3rg2go",
-      "score": 256,
-      "comments": 265,
-      "author": "geox",
-      "age_hours": 9
-    },
-    {
-      "rank": 5,
-      "title": "How fast is a macOS VM, and how small could it be?",
-      "url": "https://eclecticlight.co/2026/05/02/how-fast-is-a-macos-vm-and-how-small-could-it-be/",
-      "score": 228,
-      "comments": 83,
-      "author": "moosia",
+      "title": "New statue in London, attributed to Banksy, of a suited man, blinded by a flag",
+      "url": "https://www.smithsonianmag.com/smart-news/attributed-to-banksy-a-new-statue-of-a-suited-man-blinded-by-a-flag-and-walking-off-a-ledge-appeared-in-central-london-180988662/",
+      "score": 423,
+      "comments": 391,
+      "author": "dryadin",
       "age_hours": 17
     },
     {
+      "rank": 4,
+      "title": "OpenAI’s o1 correctly diagnosed 67% of ER patients vs. 50-55% by triage doctors",
+      "url": "https://www.theguardian.com/technology/2026/apr/30/ai-outperforms-doctors-in-harvard-trial-of-emergency-triage-diagnoses",
+      "score": 408,
+      "comments": 364,
+      "author": "donsupreme",
+      "age_hours": 35
+    },
+    {
+      "rank": 5,
+      "title": "BYOMesh – New LoRa mesh radio offers 100x the bandwidth",
+      "url": "https://partyon.xyz/@nullagent/116499715071759135",
+      "score": 393,
+      "comments": 127,
+      "author": "nullagent",
+      "age_hours": 18
+    },
+    {
       "rank": 6,
-      "title": "Do_not_track",
-      "url": "https://donottrack.sh/",
-      "score": 220,
-      "comments": 70,
-      "author": "RubyGuy",
-      "age_hours": 9
+      "title": "Let's Buy Spirit Air",
+      "url": "https://letsbuyspiritair.com/",
+      "score": 376,
+      "comments": 356,
+      "author": "bjhess",
+      "age_hours": 12
     },
     {
       "rank": 7,
-      "title": "Roblox shares plummet 18% as child safety measures weigh on bookings",
-      "url": "https://www.cnbc.com/2026/05/01/roblox-rblx-stock-child-safety-earnings.html",
-      "score": 203,
-      "comments": 127,
-      "author": "1vuio0pswjnm7",
-      "age_hours": 10
+      "title": "A desktop made for one",
+      "url": "https://isene.org/2026/05/Audience-of-One.html",
+      "score": 361,
+      "comments": 198,
+      "author": "xngbuilds",
+      "age_hours": 20
     },
     {
       "rank": 8,
-      "title": "Six Years Perfecting Maps on WatchOS",
-      "url": "https://www.david-smith.org/blog/2026/04/29/maps-on-watchos/",
-      "score": 191,
-      "comments": 35,
-      "author": "valzevul",
-      "age_hours": 6
+      "title": "Using “underdrawings” for accurate text and numbers",
+      "url": "https://samcollins.blog/underdrawings/",
+      "score": 265,
+      "comments": 87,
+      "author": "samcollins",
+      "age_hours": 66
     },
     {
       "rank": 9,
-      "title": "Tesla owner won $10k in court for Tesla's FSD lies. Tesla is still fighting him",
-      "url": "https://electrek.co/2026/05/02/this-tesla-owner-won-10k-in-court-for-teslas-fsd-lies-tesla-is-still-fighting-him/",
-      "score": 178,
-      "comments": 66,
-      "author": "breve",
-      "age_hours": 4
+      "title": "Southwest Headquarters Tour",
+      "url": "https://katherinemichel.github.io/blog/travel/southwest-headquarters-tour-2026.html",
+      "score": 261,
+      "comments": 80,
+      "author": "KatiMichel",
+      "age_hours": 19
     },
     {
       "rank": 10,
-      "title": "This Month in Ladybird - April 2026",
-      "url": "https://ladybird.org/newsletter/2026-04-30/",
-      "score": 170,
-      "comments": 26,
-      "author": "richardboegli",
-      "age_hours": 6
+      "title": "Trademark violation: Fake Notepad++ for Mac",
+      "url": "https://notepad-plus-plus.org/news/npp-trademark-infringement/",
+      "score": 197,
+      "comments": 74,
+      "author": "maxloh",
+      "age_hours": 2
     }
   ]
 }

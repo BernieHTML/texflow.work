@@ -1,7 +1,7 @@
 {
   "channel": "forex-rates",
   "event": "fx_update",
-  "ts": "2026-05-03T03:00:01.373Z",
+  "ts": "2026-05-04T11:00:01.566Z",
   "source": "Frankfurter /latest",
   "payload": {
     "base": "USD",
