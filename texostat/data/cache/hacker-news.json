@@ -1,98 +1,98 @@
 {
   "channel": "hacker-news",
   "event": "hn_update",
-  "ts": "2026-05-04T11:45:00.635Z",
+  "ts": "2026-05-05T06:15:01.110Z",
   "source": "HN Algolia /search",
   "payload": [
     {
       "rank": 1,
-      "title": "Mercedes-Benz commits to bringing back physical buttons",
-      "url": "https://www.drive.com.au/news/mercedes-benz-commits-to-bringing-back-phycial-buttons/",
-      "score": 731,
-      "comments": 406,
-      "author": "teleforce",
-      "age_hours": 21
-    },
-    {
-      "rank": 2,
-      "title": "DeepClaude – Claude Code agent loop with DeepSeek V4 Pro",
-      "url": "https://github.com/aattaran/deepclaude",
-      "score": 499,
-      "comments": 200,
-      "author": "alattaran",
-      "age_hours": 14
-    },
-    {
-      "rank": 3,
-      "title": "New statue in London, attributed to Banksy, of a suited man, blinded by a flag",
-      "url": "https://www.smithsonianmag.com/smart-news/attributed-to-banksy-a-new-statue-of-a-suited-man-blinded-by-a-flag-and-walking-off-a-ledge-appeared-in-central-london-180988662/",
-      "score": 423,
-      "comments": 391,
-      "author": "dryadin",
-      "age_hours": 17
-    },
-    {
-      "rank": 4,
-      "title": "OpenAI’s o1 correctly diagnosed 67% of ER patients vs. 50-55% by triage doctors",
-      "url": "https://www.theguardian.com/technology/2026/apr/30/ai-outperforms-doctors-in-harvard-trial-of-emergency-triage-diagnoses",
-      "score": 408,
-      "comments": 364,
-      "author": "donsupreme",
-      "age_hours": 35
-    },
-    {
-      "rank": 5,
-      "title": "BYOMesh – New LoRa mesh radio offers 100x the bandwidth",
-      "url": "https://partyon.xyz/@nullagent/116499715071759135",
-      "score": 393,
-      "comments": 127,
-      "author": "nullagent",
-      "age_hours": 18
-    },
-    {
-      "rank": 6,
-      "title": "Let's Buy Spirit Air",
-      "url": "https://letsbuyspiritair.com/",
-      "score": 376,
-      "comments": 356,
-      "author": "bjhess",
-      "age_hours": 12
-    },
-    {
-      "rank": 7,
-      "title": "A desktop made for one",
-      "url": "https://isene.org/2026/05/Audience-of-One.html",
-      "score": 361,
-      "comments": 198,
-      "author": "xngbuilds",
-      "age_hours": 20
-    },
-    {
-      "rank": 8,
-      "title": "Using “underdrawings” for accurate text and numbers",
-      "url": "https://samcollins.blog/underdrawings/",
-      "score": 265,
-      "comments": 87,
-      "author": "samcollins",
-      "age_hours": 66
-    },
-    {
-      "rank": 9,
-      "title": "Southwest Headquarters Tour",
-      "url": "https://katherinemichel.github.io/blog/travel/southwest-headquarters-tour-2026.html",
-      "score": 261,
-      "comments": 80,
-      "author": "KatiMichel",
+      "title": "Talking to strangers at the gym",
+      "url": "https://thienantran.com/talking-to-35-strangers-at-the-gym/",
+      "score": 1286,
+      "comments": 605,
+      "author": "thitran",
       "age_hours": 19
     },
     {
+      "rank": 2,
+      "title": "GameStop makes $55.5B takeover offer for eBay",
+      "url": "https://www.bbc.co.uk/news/articles/cn0p8yled1do",
+      "score": 667,
+      "comments": 635,
+      "author": "n1b0m",
+      "age_hours": 21
+    },
+    {
+      "rank": 3,
+      "title": "Microsoft Edge stores all passwords in memory in clear text, even when unused",
+      "url": "https://twitter.com/L1v1ng0ffTh3L4N/status/2051308329880719730",
+      "score": 493,
+      "comments": 177,
+      "author": "cft",
+      "age_hours": 12
+    },
+    {
+      "rank": 4,
+      "title": "I am worried about Bun",
+      "url": "https://wwj.dev/posts/i-am-worried-about-bun/",
+      "score": 459,
+      "comments": 308,
+      "author": "remote-dev",
+      "age_hours": 14
+    },
+    {
+      "rank": 5,
+      "title": "Bun is being ported from Zig to Rust",
+      "url": "https://github.com/oven-sh/bun/commit/46d3bc29f270fa881dd5730ef1549e88407701a5",
+      "score": 366,
+      "comments": 239,
+      "author": "SergeAx",
+      "age_hours": 5
+    },
+    {
+      "rank": 6,
+      "title": "How OpenAI delivers low-latency voice AI at scale",
+      "url": "https://openai.com/index/delivering-low-latency-voice-ai-at-scale/",
+      "score": 361,
+      "comments": 118,
+      "author": "Sean-Der",
+      "age_hours": 11
+    },
+    {
+      "rank": 7,
+      "title": "How Monero’s proof of work works",
+      "url": "https://blog.alcazarsec.com/tech/posts/how-moneros-proof-of-work-works",
+      "score": 269,
+      "comments": 190,
+      "author": "alcazar",
+      "age_hours": 16
+    },
+    {
+      "rank": 8,
+      "title": "Redis array: short story of a long development process",
+      "url": "https://antirez.com/news/164",
+      "score": 263,
+      "comments": 87,
+      "author": "antirez",
+      "age_hours": 16
+    },
+    {
+      "rank": 9,
+      "title": "Does Employment Slow Cognitive Decline? Evidence from Labor Market Shocks",
+      "url": "https://www.nber.org/papers/w35117",
+      "score": 261,
+      "comments": 237,
+      "author": "littlexsparkee",
+      "age_hours": 15
+    },
+    {
       "rank": 10,
-      "title": "Trademark violation: Fake Notepad++ for Mac",
-      "url": "https://notepad-plus-plus.org/news/npp-trademark-infringement/",
-      "score": 197,
-      "comments": 74,
-      "author": "maxloh",
-      "age_hours": 2
+      "title": "PyInfra 3.8.0",
+      "url": "https://github.com/pyinfra-dev/pyinfra/releases/tag/v3.8.0",
+      "score": 253,
+      "comments": 88,
+      "author": "wowi42",
+      "age_hours": 17
     }
   ]
 }

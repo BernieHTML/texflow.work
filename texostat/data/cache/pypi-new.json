@@ -1,128 +1,128 @@
 {
   "channel": "pypi-new",
   "event": "pypi_update",
-  "ts": "2026-05-04T11:30:00.937Z",
+  "ts": "2026-05-05T06:00:00.487Z",
   "source": "PyPI RSS",
   "payload": [
     {
-      "name": "cloudauth-sdk",
+      "name": "crayonz",
       "version": "added",
-      "description": "Cloud Authentication SDK for Python",
-      "author": "auth-support@cloudauth.io",
-      "published_at": "Mon, 04 May 2026 10:59:29 GMT",
-      "url": "https://pypi.org/project/cloudauth-sdk/"
+      "description": "Official Python SDK for the Crayonz AI API — meme, content, and design generation.",
+      "author": "support@crayonz.ai",
+      "published_at": "Tue, 05 May 2026 05:29:54 GMT",
+      "url": "https://pypi.org/project/crayonz/"
     },
     {
-      "name": "reforge-mcp",
+      "name": "askmy-codebase",
       "version": "added",
-      "description": "MCP server that automatically cleans up messy vibe-coded repositories",
+      "description": "Chat with any codebase using AI — local or GitHub repos",
       "author": null,
-      "published_at": "Mon, 04 May 2026 10:58:54 GMT",
-      "url": "https://pypi.org/project/reforge-mcp/"
+      "published_at": "Tue, 05 May 2026 05:25:23 GMT",
+      "url": "https://pypi.org/project/askmy-codebase/"
     },
     {
-      "name": "timeahead-mcp",
+      "name": "dulus",
       "version": "added",
-      "description": "MCP server for timeahead.in — live trust scores for MCP servers",
+      "description": "Spanish-first multi-provider AI CLI — 14 NVIDIA models free, Mesa Redonda, voice, TTS, RTK token reducer, MemPalace",
       "author": null,
-      "published_at": "Mon, 04 May 2026 10:58:45 GMT",
-      "url": "https://pypi.org/project/timeahead-mcp/"
+      "published_at": "Tue, 05 May 2026 05:25:06 GMT",
+      "url": "https://pypi.org/project/dulus/"
     },
     {
-      "name": "societal-costs-rscripts-publication-plots",
+      "name": "relic-graph",
       "version": "added",
-      "description": "Bundle and unpack the societal_costs_r project files",
+      "description": "Codebase knowledge management CLI for AI coding agents",
       "author": null,
-      "published_at": "Mon, 04 May 2026 10:57:12 GMT",
-      "url": "https://pypi.org/project/societal-costs-rscripts-publication-plots/"
+      "published_at": "Tue, 05 May 2026 05:23:04 GMT",
+      "url": "https://pypi.org/project/relic-graph/"
     },
     {
-      "name": "fastapi-semcache",
+      "name": "pygemchat",
       "version": "added",
-      "description": "Drop in FastAPI middleware/reverse proxy with semantic caching for APIs & LLMs",
+      "description": "A simple AI chatbot package for OpenAI and Gemini.",
       "author": null,
-      "published_at": "Mon, 04 May 2026 10:56:53 GMT",
-      "url": "https://pypi.org/project/fastapi-semcache/"
+      "published_at": "Tue, 05 May 2026 05:22:08 GMT",
+      "url": "https://pypi.org/project/pygemchat/"
     },
     {
-      "name": "jkey",
+      "name": "video-analyser",
       "version": "added",
-      "description": "Python library for password management and TOTP verification.",
-      "author": "imjiaoyuan@gmail.com",
-      "published_at": "Mon, 04 May 2026 10:52:31 GMT",
-      "url": "https://pypi.org/project/jkey/"
+      "description": "Video analysis lens for the modular assessment platform - extracts frames, transcripts, and quality metrics",
+      "author": "michael@example.com",
+      "published_at": "Tue, 05 May 2026 05:14:20 GMT",
+      "url": "https://pypi.org/project/video-analyser/"
     },
     {
-      "name": "autods-pet",
+      "name": "records-analyser",
       "version": "added",
-      "description": "Automatic and semi-automatic Deauville Score computation from PET/CT images",
-      "author": "sara.peluso5@unibo.it",
-      "published_at": "Mon, 04 May 2026 10:51:12 GMT",
-      "url": "https://pypi.org/project/autods-pet/"
-    },
-    {
-      "name": "cosmicml",
-      "version": "added",
-      "description": "From raw data to model insights — for Earth and beyond.",
-      "author": "deepalimadala@gmail.com",
-      "published_at": "Mon, 04 May 2026 10:50:04 GMT",
-      "url": "https://pypi.org/project/cosmicml/"
-    },
-    {
-      "name": "api-graveyard",
-      "version": "added",
-      "description": "Official Python collector for API Graveyard — automatically tracks your outgoing HTTP dependencies",
+      "description": "Structured data profiling for the poly-lens family",
       "author": null,
-      "published_at": "Mon, 04 May 2026 10:47:00 GMT",
-      "url": "https://pypi.org/project/api-graveyard/"
+      "published_at": "Tue, 05 May 2026 05:14:16 GMT",
+      "url": "https://pypi.org/project/records-analyser/"
     },
     {
-      "name": "wormhole-sdk",
+      "name": "speech-analyser",
       "version": "added",
-      "description": "Wormhole SDK library.",
+      "description": "Audio transcription and speech analysis for the poly-lens family",
       "author": null,
-      "published_at": "Mon, 04 May 2026 10:44:46 GMT",
-      "url": "https://pypi.org/project/wormhole-sdk/"
+      "published_at": "Tue, 05 May 2026 05:14:11 GMT",
+      "url": "https://pypi.org/project/speech-analyser/"
     },
     {
-      "name": "wormhole-core",
+      "name": "btc2",
       "version": "added",
-      "description": "Wormhole core engine.",
+      "description": "Simple cryptocurrency price fetching from 10 top exchanges",
+      "author": "btc2@example.com",
+      "published_at": "Tue, 05 May 2026 05:09:09 GMT",
+      "url": "https://pypi.org/project/btc2/"
+    },
+    {
+      "name": "cleanskate",
+      "version": "added",
+      "description": "Pandas-friendly access to figure skating scores",
       "author": null,
-      "published_at": "Mon, 04 May 2026 10:43:49 GMT",
-      "url": "https://pypi.org/project/wormhole-core/"
+      "published_at": "Tue, 05 May 2026 05:07:03 GMT",
+      "url": "https://pypi.org/project/cleanskate/"
     },
     {
-      "name": "archrails-mcp",
+      "name": "mcp-watcher",
       "version": "added",
-      "description": "ArchRails MCP — thin local CLI that proxies the cloud handler. The cloud runs the validators; the CLI ships only transport, auth, git-diff capture, and architect-mode YAML editing.",
+      "description": "SquatGuard MCP Template for Python",
       "author": null,
-      "published_at": "Mon, 04 May 2026 10:41:52 GMT",
-      "url": "https://pypi.org/project/archrails-mcp/"
+      "published_at": "Tue, 05 May 2026 05:03:58 GMT",
+      "url": "https://pypi.org/project/mcp-watcher/"
     },
     {
-      "name": "kingkybel-pyerror",
+      "name": "codeberg-cli",
       "version": "added",
-      "description": "Robust error handling and exception management for Python",
-      "author": "github@kybelksties.com",
-      "published_at": "Mon, 04 May 2026 10:39:44 GMT",
-      "url": "https://pypi.org/project/kingkybel-pyerror/"
+      "description": "A Codeberg CLI",
+      "author": "thatxliner@gmail.com",
+      "published_at": "Tue, 05 May 2026 04:57:44 GMT",
+      "url": "https://pypi.org/project/codeberg-cli/"
     },
     {
-      "name": "agent-foundry-local",
+      "name": "agentgc",
       "version": "added",
-      "description": "Local-first AI agent platform with formal handoff protocol for regulated industries",
-      "author": "vilius@agenticflow.dev",
-      "published_at": "Mon, 04 May 2026 10:38:59 GMT",
-      "url": "https://pypi.org/project/agent-foundry-local/"
+      "description": "Stateless memory-compression layer for autonomous AI agents",
+      "author": "carrick.cheah@green-methods.com",
+      "published_at": "Tue, 05 May 2026 04:49:27 GMT",
+      "url": "https://pypi.org/project/agentgc/"
     },
     {
-      "name": "convo-recall",
+      "name": "code-analyser",
       "version": "added",
-      "description": "Searchable memory for AI coding-agent sessions (Claude/Gemini/Codex) — FTS5 + vector hybrid search",
+      "description": "Automated Code Analysis & Grading Assistant for Educators",
       "author": null,
-      "published_at": "Mon, 04 May 2026 10:34:45 GMT",
-      "url": "https://pypi.org/project/convo-recall/"
+      "published_at": "Tue, 05 May 2026 04:48:48 GMT",
+      "url": "https://pypi.org/project/code-analyser/"
+    },
+    {
+      "name": "multi-analyser",
+      "version": "added",
+      "description": "Multi-lens analysis router — detect a file's format and route it to the right lens",
+      "author": null,
+      "published_at": "Tue, 05 May 2026 04:48:42 GMT",
+      "url": "https://pypi.org/project/multi-analyser/"
     }
   ]
 }

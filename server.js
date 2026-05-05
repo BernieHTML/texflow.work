@@ -623,6 +623,14 @@ import(pathToFileURL(join(__dirname, 'ellipse', 'server.js')).href).then(({ defa
   console.error('[Ellipse] Failed to mount /ellipse:', e.message);
 });
 
+// --- TexLetter: curl-first newsletters over SSE ---
+import(pathToFileURL(join(__dirname, 'texletter', 'server.js')).href).then(({ default: texLetterApp }) => {
+  app.use('/texletter', texLetterApp);
+  console.log('[TexLetter] Mounted at /texletter');
+}).catch((e) => {
+  console.error('[TexLetter] Failed to mount /texletter:', e.message);
+});
+
 // --- Static: public, then root assets ---
 app.use(express.static(join(__dirname, 'public')));
 app.get('/texflowlogo.png', (req, res) => res.sendFile(join(__dirname, 'texflowlogo.png')));

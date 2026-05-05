@@ -1,28 +1,28 @@
 {
   "channel": "this-day-history",
   "event": "history_update",
-  "ts": "2026-05-04T00:05:00.774Z",
+  "ts": "2026-05-05T00:05:01.384Z",
   "source": "history.muffinlabs.com",
   "payload": [
     {
-      "year": "1256",
-      "event": "The Augustinian monastic order is constituted at the Lecceto Monastery when Pope Alexander IV issues a papal bull Licet ecclesiae catholicae."
+      "year": "553",
+      "event": "The Second Council of Constantinople begins."
     },
     {
-      "year": "1415",
-      "event": "Religious reformer John Wycliffe is condemned as a heretic at the Council of Constance."
+      "year": "1215",
+      "event": "Rebel barons renounce their allegiance to King John of England — part of a chain of events leading to the signing of the Magna Carta."
     },
     {
-      "year": "1436",
-      "event": "Assassination of the Swedish rebel (later national hero) Engelbrekt Engelbrektsson (27 April O.S.)."
+      "year": "1260",
+      "event": "Kublai Khan becomes ruler of the Mongol Empire."
     },
     {
-      "year": "1471",
-      "event": "Wars of the Roses: The Battle of Tewkesbury: Edward IV defeats a Lancastrian Army and kills Edward of Westminster, Prince of Wales."
+      "year": "1494",
+      "event": "On his second voyage to the New World, Christopher Columbus sights Jamaica, landing at Discovery Bay and declares Jamaica the property of the Spanish crown."
     },
     {
-      "year": "1493",
-      "event": "In the papal bull Inter caetera, Pope Alexander VI divides the New World between Spain and Portugal along the Line of Demarcation."
+      "year": "1609",
+      "event": "Daimyō (Lord) Shimazu Tadatsune of the Satsuma Domain in southern Kyūshū, Japan, completes his successful invasion of the Ryūkyū Kingdom in Okinawa."
     }
   ]
 }

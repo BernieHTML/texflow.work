@@ -1,6 +1,6 @@
 {
   "crypto-btc": {
-    "total_polls": 17299,
+    "total_polls": 18335,
     "total_connections": 0,
     "daily": {
       "2026-04-22": {
@@ -52,14 +52,18 @@
         "connections": 0
       },
       "2026-05-04": {
-        "polls": 717,
+        "polls": 1395,
+        "connections": 0
+      },
+      "2026-05-05": {
+        "polls": 358,
         "connections": 0
       }
     },
-    "last_poll": "2026-05-04T11:56:51.983Z"
+    "last_poll": "2026-05-05T06:23:07.320Z"
   },
   "forex-rates": {
-    "total_polls": 295,
+    "total_polls": 314,
     "total_connections": 0,
     "daily": {
       "2026-04-22": {
@@ -111,14 +115,18 @@
         "connections": 0
       },
       "2026-05-04": {
-        "polls": 12,
+        "polls": 24,
+        "connections": 0
+      },
+      "2026-05-05": {
+        "polls": 7,
         "connections": 0
       }
     },
-    "last_poll": "2026-05-04T11:00:01.567Z"
+    "last_poll": "2026-05-05T06:00:00.578Z"
   },
   "earthquakes-live": {
-    "total_polls": 3441,
+    "total_polls": 3659,
     "total_connections": 0,
     "daily": {
       "2026-04-22": {
@@ -170,14 +178,18 @@
         "connections": 0
       },
       "2026-05-04": {
-        "polls": 143,
+        "polls": 284,
+        "connections": 0
+      },
+      "2026-05-05": {
+        "polls": 77,
         "connections": 0
       }
     },
-    "last_poll": "2026-05-04T11:55:00.780Z"
+    "last_poll": "2026-05-05T06:20:01.023Z"
   },
   "earthquakes-significant": {
-    "total_polls": 3440,
+    "total_polls": 3658,
     "total_connections": 0,
     "daily": {
       "2026-04-22": {
@@ -229,14 +241,18 @@
         "connections": 0
       },
       "2026-05-04": {
-        "polls": 143,
+        "polls": 284,
+        "connections": 0
+      },
+      "2026-05-05": {
+        "polls": 77,
         "connections": 0
       }
     },
-    "last_poll": "2026-05-04T11:55:00.799Z"
+    "last_poll": "2026-05-05T06:20:01.030Z"
   },
   "weather-global": {
-    "total_polls": 326,
+    "total_polls": 338,
     "total_connections": 0,
     "daily": {
       "2026-04-22": {
@@ -288,14 +304,18 @@
         "connections": 0
       },
       "2026-05-04": {
-        "polls": 9,
+        "polls": 18,
+        "connections": 0
+      },
+      "2026-05-05": {
+        "polls": 3,
         "connections": 0
       }
     },
-    "last_poll": "2026-05-04T11:30:15.586Z"
+    "last_poll": "2026-05-05T02:30:15.082Z"
   },
   "macro-world-bank": {
-    "total_polls": 16,
+    "total_polls": 18,
     "total_connections": 0,
     "daily": {
       "2026-04-22": {
@@ -339,14 +359,18 @@
         "connections": 0
       },
       "2026-05-04": {
+        "polls": 2,
+        "connections": 0
+      },
+      "2026-05-05": {
         "polls": 1,
         "connections": 0
       }
     },
-    "last_poll": "2026-05-04T00:05:00.407Z"
+    "last_poll": "2026-05-05T00:05:00.910Z"
   },
   "co2-levels": {
-    "total_polls": 19,
+    "total_polls": 21,
     "total_connections": 0,
     "daily": {
       "2026-04-22": {
@@ -390,14 +414,18 @@
         "connections": 0
       },
       "2026-05-04": {
+        "polls": 2,
+        "connections": 0
+      },
+      "2026-05-05": {
         "polls": 1,
         "connections": 0
       }
     },
-    "last_poll": "2026-05-04T00:05:00.471Z"
+    "last_poll": "2026-05-05T00:05:00.936Z"
   },
   "uv-index": {
-    "total_polls": 20,
+    "total_polls": 22,
     "total_connections": 0,
     "daily": {
       "2026-04-22": {
@@ -445,14 +473,18 @@
         "connections": 0
       },
       "2026-05-04": {
+        "polls": 2,
+        "connections": 0
+      },
+      "2026-05-05": {
         "polls": 1,
         "connections": 0
       }
     },
-    "last_poll": "2026-05-04T00:05:00.843Z"
+    "last_poll": "2026-05-05T00:05:01.520Z"
   },
   "crypto-eth": {
-    "total_polls": 17291,
+    "total_polls": 18257,
     "total_connections": 0,
     "daily": {
       "2026-04-22": {
@@ -504,14 +536,18 @@
         "connections": 0
       },
       "2026-05-04": {
-        "polls": 717,
+        "polls": 1351,
+        "connections": 0
+      },
+      "2026-05-05": {
+        "polls": 332,
         "connections": 0
       }
     },
-    "last_poll": "2026-05-04T11:56:55.000Z"
+    "last_poll": "2026-05-05T06:23:10.276Z"
   },
   "iss-location": {
-    "total_polls": 30106,
+    "total_polls": 32015,
     "total_connections": 0,
     "daily": {
       "2026-04-22": {
@@ -563,14 +599,18 @@
         "connections": 0
       },
       "2026-05-04": {
-        "polls": 1244,
+        "polls": 2484,
+        "connections": 0
+      },
+      "2026-05-05": {
+        "polls": 669,
         "connections": 0
       }
     },
-    "last_poll": "2026-05-04T11:57:27.549Z"
+    "last_poll": "2026-05-05T06:23:40.697Z"
   },
   "ocean-sst": {
-    "total_polls": 19,
+    "total_polls": 21,
     "total_connections": 0,
     "daily": {
       "2026-04-22": {
@@ -614,14 +654,18 @@
         "connections": 0
       },
       "2026-05-04": {
+        "polls": 2,
+        "connections": 0
+      },
+      "2026-05-05": {
         "polls": 1,
         "connections": 0
       }
     },
-    "last_poll": "2026-05-04T00:05:00.711Z"
+    "last_poll": "2026-05-05T00:05:01.232Z"
   },
   "iss-crew": {
-    "total_polls": 268,
+    "total_polls": 285,
     "total_connections": 0,
     "daily": {
       "2026-04-22": {
@@ -673,14 +717,18 @@
         "connections": 0
       },
       "2026-05-04": {
-        "polls": 12,
+        "polls": 22,
+        "connections": 0
+      },
+      "2026-05-05": {
+        "polls": 7,
         "connections": 0
       }
     },
-    "last_poll": "2026-05-04T11:00:00.906Z"
+    "last_poll": "2026-05-05T06:00:00.509Z"
   },
   "space-weather": {
-    "total_polls": 3438,
+    "total_polls": 3654,
     "total_connections": 0,
     "daily": {
       "2026-04-22": {
@@ -732,14 +780,18 @@
         "connections": 0
       },
       "2026-05-04": {
-        "polls": 143,
+        "polls": 282,
+        "connections": 0
+      },
+      "2026-05-05": {
+        "polls": 77,
         "connections": 0
       }
     },
-    "last_poll": "2026-05-04T11:55:00.822Z"
+    "last_poll": "2026-05-05T06:20:01.204Z"
   },
   "solar-flares": {
-    "total_polls": 3436,
+    "total_polls": 3652,
     "total_connections": 0,
     "daily": {
       "2026-04-22": {
@@ -791,14 +843,18 @@
         "connections": 0
       },
       "2026-05-04": {
-        "polls": 143,
+        "polls": 282,
+        "connections": 0
+      },
+      "2026-05-05": {
+        "polls": 77,
         "connections": 0
       }
     },
-    "last_poll": "2026-05-04T11:55:00.854Z"
+    "last_poll": "2026-05-05T06:20:01.226Z"
   },
   "covid-global": {
-    "total_polls": 289,
+    "total_polls": 307,
     "total_connections": 0,
     "daily": {
       "2026-04-22": {
@@ -850,14 +906,18 @@
         "connections": 0
       },
       "2026-05-04": {
-        "polls": 11,
+        "polls": 22,
+        "connections": 0
+      },
+      "2026-05-05": {
+        "polls": 7,
         "connections": 0
       }
     },
-    "last_poll": "2026-05-04T11:00:01.738Z"
+    "last_poll": "2026-05-05T06:00:01.062Z"
   },
   "hacker-news": {
-    "total_polls": 1142,
+    "total_polls": 1212,
     "total_connections": 0,
     "daily": {
       "2026-04-22": {
@@ -909,14 +969,18 @@
         "connections": 0
       },
       "2026-05-04": {
-        "polls": 47,
+        "polls": 91,
+        "connections": 0
+      },
+      "2026-05-05": {
+        "polls": 26,
         "connections": 0
       }
     },
-    "last_poll": "2026-05-04T11:45:00.635Z"
+    "last_poll": "2026-05-05T06:15:01.111Z"
   },
   "arxiv-ai": {
-    "total_polls": 20,
+    "total_polls": 22,
     "total_connections": 0,
     "daily": {
       "2026-04-22": {
@@ -964,14 +1028,18 @@
         "connections": 0
       },
       "2026-05-04": {
+        "polls": 2,
+        "connections": 0
+      },
+      "2026-05-05": {
         "polls": 1,
         "connections": 0
       }
     },
-    "last_poll": "2026-05-04T00:05:00.344Z"
+    "last_poll": "2026-05-05T00:05:00.965Z"
   },
   "covid-countries": {
-    "total_polls": 290,
+    "total_polls": 307,
     "total_connections": 0,
     "daily": {
       "2026-04-22": {
@@ -1023,14 +1091,18 @@
         "connections": 0
       },
       "2026-05-04": {
-        "polls": 11,
+        "polls": 21,
+        "connections": 0
+      },
+      "2026-05-05": {
+        "polls": 7,
         "connections": 0
       }
     },
-    "last_poll": "2026-05-04T11:00:01.745Z"
+    "last_poll": "2026-05-05T06:00:01.489Z"
   },
   "arxiv-physics": {
-    "total_polls": 20,
+    "total_polls": 22,
     "total_connections": 1,
     "daily": {
       "2026-04-22": {
@@ -1078,14 +1150,18 @@
         "connections": 0
       },
       "2026-05-04": {
+        "polls": 2,
+        "connections": 0
+      },
+      "2026-05-05": {
         "polls": 1,
         "connections": 0
       }
     },
-    "last_poll": "2026-05-04T00:05:00.410Z"
+    "last_poll": "2026-05-05T00:05:01.035Z"
   },
   "pypi-new": {
-    "total_polls": 566,
+    "total_polls": 599,
     "total_connections": 0,
     "daily": {
       "2026-04-22": {
@@ -1137,14 +1213,18 @@
         "connections": 0
       },
       "2026-05-04": {
-        "polls": 22,
+        "polls": 42,
+        "connections": 0
+      },
+      "2026-05-05": {
+        "polls": 13,
         "connections": 0
       }
     },
-    "last_poll": "2026-05-04T11:30:00.943Z"
+    "last_poll": "2026-05-05T06:00:00.493Z"
   },
   "pubmed-ai-health": {
-    "total_polls": 18,
+    "total_polls": 20,
     "total_connections": 0,
     "daily": {
       "2026-04-22": {
@@ -1192,14 +1272,18 @@
         "connections": 0
       },
       "2026-05-04": {
+        "polls": 2,
+        "connections": 0
+      },
+      "2026-05-05": {
         "polls": 1,
         "connections": 0
       }
     },
-    "last_poll": "2026-05-04T00:05:00.640Z"
+    "last_poll": "2026-05-05T00:05:01.223Z"
   },
   "crypto-top10": {
-    "total_polls": 3468,
+    "total_polls": 3690,
     "total_connections": 0,
     "daily": {
       "2026-04-22": {
@@ -1251,14 +1335,18 @@
         "connections": 0
       },
       "2026-05-04": {
-        "polls": 144,
+        "polls": 289,
+        "connections": 0
+      },
+      "2026-05-05": {
+        "polls": 77,
         "connections": 0
       }
     },
-    "last_poll": "2026-05-04T11:55:00.777Z"
+    "last_poll": "2026-05-05T06:20:01.069Z"
   },
   "open-fda-recalls": {
-    "total_polls": 285,
+    "total_polls": 302,
     "total_connections": 0,
     "daily": {
       "2026-04-22": {
@@ -1310,14 +1398,18 @@
         "connections": 0
       },
       "2026-05-04": {
-        "polls": 10,
+        "polls": 20,
+        "connections": 0
+      },
+      "2026-05-05": {
+        "polls": 7,
         "connections": 0
       }
     },
-    "last_poll": "2026-05-04T11:00:01.866Z"
+    "last_poll": "2026-05-05T06:00:00.835Z"
   },
   "flight-delays-us": {
-    "total_polls": 1128,
+    "total_polls": 1197,
     "total_connections": 0,
     "daily": {
       "2026-04-22": {
@@ -1369,14 +1461,18 @@
         "connections": 0
       },
       "2026-05-04": {
-        "polls": 45,
+        "polls": 88,
+        "connections": 0
+      },
+      "2026-05-05": {
+        "polls": 26,
         "connections": 0
       }
     },
-    "last_poll": "2026-05-04T11:45:00.540Z"
+    "last_poll": "2026-05-05T06:15:00.988Z"
   },
   "wikipedia-trending": {
-    "total_polls": 9,
+    "total_polls": 10,
     "total_connections": 0,
     "daily": {
       "2026-04-22": {
@@ -1398,12 +1494,16 @@
       "2026-04-29": {
         "polls": 1,
         "connections": 0
+      },
+      "2026-05-04": {
+        "polls": 1,
+        "connections": 0
       }
     },
-    "last_poll": "2026-04-29T11:12:57.315Z"
+    "last_poll": "2026-05-04T12:18:14.745Z"
   },
   "world-population": {
-    "total_polls": 17,
+    "total_polls": 19,
     "total_connections": 0,
     "daily": {
       "2026-04-22": {
@@ -1451,14 +1551,18 @@
         "connections": 0
       },
       "2026-05-04": {
+        "polls": 2,
+        "connections": 0
+      },
+      "2026-05-05": {
         "polls": 1,
         "connections": 0
       }
     },
-    "last_poll": "2026-05-04T00:05:00.544Z"
+    "last_poll": "2026-05-05T00:05:01.118Z"
   },
   "this-day-history": {
-    "total_polls": 21,
+    "total_polls": 23,
     "total_connections": 0,
     "daily": {
       "2026-04-22": {
@@ -1510,14 +1614,18 @@
         "connections": 0
       },
       "2026-05-04": {
+        "polls": 2,
+        "connections": 0
+      },
+      "2026-05-05": {
         "polls": 1,
         "connections": 0
       }
     },
-    "last_poll": "2026-05-04T00:05:00.775Z"
+    "last_poll": "2026-05-05T00:05:01.385Z"
   },
   "dev-status": {
-    "total_polls": 3402,
+    "total_polls": 3616,
     "total_connections": 0,
     "daily": {
       "2026-04-22": {
@@ -1569,14 +1677,18 @@
         "connections": 0
       },
       "2026-05-04": {
-        "polls": 141,
+        "polls": 279,
+        "connections": 0
+      },
+      "2026-05-05": {
+        "polls": 76,
         "connections": 0
       }
     },
-    "last_poll": "2026-05-04T11:55:01.040Z"
+    "last_poll": "2026-05-05T06:20:01.438Z"
   },
   "crypto-global": {
-    "total_polls": 3453,
+    "total_polls": 3672,
     "total_connections": 0,
     "daily": {
       "2026-04-22": {
@@ -1628,14 +1740,18 @@
         "connections": 0
       },
       "2026-05-04": {
-        "polls": 144,
+        "polls": 287,
+        "connections": 0
+      },
+      "2026-05-05": {
+        "polls": 76,
         "connections": 0
       }
     },
-    "last_poll": "2026-05-04T11:55:00.701Z"
+    "last_poll": "2026-05-05T06:20:01.027Z"
   },
   "near-earth-objects": {
-    "total_polls": 21,
+    "total_polls": 23,
     "total_connections": 0,
     "daily": {
       "2026-04-22": {
@@ -1687,14 +1803,18 @@
         "connections": 0
       },
       "2026-05-04": {
+        "polls": 2,
+        "connections": 0
+      },
+      "2026-05-05": {
         "polls": 1,
         "connections": 0
       }
     },
-    "last_poll": "2026-05-04T00:05:01.056Z"
+    "last_poll": "2026-05-05T00:05:01.679Z"
   },
   "un-comtrade": {
-    "total_polls": 21,
+    "total_polls": 23,
     "total_connections": 0,
     "daily": {
       "2026-04-22": {
@@ -1746,14 +1866,18 @@
         "connections": 0
       },
       "2026-05-04": {
+        "polls": 2,
+        "connections": 0
+      },
+      "2026-05-05": {
         "polls": 1,
         "connections": 0
       }
     },
-    "last_poll": "2026-05-04T00:05:03.545Z"
+    "last_poll": "2026-05-05T00:05:02.671Z"
   },
   "exchange-rates-ecb": {
-    "total_polls": 20,
+    "total_polls": 22,
     "total_connections": 0,
     "daily": {
       "2026-04-22": {
@@ -1801,14 +1925,18 @@
         "connections": 0
       },
       "2026-05-04": {
+        "polls": 2,
+        "connections": 0
+      },
+      "2026-05-05": {
         "polls": 1,
         "connections": 0
       }
     },
-    "last_poll": "2026-05-04T00:05:01.718Z"
+    "last_poll": "2026-05-05T00:05:03.987Z"
   },
   "open-library": {
-    "total_polls": 267,
+    "total_polls": 281,
     "total_connections": 0,
     "daily": {
       "2026-04-22": {
@@ -1860,14 +1988,18 @@
         "connections": 0
       },
       "2026-05-04": {
-        "polls": 10,
+        "polls": 18,
+        "connections": 0
+      },
+      "2026-05-05": {
+        "polls": 6,
         "connections": 0
       }
     },
-    "last_poll": "2026-05-04T11:00:01.344Z"
+    "last_poll": "2026-05-05T06:00:04.121Z"
   },
   "exchange-status": {
-    "total_polls": 1148,
+    "total_polls": 1220,
     "total_connections": 0,
     "daily": {
       "2026-04-22": {
@@ -1919,14 +2051,18 @@
         "connections": 0
       },
       "2026-05-04": {
-        "polls": 48,
+        "polls": 94,
+        "connections": 0
+      },
+      "2026-05-05": {
+        "polls": 26,
         "connections": 0
       }
     },
-    "last_poll": "2026-05-04T11:45:00.443Z"
+    "last_poll": "2026-05-05T06:15:00.972Z"
   },
   "power-grid-au": {
-    "total_polls": 3413,
+    "total_polls": 3627,
     "total_connections": 0,
     "daily": {
       "2026-04-22": {
@@ -1978,14 +2114,18 @@
         "connections": 0
       },
       "2026-05-04": {
-        "polls": 140,
+        "polls": 278,
+        "connections": 0
+      },
+      "2026-05-05": {
+        "polls": 76,
         "connections": 0
       }
     },
-    "last_poll": "2026-05-04T11:55:01.935Z"
+    "last_poll": "2026-05-05T06:20:02.084Z"
   },
   "crypto-news": {
-    "total_polls": 496,
+    "total_polls": 503,
     "total_connections": 0,
     "daily": {
       "2026-04-22": {
@@ -2037,14 +2177,18 @@
         "connections": 0
       },
       "2026-05-04": {
-        "polls": 5,
+        "polls": 9,
+        "connections": 0
+      },
+      "2026-05-05": {
+        "polls": 3,
         "connections": 0
       }
     },
-    "last_poll": "2026-05-04T10:50:00.684Z"
+    "last_poll": "2026-05-05T03:10:01.172Z"
   },
   "nasa-apod": {
-    "total_polls": 17,
+    "total_polls": 19,
     "total_connections": 0,
     "daily": {
       "2026-04-22": {
@@ -2088,14 +2232,18 @@
         "connections": 0
       },
       "2026-05-04": {
+        "polls": 2,
+        "connections": 0
+      },
+      "2026-05-05": {
         "polls": 1,
         "connections": 0
       }
     },
-    "last_poll": "2026-05-04T00:05:00.884Z"
+    "last_poll": "2026-05-05T00:05:01.424Z"
   },
   "flights-live": {
-    "total_polls": 1596,
+    "total_polls": 1729,
     "total_connections": 0,
     "daily": {
       "2026-04-22": {
@@ -2147,14 +2295,18 @@
         "connections": 0
       },
       "2026-05-04": {
-        "polls": 18,
+        "polls": 128,
+        "connections": 0
+      },
+      "2026-05-05": {
+        "polls": 23,
         "connections": 0
       }
     },
-    "last_poll": "2026-05-04T01:30:01.460Z"
+    "last_poll": "2026-05-05T01:50:00.726Z"
   },
   "us-patents": {
-    "total_polls": 18,
+    "total_polls": 20,
     "total_connections": 0,
     "daily": {
       "2026-04-23": {
@@ -2202,10 +2354,14 @@
         "connections": 0
       },
       "2026-05-04": {
+        "polls": 2,
+        "connections": 0
+      },
+      "2026-05-05": {
         "polls": 1,
         "connections": 0
       }
     },
-    "last_poll": "2026-05-04T00:05:00.795Z"
+    "last_poll": "2026-05-05T00:05:01.493Z"
   }
 }

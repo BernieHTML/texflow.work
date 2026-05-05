@@ -1,7 +1,29 @@
 {
   "channel": "crypto-news",
   "event": "news_update",
-  "ts": "2026-05-04T10:50:00.684Z",
+  "ts": "2026-05-05T03:10:01.172Z",
   "source": "cryptocurrency.cv",
-  "payload": []
+  "payload": [
+    {
+      "title": "Motor finance compensation scheme challenged",
+      "source": "UK FCA Crypto",
+      "url": "https://www.fca.org.uk/news/statements/motor-finance-compensation-scheme-challenged",
+      "published_at": null,
+      "tickers": []
+    },
+    {
+      "title": "FCA consults on changes to IPO research rules",
+      "source": "UK FCA Crypto",
+      "url": "https://www.fca.org.uk/news/press-releases/fca-consults-changes-ipo-research-rules",
+      "published_at": null,
+      "tickers": []
+    },
+    {
+      "title": "FCA Board appoints 2 new members to the Regulatory Decisions Committee",
+      "source": "UK FCA Crypto",
+      "url": "https://www.fca.org.uk/news/press-releases/fca-board-appoints-2-new-members-regulatory-decisions-committee",
+      "published_at": null,
+      "tickers": []
+    }
+  ]
 }

@@ -1,77 +1,77 @@
 {
   "channel": "open-library",
   "event": "library_update",
-  "ts": "2026-05-04T11:00:01.343Z",
+  "ts": "2026-05-05T06:00:04.121Z",
   "source": "Open Library /recentchanges",
   "payload": [
+    {
+      "title": "import existing book",
+      "author": "/people/horncBot",
+      "kind": "edit-book",
+      "timestamp": "2026-05-05T06:00:02.048740",
+      "url": "https://openlibrary.org"
+    },
     {
       "title": "set source_records based on initial machine_comment",
       "author": "/people/horncBot",
       "kind": "default-update",
-      "timestamp": "2026-05-04T11:00:00.933045",
+      "timestamp": "2026-05-05T06:00:01.691989",
+      "url": "https://openlibrary.org"
+    },
+    {
+      "title": "import existing book",
+      "author": "/people/horncBot",
+      "kind": "edit-book",
+      "timestamp": "2026-05-05T06:00:01.091390",
+      "url": "https://openlibrary.org"
+    },
+    {
+      "title": "import existing book",
+      "author": "/people/horncBot",
+      "kind": "edit-book",
+      "timestamp": "2026-05-05T05:59:59.745925",
+      "url": "https://openlibrary.org"
+    },
+    {
+      "title": "set source_records based on initial machine_comment",
+      "author": "/people/horncBot",
+      "kind": "default-update",
+      "timestamp": "2026-05-05T05:59:58.552938",
       "url": "https://openlibrary.org"
     },
     {
       "title": "import new book",
       "author": "/people/horncBot",
       "kind": "add-book",
-      "timestamp": "2026-05-04T10:59:59.438665",
+      "timestamp": "2026-05-05T05:59:56.329335",
       "url": "https://openlibrary.org"
     },
     {
       "title": "set source_records based on initial machine_comment",
       "author": "/people/horncBot",
       "kind": "default-update",
-      "timestamp": "2026-05-04T10:59:58.588987",
+      "timestamp": "2026-05-05T05:59:56.001222",
       "url": "https://openlibrary.org"
     },
     {
       "title": "import existing book",
       "author": "/people/horncBot",
       "kind": "edit-book",
-      "timestamp": "2026-05-04T10:59:56.974975",
+      "timestamp": "2026-05-05T05:59:55.924130",
       "url": "https://openlibrary.org"
     },
     {
       "title": "import existing book",
       "author": "/people/horncBot",
       "kind": "edit-book",
-      "timestamp": "2026-05-04T10:59:56.700891",
+      "timestamp": "2026-05-05T05:59:54.299500",
       "url": "https://openlibrary.org"
     },
     {
       "title": "set source_records based on initial machine_comment",
       "author": "/people/horncBot",
       "kind": "default-update",
-      "timestamp": "2026-05-04T10:59:56.114421",
-      "url": "https://openlibrary.org"
-    },
-    {
-      "title": "import existing book",
-      "author": "/people/horncBot",
-      "kind": "edit-book",
-      "timestamp": "2026-05-04T10:59:54.152577",
-      "url": "https://openlibrary.org"
-    },
-    {
-      "title": "set source_records based on initial machine_comment",
-      "author": "/people/horncBot",
-      "kind": "default-update",
-      "timestamp": "2026-05-04T10:59:53.296298",
-      "url": "https://openlibrary.org"
-    },
-    {
-      "title": "import existing book",
-      "author": "/people/horncBot",
-      "kind": "edit-book",
-      "timestamp": "2026-05-04T10:59:51.239605",
-      "url": "https://openlibrary.org"
-    },
-    {
-      "title": "set source_records based on initial machine_comment",
-      "author": "/people/horncBot",
-      "kind": "default-update",
-      "timestamp": "2026-05-04T10:59:50.910118",
+      "timestamp": "2026-05-05T05:59:53.194328",
       "url": "https://openlibrary.org"
     }
   ]
