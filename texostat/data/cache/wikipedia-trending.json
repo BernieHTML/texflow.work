@@ -1,108 +1,108 @@
 {
   "channel": "wikipedia-trending",
   "event": "wikipedia_update",
-  "ts": "2026-04-29T11:12:57.313Z",
+  "ts": "2026-05-04T12:18:14.744Z",
   "source": "Wikimedia Pageviews API",
   "payload": [
     {
       "rank": 1,
       "article": "Main Page",
-      "views": 7024760
+      "views": 7366506
     },
     {
       "rank": 2,
       "article": "Special:Search",
-      "views": 1112220
+      "views": 848394
     },
     {
       "rank": 3,
       "article": "Wikipedia:Featured pictures",
-      "views": 327480
+      "views": 313972
     },
     {
       "rank": 4,
-      "article": ".xxx",
-      "views": 283471
+      "article": "Michael Jackson",
+      "views": 307489
     },
     {
       "rank": 5,
-      "article": "Michael Jackson",
-      "views": 264743
+      "article": "The Devil Wears Prada 2",
+      "views": 232055
     },
     {
       "rank": 6,
       "article": "Michael (2026 film)",
-      "views": 252395
+      "views": 220636
     },
     {
       "rank": 7,
-      "article": "Jaafar Jackson",
-      "views": 173863
+      "article": ".xxx",
+      "views": 213154
     },
     {
       "rank": 8,
-      "article": "Sabethes cyaneus",
-      "views": 167497
+      "article": "Spirit Airlines",
+      "views": 200144
     },
     {
       "rank": 9,
-      "article": "Nathan Lee Chasing His Horse",
-      "views": 160627
+      "article": "2026 West Bengal Legislative Assembly election",
+      "views": 179465
     },
     {
       "rank": 10,
-      "article": "Cottingley Fairies",
-      "views": 156209
+      "article": "Shipping ethics controversy in fanfiction",
+      "views": 174791
     },
     {
       "rank": 11,
-      "article": "OPEC",
-      "views": 156191
+      "article": "Jaafar Jackson",
+      "views": 158614
     },
     {
       "rank": 12,
-      "article": "Michael Olise",
-      "views": 151700
+      "article": "Olivia Rodrigo",
+      "views": 146565
     },
     {
       "rank": 13,
-      "article": "Nahui Ollin",
-      "views": 140534
+      "article": "Neatsville, Kentucky",
+      "views": 145913
     },
     {
       "rank": 14,
-      "article": "2026 West Bengal Legislative Assembly election",
-      "views": 132774
+      "article": "Alex Zanardi",
+      "views": 131458
     },
     {
       "rank": 15,
-      "article": "Deaths in 2026",
-      "views": 130878
+      "article": "The Devil Wears Prada (film)",
+      "views": 126954
     },
     {
       "rank": 16,
-      "article": "Euphoria (American TV series)",
-      "views": 127049
+      "article": "RC Celta de Vigo",
+      "views": 126527
     },
     {
       "rank": 17,
-      "article": "Apex (2026 film)",
-      "views": 123003
+      "article": "Deaths in 2026",
+      "views": 122186
     },
     {
       "rank": 18,
-      "article": "ChatGPT",
-      "views": 116519
+      "article": "Apex (2026 film)",
+      "views": 120358
     },
     {
       "rank": 19,
-      "article": "Limonene",
-      "views": 109164
+      "article": "KFIM-LP",
+      "views": 108553
     },
     {
       "rank": 20,
-      "article": "Zoë Kravitz",
-      "views": 106946
+      "article": "Limonene",
+      "views": 105255
     }
   ]
 }

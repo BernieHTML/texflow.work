@@ -1,128 +1,128 @@
 {
   "channel": "pypi-new",
   "event": "pypi_update",
-  "ts": "2026-05-03T03:00:01.301Z",
+  "ts": "2026-05-05T06:00:00.487Z",
   "source": "PyPI RSS",
   "payload": [
     {
-      "name": "codemule",
+      "name": "crayonz",
       "version": "added",
-      "description": "None",
+      "description": "Official Python SDK for the Crayonz AI API — meme, content, and design generation.",
+      "author": "support@crayonz.ai",
+      "published_at": "Tue, 05 May 2026 05:29:54 GMT",
+      "url": "https://pypi.org/project/crayonz/"
+    },
+    {
+      "name": "askmy-codebase",
+      "version": "added",
+      "description": "Chat with any codebase using AI — local or GitHub repos",
       "author": null,
-      "published_at": "Sun, 03 May 2026 02:24:48 GMT",
-      "url": "https://pypi.org/project/codemule/"
+      "published_at": "Tue, 05 May 2026 05:25:23 GMT",
+      "url": "https://pypi.org/project/askmy-codebase/"
     },
     {
-      "name": "agentguard-ai-muaz-iqubal-muaz",
+      "name": "dulus",
       "version": "added",
-      "description": "Detect runaway AI costs before they hit production (STILL IN DEVELOPING PHASE)",
+      "description": "Spanish-first multi-provider AI CLI — 14 NVIDIA models free, Mesa Redonda, voice, TTS, RTK token reducer, MemPalace",
       "author": null,
-      "published_at": "Sun, 03 May 2026 02:23:39 GMT",
-      "url": "https://pypi.org/project/agentguard-ai-muaz-iqubal-muaz/"
+      "published_at": "Tue, 05 May 2026 05:25:06 GMT",
+      "url": "https://pypi.org/project/dulus/"
     },
     {
-      "name": "gore-geolang",
+      "name": "relic-graph",
       "version": "added",
-      "description": "GeoLang - 你的专属编程语言",
-      "author": "author@geolang.dev",
-      "published_at": "Sun, 03 May 2026 02:23:38 GMT",
-      "url": "https://pypi.org/project/gore-geolang/"
-    },
-    {
-      "name": "branchdiff",
-      "version": "added",
-      "description": "Placeholder",
+      "description": "Codebase knowledge management CLI for AI coding agents",
       "author": null,
-      "published_at": "Sun, 03 May 2026 02:19:39 GMT",
-      "url": "https://pypi.org/project/branchdiff/"
+      "published_at": "Tue, 05 May 2026 05:23:04 GMT",
+      "url": "https://pypi.org/project/relic-graph/"
     },
     {
-      "name": "ftree-kg",
+      "name": "pygemchat",
       "version": "added",
-      "description": "KGModule for file tree knowledge graphs",
-      "author": "suchanek@flux-frontiers.com",
-      "published_at": "Sun, 03 May 2026 02:16:30 GMT",
-      "url": "https://pypi.org/project/ftree-kg/"
-    },
-    {
-      "name": "AMDead",
-      "version": "added",
-      "description": "A new project created from git-repokit-template",
-      "author": "djdarcy@users.noreply.github.com",
-      "published_at": "Sun, 03 May 2026 02:09:54 GMT",
-      "url": "https://pypi.org/project/amdead/"
-    },
-    {
-      "name": "e501-fixer",
-      "version": "added",
-      "description": "Automatic string literal wrapping for PEP 8 E501 compliance",
-      "author": "cameronrout@gmail.com",
-      "published_at": "Sun, 03 May 2026 02:05:09 GMT",
-      "url": "https://pypi.org/project/e501-fixer/"
-    },
-    {
-      "name": "gpodder-fastapi-router",
-      "version": "added",
-      "description": "Pluggable FastAPI router that implements the gpodder.net (mygpo) HTTP API.",
+      "description": "A simple AI chatbot package for OpenAI and Gemini.",
       "author": null,
-      "published_at": "Sun, 03 May 2026 02:03:03 GMT",
-      "url": "https://pypi.org/project/gpodder-fastapi-router/"
+      "published_at": "Tue, 05 May 2026 05:22:08 GMT",
+      "url": "https://pypi.org/project/pygemchat/"
     },
     {
-      "name": "drkmttr",
+      "name": "video-analyser",
       "version": "added",
-      "description": "Pre-release Python package placeholder for the darkmatter platform",
+      "description": "Video analysis lens for the modular assessment platform - extracts frames, transcripts, and quality metrics",
+      "author": "michael@example.com",
+      "published_at": "Tue, 05 May 2026 05:14:20 GMT",
+      "url": "https://pypi.org/project/video-analyser/"
+    },
+    {
+      "name": "records-analyser",
+      "version": "added",
+      "description": "Structured data profiling for the poly-lens family",
       "author": null,
-      "published_at": "Sun, 03 May 2026 02:02:22 GMT",
-      "url": "https://pypi.org/project/drkmttr/"
+      "published_at": "Tue, 05 May 2026 05:14:16 GMT",
+      "url": "https://pypi.org/project/records-analyser/"
     },
     {
-      "name": "llm-context-router",
+      "name": "speech-analyser",
       "version": "added",
-      "description": "Scope your AI context before it explodes",
-      "author": "sal@saildev.org",
-      "published_at": "Sun, 03 May 2026 02:01:02 GMT",
-      "url": "https://pypi.org/project/llm-context-router/"
-    },
-    {
-      "name": "gisweep",
-      "version": "added",
-      "description": "GIS vulnerability scanner — ArcGIS REST, embedded maps, secret detection, KVKK/GDPR-aware",
-      "author": "mentalistler@mit.tc",
-      "published_at": "Sun, 03 May 2026 01:58:17 GMT",
-      "url": "https://pypi.org/project/gisweep/"
-    },
-    {
-      "name": "businesslog-agent",
-      "version": "added",
-      "description": "businesslog domain agent for PLATO fleet",
+      "description": "Audio transcription and speech analysis for the poly-lens family",
       "author": null,
-      "published_at": "Sun, 03 May 2026 01:54:26 GMT",
-      "url": "https://pypi.org/project/businesslog-agent/"
+      "published_at": "Tue, 05 May 2026 05:14:11 GMT",
+      "url": "https://pypi.org/project/speech-analyser/"
     },
     {
-      "name": "activeledger-agent",
+      "name": "btc2",
       "version": "added",
-      "description": "activeledger domain agent for PLATO fleet",
-      "author": null,
-      "published_at": "Sun, 03 May 2026 01:54:09 GMT",
-      "url": "https://pypi.org/project/activeledger-agent/"
+      "description": "Simple cryptocurrency price fetching from 10 top exchanges",
+      "author": "btc2@example.com",
+      "published_at": "Tue, 05 May 2026 05:09:09 GMT",
+      "url": "https://pypi.org/project/btc2/"
     },
     {
-      "name": "personallog-agent",
+      "name": "cleanskate",
       "version": "added",
-      "description": "personallog domain agent for PLATO fleet",
+      "description": "Pandas-friendly access to figure skating scores",
       "author": null,
-      "published_at": "Sun, 03 May 2026 01:53:54 GMT",
-      "url": "https://pypi.org/project/personallog-agent/"
+      "published_at": "Tue, 05 May 2026 05:07:03 GMT",
+      "url": "https://pypi.org/project/cleanskate/"
     },
     {
-      "name": "playerlog-agent",
+      "name": "mcp-watcher",
       "version": "added",
-      "description": "playerlog domain agent for PLATO fleet",
+      "description": "SquatGuard MCP Template for Python",
       "author": null,
-      "published_at": "Sun, 03 May 2026 01:53:39 GMT",
-      "url": "https://pypi.org/project/playerlog-agent/"
+      "published_at": "Tue, 05 May 2026 05:03:58 GMT",
+      "url": "https://pypi.org/project/mcp-watcher/"
+    },
+    {
+      "name": "codeberg-cli",
+      "version": "added",
+      "description": "A Codeberg CLI",
+      "author": "thatxliner@gmail.com",
+      "published_at": "Tue, 05 May 2026 04:57:44 GMT",
+      "url": "https://pypi.org/project/codeberg-cli/"
+    },
+    {
+      "name": "agentgc",
+      "version": "added",
+      "description": "Stateless memory-compression layer for autonomous AI agents",
+      "author": "carrick.cheah@green-methods.com",
+      "published_at": "Tue, 05 May 2026 04:49:27 GMT",
+      "url": "https://pypi.org/project/agentgc/"
+    },
+    {
+      "name": "code-analyser",
+      "version": "added",
+      "description": "Automated Code Analysis & Grading Assistant for Educators",
+      "author": null,
+      "published_at": "Tue, 05 May 2026 04:48:48 GMT",
+      "url": "https://pypi.org/project/code-analyser/"
+    },
+    {
+      "name": "multi-analyser",
+      "version": "added",
+      "description": "Multi-lens analysis router — detect a file's format and route it to the right lens",
+      "author": null,
+      "published_at": "Tue, 05 May 2026 04:48:42 GMT",
+      "url": "https://pypi.org/project/multi-analyser/"
     }
   ]
 }

@@ -1,58 +1,58 @@
 {
   "channel": "open-fda-recalls",
   "event": "recall_update",
-  "ts": "2026-05-03T03:00:01.759Z",
+  "ts": "2026-05-05T06:00:00.834Z",
   "source": "OpenFDA /food/enforcement",
   "payload": [
     {
-      "recall_number": "H-0665-2026",
-      "product_description": "Booey's Dragon's Breath sauce, 15.2oz ringneck glass bottle. UPC on bottle: 7 01936 29222 3.  There are 12 bottles per case. Manufactured Exclusively for  BOOEYS GOURMET 3924 N. Cannon St. Spokane, WA",
-      "reason": "Ingredients statement declares Anchovy and Sasame, but Contains statement does not declare Fish (Anchovy) and Sesame.",
-      "classification": "Class II",
-      "status": "Completed",
-      "report_date": "20260422",
-      "recalling_firm": "Booey's Gourmet LLC",
-      "distribution_pattern": "Distributed in WA."
-    },
-    {
-      "recall_number": "H-0664-2026",
-      "product_description": "Raw & Unfiltered Bee Well Wildflower Honey NET wT. 12 OZ (340g) UPC 8 32587 00003 2, NET WT. 22 OZ (624g) UPC 8 32587 00002 5 & NET WT. 44 OZ (1.25g) UPC 8 32587 00001 8 100% Pure Honey Bee Well Honey",
-      "reason": "High sugar content. The firm was notified by the FDA that sample results were positive for a high C4 sugar content.",
-      "classification": "Class III",
-      "status": "Ongoing",
-      "report_date": "20260422",
-      "recalling_firm": "Bee Well Honey Farm & Supply Inc.",
-      "distribution_pattern": "Product was shipped to retailers in South Carolina."
-    },
-    {
-      "recall_number": "N/A",
-      "product_description": "Label is predominantly green with white lettering in a clear plastic clamshell container.  Pure Palm dates- Medjool Dates Net Wt. 16OZ  UPC: 852160007005",
-      "reason": "mislabeled Coconut Date Bites. (product is coconut covered, label is for regular date bites)",
-      "classification": "Not Yet Classified",
-      "status": "Ongoing",
-      "report_date": "20260422",
-      "recalling_firm": "PURE PALM C/O DVD",
-      "distribution_pattern": "Product was distributed to a single Direct Account with multiple locations across several East Coast states including (Delaware, Pennsylvania, New Jersey, Maryland, New York)"
-    },
-    {
-      "recall_number": "H-0656-2026",
-      "product_description": "Crab Cakes various sizes sold to food service",
-      "reason": "May be temperature abused, which may result in growth of Clostridium botulinum",
+      "recall_number": "H-0669-2026",
+      "product_description": "Bombay Kitchen brand Tikka Sev; Net Wt 9oz (255g); INGREDIENTS: Chickpea Flour, Water, Non-GMO Expeller Pressed Canola Oil, Spices, Salt, FD&C Tomato Color and Citric Acid; CAUTION: May Contain Traces",
+      "reason": "Product(s) contain undeclared colors, FD&C Yellow #6 and FD&C Red #40",
       "classification": "Class II",
       "status": "Ongoing",
-      "report_date": "20260415",
-      "recalling_firm": "Connecticut Crab Company LLC",
-      "distribution_pattern": "NY and NJ"
+      "report_date": "20260429",
+      "recalling_firm": "Ethnic Foods Inc",
+      "distribution_pattern": "NJ"
     },
     {
-      "recall_number": "H-0652-2026",
-      "product_description": "Zarlengo's Double Dark Chocolate Gelato packaged in 1 Gallon bucket/pail - white round food and freezer grade High-Density Polyethylene bucket/pail with tamper resistant lid.",
-      "reason": "Soy Lecithin listed in ingredients statement, but Soy is not mentioned in the contains statement.",
+      "recall_number": "H-0682-2026",
+      "product_description": "Kirkland Signature Traditional Madeleines 12 Count/net wt. 18oz., Item #2000012, UPC 000020000127. Plastic clamshell container is packed with 9 pieces of Filled Heart Madeleines.  Distributed by Costc",
+      "reason": "Undeclared hazelnut and soy lecithin.",
+      "classification": "Class I",
+      "status": "Ongoing",
+      "report_date": "20260429",
+      "recalling_firm": "Costco Wholesale Corporation",
+      "distribution_pattern": "Distributed in CA, CO, FL, IL, MT, VA, WA, WI, and in Puerto Rico."
+    },
+    {
+      "recall_number": "H-0671-2026",
+      "product_description": "Spice Powder, 4 oz, Plastic Bag",
+      "reason": "Lead level was higher than NYSAGM Standard.",
+      "classification": "Class II",
+      "status": "Terminated",
+      "report_date": "20260429",
+      "recalling_firm": "Summit Import Corporation",
+      "distribution_pattern": "The recalled product was distributed to the following states: NY, NJ, SC, ME, FL, PA, MA, VA"
+    },
+    {
+      "recall_number": "H-0670-2026",
+      "product_description": "Bombay Kitchen brand Punjabi Mix; Net Wt 9oz (255g); INGREDIENTS: Chickpea Flour, Water, Non-GMO Expeller Pressed Canola Oil, Chana Dal (Split Bengal Gram), Brown Lentils (Masoor), Chickpeas, Rice Fla",
+      "reason": "Product(s) contain undeclared colors, FD&C Yellow #6 and FD&C Red #40",
       "classification": "Class II",
       "status": "Ongoing",
-      "report_date": "20260415",
-      "recalling_firm": "Zarlengo Italian Ice",
-      "distribution_pattern": "IL, IN and TX"
+      "report_date": "20260429",
+      "recalling_firm": "Ethnic Foods Inc",
+      "distribution_pattern": "NJ"
+    },
+    {
+      "recall_number": "H-0672-2026",
+      "product_description": "Bulk Horchata Powder  3951 (100547) 1/25 HORCHATA  UPC: 042743-19015-0 Item: 100547",
+      "reason": "Undeclared milk.",
+      "classification": "Class II",
+      "status": "Ongoing",
+      "report_date": "20260429",
+      "recalling_firm": "Marquez Brothers International, Inc.",
+      "distribution_pattern": "Domestic distribution: AK, AL, AR, AZ, CA, CO, FL, IA, ID, IL, IN, KS, LA, MI, MN, MO, MT, NE, NM, NV, OH, OK, OR, TN, TX, UT, VA, WA, WI. Foreign distribution: Canada, Japan."
     }
   ]
 }

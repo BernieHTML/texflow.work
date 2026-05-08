@@ -1,98 +1,98 @@
 {
   "channel": "hacker-news",
   "event": "hn_update",
-  "ts": "2026-05-03T03:00:01.880Z",
+  "ts": "2026-05-05T06:15:01.110Z",
   "source": "HN Algolia /search",
   "payload": [
     {
       "rank": 1,
-      "title": "VS Code inserting 'Co-Authored-by Copilot' into commits regardless of usage",
-      "url": "https://github.com/microsoft/vscode/pull/310226",
-      "score": 871,
-      "comments": 412,
-      "author": "indrora",
-      "age_hours": 7
+      "title": "Talking to strangers at the gym",
+      "url": "https://thienantran.com/talking-to-35-strangers-at-the-gym/",
+      "score": 1286,
+      "comments": 605,
+      "author": "thitran",
+      "age_hours": 19
     },
     {
       "rank": 2,
-      "title": "NetHack 5.0.0",
-      "url": "https://nethack.org/v500/release.html",
-      "score": 389,
-      "comments": 120,
-      "author": "rsaarelm",
-      "age_hours": 9
+      "title": "GameStop makes $55.5B takeover offer for eBay",
+      "url": "https://www.bbc.co.uk/news/articles/cn0p8yled1do",
+      "score": 667,
+      "comments": 635,
+      "author": "n1b0m",
+      "age_hours": 21
     },
     {
       "rank": 3,
-      "title": "Dav2d",
-      "url": "https://code.videolan.org/videolan/dav2d",
-      "score": 350,
-      "comments": 112,
-      "author": "dabinat",
-      "age_hours": 9
+      "title": "Microsoft Edge stores all passwords in memory in clear text, even when unused",
+      "url": "https://twitter.com/L1v1ng0ffTh3L4N/status/2051308329880719730",
+      "score": 493,
+      "comments": 177,
+      "author": "cft",
+      "age_hours": 12
     },
     {
       "rank": 4,
-      "title": "California to begin ticketing driverless cars that violate traffic laws",
-      "url": "https://www.bbc.com/news/articles/clypjx3rg2go",
-      "score": 256,
-      "comments": 265,
-      "author": "geox",
-      "age_hours": 9
+      "title": "I am worried about Bun",
+      "url": "https://wwj.dev/posts/i-am-worried-about-bun/",
+      "score": 459,
+      "comments": 308,
+      "author": "remote-dev",
+      "age_hours": 14
     },
     {
       "rank": 5,
-      "title": "How fast is a macOS VM, and how small could it be?",
-      "url": "https://eclecticlight.co/2026/05/02/how-fast-is-a-macos-vm-and-how-small-could-it-be/",
-      "score": 228,
-      "comments": 83,
-      "author": "moosia",
-      "age_hours": 17
+      "title": "Bun is being ported from Zig to Rust",
+      "url": "https://github.com/oven-sh/bun/commit/46d3bc29f270fa881dd5730ef1549e88407701a5",
+      "score": 366,
+      "comments": 239,
+      "author": "SergeAx",
+      "age_hours": 5
     },
     {
       "rank": 6,
-      "title": "Do_not_track",
-      "url": "https://donottrack.sh/",
-      "score": 220,
-      "comments": 70,
-      "author": "RubyGuy",
-      "age_hours": 9
+      "title": "How OpenAI delivers low-latency voice AI at scale",
+      "url": "https://openai.com/index/delivering-low-latency-voice-ai-at-scale/",
+      "score": 361,
+      "comments": 118,
+      "author": "Sean-Der",
+      "age_hours": 11
     },
     {
       "rank": 7,
-      "title": "Roblox shares plummet 18% as child safety measures weigh on bookings",
-      "url": "https://www.cnbc.com/2026/05/01/roblox-rblx-stock-child-safety-earnings.html",
-      "score": 203,
-      "comments": 127,
-      "author": "1vuio0pswjnm7",
-      "age_hours": 10
+      "title": "How Monero’s proof of work works",
+      "url": "https://blog.alcazarsec.com/tech/posts/how-moneros-proof-of-work-works",
+      "score": 269,
+      "comments": 190,
+      "author": "alcazar",
+      "age_hours": 16
     },
     {
       "rank": 8,
-      "title": "Six Years Perfecting Maps on WatchOS",
-      "url": "https://www.david-smith.org/blog/2026/04/29/maps-on-watchos/",
-      "score": 191,
-      "comments": 35,
-      "author": "valzevul",
-      "age_hours": 6
+      "title": "Redis array: short story of a long development process",
+      "url": "https://antirez.com/news/164",
+      "score": 263,
+      "comments": 87,
+      "author": "antirez",
+      "age_hours": 16
     },
     {
       "rank": 9,
-      "title": "Tesla owner won $10k in court for Tesla's FSD lies. Tesla is still fighting him",
-      "url": "https://electrek.co/2026/05/02/this-tesla-owner-won-10k-in-court-for-teslas-fsd-lies-tesla-is-still-fighting-him/",
-      "score": 178,
-      "comments": 66,
-      "author": "breve",
-      "age_hours": 4
+      "title": "Does Employment Slow Cognitive Decline? Evidence from Labor Market Shocks",
+      "url": "https://www.nber.org/papers/w35117",
+      "score": 261,
+      "comments": 237,
+      "author": "littlexsparkee",
+      "age_hours": 15
     },
     {
       "rank": 10,
-      "title": "This Month in Ladybird - April 2026",
-      "url": "https://ladybird.org/newsletter/2026-04-30/",
-      "score": 170,
-      "comments": 26,
-      "author": "richardboegli",
-      "age_hours": 6
+      "title": "PyInfra 3.8.0",
+      "url": "https://github.com/pyinfra-dev/pyinfra/releases/tag/v3.8.0",
+      "score": 253,
+      "comments": 88,
+      "author": "wowi42",
+      "age_hours": 17
     }
   ]
 }
