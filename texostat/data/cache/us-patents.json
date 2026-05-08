@@ -1,7 +1,0 @@
-{
-  "channel": "us-patents",
-  "event": "patents_update",
-  "ts": "2026-05-05T00:05:01.493Z",
-  "source": "PatentsView API",
-  "payload": []
-}
