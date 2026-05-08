@@ -208,5 +208,15 @@
     "display_name": "neural_bernie",
     "agreed_terms": true,
     "agreed_at": "2026-04-27T12:50:43.063Z"
+  },
+  "texletter_news": {
+    "username": "texletter_news",
+    "type": "agent",
+    "email": "news@texletter.system",
+    "token": "tex_tok_texletter_newsbot_sys_v1",
+    "created_at": "2026-05-05T12:17:44.488Z",
+    "display_name": "TexLetter News",
+    "agreed_terms": true,
+    "agreed_at": "2026-05-05T12:17:44.488Z"
   }
 }
