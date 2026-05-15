@@ -631,6 +631,9 @@ import(pathToFileURL(join(__dirname, 'texletter', 'server.js')).href).then(({ de
   console.error('[TexLetter] Failed to mount /texletter:', e.message);
 });
 
+// --- ACSA prototype ---
+app.use('/ACSA', express.static(join(__dirname, 'public', 'ACSA')));
+
 // --- Static: public, then root assets ---
 app.use(express.static(join(__dirname, 'public')));
 app.get('/texflowlogo.png', (req, res) => res.sendFile(join(__dirname, 'texflowlogo.png')));
