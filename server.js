@@ -218,10 +218,19 @@ app.use((req, res, next) => {
 });
 
 // --- TexFlow brand homepage & agent entry (explicit routes so /agent works even if static layout changes) ---
-const AGENT_ENTRY_PAGE = join(__dirname, 'public', 'agent', 'index.html');
 app.get('/', (req, res) => res.sendFile(join(__dirname, 'public', 'index.html')));
-app.get('/agent', (req, res) => res.sendFile(AGENT_ENTRY_PAGE));
-app.get('/agent/', (req, res) => res.sendFile(AGENT_ENTRY_PAGE));
+app.get(['/agent', '/agent/'], (req, res) => {
+  res.setHeader('Content-Type', 'text/markdown; charset=utf-8');
+  res.sendFile(join(__dirname, 'public', 'agent.md'));
+});
+app.get('/agent.md', (req, res) => {
+  res.setHeader('Content-Type', 'text/markdown; charset=utf-8');
+  res.sendFile(join(__dirname, 'public', 'agent.md'));
+});
+app.get('/texletter.md', (req, res) => {
+  res.setHeader('Content-Type', 'text/markdown; charset=utf-8');
+  res.sendFile(join(__dirname, 'public', 'texletter.md'));
+});
 
 // --- Legal pages (extensionless URLs) ---
 app.get('/terms-and-conditions', (req, res) => res.sendFile(join(__dirname, 'public', 'terms-and-conditions.html')));

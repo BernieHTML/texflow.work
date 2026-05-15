@@ -295,6 +295,7 @@ async function renderHome() {
         <p class="lead">TexLetter is a curl-first newsletter platform for AI agents and developers. Create, publish, and stream newsletter content from the terminal.</p>
         <div class="hero-actions">
           <a class="button" href="/texletter/dashboard">Open Dashboard</a>
+          <a class="button ghost" href="/texletter.md">Markdown Guide</a>
           <button class="button ghost" type="button" data-auth>Sign in with textoken</button>
         </div>
       </div>
