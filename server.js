@@ -19,6 +19,7 @@ const AA_DIR = join(__dirname, 'aa');
 const DATA_DIR = join(__dirname, 'data');
 const EXPERTS_PATH = join(DATA_DIR, 'experts.json');
 const ORDERS_PATH = join(DATA_DIR, 'orders.json');
+const ACSA_SUPPORTERS_PATH = join(DATA_DIR, 'acsa-supporters.json');
 const BASE_URL = (process.env.BASE_URL || `http://localhost:${PORT}`).replace(/\/$/, '');
 const ACP_VERSION = '1.0';
 
@@ -118,6 +119,11 @@ try {
 } catch (e) {
   if (e.code === 'ENOENT') await writeFile(ORDERS_PATH, '[]', 'utf8');
 }
+try {
+  await readFile(ACSA_SUPPORTERS_PATH, 'utf8');
+} catch (e) {
+  if (e.code === 'ENOENT') await writeFile(ACSA_SUPPORTERS_PATH, '[]', 'utf8');
+}
 if (expertsData.length === 0) {
   const seed = [
     { id: 'xero-invoice-processing', name: 'Xero Invoice Processing Expert', category: 'Accounting', description: 'Base knowledge for processing and reconciling Xero invoices.', full_description: 'Structured knowledge for Xero invoice processing.', use_cases: ['Code invoices', 'Match to POs'], tags: ['xero', 'accounting'], author: 'texflow', price: 0, paid: false, preamble: 'You are assisting with Xero invoice processing. Match to POs when reference exists; use account from first line item.', status: 'public', created_at: new Date().toISOString() },
@@ -152,6 +158,17 @@ async function readOrders() {
 }
 async function writeOrders(orders) {
   await writeFile(ORDERS_PATH, JSON.stringify(orders, null, 2), 'utf8');
+}
+async function readAcsaSupporters() {
+  try {
+    const raw = await readFile(ACSA_SUPPORTERS_PATH, 'utf8');
+    return JSON.parse(raw);
+  } catch (_) {
+    return [];
+  }
+}
+async function writeAcsaSupporters(supporters) {
+  await writeFile(ACSA_SUPPORTERS_PATH, JSON.stringify(supporters, null, 2), 'utf8');
 }
 function getExpertById(experts, id) {
   return experts.find(e => e.id === id) || null;
@@ -228,6 +245,7 @@ app.get('/agent.md', (req, res) => {
   res.setHeader('Content-Type', 'text/markdown; charset=utf-8');
   res.sendFile(join(__dirname, 'public', 'agent.md'));
 });
+app.get('/favicon.ico', (req, res) => res.sendFile(join(__dirname, 'texflowlogo.png')));
 app.get('/texletter.md', (req, res) => {
   res.setHeader('Content-Type', 'text/markdown; charset=utf-8');
   res.sendFile(join(__dirname, 'public', 'texletter.md'));
@@ -236,6 +254,111 @@ app.get('/texletter.md', (req, res) => {
 // --- Legal pages (extensionless URLs) ---
 app.get('/terms-and-conditions', (req, res) => res.sendFile(join(__dirname, 'public', 'terms-and-conditions.html')));
 app.get('/privacy-policy', (req, res) => res.sendFile(join(__dirname, 'public', 'privacy-policy.html')));
+
+// --- ACSA public site and support tokens ---
+app.use((req, res, next) => {
+  if (req.path === '/acsa' || req.path === '/acsa/') return res.redirect('/ACSA/');
+  if (req.path === '/acsa/support' || req.path === '/acsa/support/') return res.redirect('/ACSA/support');
+  return next();
+});
+app.get(['/ACSA/support', '/ACSA/support/'], (req, res) => res.sendFile(join(__dirname, 'public', 'ACSA', 'index.html')));
+
+app.get(['/api/acsa/supporters', '/ACSA/api/supporters', '/acsa/api/supporters'], async (req, res) => {
+  const supporters = await readAcsaSupporters();
+  const publicSupporters = supporters
+    .filter((supporter) => supporter.public)
+    .map((supporter) => ({
+      id: supporter.id,
+      name: supporter.name,
+      message: supporter.message,
+      started_supporting: supporter.started_supporting,
+      created_at: supporter.created_at
+    }));
+  res.json({
+    count: supporters.length,
+    public_count: publicSupporters.length,
+    supporters: publicSupporters
+  });
+});
+
+app.post(['/api/acsa/supporters', '/ACSA/api/supporters', '/acsa/api/supporters'], async (req, res) => {
+  const body = req.body || {};
+  const name = String(body.name || '').trim().slice(0, 80);
+  const message = String(body.message || '').trim().slice(0, 280);
+  const startedSupporting = String(body.started_supporting || '').trim().slice(0, 24);
+  const isPublic = body.public === true || body.public === 'true';
+
+  if (!name) return res.status(400).json({ error: 'Name is required' });
+  if (!startedSupporting) return res.status(400).json({ error: 'Support date is required' });
+
+  const supporters = await readAcsaSupporters();
+  const token = {
+    id: uuidv4(),
+    name,
+    message,
+    started_supporting: startedSupporting,
+    public: isPublic,
+    banner: "I support ACSA! Australia's first crewed space agency 🚀",
+    created_at: new Date().toISOString()
+  };
+  supporters.push(token);
+  await writeAcsaSupporters(supporters);
+  res.status(201).json({
+    ok: true,
+    token,
+    stats: {
+      count: supporters.length,
+      public_count: supporters.filter((supporter) => supporter.public).length
+    }
+  });
+});
+
+app.post(['/api/acsa/chat', '/ACSA/api/chat', '/acsa/api/chat'], async (req, res) => {
+  const question = String(req.body?.message || '').trim().slice(0, 1000);
+  if (!question) return res.status(400).json({ error: 'Message is required' });
+  const apiKey = process.env.GROQ_API_KEY;
+  if (!apiKey) {
+    return res.status(503).json({
+      error: 'Groq is not configured. Set GROQ_API_KEY on the server.'
+    });
+  }
+
+  const systemPrompt = `You are the floating ACSA AI guide for the Australian Crewed Spaceflight Agency website.
+ACSA is the first organisation to attempt the development of a manned Australian spacecraft. It is partnering with One Giant Leap Australia (OGL) and Electro Optic Systems (EOS), with a diverse team operating around Australia.
+ACSA aims to develop the primitive one-person Aurora capsule and send the first astronaut into space from Australian soil within a decade.
+Background for the guide only: the teenagers behind it are Angus Mann, Bernie Dyke, Wilson Steinbach, Emma Giasoumi and Kyra Loft-Morrow. The program is supported by the One Giant Leap Foundation Australia, which runs Space Tour USA where the five met.
+Help users understand the mission, Aurora, support tokens, volunteering, contacting the team, and how to spread the word.
+Contact paths: email Gus.mann.acsa@gmail.com or SMS +61 490 787 362.
+Keep answers concise, optimistic, accurate, and action-oriented.`;
+
+  try {
+    const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${apiKey}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        model: 'llama-3.1-8b-instant',
+        messages: [
+          { role: 'system', content: systemPrompt },
+          { role: 'user', content: question }
+        ],
+        temperature: 0.4,
+        max_tokens: 360
+      })
+    });
+
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok) {
+      return res.status(response.status).json({ error: data.error?.message || 'Groq request failed' });
+    }
+    const answer = data.choices?.[0]?.message?.content?.trim();
+    res.json({ answer: answer || 'I could not generate a response just now.' });
+  } catch (e) {
+    res.status(502).json({ error: `Groq request failed: ${e.message}` });
+  }
+});
 
 // --- TexMKT product: pages (before static so they take precedence) ---
 app.get('/texmkt/', (req, res) => res.sendFile(join(__dirname, 'public', 'texmkt', 'index.html')));

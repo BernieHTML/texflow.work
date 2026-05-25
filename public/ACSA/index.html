@@ -167,6 +167,9 @@
     .acsa-logo {
       width: 104px;
       max-width: 100%;
+      aspect-ratio: 1;
+      object-fit: contain;
+      border-radius: 50%;
       filter: drop-shadow(0 0 14px rgba(0, 188, 212, 0.22));
     }
 
@@ -382,6 +385,278 @@
 
     .logo-large {
       width: min(420px, 72vw);
+    }
+
+    .mission-list,
+    .support-list {
+      margin: 22px 0 0;
+      padding-left: 20px;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    .contact-layout,
+    .support-layout {
+      display: grid;
+      grid-template-columns: minmax(280px, 0.92fr) minmax(320px, 1.08fr);
+      gap: 22px;
+      align-items: start;
+      margin-top: 28px;
+    }
+
+    .contact-card,
+    .support-card,
+    .support-token {
+      border: 1px solid var(--line);
+      background:
+        radial-gradient(circle at 20% 0%, rgba(0, 188, 212, 0.12), transparent 34%),
+        rgba(5, 5, 15, 0.58);
+      box-shadow: inset 0 0 0 1px rgba(0, 188, 212, 0.04), var(--shadow-cyan);
+    }
+
+    .contact-card,
+    .support-card {
+      padding: 22px;
+    }
+
+    .floating-chatbot {
+      position: fixed;
+      right: 22px;
+      bottom: 22px;
+      z-index: 90;
+      width: min(430px, calc(100vw - 28px));
+      pointer-events: none;
+    }
+
+    .chatbot-toggle {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-left: auto;
+      padding: 12px 16px;
+      border: 1px solid rgba(0, 188, 212, 0.58);
+      border-radius: 999px;
+      background: rgba(5, 5, 15, 0.86);
+      color: var(--cyan);
+      font-family: "Space Mono", monospace;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      box-shadow: var(--shadow-cyan);
+      pointer-events: auto;
+    }
+
+    .chatbot-toggle .chatbot-orb {
+      width: 28px;
+      height: 28px;
+      margin: 0;
+      flex: 0 0 auto;
+    }
+
+    .chatbot-card {
+      position: relative;
+      overflow: hidden;
+      display: none;
+      max-height: min(680px, calc(100vh - 110px));
+      margin-bottom: 12px;
+      padding: 20px;
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      background:
+        radial-gradient(circle at 20% 0%, rgba(0, 188, 212, 0.18), transparent 34%),
+        rgba(5, 5, 15, 0.9);
+      box-shadow: inset 0 0 0 1px rgba(0, 188, 212, 0.05), 0 24px 60px rgba(0, 0, 0, 0.42), var(--shadow-cyan);
+      backdrop-filter: blur(18px);
+      pointer-events: auto;
+    }
+
+    .floating-chatbot.open .chatbot-card {
+      display: block;
+    }
+
+    .chatbot-card::before {
+      content: "";
+      position: absolute;
+      inset: -40% -20% auto;
+      height: 180px;
+      background: linear-gradient(90deg, transparent, rgba(0, 188, 212, 0.14), transparent);
+      transform: rotate(-8deg);
+      animation: scannerSweep 5s ease-in-out infinite;
+    }
+
+    .chatbot-orb {
+      position: relative;
+      width: 62px;
+      height: 62px;
+      margin-bottom: 16px;
+      border: 1px solid rgba(0, 188, 212, 0.72);
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 35% 35%, rgba(255, 255, 255, 0.95), rgba(0, 188, 212, 0.52) 28%, rgba(13, 27, 75, 0.24) 64%, transparent 66%),
+        rgba(5, 5, 15, 0.76);
+      box-shadow: 0 0 28px rgba(0, 188, 212, 0.28);
+      animation: orbFloat 3.2s ease-in-out infinite;
+    }
+
+    .chatbot-log {
+      position: relative;
+      display: grid;
+      gap: 12px;
+      max-height: 360px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+
+    .chat-message {
+      width: fit-content;
+      max-width: 92%;
+      padding: 12px 14px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 18px 18px 18px 6px;
+      color: rgba(255, 255, 255, 0.86);
+      line-height: 1.55;
+      background: rgba(13, 27, 75, 0.42);
+    }
+
+    .chat-message.user {
+      justify-self: end;
+      border-radius: 18px 18px 6px 18px;
+      border-color: rgba(230, 59, 46, 0.42);
+      background: rgba(230, 59, 46, 0.12);
+    }
+
+    .quick-prompts,
+    .wizard-options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .quick-prompt,
+    .wizard-option {
+      border: 1px solid rgba(0, 188, 212, 0.42);
+      background: rgba(13, 27, 75, 0.26);
+      color: var(--cyan);
+      padding: 8px 11px;
+      font-family: "Space Mono", monospace;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+    }
+
+    .chat-input-row,
+    .support-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .chat-error {
+      margin-top: 10px;
+      color: rgba(255, 255, 255, 0.62);
+      font-size: 0.84rem;
+    }
+
+    .chat-input-row input,
+    .contact-form input,
+    .contact-form textarea,
+    .support-form input,
+    .support-form textarea {
+      width: 100%;
+      min-width: 0;
+      border: 1px solid rgba(0, 188, 212, 0.32);
+      background: rgba(5, 5, 15, 0.78);
+      color: var(--white);
+      padding: 12px;
+      font: inherit;
+    }
+
+    .contact-form,
+    .support-form {
+      display: grid;
+      gap: 13px;
+    }
+
+    .contact-form label,
+    .support-form label,
+    .public-check {
+      display: grid;
+      gap: 6px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .contact-form textarea,
+    .support-form textarea {
+      min-height: 112px;
+      resize: vertical;
+    }
+
+    .public-check {
+      grid-template-columns: auto 1fr;
+      align-items: center;
+    }
+
+    .public-check input {
+      width: auto;
+    }
+
+    .support-token {
+      display: none;
+      margin-top: 18px;
+      padding: 22px;
+    }
+
+    .support-token.visible {
+      display: block;
+    }
+
+    .support-banner {
+      margin: 0 0 14px;
+      color: var(--white);
+      font-family: "Bebas Neue", Impact, sans-serif;
+      font-size: clamp(2.4rem, 6vw, 4rem);
+      line-height: 0.95;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .support-stats {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin: 20px 0;
+    }
+
+    .support-stat {
+      min-height: 104px;
+      padding: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      background: rgba(5, 5, 15, 0.66);
+    }
+
+    .support-stat strong {
+      display: block;
+      color: var(--white);
+      font-family: "Bebas Neue", Impact, sans-serif;
+      font-size: clamp(3rem, 7vw, 5rem);
+      line-height: 0.9;
+    }
+
+    .supporter-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .supporter-pill {
+      padding: 12px;
+      border: 1px solid rgba(0, 188, 212, 0.24);
+      color: var(--muted);
+      background: rgba(13, 27, 75, 0.24);
     }
 
     .red-ring-pulse .logo-red-ring {
@@ -777,12 +1052,37 @@
       }
     }
 
+    @keyframes scannerSweep {
+      0%,
+      100% {
+        transform: translateX(-20%) rotate(-8deg);
+      }
+      50% {
+        transform: translateX(24%) rotate(-8deg);
+      }
+    }
+
+    @keyframes orbFloat {
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-8px);
+      }
+    }
+
     @media (max-width: 1080px) {
       .post-grid {
         grid-template-columns: 1fr;
       }
 
       .newspaper-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .contact-layout,
+      .support-layout {
         grid-template-columns: 1fr;
       }
 
@@ -863,8 +1163,24 @@
 
       .vehicle-grid,
       .product-grid,
-      .specs {
+      .specs,
+      .support-stats {
         grid-template-columns: 1fr;
+      }
+
+      .chat-input-row,
+      .support-actions {
+        flex-direction: column;
+      }
+
+      .floating-chatbot {
+        right: 12px;
+        bottom: 12px;
+        width: calc(100vw - 24px);
+      }
+
+      .chatbot-card {
+        max-height: calc(100vh - 92px);
       }
     }
   </style>
@@ -879,29 +1195,7 @@
   <div class="site-shell">
     <aside class="sidebar" id="sidebar" aria-label="Primary navigation">
       <a class="brand-link" href="#home" aria-label="ACSA home">
-        <svg class="acsa-logo" viewBox="0 0 300 300" role="img" aria-label="Australian Crewed Spaceflight Agency logo">
-          <circle cx="150" cy="150" r="142" fill="#0d1b4b" stroke="#fff" stroke-width="3"></circle>
-          <circle class="logo-red-ring" cx="150" cy="150" r="132" fill="none" stroke="#e63b2e" stroke-width="8"></circle>
-          <path d="M222 229c23-16 39-38 45-63" fill="none" stroke="#cfd6e5" stroke-width="9" stroke-linecap="round" opacity=".82"></path>
-          <text x="47" y="102" fill="#fff" font-family="DM Sans, sans-serif" font-size="17" font-weight="700">Australian</text>
-          <text x="47" y="124" fill="#fff" font-family="DM Sans, sans-serif" font-size="17" font-weight="700">Crewed</text>
-          <text x="47" y="146" fill="#fff" font-family="DM Sans, sans-serif" font-size="17" font-weight="700">Spaceflight</text>
-          <text x="47" y="168" fill="#fff" font-family="DM Sans, sans-serif" font-size="17" font-weight="700">Agency</text>
-          <g transform="translate(142 58)">
-            <path d="M31 2c15 19 22 41 22 68v82H9V70C9 43 16 21 31 2Z" fill="#f7f7fb" stroke="#fff" stroke-width="2"></path>
-            <path d="M31 2c8 10 14 22 18 36H13C17 24 23 12 31 2Z" fill="#e63b2e"></path>
-            <rect x="21" y="69" width="20" height="38" rx="10" fill="#0d1b4b" stroke="#00bcd4" stroke-width="2"></rect>
-            <path d="M9 136-8 170l21-9M53 136l17 34-21-9" fill="#fff"></path>
-            <path d="M18 152h26l-7 32H25l-7-32Z" fill="#e63b2e"></path>
-          </g>
-          <g fill="#fff" opacity=".96">
-            <text x="222" y="91" font-size="25">✦</text>
-            <text x="246" y="126" font-size="17">✦</text>
-            <text x="219" y="154" font-size="18">✦</text>
-            <text x="255" y="185" font-size="23">✦</text>
-            <text x="232" y="205" font-size="14">✦</text>
-          </g>
-        </svg>
+        <img class="acsa-logo" src="/ACSA/ACSA-Logo.jpg" alt="Australian Crewed Spaceflight Agency logo">
       </a>
 
       <nav class="nav-links">
@@ -917,6 +1211,7 @@
           </div>
         </div>
         <a class="nav-link" href="#shop" data-route="shop">Shop</a>
+        <a class="nav-link" href="#support" data-route="support">Support ACSA</a>
         <a class="nav-link" href="#work" data-route="work">Work with us</a>
       </nav>
     </aside>
@@ -928,35 +1223,18 @@
             <p class="eyebrow fade-item" style="--delay: 40ms;">Mission Control / Australia</p>
             <h1 class="wordmark fade-item" style="--delay: 110ms;">ACSA</h1>
             <p class="subhead fade-item" style="--delay: 190ms;">Australian Crewed Spaceflight Agency</p>
-            <svg class="acsa-logo logo-hero fade-item" style="--delay: 270ms;" viewBox="0 0 300 300" role="img" aria-label="Australian Crewed Spaceflight Agency logo">
-              <circle cx="150" cy="150" r="142" fill="#0d1b4b" stroke="#fff" stroke-width="3"></circle>
-              <circle class="logo-red-ring" cx="150" cy="150" r="132" fill="none" stroke="#e63b2e" stroke-width="8"></circle>
-              <path d="M222 229c23-16 39-38 45-63" fill="none" stroke="#cfd6e5" stroke-width="9" stroke-linecap="round" opacity=".82"></path>
-              <text x="47" y="102" fill="#fff" font-family="DM Sans, sans-serif" font-size="17" font-weight="700">Australian</text>
-              <text x="47" y="124" fill="#fff" font-family="DM Sans, sans-serif" font-size="17" font-weight="700">Crewed</text>
-              <text x="47" y="146" fill="#fff" font-family="DM Sans, sans-serif" font-size="17" font-weight="700">Spaceflight</text>
-              <text x="47" y="168" fill="#fff" font-family="DM Sans, sans-serif" font-size="17" font-weight="700">Agency</text>
-              <g transform="translate(142 58)">
-                <path d="M31 2c15 19 22 41 22 68v82H9V70C9 43 16 21 31 2Z" fill="#f7f7fb" stroke="#fff" stroke-width="2"></path>
-                <path d="M31 2c8 10 14 22 18 36H13C17 24 23 12 31 2Z" fill="#e63b2e"></path>
-                <rect x="21" y="69" width="20" height="38" rx="10" fill="#0d1b4b" stroke="#00bcd4" stroke-width="2"></rect>
-                <path d="M9 136-8 170l21-9M53 136l17 34-21-9" fill="#fff"></path>
-                <path d="M18 152h26l-7 32H25l-7-32Z" fill="#e63b2e"></path>
-              </g>
-              <g fill="#fff" opacity=".96">
-                <text x="222" y="91" font-size="25">✦</text>
-                <text x="246" y="126" font-size="17">✦</text>
-                <text x="219" y="154" font-size="18">✦</text>
-                <text x="255" y="185" font-size="23">✦</text>
-                <text x="232" y="205" font-size="14">✦</text>
-              </g>
-            </svg>
+            <img class="acsa-logo logo-hero fade-item" style="--delay: 270ms;" src="/ACSA/ACSA-Logo.jpg" alt="Australian Crewed Spaceflight Agency logo">
           </div>
           <aside class="right-panel news-panel">
-            <h2 class="news-headline fade-item" style="--delay: 120ms;">NEWS HEADLINE HERE</h2>
+            <h2 class="news-headline fade-item" style="--delay: 120ms;">Australia's first crewed spacecraft attempt.</h2>
             <div class="rule fade-item" style="--delay: 200ms;"></div>
-            <div class="empty-news fade-item" style="--delay: 280ms;">Placeholder for news body text.</div>
-            <a class="button fade-item" style="--delay: 360ms;" href="#blog">Read more</a>
+            <p class="body-copy fade-item" style="--delay: 280ms;">ACSA is an Australian aerospace effort aiming to develop the primitive one-person Aurora capsule and send the first astronaut to space from Australian soil within a decade.</p>
+            <ul class="mission-list fade-item" style="--delay: 340ms;">
+              <li>Partnering with One Giant Leap Australia and Electro Optic Systems.</li>
+              <li>Built by aspiring astronauts and space builders across Australia.</li>
+              <li>Focused on spaceflight, aviation, physics, rocketry, and public inspiration.</li>
+            </ul>
+            <a class="button fade-item" style="--delay: 420ms;" href="#support">Support ACSA</a>
           </aside>
         </div>
       </section>
@@ -1205,47 +1483,128 @@
         </div>
       </section>
 
+      <section class="page" id="support">
+        <div class="full-panel">
+          <p class="eyebrow fade-item" style="--delay: 40ms;">Support ACSA</p>
+          <h1 class="page-title fade-item" style="--delay: 110ms;">Support Token</h1>
+          <p class="subhead fade-item" style="--delay: 180ms;">Create a public or private token of support for Australia's first crewed space agency.</p>
+          <div class="support-layout">
+            <div class="support-card fade-item" style="--delay: 250ms;">
+              <form class="support-form" id="support-form">
+                <label>Name
+                  <input id="support-name" name="name" autocomplete="name" required placeholder="Your name">
+                </label>
+                <label>Message of support
+                  <textarea id="support-message" name="message" maxlength="280" placeholder="Why are you backing ACSA?"></textarea>
+                </label>
+                <label>Date you started supporting ACSA
+                  <input id="support-date" name="started_supporting" type="date" required>
+                </label>
+                <label class="public-check">
+                  <input id="support-public" name="public" type="checkbox" checked>
+                  <span>Show my name and message publicly</span>
+                </label>
+                <button class="button" type="submit">Create ACSA token</button>
+              </form>
+
+              <div class="support-token" id="support-token" aria-live="polite">
+                <p class="support-banner">I support ACSA! Australia's first crewed space agency 🚀</p>
+                <p id="support-token-copy">Your support token will appear here.</p>
+                <div class="support-actions">
+                  <button class="button" type="button" id="share-support">Share ACSA</button>
+                  <a class="button" href="#work">Contact the team</a>
+                </div>
+              </div>
+            </div>
+
+            <aside class="support-card fade-item" style="--delay: 320ms;">
+              <p class="eyebrow">Public support stats</p>
+              <div class="support-stats">
+                <div class="support-stat">
+                  <strong id="support-total">0</strong>
+                  <span class="spec-unit">support tokens</span>
+                </div>
+                <div class="support-stat">
+                  <strong id="support-public-count">0</strong>
+                  <span class="spec-unit">public supporters</span>
+                </div>
+              </div>
+              <h2 class="contact-heading">Public Names</h2>
+              <div class="supporter-list" id="supporter-list">
+                <div class="supporter-pill">Be the first to add public support.</div>
+              </div>
+            </aside>
+          </div>
+        </div>
+      </section>
+
       <section class="page" id="work">
         <div class="newspaper-grid">
           <div class="center-block">
             <p class="eyebrow fade-item" style="--delay: 40ms;">Join the Mission</p>
             <h1 class="page-title fade-item" style="--delay: 110ms;">Work With Us</h1>
-            <p class="body-copy fade-item" style="--delay: 190ms;">We are a private space company, so we are always looking for people to join the company. It's all volunteer work, but we need great people of all kinds to help us in our mission, not just engineers and technicians.</p>
+            <p class="body-copy fade-item" style="--delay: 190ms;">ACSA is a volunteer mission, so the team is always looking for people who can help with engineering, research, media, education, partnerships, design, fundraising, and spreading the word.</p>
             <h2 class="contact-heading fade-item" style="--delay: 270ms;">Contact Us</h2>
-            <div class="contact-box fade-item" style="--delay: 340ms;">Contact details placeholder. Email, form link, or community channel details to be added.</div>
+            <div class="contact-layout fade-item" style="--delay: 340ms;">
+              <div class="contact-card">
+                <p class="eyebrow">Message wizard</p>
+                <form class="contact-form" id="contact-form">
+                  <label>Your name
+                    <input id="contact-name" autocomplete="name" placeholder="Your name">
+                  </label>
+                  <label>What is your query about?
+                    <input id="contact-topic" placeholder="Volunteering, partnership, media, support...">
+                  </label>
+                  <label>Your message
+                    <textarea id="contact-message" placeholder="Write your question or offer of support."></textarea>
+                  </label>
+                  <div class="wizard-options" role="group" aria-label="Send method">
+                    <button class="wizard-option" type="button" data-method="email">Email Gus</button>
+                    <button class="wizard-option" type="button" data-method="sms">SMS ACSA</button>
+                  </div>
+                </form>
+              </div>
+
+              <aside class="contact-card">
+                <p class="eyebrow">Mission guide</p>
+                <p class="body-copy" style="margin-top: 10px;">Use the floating ACSA AI guide in the bottom-right corner for questions about Aurora, support tokens, volunteering, and how to spread the word.</p>
+              </aside>
+            </div>
           </div>
           <aside class="right-panel render-panel red-ring-pulse">
-            <svg class="acsa-logo logo-large fade-item" style="--delay: 200ms;" viewBox="0 0 300 300" role="img" aria-label="Australian Crewed Spaceflight Agency logo">
-              <circle cx="150" cy="150" r="142" fill="#0d1b4b" stroke="#fff" stroke-width="3"></circle>
-              <circle class="logo-red-ring" cx="150" cy="150" r="132" fill="none" stroke="#e63b2e" stroke-width="8"></circle>
-              <path d="M222 229c23-16 39-38 45-63" fill="none" stroke="#cfd6e5" stroke-width="9" stroke-linecap="round" opacity=".82"></path>
-              <text x="47" y="102" fill="#fff" font-family="DM Sans, sans-serif" font-size="17" font-weight="700">Australian</text>
-              <text x="47" y="124" fill="#fff" font-family="DM Sans, sans-serif" font-size="17" font-weight="700">Crewed</text>
-              <text x="47" y="146" fill="#fff" font-family="DM Sans, sans-serif" font-size="17" font-weight="700">Spaceflight</text>
-              <text x="47" y="168" fill="#fff" font-family="DM Sans, sans-serif" font-size="17" font-weight="700">Agency</text>
-              <g transform="translate(142 58)">
-                <path d="M31 2c15 19 22 41 22 68v82H9V70C9 43 16 21 31 2Z" fill="#f7f7fb" stroke="#fff" stroke-width="2"></path>
-                <path d="M31 2c8 10 14 22 18 36H13C17 24 23 12 31 2Z" fill="#e63b2e"></path>
-                <rect x="21" y="69" width="20" height="38" rx="10" fill="#0d1b4b" stroke="#00bcd4" stroke-width="2"></rect>
-                <path d="M9 136-8 170l21-9M53 136l17 34-21-9" fill="#fff"></path>
-                <path d="M18 152h26l-7 32H25l-7-32Z" fill="#e63b2e"></path>
-              </g>
-              <g fill="#fff" opacity=".96">
-                <text x="222" y="91" font-size="25">✦</text>
-                <text x="246" y="126" font-size="17">✦</text>
-                <text x="219" y="154" font-size="18">✦</text>
-                <text x="255" y="185" font-size="23">✦</text>
-                <text x="232" y="205" font-size="14">✦</text>
-              </g>
-            </svg>
+            <img class="acsa-logo logo-large fade-item" style="--delay: 200ms;" src="/ACSA/ACSA-Logo.jpg" alt="Australian Crewed Spaceflight Agency logo">
           </aside>
         </div>
       </section>
     </main>
   </div>
 
+  <div class="floating-chatbot" id="floating-chatbot">
+    <aside class="chatbot-card" aria-label="ACSA AI chatbot">
+      <div class="chatbot-orb" aria-hidden="true"></div>
+      <p class="eyebrow">ACSA AI guide</p>
+      <div class="chatbot-log" id="chatbot-log" aria-live="polite">
+        <div class="chat-message">Hi, I am the ACSA mission guide. Ask about Aurora, the team, partners, how to help, or how to spread the word.</div>
+      </div>
+      <div class="quick-prompts">
+        <button class="quick-prompt" type="button" data-prompt="What is ACSA?">What is ACSA?</button>
+        <button class="quick-prompt" type="button" data-prompt="Who is on the team?">Team</button>
+        <button class="quick-prompt" type="button" data-prompt="How can I help spread the word?">Spread word</button>
+      </div>
+      <div class="chat-input-row">
+        <input id="chatbot-input" placeholder="Ask the ACSA guide..." aria-label="Ask the ACSA guide">
+        <button class="button" type="button" id="chatbot-send">Ask</button>
+      </div>
+      <div class="chat-error" id="chatbot-status" aria-live="polite"></div>
+    </aside>
+    <button class="chatbot-toggle" type="button" id="chatbot-toggle" aria-expanded="false">
+      <span class="chatbot-orb" aria-hidden="true"></span>
+      ACSA AI
+    </button>
+  </div>
+
   <script>
-    const pageIds = ["home", "blog", "vehicles", "shop", "work"];
+    const pageIds = ["home", "blog", "vehicles", "shop", "support", "work"];
     const vehicleIds = ["caelus1", "caelus2", "caelus3", "aurora"];
     const pages = new Map(pageIds.map((id) => [id, document.getElementById(id)]));
     const sidebar = document.getElementById("sidebar");
@@ -1317,7 +1676,8 @@
     }
 
     function routeFromHash() {
-      const route = window.location.hash.replace("#", "") || "home";
+      const pathRoute = window.location.pathname.toLowerCase().includes("/support") ? "support" : "home";
+      const route = window.location.hash.replace("#", "") || pathRoute;
       if (vehicleIds.includes(route)) {
         showVehicle(route, false);
       } else if (route === "vehicles") {
@@ -1349,6 +1709,226 @@
     document.querySelectorAll("[data-vehicle]").forEach((control) => {
       control.addEventListener("click", () => showVehicle(control.dataset.vehicle));
     });
+
+    const contactEmail = "Gus.mann.acsa@gmail.com";
+    const contactSms = "+61490787362";
+    const contactForm = document.getElementById("contact-form");
+    const contactName = document.getElementById("contact-name");
+    const contactTopic = document.getElementById("contact-topic");
+    const contactMessage = document.getElementById("contact-message");
+
+    function buildContactMessage() {
+      const name = contactName.value.trim() || "ACSA supporter";
+      const topic = contactTopic.value.trim() || "ACSA query";
+      const message = contactMessage.value.trim() || "I would like to learn more about ACSA and how I can help.";
+      return {
+        subject: `ACSA query: ${topic}`,
+        body: `Name: ${name}\nTopic: ${topic}\n\n${message}\n\nSent from the ACSA contact wizard on texflow.work.`
+      };
+    }
+
+    if (contactForm) {
+      contactForm.querySelectorAll("[data-method]").forEach((button) => {
+        button.addEventListener("click", () => {
+          const payload = buildContactMessage();
+          if (button.dataset.method === "email") {
+            window.location.href = `mailto:${contactEmail}?subject=${encodeURIComponent(payload.subject)}&body=${encodeURIComponent(payload.body)}`;
+          } else {
+            window.location.href = `sms:${contactSms}?&body=${encodeURIComponent(payload.subject + "\n" + payload.body)}`;
+          }
+        });
+      });
+    }
+
+    const chatbotLog = document.getElementById("chatbot-log");
+    const chatbotInput = document.getElementById("chatbot-input");
+    const chatbotSend = document.getElementById("chatbot-send");
+    const chatbotStatus = document.getElementById("chatbot-status");
+    const chatbotToggle = document.getElementById("chatbot-toggle");
+    const floatingChatbot = document.getElementById("floating-chatbot");
+    const supportApi = "/api/acsa/supporters";
+    const chatApi = "/api/acsa/chat";
+    const acsaKnowledge = [
+      {
+        keys: ["mission", "what", "acsa", "agency"],
+        answer: "ACSA, the Australian Crewed Spaceflight Agency, is the first organisation attempting to develop a manned Australian spacecraft. The goal is to send the first astronaut to space from Australian soil within a decade."
+      },
+      {
+        keys: ["aurora", "capsule", "spacecraft"],
+        answer: "Aurora is the primitive one-person capsule concept at the centre of ACSA's mission. It is intended as the spacecraft that could eventually carry an Australian astronaut from Australian soil."
+      },
+      {
+        keys: ["partner", "ogl", "one giant leap", "eos", "electro optic"],
+        answer: "ACSA is partnering with One Giant Leap Australia and Electro Optic Systems. The wider story began through the One Giant Leap Foundation Australia and Space Tour USA, where the founding teenagers met."
+      },
+      {
+        keys: ["team", "teen", "founder", "angus", "bernie", "wilson", "emma", "kyra"],
+        answer: "The team includes Angus Mann, Bernie Dyke, Wilson Steinbach, Emma Giasoumi and Kyra Loft-Morrow. They are teenagers with interests across space, aviation, physics, rocketry, mathematics, astrobiology, technology and AI."
+      },
+      {
+        keys: ["contact", "email", "sms", "message"],
+        answer: "Use the Work With Us contact wizard to email Gus at Gus.mann.acsa@gmail.com or send an SMS to +61 490 787 362. Include your name, topic and how you would like to help."
+      },
+      {
+        keys: ["support", "token", "share", "spread", "word"],
+        answer: "The best way to spread the word is to create a Support ACSA token, share the message with friends and family, and invite people to visit texflow.work/acsa. Public supporters can add their name to the support wall."
+      },
+      {
+        keys: ["help", "volunteer", "work", "join"],
+        answer: "ACSA needs more than engineers. Volunteers can help with research, simulations, design, media, education, outreach, fundraising, partnerships, web content and community building."
+      }
+    ];
+
+    function addChatMessage(text, user = false) {
+      if (!chatbotLog) return;
+      const message = document.createElement("div");
+      message.className = `chat-message${user ? " user" : ""}`;
+      message.textContent = text;
+      chatbotLog.appendChild(message);
+      chatbotLog.scrollTop = chatbotLog.scrollHeight;
+    }
+
+    function answerAcsaQuestion(question) {
+      const normalized = question.toLowerCase();
+      const match = acsaKnowledge.find((entry) => entry.keys.some((key) => normalized.includes(key)));
+      return match ? match.answer : "ACSA is an ambitious Australian crewed-spaceflight effort. Ask me about Aurora, the team, partners, contact options, support tokens, or how to spread the word.";
+    }
+
+    async function readJsonResponse(response) {
+      const contentType = response.headers.get("content-type") || "";
+      if (!contentType.includes("application/json")) {
+        throw new Error(`Expected JSON but received ${response.status} ${response.statusText || "response"}`);
+      }
+      return response.json();
+    }
+
+    async function sendChatQuestion(text) {
+      const question = text.trim();
+      if (!question) return;
+      addChatMessage(question, true);
+      chatbotInput.value = "";
+      if (chatbotStatus) chatbotStatus.textContent = "Thinking...";
+      try {
+        const response = await fetch(chatApi, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message: question })
+        });
+        const data = await readJsonResponse(response);
+        if (!response.ok) throw new Error(data.error || "Chat request failed");
+        addChatMessage(data.answer || answerAcsaQuestion(question));
+        if (chatbotStatus) chatbotStatus.textContent = "";
+      } catch (error) {
+        addChatMessage(answerAcsaQuestion(question));
+        if (chatbotStatus) chatbotStatus.textContent = error.message.includes("Groq") ? error.message : "Using built-in ACSA knowledge while AI is unavailable.";
+      }
+    }
+
+    if (chatbotToggle && floatingChatbot) {
+      chatbotToggle.addEventListener("click", () => {
+        const open = !floatingChatbot.classList.contains("open");
+        floatingChatbot.classList.toggle("open", open);
+        chatbotToggle.setAttribute("aria-expanded", String(open));
+        if (open) setTimeout(() => chatbotInput?.focus(), 80);
+      });
+    }
+
+    document.querySelectorAll(".quick-prompt").forEach((button) => {
+      button.addEventListener("click", () => sendChatQuestion(button.dataset.prompt || button.textContent));
+    });
+
+    if (chatbotSend && chatbotInput) {
+      chatbotSend.addEventListener("click", () => sendChatQuestion(chatbotInput.value));
+      chatbotInput.addEventListener("keydown", (event) => {
+        if (event.key === "Enter") sendChatQuestion(chatbotInput.value);
+      });
+    }
+
+    const supportForm = document.getElementById("support-form");
+    const supportToken = document.getElementById("support-token");
+    const supportTokenCopy = document.getElementById("support-token-copy");
+    const shareSupport = document.getElementById("share-support");
+    const supportTotal = document.getElementById("support-total");
+    const supportPublicCount = document.getElementById("support-public-count");
+    const supporterList = document.getElementById("supporter-list");
+    const supportDate = document.getElementById("support-date");
+    const supportShareMessage = "Support ACSA with me! Australia's first crewed space agency 🚀 https://texflow.work/acsa";
+
+    if (supportDate && !supportDate.value) {
+      supportDate.value = new Date().toISOString().slice(0, 10);
+    }
+
+    async function loadSupporters() {
+      if (!supportTotal) return;
+      try {
+        const response = await fetch(supportApi, { headers: { "Accept": "application/json" } });
+        const data = await readJsonResponse(response);
+        if (!response.ok) throw new Error(data.error || "Support stats request failed");
+        supportTotal.textContent = data.count || 0;
+        supportPublicCount.textContent = data.public_count || 0;
+        const supporters = data.supporters || [];
+        supporterList.innerHTML = supporters.length
+          ? supporters.slice(-12).reverse().map((supporter) => `<div class="supporter-pill"><strong>${escapeHtml(supporter.name)}</strong><br>${escapeHtml(supporter.message || "I support ACSA.")}</div>`).join("")
+          : '<div class="supporter-pill">Be the first to add public support.</div>';
+      } catch (error) {
+        supporterList.innerHTML = `<div class="supporter-pill">Support stats are temporarily unavailable. ${escapeHtml(error.message)}</div>`;
+      }
+    }
+
+    function escapeHtml(value) {
+      return String(value).replace(/[&<>"']/g, (char) => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+      }[char]));
+    }
+
+    if (supportForm) {
+      supportForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const payload = {
+          name: document.getElementById("support-name").value,
+          message: document.getElementById("support-message").value,
+          started_supporting: document.getElementById("support-date").value,
+          public: document.getElementById("support-public").checked
+        };
+        const response = await fetch(supportApi, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", "Accept": "application/json" },
+          body: JSON.stringify(payload)
+        });
+        let data;
+        try {
+          data = await readJsonResponse(response);
+        } catch (error) {
+          supportToken.classList.add("visible");
+          supportTokenCopy.textContent = `Could not create support token: ${error.message}`;
+          return;
+        }
+        if (!response.ok) {
+          supportToken.classList.add("visible");
+          supportTokenCopy.textContent = data.error || "Could not create support token yet.";
+          return;
+        }
+        supportToken.classList.add("visible");
+        supportTokenCopy.textContent = `${data.token.name} started supporting ACSA on ${data.token.started_supporting}. ${data.token.message || "Thank you for backing the mission."}`;
+        await loadSupporters();
+      });
+    }
+
+    if (shareSupport) {
+      shareSupport.addEventListener("click", async () => {
+        try {
+          await navigator.clipboard.writeText(supportShareMessage);
+          shareSupport.textContent = "Copied";
+          setTimeout(() => { shareSupport.textContent = "Share ACSA"; }, 1400);
+        } catch (_) {
+          window.location.href = `mailto:?subject=${encodeURIComponent("Support ACSA")}&body=${encodeURIComponent(supportShareMessage)}`;
+        }
+      });
+    }
 
     vehicleToggle.addEventListener("click", () => {
       const willOpen = !vehicleDropdown.classList.contains("open");
@@ -1474,6 +2054,7 @@
     resizeStars();
     drawStars();
     moveCursorRing();
+    loadSupporters();
     routeFromHash();
   </script>
 </body>

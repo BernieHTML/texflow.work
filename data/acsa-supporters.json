@@ -1,0 +1,38 @@
+[
+  {
+    "id": "bd380679-fad5-4315-9e45-bb83e78ab7e5",
+    "name": "Bernie Dyke",
+    "message": "Because they are aweseme.",
+    "started_supporting": "2026-05-19",
+    "public": true,
+    "banner": "I support ACSA! Australia's first crewed space agency 🚀",
+    "created_at": "2026-05-19T10:40:10.597Z"
+  },
+  {
+    "id": "073db96b-e157-43cb-af40-202806b8928d",
+    "name": "Bernie-2",
+    "message": "Because I want to help create the first Australian crewed mission to space.",
+    "started_supporting": "2026-05-19",
+    "public": true,
+    "banner": "I support ACSA! Australia's first crewed space agency 🚀",
+    "created_at": "2026-05-19T10:47:49.972Z"
+  },
+  {
+    "id": "15395b31-9cc0-4d55-a5ec-f7a3e109828a",
+    "name": "Gus Mann",
+    "message": "Because I want to see an Australian fly to space from Aussie soil 🇦🇺",
+    "started_supporting": "2026-05-19",
+    "public": true,
+    "banner": "I support ACSA! Australia's first crewed space agency 🚀",
+    "created_at": "2026-05-19T10:48:33.130Z"
+  },
+  {
+    "id": "71d3d13d-a612-44d3-81d8-d9ba29edd9c2",
+    "name": "Wilson Steinbach",
+    "message": "Because it would be AMAZING!!",
+    "started_supporting": "2026-05-19",
+    "public": true,
+    "banner": "I support ACSA! Australia's first crewed space agency 🚀",
+    "created_at": "2026-05-19T11:53:03.960Z"
+  }
+]

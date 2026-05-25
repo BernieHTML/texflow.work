@@ -479,6 +479,14 @@ a.nav-gander-btn:active {
   display: block;
 }
 
+.acsa-banner-mark img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
+  border-radius: 50%;
+}
+
 .acsa-banner-kicker {
   margin: 0 0 0.25rem;
   color: #00bcd4;
