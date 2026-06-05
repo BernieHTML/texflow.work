@@ -270,6 +270,7 @@ app.get(['/api/acsa/supporters', '/ACSA/api/supporters', '/acsa/api/supporters']
     .map((supporter) => ({
       id: supporter.id,
       name: supporter.name,
+      email: supporter.email,
       message: supporter.message,
       started_supporting: supporter.started_supporting,
       created_at: supporter.created_at
@@ -284,17 +285,20 @@ app.get(['/api/acsa/supporters', '/ACSA/api/supporters', '/acsa/api/supporters']
 app.post(['/api/acsa/supporters', '/ACSA/api/supporters', '/acsa/api/supporters'], async (req, res) => {
   const body = req.body || {};
   const name = String(body.name || '').trim().slice(0, 80);
+  const email = String(body.email || '').trim().toLowerCase().slice(0, 120);
   const message = String(body.message || '').trim().slice(0, 280);
   const startedSupporting = String(body.started_supporting || '').trim().slice(0, 24);
   const isPublic = body.public === true || body.public === 'true';
 
   if (!name) return res.status(400).json({ error: 'Name is required' });
+  if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return res.status(400).json({ error: 'Enter a valid email address' });
   if (!startedSupporting) return res.status(400).json({ error: 'Support date is required' });
 
   const supporters = await readAcsaSupporters();
   const token = {
     id: uuidv4(),
     name,
+    email,
     message,
     started_supporting: startedSupporting,
     public: isPublic,

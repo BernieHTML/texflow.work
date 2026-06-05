@@ -1494,6 +1494,9 @@
                 <label>Name
                   <input id="support-name" name="name" autocomplete="name" required placeholder="Your name">
                 </label>
+                <label>Email
+                  <input id="support-email" name="email" type="email" autocomplete="email" placeholder="you@example.com">
+                </label>
                 <label>Message of support
                   <textarea id="support-message" name="message" maxlength="280" placeholder="Why are you backing ACSA?"></textarea>
                 </label>
@@ -1868,7 +1871,10 @@
         supportPublicCount.textContent = data.public_count || 0;
         const supporters = data.supporters || [];
         supporterList.innerHTML = supporters.length
-          ? supporters.slice(-12).reverse().map((supporter) => `<div class="supporter-pill"><strong>${escapeHtml(supporter.name)}</strong><br>${escapeHtml(supporter.message || "I support ACSA.")}</div>`).join("")
+          ? supporters.slice(-12).reverse().map((supporter) => {
+            const emailLine = supporter.email ? `<br><span>${escapeHtml(supporter.email)}</span>` : "";
+            return `<div class="supporter-pill"><strong>${escapeHtml(supporter.name)}</strong>${emailLine}<br>${escapeHtml(supporter.message || "I support ACSA.")}</div>`;
+          }).join("")
           : '<div class="supporter-pill">Be the first to add public support.</div>';
       } catch (error) {
         supporterList.innerHTML = `<div class="supporter-pill">Support stats are temporarily unavailable. ${escapeHtml(error.message)}</div>`;
@@ -1890,6 +1896,7 @@
         event.preventDefault();
         const payload = {
           name: document.getElementById("support-name").value,
+          email: document.getElementById("support-email").value,
           message: document.getElementById("support-message").value,
           started_supporting: document.getElementById("support-date").value,
           public: document.getElementById("support-public").checked
@@ -1913,7 +1920,8 @@
           return;
         }
         supportToken.classList.add("visible");
-        supportTokenCopy.textContent = `${data.token.name} started supporting ACSA on ${data.token.started_supporting}. ${data.token.message || "Thank you for backing the mission."}`;
+        const emailText = data.token.email ? ` Email: ${data.token.email}.` : "";
+        supportTokenCopy.textContent = `${data.token.name} started supporting ACSA on ${data.token.started_supporting}.${emailText} ${data.token.message || "Thank you for backing the mission."}`;
         await loadSupporters();
       });
     }

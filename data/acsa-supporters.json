@@ -34,5 +34,100 @@
     "public": true,
     "banner": "I support ACSA! Australia's first crewed space agency 🚀",
     "created_at": "2026-05-19T11:53:03.960Z"
+  },
+  {
+    "id": "50efc783-b7a9-4230-82c1-05e7885cb2f4",
+    "name": "Austin Codd",
+    "message": "Yeah these lads seem to know what they’re doing here so shoutout to them",
+    "started_supporting": "2026-05-26",
+    "public": true,
+    "banner": "I support ACSA! Australia's first crewed space agency 🚀",
+    "created_at": "2026-05-26T11:23:17.636Z"
+  },
+  {
+    "id": "7b02150d-16dd-4d06-a751-ed18b4b5975a",
+    "name": "Jebediah Kerman",
+    "message": "Because I want more people to be making better spaceships, for some reason mine keep exploding whenever I crash them…",
+    "started_supporting": "2026-06-01",
+    "public": true,
+    "banner": "I support ACSA! Australia's first crewed space agency 🚀",
+    "created_at": "2026-06-01T05:29:55.320Z"
+  },
+  {
+    "id": "0ecc5bbb-84d3-4336-a98b-426728b5c87b",
+    "name": "Valentina Kerman",
+    "message": "Because I want more people to be making better spaceships, ours at the Kerbal Academy keep exploding whenever Jeb crashes them!",
+    "started_supporting": "2026-06-01",
+    "public": true,
+    "banner": "I support ACSA! Australia's first crewed space agency 🚀",
+    "created_at": "2026-06-01T05:31:27.985Z"
+  },
+  {
+    "id": "556751ff-e054-49ad-a56b-970de81983da",
+    "name": "Bill Kerman",
+    "message": "Because I want to be building better spaceships, Jeb keeps crashing the ones I make at the Kerbal Academy!",
+    "started_supporting": "2026-06-01",
+    "public": true,
+    "banner": "I support ACSA! Australia's first crewed space agency 🚀",
+    "created_at": "2026-06-01T05:32:39.130Z"
+  },
+  {
+    "id": "2a53b96a-b80a-46c0-ba88-65c3f3e527d4",
+    "name": "Bernie Dyke",
+    "message": "Because I support Australian crewed spaceflight!",
+    "started_supporting": "2026-06-01",
+    "public": true,
+    "banner": "I support ACSA! Australia's first crewed space agency 🚀",
+    "created_at": "2026-06-01T11:43:48.041Z"
+  },
+  {
+    "id": "0f15e95d-99f7-4fac-bd83-b37ea26c6124",
+    "name": "astro_101",
+    "email": "worldwise032@gmail.com",
+    "message": "I love SPACE!!",
+    "started_supporting": "2026-06-01",
+    "public": true,
+    "banner": "I support ACSA! Australia's first crewed space agency 🚀",
+    "created_at": "2026-06-01T11:48:26.270Z"
+  },
+  {
+    "id": "34ff5a6c-fd48-4592-be01-5abb8c29063a",
+    "name": "Emma Dilemma",
+    "email": "",
+    "message": "Because these guys want to do something great",
+    "started_supporting": "2026-06-02",
+    "public": false,
+    "banner": "I support ACSA! Australia's first crewed space agency 🚀",
+    "created_at": "2026-06-02T21:56:07.835Z"
+  },
+  {
+    "id": "9a6b03a0-acb4-41da-b1b6-15d56618ccb8",
+    "name": "Emma Dilemma",
+    "email": "",
+    "message": "Because these guys want to do something great",
+    "started_supporting": "2026-06-02",
+    "public": true,
+    "banner": "I support ACSA! Australia's first crewed space agency 🚀",
+    "created_at": "2026-06-02T21:56:27.370Z"
+  },
+  {
+    "id": "bdf6247a-36f1-4e7b-87f1-2b61ed7c433e",
+    "name": "Ghost of Skylab",
+    "email": "",
+    "message": "Because I want to see rockets launch from the place where I crash",
+    "started_supporting": "2026-06-03",
+    "public": true,
+    "banner": "I support ACSA! Australia's first crewed space agency 🚀",
+    "created_at": "2026-06-03T22:13:35.948Z"
+  },
+  {
+    "id": "7eb1bae1-30cc-414c-92cc-618e73e27608",
+    "name": "Wernher von Braun",
+    "email": "",
+    "message": "Because once zee rockets go up, who cares vhere zey come down?! Oh no vait I guess it vould be zee other vay round…",
+    "started_supporting": "2026-06-03",
+    "public": true,
+    "banner": "I support ACSA! Australia's first crewed space agency 🚀",
+    "created_at": "2026-06-03T22:16:08.979Z"
   }
 ]

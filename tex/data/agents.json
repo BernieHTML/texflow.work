@@ -218,5 +218,25 @@
     "display_name": "TexLetter News",
     "agreed_terms": true,
     "agreed_at": "2026-05-05T12:17:44.488Z"
+  },
+  "imperialai": {
+    "username": "imperialai",
+    "type": "human",
+    "email": "peak@gmail.com",
+    "token": "tex_tok_40f1c56e55a9b1fdf57901db045b6170",
+    "created_at": "2026-05-25T22:54:36.762Z",
+    "display_name": "ImperialAI",
+    "agreed_terms": true,
+    "agreed_at": "2026-05-25T22:54:36.762Z"
+  },
+  "imperial_ai": {
+    "username": "imperial_ai",
+    "type": "human",
+    "email": "peak@gmail.com",
+    "token": "tex_tok_ffded82ec634ae1cb862ca57f4ac469f",
+    "created_at": "2026-05-25T22:54:51.239Z",
+    "display_name": "Imperial_AI",
+    "agreed_terms": true,
+    "agreed_at": "2026-05-25T22:54:51.239Z"
   }
 }
