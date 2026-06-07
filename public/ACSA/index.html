@@ -1230,7 +1230,7 @@
             <div class="rule fade-item" style="--delay: 200ms;"></div>
             <p class="body-copy fade-item" style="--delay: 280ms;">ACSA is an Australian aerospace effort aiming to develop the primitive one-person Aurora capsule and send the first astronaut to space from Australian soil within a decade.</p>
             <ul class="mission-list fade-item" style="--delay: 340ms;">
-              <li>Partnering with One Giant Leap Australia and Electro Optic Systems.</li>
+              <li>Partnering with One Giant Leap Australia.</li>
               <li>Built by aspiring astronauts and space builders across Australia.</li>
               <li>Focused on spaceflight, aviation, physics, rocketry, and public inspiration.</li>
             </ul>
@@ -1495,7 +1495,10 @@
                   <input id="support-name" name="name" autocomplete="name" required placeholder="Your name">
                 </label>
                 <label>Email
-                  <input id="support-email" name="email" type="email" autocomplete="email" placeholder="you@example.com">
+                  <input id="support-email" name="email" type="email" autocomplete="email" required placeholder="you@example.com">
+                </label>
+                <label>Phone number
+                  <input id="support-phone" name="phone" type="tel" autocomplete="tel" required placeholder="+61 400 000 000">
                 </label>
                 <label>Message of support
                   <textarea id="support-message" name="message" maxlength="280" placeholder="Why are you backing ACSA?"></textarea>
@@ -1505,7 +1508,7 @@
                 </label>
                 <label class="public-check">
                   <input id="support-public" name="public" type="checkbox" checked>
-                  <span>Show my name and message publicly</span>
+                  <span>Show my name, email and message publicly</span>
                 </label>
                 <button class="button" type="submit">Create ACSA token</button>
               </form>
@@ -1761,8 +1764,8 @@
         answer: "Aurora is the primitive one-person capsule concept at the centre of ACSA's mission. It is intended as the spacecraft that could eventually carry an Australian astronaut from Australian soil."
       },
       {
-        keys: ["partner", "ogl", "one giant leap", "eos", "electro optic"],
-        answer: "ACSA is partnering with One Giant Leap Australia and Electro Optic Systems. The wider story began through the One Giant Leap Foundation Australia and Space Tour USA, where the founding teenagers met."
+        keys: ["partner", "ogl", "one giant leap"],
+        answer: "ACSA is partnering with One Giant Leap Australia. The wider story began through the One Giant Leap Foundation Australia and Space Tour USA, where the founding teenagers met."
       },
       {
         keys: ["team", "teen", "founder", "angus", "bernie", "wilson", "emma", "kyra"],
@@ -1897,6 +1900,7 @@
         const payload = {
           name: document.getElementById("support-name").value,
           email: document.getElementById("support-email").value,
+          phone: document.getElementById("support-phone").value,
           message: document.getElementById("support-message").value,
           started_supporting: document.getElementById("support-date").value,
           public: document.getElementById("support-public").checked
@@ -1921,7 +1925,8 @@
         }
         supportToken.classList.add("visible");
         const emailText = data.token.email ? ` Email: ${data.token.email}.` : "";
-        supportTokenCopy.textContent = `${data.token.name} started supporting ACSA on ${data.token.started_supporting}.${emailText} ${data.token.message || "Thank you for backing the mission."}`;
+        const phoneText = data.token.phone ? ` Phone: ${data.token.phone}.` : "";
+        supportTokenCopy.textContent = `${data.token.name} started supporting ACSA on ${data.token.started_supporting}.${emailText}${phoneText} ${data.token.message || "Thank you for backing the mission."}`;
         await loadSupporters();
       });
     }

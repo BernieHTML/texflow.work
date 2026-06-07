@@ -20,6 +20,8 @@ const DATA_DIR = join(__dirname, 'data');
 const EXPERTS_PATH = join(DATA_DIR, 'experts.json');
 const ORDERS_PATH = join(DATA_DIR, 'orders.json');
 const ACSA_SUPPORTERS_PATH = join(DATA_DIR, 'acsa-supporters.json');
+const ACSA_SUPPORT_EMAIL_TO = process.env.ACSA_SUPPORT_EMAIL_TO || 'bernie.dyke@gmail.com';
+const SENDMAIL_PATH = process.env.SENDMAIL_PATH || '/usr/sbin/sendmail';
 const BASE_URL = (process.env.BASE_URL || `http://localhost:${PORT}`).replace(/\/$/, '');
 const ACP_VERSION = '1.0';
 
@@ -170,6 +172,70 @@ async function readAcsaSupporters() {
 async function writeAcsaSupporters(supporters) {
   await writeFile(ACSA_SUPPORTERS_PATH, JSON.stringify(supporters, null, 2), 'utf8');
 }
+function formatAcsaSupportersEmail(supporters) {
+  const lines = [
+    'ACSA support token export',
+    `Generated: ${new Date().toISOString()}`,
+    `Total tokens: ${supporters.length}`,
+    ''
+  ];
+
+  supporters.forEach((supporter, index) => {
+    lines.push(
+      `#${index + 1}`,
+      `ID: ${supporter.id || ''}`,
+      `Name: ${supporter.name || ''}`,
+      `Email: ${supporter.email || ''}`,
+      `Phone: ${supporter.phone || ''}`,
+      `Started supporting: ${supporter.started_supporting || ''}`,
+      `Public: ${supporter.public ? 'yes' : 'no'}`,
+      `Banner: ${supporter.banner || ''}`,
+      `Created: ${supporter.created_at || ''}`,
+      'Message:',
+      supporter.message || '',
+      ''
+    );
+  });
+
+  return lines.join('\n');
+}
+function sendPlainTextEmail(to, subject, body) {
+  return new Promise((resolve, reject) => {
+    const child = spawn(SENDMAIL_PATH, ['-t']);
+    let stderr = '';
+
+    child.stderr.on('data', (chunk) => {
+      stderr += chunk.toString();
+    });
+    child.on('error', reject);
+    child.on('close', (code) => {
+      if (code === 0) {
+        resolve();
+      } else {
+        reject(new Error(stderr.trim() || `sendmail exited with code ${code}`));
+      }
+    });
+
+    child.stdin.end([
+      `To: ${to}`,
+      `Subject: ${subject}`,
+      'Content-Type: text/plain; charset=UTF-8',
+      '',
+      body
+    ].join('\n'));
+  });
+}
+async function emailAcsaSupportTokens(supporters) {
+  try {
+    await sendPlainTextEmail(
+      ACSA_SUPPORT_EMAIL_TO,
+      `ACSA support tokens export (${supporters.length})`,
+      formatAcsaSupportersEmail(supporters)
+    );
+  } catch (error) {
+    console.error(`Could not email ACSA support tokens to ${ACSA_SUPPORT_EMAIL_TO}:`, error.message);
+  }
+}
 function getExpertById(experts, id) {
   return experts.find(e => e.id === id) || null;
 }
@@ -286,12 +352,16 @@ app.post(['/api/acsa/supporters', '/ACSA/api/supporters', '/acsa/api/supporters'
   const body = req.body || {};
   const name = String(body.name || '').trim().slice(0, 80);
   const email = String(body.email || '').trim().toLowerCase().slice(0, 120);
+  const phone = String(body.phone || '').trim().slice(0, 40);
   const message = String(body.message || '').trim().slice(0, 280);
   const startedSupporting = String(body.started_supporting || '').trim().slice(0, 24);
   const isPublic = body.public === true || body.public === 'true';
 
   if (!name) return res.status(400).json({ error: 'Name is required' });
-  if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return res.status(400).json({ error: 'Enter a valid email address' });
+  if (!email) return res.status(400).json({ error: 'Email is required' });
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return res.status(400).json({ error: 'Enter a valid email address' });
+  if (!phone) return res.status(400).json({ error: 'Phone number is required' });
+  if (!/^[0-9+()\-\s.]{6,40}$/.test(phone)) return res.status(400).json({ error: 'Enter a valid phone number' });
   if (!startedSupporting) return res.status(400).json({ error: 'Support date is required' });
 
   const supporters = await readAcsaSupporters();
@@ -299,6 +369,7 @@ app.post(['/api/acsa/supporters', '/ACSA/api/supporters', '/acsa/api/supporters'
     id: uuidv4(),
     name,
     email,
+    phone,
     message,
     started_supporting: startedSupporting,
     public: isPublic,
@@ -307,6 +378,7 @@ app.post(['/api/acsa/supporters', '/ACSA/api/supporters', '/acsa/api/supporters'
   };
   supporters.push(token);
   await writeAcsaSupporters(supporters);
+  await emailAcsaSupportTokens(supporters);
   res.status(201).json({
     ok: true,
     token,
@@ -328,7 +400,7 @@ app.post(['/api/acsa/chat', '/ACSA/api/chat', '/acsa/api/chat'], async (req, res
   }
 
   const systemPrompt = `You are the floating ACSA AI guide for the Australian Crewed Spaceflight Agency website.
-ACSA is the first organisation to attempt the development of a manned Australian spacecraft. It is partnering with One Giant Leap Australia (OGL) and Electro Optic Systems (EOS), with a diverse team operating around Australia.
+ACSA is the first organisation to attempt the development of a manned Australian spacecraft. It is partnering with One Giant Leap Australia (OGL), with a diverse team operating around Australia.
 ACSA aims to develop the primitive one-person Aurora capsule and send the first astronaut into space from Australian soil within a decade.
 Background for the guide only: the teenagers behind it are Angus Mann, Bernie Dyke, Wilson Steinbach, Emma Giasoumi and Kyra Loft-Morrow. The program is supported by the One Giant Leap Foundation Australia, which runs Space Tour USA where the five met.
 Help users understand the mission, Aurora, support tokens, volunteering, contacting the team, and how to spread the word.
