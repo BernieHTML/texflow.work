@@ -1,0 +1,134 @@
+[
+  {
+    "id": "c13289cb-bf4e-48b9-aca7-d5a01afd919a",
+    "created_at": "2026-06-07T10:31:37.973Z",
+    "created_by_user_id": "128a8a50-9724-4eb3-8812-e32d309b4b69",
+    "comment": "this flight is low (TESTING EXAMPLE)",
+    "tags": [
+      "Extremely low altitude"
+    ],
+    "aircraft_hex": "80073e",
+    "callsign": "AIC301",
+    "registration": "VT-ANX",
+    "aircraft_type": "B788",
+    "altitude_ft": 14275,
+    "ground_speed_kts": 384,
+    "track_deg": 286,
+    "vertical_rate_fpm": 1696,
+    "squawk": "1452",
+    "lat": -33.681885,
+    "lon": 150.4155,
+    "observed_at": "2026-06-07T10:31:37.795Z",
+    "source": "airplanes.live"
+  },
+  {
+    "id": "e12e3241-6b29-4636-a68d-b828a41ba8cc",
+    "created_at": "2026-06-07T10:31:42.533Z",
+    "created_by_user_id": "128a8a50-9724-4eb3-8812-e32d309b4b69",
+    "comment": "this flight is low (TESTING EXAMPLE)",
+    "tags": [
+      "Extremely low altitude"
+    ],
+    "aircraft_hex": "80073e",
+    "callsign": "AIC301",
+    "registration": "VT-ANX",
+    "aircraft_type": "B788",
+    "altitude_ft": 14700,
+    "ground_speed_kts": 386,
+    "track_deg": 286,
+    "vertical_rate_fpm": 1600,
+    "squawk": "1452",
+    "lat": -33.674353,
+    "lon": 150.384579,
+    "observed_at": "2026-06-07T10:31:42.360Z",
+    "source": "airplanes.live"
+  },
+  {
+    "id": "e153ccbb-493f-4e9b-80bb-8a3cb1957ab4",
+    "created_at": "2026-06-07T10:37:03.676Z",
+    "created_by_user_id": "128a8a50-9724-4eb3-8812-e32d309b4b69",
+    "comment": "Just not sure how many of these are alowed",
+    "tags": [
+      "Night flight"
+    ],
+    "aircraft_hex": "7c6d32",
+    "callsign": "VOZ986",
+    "registration": "VH-VUS",
+    "aircraft_type": "B738",
+    "altitude_ft": 2050,
+    "ground_speed_kts": 173,
+    "track_deg": 348,
+    "vertical_rate_fpm": -928,
+    "squawk": "1103",
+    "lat": -34.090483,
+    "lon": 151.213417,
+    "observed_at": "2026-06-07T10:37:03.496Z",
+    "source": "airplanes.live"
+  },
+  {
+    "id": "812ba131-c462-4010-b5ad-13a379cdef08",
+    "created_at": "2026-06-07T10:37:13.478Z",
+    "created_by_user_id": "128a8a50-9724-4eb3-8812-e32d309b4b69",
+    "comment": "Just not sure how many of these are alowed",
+    "tags": [
+      "Night flight"
+    ],
+    "aircraft_hex": "7c6d32",
+    "callsign": "VOZ986",
+    "registration": "VH-VUS",
+    "aircraft_type": "B738",
+    "altitude_ft": 1825,
+    "ground_speed_kts": 175,
+    "track_deg": 348,
+    "vertical_rate_fpm": -864,
+    "squawk": "1103",
+    "lat": -34.078845,
+    "lon": 151.210384,
+    "observed_at": "2026-06-07T10:37:13.298Z",
+    "source": "airplanes.live"
+  },
+  {
+    "id": "fcaf24fa-53b6-408c-ba82-f6f7e388ff08",
+    "created_at": "2026-06-07T10:46:57.361Z",
+    "created_by_user_id": "128a8a50-9724-4eb3-8812-e32d309b4b69",
+    "comment": "Well this must be a bug - not taxiing in the blue mountains!!",
+    "tags": [
+      "Extremely low altitude"
+    ],
+    "aircraft_hex": "7cf7cc",
+    "callsign": "SSM3",
+    "registration": "SSM3",
+    "aircraft_type": "TWR",
+    "altitude_ft": "ground",
+    "ground_speed_kts": 41,
+    "track_deg": 203,
+    "vertical_rate_fpm": 0,
+    "squawk": "7727",
+    "lat": -33.585992,
+    "lon": 150.524202,
+    "observed_at": "2026-06-07T10:46:57.167Z",
+    "source": "airplanes.live"
+  },
+  {
+    "id": "a7ce4a71-4e30-45e4-a75d-1b292f9f1672",
+    "created_at": "2026-06-07T10:49:06.969Z",
+    "created_by_user_id": "128a8a50-9724-4eb3-8812-e32d309b4b69",
+    "comment": "Interesting how it’s flying pretty close to the bm",
+    "tags": [
+      "Frequent overflight"
+    ],
+    "aircraft_hex": "780c00",
+    "callsign": "CES736",
+    "registration": "B-5942",
+    "aircraft_type": "A332",
+    "altitude_ft": 10675,
+    "ground_speed_kts": 348,
+    "track_deg": 343,
+    "vertical_rate_fpm": 960,
+    "squawk": "1502",
+    "lat": -33.581772,
+    "lon": 150.777264,
+    "observed_at": "2026-06-07T10:49:06.762Z",
+    "source": "airplanes.live"
+  }
+]
