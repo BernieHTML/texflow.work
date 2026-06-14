@@ -130,5 +130,50 @@
     "lon": 150.777264,
     "observed_at": "2026-06-07T10:49:06.762Z",
     "source": "airplanes.live"
+  },
+  {
+    "id": "7f72221b-81a4-4669-bdb4-9799f15cc062",
+    "created_at": "2026-06-08T12:30:32.996Z",
+    "created_by_user_id": "128a8a50-9724-4eb3-8812-e32d309b4b69",
+    "comment": "Quite loud",
+    "tags": [
+      "Extremely low altitude",
+      "Loud noise"
+    ],
+    "aircraft_hex": "8990f4",
+    "callsign": "CAL052",
+    "registration": "B-18907",
+    "aircraft_type": "A359",
+    "altitude_ft": 18300,
+    "ground_speed_kts": 390,
+    "track_deg": 316,
+    "vertical_rate_fpm": 1152,
+    "squawk": "1520",
+    "lat": -33.324047,
+    "lon": 150.460678,
+    "observed_at": "2026-06-08T12:30:32.785Z",
+    "source": "airplanes.live"
+  },
+  {
+    "id": "b6b57e19-fbb2-4893-ac7c-fee944f56a4c",
+    "created_at": "2026-06-08T12:31:44.061Z",
+    "created_by_user_id": "128a8a50-9724-4eb3-8812-e32d309b4b69",
+    "comment": "JH",
+    "tags": [
+      "Extremely low altitude"
+    ],
+    "aircraft_hex": "8990f4",
+    "callsign": "CAL052",
+    "registration": "B-18907",
+    "aircraft_type": "A359",
+    "altitude_ft": 19700,
+    "ground_speed_kts": 405,
+    "track_deg": 316,
+    "vertical_rate_fpm": 1024,
+    "squawk": "1520",
+    "lat": -33.237946,
+    "lon": 150.361633,
+    "observed_at": "2026-06-08T12:31:43.845Z",
+    "source": "airplanes.live"
   }
 ]

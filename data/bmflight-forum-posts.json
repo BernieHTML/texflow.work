@@ -44,5 +44,30 @@
     "created_at": "2026-06-07T10:47:29.877Z",
     "updated_at": "2026-06-07T10:47:29.877Z",
     "status": "active"
+  },
+  {
+    "id": "ff4b4bd7-ab37-4459-ad87-19564d62def8",
+    "title": "Flight observation: WHU",
+    "body": "Bit low don’t you think?",
+    "category": "Low flights",
+    "created_by_user_id": "c8b74068-74c4-4575-a044-9420c924d2df",
+    "related_report_id": null,
+    "flight_snapshot": {
+      "aircraft_hex": "7c7070",
+      "callsign": "WHU",
+      "registration": "VH-WHU",
+      "aircraft_type": "R66",
+      "altitude_ft": 4025,
+      "ground_speed_kts": 103,
+      "track_deg": 94,
+      "lat": -33.907425,
+      "lon": 150.348405,
+      "observed_at": "2026-06-08T04:33:18.843Z",
+      "source": "airplanes.live"
+    },
+    "comments": [],
+    "created_at": "2026-06-08T04:33:47.923Z",
+    "updated_at": "2026-06-08T04:33:47.923Z",
+    "status": "active"
   }
 ]

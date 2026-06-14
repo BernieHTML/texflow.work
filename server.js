@@ -7,6 +7,7 @@ import { readFile, writeFile, readdir, mkdir } from 'fs/promises';
 import { join, dirname } from 'path';
 import { fileURLToPath, pathToFileURL } from 'url';
 import { spawn } from 'child_process';
+import { randomBytes, scryptSync, timingSafeEqual } from 'crypto';
 import { v4 as uuidv4 } from 'uuid';
 import { transformShopifyProduct, fetchShopifyProducts, slugifyMerchant } from './scripts/texmkt-shopify.js';
 import { writeWellKnownTexmkt } from './scripts/texmkt-well-known.js';
@@ -22,6 +23,11 @@ const ORDERS_PATH = join(DATA_DIR, 'orders.json');
 const ACSA_SUPPORTERS_PATH = join(DATA_DIR, 'acsa-supporters.json');
 const ACSA_SUPPORT_EMAIL_TO = process.env.ACSA_SUPPORT_EMAIL_TO || 'bernie.dyke@gmail.com';
 const SENDMAIL_PATH = process.env.SENDMAIL_PATH || '/usr/sbin/sendmail';
+const BMFLIGHT_USERS_PATH = join(DATA_DIR, 'bmflight-users.json');
+const BMFLIGHT_SESSIONS_PATH = join(DATA_DIR, 'bmflight-sessions.json');
+const BMFLIGHT_REPORTS_PATH = join(DATA_DIR, 'bmflight-reports.json');
+const BMFLIGHT_FORUM_POSTS_PATH = join(DATA_DIR, 'bmflight-forum-posts.json');
+const BMFLIGHT_PROFILE_COLORS = ['#2f7d4a', '#2f80ed', '#9b5de5', '#e76f51', '#0f766e', '#b7791f', '#c026d3', '#2563eb'];
 const BASE_URL = (process.env.BASE_URL || `http://localhost:${PORT}`).replace(/\/$/, '');
 const ACP_VERSION = '1.0';
 
@@ -172,6 +178,193 @@ async function readAcsaSupporters() {
 async function writeAcsaSupporters(supporters) {
   await writeFile(ACSA_SUPPORTERS_PATH, JSON.stringify(supporters, null, 2), 'utf8');
 }
+async function readJsonFile(path, fallback) {
+  try {
+    const raw = await readFile(path, 'utf8');
+    return JSON.parse(raw);
+  } catch (_) {
+    return fallback;
+  }
+}
+async function writeJsonFile(path, value) {
+  await writeFile(path, JSON.stringify(value, null, 2), 'utf8');
+}
+async function readBmFlightUsers() {
+  return readJsonFile(BMFLIGHT_USERS_PATH, []);
+}
+async function writeBmFlightUsers(users) {
+  await writeJsonFile(BMFLIGHT_USERS_PATH, users);
+}
+async function readBmFlightSessions() {
+  return readJsonFile(BMFLIGHT_SESSIONS_PATH, {});
+}
+async function writeBmFlightSessions(sessions) {
+  await writeJsonFile(BMFLIGHT_SESSIONS_PATH, sessions);
+}
+async function readBmFlightReports() {
+  return readJsonFile(BMFLIGHT_REPORTS_PATH, []);
+}
+async function writeBmFlightReports(reports) {
+  await writeJsonFile(BMFLIGHT_REPORTS_PATH, reports);
+}
+async function readBmFlightForumPosts() {
+  return readJsonFile(BMFLIGHT_FORUM_POSTS_PATH, []);
+}
+async function writeBmFlightForumPosts(posts) {
+  await writeJsonFile(BMFLIGHT_FORUM_POSTS_PATH, posts);
+}
+function validEmail(email) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+function validBmFlightUsername(username) {
+  return /^[A-Za-z0-9][A-Za-z0-9_.\-\s']{1,31}$/.test(username);
+}
+function bmFlightProfileColor(seed = '') {
+  const text = String(seed);
+  let hash = 0;
+  for (let i = 0; i < text.length; i += 1) hash = ((hash << 5) - hash) + text.charCodeAt(i);
+  return BMFLIGHT_PROFILE_COLORS[Math.abs(hash) % BMFLIGHT_PROFILE_COLORS.length];
+}
+function hashPassword(password) {
+  const salt = randomBytes(16).toString('hex');
+  const hash = scryptSync(password, salt, 64).toString('hex');
+  return `${salt}:${hash}`;
+}
+function verifyPassword(password, storedHash) {
+  const [salt, hash] = String(storedHash || '').split(':');
+  if (!salt || !hash) return false;
+  const actual = Buffer.from(hash, 'hex');
+  const attempted = scryptSync(password, salt, 64);
+  return actual.length === attempted.length && timingSafeEqual(actual, attempted);
+}
+function parseCookies(req) {
+  return String(req.headers.cookie || '').split(';').reduce((cookies, part) => {
+    const index = part.indexOf('=');
+    if (index === -1) return cookies;
+    cookies[part.slice(0, index).trim()] = decodeURIComponent(part.slice(index + 1).trim());
+    return cookies;
+  }, {});
+}
+function bmFlightSessionCookie(token, maxAge = 60 * 60 * 24 * 30) {
+  const secure = process.env.NODE_ENV === 'production' ? '; Secure' : '';
+  return `bmflight_session=${encodeURIComponent(token)}; Path=/; HttpOnly; SameSite=Lax; Max-Age=${maxAge}${secure}`;
+}
+function publicBmFlightUser(user) {
+  if (!user) return null;
+  return {
+    id: user.id,
+    username: user.username,
+    profile_color: user.profile_color || bmFlightProfileColor(user.id || user.username),
+    created_at: user.created_at
+  };
+}
+async function getBmFlightUserFromRequest(req) {
+  const token = parseCookies(req).bmflight_session || '';
+  if (!token) return null;
+  const sessions = await readBmFlightSessions();
+  const session = sessions[token];
+  if (!session || new Date(session.expires_at).getTime() < Date.now()) {
+    if (session) {
+      delete sessions[token];
+      await writeBmFlightSessions(sessions);
+    }
+    return null;
+  }
+  const users = await readBmFlightUsers();
+  return users.find((user) => user.id === session.user_id) || null;
+}
+async function requireBmFlightUser(req, res) {
+  const user = await getBmFlightUserFromRequest(req);
+  if (!user) {
+    res.status(401).json({ error: 'Sign in is required' });
+    return null;
+  }
+  return user;
+}
+function bmFlightClientUserMap(users) {
+  return new Map(users.map((user) => [user.id, publicBmFlightUser(user)]));
+}
+function withBmFlightAuthor(record, usersById) {
+  return {
+    ...record,
+    author: usersById.get(record.created_by_user_id) || null
+  };
+}
+function publicBmFlightForumComment(comment, usersById) {
+  const { reports: _reports, ...safeComment } = comment;
+  return withBmFlightAuthor(safeComment, usersById);
+}
+function publicBmFlightForumPost(post, usersById) {
+  const { comments = [], ...safePost } = post;
+  return {
+    ...withBmFlightAuthor(safePost, usersById),
+    comments: comments
+      .filter((comment) => comment.status !== 'removed')
+      .map((comment) => publicBmFlightForumComment(comment, usersById))
+  };
+}
+function cleanBmFlightTags(tags) {
+  const values = Array.isArray(tags) ? tags : [];
+  return [...new Set(values.map((tag) => String(tag).trim()).filter(Boolean))].slice(0, 8);
+}
+function cleanBmFlightReport(body, user) {
+  return {
+    id: uuidv4(),
+    created_at: new Date().toISOString(),
+    created_by_user_id: user?.id || null,
+    comment: String(body.comment || '').trim().slice(0, 500),
+    tags: cleanBmFlightTags(body.tags),
+    aircraft_hex: String(body.aircraft_hex || '').trim().slice(0, 16),
+    callsign: String(body.callsign || '').trim().slice(0, 24),
+    registration: String(body.registration || '').trim().slice(0, 24),
+    aircraft_type: String(body.aircraft_type || '').trim().slice(0, 24),
+    altitude_ft: body.altitude_ft === 'ground' ? 'ground' : Number.isFinite(Number(body.altitude_ft)) ? Math.round(Number(body.altitude_ft)) : null,
+    ground_speed_kts: Number.isFinite(Number(body.ground_speed_kts)) ? Math.round(Number(body.ground_speed_kts)) : null,
+    track_deg: Number.isFinite(Number(body.track_deg)) ? Math.round(Number(body.track_deg)) : null,
+    vertical_rate_fpm: Number.isFinite(Number(body.vertical_rate_fpm)) ? Math.round(Number(body.vertical_rate_fpm)) : null,
+    squawk: String(body.squawk || '').trim().slice(0, 8),
+    lat: Number.isFinite(Number(body.lat)) ? Number(body.lat) : null,
+    lon: Number.isFinite(Number(body.lon)) ? Number(body.lon) : null,
+    observed_at: String(body.observed_at || new Date().toISOString()).trim().slice(0, 40),
+    source: String(body.source || 'airplanes.live').trim().slice(0, 80)
+  };
+}
+function cleanBmFlightSnapshot(body = {}) {
+  const hasFlight = body.aircraft_hex || body.callsign;
+  if (!hasFlight) return null;
+  return {
+    aircraft_hex: String(body.aircraft_hex || '').trim().slice(0, 16),
+    callsign: String(body.callsign || '').trim().slice(0, 24),
+    registration: String(body.registration || '').trim().slice(0, 24),
+    aircraft_type: String(body.aircraft_type || '').trim().slice(0, 24),
+    altitude_ft: body.altitude_ft === 'ground' ? 'ground' : Number.isFinite(Number(body.altitude_ft)) ? Math.round(Number(body.altitude_ft)) : null,
+    ground_speed_kts: Number.isFinite(Number(body.ground_speed_kts)) ? Math.round(Number(body.ground_speed_kts)) : null,
+    track_deg: Number.isFinite(Number(body.track_deg)) ? Math.round(Number(body.track_deg)) : null,
+    lat: Number.isFinite(Number(body.lat)) ? Number(body.lat) : null,
+    lon: Number.isFinite(Number(body.lon)) ? Number(body.lon) : null,
+    observed_at: String(body.observed_at || new Date().toISOString()).trim().slice(0, 40),
+    source: String(body.source || 'airplanes.live').trim().slice(0, 80)
+  };
+}
+function publicBmFlightAircraft(ac) {
+  return {
+    hex: ac.hex,
+    flight: ac.flight,
+    r: ac.r,
+    t: ac.t,
+    alt_baro: ac.alt_baro,
+    gs: ac.gs,
+    track: ac.track,
+    baro_rate: ac.baro_rate,
+    squawk: ac.squawk,
+    category: ac.category,
+    type: ac.type,
+    emergency: ac.emergency,
+    lat: ac.lat,
+    lon: ac.lon
+  };
+}
+let bmFlightAircraftCache = { fetchedAt: 0, body: null };
 function formatAcsaSupportersEmail(supporters) {
   const lines = [
     'ACSA support token export',
@@ -387,6 +580,245 @@ app.post(['/api/acsa/supporters', '/ACSA/api/supporters', '/acsa/api/supporters'
       public_count: supporters.filter((supporter) => supporter.public).length
     }
   });
+});
+
+// --- BMFlight: live aircraft, reports, auth and community forum ---
+app.get('/api/bmflight/aircraft', async (_req, res) => {
+  const now = Date.now();
+  if (bmFlightAircraftCache.body && now - bmFlightAircraftCache.fetchedAt < 10000) {
+    return res.json(bmFlightAircraftCache.body);
+  }
+
+  try {
+    const response = await fetch('https://api.airplanes.live/v2/point/-33.87/151.21/120');
+    if (!response.ok) throw new Error(`airplanes.live returned ${response.status}`);
+    const data = await response.json();
+    const aircraft = Array.isArray(data.ac) ? data.ac.filter((ac) => ac.lat && ac.lon).map(publicBmFlightAircraft) : [];
+    const body = {
+      aircraft,
+      count: aircraft.length,
+      source: 'airplanes.live',
+      fetched_at: new Date().toISOString()
+    };
+    bmFlightAircraftCache = { fetchedAt: now, body };
+    res.json(body);
+  } catch (error) {
+    res.status(502).json({
+      error: 'Aircraft feed unavailable',
+      message: error.message
+    });
+  }
+});
+
+app.post('/api/bmflight/auth/signup', async (req, res) => {
+  const email = String(req.body?.email || '').trim().toLowerCase();
+  const username = String(req.body?.username || '').trim();
+  const password = String(req.body?.password || '');
+  const acceptedPrivacy = req.body?.accepted_privacy === true;
+  const acceptedTerms = req.body?.accepted_terms === true;
+
+  if (!validEmail(email)) return res.status(400).json({ error: 'A valid email address is required' });
+  if (!validBmFlightUsername(username)) return res.status(400).json({ error: 'Username must be 2-32 letters, numbers, spaces, dots, hyphens, underscores or apostrophes' });
+  if (password.length < 8) return res.status(400).json({ error: 'Password must be at least 8 characters' });
+  if (!acceptedPrivacy || !acceptedTerms) return res.status(400).json({ error: 'Privacy Policy and Terms acceptance is required' });
+
+  const users = await readBmFlightUsers();
+  const normalizedUsername = username.toLowerCase();
+  if (users.some((user) => user.email === email)) return res.status(409).json({ error: 'Email is already registered' });
+  if (users.some((user) => user.username.toLowerCase() === normalizedUsername)) return res.status(409).json({ error: 'Username is already taken' });
+
+  const now = new Date().toISOString();
+  const user = {
+    id: uuidv4(),
+    email,
+    username,
+    profile_color: bmFlightProfileColor(`${email}:${username}:${now}`),
+    password_hash: hashPassword(password),
+    email_verified_at: now,
+    privacy_accepted_at: now,
+    terms_accepted_at: now,
+    created_at: now
+  };
+  users.push(user);
+  await writeBmFlightUsers(users);
+
+  const sessions = await readBmFlightSessions();
+  const token = `bmf_${randomBytes(24).toString('hex')}`;
+  sessions[token] = {
+    user_id: user.id,
+    created_at: now,
+    expires_at: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30).toISOString()
+  };
+  await writeBmFlightSessions(sessions);
+  res.setHeader('Set-Cookie', bmFlightSessionCookie(token));
+  res.status(201).json({ user: publicBmFlightUser(user) });
+});
+
+app.post('/api/bmflight/auth/login', async (req, res) => {
+  const email = String(req.body?.email || '').trim().toLowerCase();
+  const password = String(req.body?.password || '');
+  const users = await readBmFlightUsers();
+  const user = users.find((candidate) => candidate.email === email);
+  if (!user || !verifyPassword(password, user.password_hash)) {
+    return res.status(401).json({ error: 'Invalid email or password' });
+  }
+
+  const sessions = await readBmFlightSessions();
+  const token = `bmf_${randomBytes(24).toString('hex')}`;
+  const now = new Date().toISOString();
+  sessions[token] = {
+    user_id: user.id,
+    created_at: now,
+    expires_at: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30).toISOString()
+  };
+  await writeBmFlightSessions(sessions);
+  res.setHeader('Set-Cookie', bmFlightSessionCookie(token));
+  res.json({ user: publicBmFlightUser(user) });
+});
+
+app.post('/api/bmflight/auth/logout', async (req, res) => {
+  const token = parseCookies(req).bmflight_session || '';
+  if (token) {
+    const sessions = await readBmFlightSessions();
+    delete sessions[token];
+    await writeBmFlightSessions(sessions);
+  }
+  res.setHeader('Set-Cookie', bmFlightSessionCookie('', 0));
+  res.json({ ok: true });
+});
+
+app.get('/api/bmflight/auth/me', async (req, res) => {
+  const user = await getBmFlightUserFromRequest(req);
+  res.json({ user: publicBmFlightUser(user) });
+});
+
+app.get('/api/bmflight/reports', async (_req, res) => {
+  const [reports, users] = await Promise.all([readBmFlightReports(), readBmFlightUsers()]);
+  const usersById = bmFlightClientUserMap(users);
+  res.json({
+    reports: reports.slice(-50).reverse().map((report) => withBmFlightAuthor(report, usersById))
+  });
+});
+
+app.get('/api/bmflight/reports/:id', async (req, res) => {
+  const [reports, users] = await Promise.all([readBmFlightReports(), readBmFlightUsers()]);
+  const report = reports.find((candidate) => candidate.id === req.params.id);
+  if (!report) return res.status(404).json({ error: 'Report not found' });
+  res.json({ report: withBmFlightAuthor(report, bmFlightClientUserMap(users)) });
+});
+
+app.post('/api/bmflight/reports', async (req, res) => {
+  const user = await requireBmFlightUser(req, res);
+  if (!user) return;
+
+  const report = cleanBmFlightReport(req.body || {}, user);
+  if (!report.aircraft_hex && !report.callsign) return res.status(400).json({ error: 'Flight details are required' });
+  if (!report.comment && report.tags.length === 0) return res.status(400).json({ error: 'Add a comment or at least one tag' });
+
+  const reports = await readBmFlightReports();
+  reports.push(report);
+  await writeBmFlightReports(reports);
+  res.status(201).json({ report: withBmFlightAuthor(report, new Map([[user.id, publicBmFlightUser(user)]])) });
+});
+
+app.get('/api/bmflight/forum/posts', async (_req, res) => {
+  const [posts, users] = await Promise.all([readBmFlightForumPosts(), readBmFlightUsers()]);
+  const usersById = bmFlightClientUserMap(users);
+  res.json({
+    posts: posts
+      .filter((post) => post.status !== 'removed')
+      .slice(-50)
+      .reverse()
+      .map((post) => publicBmFlightForumPost(post, usersById))
+  });
+});
+
+app.get('/api/bmflight/forum/posts/:id', async (req, res) => {
+  const [posts, users] = await Promise.all([readBmFlightForumPosts(), readBmFlightUsers()]);
+  const post = posts.find((candidate) => candidate.id === req.params.id && candidate.status !== 'removed');
+  if (!post) return res.status(404).json({ error: 'Post not found' });
+  const usersById = bmFlightClientUserMap(users);
+  res.json({ post: publicBmFlightForumPost(post, usersById) });
+});
+
+app.post('/api/bmflight/forum/posts', async (req, res) => {
+  const user = await requireBmFlightUser(req, res);
+  if (!user) return;
+
+  const title = String(req.body?.title || '').trim().slice(0, 120);
+  const body = String(req.body?.body || '').trim().slice(0, 2000);
+  const category = String(req.body?.category || 'Questions').trim().slice(0, 40);
+  const relatedReportId = String(req.body?.related_report_id || '').trim();
+  const flightSnapshot = cleanBmFlightSnapshot(req.body?.flight_snapshot || {});
+  if (!title || !body) return res.status(400).json({ error: 'Title and body are required' });
+
+  const now = new Date().toISOString();
+  const post = {
+    id: uuidv4(),
+    title,
+    body,
+    category,
+    created_by_user_id: user.id,
+    related_report_id: relatedReportId || null,
+    flight_snapshot: flightSnapshot,
+    comments: [],
+    created_at: now,
+    updated_at: now,
+    status: 'active'
+  };
+  const posts = await readBmFlightForumPosts();
+  posts.push(post);
+  await writeBmFlightForumPosts(posts);
+  res.status(201).json({ post: publicBmFlightForumPost(post, new Map([[user.id, publicBmFlightUser(user)]])) });
+});
+
+app.post('/api/bmflight/forum/posts/:id/comments', async (req, res) => {
+  const user = await requireBmFlightUser(req, res);
+  if (!user) return;
+
+  const body = String(req.body?.body || '').trim().slice(0, 1000);
+  if (!body) return res.status(400).json({ error: 'Comment is required' });
+
+  const posts = await readBmFlightForumPosts();
+  const post = posts.find((candidate) => candidate.id === req.params.id && candidate.status !== 'removed');
+  if (!post) return res.status(404).json({ error: 'Post not found' });
+
+  const now = new Date().toISOString();
+  const comment = {
+    id: uuidv4(),
+    post_id: post.id,
+    body,
+    created_by_user_id: user.id,
+    created_at: now,
+    status: 'active'
+  };
+  post.comments = post.comments || [];
+  post.comments.push(comment);
+  post.updated_at = now;
+  await writeBmFlightForumPosts(posts);
+  res.status(201).json({ comment: publicBmFlightForumComment(comment, new Map([[user.id, publicBmFlightUser(user)]])) });
+});
+
+app.post('/api/bmflight/forum/comments/:id/report', async (req, res) => {
+  const user = await requireBmFlightUser(req, res);
+  if (!user) return;
+
+  const posts = await readBmFlightForumPosts();
+  for (const post of posts) {
+    const comment = (post.comments || []).find((candidate) => candidate.id === req.params.id);
+    if (comment) {
+      comment.reports = comment.reports || [];
+      comment.reports.push({
+        id: uuidv4(),
+        created_by_user_id: user.id,
+        reason: String(req.body?.reason || 'Community report').trim().slice(0, 200),
+        created_at: new Date().toISOString()
+      });
+      await writeBmFlightForumPosts(posts);
+      return res.json({ ok: true });
+    }
+  }
+  res.status(404).json({ error: 'Comment not found' });
 });
 
 app.post(['/api/acsa/chat', '/ACSA/api/chat', '/acsa/api/chat'], async (req, res) => {
@@ -842,6 +1274,18 @@ import(pathToFileURL(join(__dirname, 'texletter', 'server.js')).href).then(({ de
 
 // --- ACSA prototype ---
 app.use('/ACSA', express.static(join(__dirname, 'public', 'ACSA')));
+
+// --- BMFlight community flight tracker ---
+app.use((req, res, next) => {
+  if (req.path === '/bmflight' || req.path === '/bmflight/') return res.redirect('/BMFlight/');
+  if (req.path === '/bmflight/forum' || req.path === '/bmflight/forum/') return res.redirect('/BMFlight/forum');
+  if (req.path.startsWith('/bmflight/report/')) return res.redirect(req.originalUrl.replace('/bmflight/report/', '/BMFlight/report/'));
+  if (req.path === '/bmflight-logo.png') return res.redirect('/BMFlight-logo.png');
+  return next();
+});
+app.get(['/BMFlight', '/BMFlight/', '/BMFlight/forum', '/BMFlight/forum/', '/BMFlight/report/:id'], (req, res) => res.sendFile(join(__dirname, 'public', 'BMFlight', 'index.html')));
+app.use('/BMFlight', express.static(join(__dirname, 'public', 'BMFlight')));
+app.get('/BMFlight-logo.png', (req, res) => res.sendFile(join(__dirname, 'BMFlight-logo.png')));
 
 // --- Static: public, then root assets ---
 app.use(express.static(join(__dirname, 'public')));
