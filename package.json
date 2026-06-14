@@ -7,6 +7,7 @@
   "scripts": {
     "start": "node server.js",
     "dev": "node --watch server.js",
+    "seo:generate": "node scripts/generate-seo.js",
     "build:platform66": "cd Platform66 && npm install && npm run build"
   },
   "dependencies": {

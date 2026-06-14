@@ -11,6 +11,8 @@ import { randomBytes, scryptSync, timingSafeEqual } from 'crypto';
 import { v4 as uuidv4 } from 'uuid';
 import { transformShopifyProduct, fetchShopifyProducts, slugifyMerchant } from './scripts/texmkt-shopify.js';
 import { writeWellKnownTexmkt } from './scripts/texmkt-well-known.js';
+import { SEO_PAGES, SEO_SITE } from './scripts/seo-config.js';
+import { injectSeoIntoHtml, resolveSeoPage } from './scripts/seo-utils.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const require = createRequire(import.meta.url);
@@ -30,6 +32,18 @@ const BMFLIGHT_FORUM_POSTS_PATH = join(DATA_DIR, 'bmflight-forum-posts.json');
 const BMFLIGHT_PROFILE_COLORS = ['#2f7d4a', '#2f80ed', '#9b5de5', '#e76f51', '#0f766e', '#b7791f', '#c026d3', '#2563eb'];
 const BASE_URL = (process.env.BASE_URL || `http://localhost:${PORT}`).replace(/\/$/, '');
 const ACP_VERSION = '1.0';
+
+async function sendSeoHtml(req, res, filePath, routePath = req.path) {
+  try {
+    const html = await readFile(filePath, 'utf8');
+    const page = resolveSeoPage(routePath, SEO_PAGES);
+    if (!page) return res.sendFile(filePath);
+    res.type('html').send(injectSeoIntoHtml(html, page, SEO_SITE));
+  } catch (error) {
+    console.error(`[SEO] Failed to render ${routePath}:`, error.message);
+    res.sendFile(filePath);
+  }
+}
 
 // ===== TEXMKT: constants =====
 const TEXMKT_MERCHANTS_PATH = join(DATA_DIR, 'texmkt-merchants.json');
@@ -494,8 +508,8 @@ app.use((req, res, next) => {
 });
 
 // --- TexFlow brand homepage & agent entry (explicit routes so /agent works even if static layout changes) ---
-app.get('/', (req, res) => res.sendFile(join(__dirname, 'public', 'index.html')));
-app.get(['/science', '/science/'], (req, res) => res.sendFile(join(__dirname, 'public', 'science', 'index.html')));
+app.get('/', (req, res) => sendSeoHtml(req, res, join(__dirname, 'public', 'index.html'), '/'));
+app.get(['/science', '/science/'], (req, res) => sendSeoHtml(req, res, join(__dirname, 'public', 'science', 'index.html'), '/science'));
 app.get(['/agent', '/agent/'], (req, res) => {
   res.setHeader('Content-Type', 'text/markdown; charset=utf-8');
   res.sendFile(join(__dirname, 'public', 'agent.md'));
@@ -511,8 +525,8 @@ app.get('/texletter.md', (req, res) => {
 });
 
 // --- Legal pages (extensionless URLs) ---
-app.get('/terms-and-conditions', (req, res) => res.sendFile(join(__dirname, 'public', 'terms-and-conditions.html')));
-app.get('/privacy-policy', (req, res) => res.sendFile(join(__dirname, 'public', 'privacy-policy.html')));
+app.get('/terms-and-conditions', (req, res) => sendSeoHtml(req, res, join(__dirname, 'public', 'terms-and-conditions.html'), '/terms-and-conditions'));
+app.get('/privacy-policy', (req, res) => sendSeoHtml(req, res, join(__dirname, 'public', 'privacy-policy.html'), '/privacy-policy'));
 
 // --- ACSA public site and support tokens ---
 app.use((req, res, next) => {
@@ -520,7 +534,7 @@ app.use((req, res, next) => {
   if (req.path === '/acsa/support' || req.path === '/acsa/support/') return res.redirect('/ACSA/support');
   return next();
 });
-app.get(['/ACSA/support', '/ACSA/support/'], (req, res) => res.sendFile(join(__dirname, 'public', 'ACSA', 'index.html')));
+app.get(['/ACSA/support', '/ACSA/support/'], (req, res) => sendSeoHtml(req, res, join(__dirname, 'public', 'ACSA', 'index.html'), '/ACSA/support'));
 
 app.get(['/api/acsa/supporters', '/ACSA/api/supporters', '/acsa/api/supporters'], async (req, res) => {
   const supporters = await readAcsaSupporters();
@@ -869,10 +883,10 @@ Keep answers concise, optimistic, accurate, and action-oriented.`;
 });
 
 // --- TexMKT product: pages (before static so they take precedence) ---
-app.get('/texmkt/', (req, res) => res.sendFile(join(__dirname, 'public', 'texmkt', 'index.html')));
+app.get('/texmkt/', (req, res) => sendSeoHtml(req, res, join(__dirname, 'public', 'texmkt', 'index.html'), '/texmkt/'));
 app.get('/texmkt', (req, res) => res.redirect(301, '/texmkt/'));
-app.get('/texmkt/generate', (req, res) => res.sendFile(join(__dirname, 'public', 'texmkt', 'generate.html')));
-app.get('/texmkt/upload', (req, res) => res.sendFile(join(__dirname, 'public', 'texmkt', 'upload.html')));
+app.get('/texmkt/generate', (req, res) => sendSeoHtml(req, res, join(__dirname, 'public', 'texmkt', 'generate.html'), '/texmkt/generate'));
+app.get('/texmkt/upload', (req, res) => sendSeoHtml(req, res, join(__dirname, 'public', 'texmkt', 'upload.html'), '/texmkt/upload'));
 
 // --- Legacy redirects (before static so they take precedence) ---
 app.get('/generate', (req, res) => res.redirect(301, '/texmkt/generate'));
@@ -1040,13 +1054,13 @@ app.get('/.well-known/vyex.json', async (req, res) => {
 });
 
 // --- VyEx: pages (before static) ---
-app.get('/vyex', (req, res) => res.sendFile(join(VYEX_PUBLIC, 'index.html')));
-app.get('/vyex/', (req, res) => res.sendFile(join(VYEX_PUBLIC, 'index.html')));
+app.get('/vyex', (req, res) => sendSeoHtml(req, res, join(VYEX_PUBLIC, 'index.html'), '/vyex'));
+app.get('/vyex/', (req, res) => sendSeoHtml(req, res, join(VYEX_PUBLIC, 'index.html'), '/vyex'));
 app.get('/vyex/agent', (req, res) => res.redirect(301, '/agent'));
-app.get('/vyex/create', (req, res) => res.sendFile(join(VYEX_PUBLIC, 'create.html')));
-app.get('/vyex/expert/:id', (req, res) => res.sendFile(join(VYEX_PUBLIC, 'expert.html')));
-app.get('/vyex/expert/:id/checkout', (req, res) => res.sendFile(join(VYEX_PUBLIC, 'checkout.html')));
-app.get('/vyex/expert/:id/success', (req, res) => res.sendFile(join(VYEX_PUBLIC, 'success.html')));
+app.get('/vyex/create', (req, res) => sendSeoHtml(req, res, join(VYEX_PUBLIC, 'create.html'), '/vyex/create'));
+app.get('/vyex/expert/:id', (req, res) => sendSeoHtml(req, res, join(VYEX_PUBLIC, 'expert.html'), '/vyex'));
+app.get('/vyex/expert/:id/checkout', (req, res) => sendSeoHtml(req, res, join(VYEX_PUBLIC, 'checkout.html'), '/vyex'));
+app.get('/vyex/expert/:id/success', (req, res) => sendSeoHtml(req, res, join(VYEX_PUBLIC, 'success.html'), '/vyex'));
 
 // --- VyEx: preamble (ACP; 402 for paid without token) ---
 app.get('/vyex/expert/:id/preamble', async (req, res) => {
@@ -1210,8 +1224,9 @@ app.get('/vyex/api/experts/:id', async (req, res) => {
 // --- Platform66 product (SPA; serve built dist when present) ---
 const PLATFORM66_DIST = join(__dirname, 'Platform66', 'dist');
 if (existsSync(PLATFORM66_DIST)) {
+  app.get('/platform66/', (req, res) => sendSeoHtml(req, res, join(PLATFORM66_DIST, 'index.html'), '/platform66/'));
   app.use('/platform66', express.static(PLATFORM66_DIST));
-  app.get(/^\/platform66\/.+/, (req, res) => res.sendFile(join(PLATFORM66_DIST, 'index.html')));
+  app.get(/^\/platform66\/.+/, (req, res) => sendSeoHtml(req, res, join(PLATFORM66_DIST, 'index.html'), '/platform66/'));
   app.get('/platform66', (req, res) => res.redirect(301, '/platform66/'));
 }
 
@@ -1283,7 +1298,7 @@ app.use((req, res, next) => {
   if (req.path === '/bmflight-logo.png') return res.redirect('/BMFlight-logo.png');
   return next();
 });
-app.get(['/BMFlight', '/BMFlight/', '/BMFlight/forum', '/BMFlight/forum/', '/BMFlight/report/:id'], (req, res) => res.sendFile(join(__dirname, 'public', 'BMFlight', 'index.html')));
+app.get(['/BMFlight', '/BMFlight/', '/BMFlight/forum', '/BMFlight/forum/', '/BMFlight/report/:id'], (req, res) => sendSeoHtml(req, res, join(__dirname, 'public', 'BMFlight', 'index.html'), req.path));
 app.use('/BMFlight', express.static(join(__dirname, 'public', 'BMFlight')));
 app.get('/BMFlight-logo.png', (req, res) => res.sendFile(join(__dirname, 'BMFlight-logo.png')));
 
@@ -1905,7 +1920,7 @@ const UCP_PRODUCTS_DIR = join(__dirname, '.well-known', 'ucp-products');
 await mkdir(UCP_PRODUCTS_DIR, { recursive: true });
 
 // --- Page route ---
-app.get('/ucp-gen', (req, res) => res.sendFile(join(__dirname, 'public', 'ucp-gen.html')));
+app.get('/ucp-gen', (req, res) => sendSeoHtml(req, res, join(__dirname, 'public', 'ucp-gen.html'), '/ucp-gen'));
 app.get('/ucp-gen/', (req, res) => res.redirect(301, '/ucp-gen'));
 
 // --- .well-known catalog (agent-readable index of all saved UCP products) ---
