@@ -83,6 +83,15 @@ export const SEO_PAGES = [
     sitemap: false
   },
   {
+    route: '/leospy',
+    sourceFile: 'public/leospy/index.html',
+    title: 'LEOSpy | Live LEO Satellite Intelligence',
+    description: 'Track satellites in low Earth orbit worldwide with a live interactive globe and real-time orbital intelligence.',
+    priority: 0.9,
+    changefreq: 'daily',
+    category: 'core'
+  },
+  {
     route: '/platform66/',
     sourceFile: 'Platform66/index.html',
     title: 'Platform66 | AI Space Platform for Agent Discovery',

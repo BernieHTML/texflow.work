@@ -13,6 +13,7 @@ import { transformShopifyProduct, fetchShopifyProducts, slugifyMerchant } from '
 import { writeWellKnownTexmkt } from './scripts/texmkt-well-known.js';
 import { SEO_PAGES, SEO_SITE } from './scripts/seo-config.js';
 import { injectSeoIntoHtml, resolveSeoPage } from './scripts/seo-utils.js';
+import { createLeoSpyRouter } from './routes/leospy/index.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const require = createRequire(import.meta.url);
@@ -1301,6 +1302,14 @@ app.use((req, res, next) => {
 app.get(['/BMFlight', '/BMFlight/', '/BMFlight/forum', '/BMFlight/forum/', '/BMFlight/report/:id'], (req, res) => sendSeoHtml(req, res, join(__dirname, 'public', 'BMFlight', 'index.html'), req.path));
 app.use('/BMFlight', express.static(join(__dirname, 'public', 'BMFlight')));
 app.get('/BMFlight-logo.png', (req, res) => res.sendFile(join(__dirname, 'BMFlight-logo.png')));
+
+// --- LEOSpy: live LEO satellite tracking (Cesium globe + Space-Track) ---
+try {
+  app.use('/leospy', createLeoSpyRouter());
+  console.log('[LEOSpy] Mounted at /leospy');
+} catch (e) {
+  console.error('[LEOSpy] Failed to mount /leospy:', e.message);
+}
 
 // --- Static: public, then root assets ---
 app.use(express.static(join(__dirname, 'public')));
