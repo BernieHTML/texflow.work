@@ -25,7 +25,7 @@ function defaultDescription(title) {
 async function listHtmlFiles(dir, out = []) {
   const entries = await readdir(dir, { withFileTypes: true });
   for (const entry of entries) {
-    if (['node_modules', 'dist', '.venv'].includes(entry.name) || entry.name.startsWith('.git')) continue;
+    if (['node_modules', 'dist', '.venv', 'views', 'content'].includes(entry.name) || entry.name.startsWith('.git')) continue;
     const full = join(dir, entry.name);
     if (entry.isDirectory()) {
       await listHtmlFiles(full, out);

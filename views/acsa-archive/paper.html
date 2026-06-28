@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  {{SEO}}
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="icon" href="/ACSA/ACSA-Logo.jpg">
+  <link rel="stylesheet" href="/ACSA/archive/assets/archive.css">
+</head>
+<body>
+  <div class="read-progress" aria-hidden="true"></div>
+  <canvas id="stars" aria-hidden="true"></canvas>
+  <div class="cursor-dot" aria-hidden="true"></div>
+  <div class="cursor-ring" aria-hidden="true"></div>
+
+  <header class="topbar">
+    <a class="brand-link" href="/ACSA/" aria-label="ACSA home">
+      <img class="brand-logo" src="/ACSA/ACSA-Logo.jpg" alt="Australian Crewed Spaceflight Agency logo">
+      <span class="brand-text">
+        <span class="brand-name">ACSA</span>
+        <span class="brand-sub">Archive</span>
+      </span>
+    </a>
+    <div class="topbar-actions">
+      <button class="pill-btn" id="theme-toggle" type="button">Light mode</button>
+      <a class="pill-link" href="/ACSA/archive">All papers</a>
+    </div>
+  </header>
+
+  <main class="shell">
+    <div class="paper-wrap">
+      <nav class="toc" aria-label="Table of contents">
+        <h2>Contents</h2>
+        {{TOC}}
+      </nav>
+
+      <div class="article-col">
+        <div class="paper-toolbar">
+          <a class="pill-link" href="/ACSA/archive">&larr; Back to archive</a>
+          {{PDF_BUTTON}}
+          <button class="pill-btn" id="copy-link" type="button" data-url="{{CANONICAL}}">Copy link</button>
+        </div>
+
+        <header class="paper-header">
+          <p class="paper-kicker">ACSA Archive &middot; Research Paper</p>
+          <h1 class="paper-title">{{TITLE}}</h1>
+          <div class="paper-byline">
+            <span class="paper-author">{{AUTHOR}}</span>
+            {{AFFILIATION}}
+          </div>
+          <div class="paper-facts">{{FACTS}}</div>
+        </header>
+
+        <div class="paper-abstract">
+          <strong>Abstract</strong>
+          {{ABSTRACT}}
+        </div>
+
+        <article class="article">
+          {{BODY}}
+        </article>
+
+        <section class="cite-block">
+          <h2>Cite this paper</h2>
+          <p class="cite-text">{{CITATION}}</p>
+          {{DOI}}
+        </section>
+
+        <nav class="paper-nav" aria-label="Paper navigation">
+          {{NAV}}
+        </nav>
+      </div>
+    </div>
+  </main>
+
+  <div id="copy-toast" class="copy-toast" role="status" aria-live="polite"></div>
+  <script src="/ACSA/archive/assets/archive.js"></script>
+</body>
+</html>

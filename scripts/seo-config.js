@@ -83,6 +83,15 @@ export const SEO_PAGES = [
     sitemap: false
   },
   {
+    route: '/ACSA/archive',
+    html: false,
+    title: 'ACSA Archive | Research Papers & Technical Notes',
+    description: 'A public archive of research papers, technical notes, and trade studies from the Australian Crewed Spaceflight Agency (ACSA).',
+    priority: 0.7,
+    changefreq: 'weekly',
+    category: 'core'
+  },
+  {
     route: '/leospy',
     sourceFile: 'public/leospy/index.html',
     title: 'LEOSpy | Live LEO Satellite Intelligence',

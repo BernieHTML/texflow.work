@@ -14,6 +14,7 @@ import { writeWellKnownTexmkt } from './scripts/texmkt-well-known.js';
 import { SEO_PAGES, SEO_SITE } from './scripts/seo-config.js';
 import { injectSeoIntoHtml, resolveSeoPage } from './scripts/seo-utils.js';
 import { createLeoSpyRouter } from './routes/leospy/index.js';
+import { registerAcsaArchive } from './routes/acsa-archive/index.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const require = createRequire(import.meta.url);
@@ -536,6 +537,9 @@ app.use((req, res, next) => {
   return next();
 });
 app.get(['/ACSA/support', '/ACSA/support/'], (req, res) => sendSeoHtml(req, res, join(__dirname, 'public', 'ACSA', 'index.html'), '/ACSA/support'));
+
+// --- ACSA Archive: academic paper archive rendered from Markdown ---
+registerAcsaArchive(app);
 
 app.get(['/api/acsa/supporters', '/ACSA/api/supporters', '/acsa/api/supporters'], async (req, res) => {
   const supporters = await readAcsaSupporters();
