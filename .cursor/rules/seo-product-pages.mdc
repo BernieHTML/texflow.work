@@ -1,0 +1,14 @@
+---
+description: Keep TexFlow product pages SEO and AI-discovery metadata current
+alwaysApply: true
+---
+
+# SEO For Product Pages
+
+When creating or changing a TexFlow product, product page, landing page, or public route:
+
+- Add or update its entry in `scripts/seo-config.js` with a specific title, description, priority, changefreq, image if available, and correct sitemap/index settings.
+- Keep public HTML SEO blocks aligned by running `npm run seo:generate` when the page is static HTML.
+- Ensure the page has a clear `<h1>`, crawlable internal links, descriptive image `alt` text, canonical URL, Open Graph/Twitter metadata, and appropriate JSON-LD where useful.
+- Update homepage/product-suite copy or structured data when the public product set changes.
+- Do not use outdated TexFlow positioning. TexFlow is an agent-first product suite for space, data, messaging, marketplaces, research archives, and machine-readable web discovery.

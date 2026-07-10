@@ -17,12 +17,12 @@ export const SEO_PAGES = [
   {
     route: '/',
     sourceFile: 'public/index.html',
-    title: 'TexFlow | AI Website Chatbot for Trades & Small Business',
-    description: 'TexFlow helps trades and small businesses convert more leads with an AI website chatbot featuring smart responses, live chat, and callout booking.',
+    title: 'Texflow | Shoot for the Stars',
+    description: 'TexFlow builds agent-first products for space, data, messaging, marketplaces, research archives, and machine-readable web discovery.',
     priority: 1.0,
     changefreq: 'weekly',
     category: 'homepage',
-    schemas: ['organization', 'website', 'softwareApplication']
+    schemas: ['organization', 'website', 'productCollection']
   },
   {
     route: '/science',

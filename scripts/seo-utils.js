@@ -83,26 +83,28 @@ export function websiteSchema(site) {
   };
 }
 
-export function softwareApplicationSchema(site) {
+export function productCollectionSchema(site) {
   return {
     '@context': 'https://schema.org',
-    '@type': 'SoftwareApplication',
-    name: 'TexFlow AI Website Chatbot',
-    applicationCategory: 'BusinessApplication',
-    operatingSystem: 'Web',
+    '@type': 'ItemList',
+    name: 'TexFlow Product Suite',
+    description: 'Agent-first products for space, data, messaging, marketplaces, research archives, and machine-readable web discovery.',
     url: site.origin,
-    image: absoluteUrl(site, site.defaultImage),
-    description: 'AI website chatbot for trades and small businesses with smart responses, live chat, and callout booking.',
-    offers: {
-      '@type': 'Offer',
-      availability: 'https://schema.org/InStock',
-      priceCurrency: 'AUD'
-    },
-    provider: {
-      '@type': 'Organization',
-      name: site.organizationName,
-      url: site.origin
-    }
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'LEOSpy', url: absoluteUrl(site, '/leospy') },
+      { '@type': 'ListItem', position: 2, name: 'ACSA', url: absoluteUrl(site, '/ACSA/') },
+      { '@type': 'ListItem', position: 3, name: 'BMFlight', url: absoluteUrl(site, '/BMFlight/') },
+      { '@type': 'ListItem', position: 4, name: 'Platform66', url: absoluteUrl(site, '/platform66/') },
+      { '@type': 'ListItem', position: 5, name: 'TexMKT', url: absoluteUrl(site, '/texmkt/') },
+      { '@type': 'ListItem', position: 6, name: 'TEX', url: absoluteUrl(site, '/tex/') },
+      { '@type': 'ListItem', position: 7, name: 'TexLetter', url: absoluteUrl(site, '/texletter/') },
+      { '@type': 'ListItem', position: 8, name: 'Ellipse', url: absoluteUrl(site, '/ellipse/') },
+      { '@type': 'ListItem', position: 9, name: 'TexSkills', url: absoluteUrl(site, '/texskills/') },
+      { '@type': 'ListItem', position: 10, name: 'TexoStat', url: absoluteUrl(site, '/texostat/') },
+      { '@type': 'ListItem', position: 11, name: 'Gander', url: absoluteUrl(site, '/gander/') },
+      { '@type': 'ListItem', position: 12, name: 'GanderChat', url: absoluteUrl(site, '/ganderchat/') },
+      { '@type': 'ListItem', position: 13, name: 'VyEx', url: absoluteUrl(site, '/vyex') }
+    ]
   };
 }
 
@@ -126,7 +128,8 @@ export function buildJsonLd(page, site) {
   const schemas = [];
   if (page.schemas?.includes('organization')) schemas.push(organizationSchema(site));
   if (page.schemas?.includes('website')) schemas.push(websiteSchema(site));
-  if (page.schemas?.includes('softwareApplication')) schemas.push(softwareApplicationSchema(site));
+  if (page.schemas?.includes('softwareApplication')) schemas.push(productCollectionSchema(site));
+  if (page.schemas?.includes('productCollection')) schemas.push(productCollectionSchema(site));
   const faq = faqSchema(page.faq);
   if (faq) schemas.push(faq);
   return schemas;

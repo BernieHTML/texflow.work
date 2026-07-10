@@ -948,5 +948,47 @@
     "product_url": "https://zoologistperfumes.com/products/zoologist-dragonfly-2021-travel-spray",
     "merchant_slug": "zoologist-perfumes",
     "timestamp": "2026-03-31T06:10:31.333Z"
+  },
+  {
+    "type": "checkout_redirect",
+    "product_id": "7216534224955",
+    "product_url": "https://zoologistperfumes.com/products/zoologist-penguin-travel-spray",
+    "merchant_slug": "zoologist-perfumes",
+    "timestamp": "2026-06-28T14:09:08.921Z"
+  },
+  {
+    "type": "checkout_redirect",
+    "product_id": "7401520726075",
+    "product_url": "https://zoologistperfumes.com/products/zoologist-orchid-mantis-travel-spray",
+    "merchant_slug": "zoologist-perfumes",
+    "timestamp": "2026-06-28T14:20:28.352Z"
+  },
+  {
+    "type": "checkout_redirect",
+    "product_id": "4675448045627",
+    "product_url": "https://zoologistperfumes.com/products/zoologist-sloth-deluxe-bottle",
+    "merchant_slug": "zoologist-perfumes",
+    "timestamp": "2026-07-04T23:03:03.499Z"
+  },
+  {
+    "type": "checkout_redirect",
+    "product_id": "6594588901435",
+    "product_url": "https://zoologistperfumes.com/products/zoologist-macaque-fuji-apple-edition-deluxe-bottle",
+    "merchant_slug": "zoologist-perfumes",
+    "timestamp": "2026-07-04T23:13:12.077Z"
+  },
+  {
+    "type": "checkout_redirect",
+    "product_id": "6872267194427",
+    "product_url": "https://zoologistperfumes.com/products/zoologist-sacred-scarab-sample",
+    "merchant_slug": "zoologist-perfumes",
+    "timestamp": "2026-07-04T23:22:39.212Z"
+  },
+  {
+    "type": "checkout_redirect",
+    "product_id": "6775955587131",
+    "product_url": "https://zoologistperfumes.com/products/zoologist-cow-travel-spray",
+    "merchant_slug": "zoologist-perfumes",
+    "timestamp": "2026-07-04T23:30:09.838Z"
   }
 ]
