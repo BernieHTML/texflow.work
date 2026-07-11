@@ -512,6 +512,7 @@ app.use((req, res, next) => {
 // --- TexFlow brand homepage & agent entry (explicit routes so /agent works even if static layout changes) ---
 app.get('/', (req, res) => sendSeoHtml(req, res, join(__dirname, 'public', 'index.html'), '/'));
 app.get(['/science', '/science/'], (req, res) => sendSeoHtml(req, res, join(__dirname, 'public', 'science', 'index.html'), '/science'));
+app.get(['/lunarsol', '/lunarsol/'], (req, res) => sendSeoHtml(req, res, join(__dirname, 'public', 'lunarsol', 'index.html'), '/lunarsol'));
 app.get(['/agent', '/agent/'], (req, res) => {
   res.setHeader('Content-Type', 'text/markdown; charset=utf-8');
   res.sendFile(join(__dirname, 'public', 'agent.md'));

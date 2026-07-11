@@ -34,6 +34,15 @@ export const SEO_PAGES = [
     category: 'supporting'
   },
   {
+    route: '/lunarsol',
+    sourceFile: 'public/lunarsol/index.html',
+    title: 'LunarSol | Lunar Solar Site Intelligence',
+    description: 'LunarSol is a commercial lunar imaging concept that ranks Moon sites for solar infrastructure using illumination, terrain, thermal, and access evidence.',
+    priority: 0.9,
+    changefreq: 'monthly',
+    category: 'core'
+  },
+  {
     route: '/ACSA/',
     sourceFile: 'public/ACSA/index.html',
     title: 'ACSA | Australian Crewed Spaceflight Agency',
