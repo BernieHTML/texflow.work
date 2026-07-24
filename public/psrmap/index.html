@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+<title>Lunar South Pole PSR Map — TexFlow</title>
+<meta name="description" content="Interactive map of the Moon's south pole showing permanently shadowed regions (PSRs). Drop a pin to gauge habitat feasibility by proximity to water-ice sources." />
+
+<!-- Leaflet (map engine) + proj4 (lunar polar-stereographic projection). Loaded from CDN; nothing installed. -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.9.2/proj4.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/proj4leaflet/1.0.2/proj4leaflet.min.js"></script>
+
+<style>
+  :root{
+    --bg:#0a0d12; --panel:#11161d; --panel-2:#161d26; --line:#232c38;
+    --ink:#e8edf3; --muted:#9aa7b6; --accent:#4da3ff; --accent-2:#7ee0c8;
+    --psr:#39b6ff; --pin:#ffc44d;
+    --good:#4fd08a; --mod:#ffcf5c; --poor:#ff7a6b;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0}
+  body{
+    background:var(--bg); color:var(--ink);
+    font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    overflow:hidden;
+  }
+  #map{position:absolute; inset:0; background:#05070a; z-index:1}
+  .leaflet-container{background:#05070a}
+
+  /* ---- Control panel ---- */
+  #panel{
+    position:absolute; top:14px; left:14px; z-index:1000;
+    width:320px; max-width:calc(100vw - 28px);
+    background:rgba(17,22,29,.94); border:1px solid var(--line);
+    border-radius:14px; backdrop-filter:blur(8px);
+    box-shadow:0 10px 40px rgba(0,0,0,.5);
+    max-height:calc(100vh - 28px); display:flex; flex-direction:column;
+  }
+  #panel .pad{padding:16px 16px 14px}
+  h1{font-size:16px; margin:0 0 2px; letter-spacing:.2px}
+  .sub{color:var(--muted); font-size:12.5px; margin:0 0 12px}
+  .row{display:flex; align-items:center; gap:8px; margin:9px 0}
+  .row label{flex:1; font-size:13.5px; color:var(--ink)}
+  select,button{font:inherit}
+  select{
+    width:100%; background:var(--panel-2); color:var(--ink);
+    border:1px solid var(--line); border-radius:8px; padding:8px 10px;
+  }
+  .switch{position:relative; width:40px; height:22px; flex:0 0 auto}
+  .switch input{opacity:0; width:0; height:0}
+  .slider{position:absolute; inset:0; background:#2a333f; border-radius:22px; transition:.15s; cursor:pointer}
+  .slider:before{content:""; position:absolute; height:16px; width:16px; left:3px; top:3px; background:#fff; border-radius:50%; transition:.15s}
+  .switch input:checked + .slider{background:var(--accent)}
+  .switch input:checked + .slider:before{transform:translateX(18px)}
+
+  .hint{font-size:12.5px; color:var(--muted); background:var(--panel-2);
+    border:1px dashed var(--line); border-radius:9px; padding:9px 11px; margin-top:6px}
+  .hint b{color:var(--accent-2); font-weight:600}
+
+  /* ---- Result card ---- */
+  #result{border-top:1px solid var(--line); padding:14px 16px 16px; display:none}
+  #result.show{display:block}
+  .coord{font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:13px; color:var(--muted)}
+  .verdict{display:flex; align-items:center; gap:10px; margin:10px 0 6px}
+  .dot{width:12px;height:12px;border-radius:50%;flex:0 0 auto}
+  .verdict .label{font-weight:700; font-size:16px}
+  .score{margin-left:auto; font-variant-numeric:tabular-nums; color:var(--muted); font-size:13px}
+  .metrics{margin:8px 0 4px; font-size:13px}
+  .metrics div{display:flex; justify-content:space-between; padding:3px 0; border-bottom:1px solid rgba(255,255,255,.04)}
+  .metrics span:first-child{color:var(--muted)}
+  .reason{font-size:12.5px; color:var(--muted); margin:8px 0 12px}
+  .actions{display:flex; gap:8px}
+  .btn{
+    flex:1; cursor:pointer; border:1px solid var(--line); background:var(--panel-2);
+    color:var(--ink); border-radius:9px; padding:9px 10px; font-size:13.5px; transition:.12s;
+  }
+  .btn:hover{border-color:var(--accent); color:#fff}
+  .btn.primary{background:var(--accent); border-color:var(--accent); color:#04121f; font-weight:600}
+  .btn.primary:hover{filter:brightness(1.08)}
+
+  /* ---- Legend / footer chips over map ---- */
+  #legend{
+    position:absolute; bottom:14px; left:14px; z-index:1000;
+    background:rgba(17,22,29,.9); border:1px solid var(--line); border-radius:10px;
+    padding:8px 11px; font-size:12px; color:var(--muted); display:flex; gap:14px; align-items:center;
+  }
+  #legend .k{display:flex; align-items:center; gap:6px}
+  #legend .sw{width:12px;height:12px;border-radius:3px}
+  .credit{position:absolute; bottom:14px; right:14px; z-index:1000; font-size:11px; color:#5c6673;
+    background:rgba(10,13,18,.7); padding:5px 9px; border-radius:8px}
+  .credit a{color:#7f8b9a}
+
+  #loading{
+    position:absolute; top:14px; left:50%; transform:translateX(-50%); z-index:1500;
+    background:rgba(10,13,18,.88); border:1px solid var(--line); color:var(--muted);
+    padding:6px 13px 6px 11px; border-radius:20px; font-size:12.5px; display:none; align-items:center; gap:8px;
+  }
+  #loading.show{display:flex}
+  .spin{width:12px;height:12px;border:2px solid #2f3b49;border-top-color:var(--accent);border-radius:50%;
+    display:inline-block; animation:spin .7s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .toast{
+    position:absolute; left:50%; bottom:64px; transform:translateX(-50%) translateY(10px);
+    background:#04121f; color:#eafff8; border:1px solid var(--accent);
+    padding:9px 16px; border-radius:24px; font-size:13px; z-index:2000;
+    opacity:0; pointer-events:none; transition:.2s;
+  }
+  .toast.show{opacity:1; transform:translateX(-50%) translateY(0)}
+
+  @media (max-width:560px){
+    #panel{width:auto; left:10px; right:10px; top:10px}
+    #legend{display:none}
+  }
+</style>
+</head>
+<body>
+<div id="map"></div>
+
+<div id="panel">
+  <div class="pad">
+    <h1>Lunar South Pole · PSR Map</h1>
+    <p class="sub">Permanently shadowed regions — the Moon's water-ice reservoirs.</p>
+
+    <div class="row">
+      <label for="basemap">Base imagery</label>
+      <div style="flex:0 0 150px">
+        <select id="basemap">
+          <option value="luna_shaded_relief">LOLA shaded relief</option>
+          <option value="luna_wac_global">LROC WAC mosaic</option>
+          <option value="luna_lola_albedo">LOLA albedo</option>
+          <option value="none">None (dark)</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="row">
+      <label for="psrToggle">Show PSR masks</label>
+      <span class="switch"><input type="checkbox" id="psrToggle" checked><span class="slider"></span></span>
+    </div>
+
+    <div class="row">
+      <label for="labelToggle">Label major PSRs</label>
+      <span class="switch"><input type="checkbox" id="labelToggle"><span class="slider"></span></span>
+    </div>
+
+    <div class="hint">Click anywhere on the map to drop a <b>pin</b> and measure habitat feasibility. Drag the pin to refine.</div>
+  </div>
+
+  <div id="result">
+    <div class="coord" id="coord">—</div>
+    <div class="verdict">
+      <span class="dot" id="vdot"></span>
+      <span class="label" id="vlabel">—</span>
+      <span class="score" id="vscore"></span>
+    </div>
+    <div class="metrics" id="metrics"></div>
+    <div class="reason" id="reason"></div>
+    <div class="actions">
+      <button class="btn primary" id="shareBtn">🔗 Share this spot</button>
+      <button class="btn" id="clearBtn">Clear</button>
+    </div>
+  </div>
+</div>
+
+<div id="legend">
+  <div class="k"><span class="sw" style="background:rgba(57,182,255,.55);border:1px solid #39b6ff"></span> PSR (shadowed / water-ice)</div>
+  <div class="k"><span class="sw" style="background:#ffc44d;border-radius:50%"></span> Your pin</div>
+</div>
+<div class="credit">Imagery: <a href="https://lroc.im-ldi.com/atlases/psr" target="_blank" rel="noopener">LROC / Lunaserv</a> · PSRs: LOLA</div>
+
+<div id="loading"><span class="spin"></span> Loading imagery…</div>
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+  "use strict";
+  var MOON_R = 1737.4; // km, mean lunar radius
+
+  // ---- Lunar south polar-stereographic projection (matches Lunaserv IAU2000:30120) ----
+  proj4.defs("IAU2000:30120",
+    "+proj=stere +lat_0=-90 +lat_ts=-90 +lon_0=0 +k=1 +x_0=0 +y_0=0 +a=1737400 +b=1737400 +units=m +no_defs");
+
+  var MAX = 1100000; // projected half-extent in metres (~54°S at the corners)
+  var res0 = (2 * MAX) / 256;
+  var resolutions = [];
+  for (var z = 0; z < 8; z++) resolutions.push(res0 / Math.pow(2, z));
+
+  var crs = new L.Proj.CRS("IAU2000:30120",
+    "+proj=stere +lat_0=-90 +lat_ts=-90 +lon_0=0 +k=1 +x_0=0 +y_0=0 +a=1737400 +b=1737400 +units=m +no_defs",
+    {
+      origin: [-MAX, MAX],
+      resolutions: resolutions,
+      bounds: L.bounds([-MAX, -MAX], [MAX, MAX])
+    });
+
+  var map = L.map("map", {
+    crs: crs,
+    center: [-90, 0],
+    zoom: 3,
+    minZoom: 0,
+    maxZoom: 7,
+    maxBoundsViscosity: 0.9,
+    attributionControl: false,
+    zoomControl: true
+  });
+  map.setMaxBounds(L.latLngBounds(crs.unproject(L.point(-MAX, -MAX)), crs.unproject(L.point(MAX, MAX))));
+
+  // ---- Basemap (Lunaserv WMS, reprojected on the fly to the polar view) ----
+  var WMS_URL = "https://wms.im-ldi.com/";
+  var baseLayer = null;
+  function setLoading(on){
+    var l = document.getElementById("loading");
+    if (l) l.classList.toggle("show", !!on);
+  }
+  function setBasemap(layerName){
+    if (baseLayer){ map.removeLayer(baseLayer); baseLayer = null; }
+    setLoading(false);
+    if (layerName === "none") return;
+    baseLayer = L.tileLayer.wms(WMS_URL, {
+      layers: layerName,
+      format: "image/png",
+      transparent: false,
+      version: "1.1.1",
+      crs: crs,
+      tileSize: 256,
+      noWrap: true,
+      maxNativeZoom: 6,
+      className: "moon-base"
+    });
+    baseLayer.on("loading", function(){ setLoading(true); });
+    baseLayer.on("load", function(){ setLoading(false); });
+    baseLayer.addTo(map);
+  }
+  setBasemap("luna_shaded_relief");
+
+  // ---- Geometry helpers (spherical, on the Moon) ----
+  function toRad(d){ return d * Math.PI / 180; }
+  function toDeg(r){ return r * 180 / Math.PI; }
+
+  // great-circle distance (km) between two [lat,lon] on the Moon
+  function gcDist(lat1, lon1, lat2, lon2){
+    var p1 = toRad(lat1), p2 = toRad(lat2);
+    var dp = toRad(lat2 - lat1), dl = toRad(lon2 - lon1);
+    var a = Math.sin(dp/2)*Math.sin(dp/2) + Math.cos(p1)*Math.cos(p2)*Math.sin(dl/2)*Math.sin(dl/2);
+    return MOON_R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  }
+  // point at distance (km) + bearing (deg) from [lat,lon] -> [lat,lon]
+  function destPoint(lat, lon, distKm, brgDeg){
+    var d = distKm / MOON_R, t = toRad(brgDeg);
+    var p1 = toRad(lat), l1 = toRad(lon);
+    var p2 = Math.asin(Math.sin(p1)*Math.cos(d) + Math.cos(p1)*Math.sin(d)*Math.cos(t));
+    var l2 = l1 + Math.atan2(Math.sin(t)*Math.sin(d)*Math.cos(p1), Math.cos(d) - Math.sin(p1)*Math.sin(p2));
+    return [toDeg(p2), toDeg(l2)];
+  }
+  // build a geographic circle (polygon points) so masks stay anchored in any pan/zoom
+  function circlePoly(lat, lon, radiusKm, steps){
+    steps = steps || 48;
+    var pts = [];
+    for (var i = 0; i <= steps; i++){
+      pts.push(destPoint(lat, lon, radiusKm, (360/steps)*i));
+    }
+    return pts;
+  }
+
+  // ---- PSR layers ----
+  var psrLayer = L.layerGroup();
+  var labelLayer = L.layerGroup();
+  var PSRS = [];
+
+  function drawPSRs(){
+    psrLayer.clearLayers();
+    labelLayer.clearLayers();
+    PSRS.forEach(function(p){
+      var poly = L.polygon(circlePoly(p.lat, p.lon, p.radius_km, p.radius_km > 8 ? 64 : 40), {
+        color: "#39b6ff", weight: 1, opacity: 0.85,
+        fillColor: "#39b6ff", fillOpacity: 0.30, interactive: true
+      });
+      poly.bindTooltip(
+        "<b>" + (p.feature || p.id) + "</b><br>" +
+        p.area_km2.toLocaleString() + " km² · Ø " + (p.radius_km*2).toFixed(1) + " km<br>" +
+        p.lat.toFixed(2) + "°, " + ((p.lon+360)%360).toFixed(2) + "°E",
+        {sticky:true, direction:"top", opacity:0.95}
+      );
+      psrLayer.addLayer(poly);
+
+      if (p.area_km2 >= 250 && p.feature){
+        labelLayer.addLayer(L.marker([p.lat, p.lon], {
+          interactive:false,
+          icon: L.divIcon({className:"psr-label", html:'<span>'+p.feature.replace(/ crater/i,'')+'</span>', iconSize:[0,0]})
+        }));
+      }
+    });
+  }
+
+  // ---- Habitat feasibility ----
+  // Proximity to a PSR (water-ice) is good; being INSIDE a PSR is bad for a habitat
+  // (permanent shadow, ~40 K, no direct solar power). Best = illuminated ground near a PSR edge.
+  function assess(lat, lon){
+    var best = null;
+    for (var i=0;i<PSRS.length;i++){
+      var p = PSRS[i];
+      var c = gcDist(lat, lon, p.lat, p.lon);
+      var edge = c - p.radius_km;         // + = outside, - = inside
+      if (best === null || edge < best.edge){
+        best = {psr:p, center:c, edge:edge};
+      }
+    }
+    var edge = best.edge, inside = edge < 0;
+    var score, label, cls, reason;
+    if (inside){
+      score = 30;
+      label = "Inside a PSR"; cls = "poor";
+      reason = "On the water-ice deposit itself, but in permanent shadow (~40 K, no solar power). Great for resource extraction, not for the habitat structure.";
+    } else if (edge < 5){
+      score = Math.round(96 - edge*3); label = "Excellent"; cls = "good";
+      reason = "Very close to a shadowed water-ice source while likely on illuminated, warmer ground near the rim — the prime habitat zone.";
+    } else if (edge < 15){
+      score = Math.round(85 - (edge-5)*3); label = "Good"; cls = "good";
+      reason = "Water-ice is within a short surface traverse. Workable with a rover supply route.";
+    } else if (edge < 40){
+      score = Math.round(55 - (edge-15)*1.2); label = "Moderate"; cls = "mod";
+      reason = "Reachable but water haulage over this distance adds cost and energy.";
+    } else {
+      score = Math.max(5, Math.round(25 - (edge-40)*0.3)); label = "Poor"; cls = "poor";
+      reason = "Far from any permanently shadowed water source — resupply would be expensive.";
+    }
+    return {best:best, score:Math.max(1,Math.min(100,score)), label:label, cls:cls, reason:reason, inside:inside};
+  }
+
+  // ---- Pin + result UI ----
+  var pin = null;
+  var pinRing = null;
+  var COLORS = {good:"#4fd08a", mod:"#ffcf5c", poor:"#ff7a6b"};
+  var el = function(id){ return document.getElementById(id); };
+
+  function placePin(lat, lon, fly){
+    lat = Math.max(-90, Math.min(-55, lat));
+    if (!pin){
+      pin = L.marker([lat,lon], {draggable:true, icon: L.divIcon({
+        className:"pin-icon",
+        html:'<div class="pin-pulse"></div><div class="pin-dot"></div>',
+        iconSize:[22,22], iconAnchor:[11,11]
+      })}).addTo(map);
+      pin.on("drag", function(e){ var ll=e.target.getLatLng(); showResult(ll.lat, ll.lng); });
+      pin.on("dragend", function(e){ var ll=e.target.getLatLng(); showResult(ll.lat, ll.lng, true); });
+    } else {
+      pin.setLatLng([lat,lon]);
+    }
+    if (fly) map.panTo([lat,lon], {animate:true});
+    showResult(lat, lon);
+  }
+
+  var lastPos = null;
+  function showResult(lat, lon){
+    lastPos = {lat:lat, lon:lon};
+    var a = assess(lat, lon);
+    var lonE = ((lon % 360) + 360) % 360;
+    el("coord").textContent = lat.toFixed(3) + "°  ·  " + lonE.toFixed(3) + "°E";
+    el("vdot").style.background = COLORS[a.cls];
+    el("vlabel").textContent = a.label;
+    el("vlabel").style.color = COLORS[a.cls];
+    el("vscore").textContent = "feasibility " + a.score + "/100";
+    var edgeTxt = a.inside ? ("inside by " + Math.abs(a.best.edge).toFixed(1) + " km")
+                           : (a.best.edge.toFixed(1) + " km to edge");
+    el("metrics").innerHTML =
+      '<div><span>Nearest PSR</span><span>'+ (a.best.psr.feature || a.best.psr.id) +'</span></div>' +
+      '<div><span>Distance to water-ice</span><span>'+ edgeTxt +'</span></div>' +
+      '<div><span>PSR size</span><span>'+ a.best.psr.area_km2.toLocaleString() +' km²</span></div>';
+    el("reason").textContent = a.reason;
+    el("result").classList.add("show");
+    // draw a ring to the nearest PSR centre
+    if (pinRing){ map.removeLayer(pinRing); }
+    pinRing = L.polyline([[lat,lon],[a.best.psr.lat,a.best.psr.lon]], {
+      color:COLORS[a.cls], weight:1.5, dashArray:"4 5", opacity:0.8
+    }).addTo(map);
+  }
+
+  function clearPin(){
+    if (pin){ map.removeLayer(pin); pin=null; }
+    if (pinRing){ map.removeLayer(pinRing); pinRing=null; }
+    el("result").classList.remove("show");
+    lastPos = null;
+    history.replaceState(null, "", location.pathname);
+  }
+
+  map.on("click", function(e){ placePin(e.latlng.lat, e.latlng.lng); });
+
+  // ---- Toast ----
+  var toastT;
+  function toast(msg){
+    var t = el("toast"); t.textContent = msg; t.classList.add("show");
+    clearTimeout(toastT); toastT = setTimeout(function(){ t.classList.remove("show"); }, 2200);
+  }
+
+  // ---- Share ----
+  function shareURL(){
+    if (!lastPos) return location.href;
+    var u = location.origin + location.pathname +
+      "?lat=" + lastPos.lat.toFixed(4) + "&lon=" + lastPos.lon.toFixed(4);
+    return u;
+  }
+  el("shareBtn").addEventListener("click", function(){
+    var url = shareURL();
+    history.replaceState(null, "", "?lat="+lastPos.lat.toFixed(4)+"&lon="+lastPos.lon.toFixed(4));
+    if (navigator.share && /Mobi|Android/i.test(navigator.userAgent)){
+      navigator.share({title:"My spot on the Moon", text:"Lunar south pole habitat site", url:url})
+        .catch(function(){});
+      return;
+    }
+    (navigator.clipboard ? navigator.clipboard.writeText(url) : Promise.reject())
+      .then(function(){ toast("Link copied to clipboard"); })
+      .catch(function(){
+        window.prompt("Copy this link:", url);
+      });
+  });
+  el("clearBtn").addEventListener("click", clearPin);
+
+  // ---- Controls ----
+  el("basemap").addEventListener("change", function(e){ setBasemap(e.target.value); });
+  el("psrToggle").addEventListener("change", function(e){
+    if (e.target.checked) psrLayer.addTo(map); else map.removeLayer(psrLayer);
+  });
+  el("labelToggle").addEventListener("change", function(e){
+    if (e.target.checked) labelLayer.addTo(map); else map.removeLayer(labelLayer);
+  });
+
+  // ---- Load PSR data, then render ----
+  fetch("/psrmap/psr-south.json")
+    .then(function(r){ return r.json(); })
+    .then(function(data){
+      PSRS = data.psrs || [];
+      drawPSRs();
+      psrLayer.addTo(map);
+
+      // deep-link: ?lat=..&lon=..
+      var q = new URLSearchParams(location.search);
+      if (q.has("lat") && q.has("lon")){
+        var la = parseFloat(q.get("lat")), lo = parseFloat(q.get("lon"));
+        if (isFinite(la) && isFinite(lo)){ placePin(la, lo); map.setView([la,lo], 4); }
+      }
+    })
+    .catch(function(err){
+      console.error("PSR load failed", err);
+      toast("Could not load PSR data");
+    });
+})();
+</script>
+
+<style>
+  /* pin + label icons (defined here so they apply to divIcons) */
+  .pin-icon{position:relative}
+  .pin-dot{position:absolute; left:5px; top:5px; width:12px; height:12px; border-radius:50%;
+    background:var(--pin); border:2px solid #1a1205; box-shadow:0 0 0 2px rgba(255,196,77,.35)}
+  .pin-pulse{position:absolute; left:-1px; top:-1px; width:24px; height:24px; border-radius:50%;
+    background:rgba(255,196,77,.35); animation:pulse 1.8s ease-out infinite}
+  @keyframes pulse{0%{transform:scale(.4);opacity:.8}100%{transform:scale(1.4);opacity:0}}
+  .psr-label span{position:absolute; transform:translate(-50%,-50%); white-space:nowrap;
+    font-size:10.5px; color:#bfe6ff; text-shadow:0 1px 3px #000,0 0 6px #000; pointer-events:none; font-weight:600}
+  .leaflet-tooltip{background:#0c1218; border:1px solid #2a3644; color:#e8edf3; box-shadow:0 4px 16px rgba(0,0,0,.5)}
+  .leaflet-tooltip-top:before{border-top-color:#2a3644}
+  .moon-base{filter:contrast(1.05) brightness(1.02)}
+</style>
+</body>
+</html>
