@@ -531,6 +531,9 @@ app.get('/texletter.md', (req, res) => {
 app.get('/terms-and-conditions', (req, res) => sendSeoHtml(req, res, join(__dirname, 'public', 'terms-and-conditions.html'), '/terms-and-conditions'));
 app.get('/privacy-policy', (req, res) => sendSeoHtml(req, res, join(__dirname, 'public', 'privacy-policy.html'), '/privacy-policy'));
 
+// --- Lunar South Pole PSR map ---
+app.get(['/psrmap', '/psrmap/'], (req, res) => res.sendFile(join(__dirname, 'public', 'psrmap', 'index.html')));
+
 // --- ACSA public site and support tokens ---
 app.use((req, res, next) => {
   if (req.path === '/acsa' || req.path === '/acsa/') return res.redirect('/ACSA/');
