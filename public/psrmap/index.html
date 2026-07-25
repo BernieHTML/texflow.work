@@ -37,6 +37,7 @@
     border-radius:14px; backdrop-filter:blur(8px);
     box-shadow:0 10px 40px rgba(0,0,0,.5);
     max-height:calc(100vh - 28px); display:flex; flex-direction:column;
+    overflow-y:auto; -webkit-overflow-scrolling:touch; overscroll-behavior:contain;
   }
   #panel .pad{padding:16px 16px 14px}
   h1{font-size:16px; margin:0 0 2px; letter-spacing:.2px}
@@ -124,8 +125,10 @@
     #panel .pad{padding:6px 16px 14px}
     /* scroll the sheet body, keep the handle fixed */
     #handle{
-      display:block; width:100%; background:transparent; border:0; cursor:pointer;
-      padding:10px 0 4px; margin:0; -webkit-tap-highlight-color:transparent;
+      display:block; width:100%; border:0; cursor:pointer;
+      padding:10px 0 6px; margin:0; -webkit-tap-highlight-color:transparent;
+      position:sticky; top:0; z-index:2;
+      background:rgba(17,22,29,.98);
     }
     #handle span{display:block; width:40px; height:5px; border-radius:3px;
       background:#39465a; margin:0 auto;}
