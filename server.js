@@ -533,6 +533,61 @@ app.get('/privacy-policy', (req, res) => sendSeoHtml(req, res, join(__dirname, '
 // --- Lunar South Pole PSR map ---
 app.get(['/psrmap', '/psrmap/'], (req, res) => res.sendFile(join(__dirname, 'public', 'psrmap', 'index.html')));
 
+// Caching proxy for the Lunaserv (LROC) WMS. The upstream reprojects tiles on
+// the fly and is slow / times out at deep zoom, so we cache each reprojected
+// tile on disk: first request is slow, every request after is instant.
+const PSR_TILE_CACHE = join(__dirname, 'data', 'psrmap-tiles');
+const PSR_WMS_UPSTREAM = 'https://wms.im-ldi.com/';
+const PSR_ALLOWED_LAYERS = new Set([
+  'luna_wac_global', 'luna_shaded_relief', 'luna_lola_albedo',
+  'luna_illumination', 'luna_nac_2m_sp_mosaic'
+]);
+let psrCacheReady = false;
+async function ensurePsrTileCache() {
+  if (!psrCacheReady) { await mkdir(PSR_TILE_CACHE, { recursive: true }); psrCacheReady = true; }
+}
+app.get('/psrmap/wms', async (req, res) => {
+  try {
+    const q = req.query || {};
+    const layers = String(q.layers || q.LAYERS || '');
+    if (!PSR_ALLOWED_LAYERS.has(layers)) return res.status(400).send('layer not allowed');
+
+    // Rebuild a clean WMS query from a fixed allow-list of params (no open proxy).
+    const params = new URLSearchParams();
+    for (const k of ['SERVICE','VERSION','REQUEST','LAYERS','SRS','CRS','BBOX','WIDTH','HEIGHT','FORMAT','STYLES','TRANSPARENT']) {
+      const v = q[k] ?? q[k.toLowerCase()];
+      if (v !== undefined) params.set(k, String(v));
+    }
+    const upstream = PSR_WMS_UPSTREAM + '?' + params.toString();
+    const key = require('node:crypto').createHash('sha1').update(upstream).digest('hex') + '.png';
+    await ensurePsrTileCache();
+    const file = join(PSR_TILE_CACHE, key);
+
+    if (existsSync(file)) {
+      res.set('Content-Type', 'image/png');
+      res.set('Cache-Control', 'public, max-age=31536000, immutable');
+      res.set('X-PSR-Cache', 'HIT');
+      return res.sendFile(file);
+    }
+
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), 40000);
+    let upstreamRes;
+    try { upstreamRes = await fetch(upstream, { signal: ctrl.signal }); }
+    finally { clearTimeout(timer); }
+    if (!upstreamRes.ok) return res.status(502).send('upstream error');
+
+    const buf = Buffer.from(await upstreamRes.arrayBuffer());
+    writeFile(file, buf).catch(() => {}); // cache best-effort
+    res.set('Content-Type', upstreamRes.headers.get('content-type') || 'image/png');
+    res.set('Cache-Control', 'public, max-age=31536000, immutable');
+    res.set('X-PSR-Cache', 'MISS');
+    return res.send(buf);
+  } catch (err) {
+    return res.status(504).send('tile fetch failed');
+  }
+});
+
 // --- ACSA public site and support tokens ---
 app.use((req, res, next) => {
   if (req.path === '/acsa' || req.path === '/acsa/') return res.redirect('/ACSA/');
