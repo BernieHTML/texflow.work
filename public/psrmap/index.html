@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover" />
 <title>Lunar South Pole PSR Map — TexFlow</title>
 <meta name="description" content="Interactive map of the Moon's south pole showing permanently shadowed regions (PSRs). Drop a pin to gauge habitat feasibility by proximity to water-ice sources." />
 
@@ -109,9 +109,47 @@
   }
   .toast.show{opacity:1; transform:translateX(-50%) translateY(0)}
 
-  @media (max-width:560px){
-    #panel{width:auto; left:10px; right:10px; top:10px}
+  /* handle is desktop-hidden; shown as a grab bar on mobile */
+  #handle{display:none}
+
+  @media (max-width:640px){
+    /* ---- Panel becomes a bottom sheet ---- */
+    #panel{
+      top:auto; left:0; right:0; bottom:0; width:auto; max-width:none;
+      border-radius:18px 18px 0 0; border-left:0; border-right:0; border-bottom:0;
+      max-height:78vh; transition:transform .25s ease;
+      padding-bottom:env(safe-area-inset-bottom);
+    }
+    #panel.collapsed{ transform:translateY(calc(100% - var(--peek,132px))); }
+    #panel .pad{padding:6px 16px 14px}
+    /* scroll the sheet body, keep the handle fixed */
+    #handle{
+      display:block; width:100%; background:transparent; border:0; cursor:pointer;
+      padding:10px 0 4px; margin:0; -webkit-tap-highlight-color:transparent;
+    }
+    #handle span{display:block; width:40px; height:5px; border-radius:3px;
+      background:#39465a; margin:0 auto;}
+    h1{font-size:17px}
+    .sub{font-size:13px}
+    .row{margin:14px 0}
+    .row label{font-size:15px}
+    /* bigger touch targets */
+    .switch{width:48px; height:28px}
+    .slider:before{height:22px; width:22px}
+    .switch input:checked + .slider:before{transform:translateX(20px)}
+    select{padding:11px 10px; font-size:15px}
+    .btn{padding:13px 10px; font-size:15px}
+    .hint{font-size:13px; padding:11px 12px}
+    #result{padding:14px 16px 18px}
+    .verdict .label{font-size:17px}
+    .metrics{font-size:14px}
+    .reason{font-size:13px}
+    /* keep the map's own controls clear of the sheet */
     #legend{display:none}
+    .credit{bottom:auto; top:12px; right:12px; left:auto;
+      background:rgba(10,13,18,.72); font-size:10px}
+    .leaflet-top.leaflet-right{top:44px}
+    .toast{bottom:auto; top:64px}
   }
 </style>
 </head>
@@ -119,6 +157,7 @@
 <div id="map"></div>
 
 <div id="panel">
+  <button id="handle" aria-label="Expand or collapse panel"><span></span></button>
   <div class="pad">
     <h1>Lunar South Pole · PSR Map</h1>
     <p class="sub">Permanently shadowed regions — the Moon's water-ice reservoirs.</p>
@@ -127,8 +166,8 @@
       <label for="basemap">Base imagery</label>
       <div style="flex:0 0 150px">
         <select id="basemap">
-          <option value="luna_shaded_relief">LOLA shaded relief</option>
           <option value="luna_wac_global">LROC WAC mosaic</option>
+          <option value="luna_shaded_relief">LOLA shaded relief</option>
           <option value="luna_lola_albedo">LOLA albedo</option>
           <option value="none">None (dark)</option>
         </select>
@@ -203,12 +242,17 @@
     maxZoom: 7,
     maxBoundsViscosity: 0.9,
     attributionControl: false,
-    zoomControl: true
+    zoomControl: false
   });
+  L.control.zoom({ position: "topright" }).addTo(map);
   map.setMaxBounds(L.latLngBounds(crs.unproject(L.point(-MAX, -MAX)), crs.unproject(L.point(MAX, MAX))));
 
-  // ---- Basemap (Lunaserv WMS, reprojected on the fly to the polar view) ----
-  var WMS_URL = "https://wms.im-ldi.com/";
+  // ---- Basemap (Lunaserv WMS via our same-origin caching proxy) ----
+  // The proxy caches reprojected tiles on the server so imagery loads once and
+  // is instant thereafter (the raw WMS reprojects on the fly and is slow/timeouts
+  // at deep zoom). Falls back to the WMS directly if the proxy isn't mounted.
+  var WMS_URL = (location.pathname.indexOf("/psrmap") === 0)
+    ? "/psrmap/wms" : "https://wms.im-ldi.com/";
   var baseLayer = null;
   function setLoading(on){
     var l = document.getElementById("loading");
@@ -226,14 +270,14 @@
       crs: crs,
       tileSize: 256,
       noWrap: true,
-      maxNativeZoom: 6,
+      maxNativeZoom: 3,   // deeper zoom reuses zoom-3 imagery (upscaled) — the WMS times out on deeper tiles
       className: "moon-base"
     });
     baseLayer.on("loading", function(){ setLoading(true); });
     baseLayer.on("load", function(){ setLoading(false); });
     baseLayer.addTo(map);
   }
-  setBasemap("luna_shaded_relief");
+  setBasemap("luna_wac_global");
 
   // ---- Geometry helpers (spherical, on the Moon) ----
   function toRad(d){ return d * Math.PI / 180; }
@@ -274,8 +318,8 @@
     labelLayer.clearLayers();
     PSRS.forEach(function(p){
       var poly = L.polygon(circlePoly(p.lat, p.lon, p.radius_km, p.radius_km > 8 ? 64 : 40), {
-        color: "#39b6ff", weight: 1, opacity: 0.85,
-        fillColor: "#39b6ff", fillOpacity: 0.30, interactive: true
+        color: "#66d0ff", weight: 1.4, opacity: 0.95,
+        fillColor: "#39b6ff", fillOpacity: 0.34, interactive: true
       });
       poly.bindTooltip(
         "<b>" + (p.feature || p.id) + "</b><br>" +
@@ -350,6 +394,7 @@
     }
     if (fly) map.panTo([lat,lon], {animate:true});
     showResult(lat, lon);
+    expandSheet();
   }
 
   var lastPos = null;
@@ -425,6 +470,17 @@
   el("labelToggle").addEventListener("change", function(e){
     if (e.target.checked) labelLayer.addTo(map); else map.removeLayer(labelLayer);
   });
+
+  // ---- Mobile bottom-sheet handle ----
+  var panelEl = document.getElementById("panel");
+  var mq = window.matchMedia("(max-width:640px)");
+  function syncSheet(){ if (mq.matches) panelEl.classList.add("collapsed"); else panelEl.classList.remove("collapsed"); }
+  syncSheet();
+  if (mq.addEventListener) mq.addEventListener("change", syncSheet);
+  document.getElementById("handle").addEventListener("click", function(){
+    panelEl.classList.toggle("collapsed");
+  });
+  function expandSheet(){ if (mq.matches) panelEl.classList.remove("collapsed"); }
 
   // ---- Load PSR data, then render ----
   fetch("/psrmap/psr-south.json")
