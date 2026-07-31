@@ -15,6 +15,7 @@ import { SEO_PAGES, SEO_SITE } from './scripts/seo-config.js';
 import { injectSeoIntoHtml, resolveSeoPage } from './scripts/seo-utils.js';
 import { createLeoSpyRouter } from './routes/leospy/index.js';
 import { registerAcsaArchive } from './routes/acsa-archive/index.js';
+import { registerOurMoon } from './routes/ourmoon/index.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const require = createRequire(import.meta.url);
@@ -529,6 +530,11 @@ app.get('/texletter.md', (req, res) => {
 // --- Legal pages (extensionless URLs) ---
 app.get('/terms-and-conditions', (req, res) => sendSeoHtml(req, res, join(__dirname, 'public', 'terms-and-conditions.html'), '/terms-and-conditions'));
 app.get('/privacy-policy', (req, res) => sendSeoHtml(req, res, join(__dirname, 'public', 'privacy-policy.html'), '/privacy-policy'));
+
+// --- OurMoon: claim a lunar base at the south pole ---
+// Mounted before the static handler so /ourmoon/b/:slug and the JSON registry
+// win over public/ourmoon/*; the app's own assets fall through to static.
+registerOurMoon(app);
 
 // --- ACSA public site and support tokens ---
 app.use((req, res, next) => {

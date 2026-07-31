@@ -40,6 +40,7 @@ These products and utilities are also live:
 | GanderChat | `https://texflow.work/ganderchat/` | Debate rooms with participant tokens and live streams. |
 | VyEx | `https://texflow.work/vyex/` | Expert knowledge and preamble surfaces. |
 | ACSA | `https://texflow.work/ACSA/` | Australian Crewed Spaceflight Agency prototype site. |
+| OurMoon | `https://texflow.work/ourmoon` | Live map of claimed lunar bases at the Moon's south pole, with an open JSON registry. |
 | Platform66 | `https://texflow.work/platform66/` | Agent-first marketplace prototype, when deployed. |
 
 ## Discovery endpoints
@@ -54,6 +55,7 @@ curl -sS "https://texflow.work/.well-known/texmkt-openapi.json"
 curl -sS "https://texflow.work/.well-known/ucp-products.json"
 curl -sS "https://texflow.work/.well-known/vyex.json"
 curl -sS "https://texflow.work/.well-known/vyex.md"
+curl -sS "https://texflow.work/.well-known/ourmoon.json"
 ```
 
 Use `/.well-known/mastercurl.md` for a compact curl reference across products. Use this `/agent` page for the higher-level product map and primary workflows.
@@ -409,6 +411,33 @@ https://texflow.work/ACSA/#work
 ```
 
 Use the ACSA page for its public site, shop/work-with-us areas, and contact prompt.
+
+## OurMoon
+
+OurMoon is a live, shared map of the Moon's south pole. Each signed-in user claims one base
+and one Lunar Thermal Energy Conversion (LTEC) power plant. Claims must stay 10 km clear of
+every other claim; an LTEC must sit inside a peak of eternal light, within 10 km of a
+permanently shadowed region, and within 10 km of its own base.
+
+Read endpoints are open and CORS-enabled:
+
+```bash
+curl -sS "https://texflow.work/.well-known/ourmoon.json"   # service descriptor and full rule set
+curl -sS "https://texflow.work/ourmoon/bases.json"         # every live base, with coordinates
+curl -sS "https://texflow.work/ourmoon/bases/{slug}"       # one base
+curl -sS "https://texflow.work/ourmoon/terrain.json"       # PSR and PEL datasets
+```
+
+Test a prospective siting without claiming anything:
+
+```bash
+curl -sS -X POST "https://texflow.work/ourmoon/api/check" \
+  -H "Content-Type: application/json" \
+  -d '{"base":{"lat":-89.44,"lon":222.7},"ltec":{"lat":-89.45,"lon":222.7}}'
+```
+
+Coordinates are selenographic: latitude negative south, longitude east-positive 0–360°,
+lunar radius 1737.4 km.
 
 ## Recommended agent startup sequence
 

@@ -34,6 +34,16 @@ export const SEO_PAGES = [
     category: 'supporting'
   },
   {
+    route: '/ourmoon',
+    sourceFile: 'public/ourmoon/index.html',
+    title: "OurMoon | Claim Your Lunar Base at the Moon's South Pole",
+    description: 'OurMoon lets you claim a plot at the Moon’s south pole on real LROC imagery, name your lunar base, and site an LTEC thermal power plant in a peak of eternal light beside a permanently shadowed region. Share your base and invite others to join.',
+    image: '/ourmoon/og.png',
+    priority: 0.9,
+    changefreq: 'daily',
+    category: 'core'
+  },
+  {
     route: '/ACSA/',
     sourceFile: 'public/ACSA/index.html',
     title: 'ACSA | Australian Crewed Spaceflight Agency',

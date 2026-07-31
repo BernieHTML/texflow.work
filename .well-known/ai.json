@@ -20,6 +20,14 @@
       "ai": "/platform66/.well-known/ai.json",
       "catalog": "/.well-known/agent-catalog.json",
       "description": "Platform66 is the agent-first marketplace. Onboard products, generate Agent Appeals, and discover via .well-known."
+    },
+    {
+      "id": "ourmoon",
+      "name": "OurMoon",
+      "url": "https://texflow.work/ourmoon",
+      "ai": "/.well-known/ourmoon.json",
+      "data": "https://texflow.work/ourmoon/bases.json",
+      "description": "A live, shared map of the Moon's south pole. Users claim a plot, name a lunar base, and site an LTEC thermal power plant between a peak of eternal light and a permanently shadowed region. Every claim is published as open JSON with selenographic coordinates."
     }
   ]
 }

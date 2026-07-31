@@ -1,0 +1,317 @@
+{
+  "source": "Approximate PEL centres compiled from LOLA illumination models (Mazarico et al. 2011; Speyerer & Robinson 2013; Gläser et al. 2018) and NASA Artemis III candidate landing regions.",
+  "precision": "approximate — representative centres, good to a few km",
+  "hemisphere": "south",
+  "moon_radius_km": 1737.4,
+  "illumination_note": "illum = mean annual illumination fraction (%) at roughly 2 m above the surface",
+  "count": 18,
+  "generated_at": "2026-07-31",
+  "pels": [
+    {
+      "id": "PEL_CONNECTING_RIDGE",
+      "name": "Connecting Ridge",
+      "lat": -89.45,
+      "lon": 222.70000000000005,
+      "radius_km": 3.4,
+      "illum": 86,
+      "note": "Ridge between Shackleton and de Gerlache; among the most continuously lit ground on the Moon.",
+      "nearest_psr": {
+        "id": "SP_895060_2806850",
+        "feature": "de Gerlache Crater Shackleton Crater",
+        "edge_km": 7.9,
+        "centre_km": 15.42,
+        "area_km2": 53.26
+      },
+      "ltec_viable": true
+    },
+    {
+      "id": "PEL_SHACKLETON_RIM",
+      "name": "Shackleton Rim",
+      "lat": -89.68,
+      "lon": 166,
+      "radius_km": 3,
+      "illum": 82,
+      "note": "Southern rim crest of Shackleton crater, directly above a major ice-bearing PSR.",
+      "nearest_psr": {
+        "id": "SP_896450_1282030",
+        "feature": "Shackleton Crater",
+        "edge_km": -4.92,
+        "centre_km": 6.71,
+        "area_km2": 233.7
+      },
+      "ltec_viable": true
+    },
+    {
+      "id": "PEL_MONS_MOUTON",
+      "name": "Mons Mouton",
+      "lat": -84.6,
+      "lon": 24,
+      "radius_km": 6,
+      "illum": 82,
+      "note": "Broad flat-topped massif (formerly Leibnitz Beta Plateau); large usable plateau.",
+      "nearest_psr": {
+        "id": "SP_837240_0195180",
+        "feature": "Malapert E",
+        "edge_km": 21.56,
+        "centre_km": 29.93,
+        "area_km2": 17.65
+      },
+      "ltec_viable": false
+    },
+    {
+      "id": "PEL_PEAK_NEAR_SHACKLETON",
+      "name": "Peak Near Shackleton",
+      "lat": -89.78,
+      "lon": 195,
+      "radius_km": 2.6,
+      "illum": 80,
+      "note": "Isolated high point a few km from the Shackleton rim.",
+      "nearest_psr": {
+        "id": "SP_896450_1282030",
+        "feature": "Shackleton Crater",
+        "edge_km": -1.04,
+        "centre_km": 10.19,
+        "area_km2": 233.7
+      },
+      "ltec_viable": true
+    },
+    {
+      "id": "PEL_CONNECTING_RIDGE_EXT",
+      "name": "Connecting Ridge Extension",
+      "lat": -89.2,
+      "lon": 208,
+      "radius_km": 3.6,
+      "illum": 79,
+      "note": "North-western continuation of the Connecting Ridge.",
+      "nearest_psr": {
+        "id": "SP_882490_2164550",
+        "feature": "Sverdrup Crater",
+        "edge_km": 12.5,
+        "centre_km": 29.32,
+        "area_km2": 548.79
+      },
+      "ltec_viable": false
+    },
+    {
+      "id": "PEL_DE_GERLACHE_RIM_2",
+      "name": "de Gerlache Rim 2",
+      "lat": -88.7,
+      "lon": 291.5,
+      "radius_km": 3.2,
+      "illum": 78,
+      "note": "Eastern rim of de Gerlache crater.",
+      "nearest_psr": {
+        "id": "SP_883120_2691430",
+        "feature": "de Gerlache Crater",
+        "edge_km": 9.02,
+        "centre_km": 21.02,
+        "area_km2": 243.29
+      },
+      "ltec_viable": true
+    },
+    {
+      "id": "PEL_DE_GERLACHE_RIM_1",
+      "name": "de Gerlache Rim 1",
+      "lat": -88.5,
+      "lon": 290,
+      "radius_km": 3,
+      "illum": 76,
+      "note": "Northern rim segment of de Gerlache crater.",
+      "nearest_psr": {
+        "id": "SP_883120_2691430",
+        "feature": "de Gerlache Crater",
+        "edge_km": 6.57,
+        "centre_km": 18.37,
+        "area_km2": 243.29
+      },
+      "ltec_viable": true
+    },
+    {
+      "id": "PEL_MALAPERT_MASSIF",
+      "name": "Malapert Massif",
+      "lat": -86,
+      "lon": 2.6999999999999886,
+      "radius_km": 5,
+      "illum": 74,
+      "note": "High massif with a near-continuous line of sight to Earth.",
+      "nearest_psr": {
+        "id": "SP_874930_3578760",
+        "feature": "Haworth Crater",
+        "edge_km": 22.99,
+        "centre_km": 45.99,
+        "area_km2": 1017.93
+      },
+      "ltec_viable": false
+    },
+    {
+      "id": "PEL_HAWORTH_RIM",
+      "name": "Haworth Rim",
+      "lat": -87.45,
+      "lon": 355.5,
+      "radius_km": 3.4,
+      "illum": 74,
+      "note": "Illuminated rim above the Haworth PSR.",
+      "nearest_psr": {
+        "id": "SP_874930_3578760",
+        "feature": "Haworth Crater",
+        "edge_km": -17.96,
+        "centre_km": 3.44,
+        "area_km2": 1017.93
+      },
+      "ltec_viable": true
+    },
+    {
+      "id": "PEL_NOBILE_RIM_1",
+      "name": "Nobile Rim 1",
+      "lat": -85.4,
+      "lon": 31.5,
+      "radius_km": 4,
+      "illum": 72,
+      "note": "Rim of Nobile crater; an Artemis III candidate region.",
+      "nearest_psr": {
+        "id": "SP_864040_0314430",
+        "feature": "Nobile Crater\nHaworth Crater",
+        "edge_km": 20.25,
+        "centre_km": 30.44,
+        "area_km2": 120.58
+      },
+      "ltec_viable": false
+    },
+    {
+      "id": "PEL_DE_GERLACHE_KOCHER",
+      "name": "de Gerlache–Kocher Massif",
+      "lat": -88.2,
+      "lon": 291,
+      "radius_km": 4.2,
+      "illum": 71,
+      "note": "Massif between de Gerlache and Kocher craters.",
+      "nearest_psr": {
+        "id": "SP_883120_2691430",
+        "feature": "de Gerlache Crater",
+        "edge_km": 7.32,
+        "centre_km": 20.32,
+        "area_km2": 243.29
+      },
+      "ltec_viable": true
+    },
+    {
+      "id": "PEL_FAUSTINI_RIM_A",
+      "name": "Faustini Rim A",
+      "lat": -87.2,
+      "lon": 84.89999999999998,
+      "radius_km": 3.2,
+      "illum": 70,
+      "note": "Illuminated rim segment above the Faustini PSR.",
+      "nearest_psr": {
+        "id": "SP_871460_0840750",
+        "feature": "Faustini Crater",
+        "edge_km": -15.69,
+        "centre_km": 2.05,
+        "area_km2": 663.93
+      },
+      "ltec_viable": true
+    },
+    {
+      "id": "PEL_SVERDRUP_RIDGE",
+      "name": "Sverdrup Ridge",
+      "lat": -88.05,
+      "lon": 208,
+      "radius_km": 3,
+      "illum": 70,
+      "note": "Lit ridge on the approach to Sverdrup crater.",
+      "nearest_psr": {
+        "id": "SP_882490_2164550",
+        "feature": "Sverdrup Crater",
+        "edge_km": -5.99,
+        "centre_km": 10.23,
+        "area_km2": 548.79
+      },
+      "ltec_viable": true
+    },
+    {
+      "id": "PEL_AMUNDSEN_RIM",
+      "name": "Amundsen Rim",
+      "lat": -84.3,
+      "lon": 82.80000000000001,
+      "radius_km": 4.4,
+      "illum": 69,
+      "note": "Northern rim of Amundsen crater.",
+      "nearest_psr": {
+        "id": "SP_840980_0797630",
+        "feature": "Amundsen Crater",
+        "edge_km": 4.61,
+        "centre_km": 11.14,
+        "area_km2": 14.23
+      },
+      "ltec_viable": true
+    },
+    {
+      "id": "PEL_NOBILE_RIM_2",
+      "name": "Nobile Rim 2",
+      "lat": -84.9,
+      "lon": 46.60000000000002,
+      "radius_km": 4,
+      "illum": 68,
+      "note": "Second illuminated segment of the Nobile rim complex.",
+      "nearest_psr": {
+        "id": "SP_853570_0498630",
+        "feature": "Nobile Crater",
+        "edge_km": 5.54,
+        "centre_km": 16.2,
+        "area_km2": 139.34
+      },
+      "ltec_viable": true
+    },
+    {
+      "id": "PEL_WIECHERT_RIM",
+      "name": "Wiechert Rim",
+      "lat": -84.3,
+      "lon": 165,
+      "radius_km": 3.8,
+      "illum": 67,
+      "note": "Illuminated rim on the far-side approach to the pole.",
+      "nearest_psr": {
+        "id": "SP_843960_1621040",
+        "feature": "Wiechert P Wiechert Crater",
+        "edge_km": 2.13,
+        "centre_km": 9.12,
+        "area_km2": 32.02
+      },
+      "ltec_viable": true
+    },
+    {
+      "id": "PEL_SLATER_PLAIN",
+      "name": "Slater Plain",
+      "lat": -88.1,
+      "lon": 6,
+      "radius_km": 4.6,
+      "illum": 66,
+      "note": "Relatively flat, well-lit plain near the pole.",
+      "nearest_psr": {
+        "id": "SP_874930_3578760",
+        "feature": "Haworth Crater",
+        "edge_km": -1.94,
+        "centre_km": 20.66,
+        "area_km2": 1017.93
+      },
+      "ltec_viable": true
+    },
+    {
+      "id": "PEL_CABEUS_B_PEAK",
+      "name": "Peak Near Cabeus B",
+      "lat": -82.3,
+      "lon": 322,
+      "radius_km": 3.6,
+      "illum": 64,
+      "note": "Outlying illuminated peak north of the Cabeus complex.",
+      "nearest_psr": {
+        "id": "SP_818450_3211710",
+        "feature": "Cabeus A",
+        "edge_km": 7.94,
+        "centre_km": 14.23,
+        "area_km2": 22.67
+      },
+      "ltec_viable": true
+    }
+  ]
+}

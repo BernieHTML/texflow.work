@@ -214,6 +214,13 @@ Disallow: /private/
 Disallow: /temp/
 Disallow: /dev/
 
+# OurMoon: the write endpoints are not worth crawling, but the live base
+# registry and the tile proxy's parent page are.
+Disallow: /ourmoon/api/
+Disallow: /ourmoon/wms
+Allow: /ourmoon/bases.json
+Allow: /ourmoon/terrain.json
+
 Sitemap: ${site.origin}/sitemap.xml
 `;
 }

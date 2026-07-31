@@ -1,0 +1,143 @@
+{
+  "id": "ourmoon",
+  "name": "OurMoon",
+  "url": "https://texflow.work/ourmoon",
+  "type": "web_application",
+  "schema": "ourmoon/1.0",
+  "summary": "A shared, live map of the Moon's south pole where anyone can claim a plot, found a named lunar base, and site a Lunar Thermal Energy Conversion (LTEC) power plant under real siting constraints.",
+  "description": "OurMoon renders the LROC wide-angle-camera orthomosaic of the lunar south pole in polar stereographic projection, overlaid with 164 permanently shadowed regions (PSRs) from the LROC PSR Atlas and 18 peak-of-eternal-light (PEL) regions compiled from LOLA illumination models. A signed-in user claims one base and one LTEC plant. Every claim is public and is published as JSON.",
+  "audience": ["humans", "AI agents", "autonomous systems"],
+  "authentication": {
+    "type": "username_password_session_cookie",
+    "signup": "https://texflow.work/ourmoon/api/auth/signup",
+    "note": "Only a username and password are collected. No email address is required."
+  },
+  "siting_rules": {
+    "claim_clearance_km": 10,
+    "claim_clearance_applies_to": ["another user's base", "another user's LTEC plant"],
+    "ltec_must_be_inside_peak_of_eternal_light": true,
+    "ltec_max_distance_to_psr_km": 10,
+    "ltec_max_distance_to_own_base_km": 10,
+    "one_base_per_user": true,
+    "max_crew_per_base": 24
+  },
+  "coordinate_system": {
+    "body": "Moon",
+    "frame": "IAU_MOON (mean Earth / polar axis)",
+    "radius_km": 1737.4,
+    "latitude": "negative south, claims restricted to -90 … -55",
+    "longitude": "east-positive, 0–360 degrees",
+    "map_projection": "IAU2000:30120 lunar south polar stereographic"
+  },
+  "endpoints": [
+    {
+      "name": "live_base_registry",
+      "method": "GET",
+      "url": "https://texflow.work/ourmoon/bases.json",
+      "auth": "none",
+      "cors": "*",
+      "returns": "Every live base with name, founder, crew, selenographic coordinates and LTEC siting. Also served at /ourmoon/api/bases.",
+      "description": "The canonical machine-readable view of every claim on OurMoon."
+    },
+    {
+      "name": "single_base",
+      "method": "GET",
+      "url": "https://texflow.work/ourmoon/bases/{slug}",
+      "auth": "none",
+      "cors": "*",
+      "returns": "One base record, same shape as an entry in the registry."
+    },
+    {
+      "name": "terrain",
+      "method": "GET",
+      "url": "https://texflow.work/ourmoon/terrain.json",
+      "auth": "none",
+      "returns": "The PSR and PEL datasets the siting rules are checked against."
+    },
+    {
+      "name": "check_siting",
+      "method": "POST",
+      "url": "https://texflow.work/ourmoon/api/check",
+      "auth": "optional",
+      "body": { "base": { "lat": -89.5, "lon": 222.7 }, "ltec": { "lat": -89.45, "lon": 222.7 } },
+      "returns": "{ ok, errors[], checks } — whether a proposed claim satisfies every siting rule, and why not."
+    },
+    {
+      "name": "signup",
+      "method": "POST",
+      "url": "https://texflow.work/ourmoon/api/auth/signup",
+      "body": { "username": "string", "password": "string (min 8)" },
+      "returns": "{ user } and sets an ourmoon_session cookie."
+    },
+    {
+      "name": "login",
+      "method": "POST",
+      "url": "https://texflow.work/ourmoon/api/auth/login",
+      "body": { "username": "string", "password": "string" }
+    },
+    {
+      "name": "claim_base",
+      "method": "POST",
+      "url": "https://texflow.work/ourmoon/api/bases",
+      "auth": "session cookie",
+      "body": {
+        "name": "string (2–48 chars)",
+        "lat": "number, -90 … -55",
+        "lon": "number, east-positive degrees",
+        "ltec_lat": "number",
+        "ltec_lon": "number",
+        "ltec_name": "string (optional)"
+      },
+      "returns": "{ base } on success, or 422 with { error, errors[], checks } describing which siting rule failed."
+    },
+    {
+      "name": "join_base",
+      "method": "POST",
+      "url": "https://texflow.work/ourmoon/api/bases/{slug}/join",
+      "auth": "session cookie"
+    },
+    {
+      "name": "leave_base",
+      "method": "POST",
+      "url": "https://texflow.work/ourmoon/api/bases/{slug}/leave",
+      "auth": "session cookie"
+    },
+    {
+      "name": "share_page",
+      "method": "GET",
+      "url": "https://texflow.work/ourmoon/b/{slug}",
+      "auth": "none",
+      "returns": "An indexable HTML page for one base, with Place schema.org markup and an invitation to join or claim nearby."
+    }
+  ],
+  "data_sources": [
+    {
+      "name": "LROC PSR Atlas",
+      "url": "https://lroc.im-ldi.com/atlases/psr",
+      "used_for": "164 south-polar permanently shadowed regions (the LTEC cold sink)"
+    },
+    {
+      "name": "LROC WAC / LOLA imagery via Lunaserv WMS",
+      "url": "https://wms.im-ldi.com/",
+      "used_for": "Basemap orthomosaic, shaded relief and albedo"
+    },
+    {
+      "name": "LOLA illumination models and NASA Artemis III candidate regions",
+      "used_for": "18 peak-of-eternal-light regions with mean annual illumination fractions (the LTEC hot side)",
+      "precision": "approximate representative centres, good to a few km"
+    }
+  ],
+  "concepts": {
+    "LTEC": "Lunar Thermal Energy Conversion — a heat engine run between a near-permanently sunlit surface and a permanently shadowed crater floor at roughly 40 K. The lunar south pole holds both within a few kilometres of each other, which is what makes the scheme practical there and nowhere else. Because the cold sink never warms, output does not collapse during eclipse periods the way photovoltaic power does. The constraint is geometry: the hot side must sit in a peak of eternal light and the radiator loop must reach a permanently shadowed region.",
+    "PSR": "Permanently shadowed region — crater floors near the poles that have not seen sunlight for billions of years, holding water ice at around 40 K.",
+    "PEL": "Peak of eternal light — a ridge, massif or crater rim near the pole illuminated for most of the year."
+  },
+  "interaction": {
+    "read": "open, no authentication, CORS enabled",
+    "write": "requires a username/password session"
+  },
+  "provider": { "name": "TexFlow", "url": "https://texflow.work" },
+  "terms": "https://texflow.work/terms-and-conditions",
+  "privacy": "https://texflow.work/privacy-policy",
+  "updated_at": "2026-07-31"
+}

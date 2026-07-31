@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#05070c">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+<!-- Machine-readable views of the same world, for agents and crawlers. -->
+<link rel="alternate" type="application/json" href="https://texflow.work/ourmoon/bases.json" title="OurMoon live base registry">
+<link rel="alternate" type="application/json" href="https://texflow.work/.well-known/ourmoon.json" title="OurMoon service descriptor">
+<link rel="icon" href="/ourmoon/icon.svg" type="image/svg+xml">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "@id": "https://texflow.work/ourmoon#app",
+      "name": "OurMoon",
+      "url": "https://texflow.work/ourmoon",
+      "applicationCategory": "GameApplication",
+      "applicationSubCategory": "Space simulation",
+      "operatingSystem": "Any modern web browser",
+      "browserRequirements": "Requires JavaScript",
+      "description": "OurMoon is a shared map of the Moon's south pole where anyone can claim a plot, found a named lunar base, and site a Lunar Thermal Energy Conversion (LTEC) power plant under real siting constraints derived from LROC imagery, PSR outlines and peak-of-eternal-light illumination data.",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "isPartOf": { "@type": "WebSite", "name": "TexFlow", "url": "https://texflow.work" },
+      "featureList": [
+        "Interactive LROC orthomosaic of the lunar south pole",
+        "Claim and name a lunar base plot",
+        "Site an LTEC thermal power plant in a peak of eternal light",
+        "10 km clearance rules between rival claims",
+        "Share a base and invite others to join the crew",
+        "Public JSON registry of every live base"
+      ]
+    },
+    {
+      "@type": "Dataset",
+      "@id": "https://texflow.work/ourmoon/bases.json#dataset",
+      "name": "OurMoon live lunar base registry",
+      "description": "Every lunar base currently claimed on OurMoon: name, founder, crew, selenographic coordinates and the siting of its LTEC power plant.",
+      "url": "https://texflow.work/ourmoon/bases.json",
+      "license": "https://texflow.work/terms-and-conditions",
+      "creator": { "@type": "Organization", "name": "TexFlow", "url": "https://texflow.work" },
+      "distribution": {
+        "@type": "DataDownload",
+        "encodingFormat": "application/json",
+        "contentUrl": "https://texflow.work/ourmoon/bases.json"
+      },
+      "spatialCoverage": {
+        "@type": "Place",
+        "name": "Lunar south pole",
+        "geo": { "@type": "GeoShape", "box": "-90 0 -55 360" }
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is OurMoon?",
+          "acceptedAnswer": { "@type": "Answer", "text": "OurMoon is a free web app where you sign up with a username, claim a plot on a real map of the Moon's south pole, name your lunar base, and site the LTEC power plant that keeps it alive. Every claim is public, so you can see everybody else's bases on the same map." }
+        },
+        {
+          "@type": "Question",
+          "name": "What is an LTEC plant?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Lunar Thermal Energy Conversion runs a heat engine between a surface in near-permanent sunlight and a permanently shadowed crater floor at roughly 40 K. That temperature difference is the largest passive one anywhere in the inner solar system, so it delivers high, continuous power without relying on sunlight alone. The siting cost is geometry: the hot side must sit in a peak of eternal light and the cold loop must reach a permanently shadowed region, in practice within about 10 km." }
+        },
+        {
+          "@type": "Question",
+          "name": "Where can I put my lunar base?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Anywhere on the south polar map that is at least 10 km clear of every existing base and LTEC plant. Your own LTEC then has to sit inside a peak of eternal light, within 10 km of a permanently shadowed region, and within 10 km of your base." }
+        },
+        {
+          "@type": "Question",
+          "name": "Can other people join my base?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes. Share your base link and anyone who opens it can sign up and join your crew, or claim their own base somewhere at least 10 km away." }
+        }
+      ]
+    }
+  ]
+}
+</script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css">
+<link rel="stylesheet" href="/ourmoon/styles.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.9.2/proj4.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/proj4leaflet/1.0.2/proj4leaflet.min.js"></script>
+<!-- SEO:BEGIN -->
+  <title>OurMoon | Claim Your Lunar Base at the Moon's South Pole</title>
+  <meta name="description" content="OurMoon lets you claim a plot at the Moon’s south pole on real LROC imagery, name your lunar base, and site an LTEC thermal power plant in a peak of eternal light beside a permanently shadowed region. Share your base and invite others to join.">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <link rel="canonical" href="https://texflow.work/ourmoon">
+  <meta property="og:title" content="OurMoon | Claim Your Lunar Base at the Moon's South Pole">
+  <meta property="og:description" content="OurMoon lets you claim a plot at the Moon’s south pole on real LROC imagery, name your lunar base, and site an LTEC thermal power plant in a peak of eternal light beside a permanently shadowed region. Share your base and invite others to join.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://texflow.work/ourmoon">
+  <meta property="og:image" content="https://texflow.work/ourmoon/og.png">
+  <meta property="og:site_name" content="TexFlow">
+  <meta property="og:locale" content="en_AU">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="OurMoon | Claim Your Lunar Base at the Moon's South Pole">
+  <meta name="twitter:description" content="OurMoon lets you claim a plot at the Moon’s south pole on real LROC imagery, name your lunar base, and site an LTEC thermal power plant in a peak of eternal light beside a permanently shadowed region. Share your base and invite others to join.">
+  <meta name="twitter:image" content="https://texflow.work/ourmoon/og.png">
+<!-- SEO:END -->
+</head>
+<body>
+
+<div id="map" role="application" aria-label="Map of the lunar south pole"></div>
+
+<header id="topbar">
+  <a class="brand" href="/ourmoon"><span class="moon" aria-hidden="true"></span> OurMoon</a>
+  <button class="chip" id="layersChip" type="button" aria-label="Map layers">◍ Layers</button>
+  <button class="chip" id="userChip" type="button">Sign in</button>
+</header>
+
+<div id="hud">
+  <div class="legend">
+    <span><i style="background:rgba(57,182,255,.5);border:1px solid #39b6ff"></i> PSR · cold sink</span>
+    <span><i style="background:rgba(255,201,77,.42);border:1px solid #ffc94d"></i> Eternal light</span>
+    <span><i style="background:#7ee0c8;border-radius:50%"></i> Base</span>
+    <span><i style="background:#ff9f5c;border-radius:50%"></i> LTEC</span>
+  </div>
+</div>
+
+<section id="sheet" aria-live="polite">
+  <button id="grab" type="button" aria-label="Expand or collapse panel"><span></span></button>
+  <div id="sheetBody"></div>
+</section>
+
+<div id="toast" role="status"></div>
+
+<!-- Crawlable copy of what the app is, for readers without JS. -->
+<noscript>
+  <div style="position:absolute;inset:0;z-index:3000;overflow:auto;background:#05070c;padding:28px 18px">
+    <div style="max-width:640px;margin:0 auto">
+      <h1>OurMoon — claim your lunar base</h1>
+      <p>OurMoon is a shared map of the Moon's south pole. Sign up with a username, claim a plot on real
+      LROC orthomosaic imagery, name your lunar base, and site a Lunar Thermal Energy Conversion (LTEC)
+      power plant that draws on the temperature gap between a peak of eternal light and a permanently
+      shadowed region.</p>
+      <h2>The siting rules</h2>
+      <ul>
+        <li>A new base must be at least 10 km clear of every existing base and LTEC plant.</li>
+        <li>An LTEC plant must sit inside a peak of eternal light — the hot side.</li>
+        <li>An LTEC plant must be within 10 km of a permanently shadowed region — the cold sink.</li>
+        <li>An LTEC plant must be within 10 km of the base it powers.</li>
+      </ul>
+      <p>Every live base is published at
+      <a href="/ourmoon/bases.json" style="color:#7ee0c8">/ourmoon/bases.json</a> with names, owners and
+      selenographic coordinates. The map itself needs JavaScript.</p>
+    </div>
+  </div>
+</noscript>
+
+<script src="/ourmoon/app.js"></script>
+</body>
+</html>
