@@ -1,9 +1,2 @@
 node_modules/
 .env
-*.log
-.DS_Store
-scripts/.venv/
-texostat/data/analytics.json
-texostat/data/cache/*.json
-data/leospy-cache.json
-data/psrmap-tiles/

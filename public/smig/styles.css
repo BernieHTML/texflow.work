@@ -1,0 +1,857 @@
+/* smig — one off-white surface, big type, and motion that always resolves.
+   Everything here is mobile-first; the desktop rule at the bottom just stops
+   the app growing wider than a phone. */
+
+:root {
+  --paper:      #F4F1EC;
+  --paper-lift: #FAF8F5;
+  --ink:        #17130F;
+  --ink-soft:   #6E655C;
+  --ink-faint:  #A79D92;
+  --carrot:     #E8703A;
+  --frost:      #6E93B8;
+  --line:       rgba(23, 19, 15, .10);
+  --line-firm:  rgba(23, 19, 15, .22);
+
+  /* One easing for arrivals, one for anything that should feel springy. */
+  --ease:   cubic-bezier(.22, 1, .36, 1);
+  --spring: cubic-bezier(.34, 1.4, .64, 1);
+  --t-fast: 180ms;
+  --t-mid:  340ms;
+  --t-slow: 560ms;
+
+  --pad: 22px;
+}
+
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+  background: var(--paper);
+}
+
+body {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  color: var(--ink);
+  font-size: 16px;
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+  overscroll-behavior-y: none;
+}
+
+#app {
+  position: relative;
+  height: 100dvh;
+  width: 100%;
+  max-width: 560px;
+  margin: 0 auto;
+  overflow: hidden;
+  background: var(--paper);
+}
+
+/* ------------------------------------------------------------- screens --- */
+
+/* Screens stack; only .is-live is interactive. Leaving screens keep painting
+   for the length of the transition so nothing pops out of existence. */
+.screen {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  padding: calc(env(safe-area-inset-top) + var(--pad)) var(--pad)
+           calc(env(safe-area-inset-bottom) + var(--pad));
+  background: var(--paper);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+  transition: opacity var(--t-mid) var(--ease),
+              transform var(--t-mid) var(--ease),
+              visibility 0s linear var(--t-mid);
+}
+
+.screen.is-live {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+  transition: opacity var(--t-mid) var(--ease),
+              transform var(--t-slow) var(--ease),
+              visibility 0s;
+}
+
+/* Going back reverses the direction of travel. */
+.screen.is-leaving-back { transform: translateY(-10px); }
+
+/* Children of a live screen come in one after another. The delay is set
+   inline as --i so any screen can stagger without extra CSS. */
+.is-live .stagger > * {
+  animation: rise var(--t-slow) var(--ease) both;
+  animation-delay: calc(var(--i, 0) * 55ms + 60ms);
+}
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* ------------------------------------------------------------ typography --- */
+
+h1, h2 { margin: 0; font-weight: 600; letter-spacing: -.02em; }
+h1 { font-size: clamp(1.9rem, 8vw, 2.6rem); line-height: 1.06; }
+h2 { font-size: 1.35rem; line-height: 1.15; }
+
+.lede  { margin: 10px 0 0; color: var(--ink-soft); font-size: 1rem; max-width: 34ch; }
+.tiny  { font-size: .78rem; color: var(--ink-faint); }
+.eyebrow {
+  font-size: .68rem;
+  text-transform: uppercase;
+  letter-spacing: .16em;
+  color: var(--ink-faint);
+  font-weight: 600;
+}
+
+.spacer { flex: 1 1 auto; min-height: 12px; }
+
+/* ---------------------------------------------------------------- inputs --- */
+
+.field { display: block; margin-top: 18px; }
+.field > span { display: block; margin-bottom: 7px; }
+
+input[type="text"], input[type="email"], textarea {
+  width: 100%;
+  font: inherit;
+  font-size: 1.06rem;
+  color: var(--ink);
+  background: var(--paper-lift);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 15px 16px;
+  outline: none;
+  transition: border-color var(--t-fast) var(--ease),
+              background var(--t-fast) var(--ease),
+              box-shadow var(--t-fast) var(--ease);
+}
+
+input:focus, textarea:focus {
+  border-color: var(--line-firm);
+  background: #fff;
+  box-shadow: 0 0 0 4px rgba(232, 112, 58, .10);
+}
+
+input::placeholder, textarea::placeholder { color: var(--ink-faint); }
+
+/* --------------------------------------------------------------- buttons --- */
+
+button {
+  font: inherit;
+  font-weight: 550;
+  cursor: pointer;
+  border: 0;
+  background: none;
+  color: inherit;
+}
+
+.btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 54px;
+  padding: 0 22px;
+  border-radius: 16px;
+  background: var(--ink);
+  color: var(--paper);
+  font-size: 1.02rem;
+  letter-spacing: -.01em;
+  transition: transform var(--t-fast) var(--spring),
+              opacity var(--t-fast) var(--ease),
+              background var(--t-fast) var(--ease);
+}
+
+.btn:active   { transform: scale(.972); }
+.btn:disabled { opacity: .38; cursor: default; transform: none; }
+
+.btn.ghost {
+  background: transparent;
+  color: var(--ink);
+  border: 1px solid var(--line-firm);
+}
+
+.btn.carrot { background: var(--carrot); color: #fff; }
+.btn.quiet  { background: transparent; color: var(--ink-soft); min-height: 44px; }
+.btn.danger { background: transparent; color: #B4442A; border: 1px solid rgba(180, 68, 42, .3); }
+
+.btn-row { display: flex; gap: 10px; margin-top: 12px; }
+.btn-row .btn { margin-top: 0; }
+.stack > .btn { margin-top: 10px; }
+
+/* Round icon buttons — the header and composer controls. */
+.icon-btn {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  flex: 0 0 44px;
+  border-radius: 50%;
+  color: var(--ink);
+  transition: transform var(--t-fast) var(--spring), background var(--t-fast) var(--ease);
+}
+.icon-btn:active { transform: scale(.9); }
+.icon-btn:hover  { background: rgba(23, 19, 15, .05); }
+.icon-btn svg    { width: 21px; height: 21px; display: block; }
+
+/* --------------------------------------------------------------- snowman --- */
+
+.mark { width: 108px; height: 108px; display: block; }
+.mark circle, .mark path { vector-effect: non-scaling-stroke; }
+
+/* A slow breath — the only thing moving on an idle screen. */
+.is-live .mark.breathes { animation: breathe 5.2s ease-in-out infinite; transform-origin: 50% 78%; }
+@keyframes breathe {
+  0%, 100% { transform: translateY(0)      scale(1);    }
+  50%      { transform: translateY(-5px)   scale(1.018);}
+}
+
+/* While the model loads or a request is in flight. */
+.mark.thinking { animation: tilt 1.5s var(--ease) infinite; transform-origin: 50% 82%; }
+@keyframes tilt {
+  0%, 100% { transform: rotate(-3.5deg); }
+  50%      { transform: rotate(3.5deg);  }
+}
+
+/* ------------------------------------------------------------ code panel --- */
+
+.code-plate {
+  margin-top: 26px;
+  padding: 30px 20px;
+  border-radius: 22px;
+  background: var(--paper-lift);
+  border: 1px solid var(--line);
+  text-align: center;
+}
+
+.code-out {
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+  font-size: clamp(2rem, 11vw, 2.9rem);
+  font-weight: 650;
+  letter-spacing: .04em;
+  font-variant-numeric: tabular-nums;
+  margin-top: 12px;
+}
+
+/* Each character lands on its own beat — the reveal is the reward. */
+.code-out span {
+  animation: land 620ms var(--spring) both;
+  animation-delay: calc(var(--i) * 85ms + 180ms);
+}
+.code-out span.dash { color: var(--carrot); }
+
+@keyframes land {
+  from { opacity: 0; transform: translateY(-18px) scale(.7); filter: blur(4px); }
+  to   { opacity: 1; transform: none; filter: blur(0); }
+}
+
+/* Segmented code entry. */
+.code-in {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 7px;
+  margin-top: 26px;
+}
+.code-in .cell {
+  width: 44px;
+  height: 58px;
+  display: grid;
+  place-items: center;
+  border-radius: 13px;
+  background: var(--paper-lift);
+  border: 1px solid var(--line);
+  font-size: 1.6rem;
+  font-weight: 650;
+  transition: border-color var(--t-fast) var(--ease),
+              transform var(--t-fast) var(--spring),
+              background var(--t-fast) var(--ease);
+}
+.code-in .cell.filled { border-color: var(--line-firm); background: #fff; transform: translateY(-2px); }
+.code-in .cell.active { border-color: var(--carrot); box-shadow: 0 0 0 3px rgba(232, 112, 58, .13); }
+.code-in .sep { color: var(--carrot); font-weight: 650; font-size: 1.4rem; }
+.code-in input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.shake { animation: shake 420ms var(--ease); }
+@keyframes shake {
+  10%, 90% { transform: translateX(-2px); }
+  30%, 70% { transform: translateX(4px);  }
+  50%      { transform: translateX(-4px); }
+}
+
+/* ----------------------------------------------------------------- face --- */
+
+.cam-wrap {
+  position: relative;
+  margin: 22px auto 0;
+  width: min(280px, 72vw);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  overflow: hidden;
+  background: var(--paper-lift);
+  border: 1px solid var(--line);
+}
+
+.cam-wrap video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scaleX(-1); /* a mirror, the way people expect to see themselves */
+  display: block;
+}
+
+/* The ring fills as the model holds a good reading. */
+.cam-ring {
+  position: absolute;
+  inset: -1px;
+  pointer-events: none;
+}
+.cam-ring circle {
+  fill: none;
+  stroke-width: 3;
+  transform: rotate(-90deg);
+  transform-origin: 50% 50%;
+}
+.cam-ring .track { stroke: var(--line); }
+.cam-ring .fill {
+  stroke: var(--carrot);
+  stroke-linecap: round;
+  transition: stroke-dashoffset 140ms linear, stroke var(--t-mid) var(--ease);
+}
+.cam-ring .fill.done { stroke: #3E8E63; }
+
+.cam-wrap.flash::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: #fff;
+  animation: flash 460ms var(--ease) forwards;
+}
+@keyframes flash {
+  from { opacity: .85; }
+  to   { opacity: 0;   }
+}
+
+.face-step {
+  margin-top: 20px;
+  text-align: center;
+  min-height: 62px;
+}
+.face-step .cue {
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: -.02em;
+  animation: rise var(--t-mid) var(--ease) both;
+}
+.face-step .hint { color: var(--ink-soft); font-size: .93rem; margin-top: 4px; }
+
+.load-bar {
+  height: 2px;
+  width: min(280px, 72vw);
+  margin: 16px auto 0;
+  background: var(--line);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.load-bar i {
+  display: block;
+  height: 100%;
+  width: 0%;
+  background: var(--carrot);
+  transition: width 260ms var(--ease);
+}
+
+/* --------------------------------------------------------------- threads --- */
+
+.top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 46px;
+  margin-bottom: 6px;
+}
+.top h1, .top h2 { flex: 1 1 auto; min-width: 0; }
+.top .who { flex: 1 1 auto; min-width: 0; }
+.top .who .name {
+  font-size: 1.22rem;
+  font-weight: 600;
+  letter-spacing: -.02em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.top .who .state { font-size: .76rem; color: var(--ink-faint); }
+.top .who .state.live { color: #3E8E63; }
+
+.scroll {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  margin: 0 calc(var(--pad) * -1);
+  padding: 4px var(--pad) 8px;
+}
+.scroll::-webkit-scrollbar { width: 0; }
+
+.thread-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  padding: 15px 4px;
+  text-align: left;
+  border-bottom: 1px solid var(--line);
+  animation: rise 480ms var(--ease) both;
+  animation-delay: calc(var(--i, 0) * 45ms);
+  transition: transform var(--t-fast) var(--spring);
+}
+.thread-row:active { transform: scale(.985); }
+
+/* Initial disc, tinted from the peer's stored hue. */
+.disc {
+  flex: 0 0 46px;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-weight: 650;
+  font-size: 1.02rem;
+  color: var(--ink);
+  background: hsl(var(--hue, 30) 42% 88%);
+  position: relative;
+}
+.disc.on::after {
+  content: "";
+  position: absolute;
+  right: 1px;
+  bottom: 1px;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: #3E8E63;
+  border: 2px solid var(--paper);
+  animation: pop 380ms var(--spring) both;
+}
+@keyframes pop { from { transform: scale(0); } to { transform: scale(1); } }
+
+.thread-row .body { flex: 1 1 auto; min-width: 0; }
+.thread-row .name { font-weight: 600; letter-spacing: -.01em; }
+.thread-row .prev {
+  font-size: .88rem;
+  color: var(--ink-soft);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.thread-row .prev.unseen { color: var(--ink); font-weight: 550; }
+
+.pip {
+  flex: 0 0 auto;
+  min-width: 21px;
+  height: 21px;
+  padding: 0 6px;
+  border-radius: 11px;
+  background: var(--carrot);
+  color: #fff;
+  font-size: .72rem;
+  font-weight: 650;
+  display: grid;
+  place-items: center;
+  animation: pop 420ms var(--spring) both;
+}
+
+.empty {
+  text-align: center;
+  padding: 54px 20px;
+  color: var(--ink-faint);
+  animation: rise var(--t-slow) var(--ease) both;
+}
+
+/* -------------------------------------------------------------- messages --- */
+
+/* No bubbles anywhere. A message is a coloured rule, a small name, and text
+   big enough to read at arm's length. */
+.msg {
+  padding: 16px 0 16px 15px;
+  border-left: 3px solid var(--frost);
+  margin-top: 12px;
+  animation: msg-in 620ms var(--ease) both;
+}
+.msg.mine { border-left-color: var(--carrot); }
+
+@keyframes msg-in {
+  from { opacity: 0; transform: translateY(20px); filter: blur(6px); }
+  to   { opacity: 1; transform: none; filter: blur(0); }
+}
+
+.msg .from {
+  font-size: .66rem;
+  text-transform: uppercase;
+  letter-spacing: .17em;
+  font-weight: 650;
+  color: var(--frost);
+  margin-bottom: 6px;
+}
+.msg.mine .from { color: var(--carrot); }
+
+.msg .text {
+  font-size: clamp(1.32rem, 5.6vw, 1.75rem);
+  line-height: 1.2;
+  font-weight: 500;
+  letter-spacing: -.022em;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.msg .at { font-size: .68rem; color: var(--ink-faint); margin-top: 8px; }
+.msg .at .seen { color: #3E8E63; }
+
+/* Voice note — a play control and a bar of static levels that lights up. */
+.voice {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  margin-top: 2px;
+}
+.voice .play {
+  flex: 0 0 46px;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: var(--ink);
+  color: var(--paper);
+  display: grid;
+  place-items: center;
+  transition: transform var(--t-fast) var(--spring);
+}
+.voice .play:active { transform: scale(.9); }
+.voice .play svg { width: 17px; height: 17px; }
+
+.wave { display: flex; align-items: center; gap: 3px; height: 30px; flex: 1 1 auto; }
+.wave i {
+  flex: 1 1 auto;
+  max-width: 4px;
+  border-radius: 2px;
+  background: var(--line-firm);
+  transition: background 120ms linear, transform 120ms var(--ease);
+  transform-origin: 50% 50%;
+}
+.wave i.lit { background: var(--carrot); transform: scaleY(1.18); }
+.voice .dur { font-size: .8rem; color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+
+/* "someone is typing" — three dots that never stop mid-beat. */
+.typing {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 14px 0 4px 15px;
+  border-left: 3px solid var(--frost);
+  margin-top: 12px;
+  animation: rise 320ms var(--ease) both;
+}
+.typing i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--ink-faint);
+  animation: blip 1.25s var(--ease) infinite;
+}
+.typing i:nth-child(2) { animation-delay: .16s; }
+.typing i:nth-child(3) { animation-delay: .32s; }
+@keyframes blip {
+  0%, 60%, 100% { opacity: .28; transform: translateY(0); }
+  30%           { opacity: 1;   transform: translateY(-4px); }
+}
+
+/* -------------------------------------------------------------- composer --- */
+
+.composer {
+  display: flex;
+  align-items: flex-end;
+  gap: 9px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+}
+
+.composer textarea {
+  flex: 1 1 auto;
+  resize: none;
+  max-height: 132px;
+  min-height: 50px;
+  border-radius: 16px;
+  padding: 13px 15px;
+  font-size: 1.02rem;
+  line-height: 1.3;
+}
+
+.send {
+  flex: 0 0 50px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: var(--ink);
+  color: var(--paper);
+  display: grid;
+  place-items: center;
+  transition: transform var(--t-fast) var(--spring), opacity var(--t-fast) var(--ease);
+}
+.send:disabled { opacity: .3; }
+.send:active   { transform: scale(.9); }
+.send svg      { width: 19px; height: 19px; }
+
+.mic {
+  flex: 0 0 50px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: var(--paper-lift);
+  border: 1px solid var(--line-firm);
+  display: grid;
+  place-items: center;
+  transition: transform var(--t-fast) var(--spring), background var(--t-fast) var(--ease);
+}
+.mic svg { width: 19px; height: 19px; }
+.mic.armed {
+  background: var(--carrot);
+  border-color: var(--carrot);
+  color: #fff;
+  animation: pulse 1.5s var(--ease) infinite;
+}
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(232, 112, 58, .38); }
+  50%      { box-shadow: 0 0 0 12px rgba(232, 112, 58, 0); }
+}
+
+.rec-strip {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 13px 16px;
+  border-radius: 16px;
+  background: var(--paper-lift);
+  border: 1px solid var(--line);
+  flex: 1 1 auto;
+  animation: rise var(--t-mid) var(--ease) both;
+}
+.rec-strip .dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--carrot);
+  animation: blink 1s steps(1) infinite;
+}
+@keyframes blink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: .2; } }
+.rec-strip .t { font-variant-numeric: tabular-nums; font-weight: 600; }
+
+/* ----------------------------------------------------------------- calls --- */
+
+.call-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  background: var(--paper);
+  display: flex;
+  flex-direction: column;
+  padding: calc(env(safe-area-inset-top) + var(--pad)) var(--pad)
+           calc(env(safe-area-inset-bottom) + var(--pad));
+  opacity: 0;
+  visibility: hidden;
+  transform: scale(1.02);
+  transition: opacity var(--t-mid) var(--ease),
+              transform var(--t-mid) var(--ease),
+              visibility 0s linear var(--t-mid);
+}
+.call-layer.is-live {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+  transition: opacity var(--t-mid) var(--ease), transform var(--t-mid) var(--spring), visibility 0s;
+}
+
+.call-stage {
+  position: relative;
+  flex: 1 1 auto;
+  border-radius: 24px;
+  overflow: hidden;
+  background: #E7E2DA;
+  margin: 14px 0;
+  display: grid;
+  place-items: center;
+}
+.call-stage video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.call-stage .placeholder { text-align: center; color: var(--ink-soft); z-index: 1; }
+
+.self-view {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  width: 96px;
+  aspect-ratio: 3 / 4;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 2px solid var(--paper);
+  z-index: 2;
+  background: #D8D2C8;
+  animation: rise var(--t-slow) var(--spring) both;
+}
+.self-view video { transform: scaleX(-1); }
+
+.call-controls { display: flex; justify-content: center; gap: 14px; }
+.call-btn {
+  width: 62px;
+  height: 62px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--paper-lift);
+  border: 1px solid var(--line-firm);
+  transition: transform var(--t-fast) var(--spring), background var(--t-fast) var(--ease);
+}
+.call-btn:active { transform: scale(.9); }
+.call-btn svg    { width: 23px; height: 23px; }
+.call-btn.off    { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.call-btn.end    { background: #C4452A; color: #fff; border-color: #C4452A; }
+.call-btn.take   { background: #3E8E63; color: #fff; border-color: #3E8E63; }
+
+/* The incoming-call ring: concentric pulses behind the caller's initial. */
+.ringing { display: grid; place-items: center; gap: 4px; text-align: center; }
+.ringing .halo { position: relative; display: grid; place-items: center; margin-bottom: 20px; }
+.ringing .halo::before,
+.ringing .halo::after {
+  content: "";
+  position: absolute;
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  border: 1.5px solid var(--carrot);
+  animation: ripple 2.1s var(--ease) infinite;
+}
+.ringing .halo::after { animation-delay: .7s; }
+@keyframes ripple {
+  from { transform: scale(.85); opacity: .55; }
+  to   { transform: scale(2);   opacity: 0;   }
+}
+
+/* ---------------------------------------------------------------- sheets --- */
+
+.sheet-back {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  background: rgba(23, 19, 15, .22);
+  backdrop-filter: blur(2px);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--t-mid) var(--ease), visibility 0s linear var(--t-mid);
+}
+.sheet-back.is-live { opacity: 1; visibility: visible; transition: opacity var(--t-mid) var(--ease), visibility 0s; }
+
+.sheet {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  max-width: 560px;
+  margin: 0 auto;
+  background: var(--paper);
+  border-radius: 26px 26px 0 0;
+  padding: 10px var(--pad) calc(env(safe-area-inset-bottom) + 24px);
+  transform: translateY(100%);
+  transition: transform var(--t-slow) var(--ease);
+}
+.sheet-back.is-live .sheet { transform: none; transition: transform var(--t-slow) var(--spring); }
+
+.grabber {
+  width: 38px;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--line-firm);
+  margin: 6px auto 16px;
+}
+
+/* ---------------------------------------------------------------- toasts --- */
+
+.toasts {
+  position: fixed;
+  top: calc(env(safe-area-inset-top) + 12px);
+  left: 0;
+  right: 0;
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  pointer-events: none;
+}
+.toast {
+  max-width: min(440px, calc(100vw - 32px));
+  padding: 11px 17px;
+  border-radius: 14px;
+  background: var(--ink);
+  color: var(--paper);
+  font-size: .92rem;
+  box-shadow: 0 8px 24px rgba(23, 19, 15, .16);
+  animation: toast-in 460ms var(--spring) both;
+}
+.toast.bad  { background: #B4442A; color: #fff; }
+.toast.good { background: #3E8E63; color: #fff; }
+.toast.out  { animation: toast-out 300ms var(--ease) both; }
+
+@keyframes toast-in  { from { opacity: 0; transform: translateY(-16px) scale(.94); } to { opacity: 1; transform: none; } }
+@keyframes toast-out { to   { opacity: 0; transform: translateY(-10px) scale(.97); } }
+
+/* ----------------------------------------------------------------- misc --- */
+
+.fact-quote {
+  font-size: 1.06rem;
+  font-style: italic;
+  color: var(--ink);
+  padding: 15px 17px;
+  background: var(--paper-lift);
+  border: 1px solid var(--line);
+  border-radius: 15px;
+  margin-top: 12px;
+}
+
+.hidden { display: none !important; }
+
+/* Desktop just centres the phone; the app is not a desktop app. */
+@media (min-width: 620px) {
+  body { background: #EDE9E2; }
+  #app {
+    height: min(880px, 100dvh);
+    margin-top: max(0px, calc((100dvh - 880px) / 2));
+    border-radius: 26px;
+    box-shadow: 0 30px 80px rgba(23, 19, 15, .13);
+  }
+}
+
+/* Anyone who asked for less motion gets none of it — the app still works
+   exactly the same, it just cuts to each state. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .001ms !important;
+  }
+}

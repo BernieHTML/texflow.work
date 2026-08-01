@@ -14,6 +14,7 @@ import { writeWellKnownTexmkt } from './scripts/texmkt-well-known.js';
 import { SEO_PAGES, SEO_SITE } from './scripts/seo-config.js';
 import { injectSeoIntoHtml, resolveSeoPage } from './scripts/seo-utils.js';
 import { createLeoSpyRouter } from './routes/leospy/index.js';
+import { createSmigRouter } from './routes/smig/index.js';
 import { registerAcsaArchive } from './routes/acsa-archive/index.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -1371,6 +1372,16 @@ try {
   console.log('[LEOSpy] Mounted at /leospy');
 } catch (e) {
   console.error('[LEOSpy] Failed to mount /leospy:', e.message);
+}
+
+// --- smig: a very small messenger ---
+// Mounted before the static handler so /smig/account and the API win over
+// public/smig/*; the app's own assets fall through to the router's static.
+try {
+  app.use('/smig', createSmigRouter());
+  console.log('[smig] Mounted at /smig');
+} catch (e) {
+  console.error('[smig] Failed to mount /smig:', e.message);
 }
 
 // --- Static: public, then root assets ---

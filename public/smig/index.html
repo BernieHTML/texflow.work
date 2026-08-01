@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
+<title>smig</title>
+<meta name="description" content="smig — a very small messenger. Your code gets you in, your smile unlocks your messages, and people find you by one true thing about you.">
+<meta name="theme-color" content="#F4F1EC">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="icon" href="/smig/logo.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/smig/logo.svg">
+<link rel="manifest" href="/smig/manifest.webmanifest">
+<link rel="stylesheet" href="/smig/styles.css">
+</head>
+<body>
+
+<!-- The snowman, once. Every other appearance is a <use> of this. -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="snowman" viewBox="0 0 512 512">
+    <circle cx="256" cy="345" r="104" fill="#fff" stroke="#17130F" stroke-width="14"/>
+    <circle cx="256" cy="196" r="72"  fill="#fff" stroke="#17130F" stroke-width="14"/>
+    <circle cx="232" cy="184" r="9" fill="#17130F"/>
+    <circle cx="284" cy="184" r="9" fill="#17130F"/>
+    <path d="M256 202 L300 214 L256 224 Z" fill="#E8703A"/>
+    <path d="M228 226 Q256 248 284 232" fill="none" stroke="#17130F" stroke-width="11" stroke-linecap="round"/>
+    <circle cx="256" cy="318" r="9" fill="#17130F"/>
+    <circle cx="256" cy="360" r="9" fill="#17130F"/>
+  </symbol>
+
+  <symbol id="i-back" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M15 19l-7-7 7-7"/>
+  </symbol>
+  <symbol id="i-send" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M4 12h15M13 6l6 6-6 6"/>
+  </symbol>
+  <symbol id="i-mic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/>
+  </symbol>
+  <symbol id="i-play" viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15l13-7.5z"/></symbol>
+  <symbol id="i-pause" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></symbol>
+  <symbol id="i-video" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="2" y="6" width="14" height="12" rx="3"/><path d="M16 11l6-3.5v9L16 13z"/>
+  </symbol>
+  <symbol id="i-phone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M6.5 3h3l1.5 4.5-2 1.5a12 12 0 0 0 6 6l1.5-2L21 14.5v3a2.5 2.5 0 0 1-2.7 2.5A17 17 0 0 1 3.5 5.7 2.5 2.5 0 0 1 6 3z"/>
+  </symbol>
+  <symbol id="i-hang" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M3 11c5-4 13-4 18 0v3.5l-4.5.6-.8-3a13 13 0 0 0-7.4 0l-.8 3L3 14.5z"/>
+  </symbol>
+  <symbol id="i-mic-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M9 5a3 3 0 0 1 6 0v5M5 11a7 7 0 0 0 10.6 6M12 18v3M3 3l18 18"/>
+  </symbol>
+  <symbol id="i-cam-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M16 10.5V9a3 3 0 0 0-3-3H8M2 8v7a3 3 0 0 0 3 3h8M22 8.5v7l-6-3.5M3 3l18 18"/>
+  </symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="i-share" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 15V3M8.5 6.5L12 3l3.5 3.5M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"/>
+  </symbol>
+  <symbol id="i-more" viewBox="0 0 24 24" fill="currentColor">
+    <circle cx="12" cy="5" r="1.9"/><circle cx="12" cy="12" r="1.9"/><circle cx="12" cy="19" r="1.9"/>
+  </symbol>
+</svg>
+
+<div id="app">
+
+  <!-- 1. splash ------------------------------------------------------- -->
+  <section class="screen" data-screen="splash">
+    <div class="spacer"></div>
+    <div style="display:grid;place-items:center;text-align:center">
+      <svg class="mark breathes" aria-hidden="true"><use href="#snowman"/></svg>
+      <h1 style="margin-top:26px">smig</h1>
+      <p class="lede" style="text-align:center">Small messages. One true thing about you. Your face to get in.</p>
+    </div>
+    <div class="spacer"></div>
+    <div class="stack">
+      <button class="btn" data-go="signup">Make an account</button>
+      <button class="btn ghost" data-go="signin">I have a code</button>
+    </div>
+  </section>
+
+  <!-- 2. sign up ------------------------------------------------------ -->
+  <section class="screen" data-screen="signup">
+    <div class="top"><button class="icon-btn" data-back><svg><use href="#i-back"/></svg></button></div>
+    <div class="stagger">
+      <div style="--i:0"><span class="eyebrow">Step one</span><h1 style="margin-top:8px">Who are you?</h1></div>
+      <label class="field" style="--i:1"><span class="tiny">Username</span>
+        <input id="su-name" type="text" autocomplete="username" placeholder="dot" maxlength="24" enterkeyhint="next">
+      </label>
+      <label class="field" style="--i:2"><span class="tiny">Email</span>
+        <input id="su-email" type="email" autocomplete="email" placeholder="you@somewhere.com" enterkeyhint="go">
+      </label>
+      <p class="tiny" style="--i:3;margin-top:14px">Your email is only ever used to send you your code back if you lose it.</p>
+    </div>
+    <div class="spacer"></div>
+    <button class="btn" id="su-go">Get my code</button>
+  </section>
+
+  <!-- 3. the code ----------------------------------------------------- -->
+  <section class="screen" data-screen="code">
+    <div class="spacer"></div>
+    <div style="text-align:center">
+      <span class="eyebrow">This is you now</span>
+      <div class="code-plate">
+        <div class="code-out" id="code-out"></div>
+        <p class="tiny" style="margin:16px 0 0">Write it down. It is the only way back in.</p>
+      </div>
+    </div>
+    <div class="spacer"></div>
+    <div class="stack">
+      <button class="btn ghost" id="code-copy">Copy my code</button>
+      <button class="btn" id="code-next">I've written it down</button>
+    </div>
+  </section>
+
+  <!-- 4. sign in ------------------------------------------------------ -->
+  <section class="screen" data-screen="signin">
+    <div class="top"><button class="icon-btn" data-back><svg><use href="#i-back"/></svg></button></div>
+    <div class="spacer"></div>
+    <div style="text-align:center">
+      <h1>Your code</h1>
+      <p class="lede" style="margin-inline:auto;text-align:center">Six characters, the way we gave them to you.</p>
+      <div class="code-in" id="code-in" role="button" tabindex="0" aria-label="Enter your six character code">
+        <div class="cell"></div><div class="cell"></div><div class="cell"></div>
+        <div class="sep">–</div>
+        <div class="cell"></div><div class="cell"></div><div class="cell"></div>
+        <input id="code-field" inputmode="text" autocapitalize="characters" autocomplete="one-time-code" maxlength="6" aria-label="Code">
+      </div>
+    </div>
+    <div class="spacer"></div>
+    <button class="btn" id="si-go" disabled>Let me in</button>
+  </section>
+
+  <!-- 5. onboarding: the fact ----------------------------------------- -->
+  <section class="screen" data-screen="fact">
+    <div class="stagger">
+      <div style="--i:0"><span class="eyebrow">Step two</span><h1 style="margin-top:8px">One true thing.</h1></div>
+      <p class="lede" style="--i:1">This is how people add you on smig. Not a handle — a fact. Make it yours, and tell it to the people you want to hear from.</p>
+      <label class="field" style="--i:2"><span class="tiny">Your fact</span>
+        <input id="fact-in" type="text" placeholder="i like icecream" maxlength="80" enterkeyhint="go">
+      </label>
+      <p class="tiny" style="--i:3;margin-top:12px">Capitals and punctuation don't matter when someone types it.</p>
+    </div>
+    <div class="spacer"></div>
+    <button class="btn" id="fact-go">That's me</button>
+  </section>
+
+  <!-- 6+7. face: enrol and unlock share one screen --------------------- -->
+  <section class="screen" data-screen="face">
+    <div class="top"></div>
+    <div style="text-align:center">
+      <span class="eyebrow" id="face-eyebrow">Step three</span>
+      <h1 style="margin-top:8px" id="face-title">Show smig your face.</h1>
+    </div>
+
+    <div class="cam-wrap" id="cam-wrap">
+      <video id="cam" playsinline muted autoplay></video>
+      <svg class="cam-ring" viewBox="0 0 100 100">
+        <circle class="track" cx="50" cy="50" r="48.5"/>
+        <circle class="fill" id="cam-fill" cx="50" cy="50" r="48.5"
+                stroke-dasharray="304.7" stroke-dashoffset="304.7"/>
+      </svg>
+    </div>
+
+    <div class="load-bar hidden" id="face-load"><i></i></div>
+
+    <div class="face-step">
+      <div class="cue" id="face-cue">Warming up…</div>
+      <div class="hint" id="face-hint">Your camera never leaves your phone. Only a number describing your face is sent.</div>
+    </div>
+
+    <div class="spacer"></div>
+    <button class="btn ghost" id="face-start">Turn on the camera</button>
+    <button class="btn quiet hidden" id="face-signout">Sign out instead</button>
+  </section>
+
+  <!-- 8. home --------------------------------------------------------- -->
+  <section class="screen" data-screen="home">
+    <div class="top">
+      <svg class="mark" style="width:34px;height:34px" aria-hidden="true"><use href="#snowman"/></svg>
+      <h1 style="font-size:1.6rem">smig</h1>
+      <button class="icon-btn" id="home-share" aria-label="Share smig"><svg><use href="#i-share"/></svg></button>
+      <button class="icon-btn" id="home-add" aria-label="Add someone"><svg><use href="#i-plus"/></svg></button>
+      <button class="icon-btn" id="home-menu" aria-label="Account"><svg><use href="#i-more"/></svg></button>
+    </div>
+    <div class="scroll" id="thread-list"></div>
+  </section>
+
+  <!-- 9. a conversation ------------------------------------------------ -->
+  <section class="screen" data-screen="thread">
+    <div class="top">
+      <button class="icon-btn" data-back><svg><use href="#i-back"/></svg></button>
+      <div class="who">
+        <div class="name" id="th-name">…</div>
+        <div class="state" id="th-state"></div>
+      </div>
+      <button class="icon-btn" id="th-voice" aria-label="Voice call"><svg><use href="#i-phone"/></svg></button>
+      <button class="icon-btn" id="th-video" aria-label="Video call"><svg><use href="#i-video"/></svg></button>
+    </div>
+    <div class="scroll" id="msg-list"></div>
+    <div class="composer" id="composer">
+      <textarea id="say" rows="1" placeholder="Say something" maxlength="900" enterkeyhint="send"></textarea>
+      <button class="mic" id="mic" aria-label="Hold to record"><svg><use href="#i-mic"/></svg></button>
+      <button class="send" id="send" disabled aria-label="Send"><svg><use href="#i-send"/></svg></button>
+    </div>
+  </section>
+
+</div>
+
+<!-- call overlay ------------------------------------------------------- -->
+<div class="call-layer" id="call-layer">
+  <div class="top">
+    <div class="who">
+      <div class="name" id="call-name">…</div>
+      <div class="state" id="call-state">Calling…</div>
+    </div>
+  </div>
+
+  <div class="call-stage" id="call-stage">
+    <video id="far" playsinline autoplay></video>
+    <div class="placeholder" id="call-placeholder">
+      <div class="ringing">
+        <div class="halo"><div class="disc" id="call-disc" style="width:70px;height:70px;font-size:1.5rem"></div></div>
+        <div class="tiny" id="call-sub">Ringing</div>
+      </div>
+    </div>
+    <div class="self-view hidden" id="self-view"><video id="near" playsinline muted autoplay></video></div>
+  </div>
+
+  <div class="call-controls" id="call-controls"></div>
+</div>
+
+<div class="sheet-back" id="sheet-back"><div class="sheet" id="sheet"></div></div>
+<div class="toasts" id="toasts"></div>
+
+<script type="module" src="/smig/app.js"></script>
+</body>
+</html>
