@@ -1,2 +1,12 @@
 node_modules/
 .env
+
+# smig's runtime state. These hold real people: email addresses, the 128-float
+# face descriptors the unlock gate matches against, private messages, live
+# session tokens, and the voice notes and photos themselves. `origin` is a
+# GitHub remote, so a stray `git add -A` would publish all of it permanently.
+data/smig-*.json
+data/smig-media/
+
+# Local python virtualenv for scripts/.
+scripts/.venv/
