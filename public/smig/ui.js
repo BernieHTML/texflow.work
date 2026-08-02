@@ -98,7 +98,9 @@ let sheetOpen = false;
 export function openSheet(...content) {
   const back = $('#sheet-back');
   const sheet = $('#sheet');
-  sheet.replaceChildren(el('div', { class: 'grabber' }), ...content);
+  // Callers build sheets conditionally, so a skipped row arrives as null —
+  // replaceChildren would happily render that as the word "null".
+  sheet.replaceChildren(el('div', { class: 'grabber' }), ...content.filter(Boolean));
   back.classList.add('is-live');
   sheetOpen = true;
   return closeSheet;

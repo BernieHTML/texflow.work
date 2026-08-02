@@ -6,12 +6,12 @@
     <!-- head -->
     <circle cx="256" cy="196" r="72" fill="#FFFFFF" stroke="#17130F" stroke-width="14"/>
     <!-- eyes -->
-    <circle cx="232" cy="184" r="9" fill="#17130F"/>
-    <circle cx="284" cy="184" r="9" fill="#17130F"/>
+    <circle cx="234" cy="182" r="9" fill="#17130F"/>
+    <circle cx="278" cy="182" r="9" fill="#17130F"/>
     <!-- carrot -->
-    <path d="M256 202 L300 214 L256 224 Z" fill="#E8703A"/>
+    <path d="M256 199 L299 210 L256 219 Z" fill="#E8703A"/>
     <!-- smile -->
-    <path d="M228 226 Q256 248 284 232" fill="none" stroke="#17130F" stroke-width="11" stroke-linecap="round"/>
+    <path d="M229 232 Q256 253 283 232" fill="none" stroke="#17130F" stroke-width="11" stroke-linecap="round"/>
     <!-- buttons -->
     <circle cx="256" cy="318" r="9" fill="#17130F"/>
     <circle cx="256" cy="360" r="9" fill="#17130F"/>

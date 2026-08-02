@@ -10,6 +10,11 @@
 //   3. You are added by your *fact*, not your handle. "i like icecream" is
 //      the thing a friend types to find you.
 //
+// A conversation is either `direct` (exactly two people, id "a~b") or a `group`
+// (id "g-<uuid>", a title, and up to MAX_GROUP_MEMBERS people). Everything
+// downstream — messages, seen marks, typing, presence — is written against the
+// participant list, so the two kinds differ only where they have to.
+//
 // The vision model runs entirely in the browser (self-hosted face-api.js in
 // public/smig/models). No image ever reaches this server — the client sends a
 // 128-float descriptor and expression scores, and the *decision* is made here
@@ -19,7 +24,7 @@
 // concurrent requests can't read-modify-write over each other.
 
 import { existsSync } from 'fs';
-import { mkdir, readFile, writeFile, unlink } from 'fs/promises';
+import { mkdir, open, readFile, writeFile, unlink } from 'fs/promises';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 import { randomBytes, randomUUID, timingSafeEqual } from 'crypto';
@@ -53,15 +58,35 @@ const EXPRESSION_MIN_DELTA = 0.4; // the blank → smile change itself
 // about 180 kB, so this is generous either way.
 const MAX_VOICE_BYTES = 600 * 1024;
 const MAX_VOICE_SECONDS = 60;
+const MAX_AVATAR_BYTES = 220 * 1024;   // the client sends a 256px square JPEG
+// Photos are downscaled to 1600px and re-encoded before upload, which lands
+// most of them between 150 and 500 kB. The ceiling is for the awkward ones.
+const MAX_PHOTO_BYTES = 2 * 1024 * 1024;
 const MAX_MESSAGE_CHARS = 900;
+const MAX_CAPTION_CHARS = 200;
 const MAX_FACT_CHARS = 80;
 const MIN_FACT_CHARS = 6;
+
+const MAX_GROUP_TITLE_CHARS = 40;
+// Everyone in a group gets every message pushed to them and every read receipt
+// fanned back out, so this is a working ceiling rather than a product opinion.
+const MAX_GROUP_MEMBERS = 24;
 
 // Code alphabet with I/O/0/1 removed — these get read aloud and typed by hand.
 const CODE_LETTERS = 'ABCDEFGHJKLMNPQRSTUVWXYZ';
 const CODE_DIGITS = '23456789';
 
 // ------------------------------------------------------------------ storage ---
+
+async function saveMedia(file, buffer) {
+  try {
+    await writeFile(join(MEDIA_DIR, file), buffer);
+  } catch (e) {
+    if (e.code !== 'ENOENT') throw e;
+    await mkdir(MEDIA_DIR, { recursive: true });
+    await writeFile(join(MEDIA_DIR, file), buffer);
+  }
+}
 
 async function readJson(path, fallback) {
   try {
@@ -185,6 +210,83 @@ function threadIdFor(a, b) {
   return [a, b].sort().join('~');
 }
 
+// Threads written before groups existed have no `kind`; they are all direct.
+const isGroup = (thread) => thread.kind === 'group';
+const others = (thread, me) => thread.participants.filter((p) => p !== me);
+
+function cleanTitle(raw) {
+  return String(raw || '').trim().replace(/\s+/g, ' ').slice(0, MAX_GROUP_TITLE_CHARS);
+}
+
+/**
+ * JPEG magic. Photos and avatars are both re-encoded by the client's canvas,
+ * so anything that isn't a JPEG here was not sent by smig.
+ */
+function looksLikeJpeg(buffer) {
+  return buffer.length > 3 && buffer[0] === 0xFF && buffer[1] === 0xD8 && buffer[2] === 0xFF;
+}
+
+/**
+ * Pull a data URL (or bare base64) off the body and hand back the bytes, or a
+ * `{ status, message }` to send straight back. Shared by photos and avatars so
+ * the two can't drift on what they accept.
+ */
+function readImage(raw, maxBytes, noun) {
+  const text = String(raw || '');
+  const base64 = text.includes(',') ? text.slice(text.indexOf(',') + 1) : text;
+  if (!base64 || !/^[A-Za-z0-9+/=]+$/.test(base64)) {
+    return { error: { status: 400, message: `That ${noun} did not arrive.` } };
+  }
+  const buffer = Buffer.from(base64, 'base64');
+  if (!buffer.length) return { error: { status: 400, message: `That ${noun} was empty.` } };
+  if (buffer.length > maxBytes) return { error: { status: 413, message: `That ${noun} is too big.` } };
+  if (!looksLikeJpeg(buffer)) return { error: { status: 415, message: 'That has to be a photo.' } };
+  return { buffer };
+}
+
+/** Pixel dimensions travel with a photo so the layout can hold its shape. */
+function side(raw) {
+  const n = Math.round(Number(raw));
+  return Number.isFinite(n) && n > 0 && n <= 20000 ? n : null;
+}
+
+/**
+ * An MP3 starts with either an ID3 tag or an MPEG frame sync (11 set bits).
+ * Used to reject anything the client didn't re-encode.
+ */
+function looksLikeMp3(buffer) {
+  if (buffer.length < 4) return false;
+  if (buffer.subarray(0, 3).toString('latin1') === 'ID3') return true;
+  return buffer[0] === 0xFF && (buffer[1] & 0xE0) === 0xE0;
+}
+
+/**
+ * Notes recorded before the MP3 switch were all stored as ".webm" whatever they
+ * actually were — Chrome's WebM and iOS Safari's MP4 alike — and served as
+ * audio/webm, which is why nobody could play the other person's. Read the magic
+ * bytes and tell the truth instead.
+ */
+async function sniffAudioType(path) {
+  let head;
+  try {
+    const fh = await open(path, 'r');
+    try {
+      head = Buffer.alloc(12);
+      await fh.read(head, 0, 12, 0);
+    } finally {
+      await fh.close();
+    }
+  } catch {
+    return 'application/octet-stream';
+  }
+
+  if (head.subarray(0, 4).toString('hex') === '1a45dfa3') return 'audio/webm';
+  if (head.subarray(4, 8).toString('latin1') === 'ftyp') return 'audio/mp4';
+  if (head.subarray(0, 4).toString('latin1') === 'OggS') return 'audio/ogg';
+  if (looksLikeMp3(head)) return 'audio/mpeg';
+  return 'application/octet-stream';
+}
+
 function sendError(res, status, message) {
   return res.status(status).json({ ok: false, error: message });
 }
@@ -200,6 +302,7 @@ function selfView(user) {
     code: user.code,
     fact: user.fact || null,
     hue: user.hue,
+    avatar: user.avatar || null,
     hasFace: Boolean(user.face),
     onboarded: Boolean(user.fact && user.face),
     created_at: user.created_at
@@ -208,7 +311,66 @@ function selfView(user) {
 
 /** What a user looks like to somebody they talk to — no email, no code. */
 function peerView(user) {
-  return { id: user.id, username: user.username, fact: user.fact || null, hue: user.hue };
+  return {
+    id: user.id,
+    username: user.username,
+    fact: user.fact || null,
+    hue: user.hue,
+    avatar: user.avatar || null
+  };
+}
+
+/**
+ * One shape for both kinds of conversation, so the list and the thread screen
+ * never have to branch on which they are holding.
+ *
+ * A direct thread carries `peer`; a group carries `members` and a `title`.
+ * `online` is "is there anyone else here" either way, with `online_count`
+ * spelling it out for groups.
+ */
+function threadView(thread, me, userById, log = []) {
+  const last = log[log.length - 1] || null;
+  const rest = others(thread, me);
+
+  const view = {
+    id: thread.id,
+    kind: isGroup(thread) ? 'group' : 'direct',
+    last_at: last?.at || thread.created_at,
+    // Notes are the thread talking about itself; they never count as unread.
+    unread: log.filter((m) => m.from !== me && m.kind !== 'note' && !(m.seen_by || []).includes(me)).length,
+    last: last ? {
+      kind: last.kind,
+      text: last.kind === 'text' || last.kind === 'note' ? last.text : (last.caption || null),
+      from: last.from
+    } : null
+  };
+
+  if (isGroup(thread)) {
+    const online = rest.filter((id) => isOnline(id)).length;
+    return {
+      ...view,
+      title: thread.title,
+      hue: thread.hue ?? 30,
+      owner: thread.owner || null,
+      members: rest.map((id) => userById.get(id)).filter(Boolean).map(peerView),
+      peer: null,
+      online: online > 0,
+      online_count: online
+    };
+  }
+
+  const peer = userById.get(rest[0]);
+  return {
+    ...view,
+    title: peer?.username || 'someone',
+    hue: peer?.hue ?? 0,
+    owner: null,
+    members: [],
+    peer: peer ? peerView(peer)
+               : { id: rest[0] || null, username: 'someone', fact: null, hue: 0, avatar: null },
+    online: isOnline(rest[0]),
+    online_count: isOnline(rest[0]) ? 1 : 0
+  };
 }
 
 // ---------------------------------------------------------------- live feed ---
@@ -242,14 +404,36 @@ function push(userId, event, data) {
 
 const isOnline = (userId) => feeds.has(userId);
 
+/** Send an event to everyone in a thread except the person who caused it. */
+function fanout(thread, exceptId, event, data) {
+  let delivered = false;
+  for (const id of others(thread, exceptId)) {
+    if (push(id, event, data)) delivered = true;
+  }
+  return delivered;
+}
+
 // ================================================================== router ===
 
 export function createSmigRouter() {
   const router = express.Router();
 
-  // Voice notes arrive as base64 on this router only; the app-wide json limit
-  // is 1 mb and we want headroom for the encoding overhead.
-  router.use(express.json({ limit: '2mb' }));
+  // Express 4 does not catch a promise rejected inside an async handler: it
+  // surfaces as an unhandled rejection and node exits, taking the whole site
+  // down rather than just this router. Wrapping registration means a failed
+  // disk write is a 500 to one person instead of an outage for everybody.
+  for (const method of ['get', 'post', 'patch', 'delete']) {
+    const register = router[method].bind(router);
+    router[method] = (path, ...handlers) => register(path, ...handlers.map((fn) =>
+      function guarded(req, res, next) {
+        return Promise.resolve(fn(req, res, next)).catch(next);
+      }));
+  }
+
+  // Voice notes and photos arrive as base64 on this router only; the app-wide
+  // json limit is 1 mb, and base64 costs a third on top of the byte ceilings
+  // above, so this leaves room for the largest photo we accept.
+  router.use(express.json({ limit: '6mb' }));
 
   ensureStore().catch((e) => console.error('[smig] store init failed:', e.message));
 
@@ -463,6 +647,73 @@ export function createSmigRouter() {
     return `Come chat with me on smig! ${fact}`;
   }
 
+  // A profile picture is optional and set during onboarding. The client already
+  // crops and shrinks it to a small square JPEG, so this only has to check that
+  // what arrived really is one and is small enough to keep.
+  router.post('/api/avatar', requireAuth, async (req, res) => {
+    const { buffer, error } = readImage(req.body?.image, MAX_AVATAR_BYTES, 'picture');
+    if (error) return sendError(res, error.status, error.message);
+
+    const file = `a${Date.now()}-${randomBytes(6).toString('hex')}.jpg`;
+    await saveMedia(file, buffer);
+
+    const previous = await serialise(async () => {
+      const store = await readUsers();
+      const user = store.users.find((u) => u.id === req.smig.user.id);
+      const old = user.avatar || null;
+      user.avatar = file;
+      await writeJson(USERS_PATH, store);
+      return old;
+    });
+    if (previous) await unlink(join(MEDIA_DIR, previous)).catch(() => {});
+
+    // Anyone already talking to them should see the new picture straight away.
+    const { threads } = await readThreads();
+    const audience = new Set();
+    for (const t of threads) {
+      if (!t.participants.includes(req.smig.user.id)) continue;
+      for (const id of others(t, req.smig.user.id)) audience.add(id);
+    }
+    for (const id of audience) {
+      push(id, 'peer', { peer: { ...peerView(req.smig.user), avatar: file } });
+    }
+
+    res.json({ ok: true, avatar: file });
+  });
+
+  router.delete('/api/avatar', requireAuth, async (req, res) => {
+    const previous = await serialise(async () => {
+      const store = await readUsers();
+      const user = store.users.find((u) => u.id === req.smig.user.id);
+      const old = user.avatar || null;
+      user.avatar = null;
+      await writeJson(USERS_PATH, store);
+      return old;
+    });
+    if (previous) await unlink(join(MEDIA_DIR, previous)).catch(() => {});
+    res.json({ ok: true });
+  });
+
+  // Your own picture, or one belonging to somebody you have a thread with.
+  router.get('/api/avatar/:file', requireAuth, async (req, res) => {
+    const file = String(req.params.file || '');
+    if (!/^a\d+-[0-9a-f]{12}\.jpg$/.test(file)) return sendError(res, 400, 'Bad file.');
+
+    const me = req.smig.user.id;
+    const [{ users }, { threads }] = await Promise.all([readUsers(), readThreads()]);
+    const owner = users.find((u) => u.avatar === file);
+    if (!owner) return sendError(res, 404, 'No such picture.');
+
+    const known = owner.id === me ||
+      threads.some((t) => t.participants.includes(me) && t.participants.includes(owner.id));
+    if (!known) return sendError(res, 403, 'Not yours to see.');
+
+    const path = join(MEDIA_DIR, file);
+    if (!existsSync(path)) return sendError(res, 404, 'That picture has gone.');
+    res.type('image/jpeg').setHeader('Cache-Control', 'private, max-age=86400');
+    res.sendFile(path);
+  });
+
   // Enrol the two reference frames. Both must be the same face, and they must
   // actually differ in expression — otherwise "blank then smile" means nothing.
   router.post('/api/face/enrol', requireAuth, async (req, res) => {
@@ -572,7 +823,7 @@ export function createSmigRouter() {
       return true;
     });
 
-    if (created) push(other.id, 'thread', { thread: { id, peer: peerView(req.smig.user), last: null, online: true } });
+    if (created) push(other.id, 'thread', { thread_id: id });
     res.json({ ok: true, thread_id: id, peer: peerView(other), already: !created });
   });
 
@@ -581,24 +832,33 @@ export function createSmigRouter() {
     const [{ threads }, { users }, { messages }] = await Promise.all([
       readThreads(), readUsers(), readMessages()
     ]);
+    const userById = new Map(users.map((u) => [u.id, u]));
     const list = threads
       .filter((t) => t.participants.includes(me))
-      .map((t) => {
-        const otherId = t.participants.find((p) => p !== me);
-        const peer = users.find((u) => u.id === otherId);
-        const log = messages[t.id] || [];
-        const last = log[log.length - 1] || null;
-        return {
-          id: t.id,
-          peer: peer ? peerView(peer) : { id: otherId, username: 'someone', fact: null, hue: 0 },
-          online: isOnline(otherId),
-          last_at: last?.at || t.created_at,
-          unread: log.filter((m) => m.from !== me && !(m.seen_by || []).includes(me)).length,
-          last: last ? { kind: last.kind, text: last.kind === 'text' ? last.text : null, from: last.from } : null
-        };
-      })
+      .map((t) => threadView(t, me, userById, messages[t.id] || []))
       .sort((a, b) => b.last_at.localeCompare(a.last_at));
     res.json({ ok: true, threads: list, me });
+  });
+
+  /** The people you already talk to — the pool a group is built from. */
+  router.get('/api/contacts', requireUnlocked, async (req, res) => {
+    const me = req.smig.user.id;
+    const [{ threads }, { users }] = await Promise.all([readThreads(), readUsers()]);
+    const userById = new Map(users.map((u) => [u.id, u]));
+
+    const seen = new Set();
+    const contacts = [];
+    for (const t of threads) {
+      if (isGroup(t) || !t.participants.includes(me)) continue;
+      for (const id of others(t, me)) {
+        if (seen.has(id)) continue;
+        seen.add(id);
+        const user = userById.get(id);
+        if (user) contacts.push({ ...peerView(user), online: isOnline(id) });
+      }
+    }
+    contacts.sort((a, b) => a.username.localeCompare(b.username));
+    res.json({ ok: true, contacts });
   });
 
   /** Resolve a thread the caller is actually in, or send the error and return null. */
@@ -617,9 +877,8 @@ export function createSmigRouter() {
     const thread = await openThread(req, res);
     if (!thread) return;
     const me = req.smig.user.id;
-    const otherId = thread.participants.find((p) => p !== me);
     const [{ users }, { messages }] = await Promise.all([readUsers(), readMessages()]);
-    const peer = users.find((u) => u.id === otherId);
+    const userById = new Map(users.map((u) => [u.id, u]));
     const log = messages[thread.id] || [];
 
     // Opening the thread is what "seen" means here.
@@ -631,33 +890,57 @@ export function createSmigRouter() {
         }
         await writeJson(MESSAGES_PATH, store);
       });
-      push(otherId, 'seen', { thread_id: thread.id, by: me });
+      fanout(thread, me, 'seen', { thread_id: thread.id, by: me });
     }
 
+    const view = threadView(thread, me, userById, log);
     res.json({
       ok: true,
       thread_id: thread.id,
       me,
-      peer: peer ? peerView(peer) : null,
-      online: isOnline(otherId),
+      thread: view,
+      peer: view.peer,        // still flat for the call layer, which is 1:1 only
+      online: view.online,
       messages: log
     });
   });
 
-  async function appendMessage(threadId, message, fromId, toId) {
-    await serialise(async () => {
+  /**
+   * Write a message and tell everyone. Trimming the log can drop a photo or a
+   * voice note off the end of it, so the files that went with those are removed
+   * in the same pass — otherwise they would sit in the media directory forever
+   * with nothing pointing at them.
+   */
+  async function appendMessage(thread, message) {
+    const orphaned = await serialise(async () => {
       const [msgStore, threadStore] = await Promise.all([readMessages(), readThreads()]);
-      (msgStore.messages[threadId] ||= []).push(message);
+      const log = (msgStore.messages[thread.id] ||= []);
+      log.push(message);
+
       // Threads are ephemeral by design — keep the tail, drop the archive.
-      if (msgStore.messages[threadId].length > 400) {
-        msgStore.messages[threadId] = msgStore.messages[threadId].slice(-400);
+      let dropped = [];
+      if (log.length > 400) {
+        dropped = log.slice(0, log.length - 400).filter((m) => m.file).map((m) => m.file);
+        msgStore.messages[thread.id] = log.slice(-400);
       }
-      const thread = threadStore.threads.find((t) => t.id === threadId);
-      if (thread) thread.last_at = message.at;
+
+      const stored = threadStore.threads.find((t) => t.id === thread.id);
+      if (stored) stored.last_at = message.at;
       await Promise.all([writeJson(MESSAGES_PATH, msgStore), writeJson(THREADS_PATH, threadStore)]);
+      return dropped;
     });
-    push(toId, 'message', { thread_id: threadId, message });
-    push(fromId, 'message', { thread_id: threadId, message, own: true });
+    await Promise.all(orphaned.map((f) => unlink(join(MEDIA_DIR, f)).catch(() => {})));
+
+    fanout(thread, message.from, 'message', { thread_id: thread.id, message });
+    push(message.from, 'message', { thread_id: thread.id, message, own: true });
+  }
+
+  /** A line the conversation writes about itself — "Ana joined", and so on. */
+  function note(thread, actorId, text) {
+    return appendMessage(thread, {
+      id: randomUUID(), kind: 'note', text, from: actorId,
+      at: new Date().toISOString(), seen_by: []
+    });
   }
 
   router.post('/api/threads/:id/say', requireUnlocked, async (req, res) => {
@@ -666,12 +949,39 @@ export function createSmigRouter() {
     const text = String(req.body?.text || '').trim().slice(0, MAX_MESSAGE_CHARS);
     if (!text) return sendError(res, 400, 'Nothing to send.');
 
-    const me = req.smig.user.id;
     const message = {
-      id: randomUUID(), kind: 'text', text, from: me,
+      id: randomUUID(), kind: 'text', text, from: req.smig.user.id,
       at: new Date().toISOString(), seen_by: []
     };
-    await appendMessage(thread.id, message, me, thread.participants.find((p) => p !== me));
+    await appendMessage(thread, message);
+    res.json({ ok: true, message });
+  });
+
+  // A photo stays in the conversation the way anything else does — it is sent
+  // once and then it is simply part of the thread. Nothing expires, nothing is
+  // "opened", and there is no screenshot theatre.
+  router.post('/api/threads/:id/photo', requireUnlocked, async (req, res) => {
+    const thread = await openThread(req, res);
+    if (!thread) return;
+
+    const { buffer, error } = readImage(req.body?.image, MAX_PHOTO_BYTES, 'photo');
+    if (error) return sendError(res, error.status, error.message);
+
+    const width = side(req.body?.width);
+    const height = side(req.body?.height);
+    if (!width || !height) return sendError(res, 400, 'That photo arrived without its shape.');
+
+    const caption = String(req.body?.caption || '').trim().replace(/\s+/g, ' ').slice(0, MAX_CAPTION_CHARS);
+
+    const file = `${Date.now()}-${randomBytes(6).toString('hex')}.jpg`;
+    await saveMedia(file, buffer);
+
+    const message = {
+      id: randomUUID(), kind: 'photo', file, width, height,
+      caption: caption || null, from: req.smig.user.id,
+      at: new Date().toISOString(), seen_by: []
+    };
+    await appendMessage(thread, message);
     res.json({ ok: true, message });
   });
 
@@ -688,47 +998,94 @@ export function createSmigRouter() {
     if (!buffer.length) return sendError(res, 400, 'That recording was empty.');
     if (buffer.length > MAX_VOICE_BYTES) return sendError(res, 413, 'That voice note is too long.');
 
-    const me = req.smig.user.id;
-    const file = `${Date.now()}-${randomBytes(6).toString('hex')}.webm`;
-    await writeFile(join(MEDIA_DIR, file), buffer);
+    // The client re-encodes every recording to MP3 before it gets here, because
+    // that is the only format Safari and Chrome will both play. Anything else
+    // arriving means an out-of-date tab, so say so rather than storing a file
+    // half the users can't hear.
+    if (!looksLikeMp3(buffer)) {
+      return sendError(res, 415, 'Reload smig — voice notes need the new recorder.');
+    }
+
+    const file = `${Date.now()}-${randomBytes(6).toString('hex')}.mp3`;
+    await saveMedia(file, buffer);
 
     const message = {
-      id: randomUUID(), kind: 'voice', file, seconds, from: me,
+      id: randomUUID(), kind: 'voice', file, seconds, from: req.smig.user.id,
       at: new Date().toISOString(), seen_by: []
     };
-    await appendMessage(thread.id, message, me, thread.participants.find((p) => p !== me));
+    await appendMessage(thread, message);
     res.json({ ok: true, message });
   });
 
-  // Voice notes are only readable by the two people in the thread.
+  /** True when this file is attached to a message in a thread the caller is in. */
+  async function mayReadFile(userId, file) {
+    const [{ threads }, { messages }] = await Promise.all([readThreads(), readMessages()]);
+    return threads
+      .filter((t) => t.participants.includes(userId))
+      .some((t) => (messages[t.id] || []).some((m) => m.file === file));
+  }
+
+  // Voice notes are only readable by the people in the thread they were sent to.
   router.get('/api/voice/:file', requireUnlocked, async (req, res) => {
     const file = String(req.params.file || '');
-    if (!/^\d+-[0-9a-f]{12}\.webm$/.test(file)) return sendError(res, 400, 'Bad file.');
-
-    const [{ threads }, { messages }] = await Promise.all([readThreads(), readMessages()]);
-    const mine = new Set(threads.filter((t) => t.participants.includes(req.smig.user.id)).map((t) => t.id));
-    const allowed = [...mine].some((id) => (messages[id] || []).some((m) => m.file === file));
-    if (!allowed) return sendError(res, 403, 'Not yours.');
+    // .webm covers notes recorded before the MP3 switch; those are served by
+    // sniffed type below, since some of them are actually MP4.
+    if (!/^\d+-[0-9a-f]{12}\.(mp3|webm)$/.test(file)) return sendError(res, 400, 'Bad file.');
+    if (!await mayReadFile(req.smig.user.id, file)) return sendError(res, 403, 'Not yours.');
 
     const path = join(MEDIA_DIR, file);
     if (!existsSync(path)) return sendError(res, 404, 'That recording has expired.');
-    res.type('audio/webm').sendFile(path);
+    res.type(await sniffAudioType(path)).sendFile(path);
+  });
+
+  // Same rule for photos. The name is unguessable and the bytes never change,
+  // so once you are allowed to see one it can sit in the browser cache.
+  router.get('/api/photo/:file', requireUnlocked, async (req, res) => {
+    const file = String(req.params.file || '');
+    if (!/^\d+-[0-9a-f]{12}\.jpg$/.test(file)) return sendError(res, 400, 'Bad file.');
+    if (!await mayReadFile(req.smig.user.id, file)) return sendError(res, 403, 'Not yours.');
+
+    const path = join(MEDIA_DIR, file);
+    if (!existsSync(path)) return sendError(res, 404, 'That photo has gone.');
+    res.type('image/jpeg').setHeader('Cache-Control', 'private, max-age=31536000, immutable');
+    res.sendFile(path);
   });
 
   router.post('/api/threads/:id/typing', requireUnlocked, async (req, res) => {
     const thread = await openThread(req, res);
     if (!thread) return;
-    const me = req.smig.user.id;
-    push(thread.participants.find((p) => p !== me), 'typing', { thread_id: thread.id, from: me });
+    fanout(thread, req.smig.user.id, 'typing', {
+      thread_id: thread.id,
+      from: req.smig.user.id,
+      username: req.smig.user.username
+    });
     res.json({ ok: true });
   });
 
-  // Leaving deletes the conversation for both sides, and its voice notes.
+  // Leaving a direct conversation ends it for both sides. Leaving a group only
+  // removes you — the group carries on without you, and is only really deleted
+  // once the last person has walked out.
   router.delete('/api/threads/:id', requireUnlocked, async (req, res) => {
     const thread = await openThread(req, res);
     if (!thread) return;
     const me = req.smig.user.id;
-    const otherId = thread.participants.find((p) => p !== me);
+
+    if (isGroup(thread) && others(thread, me).length) {
+      const remaining = { ...thread, participants: others(thread, me) };
+      await note(remaining, me, `${req.smig.user.username} left.`);
+      await serialise(async () => {
+        const store = await readThreads();
+        const stored = store.threads.find((t) => t.id === thread.id);
+        if (!stored) return;
+        stored.participants = stored.participants.filter((p) => p !== me);
+        // The owner leaving hands the group to whoever has been there longest.
+        if (stored.owner === me) stored.owner = stored.participants[0] || null;
+        await writeJson(THREADS_PATH, store);
+      });
+      fanout(thread, me, 'thread', { thread_id: thread.id });
+      push(me, 'thread-gone', { thread_id: thread.id });
+      return res.json({ ok: true, left: true });
+    }
 
     const files = await serialise(async () => {
       const [threadStore, msgStore] = await Promise.all([readThreads(), readMessages()]);
@@ -740,8 +1097,129 @@ export function createSmigRouter() {
     });
     await Promise.all(files.map((f) => unlink(join(MEDIA_DIR, f)).catch(() => {})));
 
-    push(otherId, 'thread-gone', { thread_id: thread.id });
+    fanout(thread, me, 'thread-gone', { thread_id: thread.id });
     res.json({ ok: true });
+  });
+
+  // --------------------------------------------------------------- groups --- //
+
+  /**
+   * Groups are built out of people you already talk to. That keeps the fact —
+   * the thing that gets you added in the first place — as the only way onto
+   * somebody's screen; nobody can be pulled into a room by a stranger.
+   */
+  async function knownToMe(me) {
+    const { threads } = await readThreads();
+    const known = new Set();
+    for (const t of threads) {
+      if (isGroup(t) || !t.participants.includes(me)) continue;
+      for (const id of others(t, me)) known.add(id);
+    }
+    return known;
+  }
+
+  router.post('/api/groups', requireUnlocked, async (req, res) => {
+    const me = req.smig.user.id;
+    const title = cleanTitle(req.body?.title);
+    if (title.length < 2) return sendError(res, 400, 'Give the group a name.');
+
+    const asked = [...new Set((Array.isArray(req.body?.members) ? req.body.members : []).map(String))]
+      .filter((id) => id !== me);
+    if (!asked.length) return sendError(res, 400, 'Pick at least one person.');
+    if (asked.length + 1 > MAX_GROUP_MEMBERS) {
+      return sendError(res, 400, `Groups hold ${MAX_GROUP_MEMBERS} people.`);
+    }
+
+    const known = await knownToMe(me);
+    if (asked.some((id) => !known.has(id))) {
+      return sendError(res, 403, 'You can only add people you already talk to.');
+    }
+
+    const { users } = await readUsers();
+    const userById = new Map(users.map((u) => [u.id, u]));
+    if (asked.some((id) => !userById.has(id))) return sendError(res, 404, 'One of those people is gone.');
+
+    const thread = {
+      id: `g-${randomUUID()}`,
+      kind: 'group',
+      title,
+      owner: me,
+      hue: randomBytes(1)[0] % 360,
+      participants: [me, ...asked],
+      created_at: new Date().toISOString(),
+      last_at: new Date().toISOString()
+    };
+
+    await serialise(async () => {
+      const store = await readThreads();
+      store.threads.push(thread);
+      await writeJson(THREADS_PATH, store);
+    });
+
+    await note(thread, me, `${req.smig.user.username} started ${title}.`);
+    fanout(thread, me, 'thread', { thread_id: thread.id });
+    res.json({ ok: true, thread: threadView(thread, me, userById, []) });
+  });
+
+  router.patch('/api/threads/:id', requireUnlocked, async (req, res) => {
+    const thread = await openThread(req, res);
+    if (!thread) return;
+    if (!isGroup(thread)) return sendError(res, 400, 'Only groups have a name.');
+
+    const title = cleanTitle(req.body?.title);
+    if (title.length < 2) return sendError(res, 400, 'Give the group a name.');
+    if (title === thread.title) return res.json({ ok: true, title });
+
+    await serialise(async () => {
+      const store = await readThreads();
+      const stored = store.threads.find((t) => t.id === thread.id);
+      if (stored) stored.title = title;
+      await writeJson(THREADS_PATH, store);
+    });
+
+    await note(thread, req.smig.user.id, `${req.smig.user.username} renamed this to ${title}.`);
+    fanout(thread, req.smig.user.id, 'thread', { thread_id: thread.id });
+    res.json({ ok: true, title });
+  });
+
+  // Anyone in a group can bring in someone they already talk to.
+  router.post('/api/threads/:id/members', requireUnlocked, async (req, res) => {
+    const thread = await openThread(req, res);
+    if (!thread) return;
+    if (!isGroup(thread)) return sendError(res, 400, 'That is not a group.');
+
+    const me = req.smig.user.id;
+    const asked = [...new Set((Array.isArray(req.body?.members) ? req.body.members : []).map(String))]
+      .filter((id) => !thread.participants.includes(id));
+    if (!asked.length) return sendError(res, 400, 'Nobody new to add.');
+    if (thread.participants.length + asked.length > MAX_GROUP_MEMBERS) {
+      return sendError(res, 400, `Groups hold ${MAX_GROUP_MEMBERS} people.`);
+    }
+
+    const known = await knownToMe(me);
+    if (asked.some((id) => !known.has(id))) {
+      return sendError(res, 403, 'You can only add people you already talk to.');
+    }
+
+    const { users } = await readUsers();
+    const userById = new Map(users.map((u) => [u.id, u]));
+    const added = asked.map((id) => userById.get(id)).filter(Boolean);
+    if (!added.length) return sendError(res, 404, 'Nobody by that name.');
+
+    await serialise(async () => {
+      const store = await readThreads();
+      const stored = store.threads.find((t) => t.id === thread.id);
+      if (stored) stored.participants.push(...added.map((u) => u.id));
+      await writeJson(THREADS_PATH, store);
+    });
+
+    // Everyone, new arrivals included, should see the line about it.
+    const grown = { ...thread, participants: [...thread.participants, ...added.map((u) => u.id)] };
+    const names = added.map((u) => u.username).join(', ');
+    await note(grown, me, `${req.smig.user.username} added ${names}.`);
+    fanout(grown, me, 'thread', { thread_id: thread.id });
+
+    res.json({ ok: true, members: added.map(peerView) });
   });
 
   // ---------------------------------------------------------------- calls --- //
@@ -773,6 +1251,9 @@ export function createSmigRouter() {
     if (!thread) return;
     const type = String(req.body?.type || '');
     if (!SIGNALS.has(type)) return sendError(res, 400, 'Unknown signal.');
+    // One peer connection, two ends. A group call needs a mesh or an SFU, and
+    // smig has neither, so the client hides the buttons and this says no.
+    if (isGroup(thread)) return sendError(res, 400, 'Groups cannot be called yet.');
 
     const me = req.smig.user.id;
     const otherId = thread.participants.find((p) => p !== me);
@@ -800,13 +1281,7 @@ export function createSmigRouter() {
     res.write(`event: hello\ndata: ${JSON.stringify({ id: userId })}\n\n`);
 
     subscribe(userId, res);
-    // Tell everyone who can see this person that they lit up.
-    readThreads().then(({ threads }) => {
-      for (const t of threads) {
-        if (!t.participants.includes(userId)) continue;
-        push(t.participants.find((p) => p !== userId), 'presence', { user_id: userId, online: true });
-      }
-    }).catch(() => {});
+    announcePresence(userId, true);
 
     const beat = setInterval(() => {
       try { res.write(': beat\n\n'); } catch { /* gone */ }
@@ -815,16 +1290,25 @@ export function createSmigRouter() {
     req.on('close', () => {
       clearInterval(beat);
       unsubscribe(userId, res);
-      if (!isOnline(userId)) {
-        readThreads().then(({ threads }) => {
-          for (const t of threads) {
-            if (!t.participants.includes(userId)) continue;
-            push(t.participants.find((p) => p !== userId), 'presence', { user_id: userId, online: false });
-          }
-        }).catch(() => {});
-      }
+      if (!isOnline(userId)) announcePresence(userId, false);
     });
   });
+
+  /**
+   * Tell everybody who shares a conversation with this person that they came or
+   * went. Someone can be reachable through several threads at once, so the set
+   * keeps them from being told twice.
+   */
+  function announcePresence(userId, online) {
+    readThreads().then(({ threads }) => {
+      const audience = new Set();
+      for (const t of threads) {
+        if (!t.participants.includes(userId)) continue;
+        for (const id of others(t, userId)) audience.add(id);
+      }
+      for (const id of audience) push(id, 'presence', { user_id: userId, online });
+    }).catch(() => {});
+  }
 
   // ----------------------------------------------------------------- page --- //
 
@@ -834,11 +1318,26 @@ export function createSmigRouter() {
   router.get('/join', sendApp);
 
   router.use(express.static(PUBLIC_DIR, {
-    // The face models are content-addressed by version and never change.
     setHeaders(res, path) {
-      if (/[\\/]models[\\/]/.test(path)) res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+      // The face models are content-addressed by version and never change.
+      if (/[\\/]models[\\/]/.test(path)) {
+        res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+        return;
+      }
+      // Everything else is the app itself. A phone holding yesterday's CSS
+      // against today's markup shows furniture that should not be there, so
+      // these are always revalidated rather than served blind from the cache.
+      res.setHeader('Cache-Control', 'no-cache');
     }
   }));
+
+  // Last resort: anything the guards above hand on lands here, so a broken
+  // request answers in the app's own voice instead of hanging.
+  router.use((err, req, res, next) => {
+    console.error('[smig]', err?.stack || err?.message || err);
+    if (res.headersSent) return next(err);
+    sendError(res, 500, 'Something went wrong at our end. Try that again.');
+  });
 
   return router;
 }

@@ -486,9 +486,9 @@ button {
 /* No bubbles anywhere. A message is a coloured rule, a small name, and text
    big enough to read at arm's length. */
 .msg {
-  padding: 16px 0 16px 15px;
-  border-left: 3px solid var(--frost);
-  margin-top: 12px;
+  padding: 12px 0 12px 12px;
+  border-left: 2px solid var(--frost);
+  margin-top: 10px;
   animation: msg-in 620ms var(--ease) both;
 }
 .msg.mine { border-left-color: var(--carrot); }
@@ -509,8 +509,8 @@ button {
 .msg.mine .from { color: var(--carrot); }
 
 .msg .text {
-  font-size: clamp(1.32rem, 5.6vw, 1.75rem);
-  line-height: 1.2;
+  font-size: clamp(1.05rem, 4.2vw, 1.3rem);
+  line-height: 1.25;
   font-weight: 500;
   letter-spacing: -.022em;
   white-space: pre-wrap;
@@ -558,9 +558,9 @@ button {
   display: flex;
   align-items: center;
   gap: 5px;
-  padding: 14px 0 4px 15px;
-  border-left: 3px solid var(--frost);
-  margin-top: 12px;
+  padding: 12px 0 4px 12px;
+  border-left: 2px solid var(--frost);
+  margin-top: 10px;
   animation: rise 320ms var(--ease) both;
 }
 .typing i {
@@ -855,3 +855,335 @@ button {
     transition-duration: .001ms !important;
   }
 }
+
+/* ------------------------------------------------------- profile picture --- */
+
+.pic-wrap {
+  position: relative;
+  margin: 26px auto 0;
+  width: min(220px, 58vw);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  overflow: hidden;
+  background: var(--paper-lift);
+  border: 1px solid var(--line);
+  display: grid;
+  place-items: center;
+  transition: transform var(--t-mid) var(--spring), border-color var(--t-fast) var(--ease);
+}
+.pic-wrap:active { transform: scale(.975); }
+.pic-wrap.filled { border-color: var(--line-firm); }
+
+.pic-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  animation: pic-in 520ms var(--ease) both;
+}
+@keyframes pic-in {
+  from { opacity: 0; transform: scale(1.06); filter: blur(8px); }
+  to   { opacity: 1; transform: none; filter: blur(0); }
+}
+
+.pic-empty { color: var(--ink-faint); display: grid; place-items: center; }
+.pic-empty svg { width: 40px; height: 40px; }
+
+/* The disc doubles as an avatar frame: the picture sits on top of the tinted
+   initial, so a missing or slow image still leaves something readable. */
+.disc img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  animation: pic-in 420ms var(--ease) both;
+}
+.disc { overflow: visible; }
+.disc.on::after { z-index: 2; }
+
+/* A group's disc is the same size, split between the first two members — one
+   glance says "more than one person" without a badge explaining it. */
+.disc.group { background: none; }
+.disc.group .half {
+  position: absolute;
+  top: 0;
+  width: 50%;
+  height: 100%;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  font-size: .8em;
+  background: hsl(var(--half-hue, 30) 42% 88%);
+}
+.disc.group .half:first-child { left: 0;  border-radius: 50% 0 0 50%; }
+.disc.group .half:last-child  { right: 0; border-radius: 0 50% 50% 0; box-shadow: -1px 0 0 var(--paper); }
+.disc.group .half img { position: absolute; inset: 0; width: 100%; height: 100%; border-radius: 0; object-fit: cover; }
+
+/* ---------------------------------------------------------------- camera --- */
+
+.snap-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 45;
+  background: #0E0B09;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  padding: calc(env(safe-area-inset-top) + 14px) 14px calc(env(safe-area-inset-bottom) + 22px);
+  opacity: 0;
+  visibility: hidden;
+  transform: scale(1.03);
+  transition: opacity var(--t-mid) var(--ease),
+              transform var(--t-mid) var(--ease),
+              visibility 0s linear var(--t-mid);
+}
+.snap-layer.is-live {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+  transition: opacity var(--t-mid) var(--ease), transform var(--t-mid) var(--spring), visibility 0s;
+}
+
+.snap-close {
+  position: absolute;
+  top: calc(env(safe-area-inset-top) + 14px);
+  left: 14px;
+  z-index: 3;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  background: rgba(255, 255, 255, .14);
+  backdrop-filter: blur(6px);
+  transition: transform var(--t-fast) var(--spring);
+}
+.snap-close:active { transform: scale(.9); }
+.snap-close svg { width: 20px; height: 20px; }
+
+.snap-stage {
+  position: relative;
+  flex: 1 1 auto;
+  border-radius: 22px;
+  overflow: hidden;
+  background: #17130F;
+  display: grid;
+  place-items: center;
+}
+.snap-stage video,
+.snap-stage img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.snap-stage video.mirror { transform: scaleX(-1); }
+/* What you just took is the subject now, so it gets shown whole. */
+.snap-stage.reviewing img { object-fit: contain; animation: pic-in 320ms var(--ease) both; }
+
+.snap-caption-row { padding-top: 12px; }
+.snap-caption-row input {
+  background: rgba(255, 255, 255, .1);
+  border-color: rgba(255, 255, 255, .18);
+  color: #fff;
+  border-radius: 14px;
+}
+.snap-caption-row input::placeholder { color: rgba(255, 255, 255, .5); }
+.snap-caption-row input:focus {
+  background: rgba(255, 255, 255, .16);
+  border-color: rgba(255, 255, 255, .4);
+  box-shadow: none;
+}
+
+.snap-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding-top: 18px;
+  min-height: 82px;
+}
+
+.snap-side {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  background: rgba(255, 255, 255, .12);
+  transition: transform var(--t-fast) var(--spring);
+}
+.snap-side:active { transform: scale(.9); }
+.snap-side svg { width: 22px; height: 22px; }
+
+/* The shutter: a white ring around a white disc, the way every camera app
+   since the first one has drawn it. */
+.shutter {
+  width: 74px;
+  height: 74px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 0 4px #0E0B09, 0 0 0 6px rgba(255, 255, 255, .9);
+  transition: transform 120ms var(--spring);
+}
+.shutter:active { transform: scale(.88); }
+
+.snap-text {
+  color: #fff;
+  padding: 14px 20px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, .12);
+}
+.snap-send {
+  flex: 1 1 auto;
+  max-width: 60%;
+  min-height: 54px;
+  border-radius: 16px;
+  background: #fff;
+  color: var(--ink);
+  font-size: 1.02rem;
+  font-weight: 600;
+  transition: transform var(--t-fast) var(--spring);
+}
+.snap-send:active { transform: scale(.972); }
+
+/* ------------------------------------------------------------ photo note --- */
+
+/* A photo in the conversation. The box holds the picture's own shape so the
+   thread doesn't jump around while it loads. */
+.shot {
+  display: block;
+  margin-top: 2px;
+  width: 100%;
+  max-width: 300px;
+  border-radius: 16px;
+  overflow: hidden;
+  background: var(--paper-lift);
+  border: 1px solid var(--line);
+  transition: transform var(--t-fast) var(--spring);
+}
+.shot:active { transform: scale(.985); }
+.shot img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  animation: pic-in 460ms var(--ease) both;
+}
+.msg .caption {
+  font-size: .98rem;
+  line-height: 1.25;
+  margin-top: 9px;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* Sending: the picture is already on screen, dimmed, before the server has it. */
+.shot.sending { opacity: .55; }
+
+.light-box {
+  position: fixed;
+  inset: 0;
+  z-index: 55;
+  background: rgba(14, 11, 9, .96);
+  display: grid;
+  place-items: center;
+  padding: calc(env(safe-area-inset-top) + 60px) 14px calc(env(safe-area-inset-bottom) + 40px);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--t-mid) var(--ease), visibility 0s linear var(--t-mid);
+}
+.light-box.is-live { opacity: 1; visibility: visible; transition: opacity var(--t-mid) var(--ease), visibility 0s; }
+.light-box img {
+  max-width: 100%;
+  max-height: 100%;
+  border-radius: 14px;
+  animation: pic-in 320ms var(--ease) both;
+}
+.light-cap {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: calc(env(safe-area-inset-bottom) + 14px);
+  text-align: center;
+  color: #fff;
+  padding: 0 24px;
+  font-size: 1rem;
+  text-shadow: 0 1px 12px rgba(0, 0, 0, .7);
+}
+
+/* ---------------------------------------------------------------- groups --- */
+
+/* A line the conversation writes about itself — someone joining, a rename.
+   Centred and quiet, so it reads as stage direction rather than speech. */
+.note {
+  text-align: center;
+  font-size: .8rem;
+  color: var(--ink-faint);
+  margin: 18px 0 6px;
+  animation: rise 420ms var(--ease) both;
+}
+
+/* In a group every voice needs its own colour, so the rule and the name are
+   tinted from the speaker's hue instead of the flat two-colour scheme. */
+.msg.theirs { border-left-color: hsl(var(--hue, 210) 34% 58%); }
+.msg.theirs .from { color: hsl(var(--hue, 210) 34% 48%); }
+
+.top .who {
+  text-align: left;
+  padding: 0;
+  background: none;
+  border-radius: 10px;
+}
+
+.picker { margin-top: 14px; max-height: 46vh; overflow-y: auto; }
+.picker::-webkit-scrollbar { width: 0; }
+
+.pick-row {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  width: 100%;
+  padding: 11px 4px;
+  text-align: left;
+  border-bottom: 1px solid var(--line);
+}
+.pick-row .body { flex: 1 1 auto; min-width: 0; }
+.pick-row .name { font-weight: 600; }
+
+/* The tick is the whole selection affordance — no checkboxes. */
+.pick-row .tick {
+  flex: 0 0 24px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 1.5px solid var(--line-firm);
+  display: grid;
+  place-items: center;
+  transition: background var(--t-fast) var(--ease), border-color var(--t-fast) var(--ease);
+}
+.pick-row.on .tick { background: var(--carrot); border-color: var(--carrot); }
+.pick-row.on .tick::after {
+  content: "";
+  width: 10px;
+  height: 6px;
+  border: 2px solid #fff;
+  border-top: 0;
+  border-right: 0;
+  transform: rotate(-45deg) translate(1px, -1px);
+  animation: pop 260ms var(--spring) both;
+}
+
+.member-row {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding: 10px 4px;
+  border-bottom: 1px solid var(--line);
+}
+.member-row .body { flex: 1 1 auto; min-width: 0; }
+.member-row .name { font-weight: 600; }

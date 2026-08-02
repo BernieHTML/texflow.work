@@ -8,6 +8,8 @@ import {
 } from './ui.js';
 import * as face from './face.js';
 import { Call } from './call.js';
+import { recordingMimeType, toMp3 } from './voice.js';
+import { openCamera, fromFile, cameraOpen, cancelCamera } from './snap.js';
 
 const BASE = '/smig';
 
@@ -15,8 +17,8 @@ const state = {
   me: null,
   unlocked: false,
   threads: [],
-  thread: null,      // the open conversation
-  peers: new Map(),  // user id → peer view, for call UI
+  thread: null,      // the open conversation, direct or group
+  peers: new Map(),  // user id → peer view, for call UI and group name tags
   feed: null,
   typingTimer: 0
 };
@@ -177,12 +179,156 @@ async function saveFact() {
   try {
     const { fact: saved } = await api('/api/fact', { method: 'POST', body: { fact } });
     state.me.fact = saved;
-    startFace(state.me.hasFace ? 'unlock' : 'enrol');
+    // A picture is offered once, on the way in; after that it lives in the menu.
+    if (state.me.hasFace) startFace('unlock');
+    else show('avatar', { replace: true });
   } catch (e) {
     if (!handleAuthError(e)) toast(e.message, 'bad');
   } finally {
     button.disabled = false;
   }
+}
+
+// ------------------------------------------------------------------ picture ---
+
+// Optional, and deliberately cheap: whichever way the picture arrives it is
+// cover-cropped to a small square and re-encoded in the browser (see snap.js),
+// so a 4 MB phone photo leaves here as a few tens of kilobytes.
+let pendingAvatar = null;
+
+$('#pic-pick').addEventListener('click', () => $('#pic-file').click());
+$('#pic-wrap').addEventListener('click', () => $('#pic-file').click());
+
+$('#pic-shoot').addEventListener('click', async () => {
+  const shot = await openCamera({ square: true, sendLabel: 'Use this one' });
+  if (shot) showPendingAvatar(shot.image);
+});
+// The picture screen serves both onboarding and later edits; this says which.
+let picReturnsHome = false;
+
+function changePicture() {
+  picReturnsHome = true;
+  pendingAvatar = null;
+  const img = $('#pic-preview');
+  if (state.me.avatar) {
+    img.src = `${BASE}/api/avatar/${state.me.avatar}`;
+    img.hidden = false;
+    $('#pic-empty').hidden = true;
+    $('#pic-wrap').classList.add('filled');
+  } else {
+    img.hidden = true;
+    $('#pic-empty').hidden = false;
+    $('#pic-wrap').classList.remove('filled');
+  }
+  $('#pic-skip').textContent = 'Never mind';
+  show('avatar');
+}
+
+function leavePicture() {
+  if (picReturnsHome) { picReturnsHome = false; return openHome(); }
+  return startFace('enrol');
+}
+
+$('#pic-skip').addEventListener('click', leavePicture);
+
+$('#pic-file').addEventListener('change', async (e) => {
+  const file = e.target.files?.[0];
+  e.target.value = '';               // let them pick the same file twice
+  if (!file) return;
+  if (!file.type.startsWith('image/')) return toast('That needs to be a picture.', 'bad');
+
+  try {
+    showPendingAvatar((await fromFile(file, { square: true })).image);
+  } catch (e) {
+    toast(e.message || 'That picture could not be read.', 'bad');
+  }
+});
+
+/** Show a picture that hasn't been saved yet, whichever way it was got. */
+function showPendingAvatar(image) {
+  pendingAvatar = image;
+  const img = $('#pic-preview');
+  img.src = image;
+  img.hidden = false;
+  $('#pic-empty').hidden = true;
+  $('#pic-wrap').classList.add('filled');
+  $('#pic-pick').textContent = 'Choose a different one';
+  tick(10);
+}
+
+
+$('#pic-go').addEventListener('click', async () => {
+  if (!pendingAvatar) return toast('Pick a picture, or skip.', 'bad');
+  const button = $('#pic-go');
+  button.disabled = true;
+  button.textContent = 'Saving…';
+  try {
+    const { avatar } = await api('/api/avatar', { method: 'POST', body: { image: pendingAvatar } });
+    state.me.avatar = avatar;
+    pendingAvatar = null;
+    if (picReturnsHome) toast('That is you now.', 'good');
+    leavePicture();
+  } catch (e) {
+    if (!handleAuthError(e)) toast(e.message, 'bad');
+  } finally {
+    button.disabled = false;
+    button.textContent = 'Use this one';
+  }
+});
+
+/** A disc showing someone's picture if they have one, their initial if not. */
+function discFor(person, extra = '') {
+  const disc = el('div', {
+    class: `disc ${extra}`.trim(),
+    style: `--hue:${person?.hue ?? 30}`
+  }, initial(person?.username));
+
+  if (person?.avatar) {
+    disc.append(el('img', {
+      src: `${BASE}/api/avatar/${person.avatar}`,
+      alt: '',
+      loading: 'lazy',
+      onerror: (e) => e.target.remove()   // fall back to the initial
+    }));
+  }
+  return disc;
+}
+
+/**
+ * The disc for a whole conversation. A group is drawn as its first two members
+ * side by side, which reads as "more than one person" faster than any badge.
+ */
+function discForThread(t, extra = '') {
+  if (t.kind !== 'group') return discFor(t.peer, extra);
+
+  const disc = el('div', { class: `disc group ${extra}`.trim(), style: `--hue:${t.hue ?? 30}` });
+  const shown = (t.members || []).slice(0, 2);
+  // A group you are alone in still needs two halves to look like one.
+  while (shown.length < 2) shown.push(null);
+
+  for (const person of shown) {
+    const half = el('div', { class: 'half', style: `--half-hue:${person?.hue ?? t.hue ?? 30}` },
+      person ? initial(person.username) : '');
+    if (person?.avatar) {
+      half.append(el('img', {
+        src: `${BASE}/api/avatar/${person.avatar}`,
+        alt: '', loading: 'lazy',
+        onerror: (e) => e.target.remove()
+      }));
+    }
+    disc.append(half);
+  }
+  return disc;
+}
+
+/** What a conversation is called: a group's name, or the other person's. */
+const titleOf = (t) => (t.kind === 'group' ? t.title : t.peer?.username) || 'someone';
+
+/** The line under the title — who is here, or how many of them. */
+function stateOf(t) {
+  if (t.kind !== 'group') return t.online ? 'here now' : 'away';
+  const people = (t.members?.length || 0) + 1;
+  return t.online_count ? `${t.online_count} of ${people} here now` : `${people} people`;
 }
 
 // -------------------------------------------------------------------- face ---
@@ -346,7 +492,7 @@ async function loadThreads() {
   try {
     const { threads } = await api('/api/threads');
     state.threads = threads;
-    threads.forEach((t) => state.peers.set(t.peer.id, t.peer));
+    for (const t of threads) rememberPeople(t);
     paintThreads();
   } catch (e) {
     if (!handleAuthError(e)) toast(e.message, 'bad');
@@ -365,30 +511,58 @@ function paintThreads() {
     return;
   }
 
-  list.replaceChildren(...state.threads.map((t, i) => {
-    const preview = t.last
-      ? (t.last.kind === 'voice' ? 'Voice note' : t.last.text || '')
-      : (t.peer.fact || 'Say something');
+  list.replaceChildren(...state.threads.map((t, i) => el('button', {
+    class: 'thread-row',
+    style: `--i:${i}`,
+    onclick: () => openThread(t.id)
+  },
+    discForThread(t, t.online ? 'on' : ''),
+    el('div', { class: 'body' },
+      el('div', { class: 'name' }, titleOf(t)),
+      el('div', { class: `prev ${t.unread ? 'unseen' : ''}` }, previewOf(t))
+    ),
+    t.unread ? el('div', { class: 'pip' }, String(t.unread)) : el('div', { class: 'tiny' }, ago(t.last_at))
+  )));
+}
 
-    return el('button', {
-      class: 'thread-row',
-      style: `--i:${i}`,
-      onclick: () => openThread(t.id)
-    },
-      el('div', { class: `disc ${t.online ? 'on' : ''}`, style: `--hue:${t.peer.hue}` }, initial(t.peer.username)),
-      el('div', { class: 'body' },
-        el('div', { class: 'name' }, t.peer.username),
-        el('div', { class: `prev ${t.unread ? 'unseen' : ''}` },
-          `${t.last && t.last.from === state.me.id ? 'You: ' : ''}${preview}`)
-      ),
-      t.unread ? el('div', { class: 'pip' }, String(t.unread)) : el('div', { class: 'tiny' }, ago(t.last_at))
-    );
-  }));
+/** The one line of a conversation that shows in the list. */
+function previewOf(t) {
+  if (!t.last) return t.kind === 'group' ? 'Say something' : (t.peer.fact || 'Say something');
+  if (t.last.kind === 'note') return t.last.text;
+
+  const body = { voice: 'Voice note', photo: t.last.text || 'Photo' }[t.last.kind] ?? (t.last.text || '');
+  if (t.last.from === state.me.id) return `You: ${body}`;
+  // In a group it matters who said it; in a two-person thread it never does.
+  if (t.kind !== 'group') return body;
+  const who = state.peers.get(t.last.from)?.username;
+  return who ? `${who}: ${body}` : body;
+}
+
+/** Keep every face we have been told about, whichever thread carried it. */
+function rememberPeople(t) {
+  if (!t) return;
+  if (t.peer?.id) state.peers.set(t.peer.id, t.peer);
+  for (const person of t.members || []) state.peers.set(person.id, person);
 }
 
 // ------------------------------------------------------------ add + share ---
 
 $('#home-add').addEventListener('click', () => {
+  openSheet(
+    el('h2', {}, 'Someone new'),
+    el('p', { class: 'lede' }, 'One person, or a few of them at once.'),
+    el('button', {
+      class: 'btn', style: 'margin-top:18px',
+      onclick: () => { closeSheet(); setTimeout(addSomeone, 240); }
+    }, 'Add one person'),
+    el('button', {
+      class: 'btn ghost', style: 'margin-top:10px',
+      onclick: () => { closeSheet(); setTimeout(startGroup, 240); }
+    }, 'Start a group')
+  );
+});
+
+function addSomeone() {
   const input = el('input', { type: 'text', placeholder: 'i like icecream', maxlength: '80', enterkeyhint: 'go' });
   const go = el('button', { class: 'btn', style: 'margin-top:14px' }, 'Find them');
 
@@ -420,7 +594,115 @@ $('#home-add').addEventListener('click', () => {
     go
   );
   setTimeout(() => input.focus(), 420);
-});
+}
+
+// ------------------------------------------------------------------ groups ---
+
+/**
+ * A group is built out of people you already talk to. That keeps the fact as
+ * the only door onto somebody's screen — nobody gets pulled into a room by a
+ * stranger who happened to hear their name.
+ */
+async function pickPeople({ title, lede, exclude = [], action, needsName = false, onGo }) {
+  let contacts = [];
+  try {
+    ({ contacts } = await api('/api/contacts'));
+  } catch (e) {
+    return handleAuthError(e) || toast(e.message, 'bad');
+  }
+
+  const pool = contacts.filter((c) => !exclude.includes(c.id));
+  if (!pool.length) {
+    return openSheet(
+      el('h2', {}, title),
+      el('p', { class: 'lede' }, exclude.length
+        ? 'Everyone you talk to is already in here.'
+        : "You need someone to talk to first. Add a person by their fact, then make a group.")
+    );
+  }
+
+  const chosen = new Set();
+  const go = el('button', { class: 'btn', style: 'margin-top:16px', disabled: '' }, action);
+
+  const nameField = needsName
+    ? el('input', { type: 'text', placeholder: 'saturday people', maxlength: '40' })
+    : null;
+
+  const refresh = () => {
+    const ready = chosen.size > 0 && (!nameField || nameField.value.trim().length >= 2);
+    go.disabled = !ready;
+    go.textContent = chosen.size ? `${action} · ${chosen.size}` : action;
+  };
+  nameField?.addEventListener('input', refresh);
+
+  const rows = pool.map((person) => {
+    const row = el('button', { class: 'pick-row' },
+      discFor(person, person.online ? 'on' : ''),
+      el('div', { class: 'body' },
+        el('div', { class: 'name' }, person.username),
+        el('div', { class: 'tiny' }, person.fact || '')),
+      el('div', { class: 'tick' })
+    );
+    row.addEventListener('click', () => {
+      if (chosen.has(person.id)) chosen.delete(person.id);
+      else chosen.add(person.id);
+      row.classList.toggle('on', chosen.has(person.id));
+      tick(6);
+      refresh();
+    });
+    return row;
+  });
+
+  go.addEventListener('click', async () => {
+    go.disabled = true;
+    go.textContent = 'One moment…';
+    try {
+      await onGo([...chosen], nameField?.value.trim());
+    } catch (e) {
+      if (!handleAuthError(e)) toast(e.message, 'bad');
+      refresh();
+    }
+  });
+
+  openSheet(
+    el('h2', {}, title),
+    el('p', { class: 'lede' }, lede),
+    nameField ? el('label', { class: 'field' }, el('span', { class: 'tiny' }, 'Name'), nameField) : null,
+    el('div', { class: 'picker' }, ...rows),
+    go
+  );
+}
+
+function startGroup() {
+  pickPeople({
+    title: 'Start a group',
+    lede: 'Name it, then pick who is in it.',
+    action: 'Make the group',
+    needsName: true,
+    onGo: async (members, title) => {
+      const { thread } = await api('/api/groups', { method: 'POST', body: { title, members } });
+      closeSheet();
+      tick([8, 30, 8]);
+      await loadThreads();
+      openThread(thread.id);
+    }
+  });
+}
+
+function addToGroup(t) {
+  pickPeople({
+    title: 'Add to the group',
+    lede: 'People you already talk to.',
+    exclude: [...(t.members || []).map((m) => m.id), state.me.id],
+    action: 'Add them',
+    onGo: async (members) => {
+      await api(`/api/threads/${encodeURIComponent(t.id)}/members`, { method: 'POST', body: { members } });
+      closeSheet();
+      tick([8, 30, 8]);
+      openThread(t.id);
+    }
+  });
+}
 
 $('#home-share').addEventListener('click', async () => {
   const text = `Come chat with me on smig! ${state.me.fact}`;
@@ -460,6 +742,10 @@ $('#home-menu').addEventListener('click', () => {
     el('div', { class: 'fact-quote' }, state.me.fact || '—'),
     el('button', {
       class: 'btn ghost', style: 'margin-top:14px',
+      onclick: () => { closeSheet(); setTimeout(() => changePicture(), 260); }
+    }, state.me.avatar ? 'Change my picture' : 'Add a picture'),
+    el('button', {
+      class: 'btn ghost',
       onclick: () => { closeSheet(); setTimeout(() => { closeFeed(); startFace('unlock'); }, 260); }
     }, 'Lock smig now'),
     el('button', { class: 'btn quiet', onclick: signOut }, 'Sign out')
@@ -489,10 +775,10 @@ async function openThread(id) {
 
   try {
     const data = await api(`/api/threads/${encodeURIComponent(id)}`);
-    state.thread = { id, peer: data.peer, messages: data.messages, online: data.online };
-    state.peers.set(data.peer.id, data.peer);
-    $('#th-name').textContent = data.peer.username;
-    setPeerState(data.online);
+    if (!data.thread) throw new Error('smig was updated — reload the page.');
+    state.thread = { ...data.thread, messages: data.messages };
+    rememberPeople(data.thread);
+    paintThreadHeader();
     paintMessages(true);
     // The badge is gone server-side now; reflect that in the list behind us.
     const row = state.threads.find((t) => t.id === id);
@@ -507,10 +793,134 @@ function leaveThread() {
   loadThreads();
 }
 
-function setPeerState(online) {
+function paintThreadHeader() {
+  const t = state.thread;
+  if (!t) return;
+
+  $('#th-name').textContent = titleOf(t);
+  const disc = discForThread(t, '');
+  disc.id = 'th-disc';
+  disc.setAttribute('style',
+    `--hue:${(t.kind === 'group' ? t.hue : t.peer?.hue) ?? 30};flex:0 0 38px;width:38px;height:38px;font-size:.9rem`);
+  $('#th-disc').replaceWith(disc);
+
   const node = $('#th-state');
-  node.textContent = online ? 'here now' : 'away';
-  node.classList.toggle('live', Boolean(online));
+  node.textContent = stateOf(t);
+  node.classList.toggle('live', Boolean(t.online));
+
+  // A group call needs a mesh smig doesn't have, so the buttons go away rather
+  // than sit there failing.
+  const group = t.kind === 'group';
+  $('#th-voice').classList.toggle('hidden', group);
+  $('#th-video').classList.toggle('hidden', group);
+}
+
+$('#th-who').addEventListener('click', () => {
+  const t = state.thread;
+  if (!t) return;
+  return t.kind === 'group' ? openGroupSheet(t) : openPeerSheet(t);
+});
+
+function openPeerSheet(t) {
+  openSheet(
+    el('h2', {}, t.peer?.username || 'someone'),
+    t.peer?.fact ? el('div', { class: 'fact-quote' }, t.peer.fact) : null,
+    el('button', {
+      class: 'btn danger', style: 'margin-top:16px',
+      onclick: () => endThread(t, {
+        question: 'Everything in it goes, for both of you. Voice notes and photos too.',
+        confirmLabel: 'End this conversation'
+      })
+    }, 'End this conversation')
+  );
+}
+
+function openGroupSheet(t) {
+  const everyone = [{ ...state.me, username: `${state.me.username} (you)` }, ...(t.members || [])];
+
+  openSheet(
+    el('h2', {}, t.title),
+    el('p', { class: 'lede' }, `${everyone.length} people. Anyone here can add someone they talk to.`),
+
+    el('div', { class: 'picker' }, ...everyone.map((person) => el('div', { class: 'member-row' },
+      discFor(person),
+      el('div', { class: 'body' },
+        el('div', { class: 'name' }, person.username),
+        el('div', { class: 'tiny' }, person.id === t.owner ? 'started the group' : (person.fact || ''))
+      )
+    ))),
+
+    el('button', {
+      class: 'btn', style: 'margin-top:16px',
+      onclick: () => { closeSheet(); setTimeout(() => addToGroup(t), 240); }
+    }, 'Add someone'),
+    el('button', {
+      class: 'btn ghost',
+      onclick: () => { closeSheet(); setTimeout(() => renameGroup(t), 240); }
+    }, 'Rename the group'),
+    el('button', {
+      class: 'btn danger', style: 'margin-top:10px',
+      onclick: () => endThread(t, {
+        question: `The others carry on in ${t.title} without you, and you stop seeing it.`,
+        confirmLabel: 'Leave the group'
+      })
+    }, 'Leave the group')
+  );
+}
+
+function renameGroup(t) {
+  const input = el('input', { type: 'text', maxlength: '40', enterkeyhint: 'go', value: t.title });
+  const go = el('button', { class: 'btn', style: 'margin-top:14px' }, 'Rename it');
+
+  const submit = async () => {
+    const title = input.value.trim();
+    if (title.length < 2) return toast('Give it a name.', 'bad');
+    go.disabled = true;
+    try {
+      await api(`/api/threads/${encodeURIComponent(t.id)}`, { method: 'PATCH', body: { title } });
+      closeSheet();
+      openThread(t.id);
+    } catch (e) {
+      if (!handleAuthError(e)) toast(e.message, 'bad');
+      go.disabled = false;
+    }
+  };
+
+  go.addEventListener('click', submit);
+  input.addEventListener('keydown', (e) => { if (e.key === 'Enter') submit(); });
+
+  openSheet(el('h2', {}, 'Rename the group'), el('label', { class: 'field' }, input), go);
+  setTimeout(() => input.select(), 420);
+}
+
+/**
+ * Both ways out of a conversation are one-way, so both ask first. The question
+ * replaces the sheet that opened it rather than stacking a browser dialog on
+ * top of the app.
+ */
+function endThread(t, { question, confirmLabel }) {
+  const go = el('button', { class: 'btn danger', style: 'margin-top:16px' }, confirmLabel);
+
+  go.addEventListener('click', async () => {
+    go.disabled = true;
+    try {
+      await api(`/api/threads/${encodeURIComponent(t.id)}`, { method: 'DELETE' });
+      closeSheet();
+      state.thread = null;
+      goBack('home');
+      await loadThreads();
+    } catch (e) {
+      if (!handleAuthError(e)) toast(e.message, 'bad');
+      go.disabled = false;
+    }
+  });
+
+  openSheet(
+    el('h2', {}, confirmLabel + '?'),
+    el('p', { class: 'lede' }, question),
+    go,
+    el('button', { class: 'btn quiet', onclick: closeSheet }, 'Keep it')
+  );
 }
 
 function paintMessages(all = false) {
@@ -527,29 +937,87 @@ function paintMessages(all = false) {
 }
 
 function messageNode(m, index, total) {
-  const mine = m.from === state.me.id;
-  const who = mine ? 'you' : (state.thread?.peer?.username || 'them');
-
   // On first paint only the last handful animate — a wall of moving text on
   // open is noise, not delight.
   const animate = total <= 1 || index >= total - 6;
+  const delay = animate ? `animation-delay:${Math.max(0, index - (total - 6)) * 55}ms` : 'animation:none';
+
+  // What the thread says about itself sits apart from what people say in it.
+  if (m.kind === 'note') return el('div', { class: 'note', style: delay }, m.text);
+
+  const group = state.thread?.kind === 'group';
+  const mine = m.from === state.me.id;
+  const speaker = mine ? null : state.peers.get(m.from);
+  const who = mine ? 'you' : (speaker?.username || (group ? 'someone' : state.thread?.peer?.username) || 'them');
 
   const node = el('div', {
-    class: `msg ${mine ? 'mine' : ''}`,
-    style: animate ? `animation-delay:${Math.max(0, index - (total - 6)) * 55}ms` : 'animation:none'
+    // In a group each voice is tinted from its own hue; one to one, the two
+    // colours already say everything.
+    class: `msg ${mine ? 'mine' : group ? 'theirs' : ''}`.trim(),
+    style: `${delay}${!mine && group ? `;--hue:${speaker?.hue ?? 210}` : ''}`
   }, el('div', { class: 'from' }, who));
 
   if (m.kind === 'voice') node.append(voiceNode(m));
+  else if (m.kind === 'photo') node.append(photoNode(m));
   else node.append(el('div', { class: 'text' }, m.text));
 
-  const seen = mine && (m.seen_by || []).some((id) => id !== state.me.id);
-  node.append(el('div', { class: 'at' },
-    clockTime(m.at),
-    seen ? el('span', { class: 'seen' }, ' · seen') : null
-  ));
+  if (m.kind === 'photo' && m.caption) node.append(el('div', { class: 'caption' }, m.caption));
 
+  node.append(el('div', { class: 'at' }, clockTime(m.at), seenTag(m, mine, group)));
   return node;
 }
+
+/** "seen" once it has been, and by how many when there are several of them. */
+function seenTag(m, mine, group) {
+  if (!mine) return null;
+  const by = (m.seen_by || []).filter((id) => id !== state.me.id).length;
+  if (!by) return null;
+  const others = state.thread?.members?.length || 1;
+  const label = group && by < others ? ` · seen by ${by}` : ' · seen';
+  return el('span', { class: 'seen' }, label);
+}
+
+/**
+ * A photo sits in the thread at its own shape and opens full size on a tap.
+ * The box is sized from the dimensions stored with the message, so the
+ * conversation doesn't lurch as pictures arrive.
+ */
+function photoNode(m) {
+  const wide = m.width >= m.height;
+  const shot = el('button', {
+    class: 'shot',
+    style: `aspect-ratio:${m.width} / ${m.height};${wide ? '' : 'max-width:220px;'}`,
+    'aria-label': m.caption || 'Open the photo'
+  }, el('img', {
+    src: `${BASE}/api/photo/${m.file}`,
+    alt: m.caption || 'A photo',
+    loading: 'lazy'
+  }));
+
+  shot.addEventListener('click', () => openLightBox(m));
+  return shot;
+}
+
+// ---------------------------------------------------------------- lightbox ---
+
+function openLightBox(m) {
+  $('#light-img').src = `${BASE}/api/photo/${m.file}`;
+  $('#light-img').alt = m.caption || 'A photo';
+  $('#light-cap').textContent = m.caption || '';
+  $('#light-box').hidden = false;
+  $('#light-box').classList.add('is-live');
+}
+
+function closeLightBox() {
+  $('#light-box').classList.remove('is-live');
+  $('#light-box').hidden = true;
+  $('#light-img').removeAttribute('src');
+}
+
+const lightBoxOpen = () => $('#light-box').classList.contains('is-live');
+
+$('#light-close').addEventListener('click', closeLightBox);
+$('#light-box').addEventListener('click', (e) => { if (e.target.id === 'light-box') closeLightBox(); });
 
 /** A play button and a fixed bar chart that lights up as it plays. */
 function voiceNode(m) {
@@ -632,6 +1100,27 @@ async function sendText() {
   }
 }
 
+// ----------------------------------------------------------- photo message ---
+
+$('#pic').addEventListener('click', async () => {
+  const thread = state.thread;
+  if (!thread) return;
+
+  const shot = await openCamera({ caption: true, sendLabel: 'Send it' });
+  if (!shot) return;
+
+  tick(10);
+  try {
+    await api(`/api/threads/${encodeURIComponent(thread.id)}/photo`, {
+      method: 'POST',
+      body: { image: shot.image, width: shot.width, height: shot.height, caption: shot.caption }
+    });
+    // Like everything else, it paints when it comes back down the feed.
+  } catch (e) {
+    if (!handleAuthError(e)) toast(e.message, 'bad');
+  }
+});
+
 // ----------------------------------------------------------- voice message ---
 
 let recorder = null;
@@ -653,10 +1142,11 @@ async function startRecording() {
     return toast('smig needs the microphone for voice notes.', 'bad');
   }
 
-  // Opus at a low rate: a minute lands around 120 kB, well inside the upload cap.
-  const mime = ['audio/webm;codecs=opus', 'audio/webm', 'audio/mp4']
-    .find((t) => MediaRecorder.isTypeSupported(t));
-  recorder = new MediaRecorder(recStream, mime ? { mimeType: mime, audioBitsPerSecond: 24000 } : undefined);
+  // Record in whatever this browser supports — Chrome gives WebM/Opus, iOS
+  // Safari gives MP4/AAC. It gets re-encoded to MP3 before upload, because
+  // that is the only format both of them can play back. See voice.js.
+  const mime = recordingMimeType();
+  recorder = new MediaRecorder(recStream, mime ? { mimeType: mime } : undefined);
   recChunks = [];
   recorder.ondataavailable = (e) => { if (e.data.size) recChunks.push(e.data); };
   recorder.onstop = finishRecording;
@@ -694,6 +1184,16 @@ function hideRecStrip() {
   mic.classList.remove('armed');
 }
 
+/** Swap the strip for a note that the encode is happening — it isn't instant. */
+function showEncoding() {
+  const strip = $('#rec-strip');
+  if (!strip) return;
+  strip.replaceChildren(
+    el('span', { class: 'dot' }),
+    el('span', { class: 't' }, 'Packing it up…')
+  );
+}
+
 function stopRecording(send) {
   if (!recorder) return;
   recorder._send = send;
@@ -703,27 +1203,32 @@ function stopRecording(send) {
 
 async function finishRecording() {
   const send = recorder?._send;
-  const seconds = Math.round((Date.now() - recStart) / 1000);
+  const recorded = Math.round((Date.now() - recStart) / 1000);
   const blob = new Blob(recChunks, { type: recorder?.mimeType || 'audio/webm' });
+  const thread = state.thread;
   recorder = null;
   recStream = null;
-  hideRecStrip();
 
-  if (!send || seconds < 1 || !blob.size) return;
+  if (!send || recorded < 1 || !blob.size || !thread) return hideRecStrip();
 
+  showEncoding();
   try {
+    const { blob: mp3, seconds } = await toMp3(blob);
+    hideRecStrip();
+
     const audio = await new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.onload = () => resolve(String(reader.result));
       reader.onerror = reject;
-      reader.readAsDataURL(blob);
+      reader.readAsDataURL(mp3);
     });
-    await api(`/api/threads/${encodeURIComponent(state.thread.id)}/voice`, {
-      method: 'POST', body: { audio, seconds }
+    await api(`/api/threads/${encodeURIComponent(thread.id)}/voice`, {
+      method: 'POST', body: { audio, seconds: Math.round(seconds) || recorded }
     });
     tick([8, 30, 8]);
   } catch (e) {
-    if (!handleAuthError(e)) toast(e.message, 'bad');
+    hideRecStrip();
+    if (!handleAuthError(e)) toast(e.message || 'That voice note would not send.', 'bad');
   }
 }
 
@@ -747,6 +1252,8 @@ $('#th-video').addEventListener('click', () => place(true));
 
 async function place(video) {
   if (!state.thread) return;
+  // Two ends to a peer connection; a group would need a mesh smig hasn't got.
+  if (state.thread.kind === 'group') return toast('Groups cannot be called yet.', 'bad');
   if (!state.thread.online) return toast(`${state.thread.peer.username} isn't on smig right now.`, 'bad');
   try {
     await call.place(state.thread.id, state.thread.peer.id, video);
@@ -773,8 +1280,10 @@ function paintCall(status, detail) {
 
   layer.classList.add('is-live');
   $('#call-name').textContent = peer?.username || 'smig';
-  $('#call-disc').textContent = initial(peer?.username);
-  $('#call-disc').style.setProperty('--hue', peer?.hue ?? 30);
+  const disc = discFor(peer, '');
+  disc.id = 'call-disc';
+  disc.setAttribute('style', `--hue:${peer?.hue ?? 30};width:70px;height:70px;font-size:1.5rem`);
+  $('#call-disc').replaceWith(disc);
   $('#self-view').classList.toggle('hidden', !call.video || status === 'incoming');
 
   const label = {
@@ -849,6 +1358,7 @@ function openFeed() {
   feed.addEventListener('seen', (e) => onSeen(JSON.parse(e.data)));
   feed.addEventListener('presence', (e) => onPresence(JSON.parse(e.data)));
   feed.addEventListener('thread', () => loadThreads());
+  feed.addEventListener('peer', (e) => onPeerChanged(JSON.parse(e.data)));
   feed.addEventListener('thread-gone', (e) => onThreadGone(JSON.parse(e.data)));
   feed.addEventListener('call', (e) => onCallEvent(JSON.parse(e.data)));
 
@@ -877,9 +1387,10 @@ function onMessageEvent({ thread_id, message }) {
     const row = state.threads.find((t) => t.id === thread_id);
     if (message.from !== state.me.id) tick([6, 26, 6]);
     if (row) {
-      row.last = { kind: message.kind, text: message.text ?? null, from: message.from };
+      row.last = { kind: message.kind, text: message.text ?? message.caption ?? null, from: message.from };
       row.last_at = message.at;
-      if (message.from !== state.me.id) row.unread = (row.unread || 0) + 1;
+      // A note is the thread narrating itself; it never earns a badge.
+      if (message.from !== state.me.id && message.kind !== 'note') row.unread = (row.unread || 0) + 1;
       state.threads.sort((a, b) => b.last_at.localeCompare(a.last_at));
       if (currentScreen() === 'home') paintThreads();
     } else {
@@ -888,10 +1399,14 @@ function onMessageEvent({ thread_id, message }) {
   }
 }
 
-function onTyping({ thread_id, from }) {
+function onTyping({ thread_id, from, username }) {
   if (state.thread?.id !== thread_id || from === state.me.id) return;
   clearTyping();
   const node = el('div', { class: 'typing', id: 'typing' }, el('i'), el('i'), el('i'));
+  // In a group, three anonymous dots aren't much use.
+  if (state.thread.kind === 'group' && username) {
+    node.append(el('span', { class: 'tiny', style: 'margin-left:6px' }, username));
+  }
   $('#msg-list').append(node);
   $('#msg-list').scrollTop = $('#msg-list').scrollHeight;
   node._timer = setTimeout(clearTyping, 3200);
@@ -902,19 +1417,69 @@ function clearTyping() {
   if (node) { clearTimeout(node._timer); node.remove(); }
 }
 
-function onSeen({ thread_id }) {
+function onSeen({ thread_id, by }) {
   if (state.thread?.id !== thread_id) return;
   for (const m of state.thread.messages) {
-    if (m.from === state.me.id && !(m.seen_by || []).includes('peer')) (m.seen_by ||= []).push('peer');
+    if (m.from === state.me.id && !(m.seen_by || []).includes(by)) (m.seen_by ||= []).push(by);
   }
   paintMessages(true);
 }
 
-function onPresence({ user_id, online }) {
-  const row = state.threads.find((t) => t.peer.id === user_id);
-  if (row) { row.online = online; if (currentScreen() === 'home') paintThreads(); }
-  if (state.thread?.peer.id === user_id) { state.thread.online = online; setPeerState(online); }
+/** Somebody changed their picture or their name — swap it in wherever it shows. */
+function onPeerChanged({ peer }) {
+  if (!peer) return;
+  state.peers.set(peer.id, peer);
+
+  let touched = false;
+  for (const t of state.threads) {
+    if (t.peer?.id === peer.id) { t.peer = { ...t.peer, ...peer }; touched = true; }
+    if (t.members?.some((m) => m.id === peer.id)) {
+      t.members = t.members.map((m) => (m.id === peer.id ? { ...m, ...peer } : m));
+      touched = true;
+    }
+  }
+  if (touched && currentScreen() === 'home') paintThreads();
+
+  const open = state.thread;
+  if (!open) return;
+  if (open.peer?.id === peer.id) open.peer = { ...open.peer, ...peer };
+  if (open.members?.some((m) => m.id === peer.id)) {
+    open.members = open.members.map((m) => (m.id === peer.id ? { ...m, ...peer } : m));
+  }
+  paintThreadHeader();
+  paintMessages(true);   // the name tag on their messages may have changed
 }
+
+function onPresence({ user_id, online }) {
+  // Someone can be in several of your conversations at once, so this is not a
+  // single row: every thread they are part of has to be told.
+  let touched = false;
+  for (const t of state.threads) {
+    if (t.kind === 'group') {
+      if (!t.members?.some((m) => m.id === user_id)) continue;
+      t.online_count = Math.max(0, (t.online_count || 0) + (online ? 1 : -1));
+      t.online = t.online_count > 0;
+    } else {
+      if (t.peer?.id !== user_id) continue;
+      t.online = online;
+      t.online_count = online ? 1 : 0;
+    }
+    touched = true;
+  }
+  if (touched && currentScreen() === 'home') paintThreads();
+
+  const open = state.thread;
+  if (open && (open.peer?.id === user_id || open.members?.some((m) => m.id === user_id))) {
+    if (open.kind === 'group') {
+      open.online_count = Math.max(0, (open.online_count || 0) + (online ? 1 : -1));
+      open.online = open.online_count > 0;
+    } else {
+      open.online = online;
+    }
+    paintThreadHeader();
+  }
+}
+
 
 function onThreadGone({ thread_id }) {
   state.threads = state.threads.filter((t) => t.id !== thread_id);
@@ -946,6 +1511,8 @@ document.addEventListener('visibilitychange', () => {
 
 // Android back / browser back closes whatever is on top before leaving.
 addEventListener('popstate', () => {
+  if (lightBoxOpen()) { closeLightBox(); historyGuard(); return; }
+  if (cameraOpen()) { cancelCamera(); historyGuard(); return; }
   if (call.active) { call.hangUp(true); historyGuard(); return; }
   if (isSheetOpen()) { closeSheet(); historyGuard(); return; }
   if (currentScreen() === 'thread') { leaveThread(); goBack('home'); historyGuard(); }
