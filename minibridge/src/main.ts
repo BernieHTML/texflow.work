@@ -8,7 +8,7 @@ import './styles/app.css';
 
 import { h, mount } from './lib/dom';
 import { loadIdentity, storageAvailable } from './lib/storage';
-import { alreadyInstalled, install } from './lib/engine';
+import { alreadyInstalled, forgetMagic, install } from './lib/engine';
 import { enroll } from './screens/enroll';
 import { unlock } from './screens/unlock';
 import { showHome } from './screens/home';
@@ -40,19 +40,25 @@ async function boot(): Promise<void> {
 }
 
 async function afterUnlock(): Promise<void> {
-  await showHome();
+  // Ask BEFORE the first render. alreadyInstalled() sets the engine's state to
+  // 'waking', which is what stops Home from offering the one-time setup to
+  // someone who already did it.
+  const installed = await alreadyInstalled();
 
-  // If the magic was installed in an earlier session it's already cached, so
-  // bring it back quietly in the background — the person shouldn't have to ask
-  // twice. Home re-renders itself once it's ready.
-  if (await alreadyInstalled()) {
-    install(() => {})
-      .then(() => void showHome())
-      .catch(() => {
-        // Nothing to say here: Home still works, and the magic box will offer
-        // the install again on the next visit.
-      });
-  }
+  await showHome();
+  if (!installed) return;
+
+  // Bring it back from the local cache. No download, but loading a model of
+  // this size onto the GPU is not instant, so Home shows "Just a moment…" until
+  // it lands rather than an install button.
+  install(() => {})
+    .then(() => void showHome())
+    .catch(() => {
+      // Couldn't wake it — most likely the browser evicted the weights under
+      // storage pressure. Clear the marker so the magic box offers the setup
+      // again properly, instead of sitting on "Just a moment…" forever.
+      void forgetMagic().then(() => void showHome());
+    });
 }
 
 void boot();

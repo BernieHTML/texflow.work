@@ -137,6 +137,22 @@ The input is "the magic box" in UI copy and nowhere is it a chat. The one-time
 setup is "Install the magic". The personal check is "Smile In", including in its
 error states.
 
+## Storage eviction is the thing most likely to bite
+
+The failure mode to recognise: you come back and MiniBridge asks you to enrol
+*and* to install the magic again, as if it were a fresh device.
+
+That is the browser having evicted this origin under storage pressure. Eviction
+is all-or-nothing per origin, so it takes `identity.json` (→ back to first-run
+setup) and `magic.json` and the Bridges with it. The model download is several
+hundred megabytes and shares a quota with all of `texflow.work`, which is what
+makes it likely — see the subpath trade-off above.
+
+Mitigations in place: `requestPersistence()` is called at enrolment *and* again
+immediately before the model download, which is the moment the pressure
+actually arrives. Safari can still decline. If it keeps happening, moving to a
+subdomain gives MiniBridge its own quota and is the real fix.
+
 ## Known gaps
 
 - Thresholds in `face.ts` (`SMILE_THRESHOLD`, `MATCH_TOLERANCE`) are hand-tuned

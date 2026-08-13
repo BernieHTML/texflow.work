@@ -131,6 +131,40 @@ export async function verifyPasscode(passcode: string, identity: Identity): Prom
   return diff === 0;
 }
 
+/* ---- The magic ---------------------------------------------------------
+ *
+ * We record for ourselves that the one-time setup completed, rather than trying
+ * to detect it by peering into web-llm's cache. web-llm can cache into any of
+ * four backends (Cache API, IndexedDB, OPFS, cross-origin), so any check based
+ * on one of them reports "not installed" on the others — which stranded people
+ * on the install screen forever.
+ *
+ * If the browser has since evicted the weights, install() simply downloads them
+ * again with the normal progress UI. A stale flag costs nothing; a wrong
+ * detection cost the whole feature.
+ */
+
+export interface MagicState {
+  modelId: string;
+  installedAt: number;
+}
+
+export async function loadMagicState(): Promise<MagicState | null> {
+  return readJSON<MagicState>(await root(), 'magic.json');
+}
+
+export async function saveMagicState(state: MagicState): Promise<void> {
+  await writeJSON(await root(), 'magic.json', state);
+}
+
+export async function clearMagicState(): Promise<void> {
+  try {
+    await (await root()).removeEntry('magic.json');
+  } catch {
+    /* already gone */
+  }
+}
+
 /* ---- Bridges ---------------------------------------------------------- */
 
 async function bridgesDir(): Promise<FileSystemDirectoryHandle> {

@@ -6,7 +6,7 @@
  */
 
 import { h, mount, prefersReducedMotion, softProgress, when } from '../lib/dom';
-import { build, deviceSupported, install, isReady } from '../lib/engine';
+import { build, deviceSupported, install, state as engineState } from '../lib/engine';
 import { listBridges, saveBridge, type BridgeRecord } from '../lib/storage';
 import { openBridge } from './bridge';
 import { showSettings } from './settings';
@@ -87,9 +87,12 @@ function render(state: HomeState): void {
 
 /** The magic box. The product's signature moment. */
 function magicBox(state: HomeState): HTMLElement {
-  // Nothing can be built until the magic is installed, so the box becomes the
-  // invitation to install it rather than a disabled input.
-  if (!isReady()) return installer(state);
+  // Three states, not two. A device that already has the magic and is bringing
+  // it back must NOT be shown the setup button — that reads as "install it
+  // again" and is the bug that made returning visits feel broken.
+  const phase = engineState();
+  if (phase === 'waking') return waking();
+  if (phase === 'absent') return installer(state);
 
   const field = h('textarea', {
     class: 'magic__field',
@@ -143,6 +146,19 @@ function magicBox(state: HomeState): HTMLElement {
 
   go.addEventListener('click', submit);
   return box;
+}
+
+/** Already installed, just coming back. Deliberately says nothing about
+ * setting anything up — there is nothing for the person to do here. */
+function waking(): HTMLElement {
+  const progress = softProgress();
+  progress.set(null);
+  return h(
+    'div',
+    { class: 'magic' },
+    h('p', { class: 'lead', text: 'Just a moment…' }),
+    h('div', { style: { marginTop: 'var(--sp-3)' } }, progress.el),
+  );
 }
 
 /** "Install the magic" — the one-time setup, in the magic box's place. */
@@ -254,7 +270,15 @@ async function buildBridge(request: string, state: HomeState): Promise<void> {
     };
     await saveBridge(record);
     progress.set(1);
-    await showHome({ bridges: await listBridges(), arriving: record.id });
+
+    // Let it land on Home first — the arrival is the moment — then open it, so
+    // you actually get to use the thing you just asked for instead of hunting
+    // for it among the tiles.
+    const bridges = await listBridges();
+    await showHome({ bridges, arriving: record.id });
+
+    const settle = prefersReducedMotion() ? 0 : 900;
+    setTimeout(() => openBridge(record, () => void showHome({ bridges })), settle);
   } catch (err) {
     if ((err as Error).name === 'AbortError') return;
     failed(request, state, (err as Error).message);

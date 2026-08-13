@@ -11,6 +11,12 @@
 // Type-only: the actual module is ~6MB minified and is pulled in lazily below,
 // so opening MiniBridge to look at your Bridges never pays for it.
 import type { MLCEngine, InitProgressReport } from '@mlc-ai/web-llm';
+import {
+  clearMagicState,
+  loadMagicState,
+  requestPersistence,
+  saveMagicState,
+} from './storage';
 
 /** Primary. Apache 2.0, tuned for structured/code output rather than chat, and
  * small enough that the one-time download is defensible on a phone — which
@@ -29,8 +35,22 @@ const PRIMARY_F32 = 'Qwen2.5-Coder-1.5B-Instruct-q4f32_1-MLC';
 let engine: MLCEngine | null = null;
 let loading: Promise<MLCEngine> | null = null;
 
-export function isReady(): boolean {
-  return engine !== null;
+/** What the magic box should be showing.
+ *
+ *   'absent'  - never installed on this device; offer the one-time setup.
+ *   'waking'  - installed before, currently coming back. NOT the same as
+ *               'absent', and conflating the two is what made returning
+ *               visits look like they needed reinstalling.
+ *   'ready'   - good to build.
+ */
+export type EngineState = 'absent' | 'waking' | 'ready';
+
+let installedBefore = false;
+
+export function state(): EngineState {
+  if (engine) return 'ready';
+  if (loading || installedBefore) return 'waking';
+  return 'absent';
 }
 
 /** Does this device have WebGPU at all? Pre-iOS 26 Safari does not. */
@@ -60,6 +80,13 @@ export async function install(onProgress: (fraction: number) => void): Promise<M
   if (loading) return loading;
 
   loading = (async () => {
+    // Ask for persistent storage BEFORE pulling down several hundred megabytes.
+    // Without it the browser may evict this origin under storage pressure, and
+    // eviction takes everything with it — the Bridges, and identity.json, which
+    // silently throws the person back to first-run setup. Safari can decline;
+    // asking at the moment of pressure is still the best shot we get.
+    await requestPersistence();
+
     const [{ CreateMLCEngine }, model] = await Promise.all([
       import('@mlc-ai/web-llm'),
       pickModel(),
@@ -71,27 +98,43 @@ export async function install(onProgress: (fraction: number) => void): Promise<M
       },
     });
     engine = created;
+    installedBefore = true;
+    // Remember for next time, so a returning visit resumes instead of offering
+    // the setup all over again.
+    await saveMagicState({ modelId: model, installedAt: Date.now() });
     return created;
   })();
 
   try {
-    return await loading;
+    const ready = await loading;
+    loading = null;
+    return ready;
   } catch (err) {
     loading = null;
     throw err;
   }
 }
 
-/** Has the model already been installed in a previous session? WebLLM keeps its
- * own cache, so we check for it rather than tracking a flag ourselves. */
+/** Has the one-time setup completed on this device before?
+ *
+ * Reads our own marker rather than inspecting web-llm's cache — see the note in
+ * storage.ts. Cheap, and it doesn't drag the 6MB engine chunk into boot. */
 export async function alreadyInstalled(): Promise<boolean> {
-  try {
-    if (!('caches' in window)) return false;
-    const keys = await caches.keys();
-    return keys.some((k) => k.startsWith('webllm/'));
-  } catch {
-    return false;
-  }
+  const magic = await loadMagicState();
+  installedBefore = magic !== null;
+  return installedBefore;
+}
+
+/** Forget that the magic was ever installed, without touching the weights.
+ *
+ * Used when waking fails — typically the browser evicted the weights under
+ * storage pressure. Clearing the marker returns the magic box to offering the
+ * setup, instead of leaving it stuck on "Just a moment…". */
+export async function forgetMagic(): Promise<void> {
+  engine = null;
+  loading = null;
+  installedBefore = false;
+  await clearMagicState();
 }
 
 /** Drop the cached weights. Used by Settings. */
@@ -101,12 +144,23 @@ export async function uninstall(): Promise<void> {
   } catch {
     /* engine may never have loaded */
   }
+
+  // Let web-llm remove its own weights, whichever backend it chose. Importing
+  // it here is fine: this only runs on a deliberate tap in Settings.
+  try {
+    const magic = await loadMagicState();
+    if (magic) {
+      const { deleteModelAllInfoInCache } = await import('@mlc-ai/web-llm');
+      await deleteModelAllInfoInCache(magic.modelId);
+    }
+  } catch {
+    // Best effort. The marker still goes, so the setup will be offered again.
+  }
+
+  await clearMagicState();
   engine = null;
   loading = null;
-  if ('caches' in window) {
-    const keys = await caches.keys();
-    await Promise.all(keys.filter((k) => k.startsWith('webllm/')).map((k) => caches.delete(k)));
-  }
+  installedBefore = false;
 }
 
 const SYSTEM_PROMPT = `You write tiny, self-contained web pages.
@@ -147,7 +201,20 @@ function extractHTML(raw: string): string {
   if (start > 0) text = text.slice(start);
 
   const end = text.toLowerCase().lastIndexOf('</html>');
-  if (end !== -1) text = text.slice(0, end + '</html>'.length);
+  if (end !== -1) return text.slice(0, end + '</html>'.length).trim();
+
+  // No closing tag: the generation was cut short, usually by the token ceiling.
+  // Salvage it rather than discarding several minutes of work on a phone — an
+  // unterminated <script> or <style> would otherwise swallow the whole page, so
+  // close whatever is still open and let the person see what they got.
+  const lower = text.toLowerCase();
+  const openTag = (tag: string) =>
+    (lower.split(`<${tag}`).length - 1) > (lower.split(`</${tag}`).length - 1);
+
+  if (openTag('script')) text += '\n</script>';
+  if (openTag('style')) text += '\n</style>';
+  if (openTag('body')) text += '\n</body>';
+  if (openTag('html')) text += '\n</html>';
 
   return text.trim();
 }
