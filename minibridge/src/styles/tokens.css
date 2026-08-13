@@ -1,0 +1,141 @@
+/* MiniBridge design tokens.
+ *
+ * Palette: "Chalk & Plum". Six named colours, chosen in a deliberate pass and
+ * sanity-checked against the current default "AI-generated" look — warm cream
+ * (#F4F1EA) + terracotta + high-contrast display serif. We diverge on all three
+ * axes on purpose:
+ *
+ *   - the offwhite is pulled COOL (a faint lilac cast), not warm cream
+ *   - the accent is plum, not terracotta/clay
+ *   - the serif is reserved for the USER's own words, never for our headings
+ *
+ * The app speaks in a rounded sans. The person speaks in a serif. That
+ * inversion is the type pairing, and it costs zero bytes because both come from
+ * the system stack — which also keeps the shell fully offline-capable.
+ */
+
+:root {
+  /* ---- Palette ------------------------------------------------------- */
+  --chalk: #f4f2f5; /* ground: offwhite, faint cool lilac cast */
+  --paper: #fbfafb; /* true light surface: Bridge content, text on plum */
+  /* The inside of a well. Must sit DARKER than the ground — a recess that is
+   * lighter than what surrounds it reads as a raised card, which is the exact
+   * look this design exists to avoid. */
+  --recess: #ece9ef;
+  --ink: #241f2b; /* primary text: near-black, plum undertone */
+  --haze: #6e6478; /* secondary text and borders (via alpha) */
+  --plum: #5b3a6e; /* primary accent — the living element */
+  --honey: #e4b363; /* the arrival bloom. Used ONCE. See below. */
+
+  /* Honey is rationed deliberately: it appears only when a Bridge arrives.
+   * Nothing else in the app is allowed to use it. That scarcity is what makes
+   * the arrival moment read as an event rather than as decoration. */
+
+  --plum-soft: color-mix(in oklab, var(--plum) 18%, transparent);
+  --plum-glow: color-mix(in oklab, var(--plum) 52%, transparent);
+  --hairline: color-mix(in oklab, var(--haze) 22%, transparent);
+  --sink: color-mix(in oklab, var(--ink) 22%, transparent);
+
+  /* ---- Type ---------------------------------------------------------- */
+  /* ui-rounded resolves to SF Pro Rounded on Apple devices — warm and personal,
+   * and notably not the default -apple-system look. */
+  --font-ui: ui-rounded, 'SF Pro Rounded', system-ui, -apple-system, 'Segoe UI',
+    sans-serif;
+  /* ui-serif resolves to New York on Apple. This is the person's voice. */
+  --font-voice: ui-serif, 'New York', Georgia, 'Times New Roman', serif;
+
+  --step--1: clamp(0.82rem, 0.79rem + 0.14vw, 0.9rem);
+  --step-0: clamp(1rem, 0.96rem + 0.2vw, 1.09rem);
+  --step-1: clamp(1.24rem, 1.16rem + 0.4vw, 1.45rem);
+  --step-2: clamp(1.55rem, 1.4rem + 0.75vw, 1.95rem);
+  --step-3: clamp(1.94rem, 1.68rem + 1.3vw, 2.6rem);
+
+  /* ---- Space & shape ------------------------------------------------- */
+  --sp-1: 0.375rem;
+  --sp-2: 0.625rem;
+  --sp-3: 1rem;
+  --sp-4: 1.5rem;
+  --sp-5: 2.25rem;
+  --sp-6: 3.5rem;
+
+  --r-sm: 10px;
+  --r-md: 16px;
+  --r-lg: 24px;
+  --r-well: 28px;
+
+  /* The signature: things are INSET into the surface, not stacked on top of it.
+   * Everything in this app comes up out of the paper rather than sitting on it,
+   * which is both visually uncommon right now and carries the idea that these
+   * things came from you. Hence wells, not cards. */
+  /* Two-tone: a shadow cast by the upper lip, and a lit lower lip where the
+   * light catches the far wall. That pair is what sells "hole" over "card". */
+  --well: inset 0 2px 5px var(--sink), inset 0 -1.5px 0 rgb(255 255 255 / 0.95),
+    0 1px 0 rgb(255 255 255 / 0.6);
+  --well-deep: inset 0 4px 11px var(--sink), inset 0 -1.5px 0 rgb(255 255 255 / 0.9),
+    0 1px 0 rgb(255 255 255 / 0.6);
+  --lift: 0 1px 2px color-mix(in oklab, var(--ink) 7%, transparent),
+    0 6px 18px color-mix(in oklab, var(--ink) 8%, transparent);
+
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --ease-out-soft: cubic-bezier(0.16, 0.84, 0.44, 1);
+}
+
+/* MiniBridge is a single-surface, light-ground product by deliberate choice —
+ * the "paper you press things into" metaphor is the whole visual idea and it
+ * does not survive inversion. We still honour dark mode by warming the ground
+ * slightly rather than flipping it, so it doesn't glare at night. */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --chalk: #e9e6ec;
+    --paper: #f4f2f6;
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+body {
+  background: var(--chalk);
+  color: var(--ink);
+  font-family: var(--font-ui);
+  font-size: var(--step-0);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  /* Standalone PWA: no rubber-band scroll on the shell itself. */
+  overscroll-behavior-y: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+input,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}

@@ -1,0 +1,8 @@
+# Reproduced by `npm run vision` — ~36MB of wasm and the face landmarker model.
+public/vision/
+
+# Generated from public/icon.svg by `node scripts/icons.mjs`.
+public/icon-*.png
+
+# Screenshot output from scripts/shots.mjs.
+.shots/

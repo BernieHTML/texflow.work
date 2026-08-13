@@ -10,3 +10,8 @@ data/smig-media/
 
 # Local python virtualenv for scripts/.
 scripts/.venv/
+
+# MiniBridge build output — ~42MB of generated bundles, wasm and model binaries.
+# Source is in /minibridge; `cd minibridge && npm run build` regenerates this
+# and is the whole deploy step. Kept out of git the same way Platform66/dist is.
+public/minibridge/

@@ -1,0 +1,22 @@
+{
+  "name": "MiniBridge",
+  "short_name": "MiniBridge",
+  "description": "A pocket-sized tool for the small things you build for yourself.",
+  "start_url": "/minibridge/",
+  "scope": "/minibridge/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#F4F2F5",
+  "theme_color": "#F4F2F5",
+  "icons": [
+    { "src": "/minibridge/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/minibridge/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    {
+      "src": "/minibridge/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    { "src": "/minibridge/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}
