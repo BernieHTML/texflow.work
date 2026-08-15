@@ -331,6 +331,18 @@ p {
   }
 }
 
+/* Something worth explaining, sat above the magic box. Quiet — it reports, it
+   doesn't alarm. */
+.notice {
+  padding: var(--sp-3);
+  border-radius: var(--r-md);
+  background: var(--recess);
+  box-shadow: var(--well);
+  color: var(--ink);
+  font-size: var(--step--1);
+  line-height: 1.45;
+}
+
 .empty {
   padding: var(--sp-5) var(--sp-3);
   text-align: center;

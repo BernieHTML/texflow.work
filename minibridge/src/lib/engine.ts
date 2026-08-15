@@ -13,9 +13,12 @@
 import type { MLCEngine, InitProgressReport } from '@mlc-ai/web-llm';
 import {
   clearMagicState,
+  loadDeviceProfile,
   loadMagicState,
   requestPersistence,
+  saveDeviceProfile,
   saveMagicState,
+  type Tier,
 } from './storage';
 
 /** Primary. Apache 2.0, tuned for structured/code output rather than chat, and
@@ -27,6 +30,28 @@ import {
  * back to the f32 build when that's missing. */
 const PRIMARY_F16 = 'Qwen2.5-Coder-1.5B-Instruct-q4f16_1-MLC';
 const PRIMARY_F32 = 'Qwen2.5-Coder-1.5B-Instruct-q4f32_1-MLC';
+
+/* The lighter builder. Same family and still code-tuned, but ~944MB of graphics
+ * memory against the 1.5B's ~1630MB.
+ *
+ * This is the DEFAULT on phones, and that is a correction rather than a
+ * preference. The 1.5B was picked on the reasoning that mobile Safari's ~5GB
+ * per-tab ceiling makes 1–3B safe, but that ceiling is not the binding
+ * constraint — the GPU buffer budget is, and 1.6GB of it sits right at the edge
+ * on a real phone. The model loads, then the first prefill tips the page over
+ * and the browser kills it outright. Pages from the 0.5B are simpler; pages
+ * from a builder that crashes the phone are non-existent. */
+const LIGHT_F16 = 'Qwen2.5-Coder-0.5B-Instruct-q4f16_1-MLC';
+const LIGHT_F32 = 'Qwen2.5-Coder-0.5B-Instruct-q4f32_1-MLC';
+
+/** Trim the KV cache below the 4096 each model ships with. The cache is
+ * allocated up front and scales with this number, so it is the cheapest
+ * memory saving available — and a small self-contained page does not need a
+ * long context. */
+const CONTEXT = { full: 4096, light: 2048 } as const;
+
+/** Leave room in the window for the description and the system prompt. */
+const RESERVE = 512;
 
 /* Fast-follow, not shipped in this pass: 'Llama-3.2-3B-Instruct-q4f16_1-MLC' as
  * an optional richer tier in Settings for newer, higher-memory devices. Kept as
@@ -46,6 +71,7 @@ let loading: Promise<MLCEngine> | null = null;
 export type EngineState = 'absent' | 'waking' | 'ready';
 
 let installedBefore = false;
+let activeTier: Tier = 'full';
 
 export function state(): EngineState {
   if (engine) return 'ready';
@@ -58,14 +84,40 @@ export function deviceSupported(): boolean {
   return typeof navigator !== 'undefined' && 'gpu' in navigator;
 }
 
-async function pickModel(): Promise<string> {
+/** Phones start on the lighter builder.
+ *
+ * Crude on purpose: a coarse pointer on a small screen is a phone, and
+ * MiniBridge is a pocket product. Getting this wrong on a tablet costs simpler
+ * pages; getting it wrong the other way costs a browser crash mid-build. */
+function looksLikeAPhone(): boolean {
+  try {
+    return (
+      window.matchMedia('(pointer: coarse)').matches &&
+      Math.min(window.screen.width, window.screen.height) < 820
+    );
+  } catch {
+    return true; // when unsure, be gentle with the device
+  }
+}
+
+/** The tier this device should use, honouring anything it has already told us
+ * the hard way. */
+export async function tierFor(): Promise<Tier> {
+  const profile = await loadDeviceProfile();
+  if (profile) return profile.tier;
+  return looksLikeAPhone() ? 'light' : 'full';
+}
+
+async function pickModel(tier: Tier): Promise<string> {
+  let f16 = false;
   try {
     const adapter = await navigator.gpu.requestAdapter();
-    if (adapter?.features.has('shader-f16')) return PRIMARY_F16;
+    f16 = adapter?.features.has('shader-f16') ?? false;
   } catch {
     /* fall through to the safer build */
   }
-  return PRIMARY_F32;
+  if (tier === 'light') return f16 ? LIGHT_F16 : LIGHT_F32;
+  return f16 ? PRIMARY_F16 : PRIMARY_F32;
 }
 
 /**
@@ -87,17 +139,24 @@ export async function install(onProgress: (fraction: number) => void): Promise<M
     // asking at the moment of pressure is still the best shot we get.
     await requestPersistence();
 
+    const tier = await tierFor();
     const [{ CreateMLCEngine }, model] = await Promise.all([
       import('@mlc-ai/web-llm'),
-      pickModel(),
+      pickModel(tier),
     ]);
-    const created = await CreateMLCEngine(model, {
-      initProgressCallback: (report: InitProgressReport) => {
-        const fraction = typeof report.progress === 'number' ? report.progress : 0;
-        onProgress(Math.max(0, Math.min(1, fraction)));
+    const created = await CreateMLCEngine(
+      model,
+      {
+        initProgressCallback: (report: InitProgressReport) => {
+          const fraction = typeof report.progress === 'number' ? report.progress : 0;
+          onProgress(Math.max(0, Math.min(1, fraction)));
+        },
       },
-    });
+      // Smaller KV cache than the model's default. Allocated once, at load.
+      { context_window_size: CONTEXT[tier] },
+    );
     engine = created;
+    activeTier = tier;
     installedBefore = true;
     // Remember for next time, so a returning visit resumes instead of offering
     // the setup all over again.
@@ -123,6 +182,41 @@ export async function alreadyInstalled(): Promise<boolean> {
   const magic = await loadMagicState();
   installedBefore = magic !== null;
   return installedBefore;
+}
+
+/**
+ * A build took the page down. Step this device down to the lighter builder so
+ * the same thing doesn't happen again.
+ *
+ * Returns true if the tier actually changed, which means the lighter builder
+ * has to be brought over before anything can be built.
+ */
+export async function stepDownAfterCrash(): Promise<boolean> {
+  const profile = (await loadDeviceProfile()) ?? { tier: await tierFor(), crashes: 0 };
+  const crashes = profile.crashes + 1;
+
+  if (profile.tier === 'light') {
+    // Already as light as we go. Record it, but there's nothing left to drop.
+    await saveDeviceProfile({ tier: 'light', crashes });
+    return false;
+  }
+
+  await saveDeviceProfile({ tier: 'light', crashes });
+
+  // The heavy weights are no longer wanted and are the largest thing on the
+  // device, so let them go rather than leaving a gigabyte of dead cache.
+  try {
+    const magic = await loadMagicState();
+    if (magic) {
+      const { deleteModelAllInfoInCache } = await import('@mlc-ai/web-llm');
+      await deleteModelAllInfoInCache(magic.modelId);
+    }
+  } catch {
+    /* best effort */
+  }
+
+  await forgetMagic();
+  return true;
 }
 
 /** Forget that the magic was ever installed, without touching the weights.
@@ -244,7 +338,8 @@ export async function build(
       { role: 'user', content: request },
     ],
     temperature: 0.6,
-    max_tokens: 4096,
+    // Must fit the window we allocated, or the request overruns the KV cache.
+    max_tokens: CONTEXT[activeTier] - RESERVE,
   });
 
   let raw = '';

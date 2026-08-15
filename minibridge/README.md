@@ -101,16 +101,43 @@ actually installed.
 | Screens | `src/screens/` |
 | Shell caching | `public/sw.js` |
 
-### The model
+### The model, and why phones get the smaller one
 
-Primary is **Qwen2.5-Coder-1.5B-Instruct** (Apache 2.0), tuned for structured
-and code output rather than chat, and small enough that the one-time download is
-defensible on a phone — mobile Safari's per-tab memory ceiling (~5GB) makes the
-1–3B range the safe zone, and 1.5B leaves the most headroom. The `q4f16_1` build
-is used where WebGPU reports `shader-f16`, falling back to `q4f32_1`.
+Two tiers, both Apache 2.0 and both tuned for structured/code output rather than
+chat. `q4f16_1` is used where WebGPU reports `shader-f16`, falling back to
+`q4f32_1`.
 
-Llama-3.2-3B as an optional richer tier is a deliberate **fast-follow**, not in
-this pass. The constant is noted in `engine.ts` so adding it is a config change.
+| Tier | Model | Graphics memory | Default on |
+| --- | --- | --- | --- |
+| `full` | Qwen2.5-Coder-1.5B-Instruct | ~1630 MB | desktop |
+| `light` | Qwen2.5-Coder-0.5B-Instruct | ~944 MB | phones |
+
+The 1.5B was originally the sole choice, on the reasoning that mobile Safari's
+~5GB per-tab ceiling makes the 1–3B range safe. **That reasoning had the wrong
+constraint.** The binding limit is the GPU buffer budget, not the tab ceiling,
+and 1.6GB of it sits right at the edge on a real phone: the model loads fine,
+then the first prefill tips the page over and the browser kills it outright.
+From the user's side that looks like pressing Build and being thrown back to
+the very first screen.
+
+Pages from the 0.5B are simpler. Pages from a builder that crashes the phone do
+not exist. `context_window_size` is also trimmed below each model's default
+4096 (`CONTEXT` in `engine.ts`), since the KV cache is allocated up front and
+scales with it.
+
+Llama-3.2-3B as an optional richer tier remains a **fast-follow**. Given the
+above it should be gated behind an explicit choice on desktop, not offered on
+phones.
+
+### Crash detection
+
+A browser that runs out of memory kills the page — there is no exception to
+catch and no error event. So `markBuildStarted()` leaves a note in OPFS before
+the heavy part and clears it after. A note still present at boot means the last
+build took the page down, and `stepDownAfterCrash()` moves the device to the
+lighter tier, drops the too-heavy weights, and Home explains it plainly.
+
+Covered by `scripts/check-crash.mjs`.
 
 ### Bridge record schema
 

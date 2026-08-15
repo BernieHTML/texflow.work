@@ -165,6 +165,60 @@ export async function clearMagicState(): Promise<void> {
   }
 }
 
+/* ---- Crash detection ---------------------------------------------------
+ *
+ * Building is the heaviest thing this app does, and when a phone runs out of
+ * memory the browser kills the page outright — no exception to catch, no error
+ * event, the app simply reboots to first-run. From inside, that is invisible.
+ *
+ * So we leave a note before starting and tear it up on the way out. If a note
+ * is still there at boot, the previous build took the whole page down with it,
+ * and we can react instead of letting it happen again.
+ */
+
+export interface PendingBuild {
+  request: string;
+  startedAt: number;
+}
+
+export async function markBuildStarted(request: string): Promise<void> {
+  await writeJSON(await root(), 'pending.json', { request, startedAt: Date.now() });
+}
+
+export async function takePendingBuild(): Promise<PendingBuild | null> {
+  const pending = await readJSON<PendingBuild>(await root(), 'pending.json');
+  await clearPendingBuild();
+  return pending;
+}
+
+export async function clearPendingBuild(): Promise<void> {
+  try {
+    await (await root()).removeEntry('pending.json');
+  } catch {
+    /* already gone */
+  }
+}
+
+/** How much this device has shown it can take.
+ *
+ * 'full'  - the 1.5B builder. Better pages, ~1.6GB of graphics memory.
+ * 'light' - the 0.5B builder. Simpler pages, ~0.9GB. Phones start here. */
+export type Tier = 'full' | 'light';
+
+export interface DeviceProfile {
+  tier: Tier;
+  /** Builds that took the page down. */
+  crashes: number;
+}
+
+export async function loadDeviceProfile(): Promise<DeviceProfile | null> {
+  return readJSON<DeviceProfile>(await root(), 'device.json');
+}
+
+export async function saveDeviceProfile(profile: DeviceProfile): Promise<void> {
+  await writeJSON(await root(), 'device.json', profile);
+}
+
 /* ---- Bridges ---------------------------------------------------------- */
 
 async function bridgesDir(): Promise<FileSystemDirectoryHandle> {

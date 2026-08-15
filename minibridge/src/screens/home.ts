@@ -7,7 +7,13 @@
 
 import { h, mount, prefersReducedMotion, softProgress, when } from '../lib/dom';
 import { build, deviceSupported, install, state as engineState } from '../lib/engine';
-import { listBridges, saveBridge, type BridgeRecord } from '../lib/storage';
+import {
+  clearPendingBuild,
+  listBridges,
+  markBuildStarted,
+  saveBridge,
+  type BridgeRecord,
+} from '../lib/storage';
 import { openBridge } from './bridge';
 import { showSettings } from './settings';
 
@@ -23,6 +29,8 @@ export interface HomeState {
   bridges: BridgeRecord[];
   /** Id of a Bridge that just arrived, so it can play its moment once. */
   arriving?: string;
+  /** Something happened last time worth explaining, in plain words. */
+  notice?: string;
 }
 
 export async function showHome(state: HomeState = { bridges: [] }): Promise<void> {
@@ -79,6 +87,7 @@ function render(state: HomeState): void {
           onclick: () => void showSettings(() => void showHome()),
         }),
       ),
+      state.notice && h('p', { class: 'notice', text: state.notice }),
       magicBox(state),
       grid,
     ),
@@ -259,8 +268,13 @@ async function buildBridge(request: string, state: HomeState): Promise<void> {
     progress.set(Math.min(0.95, soFar.length / 6000));
   };
 
+  // Leave a note before the heavy part. If the page dies here there is no
+  // exception to catch — the note at next boot is the only evidence.
+  await markBuildStarted(request);
+
   try {
     const result = await build(request, onToken, controller.signal);
+    await clearPendingBuild();
     const record: BridgeRecord = {
       id: crypto.randomUUID(),
       name: result.name,
@@ -280,6 +294,8 @@ async function buildBridge(request: string, state: HomeState): Promise<void> {
     const settle = prefersReducedMotion() ? 0 : 900;
     setTimeout(() => openBridge(record, () => void showHome({ bridges })), settle);
   } catch (err) {
+    // Survived the failure, so it wasn't a crash — tear the note up.
+    await clearPendingBuild();
     if ((err as Error).name === 'AbortError') return;
     failed(request, state, (err as Error).message);
   }
