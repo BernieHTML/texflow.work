@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="ArthurChat">
+  <rect width="64" height="64" rx="15" fill="#5847E8"/>
+  <path d="M18 21h28a5 5 0 0 1 5 5v13a5 5 0 0 1-5 5H31l-9 7v-7h-4a5 5 0 0 1-5-5V26a5 5 0 0 1 5-5Z" fill="#fff"/>
+  <circle cx="26" cy="32" r="2.6" fill="#5847E8"/>
+  <circle cx="34" cy="32" r="2.6" fill="#5847E8"/>
+  <circle cx="42" cy="32" r="2.6" fill="#5847E8"/>
+</svg>

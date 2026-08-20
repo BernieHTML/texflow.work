@@ -8,6 +8,11 @@ node_modules/
 data/smig-*.json
 data/smig-media/
 
+# MiniBridge push subscriptions. Each row is a live push endpoint for a real
+# person's phone — publishing one would let anyone who found it notify that
+# device until they uninstalled the icon.
+data/minibridge-push.json
+
 # Local python virtualenv for scripts/.
 scripts/.venv/
 
@@ -15,3 +20,8 @@ scripts/.venv/
 # Source is in /minibridge; `cd minibridge && npm run build` regenerates this
 # and is the whole deploy step. Kept out of git the same way Platform66/dist is.
 public/minibridge/
+
+# ArthurChat's runtime state: display names, scrypt'd PINs, live session
+# tokens and every private message. `origin` is a GitHub remote, so a stray
+# `git add -A` would publish all of it permanently.
+data/arthurchat-*.json

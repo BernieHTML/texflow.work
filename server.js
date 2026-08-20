@@ -15,6 +15,8 @@ import { SEO_PAGES, SEO_SITE } from './scripts/seo-config.js';
 import { injectSeoIntoHtml, resolveSeoPage } from './scripts/seo-utils.js';
 import { createLeoSpyRouter } from './routes/leospy/index.js';
 import { createSmigRouter } from './routes/smig/index.js';
+import { createArthurChatRouter } from './routes/arthurchat/index.js';
+import { createMiniBridgeRouter } from './routes/minibridge/index.js';
 import { registerAcsaArchive } from './routes/acsa-archive/index.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -513,6 +515,7 @@ app.use((req, res, next) => {
 // --- TexFlow brand homepage & agent entry (explicit routes so /agent works even if static layout changes) ---
 app.get('/', (req, res) => sendSeoHtml(req, res, join(__dirname, 'public', 'index.html'), '/'));
 app.get(['/science', '/science/'], (req, res) => sendSeoHtml(req, res, join(__dirname, 'public', 'science', 'index.html'), '/science'));
+app.get(['/products', '/products/'], (req, res) => sendSeoHtml(req, res, join(__dirname, 'public', 'products', 'index.html'), '/products'));
 app.get(['/agent', '/agent/'], (req, res) => {
   res.setHeader('Content-Type', 'text/markdown; charset=utf-8');
   res.sendFile(join(__dirname, 'public', 'agent.md'));
@@ -1383,6 +1386,33 @@ try {
 } catch (e) {
   console.error('[smig] Failed to mount /smig:', e.message);
 }
+
+// --- ArthurChat: swap codes, add each other, talk ---
+// Mounted before the static handler so the API wins over public/arthurchat/*;
+// the app's own assets fall through to the router's own static handler.
+try {
+  app.use('/arthurchat', createArthurChatRouter());
+  console.log('[arthurchat] Mounted at /arthurchat');
+} catch (e) {
+  console.error('[arthurchat] Failed to mount /arthurchat:', e.message);
+}
+
+// --- MiniBridge: the opt-in cloud backup and Web Push for Chat ---
+// Only /minibridge/api is served here. The app itself is a static build in
+// public/minibridge and must keep falling through to express.static below.
+try {
+  app.use('/minibridge/api', createMiniBridgeRouter());
+  console.log('[MiniBridge] API mounted at /minibridge/api');
+} catch (e) {
+  console.error('[MiniBridge] Failed to mount /minibridge/api:', e.message);
+}
+
+// MiniBridge is now just the chat, served at /minibridge. This redirect keeps
+// the old address alive: it is on people's Home Screens and inside notification
+// payloads already sent, and neither can be reached to be updated.
+app.get(['/minibridge/chat', '/minibridge/chat/'], (req, res) =>
+  res.redirect(301, '/minibridge/'),
+);
 
 // --- Static: public, then root assets ---
 app.use(express.static(join(__dirname, 'public')));
