@@ -1,0 +1,187 @@
+/* Chat styles.
+ *
+ * The type inversion from tokens.css carries the whole conversation: the person
+ * speaks in the serif, MiniBridge answers in the rounded sans. That is enough
+ * to tell the two apart without a single avatar, timestamp or alignment trick,
+ * so there are none.
+ *
+ * On bubbles: MiniBridge's replies are wells, recessed into the paper like
+ * everything else here. The person's own messages are NOT — they sit on the
+ * surface in plum, because they came from outside the app rather than out of
+ * it. That is the same idea the rest of the product is built on, applied to a
+ * transcript.
+ */
+
+.chat {
+  /* The composer must sit at the bottom with the transcript scrolling above it,
+     so this screen is capped to the viewport rather than growing with the
+     conversation.
+     max-height, not height: .screen is `flex: 1`, and flex-basis wins over
+     height on the main axis, so a height here is simply ignored and the screen
+     grows until the composer is off the bottom of the phone. max-height still
+     clamps a flex item, and min-height:0 is what lets it be clamped at all.
+     The insets come off because #app has already padded by them. */
+  max-height: calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+  min-height: 0;
+  gap: var(--sp-3);
+  padding-bottom: var(--sp-3);
+  overflow: hidden;
+}
+
+.chat__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  flex: none;
+}
+
+/* The app's name sits at the head of its only screen, so it takes the h1 down
+   to something a chat header can carry rather than the display size. */
+.chat__title {
+  flex: 1;
+  font-size: var(--step-1);
+  font-weight: 620;
+  letter-spacing: -0.01em;
+}
+
+/* ---- The transcript ---------------------------------------------------- */
+
+.talk {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  /* Only the transcript rubber-bands. The shell itself must not — a chat that
+     drags the whole page around under your thumb feels like a web page. */
+  overscroll-behavior: contain;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  padding: var(--sp-2) 0;
+  /* Room for the last bubble to clear the composer's shadow. */
+  scroll-padding-bottom: var(--sp-4);
+}
+
+.talk__empty {
+  margin: auto 0;
+  text-align: center;
+  padding: var(--sp-5) var(--sp-3);
+}
+
+.said {
+  max-width: 85%;
+  padding: var(--sp-3);
+  border-radius: var(--r-lg);
+  animation: said-in 0.32s var(--ease-out-soft) both;
+}
+
+@keyframes said-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+
+/* Yours: on the paper, in your own voice. */
+.said--mine {
+  align-self: flex-end;
+  background: var(--plum);
+  color: var(--paper);
+  box-shadow: var(--lift);
+  border-bottom-right-radius: var(--r-sm);
+  font-family: var(--font-voice);
+}
+
+/* Theirs: out of the paper, in the app's voice. */
+.said--theirs {
+  align-self: flex-start;
+  background: var(--recess);
+  box-shadow: var(--well);
+  border-bottom-left-radius: var(--r-sm);
+}
+
+.said__p {
+  color: inherit;
+  line-height: 1.45;
+}
+
+.said__p + .said__p {
+  margin-top: var(--sp-2);
+}
+
+/* Where a reply came from, when it wasn't from here. Small, permanent, and
+   never celebratory — it is a disclosure, not a badge. */
+.said__via {
+  display: block;
+  margin-top: var(--sp-2);
+  font-size: var(--step--1);
+  color: var(--haze);
+  letter-spacing: 0.01em;
+}
+
+/* Filling in as it arrives. The same plum breath as the magic box, so thinking
+   looks the same everywhere in the app. */
+.said--live {
+  position: relative;
+  overflow: hidden;
+}
+
+.said--live::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(120% 90% at 20% 120%, var(--plum-glow), transparent 60%);
+  opacity: 0.4;
+  animation: breathe 3.2s var(--ease) infinite;
+}
+
+.talk__trouble {
+  align-self: flex-start;
+  max-width: 85%;
+  font-size: var(--step--1);
+  color: var(--haze);
+  padding: 0 var(--sp-1);
+}
+
+/* ---- The composer ------------------------------------------------------ */
+
+.magic--composer {
+  flex: none;
+  /* Shorter than the magic box on Home: that one is an invitation to describe
+     something, this one is a line you're already mid-conversation in. */
+  padding: var(--sp-3) var(--sp-3) var(--sp-2);
+}
+
+.magic--composer .magic__field {
+  min-height: 1.6em;
+  max-height: 30dvh;
+  font-size: var(--step-0);
+}
+
+/* Waiting on a reply. The field is gone rather than disabled — there is nothing
+   useful to type into it, and a greyed-out box invites tapping at it. */
+.magic--busy {
+  min-height: 4.6rem;
+}
+
+/* ---- The notifications offer ------------------------------------------- */
+
+.notice--offer {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+.notice__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+}
+
+.notice__actions .btn {
+  padding: 0.5rem 1rem;
+  font-size: var(--step--1);
+}

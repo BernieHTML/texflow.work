@@ -6,8 +6,8 @@
  *   npm i --no-save puppeteer
  *   node scripts/shots.mjs
  *
- * On this VPS Chrome is also missing ~13 system libraries and installing them
- * needs root. They can be unpacked into a local prefix without sudo:
+ * On this VPS Chrome is also missing a set of system libraries and installing
+ * them needs root. They can be unpacked into a local prefix without sudo:
  *
  *   apt-get download libasound2 libatk1.0-0 libatk-bridge2.0-0 libatspi2.0-0 \
  *     libcairo2 libpango-1.0-0 libpangocairo-1.0-0 libpangoft2-1.0-0 \
@@ -17,9 +17,12 @@
  *   for d in *.deb; do dpkg-deb -x "$d" ./libs; done
  *   LD_LIBRARY_PATH=$PWD/libs/usr/lib/x86_64-linux-gnu node scripts/shots.mjs
  *
- * The camera screens can't be exercised meaningfully headless (the fake device
- * feeds a test pattern, so no face is ever found), so this seeds OPFS directly
- * to reach Home, and captures the camera screens as far as they render.
+ * (libcups2, libnss3 and libgbm1 are already installed system-wide here — asking
+ * apt for them just 404s against a stale index.)
+ *
+ * This runs without a WebGPU adapter, so the model never loads and the setup and
+ * wake-failure states are the honest ones. The composer's markup is injected
+ * afterwards so its CSS is still exercised.
  */
 
 import puppeteer from 'puppeteer';
@@ -29,19 +32,15 @@ import { fileURLToPath } from 'node:url';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const out = process.env.SHOT_DIR || join(here, '..', '.shots');
-const BASE = process.env.BASE || 'http://127.0.0.1:5001/minibridge/';
+const APP = `${process.env.ORIGIN || 'http://127.0.0.1:5001'}/minibridge/`;
 
 await mkdir(out, { recursive: true });
 
-const browser = await puppeteer.launch({
-  headless: 'new',
-  args: [
-    '--no-sandbox',
-    '--use-fake-ui-for-media-stream',
-    '--use-fake-device-for-media-stream',
-    '--enable-unsafe-webgpu',
-  ],
-});
+// Deliberately NO --enable-unsafe-webgpu. With an adapter present the tiny
+// model genuinely loads here (the VPS link pulls ~200MB in seconds), which both
+// saturates the renderer and means the setup and wake-failure states are never
+// reached. Without it, those states are the honest ones.
+const browser = await puppeteer.launch({ headless: 'new', args: ['--no-sandbox'] });
 
 const page = await browser.newPage();
 await page.setViewport({ width: 390, height: 844, deviceScaleFactor: 2, isMobile: true });
@@ -54,125 +53,103 @@ const shot = async (name) => {
   console.log(`  ${name}.png`);
 };
 
+async function seed(entries) {
+  await page.evaluate((rows) => {
+    for (const [k, v] of rows) {
+      if (v === null) localStorage.removeItem(k);
+      else localStorage.setItem(k, JSON.stringify(v));
+    }
+  }, entries);
+}
+
+await page.goto(APP, { waitUntil: 'networkidle0' });
+
 console.log('first open:');
-await page.goto(BASE, { waitUntil: 'networkidle0' });
-await shot('01-enroll');
+await seed([['mb.chat', null], ['mb.model', null], ['mb.device', null], ['mb.loading', null]]);
+await page.reload({ waitUntil: 'networkidle0' });
+await shot('01-first-open');
 
-// Straight to the passcode branch, which is reachable without a camera.
-const link = await page.$('button.link');
-if (link) {
-  await link.click();
-  await shot('02-passcode-set');
-}
+console.log('a conversation:');
+const now = Date.now();
+await seed([
+  [
+    'mb.chat',
+    [
+      { id: '1', role: 'user', content: 'what should I do with half a lemon and no plan', at: now - 240000 },
+      {
+        id: '2',
+        role: 'assistant',
+        content:
+          'Squeeze it over whatever you were going to eat anyway — it wakes up almost anything savoury.\n\nIf you want it to keep, cut it into wedges and freeze them. They go straight into a glass later, no thawing.',
+        at: now - 232000,
+        via: 'device',
+      },
+      { id: '3', role: 'user', content: 'and the peel?', at: now - 90000 },
+      {
+        id: '4',
+        role: 'assistant',
+        content:
+          'Grate it into sugar and leave it overnight. You end up with lemon sugar, which is better than it sounds.',
+        at: now - 84000,
+        via: 'cloud',
+      },
+    ],
+  ],
+]);
+await page.reload({ waitUntil: 'networkidle0' });
+await shot('02-conversation');
 
-console.log('passcode unlock (seeded identity, real hash for 1234):');
-await page.evaluate(async () => {
-  // Mirror storage.ts exactly so the real verification path is exercised.
-  const salt = 'a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4';
-  const enc = new TextEncoder();
-  const saltBytes = Uint8Array.from(salt.match(/.{2}/g).map((h) => parseInt(h, 16)));
-  const key = await crypto.subtle.importKey('raw', enc.encode('1234'), 'PBKDF2', false, [
-    'deriveBits',
-  ]);
-  const bits = await crypto.subtle.deriveBits(
-    { name: 'PBKDF2', salt: saltBytes, iterations: 150000, hash: 'SHA-256' },
-    key,
-    256,
-  );
-  const hex = [...new Uint8Array(bits)].map((b) => b.toString(16).padStart(2, '0')).join('');
-
-  const root = await navigator.storage.getDirectory();
-  const handle = await root.getFileHandle('identity.json', { create: true });
-  const w = await handle.createWritable();
-  await w.write(
-    JSON.stringify({
-      signature: [],
-      passcodeSalt: salt,
-      passcodeHash: hex,
-      enrolledAt: Date.now(),
-    }),
-  );
-  await w.close();
-});
-await page.goto(BASE, { waitUntil: 'networkidle0' });
-await shot('03-passcode-unlock');
-
-/** Load the app and get past the passcode, the way a person would. */
-async function openApp() {
-  await page.goto(BASE, { waitUntil: 'networkidle0' });
-  for (const digit of ['1', '2', '3', '4']) {
-    await page.evaluate((d) => {
-      const key = [...document.querySelectorAll('.key')].find((k) => k.textContent === d);
-      key?.click();
-    }, digit);
-    await new Promise((r) => setTimeout(r, 120));
-  }
-  await new Promise((r) => setTimeout(r, 900));
-  return page.evaluate(() => !!document.querySelector('.home'));
-}
-
-console.log(`  passcode accepted -> Home: ${await openApp()}`);
-
-console.log('home with Bridges:');
-await page.evaluate(async () => {
-  const root = await navigator.storage.getDirectory();
-  const dir = await root.getDirectoryHandle('bridges', { create: true });
-  const samples = [
-    ['Pasta timer', 'a timer for the pasta', 1000 * 60 * 4],
-    ['Split the bill', 'something to split the bill four ways', 1000 * 60 * 90],
-    ['Shopping list', 'somewhere to jot the shopping', 1000 * 60 * 60 * 26],
-  ];
-  for (const [name, request, age] of samples) {
-    const id = crypto.randomUUID();
-    const h = await dir.getFileHandle(`${id}.json`, { create: true });
-    const w = await h.createWritable();
-    await w.write(
-      JSON.stringify({
-        id,
-        name,
-        request,
-        createdAt: Date.now() - age,
-        html: `<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{font-family:system-ui;padding:2rem;background:#FBFAFB;color:#241F2B}h1{font-size:1.4rem}</style></head><body><h1>${name}</h1><p>${request}</p></body></html>`,
-      }),
-    );
-    await w.close();
-  }
-});
-await openApp();
-await shot('04-home');
-
-// Force the magic box past the installer so the signature element is visible
-// even though WebGPU/weights aren't available in this environment.
-console.log('magic box (forced ready):');
+// The composer only appears once a model is resident, which cannot happen
+// without a WebGPU adapter. Its markup is injected so the CSS is exercised —
+// the state is real, the route to it just isn't reachable headless.
+console.log('composer (markup injected):');
 await page.evaluate(() => {
   const box = document.querySelector('.magic');
   if (!box) return;
+  box.className = 'magic magic--composer';
   box.replaceChildren();
   const field = document.createElement('textarea');
   field.className = 'magic__field';
-  field.rows = 2;
-  field.placeholder = 'a timer for the pasta…';
+  field.rows = 1;
+  field.placeholder = 'what’s on your mind…';
   const foot = document.createElement('div');
   foot.className = 'magic__foot';
   const hint = document.createElement('span');
   hint.className = 'magic__hint';
-  hint.textContent = 'One thing at a time.';
+  hint.textContent = 'On this phone.';
   const go = document.createElement('button');
   go.className = 'magic__go';
-  go.textContent = 'Build';
+  go.textContent = 'Send';
   foot.append(hint, go);
   box.append(field, foot);
 });
-await shot('05-magic-box');
+await shot('03-composer');
 
-console.log('bridge open:');
-await page.evaluate(() => document.querySelector('.tile')?.click());
-await shot('06-bridge');
+console.log('after a crash (stepped down, waiting for a tap):');
+await seed([
+  ['mb.model', { modelId: 'Llama-3.2-1B-Instruct-q4f16_1-MLC', installedAt: now }],
+  ['mb.device', { tier: 'pocket', crashes: 0 }],
+  ['mb.loading', { step: 'replying', at: now }],
+]);
+await page.reload({ waitUntil: 'networkidle0' });
+await shot('04-after-crash');
+
+console.log('a wake that failed (weights gone from the device):');
+await seed([
+  ['mb.model', { modelId: 'SmolLM2-360M-Instruct-q4f16_1-MLC', installedAt: now }],
+  ['mb.device', { tier: 'tiny', crashes: 0 }],
+  ['mb.loading', null],
+]);
+await page.reload({ waitUntil: 'networkidle0' });
+// No adapter, so the wake genuinely fails rather than being simulated.
+await new Promise((r) => setTimeout(r, 2500));
+await shot('05-wake-failed');
 
 console.log('settings:');
-await openApp();
-await page.evaluate(() => document.querySelector('.icon-btn')?.click());
-await shot('07-settings');
+await page.evaluate(() => document.querySelector('.chat__head button')?.click());
+await shot('06-settings');
+await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+await shot('07-settings-lower');
 
 await browser.close();
-console.log(`\nwrote to ${out}`);
+console.log(`\nshots in ${out}`);

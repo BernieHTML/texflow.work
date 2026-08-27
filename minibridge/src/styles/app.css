@@ -1,7 +1,10 @@
 /* MiniBridge app styles.
  *
- * Discipline: two places get real design effort — the magic box and the moment
- * a Bridge arrives. Everything else is deliberately quiet so those two land.
+ * The signature: things are INSET into the surface, not stacked on top of it.
+ * Wells, not cards. Everything comes up out of the paper rather than sitting on
+ * it — see tokens.css for the full note.
+ *
+ * This file is the shared furniture. The conversation itself is chat.css.
  */
 
 #app {
@@ -28,16 +31,6 @@
   }
 }
 
-.screen--centred {
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  gap: var(--sp-3);
-  max-width: 30rem;
-  margin: 0 auto;
-  width: 100%;
-}
-
 /* ---- Type ------------------------------------------------------------- */
 
 h1 {
@@ -45,14 +38,6 @@ h1 {
   line-height: 1.1;
   letter-spacing: -0.02em;
   font-weight: 650;
-  margin: 0;
-}
-
-h2 {
-  font-size: var(--step-1);
-  line-height: 1.2;
-  letter-spacing: -0.01em;
-  font-weight: 620;
   margin: 0;
 }
 
@@ -98,30 +83,15 @@ p {
   pointer-events: none;
 }
 
-.btn--quiet {
-  background: transparent;
-  color: var(--haze);
-  box-shadow: none;
-  font-weight: 550;
-}
-
-.btn--quiet:active {
-  color: var(--ink);
-}
-
 .btn--well {
   background: var(--recess);
   color: var(--ink);
   box-shadow: var(--well);
 }
 
-/* ---- The magic box ----------------------------------------------------
- * The signature element of the whole product: an inset WELL, not a raised
- * card. Things in MiniBridge come up out of the paper rather than sitting on
- * top of it. That reads as "this came from you", and it also sidesteps the
- * floating-card-with-drop-shadow look every other app has right now.
- *
- * Explicitly not a chat input: no bubble, no send arrow, no history above it.
+/* ---- The well ----------------------------------------------------------
+ * The composer and every stand-in that takes its place. An inset well, not a
+ * raised card.
  */
 
 .magic {
@@ -134,8 +104,8 @@ p {
   transition: box-shadow 0.4s var(--ease);
 }
 
-/* The breath: a slow plum glow living inside the well. It is the one thing on
- * Home that moves while you are not touching anything. */
+/* The breath: a slow plum glow living inside the well. The one thing that moves
+   while you are not touching anything. */
 .magic::before {
   content: '';
   position: absolute;
@@ -169,7 +139,7 @@ p {
 }
 
 /* Typing quickens the breath — the box responds to you without ever pretending
- * to think. */
+   to think. */
 .magic--typing::before {
   animation-duration: 2.1s;
 }
@@ -186,7 +156,6 @@ p {
   font-family: var(--font-voice);
   font-size: var(--step-1);
   line-height: 1.4;
-  min-height: 3.4em;
   max-height: 40dvh;
   color: var(--ink);
 }
@@ -211,9 +180,8 @@ p {
   opacity: 0.85;
 }
 
-/* Submit: no arrow-in-a-bubble. A word, and a press that sinks into the well.
- * iOS Safari has no Vibration API, so the feedback has to be visual — the
- * button sinks and the well flexes. */
+/* Send: no arrow-in-a-bubble. A word, and a press that sinks into the well.
+   iOS Safari has no Vibration API, so the feedback has to be visual. */
 .magic__go {
   border: 0;
   border-radius: 999px;
@@ -235,105 +203,11 @@ p {
   transform: scale(0.93);
 }
 
-.magic--sent {
-  animation: sink 0.5s var(--ease);
-}
+/* ---- Notices ----------------------------------------------------------- */
 
-@keyframes sink {
-  40% {
-    transform: scale(0.975);
-    box-shadow: inset 0 4px 12px var(--sink);
-  }
-}
-
-/* ---- Home ------------------------------------------------------------- */
-
-.home {
-  gap: var(--sp-4);
-}
-
-.home__head {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: var(--sp-3);
-}
-
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(9.5rem, 1fr));
-  gap: var(--sp-3);
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-/* Bridges are wells too — recessed into the paper, same family as the magic
-   box they came out of. */
-.tile {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  gap: 0.15rem;
-  width: 100%;
-  min-height: 6.5rem;
-  padding: var(--sp-3);
-  border: 0;
-  text-align: left;
-  border-radius: var(--r-lg);
-  background: var(--recess);
-  box-shadow: var(--well);
-  transition: transform 0.2s var(--ease), box-shadow 0.2s var(--ease);
-}
-
-.tile:active {
-  transform: scale(0.97);
-  box-shadow: var(--well-deep);
-}
-
-.tile__name {
-  font-family: var(--font-voice);
-  font-size: var(--step-0);
-  line-height: 1.25;
-  color: var(--ink);
-}
-
-.tile__when {
-  font-size: var(--step--1);
-  color: var(--haze);
-}
-
-/* The arrival moment. The one deliberate animation in the app, and the only
- * place Honey is ever used — the surface blooms warm exactly once, when
- * something you asked for turns up. Scarcity is what makes it land. */
-.tile--arriving {
-  animation: arrive 0.9s var(--ease-out-soft) both;
-}
-
-@keyframes arrive {
-  0% {
-    opacity: 0;
-    transform: scale(0.86) translateY(10px);
-    box-shadow: inset 0 6px 16px var(--sink);
-  }
-  45% {
-    opacity: 1;
-    box-shadow: inset 0 0 0 2px var(--honey), 0 0 26px color-mix(in oklab, var(--honey) 55%, transparent);
-  }
-  70% {
-    transform: scale(1.03) translateY(0);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1) translateY(0);
-    box-shadow: var(--well);
-  }
-}
-
-/* Something worth explaining, sat above the magic box. Quiet — it reports, it
-   doesn't alarm. */
+/* Something worth explaining. Quiet — it reports, it doesn't alarm. */
 .notice {
+  flex: none;
   padding: var(--sp-3);
   border-radius: var(--r-md);
   background: var(--recess);
@@ -343,63 +217,75 @@ p {
   line-height: 1.45;
 }
 
-.empty {
-  padding: var(--sp-5) var(--sp-3);
-  text-align: center;
-  color: var(--haze);
+/* ---- Settings ---------------------------------------------------------- */
+
+.home__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-3);
 }
 
-/* ---- Camera ceremony (Smile In) --------------------------------------- */
+.rows {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  margin-top: var(--sp-3);
+}
 
-.lens {
-  position: relative;
-  width: min(62vw, 15rem);
-  aspect-ratio: 1;
-  border-radius: 50%;
-  overflow: hidden;
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  padding: var(--sp-3);
+  border-radius: var(--r-md);
   background: var(--recess);
-  box-shadow: var(--well-deep);
+  box-shadow: var(--well);
 }
 
-.lens video {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  /* Mirror it — people expect to see themselves the way a mirror shows them. */
-  transform: scaleX(-1);
+/* The size currently in use. A lit lower lip in plum rather than a tick — the
+   same light that defines every other well here. */
+.row--on {
+  box-shadow: var(--well), inset 0 -2px 0 var(--plum);
 }
 
-.ring {
-  position: absolute;
-  inset: -6px;
-  border-radius: 50%;
-  pointer-events: none;
+.row__label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  min-width: 0;
 }
 
-.ring circle {
-  fill: none;
-  stroke-width: 3;
-  stroke-linecap: round;
-  transform: rotate(-90deg);
-  transform-origin: 50% 50%;
+.row__name {
+  font-weight: 570;
 }
 
-.ring__track {
-  stroke: var(--hairline);
+/* The label wraps, the action doesn't. "Turn on" broken across two lines reads
+   as two controls, and "In use" stacked into a column reads as neither. */
+.row > .btn,
+.row > .fine {
+  flex: none;
+  white-space: nowrap;
 }
 
-.ring__fill {
-  stroke: var(--plum);
-  transition: stroke-dashoffset 0.2s linear;
+.section-title {
+  font-size: var(--step--1);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--haze);
+  margin-top: var(--sp-4);
 }
 
-/* ---- Progress (install / build) ---------------------------------------
- * Soft, wordless. No percentages, no megabytes, no byte counts — the copy
- * elsewhere carries the warmth and this just has to feel alive. */
+/* ---- Progress ----------------------------------------------------------
+ * Soft, wordless. No percentages, no megabytes — the copy elsewhere carries the
+ * warmth and this just has to feel alive.
+ */
 
 .soft-progress {
   position: relative;
-  width: min(18rem, 70vw);
+  width: 100%;
+  max-width: 18rem;
   height: 6px;
   border-radius: 999px;
   background: var(--recess);
@@ -430,179 +316,7 @@ p {
   }
 }
 
-/* ---- Bridge view ------------------------------------------------------ */
-
-.stage {
-  position: fixed;
-  inset: 0;
-  z-index: 40;
-  display: flex;
-  flex-direction: column;
-  background: var(--chalk);
-  /* Reads as launching an app, not opening a preview pane. */
-  animation: stage-open 0.42s var(--ease-out-soft) both;
-}
-
-@keyframes stage-open {
-  from {
-    opacity: 0;
-    transform: scale(0.9);
-  }
-}
-
-.stage--closing {
-  animation: stage-close 0.3s var(--ease) both;
-}
-
-@keyframes stage-close {
-  to {
-    opacity: 0;
-    transform: scale(0.93);
-  }
-}
-
-.stage__bar {
-  display: flex;
-  align-items: center;
-  gap: var(--sp-3);
-  padding: calc(env(safe-area-inset-top) + var(--sp-2)) var(--sp-3) var(--sp-2);
-}
-
-.stage__name {
-  font-family: var(--font-voice);
-  font-size: var(--step-0);
-  flex: 1;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.stage__frame {
-  flex: 1;
-  width: 100%;
-  border: 0;
-  /* Not a well: this is the Bridge's own surface, so it stays true paper. */
-  background: var(--paper);
-  border-radius: var(--r-lg) var(--r-lg) 0 0;
-  box-shadow: var(--well);
-  margin-bottom: env(safe-area-inset-bottom);
-}
-
-/* ---- Settings --------------------------------------------------------- */
-
-.rows {
-  display: flex;
-  flex-direction: column;
-  gap: var(--sp-2);
-  margin-top: var(--sp-3);
-}
-
-.row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--sp-3);
-  padding: var(--sp-3);
-  border-radius: var(--r-md);
-  background: var(--recess);
-  box-shadow: var(--well);
-}
-
-.row__label {
-  display: flex;
-  flex-direction: column;
-  gap: 0.1rem;
-  min-width: 0;
-}
-
-.row__name {
-  font-weight: 570;
-}
-
-.section-title {
-  font-size: var(--step--1);
-  text-transform: uppercase;
-  letter-spacing: 0.07em;
-  color: var(--haze);
-  margin-top: var(--sp-4);
-}
-
-/* ---- Passcode --------------------------------------------------------- */
-
-.pins {
-  display: flex;
-  gap: var(--sp-2);
-  justify-content: center;
-}
-
-.pin {
-  width: 0.85rem;
-  height: 0.85rem;
-  border-radius: 50%;
-  background: var(--recess);
-  box-shadow: var(--well);
-  transition: background-color 0.18s var(--ease), transform 0.18s var(--ease);
-}
-
-.pin--set {
-  background: var(--plum);
-  transform: scale(1.12);
-}
-
-.keypad {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--sp-2);
-  width: min(17rem, 78vw);
-  margin: 0 auto;
-}
-
-.key {
-  border: 0;
-  border-radius: var(--r-md);
-  padding: var(--sp-3);
-  font-size: var(--step-1);
-  font-weight: 550;
-  background: var(--recess);
-  box-shadow: var(--well);
-  transition: transform 0.14s var(--ease);
-}
-
-.key:active {
-  transform: scale(0.94);
-  box-shadow: var(--well-deep);
-}
-
-.key--blank {
-  background: transparent;
-  box-shadow: none;
-  pointer-events: none;
-}
-
-.shake {
-  animation: shake 0.4s var(--ease);
-}
-
-@keyframes shake {
-  25% {
-    transform: translateX(-7px);
-  }
-  50% {
-    transform: translateX(6px);
-  }
-  75% {
-    transform: translateX(-3px);
-  }
-}
-
-/* ---- Misc ------------------------------------------------------------- */
-
-.stack {
-  display: flex;
-  flex-direction: column;
-  gap: var(--sp-3);
-  align-items: center;
-}
+/* ---- Misc -------------------------------------------------------------- */
 
 .spacer {
   flex: 1;
@@ -633,16 +347,4 @@ p {
 
 .icon-btn:active {
   transform: scale(0.92);
-}
-
-.sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0 0 0 0);
-  white-space: nowrap;
-  border: 0;
 }

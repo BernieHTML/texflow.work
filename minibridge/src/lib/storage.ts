@@ -1,255 +1,226 @@
-/* On-device storage. Everything here lives in OPFS (Origin Private File
- * System) and never leaves the phone. There is no server side to any of this.
+/* On-device storage. Everything here stays on the phone.
  *
- * Layout:
- *   /identity.json          -> Identity  (Smile In signature + passcode)
- *   /bridges/<id>.json      -> BridgeRecord
+ * localStorage, not OPFS. Two reasons, and the first is the important one:
  *
- * Note on origin: MiniBridge is served from texflow.work/minibridge, so this
- * OPFS store shares its quota with the rest of texflow.work. That is a known
- * trade-off of the subpath deployment — see README.
+ *   1. The crash breadcrumb has to be written SYNCHRONOUSLY. When a phone runs
+ *      out of memory the browser kills the page outright — no exception, no
+ *      unload event, no chance to await anything. An async write loses the race
+ *      and the breadcrumb is the only evidence a crash ever happened.
+ *   2. A capped chat transcript is tens of kilobytes. OPFS earns its complexity
+ *      for hundreds of megabytes of generated documents, which this no longer
+ *      has, and it brought a "this browser can't" screen with it.
+ *
+ * Model weights are NOT here. web-llm keeps its own cache and doing it twice
+ * would double several hundred megabytes on the device.
  */
 
-/** A Bridge: one thing the person asked for, and the thing that got built.
- *
- * Schema decision: we DO keep `request`, the person's original words. The spec
- * left this open. Storing it costs a few hundred bytes, lets Home show what a
- * Bridge was asked to be, and is the precondition for ever rebuilding or
- * tweaking one. It is the person's own text on their own device. */
-export interface BridgeRecord {
-  /** crypto.randomUUID() */
+const KEY = {
+  chat: 'mb.chat',
+  prefs: 'mb.prefs',
+  device: 'mb.device',
+  model: 'mb.model',
+  /** Written before the heavy part, torn up after. See takeBreadcrumb(). */
+  loading: 'mb.loading',
+} as const;
+
+function read<T>(key: string, fallback: T): T {
+  try {
+    const raw = localStorage.getItem(key);
+    return raw ? (JSON.parse(raw) as T) : fallback;
+  } catch {
+    // Corrupt or unavailable. Behaving as if empty is always safer here than
+    // throwing on boot.
+    return fallback;
+  }
+}
+
+function write(key: string, value: unknown): void {
+  try {
+    localStorage.setItem(key, JSON.stringify(value));
+  } catch {
+    // Quota, or Safari private mode. Losing a preference is survivable; taking
+    // the app down over it is not.
+  }
+}
+
+function drop(key: string): void {
+  try {
+    localStorage.removeItem(key);
+  } catch {
+    /* nothing to do */
+  }
+}
+
+/* ---- The conversation --------------------------------------------------- */
+
+export interface ChatMessage {
   id: string;
-  /** Short display name, derived from the request. */
-  name: string;
-  /** The person's original words, verbatim. */
-  request: string;
-  /** Epoch milliseconds. */
-  createdAt: number;
-  /** The complete self-contained HTML document. */
-  html: string;
+  role: 'user' | 'assistant';
+  content: string;
+  at: number;
+  /** Where an assistant message came from. Shown in the UI, because "this one
+   * left your phone" is not something to leave someone guessing about. */
+  via?: 'device' | 'cloud';
 }
 
-/** Identity is the Smile In signature plus the passcode fallback.
+/** Old turns fall off the end. The model only ever sees the last handful
+ * anyway, and an unbounded transcript in localStorage eventually throws. */
+const KEEP = 60;
+
+export function loadChat(): ChatMessage[] {
+  return read<ChatMessage[]>(KEY.chat, []);
+}
+
+export function saveChat(messages: ChatMessage[]): void {
+  write(KEY.chat, messages.slice(-KEEP));
+}
+
+export function clearChat(): void {
+  drop(KEY.chat);
+}
+
+/* ---- Preferences --------------------------------------------------------
  *
- * ENGINEERING HONESTY: `signature` is a geometric descriptor derived from face
- * landmarks. It is NOT a biometric credential and this is NOT authentication.
- * See face.ts for the full note. */
-export interface Identity {
-  /** Normalised inter-landmark distance vector. No image is ever stored. */
-  signature: number[];
-  /** PBKDF2-SHA256 of the passcode, hex. */
-  passcodeHash: string;
-  /** Random per-install salt, hex. */
-  passcodeSalt: string;
-  enrolledAt: number;
-}
-
-let rootPromise: Promise<FileSystemDirectoryHandle> | null = null;
-
-function root(): Promise<FileSystemDirectoryHandle> {
-  if (!rootPromise) rootPromise = navigator.storage.getDirectory();
-  return rootPromise;
-}
-
-export function storageAvailable(): boolean {
-  return typeof navigator !== 'undefined' && !!navigator.storage?.getDirectory;
-}
-
-async function readJSON<T>(dir: FileSystemDirectoryHandle, name: string): Promise<T | null> {
-  try {
-    const handle = await dir.getFileHandle(name);
-    const file = await handle.getFile();
-    const text = await file.text();
-    return text ? (JSON.parse(text) as T) : null;
-  } catch {
-    // Missing file is the normal "not set up yet" case, not an error.
-    return null;
-  }
-}
-
-async function writeJSON(dir: FileSystemDirectoryHandle, name: string, value: unknown): Promise<void> {
-  const handle = await dir.getFileHandle(name, { create: true });
-  const writable = await handle.createWritable();
-  await writable.write(JSON.stringify(value));
-  await writable.close();
-}
-
-/* ---- Identity --------------------------------------------------------- */
-
-export async function loadIdentity(): Promise<Identity | null> {
-  return readJSON<Identity>(await root(), 'identity.json');
-}
-
-export async function saveIdentity(identity: Identity): Promise<void> {
-  await writeJSON(await root(), 'identity.json', identity);
-}
-
-export async function clearIdentity(): Promise<void> {
-  try {
-    await (await root()).removeEntry('identity.json');
-  } catch {
-    /* already gone */
-  }
-}
-
-/* ---- Passcode --------------------------------------------------------- */
-
-const PBKDF2_ITERATIONS = 150_000;
-
-function toHex(buffer: ArrayBuffer): string {
-  return [...new Uint8Array(buffer)].map((b) => b.toString(16).padStart(2, '0')).join('');
-}
-
-export function newSalt(): string {
-  return toHex(crypto.getRandomValues(new Uint8Array(16)).buffer);
-}
-
-/** Hash a passcode. Cheap to do properly, so we do it properly — even though
- * the passcode guards nothing more sensitive than a grid of small toys. */
-export async function hashPasscode(passcode: string, saltHex: string): Promise<string> {
-  const encoder = new TextEncoder();
-  const salt = Uint8Array.from(saltHex.match(/.{2}/g)!.map((h) => parseInt(h, 16)));
-  const key = await crypto.subtle.importKey('raw', encoder.encode(passcode), 'PBKDF2', false, [
-    'deriveBits',
-  ]);
-  const bits = await crypto.subtle.deriveBits(
-    { name: 'PBKDF2', salt, iterations: PBKDF2_ITERATIONS, hash: 'SHA-256' },
-    key,
-    256,
-  );
-  return toHex(bits);
-}
-
-export async function verifyPasscode(passcode: string, identity: Identity): Promise<boolean> {
-  const candidate = await hashPasscode(passcode, identity.passcodeSalt);
-  // Constant-time-ish compare. Lengths are fixed here so this is honest enough.
-  if (candidate.length !== identity.passcodeHash.length) return false;
-  let diff = 0;
-  for (let i = 0; i < candidate.length; i++) {
-    diff |= candidate.charCodeAt(i) ^ identity.passcodeHash.charCodeAt(i);
-  }
-  return diff === 0;
-}
-
-/* ---- The magic ---------------------------------------------------------
- *
- * We record for ourselves that the one-time setup completed, rather than trying
- * to detect it by peering into web-llm's cache. web-llm can cache into any of
- * four backends (Cache API, IndexedDB, OPFS, cross-origin), so any check based
- * on one of them reports "not installed" on the others — which stranded people
- * on the install screen forever.
- *
- * If the browser has since evicted the weights, install() simply downloads them
- * again with the normal progress UI. A stale flag costs nothing; a wrong
- * detection cost the whole feature.
+ * Both switches are OFF until turned on, and they are the only things in
+ * MiniBridge that can cause anything to leave the device.
  */
 
-export interface MagicState {
+export interface Prefs {
+  /** Fall back to the cloud when the device can't answer. */
+  cloud: boolean;
+  /** Notify this phone when a reply lands and you're not looking. */
+  notify: boolean;
+  /** Ours, not the browser's — the key the server files this phone's push
+   * subscription under. A random id tied to nothing else. */
+  deviceId: string;
+}
+
+export function loadPrefs(): Prefs {
+  const stored = read<Partial<Prefs>>(KEY.prefs, {});
+  const prefs: Prefs = {
+    cloud: stored.cloud === true,
+    notify: stored.notify === true,
+    deviceId: stored.deviceId || crypto.randomUUID(),
+  };
+  // Settle the id on first read. Minted fresh each launch, the server would
+  // file a new subscription every time and keep notifying the old ones.
+  if (!stored.deviceId) savePrefs(prefs);
+  return prefs;
+}
+
+export function savePrefs(prefs: Prefs): void {
+  write(KEY.prefs, prefs);
+}
+
+/* ---- What this phone can take -------------------------------------------
+ *
+ * 'full'   - the roomiest model. Desktops.
+ * 'pocket' - the phone default. Holds a real conversation.
+ * 'tiny'   - where a phone lands after it has died once. Simple, but it runs.
+ */
+
+export type Tier = 'full' | 'pocket' | 'tiny';
+
+export interface DeviceProfile {
+  tier: Tier;
+  /** Times a load or a reply took the whole page down. */
+  crashes: number;
+  /** Set when the person picked a tier themselves, so we stop guessing. */
+  chosen?: boolean;
+}
+
+export function loadDevice(): DeviceProfile | null {
+  return read<DeviceProfile | null>(KEY.device, null);
+}
+
+export function saveDevice(profile: DeviceProfile): void {
+  write(KEY.device, profile);
+}
+
+/* ---- The installed model ------------------------------------------------
+ *
+ * We record for ourselves that the download completed, rather than peering into
+ * web-llm's cache — it can cache into any of four backends, so a check based on
+ * one reports "not installed" on the others.
+ */
+
+export interface InstalledModel {
   modelId: string;
   installedAt: number;
 }
 
-export async function loadMagicState(): Promise<MagicState | null> {
-  return readJSON<MagicState>(await root(), 'magic.json');
+export function loadModel(): InstalledModel | null {
+  return read<InstalledModel | null>(KEY.model, null);
 }
 
-export async function saveMagicState(state: MagicState): Promise<void> {
-  await writeJSON(await root(), 'magic.json', state);
+export function saveModel(model: InstalledModel): void {
+  write(KEY.model, model);
 }
 
-export async function clearMagicState(): Promise<void> {
-  try {
-    await (await root()).removeEntry('magic.json');
-  } catch {
-    /* already gone */
-  }
+export function clearModel(): void {
+  drop(KEY.model);
 }
 
-/* ---- Crash detection ---------------------------------------------------
+/* ---- Crash detection ----------------------------------------------------
  *
- * Building is the heaviest thing this app does, and when a phone runs out of
- * memory the browser kills the page outright — no exception to catch, no error
- * event, the app simply reboots to first-run. From inside, that is invisible.
+ * Loading a model onto the GPU and generating from it are the only things this
+ * app does that can exhaust a phone. When that happens the browser kills the
+ * page — from inside, indistinguishable from the app simply restarting. Safari
+ * then reloads, we do the same heavy thing again, and after a few rounds it
+ * gives up with "A problem repeatedly occurred".
  *
- * So we leave a note before starting and tear it up on the way out. If a note
- * is still there at boot, the previous build took the whole page down with it,
- * and we can react instead of letting it happen again.
+ * So: drop a breadcrumb before the heavy part, tear it up after. One still
+ * there at boot means the last attempt killed us, and the app can step down
+ * and — crucially — NOT immediately try the same thing again.
  */
 
-export interface PendingBuild {
-  request: string;
-  startedAt: number;
+export type HeavyStep = 'loading' | 'replying';
+
+export function markHeavy(step: HeavyStep): void {
+  write(KEY.loading, { step, at: Date.now() });
 }
 
-export async function markBuildStarted(request: string): Promise<void> {
-  await writeJSON(await root(), 'pending.json', { request, startedAt: Date.now() });
+export function clearHeavy(): void {
+  drop(KEY.loading);
 }
 
-export async function takePendingBuild(): Promise<PendingBuild | null> {
-  const pending = await readJSON<PendingBuild>(await root(), 'pending.json');
-  await clearPendingBuild();
-  return pending;
+/** Read and clear in one go. Returns what we were doing when the page died. */
+export function takeBreadcrumb(): HeavyStep | null {
+  const note = read<{ step: HeavyStep } | null>(KEY.loading, null);
+  clearHeavy();
+  return note?.step ?? null;
 }
 
-export async function clearPendingBuild(): Promise<void> {
-  try {
-    await (await root()).removeEntry('pending.json');
-  } catch {
-    /* already gone */
-  }
-}
-
-/** How much this device has shown it can take.
+/**
+ * Tear up the breadcrumb when the page goes away in the ordinary way.
  *
- * 'full'  - the 1.5B builder. Better pages, ~1.6GB of graphics memory.
- * 'light' - the 0.5B builder. Simpler pages, ~0.9GB. Phones start here. */
-export type Tier = 'full' | 'light';
-
-export interface DeviceProfile {
-  tier: Tier;
-  /** Builds that took the page down. */
-  crashes: number;
+ * Without this the guard punishes normal use. Replies take a while on a phone,
+ * and the whole notification feature exists to encourage asking something and
+ * putting the phone in your pocket — which fires `pagehide`, leaves the
+ * breadcrumb sitting there, and gets diagnosed at the next launch as a crash
+ * that never happened. The model would step down a size for no reason.
+ *
+ * The distinction is exactly right: a browser killing the page for memory does
+ * NOT fire `pagehide`, so a genuine crash still leaves its breadcrumb. Anything
+ * that leaves cleanly — closing the tab, backgrounding on iOS, the OS reclaiming
+ * an already-suspended app — is not the failure this guard is looking for.
+ */
+export function forgiveOnLeaving(): void {
+  window.addEventListener('pagehide', clearHeavy);
 }
 
-export async function loadDeviceProfile(): Promise<DeviceProfile | null> {
-  return readJSON<DeviceProfile>(await root(), 'device.json');
-}
+/* ---- Room --------------------------------------------------------------- */
 
-export async function saveDeviceProfile(profile: DeviceProfile): Promise<void> {
-  await writeJSON(await root(), 'device.json', profile);
-}
-
-/* ---- Bridges ---------------------------------------------------------- */
-
-async function bridgesDir(): Promise<FileSystemDirectoryHandle> {
-  return (await root()).getDirectoryHandle('bridges', { create: true });
-}
-
-export async function listBridges(): Promise<BridgeRecord[]> {
-  const dir = await bridgesDir();
-  const out: BridgeRecord[] = [];
-  // @ts-expect-error - values() is present in browsers but missing from the DOM lib types.
-  for await (const entry of dir.values()) {
-    if (entry.kind !== 'file' || !entry.name.endsWith('.json')) continue;
-    const record = await readJSON<BridgeRecord>(dir, entry.name);
-    if (record) out.push(record);
-  }
-  return out.sort((a, b) => b.createdAt - a.createdAt);
-}
-
-export async function saveBridge(record: BridgeRecord): Promise<void> {
-  await writeJSON(await bridgesDir(), `${record.id}.json`, record);
-}
-
-export async function deleteBridge(id: string): Promise<void> {
+/** Ask the browser to keep our data around. Best-effort; Safari may decline. */
+export async function requestPersistence(): Promise<boolean> {
+  if (!navigator.storage?.persist) return false;
   try {
-    await (await bridgesDir()).removeEntry(`${id}.json`);
+    if (await navigator.storage.persisted()) return true;
+    return await navigator.storage.persist();
   } catch {
-    /* already gone */
+    return false;
   }
 }
-
-/* ---- Storage usage ---------------------------------------------------- */
 
 export interface Usage {
   usedBytes: number;
@@ -269,15 +240,4 @@ export function describeSize(bytes: number): string {
   const mb = bytes / (1024 * 1024);
   if (mb < 1024) return `about ${Math.round(mb)} MB`;
   return `about ${(mb / 1024).toFixed(1)} GB`;
-}
-
-/** Ask the browser to keep our data around. Best-effort; Safari may decline. */
-export async function requestPersistence(): Promise<boolean> {
-  if (!navigator.storage?.persist) return false;
-  try {
-    if (await navigator.storage.persisted()) return true;
-    return await navigator.storage.persist();
-  } catch {
-    return false;
-  }
 }

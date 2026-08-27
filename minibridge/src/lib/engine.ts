@@ -1,81 +1,89 @@
-/* The on-device builder.
+/* The on-device model.
  *
  * WebLLM downloads and caches its own weights (OPFS/IndexedDB) — we let it own
- * that entirely rather than reimplementing caching. After the one-time install,
- * building a Bridge involves no network at all.
+ * that entirely. After the one-time download, talking involves no network.
  *
  * Nothing in this file's user-facing strings names the technology. That copy
  * lives in the UI layer and is deliberately kept in MiniBridge's voice.
  */
 
 // Type-only: the actual module is ~6MB minified and is pulled in lazily below,
-// so opening MiniBridge to look at your Bridges never pays for it.
+// so opening MiniBridge never pays for it until there's something to load.
 import type { MLCEngine, InitProgressReport } from '@mlc-ai/web-llm';
 import {
-  clearMagicState,
-  loadDeviceProfile,
-  loadMagicState,
+  clearHeavy,
+  clearModel,
+  loadDevice,
+  loadModel,
+  markHeavy,
   requestPersistence,
-  saveDeviceProfile,
-  saveMagicState,
+  saveDevice,
+  saveModel,
   type Tier,
 } from './storage';
 
-/** Primary. Apache 2.0, tuned for structured/code output rather than chat, and
- * small enough that the one-time download is defensible on a phone — which
- * matters because mobile Safari's per-tab memory ceiling (~5GB) makes the 1–3B
- * range the safe zone.
+/** Three sizes of the same idea. All general-purpose instruct models — this is
+ * a chat, so a code-tuned model would be the wrong tool however small.
  *
- * q4f16_1 is the smaller build and needs the shader-f16 WebGPU feature; we fall
- * back to the f32 build when that's missing. */
-const PRIMARY_F16 = 'Qwen2.5-Coder-1.5B-Instruct-q4f16_1-MLC';
-const PRIMARY_F32 = 'Qwen2.5-Coder-1.5B-Instruct-q4f32_1-MLC';
-
-/* The lighter builder. Same family and still code-tuned, but ~944MB of graphics
- * memory against the 1.5B's ~1630MB.
+ * q4f16_1 is the smaller build of each and needs the shader-f16 WebGPU feature;
+ * we fall back to the f32 build when that's missing.
  *
- * This is the DEFAULT on phones, and that is a correction rather than a
- * preference. The 1.5B was picked on the reasoning that mobile Safari's ~5GB
- * per-tab ceiling makes 1–3B safe, but that ceiling is not the binding
- * constraint — the GPU buffer budget is, and 1.6GB of it sits right at the edge
- * on a real phone. The model loads, then the first prefill tips the page over
- * and the browser kills it outright. Pages from the 0.5B are simpler; pages
- * from a builder that crashes the phone are non-existent. */
-const LIGHT_F16 = 'Qwen2.5-Coder-0.5B-Instruct-q4f16_1-MLC';
-const LIGHT_F32 = 'Qwen2.5-Coder-0.5B-Instruct-q4f32_1-MLC';
+ * The binding constraint on a phone is the GPU buffer budget, NOT the ~5GB
+ * per-tab memory ceiling. A model can load fine and then die on the first
+ * prefill, which the browser reports as the page crashing rather than as an
+ * error anything here can catch. Hence three tiers and an automatic way down. */
+const MODELS: Record<Tier, { f16: string; f32: string; about: string }> = {
+  full: {
+    f16: 'Llama-3.2-3B-Instruct-q4f16_1-MLC',
+    f32: 'Llama-3.2-3B-Instruct-q4f32_1-MLC',
+    about: 'the roomiest one',
+  },
+  pocket: {
+    f16: 'Llama-3.2-1B-Instruct-q4f16_1-MLC',
+    f32: 'Llama-3.2-1B-Instruct-q4f32_1-MLC',
+    about: 'the pocket one',
+  },
+  tiny: {
+    f16: 'SmolLM2-360M-Instruct-q4f16_1-MLC',
+    f32: 'SmolLM2-360M-Instruct-q4f32_1-MLC',
+    about: 'the smallest one',
+  },
+};
 
-/** Trim the KV cache below the 4096 each model ships with. The cache is
- * allocated up front and scales with this number, so it is the cheapest
- * memory saving available — and a small self-contained page does not need a
- * long context. */
-const CONTEXT = { full: 4096, light: 2048 } as const;
+/** Trim the KV cache well below the 4096 these ship with. It is allocated up
+ * front and scales with this number, so it is the cheapest memory saving
+ * available — and a pocket conversation does not need a long memory. */
+const CONTEXT: Record<Tier, number> = { full: 4096, pocket: 1536, tiny: 1024 };
 
-/** Leave room in the window for the description and the system prompt. */
-const RESERVE = 512;
+/** How much of the window a reply may take. */
+const REPLY_TOKENS: Record<Tier, number> = { full: 640, pocket: 400, tiny: 300 };
 
-/* Fast-follow, not shipped in this pass: 'Llama-3.2-3B-Instruct-q4f16_1-MLC' as
- * an optional richer tier in Settings for newer, higher-memory devices. Kept as
- * a constant so adding the tier later is a config change, not a refactor. */
+/** Leave room for the system prompt and the turn being answered. */
+const RESERVE = 256;
+
+export function describeTier(tier: Tier): string {
+  return MODELS[tier].about;
+}
+
+/** The order we step down in. */
+const DOWNHILL: Tier[] = ['full', 'pocket', 'tiny'];
 
 let engine: MLCEngine | null = null;
 let loading: Promise<MLCEngine> | null = null;
 
-/** What the magic box should be showing.
- *
- *   'absent'  - never installed on this device; offer the one-time setup.
- *   'waking'  - installed before, currently coming back. NOT the same as
- *               'absent', and conflating the two is what made returning
- *               visits look like they needed reinstalling.
- *   'ready'   - good to build.
+/**
+ *   'absent'  - never downloaded on this device; offer the one-time setup.
+ *   'waking'  - downloaded before, currently coming back.
+ *   'ready'   - good to go.
  */
 export type EngineState = 'absent' | 'waking' | 'ready';
 
-let installedBefore = false;
-let activeTier: Tier = 'full';
+let downloaded = false;
+let activeTier: Tier = 'pocket';
 
 export function state(): EngineState {
   if (engine) return 'ready';
-  if (loading || installedBefore) return 'waking';
+  if (loading || downloaded) return 'waking';
   return 'absent';
 }
 
@@ -84,11 +92,9 @@ export function deviceSupported(): boolean {
   return typeof navigator !== 'undefined' && 'gpu' in navigator;
 }
 
-/** Phones start on the lighter builder.
- *
- * Crude on purpose: a coarse pointer on a small screen is a phone, and
- * MiniBridge is a pocket product. Getting this wrong on a tablet costs simpler
- * pages; getting it wrong the other way costs a browser crash mid-build. */
+/** Crude on purpose: a coarse pointer on a small screen is a phone, and this is
+ * a pocket product. Guessing wrong on a tablet costs a simpler conversation;
+ * guessing wrong the other way costs a crash. */
 function looksLikeAPhone(): boolean {
   try {
     return (
@@ -101,11 +107,25 @@ function looksLikeAPhone(): boolean {
 }
 
 /** The tier this device should use, honouring anything it has already told us
- * the hard way. */
-export async function tierFor(): Promise<Tier> {
-  const profile = await loadDeviceProfile();
+ * the hard way — or been told by hand. */
+export function tierFor(): Tier {
+  const profile = loadDevice();
   if (profile) return profile.tier;
-  return looksLikeAPhone() ? 'light' : 'full';
+  return looksLikeAPhone() ? 'pocket' : 'full';
+}
+
+export function currentTier(): Tier {
+  return activeTier;
+}
+
+export function deviceProfile() {
+  return loadDevice() ?? { tier: tierFor(), crashes: 0 };
+}
+
+/** Choose a tier by hand, from Settings. Stops the automatic guessing. */
+export function chooseTier(tier: Tier): void {
+  const profile = deviceProfile();
+  saveDevice({ ...profile, tier, chosen: true });
 }
 
 async function pickModel(tier: Tier): Promise<string> {
@@ -116,16 +136,15 @@ async function pickModel(tier: Tier): Promise<string> {
   } catch {
     /* fall through to the safer build */
   }
-  if (tier === 'light') return f16 ? LIGHT_F16 : LIGHT_F32;
-  return f16 ? PRIMARY_F16 : PRIMARY_F32;
+  return f16 ? MODELS[tier].f16 : MODELS[tier].f32;
 }
 
 /**
- * Set up the builder. `onProgress` receives 0–1.
+ * Bring the model up. `onProgress` receives 0–1.
  *
- * We deliberately pass along only a fraction, never WebLLM's raw progress text
- * — that text is full of megabyte counts and cache internals, and none of it
- * belongs in front of a person.
+ * We pass along only a fraction, never WebLLM's raw progress text — that text
+ * is full of megabyte counts and cache internals, and none of it belongs in
+ * front of a person.
  */
 export async function install(onProgress: (fraction: number) => void): Promise<MLCEngine> {
   if (engine) return engine;
@@ -133,13 +152,16 @@ export async function install(onProgress: (fraction: number) => void): Promise<M
 
   loading = (async () => {
     // Ask for persistent storage BEFORE pulling down several hundred megabytes.
-    // Without it the browser may evict this origin under storage pressure, and
-    // eviction takes everything with it — the Bridges, and identity.json, which
-    // silently throws the person back to first-run setup. Safari can decline;
-    // asking at the moment of pressure is still the best shot we get.
+    // Without it the browser may evict this origin under pressure, and eviction
+    // takes the weights with it. Safari can decline; asking at the moment of
+    // pressure is still the best shot we get.
     await requestPersistence();
 
-    const tier = await tierFor();
+    const tier = tierFor();
+    // Synchronous, and written before anything heavy starts. If the next line
+    // takes the page down, this is the only trace left at the next boot.
+    markHeavy('loading');
+
     const [{ CreateMLCEngine }, model] = await Promise.all([
       import('@mlc-ai/web-llm'),
       pickModel(tier),
@@ -152,15 +174,14 @@ export async function install(onProgress: (fraction: number) => void): Promise<M
           onProgress(Math.max(0, Math.min(1, fraction)));
         },
       },
-      // Smaller KV cache than the model's default. Allocated once, at load.
       { context_window_size: CONTEXT[tier] },
     );
+
+    clearHeavy();
     engine = created;
     activeTier = tier;
-    installedBefore = true;
-    // Remember for next time, so a returning visit resumes instead of offering
-    // the setup all over again.
-    await saveMagicState({ modelId: model, installedAt: Date.now() });
+    downloaded = true;
+    saveModel({ modelId: model, installedAt: Date.now() });
     return created;
   })();
 
@@ -169,66 +190,67 @@ export async function install(onProgress: (fraction: number) => void): Promise<M
     loading = null;
     return ready;
   } catch (err) {
+    // Survived the failure, so it wasn't a crash — tear the breadcrumb up, or
+    // the next boot would blame a step-down on an ordinary network error.
+    clearHeavy();
     loading = null;
     throw err;
   }
 }
 
-/** Has the one-time setup completed on this device before?
- *
- * Reads our own marker rather than inspecting web-llm's cache — see the note in
- * storage.ts. Cheap, and it doesn't drag the 6MB engine chunk into boot. */
-export async function alreadyInstalled(): Promise<boolean> {
-  const magic = await loadMagicState();
-  installedBefore = magic !== null;
-  return installedBefore;
+/** Has the download completed on this device before? */
+export function alreadyDownloaded(): boolean {
+  downloaded = loadModel() !== null;
+  return downloaded;
 }
 
 /**
- * A build took the page down. Step this device down to the lighter builder so
- * the same thing doesn't happen again.
+ * The page died doing something heavy. Step this device down a size so the same
+ * thing doesn't happen again.
  *
- * Returns true if the tier actually changed, which means the lighter builder
- * has to be brought over before anything can be built.
+ * Returns the new tier, or null if there is nothing lighter left.
  */
-export async function stepDownAfterCrash(): Promise<boolean> {
-  const profile = (await loadDeviceProfile()) ?? { tier: await tierFor(), crashes: 0 };
+export async function stepDown(): Promise<Tier | null> {
+  const profile = deviceProfile();
   const crashes = profile.crashes + 1;
+  const next = DOWNHILL[DOWNHILL.indexOf(profile.tier) + 1];
 
-  if (profile.tier === 'light') {
-    // Already as light as we go. Record it, but there's nothing left to drop.
-    await saveDeviceProfile({ tier: 'light', crashes });
-    return false;
+  if (!next) {
+    // Already as small as we go. Record it; there is nothing left to drop.
+    saveDevice({ ...profile, crashes });
+    return null;
   }
 
-  await saveDeviceProfile({ tier: 'light', crashes });
+  saveDevice({ tier: next, crashes });
 
-  // The heavy weights are no longer wanted and are the largest thing on the
-  // device, so let them go rather than leaving a gigabyte of dead cache.
+  // The too-heavy weights are the largest thing on the device and are no longer
+  // wanted, so let them go rather than leaving a gigabyte of dead cache.
+  await dropWeights();
+  clearModel();
+  engine = null;
+  loading = null;
+  downloaded = false;
+  return next;
+}
+
+async function dropWeights(): Promise<void> {
   try {
-    const magic = await loadMagicState();
-    if (magic) {
-      const { deleteModelAllInfoInCache } = await import('@mlc-ai/web-llm');
-      await deleteModelAllInfoInCache(magic.modelId);
-    }
+    const installed = loadModel();
+    if (!installed) return;
+    const { deleteModelAllInfoInCache } = await import('@mlc-ai/web-llm');
+    await deleteModelAllInfoInCache(installed.modelId);
   } catch {
     /* best effort */
   }
-
-  await forgetMagic();
-  return true;
 }
 
-/** Forget that the magic was ever installed, without touching the weights.
- *
- * Used when waking fails — typically the browser evicted the weights under
- * storage pressure. Clearing the marker returns the magic box to offering the
- * setup, instead of leaving it stuck on "Just a moment…". */
-export async function forgetMagic(): Promise<void> {
+/** Forget the download without touching the weights. Used when waking fails —
+ * typically the browser evicted them under storage pressure. */
+export function forget(): void {
   engine = null;
   loading = null;
-  installedBefore = false;
-  await clearMagicState();
+  downloaded = false;
+  clearModel();
 }
 
 /** Drop the cached weights. Used by Settings. */
@@ -236,124 +258,83 @@ export async function uninstall(): Promise<void> {
   try {
     await engine?.unload();
   } catch {
-    /* engine may never have loaded */
+    /* may never have loaded */
   }
+  await dropWeights();
+  forget();
+}
 
-  // Let web-llm remove its own weights, whichever backend it chose. Importing
-  // it here is fine: this only runs on a deliberate tap in Settings.
-  try {
-    const magic = await loadMagicState();
-    if (magic) {
-      const { deleteModelAllInfoInCache } = await import('@mlc-ai/web-llm');
-      await deleteModelAllInfoInCache(magic.modelId);
-    }
-  } catch {
-    // Best effort. The marker still goes, so the setup will be offered again.
+/* ---- Talking ------------------------------------------------------------ */
+
+const SYSTEM_PROMPT = `You are MiniBridge, a small, warm assistant living in someone's pocket.
+
+Answer in plain conversational language. Be brief — a couple of short paragraphs at most unless genuinely more is needed. Never open by restating the question. No markdown headings, and no bullet lists unless the answer really is a list. Say plainly when you don't know something rather than guessing.`;
+
+export interface Turn {
+  role: 'user' | 'assistant';
+  content: string;
+}
+
+/** Roughly four characters to the token. Crude, but it only has to keep us off
+ * the edge of the window, and counting properly would mean shipping a
+ * tokeniser to do it. */
+const CHARS_PER_TOKEN = 4;
+
+/** Keep the most recent turns that fit, oldest dropped first.
+ *
+ * Trimming rather than summarising is the honest choice at this size: a model
+ * this small, asked to summarise its own history, mostly invents one. */
+function fitHistory(turns: Turn[], tier: Tier): Turn[] {
+  const budget = (CONTEXT[tier] - REPLY_TOKENS[tier] - RESERVE) * CHARS_PER_TOKEN;
+  const kept: Turn[] = [];
+  let used = 0;
+  for (let i = turns.length - 1; i >= 0; i--) {
+    used += turns[i].content.length;
+    if (used > budget && kept.length) break;
+    kept.unshift(turns[i]);
   }
-
-  await clearMagicState();
-  engine = null;
-  loading = null;
-  installedBefore = false;
-}
-
-const SYSTEM_PROMPT = `You write tiny, self-contained web pages.
-
-Given a description, output ONE complete HTML document and nothing else.
-
-Rules:
-- Start with <!DOCTYPE html>. Include <html>, <head> and <body>.
-- Put ALL CSS in a single <style> tag and ALL JavaScript in a single <script> tag, inline in the document.
-- No external files, no CDN links, no <link> to stylesheets, no imports, no fonts from the network.
-- Do not use fetch, XMLHttpRequest, WebSocket, or any network call unless the description genuinely requires live data.
-- Include <meta name="viewport" content="width=device-width, initial-scale=1"> and make it work well on a phone screen.
-- Make it work immediately with no setup, no API keys and no sign-in.
-- Keep it focused: build exactly what was described, nothing more.
-- Output raw HTML only. No markdown code fences, no commentary before or after.`;
-
-/** Ask for a short name for a Bridge. Falls back to trimming the request. */
-function deriveName(request: string): string {
-  const cleaned = request.replace(/\s+/g, ' ').trim();
-  const stripped = cleaned.replace(
-    /^(please\s+)?(build|make|create|give me|i want|i'd like|can you (make|build)|a|an)\s+/i,
-    '',
-  );
-  const words = (stripped || cleaned).split(' ').slice(0, 4).join(' ');
-  const name = words.charAt(0).toUpperCase() + words.slice(1);
-  return name.replace(/[.,;:!?]+$/, '').slice(0, 32) || 'A small thing';
-}
-
-/** Strip markdown fences and any chatter around the document — small models
- * wrap their output more often than the prompt would suggest. */
-function extractHTML(raw: string): string {
-  let text = raw.trim();
-
-  const fence = text.match(/```(?:html)?\s*([\s\S]*?)```/i);
-  if (fence) text = fence[1].trim();
-
-  const start = text.search(/<!DOCTYPE html|<html[\s>]/i);
-  if (start > 0) text = text.slice(start);
-
-  const end = text.toLowerCase().lastIndexOf('</html>');
-  if (end !== -1) return text.slice(0, end + '</html>'.length).trim();
-
-  // No closing tag: the generation was cut short, usually by the token ceiling.
-  // Salvage it rather than discarding several minutes of work on a phone — an
-  // unterminated <script> or <style> would otherwise swallow the whole page, so
-  // close whatever is still open and let the person see what they got.
-  const lower = text.toLowerCase();
-  const openTag = (tag: string) =>
-    (lower.split(`<${tag}`).length - 1) > (lower.split(`</${tag}`).length - 1);
-
-  if (openTag('script')) text += '\n</script>';
-  if (openTag('style')) text += '\n</style>';
-  if (openTag('body')) text += '\n</body>';
-  if (openTag('html')) text += '\n</html>';
-
-  return text.trim();
-}
-
-export interface BuildResult {
-  name: string;
-  html: string;
+  return kept;
 }
 
 /**
- * Build one thing from one description.
+ * Continue a conversation. `turns` ends with the person's new message.
  *
- * `onToken` fires as text arrives so the Building screen can show that
- * something is genuinely happening without resorting to a fake spinner.
+ * `onToken` receives the reply so far, so the bubble can fill in as it arrives
+ * — on a phone that is the difference between "thinking" and "frozen".
  */
-export async function build(
-  request: string,
+export async function chat(
+  turns: Turn[],
   onToken: (soFar: string) => void,
   signal?: AbortSignal,
-): Promise<BuildResult> {
-  if (!engine) throw new Error('not-installed');
+): Promise<string> {
+  if (!engine) throw new Error('not-ready');
 
-  const stream = await engine.chat.completions.create({
-    stream: true,
-    messages: [
-      { role: 'system', content: SYSTEM_PROMPT },
-      { role: 'user', content: request },
-    ],
-    temperature: 0.6,
-    // Must fit the window we allocated, or the request overruns the KV cache.
-    max_tokens: CONTEXT[activeTier] - RESERVE,
-  });
+  // Generating is the other thing that can exhaust a phone. Same breadcrumb,
+  // different step, so the next boot can say which it was.
+  markHeavy('replying');
 
-  let raw = '';
-  for await (const chunk of stream) {
-    if (signal?.aborted) {
-      await engine.interruptGenerate();
-      throw new DOMException('aborted', 'AbortError');
+  try {
+    const stream = await engine.chat.completions.create({
+      stream: true,
+      messages: [{ role: 'system', content: SYSTEM_PROMPT }, ...fitHistory(turns, activeTier)],
+      temperature: 0.7,
+      max_tokens: REPLY_TOKENS[activeTier],
+    });
+
+    let reply = '';
+    for await (const chunk of stream) {
+      if (signal?.aborted) {
+        await engine.interruptGenerate();
+        throw new DOMException('aborted', 'AbortError');
+      }
+      reply += chunk.choices[0]?.delta?.content ?? '';
+      onToken(reply);
     }
-    raw += chunk.choices[0]?.delta?.content ?? '';
-    onToken(raw);
+
+    const trimmed = reply.trim();
+    if (!trimmed) throw new Error('empty-reply');
+    return trimmed;
+  } finally {
+    clearHeavy();
   }
-
-  const html = extractHTML(raw);
-  if (!html || !/<html[\s>]/i.test(html)) throw new Error('unusable-output');
-
-  return { name: deriveName(request), html };
 }

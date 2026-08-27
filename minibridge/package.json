@@ -1,19 +1,16 @@
 {
   "name": "minibridge",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "type": "module",
-  "description": "A pocket-sized tool that builds the small things you want, on your device.",
+  "description": "A chat with a model on your own phone, and a nudge when it answers.",
   "scripts": {
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
-    "vision": "node scripts/fetch-vision.mjs",
-    "icons": "node scripts/icons.mjs",
-    "postinstall": "node scripts/fetch-vision.mjs"
+    "icons": "node scripts/icons.mjs"
   },
   "dependencies": {
-    "@mediapipe/tasks-vision": "^0.10.18",
     "@mlc-ai/web-llm": "^0.2.79"
   },
   "devDependencies": {

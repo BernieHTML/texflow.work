@@ -1,7 +1,7 @@
 {
   "name": "MiniBridge",
   "short_name": "MiniBridge",
-  "description": "A pocket-sized tool for the small things you build for yourself.",
+  "description": "A chat with a model on your own phone.",
   "start_url": "/minibridge/",
   "scope": "/minibridge/",
   "display": "standalone",
