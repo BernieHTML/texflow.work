@@ -25,3 +25,8 @@ public/minibridge/
 # tokens and every private message. `origin` is a GitHub remote, so a stray
 # `git add -A` would publish all of it permanently.
 data/arthurchat-*.json
+
+# BHS Penalty Shootout's runtime state: player email addresses, scrypt'd
+# passwords, live session tokens and matches in progress. `origin` is a GitHub
+# remote, so a stray `git add -A` would publish all of it permanently.
+data/bhs-*.json

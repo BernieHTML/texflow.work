@@ -1,0 +1,15 @@
+{
+  "name": "BHS Penalty Shootout",
+  "short_name": "BHS Shootout",
+  "description": "Pick five takers from Blaxland High and settle it from twelve yards.",
+  "start_url": "/bhsshootout/",
+  "scope": "/bhsshootout/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0b1830",
+  "theme_color": "#0b1830",
+  "icons": [
+    { "src": "/bhsshootout/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "/bhsshootout/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "maskable" }
+  ]
+}

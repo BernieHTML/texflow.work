@@ -17,6 +17,7 @@ import { createLeoSpyRouter } from './routes/leospy/index.js';
 import { createSmigRouter } from './routes/smig/index.js';
 import { createArthurChatRouter } from './routes/arthurchat/index.js';
 import { createMiniBridgeRouter } from './routes/minibridge/index.js';
+import { createBhsShootoutRouter } from './routes/bhsshootout/index.js';
 import { registerAcsaArchive } from './routes/acsa-archive/index.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -1395,6 +1396,16 @@ try {
   console.log('[arthurchat] Mounted at /arthurchat');
 } catch (e) {
   console.error('[arthurchat] Failed to mount /arthurchat:', e.message);
+}
+
+// --- BHS Penalty Shootout: two phones, one shootout ---
+// Mounted before the static handler so the API wins over public/bhsshootout/*;
+// the app's own assets fall through to the router's own static handler.
+try {
+  app.use('/bhsshootout', createBhsShootoutRouter());
+  console.log('[bhs] Mounted at /bhsshootout');
+} catch (e) {
+  console.error('[bhs] Failed to mount /bhsshootout:', e.message);
 }
 
 // --- MiniBridge: the opt-in cloud backup and Web Push for Chat ---
