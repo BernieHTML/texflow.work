@@ -1,6 +1,6 @@
 // Service worker for the "Cut List" Flow. Scope is this directory only,
 // so a deleted copy takes nothing else with it.
-const CACHE = 'flow-cut-list-f1ea7a648b';
+const CACHE = 'flow-cut-list-60be9624d0';
 const SHELL = ['./', './manifest.webmanifest', './icon-192.png', './icon-512.png', './icon-maskable-512.png'];
 
 self.addEventListener('install', (e) => {

@@ -1584,7 +1584,11 @@ Flow.ready(function () {
   };
 
   var num = function (v) { var n = parseFloat(v); return isFinite(n) && n > 0 ? n : 0; };
-  var fmt = function (n) { return Flow.num(n, UNITS[s.unit].dp).replace(/\.?0+$/, function (m) { return s.unit === 'mm' ? '' : m; }); };
+  // Trailing zeros only ever come off a *decimal* — stripping them blindly
+  // turns 2,400 mm into 2,4 mm.
+  var fmt = function (n) {
+    return Flow.num(n, UNITS[s.unit].dp).replace(/\.(\d*?)0+$/, function (m, keep) { return keep ? '.' + keep : ''; });
+  };
   var label = function (n) { return fmt(n) + ' ' + s.unit; };
 
   function pack() {
