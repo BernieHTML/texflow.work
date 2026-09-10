@@ -1,0 +1,241 @@
+<!--css-->
+.sr-servings { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+.sr-servings .flow-stepper { width: 100%; }
+
+.sr-out li { align-items: flex-start; padding: 11px 14px; }
+.sr-qty {
+  flex: none;
+  min-width: 84px;
+  font-weight: 660;
+  font-variant-numeric: tabular-nums;
+  color: var(--a1);
+}
+@media (prefers-color-scheme: dark) { .sr-qty { color: var(--a2); } }
+.sr-rest { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+.sr-plain { color: var(--ink-2); }
+.sr-metric { display: block; font-size: 12.5px; color: var(--ink-3); }
+
+.sr-factor {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--a2) 16%, transparent);
+  font-size: 13px;
+  font-weight: 620;
+  color: color-mix(in srgb, var(--a1) 82%, var(--ink));
+}
+@media (prefers-color-scheme: dark) { .sr-factor { color: var(--a2); } }
+
+<!--html-->
+<section class="flow-section">
+  <div class="sr-servings">
+    <div>
+      <span class="flow-label">Recipe makes</span>
+      <div class="flow-stepper">
+        <button type="button" data-k="from" data-d="-1" aria-label="Fewer">−</button>
+        <output id="from-out"></output>
+        <button type="button" data-k="from" data-d="1" aria-label="More">+</button>
+      </div>
+    </div>
+    <div>
+      <span class="flow-label">You want</span>
+      <div class="flow-stepper">
+        <button type="button" data-k="to" data-d="-1" aria-label="Fewer">−</button>
+        <output id="to-out"></output>
+        <button type="button" data-k="to" data-d="1" aria-label="More">+</button>
+      </div>
+    </div>
+  </div>
+
+  <span class="flow-label">Paste the ingredients</span>
+  <textarea class="flow-textarea" id="text" rows="7" placeholder="2 cups plain flour&#10;1 1/2 tsp baking powder&#10;125 g butter, softened&#10;3 eggs" aria-label="Ingredients"></textarea>
+  <div style="display:flex;align-items:center;gap:10px;margin-top:12px;flex-wrap:wrap">
+    <span class="sr-factor" id="factor">×1</span>
+    <button class="flow-chip" type="button" id="metric" aria-pressed="false">Show grams</button>
+    <button class="flow-chip" type="button" id="copy">Copy the list</button>
+  </div>
+</section>
+
+<section class="flow-section" id="out-block">
+  <span class="flow-label">Scaled</span>
+  <ul class="flow-list sr-out" id="out"></ul>
+</section>
+
+<!--js-->
+/* Recipe Scaler.
+ *
+ * The whole problem is that recipes are written for people, not parsers:
+ * "1 1/2 cups", "½ tsp", "2–3 apples", "125g". So the quantity at the front of
+ * each line is read in every form it actually appears in, scaled, and written
+ * back in the form a cook can use — thirds and quarters for cups and spoons,
+ * decimals for weights, and nothing at all for "a pinch of salt".
+ *
+ * Everything after the number is left exactly as typed. */
+
+Flow.ready(function () {
+  var VULGAR = {
+    '¼': 0.25, '½': 0.5, '¾': 0.75, '⅐': 1 / 7, '⅑': 1 / 9, '⅒': 0.1,
+    '⅓': 1 / 3, '⅔': 2 / 3, '⅕': 0.2, '⅖': 0.4, '⅗': 0.6, '⅘': 0.8,
+    '⅙': 1 / 6, '⅚': 5 / 6, '⅛': 0.125, '⅜': 0.375, '⅝': 0.625, '⅞': 0.875
+  };
+
+  // Grams in one cup. Volume-to-weight is ingredient-specific and this is the
+  // short list that covers most baking; anything not here stays in cups.
+  var PER_CUP = {
+    flour: 125, 'plain flour': 125, 'self-raising flour': 125, 'wholemeal flour': 130,
+    sugar: 200, 'caster sugar': 220, 'brown sugar': 195, 'icing sugar': 125,
+    butter: 227, oil: 218, milk: 245, water: 240, cream: 240, yoghurt: 245,
+    rice: 185, oats: 90, 'rolled oats': 90, cocoa: 85, honey: 340, 'maple syrup': 320,
+    'breadcrumbs': 108, 'desiccated coconut': 80, 'chocolate chips': 170, nuts: 120
+  };
+  var SPOONS = { tbsp: 15, tablespoon: 15, tablespoons: 15, tsp: 5, teaspoon: 5, teaspoons: 5 };
+
+  var s = Flow.state('recipe', { from: 4, to: 6, text: '', metric: false });
+
+  var el = {
+    text: Flow.$('#text'), out: Flow.$('#out'), factor: Flow.$('#factor'),
+    metric: Flow.$('#metric'), block: Flow.$('#out-block')
+  };
+
+  // A leading quantity: whole numbers, decimals, "1 1/2", "1/2", "½", "1½",
+  // and ranges written with a hyphen or an en dash.
+  var QTY = /^\s*(\d+\s+\d+\/\d+|\d+\/\d+|\d*[.,]?\d+\s*[¼-¾⅐-⅞]|[¼-¾⅐-⅞]|\d*[.,]?\d+)\s*(?:[-–]\s*(\d*[.,]?\d+|\d+\/\d+))?\s*/;
+
+  function readQty(raw) {
+    var text = raw.replace(/,/g, '.');
+    var vulgar = 0;
+    text = text.replace(/[¼-¾⅐-⅞]/g, function (c) { vulgar += VULGAR[c] || 0; return ' '; });
+    var mixed = text.match(/(\d+)\s+(\d+)\/(\d+)/);
+    if (mixed) return Number(mixed[1]) + Number(mixed[2]) / Number(mixed[3]);
+    var frac = text.match(/(\d+)\/(\d+)/);
+    if (frac) return Number(frac[1]) / Number(frac[2]);
+    var plain = parseFloat(text);
+    return (isFinite(plain) ? plain : 0) + vulgar;
+  }
+
+  // Back out to something a person would write. Sixths and eighths are real in
+  // a kitchen; 0.3333 is not.
+  var FRACTIONS = [[1, 8], [1, 6], [1, 4], [1, 3], [3, 8], [1, 2], [5, 8], [2, 3], [3, 4], [5, 6], [7, 8]];
+
+  function writeQty(n, cookish) {
+    if (!(n > 0)) return '';
+    if (!cookish) {
+      if (n >= 100) return String(Math.round(n));
+      if (n >= 10) return String(Math.round(n * 2) / 2).replace(/\.0$/, '');
+      return String(Math.round(n * 100) / 100);
+    }
+    var whole = Math.floor(n + 1e-9);
+    var rest = n - whole;
+    if (rest < 0.04) return String(whole || 0);
+    var best = null;
+    FRACTIONS.forEach(function (f) {
+      var err = Math.abs(rest - f[0] / f[1]);
+      if (!best || err < best.err) best = { err: err, f: f };
+    });
+    if (best.err > 0.05) return String(Math.round(n * 100) / 100);
+    if (best.f[0] / best.f[1] > 0.96) return String(whole + 1);
+    var frac = best.f[0] + '/' + best.f[1];
+    return whole ? whole + ' ' + frac : frac;
+  }
+
+  function unitOf(rest) {
+    var m = rest.match(/^([a-zA-Z]+)\b/);
+    return m ? m[1].toLowerCase() : '';
+  }
+
+  function metricFor(qty, rest) {
+    var unit = unitOf(rest);
+    var after = rest.replace(/^[a-zA-Z]+\s*(of\s+)?/i, '').toLowerCase();
+    var name = Object.keys(PER_CUP).sort(function (a, b) { return b.length - a.length; })
+      .find(function (k) { return after.indexOf(k) > -1; });
+    if (!name) return '';
+    // One cup is 240 mL, so a spoon is just a fraction of a cup by volume.
+    var mlPerCup = 240;
+    var grams = /^cups?$/.test(unit) ? qty * PER_CUP[name]
+      : SPOONS[unit] ? (qty * SPOONS[unit] / mlPerCup) * PER_CUP[name]
+      : 0;
+    if (!grams) return '';
+    return (grams < 10 ? Math.round(grams * 10) / 10 : Math.round(grams)) + ' g';
+  }
+
+  function render() {
+    Flow.$('#from-out').textContent = s.from;
+    Flow.$('#to-out').textContent = s.to;
+    var factor = s.from > 0 ? s.to / s.from : 1;
+    el.factor.textContent = '×' + writeQty(factor, true);
+    el.metric.setAttribute('aria-pressed', s.metric ? 'true' : 'false');
+
+    var lines = el.text.value.split('\n');
+    var any = lines.some(function (l) { return l.trim(); });
+    el.block.classList.toggle('flow-hidden', !any);
+    el.out.innerHTML = '';
+
+    lines.forEach(function (line) {
+      if (!line.trim()) return;
+      var li = Flow.h('li');
+      var m = line.match(QTY);
+      var qty = m ? readQty(m[1]) : 0;
+
+      if (!qty) {
+        li.appendChild(Flow.h('span', { class: 'sr-rest sr-plain', text: line.trim() }));
+        el.out.appendChild(li);
+        return;
+      }
+
+      var rest = line.slice(m[0].length);
+      var unit = unitOf(rest);
+      var cookish = /^(cups?|tbsp|tsp|tablespoons?|teaspoons?)$/.test(unit) || !unit;
+      var scaled = qty * factor;
+      var text = writeQty(scaled, cookish);
+
+      if (m[2]) {
+        var high = readQty(m[2]) * factor;
+        text += '–' + writeQty(high, cookish);
+      }
+
+      li.appendChild(Flow.h('span', { class: 'sr-qty', text: text }));
+      var body = Flow.h('span', { class: 'sr-rest' }, rest.trim());
+      if (s.metric) {
+        var grams = metricFor(scaled, rest.trim());
+        if (grams) body.appendChild(Flow.h('span', { class: 'sr-metric', text: 'about ' + grams }));
+      }
+      li.appendChild(body);
+      el.out.appendChild(li);
+    });
+  }
+
+  function plainText() {
+    return Flow.$$('#out li').map(function (li) {
+      var q = li.querySelector('.sr-qty');
+      var r = li.querySelector('.sr-rest');
+      return ((q ? q.textContent + ' ' : '') + (r ? r.firstChild.textContent : '')).trim();
+    }).join('\n');
+  }
+
+  var timer;
+  el.text.value = s.text;
+  el.text.addEventListener('input', function () {
+    render();
+    clearTimeout(timer);
+    timer = setTimeout(function () { s.text = el.text.value; s.save(); }, 400);
+  });
+
+  Flow.$$('.flow-stepper button[data-k]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var k = b.dataset.k;
+      s[k] = Math.max(1, Math.min(200, s[k] + Number(b.dataset.d)));
+      s.save(); render(); Flow.haptic();
+    });
+  });
+
+  el.metric.addEventListener('click', function () { s.metric = !s.metric; s.save(); render(); });
+  Flow.$('#copy').addEventListener('click', function () {
+    var text = plainText();
+    if (!text) return Flow.toast('Nothing to copy yet');
+    if (navigator.clipboard) navigator.clipboard.writeText(text).then(function () { Flow.toast('Copied'); });
+  });
+
+  render();
+});

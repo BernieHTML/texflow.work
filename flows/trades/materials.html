@@ -1,0 +1,282 @@
+<!--css-->
+.mt-fields { margin-top: 16px; }
+.mt-field { display: flex; align-items: center; gap: 12px; padding: 8px 0; }
+.mt-field label { flex: 1; font-size: 15px; font-weight: 540; }
+.mt-field label small { display: block; font-size: 12.5px; font-weight: 400; color: var(--ink-3); }
+.mt-in { position: relative; width: 132px; flex: none; }
+.mt-in input { width: 100%; min-height: 46px; padding: 10px 42px 10px 12px; text-align: right; font-variant-numeric: tabular-nums; }
+.mt-in span { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); font-size: 13px; color: var(--ink-3); pointer-events: none; }
+
+.mt-lines { margin-top: 14px; }
+.mt-lines li { justify-content: space-between; }
+
+.mt-note { margin-top: 14px; }
+
+<!--html-->
+<section class="flow-section">
+  <div class="flow-segment" id="picker"></div>
+  <div id="answer" style="margin-top:16px"></div>
+
+  <div class="flow-card mt-fields" id="fields"></div>
+
+  <ul class="flow-list mt-lines" id="lines"></ul>
+  <p class="flow-hint mt-note" id="note"></p>
+</section>
+
+<!--js-->
+/* Materials.
+ *
+ * Five jobs that are all the same shape: measure it, allow for waste, round up
+ * to whole units, and say how many to buy. Each one is a small spec — its
+ * fields and one function — so adding the sixth is fifteen lines rather than a
+ * new screen. Everything rounds *up*, because a second trip is worse than a
+ * spare tile. */
+
+Flow.ready(function () {
+  var round = function (n, dp) { return Math.round(n * Math.pow(10, dp || 0)) / Math.pow(10, dp || 0); };
+
+  var CALCS = [
+    {
+      id: 'paint', name: 'Paint',
+      fields: [
+        { k: 'length', label: 'Wall run', hint: 'Total length of all the walls', unit: 'm', def: 12 },
+        { k: 'height', label: 'Height', unit: 'm', def: 2.4 },
+        { k: 'openings', label: 'Doors and windows', hint: 'Their combined area, to take off', unit: 'm²', def: 3.6 },
+        { k: 'coats', label: 'Coats', unit: '', def: 2 },
+        { k: 'spread', label: 'Coverage', hint: 'On the tin, per litre', unit: 'm²/L', def: 11 }
+      ],
+      compute: function (v) {
+        var area = Math.max(0, v.length * v.height - v.openings);
+        var litres = v.spread > 0 ? (area * v.coats) / v.spread : 0;
+        // Brute force over the tin sizes rather than a greedy fill, because
+        // greedy gets 3.2 L wrong: it says four 1 L tins when one 4 L tin is
+        // less paint and less money. The search is over three small numbers,
+        // and it minimises paint bought, then tins carried.
+        var sizes = [10, 4, 1];
+        var best = null;
+        for (var a = 0; a <= Math.ceil(litres / 10) + 1; a++) {
+          for (var b = 0; b <= 3; b++) {          // four 4 L tins lose to a 10 + a 4
+            var rest = litres - a * 10 - b * 4;
+            var c = Math.max(0, Math.ceil(rest - 1e-9));
+            if (c > 3) continue;                   // four 1 L tins lose to one 4 L
+            var got = a * 10 + b * 4 + c;
+            if (got + 1e-9 < litres) continue;
+            var count = a + b + c;
+            if (!best || got < best.got - 1e-9 || (Math.abs(got - best.got) < 1e-9 && count < best.count)) {
+              best = { got: got, count: count, tins: [a, b, c] };
+            }
+          }
+        }
+        var tins = best ? best.tins : [0, 0, 0];
+        var bought = best ? best.got : 0;
+        var order = sizes
+          .map(function (size, i) { return tins[i] ? tins[i] + ' × ' + size + ' L' : null; })
+          .filter(Boolean).join(' + ') || 'nothing';
+
+        return {
+          value: round(litres, 1) + ' L',
+          label: 'Paint needed',
+          note: round(area, 1) + ' m² of wall, ' + v.coats + ' coat' + (v.coats === 1 ? '' : 's'),
+          lines: [
+            ['Surface to cover', round(area, 1) + ' m²'],
+            ['Tins to buy', order],
+            ['That gets you', bought + ' L'],
+            ['Left over', round(bought - litres, 1) + ' L']
+          ],
+          hint: 'The leftover is worth keeping for touch-ups — write the room on the lid.'
+        };
+      }
+    },
+    {
+      id: 'tiles', name: 'Tiles',
+      fields: [
+        { k: 'length', label: 'Floor length', unit: 'm', def: 3.6 },
+        { k: 'width', label: 'Floor width', unit: 'm', def: 2.8 },
+        { k: 'tw', label: 'Tile width', unit: 'mm', def: 300 },
+        { k: 'th', label: 'Tile height', unit: 'mm', def: 600 },
+        { k: 'waste', label: 'Waste', hint: 'Cuts and breakages', unit: '%', def: 10 },
+        { k: 'perBox', label: 'Tiles per box', unit: '', def: 8 }
+      ],
+      compute: function (v) {
+        var area = v.length * v.width;
+        var tileArea = (v.tw / 1000) * (v.th / 1000);
+        var tiles = tileArea > 0 ? Math.ceil((area / tileArea) * (1 + v.waste / 100)) : 0;
+        var boxes = v.perBox > 0 ? Math.ceil(tiles / v.perBox) : 0;
+        return {
+          value: String(tiles),
+          label: 'Tiles to buy',
+          note: round(area, 2) + ' m² at ' + v.tw + ' × ' + v.th + ' mm, ' + v.waste + '% waste',
+          lines: [
+            ['Floor area', round(area, 2) + ' m²'],
+            ['Tiles before waste', String(Math.ceil(area / tileArea))],
+            ['Boxes of ' + v.perBox, String(boxes)],
+            ['Spare tiles left', String(boxes * v.perBox - tiles)]
+          ],
+          hint: 'Keep the spares. Matching a batch two years later almost never works.'
+        };
+      }
+    },
+    {
+      id: 'concrete', name: 'Concrete',
+      fields: [
+        { k: 'length', label: 'Length', unit: 'm', def: 4 },
+        { k: 'width', label: 'Width', unit: 'm', def: 3 },
+        { k: 'depth', label: 'Depth', unit: 'mm', def: 100 },
+        { k: 'waste', label: 'Allowance', hint: 'Spillage and an uneven base', unit: '%', def: 10 }
+      ],
+      compute: function (v) {
+        var cubic = v.length * v.width * (v.depth / 1000) * (1 + v.waste / 100);
+        // A 20 kg bag of pre-mix yields roughly 0.01 m³; 2.4 t/m³ is a typical
+        // wet density for a plain mix.
+        return {
+          value: round(cubic, 2) + ' m³',
+          label: 'Concrete needed',
+          note: v.length + ' × ' + v.width + ' m at ' + v.depth + ' mm deep',
+          lines: [
+            ['20 kg bags of pre-mix', String(Math.ceil(cubic / 0.01))],
+            ['Weight, roughly', round(cubic * 2.4, 2) + ' t'],
+            ['Ready-mix order', round(Math.ceil(cubic * 4) / 4, 2) + ' m³']
+          ],
+          hint: 'Ready-mix is sold in quarter-metre steps, so the order is rounded to the next one.'
+        };
+      }
+    },
+    {
+      id: 'decking', name: 'Decking',
+      fields: [
+        { k: 'length', label: 'Deck length', unit: 'm', def: 5 },
+        { k: 'width', label: 'Deck width', unit: 'm', def: 3 },
+        { k: 'board', label: 'Board width', unit: 'mm', def: 140 },
+        { k: 'gap', label: 'Gap between boards', unit: 'mm', def: 5 },
+        { k: 'stock', label: 'Board length sold', unit: 'm', def: 5.4 }
+      ],
+      compute: function (v) {
+        var pitch = (v.board + v.gap) / 1000;
+        var rows = pitch > 0 ? Math.ceil(v.width / pitch) : 0;
+        var linear = rows * v.length;
+        var perStock = v.stock > 0 ? Math.floor(v.stock / v.length) : 0;
+        var boards = perStock > 0 ? Math.ceil(rows / perStock) : Math.ceil(linear / v.stock);
+        return {
+          value: String(boards),
+          label: 'Boards to buy',
+          note: rows + ' rows across ' + v.width + ' m, ' + v.board + ' mm boards at ' + v.gap + ' mm gaps',
+          lines: [
+            ['Rows of board', String(rows)],
+            ['Linear metres', round(linear, 1) + ' m'],
+            ['Lengths of ' + v.stock + ' m', String(boards)],
+            ['Joists at 450 mm centres', String(Math.ceil(v.length / 0.45) + 1)]
+          ],
+          hint: 'The last row will need ripping down. Set it out from the edge people see.'
+        };
+      }
+    },
+    {
+      id: 'turf', name: 'Turf',
+      fields: [
+        { k: 'length', label: 'Lawn length', unit: 'm', def: 8 },
+        { k: 'width', label: 'Lawn width', unit: 'm', def: 6 },
+        { k: 'roll', label: 'Roll covers', unit: 'm²', def: 1 },
+        { k: 'waste', label: 'Waste', hint: 'Curves and edges', unit: '%', def: 8 }
+      ],
+      compute: function (v) {
+        var area = v.length * v.width;
+        var need = area * (1 + v.waste / 100);
+        return {
+          value: String(Math.ceil(need / (v.roll || 1))),
+          label: 'Rolls of turf',
+          note: round(area, 1) + ' m² of lawn, ' + v.waste + '% waste',
+          lines: [
+            ['Lawn area', round(area, 1) + ' m²'],
+            ['With waste', round(need, 1) + ' m²'],
+            ['Underlay soil at 25 mm', round(area * 0.025, 2) + ' m³'],
+            ['Pallets, 50 m² each', String(Math.ceil(need / 50))]
+          ],
+          hint: 'Turf wants laying the day it arrives. Order it for the morning you are free.'
+        };
+      }
+    }
+  ];
+
+  var s = Flow.state('materials', { calc: 'paint', values: {} });
+  var el = {
+    picker: Flow.$('#picker'), fields: Flow.$('#fields'), answer: Flow.$('#answer'),
+    lines: Flow.$('#lines'), note: Flow.$('#note')
+  };
+
+  var current = function () { return CALCS.find(function (c) { return c.id === s.calc; }) || CALCS[0]; };
+
+  function valuesFor(calc) {
+    var saved = s.values[calc.id] || {};
+    var out = {};
+    calc.fields.forEach(function (f) {
+      var v = parseFloat(saved[f.k]);
+      out[f.k] = isFinite(v) ? v : f.def;
+    });
+    return out;
+  }
+
+  function renderPicker() {
+    el.picker.innerHTML = '';
+    CALCS.forEach(function (c) {
+      el.picker.appendChild(Flow.h('button', {
+        type: 'button', text: c.name, 'aria-pressed': c.id === s.calc ? 'true' : 'false',
+        onclick: function () { s.calc = c.id; s.save(); render(); Flow.haptic(); }
+      }));
+    });
+  }
+
+  function render() {
+    renderPicker();
+    var calc = current();
+    var vals = valuesFor(calc);
+
+    el.fields.innerHTML = '';
+    calc.fields.forEach(function (f) {
+      var row = Flow.h('div', { class: 'mt-field' });
+      var label = Flow.h('label', { for: 'f-' + f.k }, f.label);
+      if (f.hint) label.appendChild(Flow.h('small', { text: f.hint }));
+      row.appendChild(label);
+      var wrap = Flow.h('div', { class: 'mt-in' });
+      wrap.appendChild(Flow.h('input', {
+        class: 'flow-input', id: 'f-' + f.k, type: 'text', inputmode: 'decimal',
+        value: String(vals[f.k]),
+        oninput: function (e) {
+          if (!s.values[calc.id]) s.values[calc.id] = {};
+          s.values[calc.id][f.k] = e.target.value;
+          save();
+          update();
+        }
+      }));
+      if (f.unit) wrap.appendChild(Flow.h('span', { text: f.unit }));
+      row.appendChild(wrap);
+      el.fields.appendChild(row);
+    });
+
+    update();
+  }
+
+  function update() {
+    var calc = current();
+    var out = calc.compute(valuesFor(calc));
+
+    el.answer.innerHTML = '';
+    var tile = Flow.h('div', { class: 'flow-tile' });
+    tile.appendChild(Flow.h('div', { class: 'flow-tile-label', text: out.label }));
+    tile.appendChild(Flow.h('div', { class: 'flow-tile-value', text: out.value }));
+    tile.appendChild(Flow.h('div', { class: 'flow-tile-note', text: out.note }));
+    el.answer.appendChild(tile);
+
+    el.lines.innerHTML = '';
+    out.lines.forEach(function (row) {
+      el.lines.appendChild(Flow.h('li', {},
+        Flow.h('span', { class: 'grow', text: row[0] }),
+        Flow.h('span', { class: 'val', text: row[1] })));
+    });
+    el.note.textContent = out.hint;
+  }
+
+  var timer;
+  function save() { clearTimeout(timer); timer = setTimeout(function () { s.save(); }, 300); }
+
+  render();
+});

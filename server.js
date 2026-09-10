@@ -15,6 +15,7 @@ import { SEO_PAGES, SEO_SITE } from './scripts/seo-config.js';
 import { injectSeoIntoHtml, resolveSeoPage } from './scripts/seo-utils.js';
 import { createLeoSpyRouter } from './routes/leospy/index.js';
 import { createSmigRouter } from './routes/smig/index.js';
+import { createFlowsRouter } from './routes/flows/index.js';
 import { registerAcsaArchive } from './routes/acsa-archive/index.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -1382,6 +1383,17 @@ try {
   console.log('[smig] Mounted at /smig');
 } catch (e) {
   console.error('[smig] Failed to mount /smig:', e.message);
+}
+
+// --- Flows: the tools, the accounts that hold them, and the sharing ---
+// Mounted before the static handler so /f/<id>/ and /s/<code>/ get the right
+// cache headers and the deleted-copy 410, rather than falling through to a
+// plain file read of public/f/.
+try {
+  app.use(createFlowsRouter());
+  console.log('[Flows] Mounted at /flows, /f and /s');
+} catch (e) {
+  console.error('[Flows] Failed to mount:', e.message);
 }
 
 // --- Static: public, then root assets ---

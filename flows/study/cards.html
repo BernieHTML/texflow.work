@@ -1,0 +1,275 @@
+<!--css-->
+.cd-stage { display: flex; flex-direction: column; gap: 14px; }
+
+.cd-card {
+  position: relative;
+  min-height: 230px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 26px 22px;
+  text-align: center;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-xl);
+  box-shadow: var(--shadow-2);
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  transition: transform 0.2s var(--ease);
+}
+.cd-card:active { transform: scale(0.99); }
+.cd-front { font-size: 23px; font-weight: 600; letter-spacing: -0.02em; line-height: 1.32; overflow-wrap: anywhere; }
+.cd-back { font-size: 18px; color: var(--ink-2); line-height: 1.45; overflow-wrap: anywhere; }
+.cd-rule { width: 46px; height: 2px; border-radius: 1px; background: var(--line-strong); }
+.cd-tap { font-size: 12.5px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: var(--ink-3); }
+
+.cd-grades { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.cd-grade {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  min-height: 62px;
+  padding: 10px 4px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r);
+  background: var(--surface);
+  color: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.14s var(--ease);
+}
+.cd-grade:active { transform: scale(0.95); }
+.cd-grade span { font-size: 11px; font-weight: 500; color: var(--ink-3); font-variant-numeric: tabular-nums; }
+.cd-grade.g0 { border-color: color-mix(in srgb, var(--danger) 40%, transparent); color: var(--danger); }
+.cd-grade.g3 { border-color: color-mix(in srgb, var(--good) 40%, transparent); color: var(--good); }
+
+.cd-meter { display: flex; gap: 4px; }
+.cd-meter i { flex: 1; height: 5px; border-radius: 3px; background: var(--bg-deep); }
+.cd-meter i.on { background: linear-gradient(90deg, var(--a1), var(--a2)); }
+
+.cd-counts { display: flex; justify-content: space-between; font-size: 13px; color: var(--ink-3); font-variant-numeric: tabular-nums; }
+
+.cd-list .front { font-weight: 560; }
+.cd-list .due { font-size: 12px; color: var(--ink-3); }
+
+<!--html-->
+<section class="flow-section cd-stage" id="stage"></section>
+
+<section class="flow-section flow-hidden" id="browse">
+  <span class="flow-label">Every card</span>
+  <ul class="flow-list cd-list" id="all"></ul>
+</section>
+
+<div class="flow-dock">
+  <div class="flow-row">
+    <button class="flow-btn is-quiet" type="button" id="toggle-browse">All cards</button>
+    <button class="flow-btn" type="button" id="add">Write a card</button>
+  </div>
+</div>
+
+<!--js-->
+/* Cards.
+ *
+ * Spaced repetition, cut down to the part that does the work: a card you got
+ * right waits longer before it comes back, a card you got wrong is due again
+ * today. The interval grows by an ease factor that itself moves with how hard
+ * you found the card — the core of SM-2, without the settings screen.
+ *
+ * One Flow is one deck. If you want a deck for French and a deck for anatomy,
+ * take two copies — and a deck saved to a file, with its cards inside it, is
+ * something you can hand to someone sitting the same exam. */
+
+Flow.ready(function () {
+  var DAY = 86400000;
+  var s = Flow.state('deck', { cards: [], showBrowse: false });
+
+  var el = { stage: Flow.$('#stage'), browse: Flow.$('#browse'), all: Flow.$('#all') };
+  var current = null;
+  var revealed = false;
+  var doneToday = 0;
+
+  var startOfDay = function (t) { var d = new Date(t); d.setHours(0, 0, 0, 0); return d.getTime(); };
+  var uid = function () { return String(Date.now()) + Math.random().toString(36).slice(2, 5); };
+
+  function due(card) { return !card.dueAt || card.dueAt <= Date.now(); }
+  function dueCards() { return s.cards.filter(due); }
+
+  function nextCard() {
+    var pool = dueCards();
+    if (!pool.length) return null;
+    // Oldest due first, so a backlog drains in the order it built up.
+    return pool.sort(function (a, b) { return (a.dueAt || 0) - (b.dueAt || 0); })[0];
+  }
+
+  // SM-2, trimmed. `ease` starts at 2.5 and drifts with how the card is graded;
+  // `reps` counts consecutive successes, and the first two have fixed steps
+  // because a brand new card has no history worth multiplying.
+  function grade(card, q) {
+    if (q === 0) {
+      card.reps = 0;
+      card.interval = 0;
+      card.ease = Math.max(1.3, (card.ease || 2.5) - 0.2);
+      card.dueAt = Date.now() + 6 * 60000;   // back in a few minutes, not tomorrow
+    } else {
+      card.reps = (card.reps || 0) + 1;
+      card.ease = Math.max(1.3, (card.ease || 2.5) + (0.1 - (3 - q) * (0.08 + (3 - q) * 0.02)));
+      card.interval = card.reps === 1 ? 1 : card.reps === 2 ? 6 : Math.round((card.interval || 1) * card.ease);
+      if (q === 1) card.interval = Math.max(1, Math.round(card.interval * 0.6));
+      if (q === 3) card.interval = Math.round(card.interval * 1.3);
+      card.dueAt = startOfDay(Date.now()) + card.interval * DAY + 4 * 3600000;
+    }
+    card.seen = (card.seen || 0) + 1;
+    card.lastAt = Date.now();
+  }
+
+  function whenText(card) {
+    if (due(card)) return 'due now';
+    var days = Math.round((card.dueAt - Date.now()) / DAY);
+    if (days < 1) return 'later today';
+    if (days === 1) return 'tomorrow';
+    if (days < 31) return 'in ' + days + ' days';
+    return 'in ' + Math.round(days / 30) + ' months';
+  }
+
+  function render() {
+    el.stage.innerHTML = '';
+    el.browse.classList.toggle('flow-hidden', !s.showBrowse);
+    Flow.$('#toggle-browse').textContent = s.showBrowse ? 'Hide list' : 'All cards';
+    renderAll();
+
+    if (!s.cards.length) {
+      el.stage.appendChild(Flow.h('div', { class: 'flow-empty' },
+        Flow.h('strong', { text: 'An empty deck' }),
+        'Write the first card. A question on the front, the answer on the back.'));
+      return;
+    }
+
+    var pool = dueCards();
+    if (!pool.length) {
+      var soonest = s.cards.slice().sort(function (a, b) { return (a.dueAt || 0) - (b.dueAt || 0); })[0];
+      el.stage.appendChild(Flow.h('div', { class: 'flow-tile' },
+        Flow.h('div', { class: 'flow-tile-label', text: 'Nothing due' }),
+        Flow.h('div', { class: 'flow-tile-value', text: doneToday ? doneToday + ' done' : 'All caught up' }),
+        Flow.h('div', { class: 'flow-tile-note', text: 'The next card is back ' + whenText(soonest) + '.' })));
+      return;
+    }
+
+    if (!current || s.cards.indexOf(current) === -1 || !due(current)) current = nextCard();
+    if (!current) current = pool[0];
+
+    var total = pool.length;
+    var meter = Flow.h('div', { class: 'cd-meter' });
+    for (var i = 0; i < Math.min(total + doneToday, 20); i++) {
+      meter.appendChild(Flow.h('i', { class: i < doneToday ? 'on' : '' }));
+    }
+    el.stage.appendChild(meter);
+    el.stage.appendChild(Flow.h('div', { class: 'cd-counts' },
+      Flow.h('span', { text: total + ' to go' }),
+      Flow.h('span', { text: doneToday ? doneToday + ' done today' : s.cards.length + ' cards in the deck' })));
+
+    var card = Flow.h('div', { class: 'cd-card', onclick: function () { if (!revealed) { revealed = true; render(); Flow.haptic(); } } });
+    card.appendChild(Flow.h('div', { class: 'cd-front', text: current.front }));
+    if (revealed) {
+      card.appendChild(Flow.h('div', { class: 'cd-rule' }));
+      card.appendChild(Flow.h('div', { class: 'cd-back', text: current.back }));
+    } else {
+      card.appendChild(Flow.h('div', { class: 'cd-tap', text: 'Tap to turn it over' }));
+    }
+    el.stage.appendChild(card);
+
+    if (revealed) {
+      var grades = Flow.h('div', { class: 'cd-grades' });
+      [
+        ['Again', 0, 'g0'], ['Hard', 1, 'g1'], ['Good', 2, 'g2'], ['Easy', 3, 'g3']
+      ].forEach(function (g) {
+        var preview = Object.assign({}, current);
+        grade(preview, g[1]);
+        grades.appendChild(Flow.h('button', {
+          class: 'cd-grade ' + g[2], type: 'button',
+          onclick: function () { answer(g[1]); }
+        }, Flow.h('b', { text: g[0], style: { fontWeight: '600' } }), Flow.h('span', { text: whenText(preview) })));
+      });
+      el.stage.appendChild(grades);
+    } else {
+      el.stage.appendChild(Flow.h('button', {
+        class: 'flow-btn is-quiet', type: 'button', text: 'Show the answer',
+        onclick: function () { revealed = true; render(); }
+      }));
+    }
+  }
+
+  function answer(q) {
+    grade(current, q);
+    if (q > 0) doneToday++;
+    s.save();
+    revealed = false;
+    current = nextCard();
+    render();
+    Flow.haptic(q === 0 ? 30 : 12);
+  }
+
+  function renderAll() {
+    if (!s.showBrowse) return;
+    el.all.innerHTML = '';
+    if (!s.cards.length) {
+      el.all.appendChild(Flow.h('li', {}, Flow.h('span', { class: 'grow sub', text: 'No cards yet.' })));
+      return;
+    }
+    s.cards.slice().sort(function (a, b) { return (a.dueAt || 0) - (b.dueAt || 0); }).forEach(function (c) {
+      el.all.appendChild(Flow.h('li', { style: { cursor: 'pointer' }, onclick: function () { editSheet(c); } },
+        Flow.h('span', { class: 'grow' },
+          Flow.h('span', { class: 'name front', text: c.front }),
+          Flow.h('span', { class: 'sub', text: c.back })),
+        Flow.h('span', { class: 'due', text: whenText(c) })));
+    });
+  }
+
+  function editSheet(existing) {
+    var front = Flow.h('textarea', { class: 'flow-textarea', rows: 2, style: { minHeight: '72px' }, placeholder: 'The question', 'aria-label': 'Front' });
+    var back = Flow.h('textarea', { class: 'flow-textarea', rows: 3, style: { minHeight: '96px' }, placeholder: 'The answer', 'aria-label': 'Back' });
+    if (existing) { front.value = existing.front; back.value = existing.back; }
+
+    var body = Flow.h('div');
+    body.appendChild(Flow.h('span', { class: 'flow-label', text: 'Front' }));
+    body.appendChild(front);
+    body.appendChild(Flow.h('span', { class: 'flow-label', text: 'Back', style: { marginTop: '12px' } }));
+    body.appendChild(back);
+
+    var actions = [{
+      label: existing ? 'Save it' : 'Add it', onClick: function () {
+        var f = front.value.trim();
+        var b = back.value.trim();
+        if (!f || !b) return Flow.toast('A card needs both sides');
+        if (existing) { existing.front = f; existing.back = b; }
+        else s.cards.push({ id: uid(), front: f, back: b, ease: 2.5, reps: 0, interval: 0, dueAt: 0, seen: 0 });
+        s.save();
+        if (!existing) current = current || nextCard();
+        render();
+        Flow.haptic();
+      }
+    }];
+    if (existing) {
+      actions.push({ label: 'Delete this card', kind: 'danger', onClick: function () {
+        s.cards = s.cards.filter(function (c) { return c.id !== existing.id; });
+        if (current && current.id === existing.id) { current = nextCard(); revealed = false; }
+        s.save(); render();
+      } });
+    }
+    actions.push({ label: 'Cancel', kind: 'ghost' });
+
+    Flow.sheet({ title: existing ? 'Edit the card' : 'A new card', body: body, actions: actions });
+    setTimeout(function () { front.focus(); }, 420);
+  }
+
+  Flow.$('#add').addEventListener('click', function () { editSheet(null); });
+  Flow.$('#toggle-browse').addEventListener('click', function () {
+    s.showBrowse = !s.showBrowse; s.save(); render();
+  });
+
+  render();
+});

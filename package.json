@@ -8,6 +8,7 @@
     "start": "node server.js",
     "dev": "node --watch server.js",
     "seo:generate": "node scripts/generate-seo.js",
+    "flows:build": "node scripts/build-flows.mjs",
     "build:platform66": "cd Platform66 && npm install && npm run build"
   },
   "dependencies": {

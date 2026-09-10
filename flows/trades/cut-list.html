@@ -1,0 +1,246 @@
+<!--css-->
+.cl-row { display: grid; grid-template-columns: 1fr 96px 72px auto; gap: 8px; align-items: center; margin-bottom: 8px; }
+.cl-row .flow-input { min-height: 46px; padding: 10px 12px; font-size: 15px; }
+.cl-row .len, .cl-row .qty { text-align: right; font-variant-numeric: tabular-nums; }
+.cl-head { display: grid; grid-template-columns: 1fr 96px 72px 34px; gap: 8px; margin-bottom: 6px; }
+.cl-head span { font-size: 10.5px; font-weight: 650; letter-spacing: 0.07em; text-transform: uppercase; color: var(--ink-3); }
+.cl-head span:nth-child(2), .cl-head span:nth-child(3) { text-align: right; }
+
+.cl-bar { margin-bottom: 12px; }
+.cl-bar-top { display: flex; align-items: baseline; justify-content: space-between; font-size: 13px; color: var(--ink-3); margin-bottom: 5px; }
+.cl-bar-top b { color: var(--ink); font-weight: 600; font-size: 14px; }
+.cl-stick {
+  display: flex;
+  height: 34px;
+  border-radius: 9px;
+  overflow: hidden;
+  background: repeating-linear-gradient(45deg, var(--bg-deep), var(--bg-deep) 5px, transparent 5px, transparent 10px);
+  border: 1px solid var(--line);
+}
+.cl-piece {
+  display: grid;
+  place-items: center;
+  min-width: 0;
+  font-size: 11.5px;
+  font-weight: 620;
+  color: #fff;
+  background: linear-gradient(135deg, var(--a1), var(--a2));
+  border-right: 2px solid var(--surface);
+  overflow: hidden;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.cl-piece:last-child { border-right: 0; }
+.cl-off { display: grid; place-items: center; font-size: 11px; color: var(--ink-3); min-width: 0; overflow: hidden; }
+
+.cl-units { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+<!--html-->
+<section class="flow-section">
+  <span class="flow-label">What you are cutting from</span>
+  <div class="cl-units">
+    <div class="mt-in" style="position:relative">
+      <input class="flow-input" id="stock" type="text" inputmode="decimal" aria-label="Stock length" style="text-align:right;padding-right:44px">
+      <span style="position:absolute;right:12px;top:50%;transform:translateY(-50%);color:var(--ink-3);font-size:13px" id="stock-unit">mm</span>
+    </div>
+    <select class="flow-select" id="unit" aria-label="Units">
+      <option value="mm">millimetres</option>
+      <option value="m">metres</option>
+      <option value="in">inches</option>
+    </select>
+  </div>
+  <div class="cl-units" style="margin-top:10px">
+    <div style="position:relative">
+      <input class="flow-input" id="kerf" type="text" inputmode="decimal" aria-label="Blade width" style="text-align:right;padding-right:44px">
+      <span style="position:absolute;right:12px;top:50%;transform:translateY(-50%);color:var(--ink-3);font-size:13px" id="kerf-unit">mm</span>
+    </div>
+    <p class="flow-hint" style="margin:0;align-self:center">Blade width — every cut eats this much.</p>
+  </div>
+</section>
+
+<section class="flow-section">
+  <span class="flow-label">The pieces you need</span>
+  <div class="cl-head"><span>What for</span><span>Length</span><span>How many</span><span></span></div>
+  <div id="pieces"></div>
+  <button class="flow-btn is-quiet is-small" type="button" id="add" style="margin-top:6px">Add a piece</button>
+</section>
+
+<section class="flow-section" id="plan-block">
+  <div id="answer" style="margin-bottom:16px"></div>
+  <span class="flow-label">How to cut them</span>
+  <div id="bars"></div>
+  <p class="flow-hint" id="note"></p>
+</section>
+
+<!--js-->
+/* Cut List.
+ *
+ * First-fit-decreasing bin packing: sort the pieces longest first, and put each
+ * one in the first bar it still fits. It is not guaranteed optimal — nothing
+ * fast is — but it is within a bar or two of optimal on real cutting lists, and
+ * it produces a layout a person can follow down the bench in order.
+ *
+ * The blade width is not a detail. Ten cuts with a 3 mm blade is 30 mm gone,
+ * which is exactly the amount that makes the last piece not fit. */
+
+Flow.ready(function () {
+  var UNITS = { mm: { step: 1, dp: 0, kerf: 3 }, m: { step: 0.001, dp: 3, kerf: 0.003 }, in: { step: 0.0625, dp: 3, kerf: 0.125 } };
+
+  var s = Flow.state('cuts', {
+    unit: 'mm', stock: '2400', kerf: '3',
+    pieces: [
+      { label: 'Shelf', length: '800', qty: '4' },
+      { label: 'Upright', length: '1800', qty: '2' }
+    ]
+  });
+
+  var el = {
+    stock: Flow.$('#stock'), kerf: Flow.$('#kerf'), unit: Flow.$('#unit'),
+    pieces: Flow.$('#pieces'), bars: Flow.$('#bars'), answer: Flow.$('#answer'),
+    note: Flow.$('#note'), block: Flow.$('#plan-block')
+  };
+
+  var num = function (v) { var n = parseFloat(v); return isFinite(n) && n > 0 ? n : 0; };
+  var fmt = function (n) { return Flow.num(n, UNITS[s.unit].dp).replace(/\.?0+$/, function (m) { return s.unit === 'mm' ? '' : m; }); };
+  var label = function (n) { return fmt(n) + ' ' + s.unit; };
+
+  function pack() {
+    var stock = num(s.stock);
+    var kerf = parseFloat(s.kerf) || 0;
+    var wanted = [];
+    s.pieces.forEach(function (p) {
+      var len = num(p.length);
+      var qty = Math.max(0, Math.round(num(p.qty)));
+      for (var i = 0; i < qty && i < 400; i++) wanted.push({ len: len, label: p.label });
+    });
+    var tooLong = wanted.filter(function (p) { return p.len > stock; });
+    var fits = wanted.filter(function (p) { return p.len <= stock && p.len > 0; });
+    fits.sort(function (a, b) { return b.len - a.len; });
+
+    var bars = [];
+    fits.forEach(function (piece) {
+      // A cut is only charged for the blade if something has already been cut
+      // off this bar, so the first piece on a fresh length is kerf-free.
+      var home = bars.find(function (bar) {
+        return bar.left >= piece.len + (bar.pieces.length ? kerf : 0);
+      });
+      if (!home) {
+        home = { pieces: [], left: stock };
+        bars.push(home);
+      }
+      home.left -= piece.len + (home.pieces.length ? kerf : 0);
+      home.pieces.push(piece);
+    });
+
+    var used = fits.reduce(function (a, p) { return a + p.len; }, 0);
+    return {
+      stock: stock, bars: bars, tooLong: tooLong,
+      used: used,
+      bought: bars.length * stock,
+      waste: bars.length ? (1 - used / (bars.length * stock)) * 100 : 0,
+      longestOff: bars.reduce(function (a, b) { return Math.max(a, b.left); }, 0)
+    };
+  }
+
+  function renderPieces() {
+    el.pieces.innerHTML = '';
+    s.pieces.forEach(function (p, i) {
+      var row = Flow.h('div', { class: 'cl-row' });
+      row.appendChild(Flow.h('input', {
+        class: 'flow-input', value: p.label, placeholder: 'Piece ' + (i + 1), 'aria-label': 'What for',
+        oninput: function (e) { p.label = e.target.value; save(); update(); }
+      }));
+      row.appendChild(Flow.h('input', {
+        class: 'flow-input len', type: 'text', inputmode: 'decimal', value: p.length, placeholder: '0',
+        'aria-label': 'Length', oninput: function (e) { p.length = e.target.value; save(); update(); }
+      }));
+      row.appendChild(Flow.h('input', {
+        class: 'flow-input qty', type: 'text', inputmode: 'numeric', value: p.qty, placeholder: '1',
+        'aria-label': 'How many', oninput: function (e) { p.qty = e.target.value; save(); update(); }
+      }));
+      row.appendChild(Flow.h('button', {
+        class: 'flow-x', type: 'button', 'aria-label': 'Remove', html: Flow.icons.x,
+        onclick: function () { s.pieces.splice(i, 1); s.save(); renderPieces(); update(); }
+      }));
+      el.pieces.appendChild(row);
+    });
+  }
+
+  function update() {
+    var r = pack();
+    el.block.classList.toggle('flow-hidden', !r.bars.length && !r.tooLong.length);
+
+    el.answer.innerHTML = '';
+    var tile = Flow.h('div', { class: 'flow-tile' });
+    tile.appendChild(Flow.h('div', { class: 'flow-tile-label', text: 'Lengths to buy' }));
+    tile.appendChild(Flow.h('div', { class: 'flow-tile-value', text: String(r.bars.length) }));
+    tile.appendChild(Flow.h('div', {
+      class: 'flow-tile-note',
+      text: r.bars.length
+        ? 'at ' + label(r.stock) + ' each · ' + Flow.num(r.waste, 1) + '% offcut · longest offcut ' + label(r.longestOff)
+        : 'Add the pieces you need.'
+    }));
+    el.answer.appendChild(tile);
+
+    el.bars.innerHTML = '';
+    r.bars.forEach(function (bar, i) {
+      var wrap = Flow.h('div', { class: 'cl-bar' });
+      var top = Flow.h('div', { class: 'cl-bar-top' });
+      top.appendChild(Flow.h('b', { text: 'Length ' + (i + 1) }));
+      top.appendChild(Flow.h('span', { text: bar.left > 0.0001 ? label(bar.left) + ' left' : 'nothing left' }));
+      wrap.appendChild(top);
+
+      var stick = Flow.h('div', { class: 'cl-stick' });
+      bar.pieces.forEach(function (p) {
+        stick.appendChild(Flow.h('div', {
+          class: 'cl-piece', style: { flex: p.len + ' 1 0' }, title: p.label,
+          text: fmt(p.len)
+        }));
+      });
+      if (bar.left > 0.0001) {
+        stick.appendChild(Flow.h('div', { class: 'cl-off', style: { flex: bar.left + ' 1 0' }, text: bar.left / r.stock > 0.12 ? fmt(bar.left) : '' }));
+      }
+      wrap.appendChild(stick);
+      el.bars.appendChild(wrap);
+    });
+
+    el.note.textContent = r.tooLong.length
+      ? r.tooLong.length + ' piece' + (r.tooLong.length === 1 ? ' is' : 's are') + ' longer than the stock — they cannot be cut from it.'
+      : (r.bars.length ? 'Cut each length in the order shown, longest first. The striped part is offcut.' : '');
+    el.note.style.color = r.tooLong.length ? 'var(--danger)' : '';
+  }
+
+  function applyUnit() {
+    el.unit.value = s.unit;
+    Flow.$('#stock-unit').textContent = s.unit;
+    Flow.$('#kerf-unit').textContent = s.unit;
+  }
+
+  var timer;
+  function save() { clearTimeout(timer); timer = setTimeout(function () { s.save(); }, 300); }
+
+  el.stock.value = s.stock;
+  el.kerf.value = s.kerf;
+  applyUnit();
+
+  el.stock.addEventListener('input', function (e) { s.stock = e.target.value; save(); update(); });
+  el.kerf.addEventListener('input', function (e) { s.kerf = e.target.value; save(); update(); });
+  el.unit.addEventListener('change', function (e) {
+    // Units change the labels, not the numbers: retyping a whole cut list
+    // because you picked the wrong unit first is the sort of thing that makes
+    // people close a tool and reach for paper.
+    s.unit = e.target.value;
+    s.kerf = String(UNITS[s.unit].kerf);
+    el.kerf.value = s.kerf;
+    s.save(); applyUnit(); update();
+  });
+  Flow.$('#add').addEventListener('click', function () {
+    s.pieces.push({ label: '', length: '', qty: '1' });
+    s.save(); renderPieces(); update();
+    var inputs = Flow.$$('.cl-row .flow-input');
+    if (inputs.length) inputs[inputs.length - 3].focus();
+  });
+
+  renderPieces();
+  update();
+});

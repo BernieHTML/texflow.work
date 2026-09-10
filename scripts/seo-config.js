@@ -17,12 +17,31 @@ export const SEO_PAGES = [
   {
     route: '/',
     sourceFile: 'public/index.html',
-    title: 'Texflow | Shoot for the Stars',
-    description: 'TexFlow builds agent-first products for space, data, messaging, marketplaces, research archives, and machine-readable web discovery.',
+    title: 'TexFlow | Small tools, one job each',
+    description: 'TexFlow Flows are tiny single-purpose apps you use in a tap, keep on your home screen or as one offline file, send to anyone, and delete for good when you are done.',
     priority: 1.0,
     changefreq: 'weekly',
     category: 'homepage',
-    schemas: ['organization', 'website', 'productCollection']
+    schemas: ['organization', 'website']
+  },
+  {
+    route: '/flows/browse',
+    sourceFile: 'public/flows/browse.html',
+    title: 'All Flows | TexFlow',
+    description: 'Every TexFlow Flow: twenty small single-purpose tools across everyday life, writing, sport, trades, kitchen, money, study, health, travel and home.',
+    priority: 0.9,
+    changefreq: 'weekly',
+    category: 'flows'
+  },
+  {
+    route: '/products',
+    sourceFile: 'public/products/index.html',
+    title: 'Products | TexFlow',
+    description: 'Every TexFlow product in one place: satellite and lunar mapping, flight tracking, agent messaging, curl-first publishing, live data feeds, marketplaces, and machine-readable discovery.',
+    priority: 0.9,
+    changefreq: 'weekly',
+    category: 'core',
+    schemas: ['productCollection']
   },
   {
     route: '/science',
@@ -31,6 +50,25 @@ export const SEO_PAGES = [
     description: 'Interactive TexFlow science lessons explain rockets, aircraft, satellites, and orbital motion with visual simulations and quick concept checks.',
     priority: 0.7,
     changefreq: 'monthly',
+    category: 'supporting'
+  },
+  {
+    route: '/psrmap',
+    sourceFile: 'public/psrmap/index.html',
+    title: 'Lunar South Pole PSR Map — TexFlow',
+    description: 'Interactive map of the Moon’s south pole showing permanently shadowed regions (PSRs). Drop a pin to gauge habitat feasibility by proximity to water-ice sources.',
+    priority: 0.7,
+    changefreq: 'monthly',
+    category: 'supporting'
+  },
+  {
+    route: '/smig',
+    sourceFile: 'public/smig/index.html',
+    title: 'smig',
+    description: 'smig — a very small messenger. Your code gets you in, your smile unlocks your messages, and people find you by one true thing about you.',
+    image: '/smig/og.png',
+    priority: 0.7,
+    changefreq: 'weekly',
     category: 'supporting'
   },
   {

@@ -1,0 +1,287 @@
+<!--css-->
+.pk-progress { display: flex; align-items: center; gap: 14px; }
+.pk-ring { position: relative; width: 68px; height: 68px; flex: none; }
+.pk-ring svg { width: 100%; height: 100%; transform: rotate(-90deg); display: block; }
+.pk-ring .t { fill: none; stroke: rgba(255, 255, 255, 0.28); stroke-width: 8; }
+.pk-ring .a { fill: none; stroke: #fff; stroke-width: 8; stroke-linecap: round; transition: stroke-dashoffset 0.4s var(--ease); }
+.pk-ring b { position: absolute; inset: 0; display: grid; place-items: center; font-size: 15px; font-weight: 660; font-variant-numeric: tabular-nums; }
+
+.pk-group { margin-top: 22px; }
+.pk-group-head { display: flex; align-items: baseline; justify-content: space-between; margin: 0 2px 8px; }
+.pk-group-head span { font-size: 11px; font-weight: 650; letter-spacing: 0.09em; text-transform: uppercase; color: var(--ink-3); }
+
+.pk-item { display: flex; align-items: center; gap: 12px; padding: 3px 4px; }
+.pk-item .flow-check { flex: 1; min-width: 0; }
+.pk-item .flow-check .txt { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.pk-add { display: flex; gap: 8px; margin-top: 10px; }
+.pk-add .flow-input { min-height: 44px; }
+
+.pk-tpl { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.pk-tpl button {
+  min-height: 52px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r);
+  background: var(--surface);
+  color: inherit;
+  font-size: 15px;
+  font-weight: 550;
+  cursor: pointer;
+}
+.pk-tpl button:active { transform: scale(0.98); }
+
+<!--html-->
+<section class="flow-section">
+  <div class="flow-tile">
+    <div class="pk-progress">
+      <div class="pk-ring">
+        <svg viewBox="0 0 40 40" aria-hidden="true">
+          <circle class="t" cx="20" cy="20" r="16"></circle>
+          <circle class="a" id="arc" cx="20" cy="20" r="16"></circle>
+        </svg>
+        <b id="pct">0%</b>
+      </div>
+      <div style="min-width:0">
+        <div class="flow-tile-label" style="margin-bottom:4px" id="trip-name">Your list</div>
+        <div style="font-size:23px;font-weight:660;letter-spacing:-.02em" id="left">Nothing on it yet</div>
+        <div class="flow-tile-note" style="margin-top:2px" id="sub">Start from a trip below.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="flow-section" id="empty-block">
+  <span class="flow-label">Start from</span>
+  <div class="pk-tpl" id="templates"></div>
+</section>
+
+<section id="groups"></section>
+
+<div class="flow-dock">
+  <div class="flow-row">
+    <button class="flow-btn is-quiet" type="button" id="reset">New trip</button>
+    <button class="flow-btn" type="button" id="add">Add something</button>
+  </div>
+</div>
+
+<!--js-->
+/* Packing.
+ *
+ * A packing list is only useful if it already exists when you are tired and
+ * leaving in an hour, so this starts from a real list rather than an empty one.
+ * The templates are opinionated on purpose — the things people forget, not the
+ * things people obviously remember.
+ *
+ * "New trip" clears the ticks and keeps the list, because the list is the part
+ * you spent effort on and the ticks are the part that is disposable. */
+
+Flow.ready(function () {
+  var TEMPLATES = {
+    'Beach': {
+      Clothes: ['Swimmers', 'Rash top', 'Thongs', 'Hat', 'Something warm for the evening'],
+      Wash: ['Sunscreen', 'Aloe vera', 'Insect repellent', 'Toothbrush'],
+      Bag: ['Beach towel', 'Sunglasses', 'Book', 'Dry bag', 'Water bottle'],
+      Papers: ['Passport', 'Boarding pass', 'Travel insurance']
+    },
+    'Snow': {
+      Clothes: ['Thermals ×2', 'Ski socks ×3', 'Waterproof jacket', 'Salopettes', 'Fleece', 'Beanie', 'Gloves'],
+      Gear: ['Goggles', 'Helmet', 'Lift pass', 'Hand warmers', 'Boot bag'],
+      Wash: ['Lip balm', 'High-factor sunscreen', 'Ibuprofen'],
+      Papers: ['Passport', 'Insurance with winter sports cover']
+    },
+    'City break': {
+      Clothes: ['Comfortable shoes', 'One smart outfit', 'Layers', 'Light jacket'],
+      Bag: ['Day bag', 'Umbrella', 'Reusable bottle', 'Adaptor'],
+      Tech: ['Phone charger', 'Power bank', 'Headphones'],
+      Papers: ['Passport', 'Cards', 'Hotel address written down']
+    },
+    'Camping': {
+      Shelter: ['Tent', 'Pegs and mallet', 'Sleeping bag', 'Mat', 'Pillow'],
+      Kitchen: ['Stove and gas', 'Lighter', 'Pot and pan', 'Cutlery', 'Mug', 'Tea towel', 'Bin bags'],
+      Kit: ['Head torch', 'Batteries', 'First aid kit', 'Rope', 'Power bank'],
+      Clothes: ['Waterproof', 'Warm layer', 'Spare socks', 'Boots']
+    },
+    'Work trip': {
+      Bag: ['Laptop and charger', 'Notebook', 'Business cards', 'Adaptor', 'Headphones'],
+      Clothes: ['Shirts', 'One spare outfit', 'Shoe care', 'Gym kit'],
+      Papers: ['ID', 'Expense card', 'Printed itinerary'],
+      Wash: ['Wash bag', 'Painkillers']
+    },
+    'With a baby': {
+      Feeding: ['Bottles', 'Formula or expressed milk', 'Bibs', 'Snacks'],
+      Changing: ['Nappies ×8 a day', 'Wipes', 'Changing mat', 'Nappy bags', 'Two spare outfits'],
+      Sleep: ['Travel cot', 'Sleeping bag', 'The comfort thing', 'Blackout blind'],
+      Out: ['Pram or carrier', 'Rain cover', 'Sunshade', 'Calpol']
+    }
+  };
+
+  var s = Flow.state('list', { trip: '', groups: {}, ticked: [] });
+
+  var el = {
+    groups: Flow.$('#groups'), templates: Flow.$('#templates'),
+    emptyBlock: Flow.$('#empty-block'), arc: Flow.$('#arc')
+  };
+  var CIRC = 2 * Math.PI * 16;
+  el.arc.style.strokeDasharray = CIRC;
+
+  var allItems = function () {
+    return Object.keys(s.groups).reduce(function (a, g) { return a.concat(s.groups[g]); }, []);
+  };
+  var key = function (group, item) { return group + '::' + item; };
+  var isTicked = function (group, item) { return s.ticked.indexOf(key(group, item)) > -1; };
+
+  function toggle(group, item) {
+    var k = key(group, item);
+    var at = s.ticked.indexOf(k);
+    if (at > -1) s.ticked.splice(at, 1);
+    else { s.ticked.push(k); Flow.haptic(); }
+    s.save();
+    paintHead();
+  }
+
+  function paintHead() {
+    var total = allItems().length;
+    var done = s.ticked.length;
+    var pct = total ? Math.round((done / total) * 100) : 0;
+    Flow.$('#pct').textContent = pct + '%';
+    el.arc.style.strokeDashoffset = CIRC * (1 - (total ? done / total : 0));
+    Flow.$('#trip-name').textContent = s.trip || 'Your list';
+    Flow.$('#left').textContent = !total ? 'Nothing on it yet'
+      : done === total ? 'All packed' : (total - done) + ' still to go';
+    Flow.$('#sub').textContent = !total ? 'Start from a trip below.'
+      : done === total ? 'Go. Have a good one.' : done + ' of ' + total + ' done';
+  }
+
+  function render() {
+    el.emptyBlock.classList.toggle('flow-hidden', allItems().length > 0);
+    el.templates.innerHTML = '';
+    Object.keys(TEMPLATES).forEach(function (name) {
+      el.templates.appendChild(Flow.h('button', {
+        type: 'button', text: name, onclick: function () { load(name); }
+      }));
+    });
+
+    el.groups.innerHTML = '';
+    Object.keys(s.groups).forEach(function (group) {
+      var items = s.groups[group];
+      if (!items.length) return;
+      var block = Flow.h('div', { class: 'pk-group' });
+      var head = Flow.h('div', { class: 'pk-group-head' });
+      head.appendChild(Flow.h('span', { text: group }));
+      head.appendChild(Flow.h('span', {
+        text: items.filter(function (i) { return isTicked(group, i); }).length + '/' + items.length
+      }));
+      block.appendChild(head);
+
+      var card = Flow.h('div', { class: 'flow-card', style: { padding: '8px 12px' } });
+      items.forEach(function (item) {
+        var row = Flow.h('div', { class: 'pk-item' });
+        var label = Flow.h('label', { class: 'flow-check' });
+        var input = Flow.h('input', { type: 'checkbox', checked: isTicked(group, item) });
+        input.addEventListener('change', function () { toggle(group, item); head.children[1].textContent = items.filter(function (i) { return isTicked(group, i); }).length + '/' + items.length; });
+        label.appendChild(input);
+        label.appendChild(Flow.h('span', { class: 'box', html: Flow.icons.check }));
+        label.appendChild(Flow.h('span', { class: 'txt', text: item }));
+        row.appendChild(label);
+        row.appendChild(Flow.h('button', {
+          class: 'flow-x', type: 'button', 'aria-label': 'Remove ' + item, html: Flow.icons.x,
+          onclick: function () {
+            s.groups[group] = s.groups[group].filter(function (i) { return i !== item; });
+            s.ticked = s.ticked.filter(function (k) { return k !== key(group, item); });
+            if (!s.groups[group].length) delete s.groups[group];
+            s.save(); render();
+          }
+        }));
+        card.appendChild(row);
+      });
+      block.appendChild(card);
+      el.groups.appendChild(block);
+    });
+
+    paintHead();
+  }
+
+  function load(name) {
+    var apply = function () {
+      var tpl = TEMPLATES[name];
+      Object.keys(tpl).forEach(function (group) {
+        s.groups[group] = (s.groups[group] || []).slice();
+        tpl[group].forEach(function (item) {
+          if (s.groups[group].indexOf(item) === -1) s.groups[group].push(item);
+        });
+      });
+      s.trip = s.trip || name;
+      s.save(); render(); Flow.haptic(30);
+    };
+    if (!allItems().length) return apply();
+    Flow.confirm({
+      title: 'Add the ' + name + ' list?',
+      lede: 'It gets merged into what you already have — nothing you added is lost.',
+      confirmLabel: 'Add it'
+    }).then(function (ok) { if (ok) apply(); });
+  }
+
+  function addSheet() {
+    var body = Flow.h('div');
+    var item = Flow.h('input', { class: 'flow-input', placeholder: 'What are you taking', 'aria-label': 'Item' });
+    var groups = Object.keys(s.groups);
+    var chosen = groups[0] || 'Bag';
+
+    body.appendChild(item);
+    body.appendChild(Flow.h('span', { class: 'flow-label', text: 'Into', style: { marginTop: '14px' } }));
+    var chips = Flow.h('div', { class: 'flow-chips' });
+    function paintChips() {
+      chips.innerHTML = '';
+      groups.concat(groups.indexOf('Other') > -1 ? [] : ['Other']).forEach(function (g) {
+        chips.appendChild(Flow.h('button', {
+          class: 'flow-chip', type: 'button', text: g, 'aria-pressed': chosen === g ? 'true' : 'false',
+          onclick: function () { chosen = g; paintChips(); }
+        }));
+      });
+    }
+    paintChips();
+    body.appendChild(chips);
+
+    Flow.sheet({
+      title: 'Add something',
+      body: body,
+      actions: [
+        { label: 'Add it', onClick: function () {
+          var text = item.value.trim().slice(0, 60);
+          if (!text) return;
+          s.groups[chosen] = s.groups[chosen] || [];
+          if (s.groups[chosen].indexOf(text) === -1) s.groups[chosen].push(text);
+          s.save(); render(); Flow.haptic();
+        } },
+        { label: 'Cancel', kind: 'ghost' }
+      ]
+    });
+    setTimeout(function () { item.focus(); }, 420);
+  }
+
+  Flow.$('#add').addEventListener('click', addSheet);
+  Flow.$('#reset').addEventListener('click', function () {
+    if (!allItems().length) return Flow.toast('There is nothing to reset');
+    Flow.sheet({
+      title: 'Starting a new trip?',
+      lede: 'The list you have built is worth keeping. Clearing the ticks gets you a fresh run through it.',
+      actions: [
+        { label: 'Untick everything', onClick: function () {
+          s.ticked = []; s.save(); render(); Flow.toast('Ready for the next one');
+        } },
+        { label: 'Start from nothing', kind: 'quiet', onClick: function () {
+          Flow.confirm({
+            title: 'Throw the list away?', lede: 'Every item and every tick goes.',
+            confirmLabel: 'Throw it away', danger: true
+          }).then(function (ok) {
+            if (!ok) return;
+            s.groups = {}; s.ticked = []; s.trip = ''; s.save(); render();
+          });
+        } },
+        { label: 'Cancel', kind: 'ghost' }
+      ]
+    });
+  });
+
+  render();
+});

@@ -10,3 +10,10 @@ data/smig-media/
 
 # Local python virtualenv for scripts/.
 scripts/.venv/
+
+# Flows runtime state: account names, the scrypt'd TexTokens that are the only
+# way into an account, live session tokens, and the list of which copy of which
+# tool belongs to whom. `origin` is a GitHub remote, so a stray `git add -A`
+# would publish all of it permanently. (What people type *into* a Flow never
+# reaches this server at all — it stays in the browser.)
+data/flows-*.json

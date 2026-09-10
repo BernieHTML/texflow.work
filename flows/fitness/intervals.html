@@ -1,0 +1,306 @@
+<!--css-->
+.iv-stage { display: flex; flex-direction: column; align-items: center; padding: 6px 0 4px; }
+
+.iv-dial { position: relative; width: min(300px, 76vw); aspect-ratio: 1; }
+.iv-dial svg { width: 100%; height: 100%; transform: rotate(-90deg); display: block; }
+.iv-track { fill: none; stroke: var(--bg-deep); stroke-width: 12; }
+.iv-arc {
+  fill: none;
+  stroke: url(#iv-grad);
+  stroke-width: 12;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.25s linear;
+}
+.iv-dial.is-rest .iv-arc { stroke: var(--ink-3); }
+
+.iv-face {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+}
+.iv-phase {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+.iv-dial.is-work .iv-phase { color: var(--a1); }
+@media (prefers-color-scheme: dark) { .iv-dial.is-work .iv-phase { color: var(--a2); } }
+.iv-time {
+  font-size: clamp(52px, 19vw, 76px);
+  font-weight: 300;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.iv-round { font-size: 14px; color: var(--ink-3); font-variant-numeric: tabular-nums; }
+
+.iv-actions { display: flex; gap: 10px; width: 100%; margin-top: 22px; }
+.iv-actions .flow-btn { flex: 1; }
+
+.iv-setup { margin-top: 26px; }
+.iv-set { display: flex; align-items: center; gap: 12px; padding: 9px 0; }
+.iv-set label { flex: 1; font-size: 15px; font-weight: 540; }
+.iv-set .flow-stepper { width: 168px; }
+.iv-set .flow-stepper output { font-size: 15px; }
+
+.iv-plan { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; margin-top: 14px; font-size: 14px; color: var(--ink-3); }
+.iv-plan b { font-size: 17px; font-weight: 650; color: var(--ink); font-variant-numeric: tabular-nums; }
+
+<!--html-->
+<section class="flow-section iv-stage">
+  <div class="iv-dial" id="dial">
+    <svg viewBox="0 0 120 120" aria-hidden="true">
+      <defs>
+        <linearGradient id="iv-grad" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="var(--a1)"></stop>
+          <stop offset="1" stop-color="var(--a2)"></stop>
+        </linearGradient>
+      </defs>
+      <circle class="iv-track" cx="60" cy="60" r="52"></circle>
+      <circle class="iv-arc" id="arc" cx="60" cy="60" r="52"></circle>
+    </svg>
+    <div class="iv-face">
+      <span class="iv-phase" id="phase">Ready</span>
+      <span class="iv-time" id="time" role="timer" aria-live="off">30</span>
+      <span class="iv-round" id="round"></span>
+    </div>
+  </div>
+
+  <div class="iv-actions">
+    <button class="flow-btn is-quiet" type="button" id="reset">Reset</button>
+    <button class="flow-btn" type="button" id="go">Start</button>
+  </div>
+</section>
+
+<section class="flow-section iv-setup" id="setup">
+  <span class="flow-label">The session</span>
+  <div class="flow-card">
+    <div class="iv-set">
+      <label for="rounds-out">Rounds</label>
+      <div class="flow-stepper"><button type="button" data-k="rounds" data-d="-1">−</button><output id="rounds-out"></output><button type="button" data-k="rounds" data-d="1">+</button></div>
+    </div>
+    <div class="iv-set">
+      <label for="work-out">Work</label>
+      <div class="flow-stepper"><button type="button" data-k="work" data-d="-5">−</button><output id="work-out"></output><button type="button" data-k="work" data-d="5">+</button></div>
+    </div>
+    <div class="iv-set">
+      <label for="rest-out">Rest</label>
+      <div class="flow-stepper"><button type="button" data-k="rest" data-d="-5">−</button><output id="rest-out"></output><button type="button" data-k="rest" data-d="5">+</button></div>
+    </div>
+    <div class="iv-set">
+      <label for="prep-out">Get ready</label>
+      <div class="flow-stepper"><button type="button" data-k="prepare" data-d="-5">−</button><output id="prep-out"></output><button type="button" data-k="prepare" data-d="5">+</button></div>
+    </div>
+    <div class="iv-plan">
+      <span>Whole session</span>
+      <b id="total">—</b>
+    </div>
+  </div>
+  <div class="flow-chips" style="margin-top:12px" id="presets"></div>
+</section>
+
+<!--js-->
+/* Interval Timer.
+ *
+ * The clock runs against Date.now() rather than by counting ticks, because a
+ * phone that locks its screen or backgrounds the tab will happily stop firing
+ * timers and a workout timer that quietly loses forty seconds is worse than no
+ * timer at all. Every repaint asks the clock what time it actually is. */
+
+Flow.ready(function () {
+  var s = Flow.state('session', { rounds: 8, work: 30, rest: 15, prepare: 10, sound: true });
+  var PRESETS = [
+    { name: 'Tabata', rounds: 8, work: 20, rest: 10, prepare: 10 },
+    { name: 'EMOM', rounds: 10, work: 60, rest: 0, prepare: 10 },
+    { name: '40/20', rounds: 10, work: 40, rest: 20, prepare: 15 },
+    { name: 'Long', rounds: 5, work: 180, rest: 60, prepare: 15 }
+  ];
+  var LIMITS = { rounds: [1, 60], work: [5, 600], rest: [0, 600], prepare: [0, 60] };
+
+  var el = {
+    dial: Flow.$('#dial'), arc: Flow.$('#arc'), phase: Flow.$('#phase'),
+    time: Flow.$('#time'), round: Flow.$('#round'), go: Flow.$('#go'),
+    reset: Flow.$('#reset'), setup: Flow.$('#setup'), total: Flow.$('#total'),
+    presets: Flow.$('#presets')
+  };
+  var CIRC = 2 * Math.PI * 52;
+  el.arc.style.strokeDasharray = CIRC;
+
+  // The whole session as a flat list, which makes "what comes next" a lookup
+  // rather than a state machine with edge cases at the last round.
+  function plan() {
+    var out = [];
+    if (s.prepare > 0) out.push({ kind: 'prepare', label: 'Get ready', secs: s.prepare, round: 0 });
+    for (var r = 1; r <= s.rounds; r++) {
+      out.push({ kind: 'work', label: 'Work', secs: s.work, round: r });
+      if (s.rest > 0 && r < s.rounds) out.push({ kind: 'rest', label: 'Rest', secs: s.rest, round: r });
+    }
+    return out;
+  }
+
+  var steps = plan();
+  var running = false;
+  var index = 0;
+  var stepEnd = 0;     // ms timestamp the current step finishes
+  var paused = null;   // seconds left when paused
+  var lastBeepAt = -1;
+  var ticker = null;
+
+  function totalSeconds() { return plan().reduce(function (a, p) { return a + p.secs; }, 0); }
+
+  function secsLeft() {
+    if (!running) return paused === null ? (steps[index] ? steps[index].secs : 0) : paused;
+    return Math.max(0, (stepEnd - Date.now()) / 1000);
+  }
+
+  function paint() {
+    var step = steps[index] || { kind: 'done', label: 'Done', secs: 0, round: s.rounds };
+    var left = secsLeft();
+    var shown = Math.ceil(left - 0.001);
+
+    el.time.textContent = step.secs >= 60 || shown >= 60 ? Flow.dur(shown) : String(Math.max(0, shown));
+    el.phase.textContent = index >= steps.length ? 'Finished' : step.label;
+    el.round.textContent = step.kind === 'work' || step.kind === 'rest'
+      ? 'Round ' + step.round + ' of ' + s.rounds
+      : (index >= steps.length ? 'Well done' : s.rounds + ' rounds to go');
+
+    var frac = step.secs > 0 ? left / step.secs : 0;
+    el.arc.style.strokeDashoffset = CIRC * (1 - frac);
+    el.dial.className = 'iv-dial is-' + step.kind;
+
+    if (running && s.sound) {
+      var t = Math.ceil(left);
+      if (t !== lastBeepAt && t <= 3 && t >= 1) {
+        lastBeepAt = t;
+        Flow.beep({ freq: 660, length: 0.09, volume: 0.16 });
+      }
+    }
+  }
+
+  // Steps are advanced in a loop against the wall clock, not one per tick: a
+  // backgrounded tab stops firing timers, and on return the session has to
+  // land where it really is rather than crawling forward a step at a time.
+  // Anything skipped that way is silent — a beep for a round that finished two
+  // minutes ago in a pocket is noise, not information.
+  function tick() {
+    if (!running) return;
+    var advanced = 0;
+    while (index < steps.length && Date.now() >= stepEnd) {
+      index++;
+      advanced++;
+      lastBeepAt = -1;
+      if (index < steps.length) stepEnd += steps[index].secs * 1000;
+    }
+    if (index >= steps.length) return finish();
+    if (advanced === 1 && Date.now() - (stepEnd - steps[index].secs * 1000) < 1500) {
+      var next = steps[index];
+      Flow.beep(next.kind === 'work'
+        ? { freq: 980, length: 0.22, volume: 0.3 }
+        : { freq: 520, length: 0.2, volume: 0.22 });
+      Flow.haptic(next.kind === 'work' ? 60 : 25);
+    }
+    paint();
+  }
+
+  function start() {
+    if (index >= steps.length) reset();
+    Flow.audio();
+    running = true;
+    var left = paused === null ? steps[index].secs : paused;
+    paused = null;
+    stepEnd = Date.now() + left * 1000;
+    el.go.textContent = 'Pause';
+    el.setup.classList.add('flow-hidden');
+    Flow.keepAwake(true);
+    Flow.beep({ freq: 880, length: 0.16, volume: 0.25 });
+    clearInterval(ticker);
+    ticker = setInterval(tick, 100);
+    paint();
+  }
+
+  function pause() {
+    paused = secsLeft();
+    running = false;
+    clearInterval(ticker);
+    el.go.textContent = 'Resume';
+    Flow.keepAwake(false);
+    paint();
+  }
+
+  function finish() {
+    running = false;
+    clearInterval(ticker);
+    index = steps.length;
+    el.go.textContent = 'Again';
+    el.setup.classList.remove('flow-hidden');
+    Flow.keepAwake(false);
+    Flow.beep({ count: 3, freq: 1040, gap: 0.24, length: 0.2, volume: 0.3 });
+    Flow.haptic(200);
+    paint();
+  }
+
+  function reset() {
+    running = false;
+    clearInterval(ticker);
+    steps = plan();
+    index = 0;
+    paused = null;
+    lastBeepAt = -1;
+    el.go.textContent = 'Start';
+    el.setup.classList.remove('flow-hidden');
+    Flow.keepAwake(false);
+    paint();
+  }
+
+  function renderSetup() {
+    Flow.$('#rounds-out').textContent = s.rounds;
+    Flow.$('#work-out').textContent = Flow.dur(s.work);
+    Flow.$('#rest-out').textContent = s.rest ? Flow.dur(s.rest) : 'none';
+    Flow.$('#prep-out').textContent = s.prepare ? Flow.dur(s.prepare) : 'none';
+    el.total.textContent = Flow.dur(totalSeconds());
+  }
+
+  function renderPresets() {
+    el.presets.innerHTML = '';
+    PRESETS.forEach(function (p) {
+      var on = s.rounds === p.rounds && s.work === p.work && s.rest === p.rest;
+      el.presets.appendChild(Flow.h('button', {
+        class: 'flow-chip', type: 'button', 'aria-pressed': on ? 'true' : 'false', text: p.name,
+        onclick: function () {
+          s.rounds = p.rounds; s.work = p.work; s.rest = p.rest; s.prepare = p.prepare;
+          s.save(); renderSetup(); renderPresets(); reset(); Flow.haptic();
+        }
+      }));
+    });
+  }
+
+  Flow.$$('.flow-stepper button[data-k]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var k = btn.dataset.k;
+      var range = LIMITS[k];
+      s[k] = Math.max(range[0], Math.min(range[1], s[k] + Number(btn.dataset.d)));
+      s.save();
+      renderSetup();
+      renderPresets();
+      reset();
+      Flow.haptic();
+    });
+  });
+
+  el.go.addEventListener('click', function () { running ? pause() : start(); });
+  el.reset.addEventListener('click', reset);
+
+  document.addEventListener('visibilitychange', function () {
+    if (document.visibilityState === 'visible' && running) tick();
+  });
+
+  renderSetup();
+  renderPresets();
+  reset();
+});

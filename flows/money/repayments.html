@@ -1,0 +1,237 @@
+<!--css-->
+.rp-field { display: flex; align-items: center; gap: 12px; padding: 9px 0; }
+.rp-field label { flex: 1; font-size: 15px; font-weight: 540; }
+.rp-field label small { display: block; font-size: 12.5px; font-weight: 400; color: var(--ink-3); }
+.rp-in { position: relative; width: 150px; flex: none; }
+.rp-in input { width: 100%; min-height: 46px; text-align: right; font-variant-numeric: tabular-nums; padding: 10px 12px; }
+.rp-in.has-pre input { padding-left: 26px; }
+.rp-in.has-post input { padding-right: 40px; }
+.rp-in .pre { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--ink-3); font-size: 14px; pointer-events: none; }
+.rp-in .post { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); color: var(--ink-3); font-size: 13px; pointer-events: none; }
+
+.rp-lines li { justify-content: space-between; }
+.rp-saved { color: var(--good); font-weight: 650; }
+
+.rp-chart { display: flex; align-items: flex-end; gap: 3px; height: 92px; margin: 4px 0 10px; }
+.rp-chart i {
+  flex: 1;
+  min-width: 0;
+  border-radius: 3px 3px 0 0;
+  background: linear-gradient(to top, var(--a1), var(--a2));
+  opacity: 0.85;
+}
+.rp-chart i.interest { background: var(--line-strong); }
+.rp-key { display: flex; gap: 14px; font-size: 12.5px; color: var(--ink-3); }
+.rp-key span { display: inline-flex; align-items: center; gap: 6px; }
+.rp-key i { width: 11px; height: 11px; border-radius: 3px; display: inline-block; }
+
+<!--html-->
+<section class="flow-section">
+  <div id="answer"></div>
+
+  <div class="flow-card" style="margin-top:16px">
+    <div class="rp-field">
+      <label for="amount">Amount borrowed</label>
+      <div class="rp-in has-pre"><span class="pre">$</span><input class="flow-input" id="amount" type="text" inputmode="decimal"></div>
+    </div>
+    <div class="rp-field">
+      <label for="rate">Interest rate<small>Yearly, as advertised</small></label>
+      <div class="rp-in has-post"><input class="flow-input" id="rate" type="text" inputmode="decimal"><span class="post">%</span></div>
+    </div>
+    <div class="rp-field">
+      <label for="years">Over</label>
+      <div class="rp-in has-post"><input class="flow-input" id="years" type="text" inputmode="decimal"><span class="post">yrs</span></div>
+    </div>
+    <div class="rp-field">
+      <label for="extra">Extra each time<small>On top of the repayment</small></label>
+      <div class="rp-in has-pre"><span class="pre">$</span><input class="flow-input" id="extra" type="text" inputmode="decimal"></div>
+    </div>
+  </div>
+
+  <div class="flow-segment" style="margin-top:12px" id="freq"></div>
+</section>
+
+<section class="flow-section">
+  <span class="flow-label">What it costs</span>
+  <ul class="flow-list rp-lines" id="lines"></ul>
+</section>
+
+<section class="flow-section" id="chart-block">
+  <span class="flow-label">Where each repayment goes</span>
+  <div class="rp-chart" id="chart"></div>
+  <div class="rp-key">
+    <span><i style="background:linear-gradient(135deg,var(--a1),var(--a2))"></i> Off the debt</span>
+    <span><i class="interest" style="background:var(--line-strong)"></i> Interest</span>
+  </div>
+  <p class="flow-hint">One bar per year. Early on, most of what you pay is interest.</p>
+</section>
+
+<!--js-->
+/* Repayments.
+ *
+ * The standard amortisation formula for the repayment, then an actual
+ * period-by-period simulation for everything else — because the interesting
+ * question is not "what is the repayment" but "what does one extra fifty
+ * dollars a fortnight do to it", and that only falls out of running the loan
+ * forward. The answer is usually years, which is why it gets the big number. */
+
+Flow.ready(function () {
+  var FREQS = [
+    { id: 'monthly', name: 'Monthly', per: 12 },
+    { id: 'fortnightly', name: 'Fortnightly', per: 26 },
+    { id: 'weekly', name: 'Weekly', per: 52 }
+  ];
+
+  var s = Flow.state('loan', { amount: '450000', rate: '6.2', years: '30', extra: '0', freq: 'monthly' });
+
+  var el = {
+    answer: Flow.$('#answer'), lines: Flow.$('#lines'), freq: Flow.$('#freq'),
+    chart: Flow.$('#chart'), chartBlock: Flow.$('#chart-block')
+  };
+  var num = function (v) { var n = parseFloat(v); return isFinite(n) && n >= 0 ? n : 0; };
+  var freq = function () { return FREQS.find(function (f) { return f.id === s.freq; }) || FREQS[0]; };
+
+  function repaymentFor(principal, ratePer, periods) {
+    if (periods <= 0) return 0;
+    if (ratePer <= 0) return principal / periods;
+    var factor = Math.pow(1 + ratePer, periods);
+    return (principal * ratePer * factor) / (factor - 1);
+  }
+
+  // Run the loan forward one period at a time. Slow in theory, instant in
+  // practice — a thirty-year weekly loan is 1560 iterations.
+  function simulate(principal, ratePer, payment) {
+    var balance = principal;
+    var interest = 0;
+    var periods = 0;
+    var perYear = freq().per;
+    var years = [];
+    var yearPaid = 0;
+    var yearInterest = 0;
+
+    while (balance > 0.005 && periods < perYear * 80) {
+      var due = balance * ratePer;
+      var principalPart = Math.min(payment - due, balance);
+      if (principalPart <= 0) return null;   // the payment never clears the interest
+      interest += due;
+      balance -= principalPart;
+      yearInterest += due;
+      yearPaid += principalPart + due;
+      periods++;
+      if (periods % perYear === 0 || balance <= 0.005) {
+        years.push({ paid: yearPaid, interest: yearInterest });
+        yearPaid = 0;
+        yearInterest = 0;
+      }
+    }
+    return { periods: periods, interest: interest, years: years };
+  }
+
+  function compute() {
+    var principal = num(s.amount);
+    var perYear = freq().per;
+    var ratePer = num(s.rate) / 100 / perYear;
+    var periods = Math.round(num(s.years) * perYear);
+    var base = repaymentFor(principal, ratePer, periods);
+    var extra = num(s.extra);
+
+    var plain = principal > 0 && periods > 0 ? simulate(principal, ratePer, base) : null;
+    var withExtra = extra > 0 && plain ? simulate(principal, ratePer, base + extra) : null;
+
+    return {
+      principal: principal, perYear: perYear, base: base, extra: extra,
+      periods: periods, plain: plain, withExtra: withExtra
+    };
+  }
+
+  function periodsToWords(periods, perYear) {
+    var years = Math.floor(periods / perYear);
+    var rest = Math.round((periods % perYear) / perYear * 12);
+    if (rest >= 12) { years++; rest = 0; }
+    if (!years) return rest + ' month' + (rest === 1 ? '' : 's');
+    return years + ' yr' + (rest ? ' ' + rest + ' mo' : '');
+  }
+
+  function render() {
+    el.freq.innerHTML = '';
+    FREQS.forEach(function (f) {
+      el.freq.appendChild(Flow.h('button', {
+        type: 'button', text: f.name, 'aria-pressed': f.id === s.freq ? 'true' : 'false',
+        onclick: function () { s.freq = f.id; s.save(); render(); Flow.haptic(); }
+      }));
+    });
+    update();
+  }
+
+  function update() {
+    var r = compute();
+    var run = r.withExtra || r.plain;
+
+    el.answer.innerHTML = '';
+    var tile = Flow.h('div', { class: 'flow-tile' });
+    tile.appendChild(Flow.h('div', { class: 'flow-tile-label', text: freq().name + ' repayment' }));
+    tile.appendChild(Flow.h('div', {
+      class: 'flow-tile-value',
+      text: r.base > 0 && isFinite(r.base) ? Flow.money(r.base + r.extra) : '—'
+    }));
+    tile.appendChild(Flow.h('div', {
+      class: 'flow-tile-note',
+      text: !run ? 'Fill in an amount, a rate and a term.'
+        : r.extra > 0
+          ? 'Including your extra ' + Flow.money(r.extra) + '. Paid off in ' + periodsToWords(run.periods, r.perYear) + '.'
+          : 'Paid off in ' + periodsToWords(run.periods, r.perYear) + '.'
+    }));
+    el.answer.appendChild(tile);
+
+    el.lines.innerHTML = '';
+    if (!run) {
+      el.chartBlock.classList.add('flow-hidden');
+      return;
+    }
+
+    var rows = [
+      ['Interest over the whole loan', Flow.money(run.interest)],
+      ['Everything you pay', Flow.money(r.principal + run.interest)],
+      ['Interest as a share', Flow.num((run.interest / (r.principal + run.interest)) * 100, 1) + '%']
+    ];
+    rows.forEach(function (row) {
+      el.lines.appendChild(Flow.h('li', {},
+        Flow.h('span', { class: 'grow', text: row[0] }),
+        Flow.h('span', { class: 'val', text: row[1] })));
+    });
+
+    if (r.withExtra && r.plain) {
+      var saved = r.plain.interest - r.withExtra.interest;
+      var sooner = r.plain.periods - r.withExtra.periods;
+      el.lines.appendChild(Flow.h('li', {},
+        Flow.h('span', { class: 'grow' },
+          Flow.h('span', { class: 'name', text: 'The extra ' + Flow.money(r.extra) + ' saves you' }),
+          Flow.h('span', { class: 'sub', text: 'and finishes it ' + periodsToWords(sooner, r.perYear) + ' early' })),
+        Flow.h('span', { class: 'val rp-saved', text: Flow.money(saved) })));
+    }
+
+    el.chartBlock.classList.remove('flow-hidden');
+    el.chart.innerHTML = '';
+    var peak = run.years.reduce(function (a, y) { return Math.max(a, y.paid); }, 0) || 1;
+    run.years.forEach(function (y) {
+      var col = Flow.h('i', { style: { height: (y.paid / peak) * 100 + '%', display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', background: 'none', opacity: '1' } });
+      col.appendChild(Flow.h('span', { style: { flex: y.interest, background: 'var(--line-strong)', borderRadius: '3px 3px 0 0' } }));
+      col.appendChild(Flow.h('span', { style: { flex: Math.max(0.0001, y.paid - y.interest), background: 'linear-gradient(to top, var(--a1), var(--a2))' } }));
+      el.chart.appendChild(col);
+    });
+  }
+
+  var timer;
+  ['amount', 'rate', 'years', 'extra'].forEach(function (k) {
+    var input = Flow.$('#' + k);
+    input.value = s[k];
+    input.addEventListener('input', function (e) {
+      s[k] = e.target.value;
+      clearTimeout(timer);
+      timer = setTimeout(function () { s.save(); }, 300);
+      update();
+    });
+  });
+
+  render();
+});

@@ -1,0 +1,271 @@
+<!--css-->
+.pl-card {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding: 13px 14px;
+  margin-bottom: 9px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-1);
+  transition: border-color 0.3s var(--ease), opacity 0.3s;
+}
+.pl-card.is-thirsty { border-color: color-mix(in srgb, var(--a2) 55%, transparent); }
+.pl-card.is-late { border-color: color-mix(in srgb, var(--danger) 45%, transparent); }
+
+.pl-drop {
+  flex: none;
+  width: 46px;
+  height: 46px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 15px;
+  background: var(--bg-deep);
+  color: var(--ink-3);
+  cursor: pointer;
+  transition: transform 0.18s var(--ease), background 0.25s, color 0.25s;
+}
+.pl-card.is-thirsty .pl-drop, .pl-card.is-late .pl-drop { background: linear-gradient(135deg, var(--a1), var(--a2)); color: #fff; }
+.pl-drop:active { transform: scale(0.88); }
+.pl-drop svg { width: 21px; height: 21px; }
+
+.pl-body { flex: 1; min-width: 0; }
+.pl-name { font-weight: 570; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pl-when { font-size: 13px; color: var(--ink-3); }
+.pl-card.is-late .pl-when { color: var(--danger); }
+
+.pl-meter { width: 60px; flex: none; height: 5px; border-radius: 3px; background: var(--bg-deep); overflow: hidden; }
+.pl-meter i { display: block; height: 100%; border-radius: 3px; background: linear-gradient(90deg, var(--a1), var(--a2)); transition: width 0.4s var(--ease); }
+
+.pl-sec { margin-top: 22px; }
+.pl-common { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 14px; }
+.pl-common button {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  min-height: 48px; padding: 0 13px;
+  border: 1px solid var(--line-strong); border-radius: var(--r);
+  background: var(--surface); color: inherit; font-size: 14.5px; font-weight: 540; cursor: pointer;
+}
+.pl-common span { color: var(--ink-3); font-size: 13px; }
+
+<!--html-->
+<section class="flow-section">
+  <div id="answer"></div>
+</section>
+
+<section class="flow-section" id="thirsty-block">
+  <span class="flow-label">Thirsty</span>
+  <div id="thirsty"></div>
+</section>
+
+<section class="flow-section" id="fine-block">
+  <span class="flow-label">Fine for now</span>
+  <div id="fine"></div>
+</section>
+
+<div class="flow-dock">
+  <button class="flow-btn" type="button" id="add">Add a plant</button>
+</div>
+
+<!--js-->
+/* Plant Care.
+ *
+ * Every plant has its own interval, because a fern and a cactus do not want the
+ * same thing, and a single weekly reminder is exactly how houseplants die. The
+ * only interaction that matters is one tap on the drop when you have watered
+ * something, so that is the biggest target on the card.
+ *
+ * Nothing here nags. It just knows what is overdue when you open it. */
+
+Flow.ready(function () {
+  var DAY = 86400000;
+  var COMMON = [
+    ['Monstera', 9], ['Pothos', 8], ['Snake plant', 21], ['ZZ plant', 21],
+    ['Fiddle leaf fig', 8], ['Peace lily', 6], ['Fern', 4], ['Orchid', 8],
+    ['Succulent', 18], ['Cactus', 28], ['Basil', 2], ['Herbs on the sill', 3],
+    ['Rubber plant', 10], ['Spider plant', 7], ['Olive tree', 12], ['Tomatoes', 2]
+  ];
+
+  var DROP = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3.2s6 6.6 6 10.4a6 6 0 0 1-12 0C6 9.8 12 3.2 12 3.2z"/></svg>';
+
+  var s = Flow.state('plants', { list: [] });
+  var el = {
+    answer: Flow.$('#answer'), thirsty: Flow.$('#thirsty'), fine: Flow.$('#fine'),
+    thirstyBlock: Flow.$('#thirsty-block'), fineBlock: Flow.$('#fine-block')
+  };
+
+  var uid = function () { return String(Date.now()) + Math.random().toString(36).slice(2, 5); };
+
+  function daysSince(plant) {
+    if (!plant.last) return Infinity;
+    return (Date.now() - plant.last) / DAY;
+  }
+  function dueIn(plant) {
+    if (!plant.last) return -1;
+    return plant.every - daysSince(plant);
+  }
+  var stateOf = function (p) {
+    var d = dueIn(p);
+    // A day past due is normal life; three days past is a plant with a problem.
+    return d <= -Math.max(2, p.every * 0.4) ? 'late' : d <= 0 ? 'thirsty' : 'fine';
+  };
+
+  function whenText(plant) {
+    if (!plant.last) return 'never watered';
+    var d = dueIn(plant);
+    if (d <= 0) {
+      var over = Math.floor(-d);
+      return over < 1 ? 'due today' : over === 1 ? 'a day overdue' : over + ' days overdue';
+    }
+    var days = Math.ceil(d);
+    return days === 1 ? 'tomorrow' : 'in ' + days + ' days';
+  }
+
+  function water(plant) {
+    plant.last = Date.now();
+    plant.times = (plant.times || 0) + 1;
+    s.save();
+    Flow.haptic(30);
+    render();
+  }
+
+  function card(plant) {
+    var state = stateOf(plant);
+    var wrap = Flow.h('div', { class: 'pl-card is-' + state });
+    wrap.appendChild(Flow.h('button', {
+      class: 'pl-drop', type: 'button', html: DROP,
+      'aria-label': 'Water ' + plant.name,
+      onclick: function () { water(plant); }
+    }));
+    var body = Flow.h('div', { class: 'pl-body', style: { cursor: 'pointer' }, onclick: function () { editSheet(plant); } });
+    body.appendChild(Flow.h('div', { class: 'pl-name', text: plant.name + (plant.room ? ' · ' + plant.room : '') }));
+    body.appendChild(Flow.h('div', { class: 'pl-when', text: whenText(plant) + ' · every ' + plant.every + ' days' }));
+    wrap.appendChild(body);
+
+    var frac = plant.last ? Math.min(1, Math.max(0, daysSince(plant) / plant.every)) : 1;
+    wrap.appendChild(Flow.h('div', { class: 'pl-meter' }, Flow.h('i', { style: { width: frac * 100 + '%' } })));
+    return wrap;
+  }
+
+  function render() {
+    var thirsty = s.list.filter(function (p) { return stateOf(p) !== 'fine'; })
+      .sort(function (a, b) { return dueIn(a) - dueIn(b); });
+    var fine = s.list.filter(function (p) { return stateOf(p) === 'fine'; })
+      .sort(function (a, b) { return dueIn(a) - dueIn(b); });
+
+    el.answer.innerHTML = '';
+    var tile = Flow.h('div', { class: 'flow-tile' });
+    tile.appendChild(Flow.h('div', { class: 'flow-tile-label', text: 'Today' }));
+    tile.appendChild(Flow.h('div', {
+      class: 'flow-tile-value',
+      text: !s.list.length ? '—' : thirsty.length ? thirsty.length + ' to water' : 'All watered'
+    }));
+    tile.appendChild(Flow.h('div', {
+      class: 'flow-tile-note',
+      text: !s.list.length ? 'Add the ones you keep forgetting.'
+        : thirsty.length ? 'Tap the drop on each one as you go.'
+          : 'Next is ' + fine[0].name + ', ' + whenText(fine[0]) + '.'
+    }));
+    el.answer.appendChild(tile);
+
+    el.thirstyBlock.classList.toggle('flow-hidden', !thirsty.length);
+    el.fineBlock.classList.toggle('flow-hidden', !fine.length);
+    el.thirsty.innerHTML = '';
+    el.fine.innerHTML = '';
+    thirsty.forEach(function (p) { el.thirsty.appendChild(card(p)); });
+    fine.forEach(function (p) { el.fine.appendChild(card(p)); });
+
+    if (!s.list.length) {
+      el.fineBlock.classList.remove('flow-hidden');
+      el.fineBlock.querySelector('.flow-label').textContent = 'Nothing here yet';
+      el.fine.appendChild(Flow.h('div', { class: 'flow-empty' },
+        Flow.h('strong', { text: 'No plants' }),
+        'Add one and it starts counting from the last time you watered it.'));
+    } else {
+      el.fineBlock.querySelector('.flow-label').textContent = 'Fine for now';
+    }
+  }
+
+  function editSheet(existing) {
+    var name = Flow.h('input', {
+      class: 'flow-input', placeholder: 'What is it', 'aria-label': 'Plant',
+      value: existing ? existing.name : ''
+    });
+    var room = Flow.h('input', {
+      class: 'flow-input', placeholder: 'Where does it live', 'aria-label': 'Room',
+      value: existing ? (existing.room || '') : ''
+    });
+    var every = existing ? existing.every : 7;
+
+    var body = Flow.h('div');
+    if (!existing) {
+      body.appendChild(Flow.h('span', { class: 'flow-label', text: 'Common ones' }));
+      var common = Flow.h('div', { class: 'pl-common' });
+      COMMON.forEach(function (c) {
+        common.appendChild(Flow.h('button', {
+          type: 'button',
+          onclick: function () { name.value = c[0]; every = c[1]; paintEvery(); }
+        }, Flow.h('b', { text: c[0], style: { fontWeight: '540' } }), Flow.h('span', { text: c[1] + 'd' })));
+      });
+      body.appendChild(common);
+    }
+
+    body.appendChild(Flow.h('span', { class: 'flow-label', text: 'Name' }));
+    body.appendChild(name);
+    body.appendChild(Flow.h('span', { class: 'flow-label', text: 'Room', style: { marginTop: '12px' } }));
+    body.appendChild(room);
+    body.appendChild(Flow.h('span', { class: 'flow-label', text: 'Water it every', style: { marginTop: '12px' } }));
+
+    var out = Flow.h('output', { text: every + ' days' });
+    function paintEvery() { out.textContent = every + (every === 1 ? ' day' : ' days'); }
+    body.appendChild(Flow.h('div', { class: 'flow-stepper' },
+      Flow.h('button', { type: 'button', text: '−', 'aria-label': 'Less often', onclick: function () { every = Math.max(1, every - 1); paintEvery(); Flow.haptic(); } }),
+      out,
+      Flow.h('button', { type: 'button', text: '+', 'aria-label': 'More often', onclick: function () { every = Math.min(120, every + 1); paintEvery(); Flow.haptic(); } })
+    ));
+
+    var actions = [{
+      label: existing ? 'Save it' : 'Add it', onClick: function () {
+        var text = name.value.trim().slice(0, 48);
+        if (!text) return Flow.toast('It needs a name');
+        if (existing) {
+          existing.name = text;
+          existing.room = room.value.trim().slice(0, 32);
+          existing.every = every;
+        } else {
+          s.list.push({
+            id: uid(), name: text, room: room.value.trim().slice(0, 32),
+            every: every, last: Date.now(), times: 0
+          });
+        }
+        s.save(); render(); Flow.haptic();
+      }
+    }];
+    if (existing) {
+      actions.push({ label: 'Watered it just now', kind: 'quiet', onClick: function () { water(existing); } });
+      actions.push({ label: 'Remove this plant', kind: 'danger', onClick: function () {
+        s.list = s.list.filter(function (p) { return p.id !== existing.id; });
+        s.save(); render();
+      } });
+    }
+    actions.push({ label: 'Cancel', kind: 'ghost' });
+
+    Flow.sheet({
+      title: existing ? existing.name : 'A new plant',
+      lede: existing
+        ? (existing.times ? 'Watered ' + existing.times + ' time' + (existing.times === 1 ? '' : 's') + ' since you added it.' : 'Not watered through here yet.')
+        : 'Pick a common one for a sensible interval, or set your own.',
+      body: body,
+      actions: actions
+    });
+    if (!existing) setTimeout(function () { name.focus(); }, 420);
+  }
+
+  Flow.$('#add').addEventListener('click', function () { editSheet(null); });
+  document.addEventListener('visibilitychange', function () {
+    if (document.visibilityState === 'visible') render();
+  });
+
+  render();
+});

@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Your Flows · TexFlow</title>
+  <meta name="description" content="Your TexFlow shelf. A TexToken remembers which copies of which tools are yours, across every device you use.">
+  <meta name="robots" content="noindex">
+  <link rel="canonical" href="https://texflow.work/flows">
+  <link rel="icon" href="/texflowlogo.png" type="image/png">
+  <meta name="theme-color" content="#fbfbfa" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0b0b0c" media="(prefers-color-scheme: dark)">
+  <meta name="color-scheme" content="light dark">
+  <link rel="stylesheet" href="/flows/site.css">
+</head>
+<body>
+
+<header class="top">
+  <div class="top-in">
+    <a class="mark" href="/"><span class="mark-glyph" aria-hidden="true"></span> TexFlow</a>
+    <nav class="top-nav">
+      <a class="top-link" href="/flows/browse">All Flows</a>
+      <span id="top-account"></span>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap" id="main" style="padding-bottom:72px">
+  <div class="page-head">
+    <h1 id="heading">Your Flows</h1>
+    <p class="lede" id="sub">One moment…</p>
+  </div>
+  <div id="body"></div>
+</main>
+
+<footer class="foot">
+  <div class="wrap foot-in">
+    <p class="foot-note">Your TexToken is the only way into this shelf. There is no reset.</p>
+    <nav class="foot-links">
+      <a href="/">Home</a>
+      <a href="/flows/browse">All Flows</a>
+      <a href="/terms-and-conditions">Terms</a>
+      <a href="/privacy-policy">Privacy</a>
+    </nav>
+  </div>
+</footer>
+
+<script src="/flows/site.js"></script>
+<script>
+(function () {
+  Tex.header('shelf');
+
+  var body = Tex.$('#body');
+  var heading = Tex.$('#heading');
+  var sub = Tex.$('#sub');
+
+  function when(iso) {
+    if (!iso) return 'not opened yet';
+    var mins = Math.round((Date.now() - new Date(iso).getTime()) / 60000);
+    if (mins < 2) return 'open just now';
+    if (mins < 60) return 'opened ' + mins + ' min ago';
+    var hrs = Math.round(mins / 60);
+    if (hrs < 24) return 'opened ' + hrs + (hrs === 1 ? ' hour ago' : ' hours ago');
+    var days = Math.round(hrs / 24);
+    if (days < 30) return 'opened ' + days + (days === 1 ? ' day ago' : ' days ago');
+    return 'opened ' + new Date(iso).toLocaleDateString(undefined, { day: 'numeric', month: 'short' });
+  }
+
+  // ------------------------------------------------------------ signed out --
+
+  function signedOut() {
+    heading.textContent = 'Your Flows live behind one line of text.';
+    sub.textContent = 'A TexToken is your account. No email, no password, no verification — just a string you keep somewhere safe. It exists so the tools you keep follow you between devices.';
+
+    body.innerHTML = '';
+    var grid = Tex.h('div', { style: { display: 'grid', gap: '14px', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', alignItems: 'start' } });
+
+    // make one
+    var name = Tex.h('input', { class: 'input', placeholder: 'What should we call you?', 'aria-label': 'Your name', maxlength: '40' });
+    var makeBtn = Tex.h('button', { class: 'btn wide', type: 'button' }, 'Make my TexToken');
+    var make = Tex.h('div', { class: 'panel' },
+      Tex.h('h3', { text: 'Start a shelf', style: { marginBottom: '6px' } }),
+      Tex.h('p', { style: { color: 'var(--ink-2)', fontSize: '15.5px', marginBottom: '18px' } },
+        'Takes one tap. Nothing is sent anywhere and nothing is verified.'),
+      Tex.h('div', { class: 'field' }, Tex.h('span', { class: 'label', text: 'Name' }), name),
+      makeBtn
+    );
+
+    makeBtn.addEventListener('click', function () {
+      makeBtn.disabled = true;
+      Tex.api('/api/flows/account', { method: 'POST', body: JSON.stringify({ name: name.value.trim() }) })
+        .then(function (res) { revealToken(res.token); })
+        .catch(function (e) { Tex.toast(e.message); makeBtn.disabled = false; });
+    });
+
+    // use one
+    var token = Tex.h('input', { class: 'input mono', placeholder: 'tex-XXXX-XXXX-XXXX', 'aria-label': 'Your TexToken', autocapitalize: 'characters', spellcheck: 'false' });
+    var signIn = Tex.h('button', { class: 'btn ghost wide', type: 'button' }, 'Open my shelf');
+    var use = Tex.h('div', { class: 'panel' },
+      Tex.h('h3', { text: 'Already have one', style: { marginBottom: '6px' } }),
+      Tex.h('p', { style: { color: 'var(--ink-2)', fontSize: '15.5px', marginBottom: '18px' } },
+        'Paste it in. It works on any device, any browser.'),
+      Tex.h('div', { class: 'field' }, Tex.h('span', { class: 'label', text: 'TexToken' }), token),
+      signIn
+    );
+
+    function attempt() {
+      signIn.disabled = true;
+      Tex.api('/api/flows/session', { method: 'POST', body: JSON.stringify({ token: token.value.trim() }) })
+        .then(function () { Tex.me(true).then(paint); })
+        .catch(function (e) { Tex.toast(e.message); signIn.disabled = false; });
+    }
+    signIn.addEventListener('click', attempt);
+    token.addEventListener('keydown', function (e) { if (e.key === 'Enter') attempt(); });
+
+    grid.appendChild(make);
+    grid.appendChild(use);
+    body.appendChild(grid);
+
+    body.appendChild(Tex.h('p', {
+      style: { marginTop: '28px', color: 'var(--ink-3)', fontSize: '15px', maxWidth: '60ch' }
+    }, 'You do not need any of this to use a Flow — every tool at /flows/browse opens without an account. A TexToken is only for keeping a shelf of them.'));
+  }
+
+  // The one moment the token is readable. It is stored hashed, so this is not
+  // a screen anyone can get back to — which the copy has to say plainly rather
+  // than politely.
+  function revealToken(value) {
+    var shown = Tex.h('code', { class: 'token', text: value });
+    var body2 = Tex.h('div', {}, shown);
+    Tex.sheet({
+      title: 'This is your TexToken',
+      lede: 'Write it down, or put it in your password manager. It is stored scrambled here, so nobody — including us — can show it to you again.',
+      body: body2,
+      actions: [
+        { label: 'Copy it', keepOpen: true, onClick: function () { Tex.copy(value, 'TexToken copied'); } },
+        { label: 'Saved it — open my shelf', kind: 'ghost', onClick: function () { Tex.me(true).then(paint); } }
+      ]
+    });
+  }
+
+  // ------------------------------------------------------------- signed in --
+
+  function signedIn(state) {
+    var copies = state.copies || [];
+    heading.textContent = copies.length ? 'Your Flows' : 'Nothing on your shelf yet';
+    sub.textContent = copies.length
+      ? copies.length + ' tool' + (copies.length === 1 ? '' : 's') + ' kept as ' + state.user.name + '. Open one, send one, or take one off.'
+      : 'Add a tool from the catalogue and it becomes yours — a copy with its own link, its own home-screen icon, and its own delete button.';
+
+    body.innerHTML = '';
+
+    if (!copies.length) {
+      body.appendChild(Tex.h('div', { class: 'empty' },
+        Tex.h('strong', { text: 'An empty shelf' }),
+        Tex.h('p', { style: { marginBottom: '20px' } }, 'Twenty of them are waiting. None of them take more than a tap.'),
+        Tex.h('a', { class: 'btn', href: '/flows/browse' }, 'Browse the Flows')));
+    } else {
+      var shelf = Tex.h('div', { class: 'shelf' });
+      copies.forEach(function (copy) { shelf.appendChild(card(copy)); });
+      body.appendChild(shelf);
+      body.appendChild(Tex.h('div', { class: 'rowbar', style: { marginTop: '22px' } },
+        Tex.h('a', { class: 'btn ghost', href: '/flows/browse' }, 'Add another')));
+    }
+
+    body.appendChild(Tex.h('div', { style: { marginTop: '46px', paddingTop: '26px', borderTop: '1px solid var(--line-2)' } },
+      Tex.h('p', { class: 'kicker', text: 'Signed in as ' + state.user.name }),
+      Tex.h('div', { class: 'rowbar' },
+        Tex.h('button', {
+          class: 'btn ghost small', type: 'button',
+          onclick: function () {
+            Tex.api('/api/flows/session', { method: 'DELETE' }).then(function () {
+              Tex.toast('Signed out on this device');
+              Tex.me(true).then(paint);
+            });
+          }
+        }, 'Sign out'),
+        Tex.h('span', { style: { color: 'var(--ink-3)', fontSize: '14.5px' } },
+          'Signing out leaves your Flows exactly where they are. Your TexToken opens them again.'))));
+  }
+
+  function card(copy) {
+    var el = Tex.h('div', { class: 'owned' });
+    el.appendChild(Tex.h('a', { class: 'owned-mark', href: copy.url, 'aria-label': 'Open ' + copy.name, html: copy.svg }));
+    el.appendChild(Tex.h('a', { class: 'owned-copy', href: copy.url },
+      Tex.h('span', { class: 'owned-name', text: copy.name }),
+      Tex.h('span', { class: 'owned-sub', text: when(copy.lastOpened) })));
+    el.appendChild(Tex.h('button', {
+      class: 'iconbtn', type: 'button', 'aria-label': 'More for ' + copy.name, html: Tex.icons.more,
+      onclick: function () { menu(copy); }
+    }));
+    return el;
+  }
+
+  function menu(copy) {
+    var origin = location.origin;
+    Tex.sheet({
+      title: copy.name,
+      lede: 'Your copy lives at ' + origin + copy.url,
+      actions: [
+        { label: 'Open it', onClick: function () { location.href = copy.url; } },
+        { label: 'Send a copy to someone', kind: 'ghost', onClick: function () {
+          Tex.shareFlow(copy.flowId, copy.name);
+        } },
+        { label: 'Copy my own link', kind: 'ghost', onClick: function () {
+          Tex.copy(origin + copy.url, 'Your link is on the clipboard');
+        } },
+        { label: 'Save it as a file', kind: 'ghost', onClick: function () {
+          location.href = copy.url + 'download';
+        } },
+        { label: 'Delete this copy', kind: 'danger', onClick: function () { remove(copy); } }
+      ]
+    });
+  }
+
+  function remove(copy) {
+    Tex.confirm({
+      title: 'Delete your copy of ' + copy.name + '?',
+      lede: 'The link stops working straight away and everything stored in it is erased. If it is on a home screen, hold the icon and remove it. This cannot be undone.',
+      confirmLabel: 'Delete it',
+      danger: true
+    }).then(function (ok) {
+      if (!ok) return;
+      Tex.api('/api/flows/instance/' + copy.code, { method: 'DELETE' })
+        .then(function () { Tex.toast(copy.name + ' is gone'); return Tex.me(true); })
+        .then(paint)
+        .catch(function () { Tex.toast('Could not delete it just now'); });
+    });
+  }
+
+  function paint(state) {
+    if (state && state.user) signedIn(state);
+    else signedOut();
+  }
+
+  Tex.me().then(paint);
+})();
+</script>
+</body>
+</html>

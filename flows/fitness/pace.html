@@ -1,0 +1,295 @@
+<!--css-->
+.pc-clock { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+.pc-clock .cell { position: relative; }
+.pc-clock input {
+  width: 100%;
+  min-height: 58px;
+  padding: 18px 12px 6px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r);
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 21px;
+  font-weight: 620;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+.pc-clock input:focus { outline: none; border-color: var(--a2); box-shadow: 0 0 0 4px color-mix(in srgb, var(--a2) 22%, transparent); }
+.pc-clock .cap {
+  position: absolute;
+  top: 6px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 10px;
+  font-weight: 650;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  pointer-events: none;
+}
+
+.pc-dist { display: grid; grid-template-columns: 1fr 110px; gap: 8px; }
+
+.pc-splits li { font-variant-numeric: tabular-nums; }
+.pc-splits .k { width: 58px; color: var(--ink-3); font-size: 14px; }
+.pc-splits .fast { color: var(--good); }
+
+.pc-solve { margin-bottom: 16px; }
+
+<!--html-->
+<section class="flow-section">
+  <span class="flow-label">Work out my</span>
+  <div class="flow-segment pc-solve" id="solve">
+    <button type="button" data-for="pace">Pace</button>
+    <button type="button" data-for="time">Time</button>
+    <button type="button" data-for="dist">Distance</button>
+  </div>
+
+  <div id="answer"></div>
+
+  <div class="flow-section" id="dist-block">
+    <span class="flow-label">Distance</span>
+    <div class="pc-dist">
+      <input class="flow-input" id="dist" type="text" inputmode="decimal" placeholder="0" aria-label="Distance">
+      <select class="flow-select" id="unit" aria-label="Unit">
+        <option value="km">km</option>
+        <option value="mi">miles</option>
+      </select>
+    </div>
+    <div class="flow-chips" style="margin-top:10px" id="presets"></div>
+  </div>
+
+  <div class="flow-section" id="time-block">
+    <span class="flow-label">Time</span>
+    <div class="pc-clock">
+      <div class="cell"><span class="cap">hours</span><input id="th" type="text" inputmode="numeric" placeholder="0" aria-label="Hours"></div>
+      <div class="cell"><span class="cap">minutes</span><input id="tm" type="text" inputmode="numeric" placeholder="0" aria-label="Minutes"></div>
+      <div class="cell"><span class="cap">seconds</span><input id="ts" type="text" inputmode="numeric" placeholder="0" aria-label="Seconds"></div>
+    </div>
+  </div>
+
+  <div class="flow-section" id="pace-block">
+    <span class="flow-label">Pace</span>
+    <div class="pc-clock" style="grid-template-columns:1fr 1fr">
+      <div class="cell"><span class="cap">minutes</span><input id="pm" type="text" inputmode="numeric" placeholder="0" aria-label="Pace minutes"></div>
+      <div class="cell"><span class="cap">seconds</span><input id="ps" type="text" inputmode="numeric" placeholder="0" aria-label="Pace seconds"></div>
+    </div>
+    <p class="flow-hint" id="pace-unit">per kilometre</p>
+  </div>
+</section>
+
+<section class="flow-section flow-hidden" id="splits-block">
+  <span class="flow-label">Even splits</span>
+  <ul class="flow-list pc-splits" id="splits"></ul>
+  <p class="flow-hint">Cumulative time at each marker, if you hold that pace the whole way.</p>
+</section>
+
+<!--js-->
+/* Pace.
+ *
+ * Three quantities, one equation: distance = time / pace. You say which one
+ * you are missing and fill the other two. The splits underneath are the part
+ * people actually use on the start line — what the watch should read at each
+ * marker if the pace holds. */
+
+Flow.ready(function () {
+  var PRESETS = {
+    km: [['5K', 5], ['10K', 10], ['Half', 21.0975], ['Marathon', 42.195]],
+    mi: [['1 mi', 1], ['5K', 3.10686], ['10 mi', 10], ['Marathon', 26.2188]]
+  };
+
+  var s = Flow.state('run', {
+    solveFor: 'pace', unit: 'km', dist: '5',
+    time: { h: 0, m: 25, s: 0 },
+    pace: { m: 5, s: 0 }
+  });
+
+  var el = {};
+  ['solve', 'answer', 'dist', 'unit', 'presets', 'th', 'tm', 'ts', 'pm', 'ps',
+    'distBlock', 'timeBlock', 'paceBlock', 'splitsBlock', 'splits', 'paceUnit'].forEach(function (k) {
+    el[k] = Flow.$('#' + k.replace(/[A-Z]/g, function (c) { return '-' + c.toLowerCase(); }));
+  });
+
+  var int = function (v) { var n = parseInt(v, 10); return isFinite(n) && n > 0 ? n : 0; };
+  var unitName = function () { return s.unit === 'km' ? 'kilometre' : 'mile'; };
+
+  var totalSeconds = function () { return s.time.h * 3600 + s.time.m * 60 + s.time.s; };
+  var paceSeconds = function () { return s.pace.m * 60 + s.pace.s; };
+  var distance = function () { var n = parseFloat(s.dist); return isFinite(n) && n > 0 ? n : 0; };
+
+  function setSeconds(target, secs) {
+    secs = Math.max(0, Math.round(secs));
+    if (target === 'time') {
+      s.time = { h: Math.floor(secs / 3600), m: Math.floor(secs / 60) % 60, s: secs % 60 };
+    } else {
+      s.pace = { m: Math.floor(secs / 60), s: secs % 60 };
+    }
+  }
+
+  // Solving happens on every keystroke, so the answer is never a button press
+  // away — but only the field you are *not* editing ever changes under you.
+  function solve() {
+    if (s.solveFor === 'pace') {
+      var d = distance();
+      setSeconds('pace', d > 0 ? totalSeconds() / d : 0);
+    } else if (s.solveFor === 'time') {
+      setSeconds('time', paceSeconds() * distance());
+    } else {
+      var p = paceSeconds();
+      s.dist = p > 0 ? String(Math.round((totalSeconds() / p) * 100) / 100) : '0';
+    }
+  }
+
+  function clock(secs) {
+    secs = Math.max(0, Math.round(secs));
+    var h = Math.floor(secs / 3600);
+    var m = Math.floor(secs / 60) % 60;
+    var sec = secs % 60;
+    var pad = function (v) { return v < 10 ? '0' + v : String(v); };
+    return h ? h + ':' + pad(m) + ':' + pad(sec) : m + ':' + pad(sec);
+  }
+
+  function render() {
+    Flow.$$('#solve button').forEach(function (b) {
+      b.setAttribute('aria-pressed', b.dataset.for === s.solveFor ? 'true' : 'false');
+    });
+    el.distBlock.classList.toggle('flow-hidden', s.solveFor === 'dist');
+    el.timeBlock.classList.toggle('flow-hidden', s.solveFor === 'time');
+    el.paceBlock.classList.toggle('flow-hidden', s.solveFor === 'pace');
+
+    el.dist.value = s.dist;
+    el.unit.value = s.unit;
+    el.th.value = s.time.h || '';
+    el.tm.value = s.time.m || '';
+    el.ts.value = s.time.s || '';
+    el.pm.value = s.pace.m || '';
+    el.ps.value = s.pace.s || '';
+    el.paceUnit.textContent = 'per ' + unitName();
+
+    renderPresets();
+    renderAnswer();
+    renderSplits();
+  }
+
+  function renderPresets() {
+    el.presets.innerHTML = '';
+    PRESETS[s.unit].forEach(function (p) {
+      el.presets.appendChild(Flow.h('button', {
+        class: 'flow-chip', type: 'button', text: p[0],
+        'aria-pressed': Math.abs(distance() - p[1]) < 0.01 ? 'true' : 'false',
+        onclick: function () { s.dist = String(p[1]); solve(); s.save(); render(); Flow.haptic(); }
+      }));
+    });
+  }
+
+  function renderAnswer() {
+    el.answer.innerHTML = '';
+    var tile = Flow.h('div', { class: 'flow-tile', style: { marginBottom: '4px' } });
+    var label, value, note;
+
+    if (s.solveFor === 'pace') {
+      label = 'Pace';
+      value = distance() > 0 && totalSeconds() > 0 ? clock(paceSeconds()) : '—';
+      note = distance() > 0 && totalSeconds() > 0
+        ? 'per ' + unitName() + ' · ' + otherUnitPace() + ' · ' + speed()
+        : 'Fill in a distance and a time.';
+    } else if (s.solveFor === 'time') {
+      label = 'Finish time';
+      value = distance() > 0 && paceSeconds() > 0 ? clock(totalSeconds()) : '—';
+      note = distance() > 0 && paceSeconds() > 0
+        ? Flow.num(distance(), 2).replace(/\.00$/, '') + ' ' + s.unit + ' at ' + clock(paceSeconds()) + ' per ' + unitName()
+        : 'Fill in a distance and a pace.';
+    } else {
+      label = 'Distance';
+      value = paceSeconds() > 0 && totalSeconds() > 0 ? Flow.num(distance(), 2) + ' ' + s.unit : '—';
+      note = paceSeconds() > 0 && totalSeconds() > 0
+        ? clock(totalSeconds()) + ' at ' + clock(paceSeconds()) + ' per ' + unitName()
+        : 'Fill in a time and a pace.';
+    }
+
+    tile.appendChild(Flow.h('div', { class: 'flow-tile-label', text: label }));
+    tile.appendChild(Flow.h('div', { class: 'flow-tile-value', text: value }));
+    tile.appendChild(Flow.h('div', { class: 'flow-tile-note', text: note }));
+    el.answer.appendChild(tile);
+  }
+
+  function otherUnitPace() {
+    var factor = s.unit === 'km' ? 1.609344 : 1 / 1.609344;
+    var other = s.unit === 'km' ? 'mile' : 'kilometre';
+    return clock(paceSeconds() * factor) + ' per ' + other;
+  }
+
+  function speed() {
+    var p = paceSeconds();
+    if (!p) return '';
+    return Flow.num(3600 / p, 1) + ' ' + (s.unit === 'km' ? 'km/h' : 'mph');
+  }
+
+  function renderSplits() {
+    var d = distance();
+    var p = paceSeconds();
+    var show = d > 0 && p > 0 && d <= 100;
+    el.splitsBlock.classList.toggle('flow-hidden', !show);
+    if (!show) return;
+
+    el.splits.innerHTML = '';
+    var marks = [];
+    for (var k = 1; k <= Math.floor(d); k++) marks.push(k);
+    if (d - Math.floor(d) > 0.02) marks.push(d);
+    // Beyond a dozen markers the list stops being something you glance at, so
+    // it thins out to every fifth one and always keeps the finish.
+    var step = marks.length > 14 ? Math.ceil(marks.length / 12) : 1;
+
+    marks.forEach(function (mark, i) {
+      if (step > 1 && i % step !== 0 && i !== marks.length - 1) return;
+      var last = i === marks.length - 1;
+      el.splits.appendChild(Flow.h('li', {},
+        Flow.h('span', { class: 'k', text: (mark === Math.round(mark) ? mark : Flow.num(mark, 2)) + ' ' + s.unit }),
+        Flow.h('span', { class: 'grow sub', text: last ? 'finish' : '' }),
+        Flow.h('span', { class: 'val' + (last ? ' fast' : ''), text: clock(p * mark) })
+      ));
+    });
+  }
+
+  var timer;
+  function changed() {
+    solve();
+    clearTimeout(timer);
+    timer = setTimeout(function () { s.save(); }, 300);
+    // Re-render everything except the field being typed into, which solve()
+    // never touches because it only writes the quantity being solved for.
+    renderAnswer();
+    renderSplits();
+    if (s.solveFor === 'pace') { el.pm.value = s.pace.m || ''; el.ps.value = s.pace.s || ''; }
+    if (s.solveFor === 'time') { el.th.value = s.time.h || ''; el.tm.value = s.time.m || ''; el.ts.value = s.time.s || ''; }
+    if (s.solveFor === 'dist') { el.dist.value = s.dist; renderPresets(); }
+  }
+
+  Flow.$$('#solve button').forEach(function (b) {
+    b.addEventListener('click', function () {
+      s.solveFor = b.dataset.for; solve(); s.save(); render(); Flow.haptic();
+    });
+  });
+
+  el.dist.addEventListener('input', function (e) { s.dist = e.target.value; changed(); renderPresets(); });
+  el.unit.addEventListener('change', function (e) {
+    // Changing units keeps the run you described, not the numbers you typed:
+    // 5 km stays 5 km, and the pace per mile is recomputed from it.
+    var d = distance();
+    var factor = e.target.value === 'mi' ? 1 / 1.609344 : 1.609344;
+    s.unit = e.target.value;
+    if (d > 0 && s.solveFor !== 'dist') s.dist = String(Math.round(d * factor * 1000) / 1000);
+    solve(); s.save(); render();
+  });
+
+  [['th', 'time', 'h'], ['tm', 'time', 'm'], ['ts', 'time', 's'], ['pm', 'pace', 'm'], ['ps', 'pace', 's']]
+    .forEach(function (row) {
+      el[row[0]].addEventListener('input', function (e) {
+        s[row[1]][row[2]] = int(e.target.value);
+        changed();
+      });
+    });
+
+  render();
+});

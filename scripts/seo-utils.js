@@ -89,22 +89,30 @@ export function productCollectionSchema(site) {
     '@type': 'ItemList',
     name: 'TexFlow Product Suite',
     description: 'Agent-first products for space, data, messaging, marketplaces, research archives, and machine-readable web discovery.',
-    url: site.origin,
+    url: absoluteUrl(site, '/products'),
     itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'LEOSpy', url: absoluteUrl(site, '/leospy') },
-      { '@type': 'ListItem', position: 2, name: 'ACSA', url: absoluteUrl(site, '/ACSA/') },
-      { '@type': 'ListItem', position: 3, name: 'BMFlight', url: absoluteUrl(site, '/BMFlight/') },
-      { '@type': 'ListItem', position: 4, name: 'Platform66', url: absoluteUrl(site, '/platform66/') },
-      { '@type': 'ListItem', position: 5, name: 'TexMKT', url: absoluteUrl(site, '/texmkt/') },
-      { '@type': 'ListItem', position: 6, name: 'TEX', url: absoluteUrl(site, '/tex/') },
-      { '@type': 'ListItem', position: 7, name: 'TexLetter', url: absoluteUrl(site, '/texletter/') },
-      { '@type': 'ListItem', position: 8, name: 'Ellipse', url: absoluteUrl(site, '/ellipse/') },
-      { '@type': 'ListItem', position: 9, name: 'TexSkills', url: absoluteUrl(site, '/texskills/') },
-      { '@type': 'ListItem', position: 10, name: 'TexoStat', url: absoluteUrl(site, '/texostat/') },
-      { '@type': 'ListItem', position: 11, name: 'Gander', url: absoluteUrl(site, '/gander/') },
-      { '@type': 'ListItem', position: 12, name: 'GanderChat', url: absoluteUrl(site, '/ganderchat/') },
-      { '@type': 'ListItem', position: 13, name: 'VyEx', url: absoluteUrl(site, '/vyex') }
-    ]
+      '/leospy|LEOSpy',
+      '/ACSA/|ACSA',
+      '/ACSA/archive|ACSA Archive',
+      '/BMFlight/|BMFlight',
+      '/psrmap|PSR Map',
+      '/science|Science',
+      '/tex/|TEX',
+      '/smig|Smig',
+      '/texletter/|TexLetter',
+      '/ellipse/|Ellipse',
+      '/texostat/|TexoStat',
+      '/texmkt/|TexMKT',
+      '/platform66/|Platform66',
+      '/vyex|VyEx',
+      '/gander/|Gander',
+      '/ganderchat/|GanderChat',
+      '/texskills/|TexSkills',
+      '/ucp-gen|UCP Generator'
+    ].map((entry, index) => {
+      const [path, name] = entry.split('|');
+      return { '@type': 'ListItem', position: index + 1, name, url: absoluteUrl(site, path) };
+    })
   };
 }
 

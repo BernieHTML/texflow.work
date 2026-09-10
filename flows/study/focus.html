@@ -1,0 +1,224 @@
+<!--css-->
+.fc-stage { display: flex; flex-direction: column; align-items: center; }
+
+.fc-dial { position: relative; width: min(290px, 74vw); aspect-ratio: 1; }
+.fc-dial svg { width: 100%; height: 100%; transform: rotate(-90deg); display: block; }
+.fc-track { fill: none; stroke: var(--bg-deep); stroke-width: 10; }
+.fc-arc { fill: none; stroke: url(#fc-grad); stroke-width: 10; stroke-linecap: round; transition: stroke-dashoffset 0.3s linear; }
+.fc-dial.is-break .fc-arc { stroke: var(--ink-3); }
+
+.fc-face { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; }
+.fc-kind { font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3); }
+.fc-time { font-size: clamp(48px, 17vw, 70px); font-weight: 300; letter-spacing: -0.04em; line-height: 1; font-variant-numeric: tabular-nums; }
+.fc-on { font-size: 14px; color: var(--ink-3); max-width: 70%; text-align: center; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.fc-pips { display: flex; gap: 7px; margin: 20px 0 4px; }
+.fc-pips i { width: 9px; height: 9px; border-radius: 50%; background: var(--bg-deep); border: 1px solid var(--line); }
+.fc-pips i.on { background: linear-gradient(135deg, var(--a1), var(--a2)); border-color: transparent; }
+
+.fc-actions { display: flex; gap: 10px; width: 100%; margin-top: 16px; }
+.fc-actions .flow-btn { flex: 1; }
+
+.fc-task { margin-top: 22px; }
+
+.fc-log li { font-variant-numeric: tabular-nums; }
+.fc-today { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 10px; }
+.fc-today b { font-size: 26px; font-weight: 650; letter-spacing: -0.03em; }
+.fc-today span { font-size: 13px; color: var(--ink-3); }
+
+<!--html-->
+<section class="flow-section fc-stage">
+  <div class="fc-dial" id="dial">
+    <svg viewBox="0 0 120 120" aria-hidden="true">
+      <defs><linearGradient id="fc-grad" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="var(--a1)"></stop><stop offset="1" stop-color="var(--a2)"></stop>
+      </linearGradient></defs>
+      <circle class="fc-track" cx="60" cy="60" r="53"></circle>
+      <circle class="fc-arc" id="arc" cx="60" cy="60" r="53"></circle>
+    </svg>
+    <div class="fc-face">
+      <span class="fc-kind" id="kind">Focus</span>
+      <span class="fc-time" id="time" role="timer">25:00</span>
+      <span class="fc-on" id="on"></span>
+    </div>
+  </div>
+
+  <div class="fc-pips" id="pips" aria-label="Sessions this round"></div>
+
+  <div class="fc-actions">
+    <button class="flow-btn is-quiet" type="button" id="skip">Skip</button>
+    <button class="flow-btn" type="button" id="go">Start</button>
+  </div>
+
+  <div class="fc-task" style="width:100%">
+    <span class="flow-label">What you are on</span>
+    <input class="flow-input" id="task" placeholder="Optional — the one thing" aria-label="Task">
+  </div>
+</section>
+
+<section class="flow-section">
+  <div class="fc-today">
+    <b id="today-total">0m</b>
+    <span id="today-count">nothing yet today</span>
+  </div>
+  <ul class="flow-list fc-log" id="log"></ul>
+</section>
+
+<!--js-->
+/* Focus.
+ *
+ * Twenty-five minutes, five off, a longer break every fourth one. The clock is
+ * wall-clock based, so locking the phone does not pause the session — that is
+ * the point of it. The log at the bottom only records *finished* focus blocks:
+ * a session you abandoned at minute four is not something to be credited with,
+ * and a log you can inflate stops being worth reading. */
+
+Flow.ready(function () {
+  var LENGTHS = { focus: 25 * 60, short: 5 * 60, long: 15 * 60 };
+  var ROUND = 4;
+
+  var s = Flow.state('focus', { log: [], task: '', done: 0 });
+
+  var el = {
+    dial: Flow.$('#dial'), arc: Flow.$('#arc'), kind: Flow.$('#kind'), time: Flow.$('#time'),
+    on: Flow.$('#on'), pips: Flow.$('#pips'), go: Flow.$('#go'), skip: Flow.$('#skip'),
+    task: Flow.$('#task'), log: Flow.$('#log')
+  };
+  var CIRC = 2 * Math.PI * 53;
+  el.arc.style.strokeDasharray = CIRC;
+
+  var kind = 'focus';
+  var running = false;
+  var endsAt = 0;
+  var paused = LENGTHS.focus;
+  var ticker = null;
+
+  var isBreak = function () { return kind !== 'focus'; };
+  var length = function () { return LENGTHS[kind]; };
+  var left = function () { return running ? Math.max(0, (endsAt - Date.now()) / 1000) : paused; };
+
+  var startOfDay = function () { var d = new Date(); d.setHours(0, 0, 0, 0); return d.getTime(); };
+
+  function paint() {
+    var secs = left();
+    el.time.textContent = Flow.dur(Math.ceil(secs - 0.001));
+    el.kind.textContent = kind === 'focus' ? 'Focus' : kind === 'short' ? 'Break' : 'Long break';
+    el.on.textContent = kind === 'focus' ? s.task : 'Get up, look out a window';
+    el.arc.style.strokeDashoffset = CIRC * (1 - secs / length());
+    el.dial.className = 'fc-dial' + (isBreak() ? ' is-break' : '');
+    el.go.textContent = running ? 'Pause' : (secs === length() ? 'Start' : 'Resume');
+  }
+
+  function tick() {
+    if (!running) return;
+    if (Date.now() >= endsAt) return complete();
+    paint();
+  }
+
+  function start() {
+    Flow.audio();
+    running = true;
+    endsAt = Date.now() + left() * 1000;
+    Flow.keepAwake(true);
+    clearInterval(ticker);
+    ticker = setInterval(tick, 250);
+    paint();
+  }
+
+  function pause() {
+    paused = left();
+    running = false;
+    clearInterval(ticker);
+    Flow.keepAwake(false);
+    paint();
+  }
+
+  function complete() {
+    running = false;
+    clearInterval(ticker);
+    Flow.keepAwake(false);
+    if (kind === 'focus') {
+      s.done = (s.done || 0) + 1;
+      s.log.unshift({ at: Date.now(), minutes: Math.round(LENGTHS.focus / 60), task: s.task });
+      s.log = s.log.slice(0, 120);
+      Flow.beep({ count: 2, freq: 880, gap: 0.26, length: 0.24, volume: 0.28 });
+    } else {
+      Flow.beep({ freq: 640, length: 0.3, volume: 0.24 });
+    }
+    s.save();
+    Flow.haptic(180);
+    advance();
+  }
+
+  function advance() {
+    kind = kind === 'focus'
+      ? ((s.done || 0) % ROUND === 0 ? 'long' : 'short')
+      : 'focus';
+    paused = LENGTHS[kind];
+    render();
+  }
+
+  function render() {
+    el.pips.innerHTML = '';
+    // Four pips per round. A long break means the round is complete, so it
+    // shows full rather than empty on the way back to zero.
+    var filled = kind === 'long' ? ROUND : (s.done || 0) % ROUND;
+    for (var i = 0; i < ROUND; i++) {
+      el.pips.appendChild(Flow.h('i', { class: i < filled ? 'on' : '' }));
+    }
+    renderLog();
+    paint();
+  }
+
+  function renderLog() {
+    var since = startOfDay();
+    var today = s.log.filter(function (e) { return e.at >= since; });
+    var minutes = today.reduce(function (a, e) { return a + e.minutes; }, 0);
+    Flow.$('#today-total').textContent = minutes >= 60
+      ? Math.floor(minutes / 60) + 'h ' + (minutes % 60 ? (minutes % 60) + 'm' : '')
+      : minutes + 'm';
+    Flow.$('#today-count').textContent = today.length
+      ? today.length + ' session' + (today.length === 1 ? '' : 's') + ' today'
+      : 'nothing yet today';
+
+    el.log.innerHTML = '';
+    if (!s.log.length) {
+      el.log.appendChild(Flow.h('li', {}, Flow.h('span', { class: 'grow sub', text: 'Finished sessions land here.' })));
+      return;
+    }
+    s.log.slice(0, 12).forEach(function (e) {
+      var when = new Date(e.at);
+      el.log.appendChild(Flow.h('li', {},
+        Flow.h('span', { class: 'grow' },
+          Flow.h('span', { class: 'name', text: e.task || 'Focus' }),
+          Flow.h('span', { class: 'sub', text: when.toLocaleDateString(undefined, { weekday: 'short', day: 'numeric', month: 'short' }) })),
+        Flow.h('span', { class: 'val', text: when.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' }) })));
+    });
+  }
+
+  el.go.addEventListener('click', function () { running ? pause() : start(); Flow.haptic(); });
+  el.skip.addEventListener('click', function () {
+    running = false;
+    clearInterval(ticker);
+    Flow.keepAwake(false);
+    // Skipping a focus block does not count it; skipping a break just moves on.
+    if (kind !== 'focus') { kind = 'focus'; paused = LENGTHS.focus; render(); return; }
+    kind = (s.done || 0) % ROUND === 0 && s.done ? 'long' : 'short';
+    paused = LENGTHS[kind];
+    render();
+  });
+
+  el.task.value = s.task;
+  el.task.addEventListener('input', function (e) {
+    s.task = e.target.value.slice(0, 80);
+    paint();
+    clearTimeout(el.task._t);
+    el.task._t = setTimeout(function () { s.save(); }, 400);
+  });
+
+  document.addEventListener('visibilitychange', function () {
+    if (document.visibilityState === 'visible' && running) tick();
+  });
+
+  render();
+});

@@ -1,0 +1,302 @@
+<!--css-->
+.ow-people { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 6px; }
+.ow-person {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 40px;
+  padding: 0 6px 0 13px;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  background: var(--surface);
+  font-size: 14.5px;
+  font-weight: 550;
+}
+.ow-person .flow-x { width: 26px; height: 26px; }
+.ow-person .flow-x svg { width: 13px; height: 13px; }
+.ow-add { min-height: 40px; padding: 0 14px; border-radius: 999px; border: 1px dashed var(--line-strong); background: none; color: var(--ink-2); font-size: 14.5px; font-weight: 550; cursor: pointer; }
+
+.ow-exp { display: flex; align-items: center; gap: 12px; }
+.ow-exp .grow { min-width: 0; }
+.ow-exp .who { font-size: 13px; color: var(--ink-3); }
+
+.ow-settle li { gap: 10px; }
+.ow-arrow { color: var(--ink-3); flex: none; }
+.ow-arrow svg { width: 17px; height: 17px; display: block; }
+.ow-net-pos { color: var(--good); }
+.ow-net-neg { color: var(--danger); }
+
+.ow-form .flow-field:last-child { margin-bottom: 0; }
+.ow-split { display: flex; flex-wrap: wrap; gap: 8px; }
+
+<!--html-->
+<section class="flow-section">
+  <span class="flow-label">Who is in on it</span>
+  <div class="ow-people" id="people"></div>
+</section>
+
+<section class="flow-section">
+  <div id="answer"></div>
+</section>
+
+<section class="flow-section" id="settle-block">
+  <span class="flow-label">Settle up</span>
+  <ul class="flow-list ow-settle" id="settle"></ul>
+  <p class="flow-hint">The fewest payments that square everyone off.</p>
+</section>
+
+<section class="flow-section">
+  <span class="flow-label">What has been paid for</span>
+  <ul class="flow-list" id="expenses"></ul>
+</section>
+
+<div class="flow-dock">
+  <button class="flow-btn" type="button" id="add-exp">Add something someone paid for</button>
+</div>
+
+<!--js-->
+/* Who Owes What.
+ *
+ * Two halves. The first is bookkeeping: every expense knows who paid and who
+ * it was for, so a taxi three of you took is not silently split five ways.
+ *
+ * The second is the bit people get wrong on paper — turning a tangle of debts
+ * into the fewest payments. Net everyone off against the group, then repeatedly
+ * settle the largest debtor against the largest creditor. That is at most
+ * (people − 1) transfers, and usually far fewer than the pairwise mess. */
+
+Flow.ready(function () {
+  var s = Flow.state('trip', {
+    people: ['Me', 'Sam'],
+    expenses: []
+  });
+
+  var el = {
+    people: Flow.$('#people'), expenses: Flow.$('#expenses'),
+    settle: Flow.$('#settle'), settleBlock: Flow.$('#settle-block'), answer: Flow.$('#answer')
+  };
+
+  var num = function (v) { var n = parseFloat(v); return isFinite(n) && n > 0 ? n : 0; };
+  var ARROW = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13"/><path d="M13 6.5L18.5 12 13 17.5"/></svg>';
+
+  function balances() {
+    var net = s.people.map(function () { return 0; });
+    var total = 0;
+    s.expenses.forEach(function (e) {
+      var amount = num(e.amount);
+      if (!amount) return;
+      total += amount;
+      var among = (e.among && e.among.length ? e.among : s.people.map(function (_, i) { return i; }))
+        .filter(function (i) { return i < s.people.length; });
+      if (!among.length) return;
+      var share = amount / among.length;
+      if (e.paidBy < s.people.length) net[e.paidBy] += amount;
+      among.forEach(function (i) { net[i] -= share; });
+    });
+    return { net: net, total: total };
+  }
+
+  function settlements(net) {
+    // Work on copies with indices, in cents, so repeated halving never leaves
+    // a stray cent owed to nobody.
+    var owe = [];
+    var due = [];
+    net.forEach(function (v, i) {
+      var cents = Math.round(v * 100);
+      if (cents < 0) owe.push({ i: i, cents: -cents });
+      else if (cents > 0) due.push({ i: i, cents: cents });
+    });
+    owe.sort(function (a, b) { return b.cents - a.cents; });
+    due.sort(function (a, b) { return b.cents - a.cents; });
+
+    var out = [];
+    var a = 0;
+    var b = 0;
+    while (a < owe.length && b < due.length) {
+      var amount = Math.min(owe[a].cents, due[b].cents);
+      if (amount > 0) out.push({ from: owe[a].i, to: due[b].i, amount: amount / 100 });
+      owe[a].cents -= amount;
+      due[b].cents -= amount;
+      if (owe[a].cents <= 0) a++;
+      if (due[b].cents <= 0) b++;
+    }
+    return out;
+  }
+
+  function renderPeople() {
+    el.people.innerHTML = '';
+    s.people.forEach(function (name, i) {
+      var chip = Flow.h('span', { class: 'ow-person' }, name);
+      if (s.people.length > 2) {
+        chip.appendChild(Flow.h('button', {
+          class: 'flow-x', type: 'button', 'aria-label': 'Remove ' + name, html: Flow.icons.x,
+          onclick: function () { removePerson(i); }
+        }));
+      }
+      el.people.appendChild(chip);
+    });
+    el.people.appendChild(Flow.h('button', {
+      class: 'ow-add', type: 'button', text: '+ Someone else', onclick: addPerson
+    }));
+  }
+
+  function addPerson() {
+    var input = Flow.h('input', { class: 'flow-input', placeholder: 'Their name', 'aria-label': 'Name' });
+    var handle = Flow.sheet({
+      title: 'Who else is in?',
+      body: Flow.h('div', {}, input),
+      actions: [
+        { label: 'Add them', onClick: function () {
+          var name = input.value.trim();
+          if (!name) return;
+          s.people.push(name.slice(0, 24));
+          s.save(); render();
+        } },
+        { label: 'Cancel', kind: 'ghost' }
+      ]
+    });
+    setTimeout(function () { input.focus(); }, 420);
+    return handle;
+  }
+
+  function removePerson(i) {
+    Flow.confirm({
+      title: 'Take ' + s.people[i] + ' out?',
+      lede: 'Anything they paid for, and their share of everything else, comes out with them.',
+      confirmLabel: 'Take them out', danger: true
+    }).then(function (ok) {
+      if (!ok) return;
+      s.expenses = s.expenses.filter(function (e) { return e.paidBy !== i; });
+      s.expenses.forEach(function (e) {
+        e.paidBy = e.paidBy > i ? e.paidBy - 1 : e.paidBy;
+        if (e.among) {
+          e.among = e.among.filter(function (p) { return p !== i; })
+            .map(function (p) { return p > i ? p - 1 : p; });
+        }
+      });
+      s.people.splice(i, 1);
+      s.save(); render();
+    });
+  }
+
+  function expenseSheet(existing) {
+    var draft = existing
+      ? { what: existing.what, amount: existing.amount, paidBy: existing.paidBy, among: (existing.among || []).slice() }
+      : { what: '', amount: '', paidBy: 0, among: s.people.map(function (_, i) { return i; }) };
+    if (!draft.among.length) draft.among = s.people.map(function (_, i) { return i; });
+
+    var body = Flow.h('div', { class: 'ow-form' });
+    var what = Flow.h('input', { class: 'flow-input', value: draft.what, placeholder: 'What was it', 'aria-label': 'What' });
+    var amount = Flow.h('input', { class: 'flow-input', type: 'text', inputmode: 'decimal', value: draft.amount, placeholder: '0.00', 'aria-label': 'How much' });
+    body.appendChild(Flow.h('div', { class: 'flow-field' }, what));
+    body.appendChild(Flow.h('div', { class: 'flow-field' }, amount));
+
+    body.appendChild(Flow.h('span', { class: 'flow-label', text: 'Paid by' }));
+    var payer = Flow.h('div', { class: 'flow-segment', style: { marginBottom: '14px' } });
+    function paintPayer() {
+      payer.innerHTML = '';
+      s.people.forEach(function (name, i) {
+        payer.appendChild(Flow.h('button', {
+          type: 'button', text: name, 'aria-pressed': draft.paidBy === i ? 'true' : 'false',
+          onclick: function () { draft.paidBy = i; paintPayer(); }
+        }));
+      });
+    }
+    paintPayer();
+    body.appendChild(payer);
+
+    body.appendChild(Flow.h('span', { class: 'flow-label', text: 'Shared between' }));
+    var split = Flow.h('div', { class: 'ow-split' });
+    function paintSplit() {
+      split.innerHTML = '';
+      s.people.forEach(function (name, i) {
+        var on = draft.among.indexOf(i) > -1;
+        split.appendChild(Flow.h('button', {
+          class: 'flow-chip', type: 'button', text: name, 'aria-pressed': on ? 'true' : 'false',
+          onclick: function () {
+            if (on) draft.among = draft.among.filter(function (p) { return p !== i; });
+            else draft.among.push(i);
+            paintSplit();
+          }
+        }));
+      });
+    }
+    paintSplit();
+    body.appendChild(split);
+
+    var actions = [
+      { label: existing ? 'Save it' : 'Add it', onClick: function () {
+        if (!num(amount.value)) return Flow.toast('It needs an amount');
+        if (!draft.among.length) return Flow.toast('Someone has to be sharing it');
+        var record = {
+          id: existing ? existing.id : String(Date.now()) + Math.random().toString(36).slice(2, 5),
+          what: what.value.trim() || 'Something',
+          amount: amount.value,
+          paidBy: draft.paidBy,
+          among: draft.among.slice().sort(function (a, b) { return a - b; })
+        };
+        if (existing) s.expenses = s.expenses.map(function (e) { return e.id === existing.id ? record : e; });
+        else s.expenses.push(record);
+        s.save(); render(); Flow.haptic();
+      } }
+    ];
+    if (existing) {
+      actions.push({ label: 'Delete', kind: 'danger', onClick: function () {
+        s.expenses = s.expenses.filter(function (e) { return e.id !== existing.id; });
+        s.save(); render();
+      } });
+    }
+    actions.push({ label: 'Cancel', kind: 'ghost' });
+
+    Flow.sheet({ title: existing ? 'Edit' : 'Something someone paid for', body: body, actions: actions });
+    if (!existing) setTimeout(function () { what.focus(); }, 420);
+  }
+
+  function render() {
+    renderPeople();
+
+    var b = balances();
+    var moves = settlements(b.net);
+
+    el.answer.innerHTML = '';
+    var tile = Flow.h('div', { class: 'flow-tile' });
+    tile.appendChild(Flow.h('div', { class: 'flow-tile-label', text: 'Spent between you' }));
+    tile.appendChild(Flow.h('div', { class: 'flow-tile-value', text: b.total > 0 ? Flow.money(b.total) : '—' }));
+    tile.appendChild(Flow.h('div', {
+      class: 'flow-tile-note',
+      text: b.total > 0
+        ? Flow.money(b.total / s.people.length) + ' each · ' + (moves.length ? moves.length + ' payment' + (moves.length === 1 ? '' : 's') + ' to square it' : 'nobody owes anybody')
+        : 'Add the first thing someone paid for.'
+    }));
+    el.answer.appendChild(tile);
+
+    el.settleBlock.classList.toggle('flow-hidden', !moves.length);
+    el.settle.innerHTML = '';
+    moves.forEach(function (m) {
+      el.settle.appendChild(Flow.h('li', {},
+        Flow.h('span', { class: 'name', style: { flex: 'none' }, text: s.people[m.from] }),
+        Flow.h('span', { class: 'ow-arrow', html: ARROW }),
+        Flow.h('span', { class: 'grow name', text: s.people[m.to] }),
+        Flow.h('span', { class: 'val', text: Flow.money(m.amount) })));
+    });
+
+    el.expenses.innerHTML = '';
+    if (!s.expenses.length) {
+      el.expenses.appendChild(Flow.h('li', {},
+        Flow.h('span', { class: 'grow sub', text: 'Nothing logged yet. Whoever pays for the first thing, tap below.' })));
+      return;
+    }
+    s.expenses.slice().reverse().forEach(function (e) {
+      var among = (e.among && e.among.length ? e.among : s.people.map(function (_, i) { return i; }));
+      var who = among.length === s.people.length ? 'everyone' : among.map(function (i) { return s.people[i]; }).join(', ');
+      el.expenses.appendChild(Flow.h('li', { onclick: function () { expenseSheet(e); }, style: { cursor: 'pointer' } },
+        Flow.h('span', { class: 'grow' },
+          Flow.h('span', { class: 'name', text: e.what }),
+          Flow.h('span', { class: 'sub', text: s.people[e.paidBy] + ' paid, for ' + who })),
+        Flow.h('span', { class: 'val', text: Flow.money(num(e.amount)) })));
+    });
+  }
+
+  Flow.$('#add-exp').addEventListener('click', function () { expenseSheet(null); });
+  render();
+});

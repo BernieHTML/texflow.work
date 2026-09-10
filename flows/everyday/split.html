@@ -1,0 +1,220 @@
+<!--css-->
+.sp-total { position: relative; margin-bottom: 16px; }
+.sp-total input {
+  width: 100%;
+  min-height: 68px;
+  padding: 10px 16px 10px 44px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-lg);
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 34px;
+  font-weight: 650;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+}
+.sp-total input:focus { outline: none; border-color: var(--a2); box-shadow: 0 0 0 4px color-mix(in srgb, var(--a2) 22%, transparent); }
+.sp-total span { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); font-size: 26px; color: var(--ink-3); pointer-events: none; }
+
+.sp-extra { display: grid; grid-template-columns: 1fr 96px auto; gap: 8px; align-items: center; margin-bottom: 8px; }
+.sp-extra .flow-input, .sp-extra .flow-select { min-height: 44px; padding: 9px 12px; font-size: 15px; }
+
+.sp-who { font-size: 13px; color: var(--ink-3); }
+.sp-owed { font-size: 17px; font-weight: 650; font-variant-numeric: tabular-nums; }
+.sp-name { border: 0; background: none; padding: 2px 0; font-weight: 560; width: 100%; }
+.sp-name:focus { outline: none; }
+
+<!--html-->
+<section class="flow-section">
+  <div id="verdict"></div>
+
+  <label class="flow-label" for="total">What is on the bill</label>
+  <div class="sp-total">
+    <span id="sym">$</span>
+    <input id="total" type="text" inputmode="decimal" placeholder="0.00" aria-label="Bill total">
+  </div>
+
+  <div class="flow-row" style="align-items:flex-end">
+    <div>
+      <span class="flow-label">Between</span>
+      <div class="flow-stepper">
+        <button type="button" id="fewer" aria-label="Fewer people">−</button>
+        <output id="people">2</output>
+        <button type="button" id="more" aria-label="More people">+</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="flow-section">
+    <span class="flow-label">Tip</span>
+    <div class="flow-segment" id="tips"></div>
+  </div>
+
+  <div class="flow-section">
+    <span class="flow-label">Someone had extras</span>
+    <div id="extras"></div>
+    <button class="flow-btn is-quiet is-small" type="button" id="add-extra" style="margin-top:6px">Add an item for one person</button>
+    <p class="flow-hint">Anything here comes out of the shared amount and goes on that person's tab instead.</p>
+  </div>
+
+  <div class="flow-section" id="breakdown-wrap">
+    <span class="flow-label">Who pays what</span>
+    <ul class="flow-list" id="breakdown"></ul>
+  </div>
+</section>
+
+<!--js-->
+/* Split the Bill.
+ *
+ * The shared part of the bill is what is left after anything one person is
+ * carrying on their own — so the lobster comes off the top, gets added to the
+ * person who ordered it, and the tip lands on top of the whole thing. */
+
+Flow.ready(function () {
+  var s = Flow.state('bill', {
+    total: '', people: 2, tip: 0, roundUp: false,
+    names: [], extras: []
+  });
+
+  var el = {
+    total: Flow.$('#total'), people: Flow.$('#people'), tips: Flow.$('#tips'),
+    extras: Flow.$('#extras'), verdict: Flow.$('#verdict'), breakdown: Flow.$('#breakdown'),
+    wrap: Flow.$('#breakdown-wrap')
+  };
+
+  var num = function (v) { var n = parseFloat(v); return isFinite(n) && n > 0 ? n : 0; };
+  var nameOf = function (i) { return s.names[i] || 'Person ' + (i + 1); };
+
+  function compute() {
+    var total = num(s.total);
+    var extras = s.extras.map(function (e) { return { who: Math.min(e.who, s.people - 1), amount: num(e.amount), label: e.label }; });
+    var claimed = extras.reduce(function (a, e) { return a + e.amount; }, 0);
+    // A bill cannot be more claimed than it is big; if someone over-types, the
+    // shared pool floors at zero rather than going negative.
+    var shared = Math.max(0, total - claimed);
+    var each = s.people > 0 ? shared / s.people : 0;
+    var mult = 1 + s.tip / 100;
+
+    var people = [];
+    for (var i = 0; i < s.people; i++) {
+      var own = extras.filter(function (e) { return e.who === i; }).reduce(function (a, e) { return a + e.amount; }, 0);
+      var owed = (each + own) * mult;
+      people.push({ i: i, own: own, owed: s.roundUp ? Math.ceil(owed) : owed });
+    }
+    return { total: total, claimed: claimed, shared: shared, people: people, tipAmount: total * (mult - 1) };
+  }
+
+  function render() {
+    el.people.textContent = s.people;
+    renderTips();
+    renderExtras();
+    update();
+  }
+
+  function renderTips() {
+    el.tips.innerHTML = '';
+    [0, 10, 15, 20].forEach(function (pct) {
+      el.tips.appendChild(Flow.h('button', {
+        type: 'button', 'aria-pressed': s.tip === pct ? 'true' : 'false',
+        text: pct === 0 ? 'None' : pct + '%',
+        onclick: function () { s.tip = pct; s.save(); renderTips(); update(); Flow.haptic(); }
+      }));
+    });
+    el.tips.appendChild(Flow.h('button', {
+      type: 'button', 'aria-pressed': s.roundUp ? 'true' : 'false', text: 'Round',
+      onclick: function () { s.roundUp = !s.roundUp; s.save(); renderTips(); update(); Flow.haptic(); }
+    }));
+  }
+
+  function renderExtras() {
+    el.extras.innerHTML = '';
+    s.extras.forEach(function (e, i) {
+      var row = Flow.h('div', { class: 'sp-extra' });
+      row.appendChild(Flow.h('input', {
+        class: 'flow-input', value: e.label, placeholder: 'What was it',
+        'aria-label': 'Item', oninput: function (ev) { e.label = ev.target.value; save(); }
+      }));
+      row.appendChild(Flow.h('input', {
+        class: 'flow-input', type: 'text', inputmode: 'decimal', value: e.amount, placeholder: '0.00',
+        'aria-label': 'Amount', oninput: function (ev) { e.amount = ev.target.value; save(); update(); }
+      }));
+      var sel = Flow.h('select', {
+        class: 'flow-select', 'aria-label': 'Whose',
+        onchange: function (ev) { e.who = Number(ev.target.value); save(); update(); }
+      });
+      for (var p = 0; p < s.people; p++) {
+        sel.appendChild(Flow.h('option', { value: p, selected: p === e.who }, nameOf(p)));
+      }
+      row.appendChild(sel);
+      row.appendChild(Flow.h('button', {
+        class: 'flow-x', type: 'button', 'aria-label': 'Remove', html: Flow.icons.x,
+        onclick: function () { s.extras.splice(i, 1); s.save(); renderExtras(); update(); }
+      }));
+      el.extras.appendChild(row);
+    });
+  }
+
+  function update() {
+    var r = compute();
+    var spread = r.people.map(function (p) { return p.owed; });
+    var lo = Math.min.apply(null, spread);
+    var hi = Math.max.apply(null, spread);
+
+    el.verdict.innerHTML = '';
+    var tile = Flow.h('div', { class: 'flow-tile', style: { marginBottom: '18px' } });
+    tile.appendChild(Flow.h('div', { class: 'flow-tile-label', text: s.extras.length ? 'Each pays' : 'Each of ' + s.people + ' pays' }));
+    tile.appendChild(Flow.h('div', {
+      class: 'flow-tile-value',
+      text: r.total <= 0 ? '—' : (hi - lo < 0.005 ? Flow.money(lo) : Flow.money(lo) + '–' + Flow.money(hi))
+    }));
+    var note = [];
+    if (s.tip) note.push(Flow.money(r.tipAmount) + ' tip included');
+    if (r.claimed > 0) note.push(Flow.money(r.shared) + ' shared between ' + s.people);
+    if (s.roundUp && r.total > 0) note.push('rounded up');
+    if (note.length) tile.appendChild(Flow.h('div', { class: 'flow-tile-note', text: note.join(' · ') }));
+    el.verdict.appendChild(tile);
+
+    var interesting = s.extras.length > 0 || s.names.some(Boolean);
+    el.wrap.classList.toggle('flow-hidden', !interesting || r.total <= 0);
+    if (!interesting) return;
+
+    el.breakdown.innerHTML = '';
+    r.people.forEach(function (p) {
+      var li = Flow.h('li');
+      var grow = Flow.h('span', { class: 'grow' });
+      grow.appendChild(Flow.h('input', {
+        class: 'sp-name', value: s.names[p.i] || '', placeholder: 'Person ' + (p.i + 1),
+        'aria-label': 'Name', oninput: function (ev) { s.names[p.i] = ev.target.value; save(); renderExtras(); }
+      }));
+      if (p.own > 0) grow.appendChild(Flow.h('span', { class: 'sp-who', text: 'plus ' + Flow.money(p.own) + ' of their own' }));
+      li.appendChild(grow);
+      li.appendChild(Flow.h('span', { class: 'sp-owed', text: Flow.money(p.owed) }));
+      el.breakdown.appendChild(li);
+    });
+  }
+
+  var timer;
+  function save() { clearTimeout(timer); timer = setTimeout(function () { s.save(); }, 250); }
+
+  el.total.value = s.total;
+  el.total.addEventListener('input', function (e) { s.total = e.target.value; save(); update(); });
+
+  Flow.$('#more').addEventListener('click', function () {
+    if (s.people >= 30) return;
+    s.people++; s.save(); Flow.haptic(); render();
+  });
+  Flow.$('#fewer').addEventListener('click', function () {
+    if (s.people <= 1) return;
+    s.people--;
+    s.extras.forEach(function (e) { e.who = Math.min(e.who, s.people - 1); });
+    s.save(); Flow.haptic(); render();
+  });
+  Flow.$('#add-extra').addEventListener('click', function () {
+    s.extras.push({ who: 0, label: '', amount: '' });
+    s.save(); renderExtras(); update();
+    var inputs = Flow.$$('.sp-extra .flow-input');
+    if (inputs.length) inputs[inputs.length - 2].focus();
+  });
+
+  render();
+});

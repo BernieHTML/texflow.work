@@ -1,0 +1,268 @@
+<!--css-->
+.up-rows { display: flex; flex-direction: column; gap: 10px; }
+
+.up-row {
+  position: relative;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-1);
+  padding: 12px 12px 14px;
+  transition: border-color 0.25s var(--ease), box-shadow 0.25s var(--ease);
+}
+.up-row.is-best { border-color: color-mix(in srgb, var(--a2) 55%, transparent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--a2) 15%, transparent), var(--shadow-1); }
+
+.up-head { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+.up-name {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  background: none;
+  padding: 4px 2px;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+.up-name:focus { outline: none; }
+.up-name::placeholder { color: var(--ink-3); font-weight: 500; }
+
+.up-badge {
+  flex: none;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  padding: 4px 9px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--a1), var(--a2));
+  color: #fff;
+}
+
+.up-grid { display: grid; grid-template-columns: 1.05fr 1fr 1.15fr; gap: 8px; }
+.up-grid .flow-input, .up-grid .flow-select { min-height: 46px; padding: 10px 12px; }
+.up-money { position: relative; }
+.up-money .flow-input { padding-left: 26px; }
+.up-money::before {
+  content: attr(data-sym);
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--ink-3);
+  font-size: 15px;
+  pointer-events: none;
+}
+
+.up-per {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--line);
+  font-size: 14px;
+  color: var(--ink-3);
+}
+.up-per b { font-size: 17px; font-weight: 650; color: var(--ink); font-variant-numeric: tabular-nums; }
+.up-row.is-best .up-per b { color: var(--a1); }
+@media (prefers-color-scheme: dark) { .up-row.is-best .up-per b { color: var(--a2); } }
+
+.up-mix { margin-top: 12px; font-size: 13.5px; color: var(--ink-3); text-align: center; }
+
+<!--html-->
+<section class="flow-section">
+  <div id="verdict"></div>
+  <div class="up-rows" id="rows"></div>
+  <p class="up-mix flow-hidden" id="mix">Those are different kinds of thing, so there is nothing to compare yet.</p>
+</section>
+
+<div class="flow-dock">
+  <button class="flow-btn is-quiet" type="button" id="add">Add another size</button>
+</div>
+
+<!--js-->
+/* Unit Price — the sum you do in the aisle, done properly.
+ *
+ * Everything is normalised to one base unit per dimension, so a 700 mL bottle
+ * and a 1.5 L bottle land on the same number and the winner is obvious. Sizes
+ * that measure different things (a litre against a kilo) are never compared;
+ * the Flow says so rather than quietly ranking nonsense. */
+
+Flow.ready(function () {
+  var UNITS = [
+    { id: 'ml',   label: 'mL',      dim: 'volume', per: 0.001 },
+    { id: 'l',    label: 'L',       dim: 'volume', per: 1 },
+    { id: 'floz', label: 'fl oz',   dim: 'volume', per: 0.0295735 },
+    { id: 'g',    label: 'g',       dim: 'weight', per: 0.001 },
+    { id: 'kg',   label: 'kg',      dim: 'weight', per: 1 },
+    { id: 'oz',   label: 'oz',      dim: 'weight', per: 0.0283495 },
+    { id: 'lb',   label: 'lb',      dim: 'weight', per: 0.453592 },
+    { id: 'ea',   label: 'items',   dim: 'count',  per: 1 },
+    { id: 'm',    label: 'metres',  dim: 'length', per: 1 },
+    { id: 'ft',   label: 'feet',    dim: 'length', per: 0.3048 },
+    { id: 'sqm',  label: 'sq m',    dim: 'area',   per: 1 },
+    { id: 'wash', label: 'washes',  dim: 'count',  per: 1 },
+    { id: 'sheet', label: 'sheets', dim: 'count',  per: 1 }
+  ];
+  var BASE = { volume: 'litre', weight: 'kg', count: 'item', length: 'metre', area: 'sq m' };
+  var unit = function (id) { return UNITS.find(function (u) { return u.id === id; }) || UNITS[0]; };
+
+  var s = Flow.state('rows', {
+    list: [{ name: '', price: '', size: '', unit: 'ml' }, { name: '', price: '', size: '', unit: 'ml' }],
+    sym: '$'
+  });
+
+  var rowsEl = Flow.$('#rows');
+  var verdictEl = Flow.$('#verdict');
+  var mixEl = Flow.$('#mix');
+
+  function value(r) {
+    var price = parseFloat(r.price);
+    var size = parseFloat(r.size);
+    if (!(price > 0) || !(size > 0)) return null;
+    var u = unit(r.unit);
+    return { per: price / (size * u.per), dim: u.dim };
+  }
+
+  // Prices per litre swing from cents to tens of dollars, so the precision
+  // follows the number rather than being fixed at two places.
+  function perText(v) {
+    var n = v.per;
+    var dp = n >= 100 ? 0 : n >= 10 ? 1 : n >= 1 ? 2 : 3;
+    return s.sym + Flow.num(n, dp) + ' per ' + BASE[v.dim];
+  }
+
+  function render() {
+    rowsEl.innerHTML = '';
+    var values = s.list.map(value);
+    var dims = {};
+    values.forEach(function (v) { if (v) dims[v.dim] = (dims[v.dim] || 0) + 1; });
+    var dimKeys = Object.keys(dims);
+    var comparable = dimKeys.length === 1 && dims[dimKeys[0]] > 1;
+
+    var bestIdx = -1;
+    if (comparable) {
+      values.forEach(function (v, i) {
+        if (v && (bestIdx < 0 || v.per < values[bestIdx].per)) bestIdx = i;
+      });
+    }
+
+    s.list.forEach(function (r, i) {
+      var v = values[i];
+      var row = Flow.h('div', { class: 'up-row' + (i === bestIdx ? ' is-best' : '') });
+
+      var head = Flow.h('div', { class: 'up-head' });
+      head.appendChild(Flow.h('input', {
+        class: 'up-name', value: r.name, placeholder: 'Option ' + String.fromCharCode(65 + i),
+        'aria-label': 'Name', oninput: function (e) { r.name = e.target.value; save(); }
+      }));
+      if (i === bestIdx) head.appendChild(Flow.h('span', { class: 'up-badge', text: 'Best value' }));
+      if (s.list.length > 2) {
+        head.appendChild(Flow.h('button', {
+          class: 'flow-x', type: 'button', 'aria-label': 'Remove', html: Flow.icons.x,
+          onclick: function () { s.list.splice(i, 1); save(); render(); }
+        }));
+      }
+      row.appendChild(head);
+
+      var grid = Flow.h('div', { class: 'up-grid' });
+      var money = Flow.h('div', { class: 'up-money', dataset: { sym: s.sym } });
+      money.appendChild(Flow.h('input', {
+        class: 'flow-input', type: 'text', inputmode: 'decimal', value: r.price, placeholder: '0.00',
+        'aria-label': 'Price', oninput: function (e) { r.price = e.target.value; save(); update(); }
+      }));
+      grid.appendChild(money);
+      grid.appendChild(Flow.h('input', {
+        class: 'flow-input', type: 'text', inputmode: 'decimal', value: r.size, placeholder: 'Size',
+        'aria-label': 'Size', oninput: function (e) { r.size = e.target.value; save(); update(); }
+      }));
+
+      var sel = Flow.h('select', {
+        class: 'flow-select', 'aria-label': 'Unit',
+        onchange: function (e) { r.unit = e.target.value; save(); update(); }
+      });
+      UNITS.forEach(function (u) {
+        sel.appendChild(Flow.h('option', { value: u.id, selected: u.id === r.unit }, u.label));
+      });
+      grid.appendChild(sel);
+      row.appendChild(grid);
+
+      var per = Flow.h('div', { class: 'up-per' });
+      per.appendChild(Flow.h('span', { text: v ? 'works out at' : 'price and size' }));
+      per.appendChild(Flow.h('b', { text: v ? perText(v) : '—' }));
+      row.appendChild(per);
+
+      rowsEl.appendChild(row);
+    });
+
+    mixEl.classList.toggle('flow-hidden', dimKeys.length < 2);
+    renderVerdict(values, bestIdx, comparable);
+  }
+
+  function renderVerdict(values, bestIdx, comparable) {
+    verdictEl.innerHTML = '';
+    if (!comparable || bestIdx < 0) return;
+    var best = values[bestIdx];
+    var rivals = values.filter(function (v, i) { return v && i !== bestIdx; });
+    if (!rivals.length) return;
+    var next = rivals.reduce(function (a, b) { return a.per < b.per ? a : b; });
+    var saving = (1 - best.per / next.per) * 100;
+    var name = s.list[bestIdx].name || ('Option ' + String.fromCharCode(65 + bestIdx));
+
+    var tile = Flow.h('div', { class: 'flow-tile', style: { marginBottom: '14px' } });
+    tile.appendChild(Flow.h('div', { class: 'flow-tile-label', text: 'Best value' }));
+    tile.appendChild(Flow.h('div', { class: 'flow-tile-value', text: name }));
+    tile.appendChild(Flow.h('div', {
+      class: 'flow-tile-note',
+      text: saving < 0.5
+        ? 'Line ball — there is nothing in it.'
+        : Math.round(saving) + '% cheaper than the next one, at ' + perText(best) + '.'
+    }));
+    verdictEl.appendChild(tile);
+  }
+
+  // Typing re-renders only the parts that are not being typed into, so the
+  // caret never jumps mid-number.
+  function update() {
+    var values = s.list.map(value);
+    var dims = {};
+    values.forEach(function (v) { if (v) dims[v.dim] = (dims[v.dim] || 0) + 1; });
+    var keys = Object.keys(dims);
+    var comparable = keys.length === 1 && dims[keys[0]] > 1;
+    var bestIdx = -1;
+    if (comparable) values.forEach(function (v, i) { if (v && (bestIdx < 0 || v.per < values[bestIdx].per)) bestIdx = i; });
+
+    Flow.$$('.up-row').forEach(function (row, i) {
+      row.classList.toggle('is-best', i === bestIdx);
+      var per = row.querySelector('.up-per');
+      per.children[0].textContent = values[i] ? 'works out at' : 'price and size';
+      per.children[1].textContent = values[i] ? perText(values[i]) : '—';
+      var head = row.querySelector('.up-head');
+      var badge = head.querySelector('.up-badge');
+      if (i === bestIdx && !badge) head.insertBefore(Flow.h('span', { class: 'up-badge', text: 'Best value' }), head.children[1] || null);
+      if (i !== bestIdx && badge) badge.remove();
+    });
+
+    mixEl.classList.toggle('flow-hidden', keys.length < 2);
+    renderVerdict(values, bestIdx, comparable);
+  }
+
+  var saveTimer;
+  function save() {
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(function () { s.save(); }, 250);
+  }
+
+  Flow.$('#add').addEventListener('click', function () {
+    var last = s.list[s.list.length - 1];
+    s.list.push({ name: '', price: '', size: '', unit: last ? last.unit : 'ml' });
+    s.save();
+    render();
+    Flow.haptic();
+    var inputs = Flow.$$('.up-row .up-name');
+    inputs[inputs.length - 1].focus();
+  });
+
+  render();
+});

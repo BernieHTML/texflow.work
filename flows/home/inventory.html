@@ -1,0 +1,227 @@
+<!--css-->
+.in-search { margin-bottom: 14px; }
+
+.in-room { margin-top: 22px; }
+.in-room-head { display: flex; align-items: baseline; justify-content: space-between; margin: 0 2px 8px; }
+.in-room-head span:first-child { font-size: 11px; font-weight: 650; letter-spacing: 0.09em; text-transform: uppercase; color: var(--ink-3); }
+.in-room-head span:last-child { font-size: 13px; color: var(--ink-3); font-variant-numeric: tabular-nums; }
+
+.in-item .name { font-weight: 560; }
+.in-item .sub { display: flex; gap: 8px; flex-wrap: wrap; }
+.in-flag {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 650;
+  letter-spacing: 0.04em;
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--danger) 14%, transparent);
+  color: var(--danger);
+}
+.in-flag.ok { background: color-mix(in srgb, var(--good) 14%, transparent); color: var(--good); }
+
+.in-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 14px; }
+.in-stat { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 11px 8px; text-align: center; }
+.in-stat b { display: block; font-size: 17px; font-weight: 660; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+.in-stat span { font-size: 10.5px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; color: var(--ink-3); }
+
+.in-form .flow-row > * { min-width: 0; }
+
+<!--html-->
+<section class="flow-section">
+  <div id="answer"></div>
+  <div class="in-stats" id="stats"></div>
+</section>
+
+<section class="flow-section">
+  <input class="flow-input in-search" id="search" type="search" placeholder="Search everything" aria-label="Search">
+  <div id="rooms"></div>
+</section>
+
+<div class="flow-dock">
+  <button class="flow-btn" type="button" id="add">Add something</button>
+</div>
+
+<!--js-->
+/* Home Inventory.
+ *
+ * Written for the two days it is ever needed: the day you claim on insurance,
+ * and the day something breaks and you want to know whether it is still under
+ * warranty. So every item carries what it cost, when it arrived, how long the
+ * warranty runs and which box or room it is in — and the warranty is shown as a
+ * countdown, because "36 months from March 2024" is not an answer anyone can
+ * use while standing in a shop.
+ *
+ * It never leaves the phone. A list of everything valuable in your house, with
+ * the room it is in, is not a thing to upload anywhere. */
+
+Flow.ready(function () {
+  var MONTH = 2629800000;
+  var s = Flow.state('stuff', { items: [] });
+
+  var el = {
+    rooms: Flow.$('#rooms'), answer: Flow.$('#answer'),
+    stats: Flow.$('#stats'), search: Flow.$('#search')
+  };
+  var query = '';
+  var uid = function () { return String(Date.now()) + Math.random().toString(36).slice(2, 5); };
+  var num = function (v) { var n = parseFloat(v); return isFinite(n) && n > 0 ? n : 0; };
+
+  function warranty(item) {
+    if (!item.bought || !num(item.warranty)) return null;
+    var ends = new Date(item.bought).getTime() + num(item.warranty) * MONTH;
+    var monthsLeft = (ends - Date.now()) / MONTH;
+    return { ends: ends, monthsLeft: monthsLeft, live: monthsLeft > 0 };
+  }
+
+  function warrantyText(w) {
+    if (!w) return null;
+    if (!w.live) return 'warranty ended';
+    if (w.monthsLeft < 1) return 'warranty ends this month';
+    if (w.monthsLeft < 12) return Math.round(w.monthsLeft) + ' months of warranty';
+    return Math.floor(w.monthsLeft / 12) + ' yr of warranty';
+  }
+
+  function matches(item) {
+    if (!query) return true;
+    var hay = [item.name, item.room, item.box, item.notes].join(' ').toLowerCase();
+    return hay.indexOf(query) > -1;
+  }
+
+  function render() {
+    var shown = s.items.filter(matches);
+    var total = s.items.reduce(function (a, i) { return a + num(i.value); }, 0);
+    var covered = s.items.filter(function (i) { var w = warranty(i); return w && w.live; }).length;
+    var rooms = {};
+    shown.forEach(function (i) {
+      var room = i.room || 'Unsorted';
+      (rooms[room] = rooms[room] || []).push(i);
+    });
+
+    el.answer.innerHTML = '';
+    var tile = Flow.h('div', { class: 'flow-tile' });
+    tile.appendChild(Flow.h('div', { class: 'flow-tile-label', text: 'What it is all worth' }));
+    tile.appendChild(Flow.h('div', { class: 'flow-tile-value', text: total > 0 ? Flow.money(total) : '—' }));
+    tile.appendChild(Flow.h('div', {
+      class: 'flow-tile-note',
+      text: s.items.length
+        ? s.items.length + ' thing' + (s.items.length === 1 ? '' : 's') + ' in ' + Object.keys(s.items.reduce(function (a, i) { a[i.room || 'Unsorted'] = 1; return a; }, {})).length + ' rooms'
+        : 'Start with the expensive things and the things with warranties.'
+    }));
+    el.answer.appendChild(tile);
+
+    el.stats.innerHTML = '';
+    [
+      [String(s.items.length), 'items'],
+      [String(covered), 'in warranty'],
+      [s.items.length ? Flow.money(total / s.items.length) : '—', 'average']
+    ].forEach(function (row) {
+      el.stats.appendChild(Flow.h('div', { class: 'in-stat' },
+        Flow.h('b', { text: row[0] }), Flow.h('span', { text: row[1] })));
+    });
+
+    el.rooms.innerHTML = '';
+    var names = Object.keys(rooms).sort();
+    if (!names.length) {
+      el.rooms.appendChild(Flow.h('div', { class: 'flow-empty' },
+        Flow.h('strong', { text: query ? 'Nothing matches that' : 'Nothing listed yet' }),
+        query ? 'Try a different word.' : 'The television, the bike, the laptop. Those first.'));
+      return;
+    }
+
+    names.forEach(function (room) {
+      var items = rooms[room].slice().sort(function (a, b) { return num(b.value) - num(a.value); });
+      var block = Flow.h('div', { class: 'in-room' });
+      block.appendChild(Flow.h('div', { class: 'in-room-head' },
+        Flow.h('span', { text: room }),
+        Flow.h('span', { text: Flow.money(items.reduce(function (a, i) { return a + num(i.value); }, 0)) })));
+
+      var list = Flow.h('ul', { class: 'flow-list' });
+      items.forEach(function (item) {
+        var w = warranty(item);
+        var sub = Flow.h('span', { class: 'sub' });
+        if (item.box) sub.appendChild(Flow.h('span', { text: item.box }));
+        if (w) sub.appendChild(Flow.h('span', { class: 'in-flag' + (w.live ? ' ok' : ''), text: warrantyText(w) }));
+        else if (item.bought) sub.appendChild(Flow.h('span', { text: new Date(item.bought).toLocaleDateString(undefined, { month: 'short', year: 'numeric' }) }));
+
+        list.appendChild(Flow.h('li', { class: 'in-item', style: { cursor: 'pointer' }, onclick: function () { editSheet(item); } },
+          Flow.h('span', { class: 'grow' },
+            Flow.h('span', { class: 'name', text: item.name }),
+            sub),
+          Flow.h('span', { class: 'val', text: num(item.value) ? Flow.money(num(item.value)) : '' })));
+      });
+      block.appendChild(list);
+      el.rooms.appendChild(block);
+    });
+  }
+
+  function editSheet(existing) {
+    var v = existing || { name: '', room: '', value: '', bought: '', warranty: '', box: '', notes: '' };
+    var body = Flow.h('div', { class: 'in-form' });
+
+    var name = Flow.h('input', { class: 'flow-input', value: v.name, placeholder: 'What is it', 'aria-label': 'Item' });
+    var room = Flow.h('input', { class: 'flow-input', value: v.room, placeholder: 'Room', 'aria-label': 'Room', list: 'in-rooms' });
+    var value = Flow.h('input', { class: 'flow-input', type: 'text', inputmode: 'decimal', value: v.value, placeholder: 'What it cost', 'aria-label': 'Value' });
+    var bought = Flow.h('input', { class: 'flow-input', type: 'date', value: v.bought, 'aria-label': 'Bought' });
+    var warrantyM = Flow.h('input', { class: 'flow-input', type: 'text', inputmode: 'numeric', value: v.warranty, placeholder: 'Warranty, months', 'aria-label': 'Warranty in months' });
+    var box = Flow.h('input', { class: 'flow-input', value: v.box, placeholder: 'Which box or shelf', 'aria-label': 'Where' });
+
+    var known = s.items.map(function (i) { return i.room; }).filter(Boolean);
+    var datalist = Flow.h('datalist', { id: 'in-rooms' });
+    known.filter(function (r, i) { return known.indexOf(r) === i; }).forEach(function (r) {
+      datalist.appendChild(Flow.h('option', { value: r }));
+    });
+    body.appendChild(datalist);
+
+    body.appendChild(Flow.h('div', { class: 'flow-field' }, name));
+    body.appendChild(Flow.h('div', { class: 'flow-field flow-row' }, room, value));
+    body.appendChild(Flow.h('span', { class: 'flow-label', text: 'Bought, and how long it is covered for' }));
+    body.appendChild(Flow.h('div', { class: 'flow-field flow-row' }, bought, warrantyM));
+    body.appendChild(Flow.h('div', { class: 'flow-field' }, box));
+
+    var actions = [{
+      label: existing ? 'Save it' : 'Add it', onClick: function () {
+        var text = name.value.trim().slice(0, 60);
+        if (!text) return Flow.toast('It needs a name');
+        var record = {
+          id: existing ? existing.id : uid(),
+          name: text,
+          room: room.value.trim().slice(0, 32),
+          value: value.value.trim(),
+          bought: bought.value,
+          warranty: warrantyM.value.trim(),
+          box: box.value.trim().slice(0, 40),
+          notes: v.notes || ''
+        };
+        if (existing) s.items = s.items.map(function (i) { return i.id === existing.id ? record : i; });
+        else s.items.push(record);
+        s.save(); render(); Flow.haptic();
+      }
+    }];
+    if (existing) {
+      actions.push({ label: 'Remove it', kind: 'danger', onClick: function () {
+        s.items = s.items.filter(function (i) { return i.id !== existing.id; });
+        s.save(); render();
+      } });
+    }
+    actions.push({ label: 'Cancel', kind: 'ghost' });
+
+    var w = existing ? warranty(existing) : null;
+    Flow.sheet({
+      title: existing ? existing.name : 'Something you own',
+      lede: w ? (w.live ? 'Covered until ' + new Date(w.ends).toLocaleDateString(undefined, { month: 'long', year: 'numeric' }) + '.' : 'Warranty ran out in ' + new Date(w.ends).toLocaleDateString(undefined, { month: 'long', year: 'numeric' }) + '.')
+        : 'Only the name is required. The rest is what makes it useful later.',
+      body: body,
+      actions: actions
+    });
+    if (!existing) setTimeout(function () { name.focus(); }, 420);
+  }
+
+  el.search.addEventListener('input', function (e) {
+    query = e.target.value.trim().toLowerCase();
+    render();
+  });
+  Flow.$('#add').addEventListener('click', function () { editSheet(null); });
+
+  render();
+});

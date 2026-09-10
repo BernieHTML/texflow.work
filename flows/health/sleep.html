@@ -1,0 +1,259 @@
+<!--css-->
+.sl-quick { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 18px; }
+.sl-quick .flow-btn { flex-direction: column; gap: 2px; min-height: 70px; }
+.sl-quick .flow-btn small { font-size: 12px; font-weight: 450; opacity: 0.8; }
+
+.sl-chart { display: flex; align-items: flex-end; gap: 4px; height: 108px; margin: 6px 0 8px; }
+.sl-bar { flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: flex-end; gap: 4px; }
+.sl-bar i {
+  display: block;
+  border-radius: 4px 4px 0 0;
+  background: linear-gradient(to top, var(--a1), var(--a2));
+  opacity: 0.9;
+  transition: height 0.3s var(--ease);
+}
+.sl-bar.short i { background: linear-gradient(to top, var(--danger), color-mix(in srgb, var(--danger) 55%, var(--a2))); }
+.sl-bar span { font-size: 9.5px; text-align: center; color: var(--ink-3); }
+
+.sl-goal { position: relative; }
+.sl-goal-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-top: 1.5px dashed var(--line-strong);
+  pointer-events: none;
+}
+.sl-goal-line b { position: absolute; right: 0; top: -16px; font-size: 10.5px; font-weight: 600; color: var(--ink-3); background: var(--bg); padding: 0 4px; }
+
+.sl-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 12px 0; }
+.sl-stat { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 11px 8px; text-align: center; }
+.sl-stat b { display: block; font-size: 19px; font-weight: 660; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+.sl-stat span { font-size: 10.5px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; color: var(--ink-3); }
+
+.sl-times { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.sl-log .hrs { font-variant-numeric: tabular-nums; font-weight: 620; }
+
+<!--html-->
+<section class="flow-section">
+  <div id="answer"></div>
+
+  <div class="sl-quick" style="margin-top:16px">
+    <button class="flow-btn is-quiet" type="button" id="bed">Going to bed<small id="bed-sub">now</small></button>
+    <button class="flow-btn is-quiet" type="button" id="wake">Just woke up<small id="wake-sub">now</small></button>
+  </div>
+
+  <div class="sl-stats" id="stats"></div>
+
+  <span class="flow-label">The last two weeks</span>
+  <div class="sl-goal">
+    <div class="sl-chart" id="chart"></div>
+    <div class="sl-goal-line" id="goal-line"><b id="goal-label"></b></div>
+  </div>
+</section>
+
+<section class="flow-section">
+  <span class="flow-label">Nights</span>
+  <ul class="flow-list sl-log" id="log"></ul>
+</section>
+
+<div class="flow-dock">
+  <button class="flow-btn is-quiet" type="button" id="manual">Add a night by hand</button>
+</div>
+
+<!--js-->
+/* Sleep Log.
+ *
+ * Two taps a day and nothing else. A night is stamped with the *morning* it
+ * ends, so going to bed at 11pm on Tuesday and waking on Wednesday is one
+ * record filed under Wednesday — which is how people talk about it, and it
+ * keeps a 2am bedtime from looking like two nights.
+ *
+ * No wearable, no microphone, no sleep-stage guesswork. Just when you got in
+ * and when you got up, which is the number that actually moves. */
+
+Flow.ready(function () {
+  var GOAL = 8;
+  var s = Flow.state('sleep', { nights: [], pendingBed: null, goal: GOAL });
+
+  var el = {
+    answer: Flow.$('#answer'), stats: Flow.$('#stats'), chart: Flow.$('#chart'),
+    log: Flow.$('#log'), goalLine: Flow.$('#goal-line'), goalLabel: Flow.$('#goal-label')
+  };
+
+  var pad = function (n) { return n < 10 ? '0' + n : String(n); };
+  var hhmm = function (d) { return pad(d.getHours()) + ':' + pad(d.getMinutes()); };
+  var dayKey = function (d) { return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()); };
+
+  function hoursBetween(bedIso, wakeIso) {
+    return Math.max(0, (new Date(wakeIso) - new Date(bedIso)) / 3600000);
+  }
+
+  function shortTime(iso) {
+    return new Date(iso).toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' });
+  }
+
+  function record(bedIso, wakeIso) {
+    var wake = new Date(wakeIso);
+    var night = {
+      id: dayKey(wake),
+      bed: bedIso,
+      wake: wakeIso,
+      hours: hoursBetween(bedIso, wakeIso)
+    };
+    s.nights = s.nights.filter(function (n) { return n.id !== night.id; });
+    s.nights.push(night);
+    s.nights.sort(function (a, b) { return b.id.localeCompare(a.id); });
+    s.nights = s.nights.slice(0, 400);
+  }
+
+  function averageOf(count) {
+    var take = s.nights.slice(0, count);
+    if (!take.length) return 0;
+    return take.reduce(function (a, n) { return a + n.hours; }, 0) / take.length;
+  }
+
+  function hoursText(h) {
+    if (!h) return '—';
+    var whole = Math.floor(h);
+    var mins = Math.round((h - whole) * 60);
+    if (mins === 60) return (whole + 1) + 'h';
+    return whole + 'h' + (mins ? ' ' + mins + 'm' : '');
+  }
+
+  function render() {
+    var last = s.nights[0];
+    Flow.$('#bed-sub').textContent = s.pendingBed ? 'in bed since ' + shortTime(s.pendingBed) : 'now';
+    Flow.$('#wake-sub').textContent = s.pendingBed ? 'ends the night' : 'needs a bedtime first';
+    Flow.$('#wake').disabled = !s.pendingBed;
+
+    el.answer.innerHTML = '';
+    var tile = Flow.h('div', { class: 'flow-tile' });
+    tile.appendChild(Flow.h('div', { class: 'flow-tile-label', text: last ? 'Last night' : 'Nothing logged' }));
+    tile.appendChild(Flow.h('div', { class: 'flow-tile-value', text: last ? hoursText(last.hours) : '—' }));
+    tile.appendChild(Flow.h('div', {
+      class: 'flow-tile-note',
+      text: last
+        ? shortTime(last.bed) + ' to ' + shortTime(last.wake) + ' · seven-night average ' + hoursText(averageOf(7))
+        : 'Tap “Going to bed” tonight. That is the whole thing.'
+    }));
+    el.answer.appendChild(tile);
+
+    el.stats.innerHTML = '';
+    [
+      [hoursText(averageOf(7)), 'last 7'],
+      [hoursText(averageOf(30)), 'last 30'],
+      [s.nights.filter(function (n) { return n.hours >= s.goal; }).length + '', 'good nights']
+    ].forEach(function (row) {
+      el.stats.appendChild(Flow.h('div', { class: 'sl-stat' },
+        Flow.h('b', { text: row[0] }), Flow.h('span', { text: row[1] })));
+    });
+
+    renderChart();
+    renderLog();
+  }
+
+  function renderChart() {
+    el.chart.innerHTML = '';
+    var recent = s.nights.slice(0, 14).reverse();
+    var peak = Math.max(s.goal + 1, recent.reduce(function (a, n) { return Math.max(a, n.hours); }, 0));
+
+    for (var i = 0; i < 14; i++) {
+      var night = recent[i - (14 - recent.length)];
+      var bar = Flow.h('div', { class: 'sl-bar' + (night && night.hours < s.goal - 1 ? ' short' : '') });
+      bar.appendChild(Flow.h('i', {
+        style: { height: night ? Math.max(3, (night.hours / peak) * 84) + 'px' : '3px', opacity: night ? '' : '0.25' }
+      }));
+      bar.appendChild(Flow.h('span', {
+        text: night ? new Date(night.id + 'T12:00:00').toLocaleDateString(undefined, { weekday: 'narrow' }) : ''
+      }));
+      el.chart.appendChild(bar);
+    }
+    // The dashed line sits at the goal, measured against the same scale as the
+    // bars, so "short" is something you see rather than something you work out.
+    el.goalLine.style.bottom = (18 + (s.goal / peak) * 84) + 'px';
+    el.goalLabel.textContent = s.goal + 'h';
+  }
+
+  function renderLog() {
+    el.log.innerHTML = '';
+    if (!s.nights.length) {
+      el.log.appendChild(Flow.h('li', {}, Flow.h('span', { class: 'grow sub', text: 'Nights land here once you log one.' })));
+      return;
+    }
+    s.nights.slice(0, 20).forEach(function (n) {
+      el.log.appendChild(Flow.h('li', { style: { cursor: 'pointer' }, onclick: function () { nightSheet(n); } },
+        Flow.h('span', { class: 'grow' },
+          Flow.h('span', { class: 'name', text: new Date(n.id + 'T12:00:00').toLocaleDateString(undefined, { weekday: 'long', day: 'numeric', month: 'short' }) }),
+          Flow.h('span', { class: 'sub', text: shortTime(n.bed) + ' → ' + shortTime(n.wake) })),
+        Flow.h('span', { class: 'hrs', text: hoursText(n.hours) })));
+    });
+  }
+
+  function nightSheet(n) {
+    Flow.sheet({
+      title: new Date(n.id + 'T12:00:00').toLocaleDateString(undefined, { weekday: 'long', day: 'numeric', month: 'long' }),
+      lede: hoursText(n.hours) + ', from ' + shortTime(n.bed) + ' to ' + shortTime(n.wake) + '.',
+      actions: [
+        { label: 'Delete this night', kind: 'danger', onClick: function () {
+          s.nights = s.nights.filter(function (x) { return x.id !== n.id; });
+          s.save(); render();
+        } },
+        { label: 'Close', kind: 'ghost' }
+      ]
+    });
+  }
+
+  function manualSheet() {
+    var body = Flow.h('div');
+    var yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+
+    var date = Flow.h('input', { class: 'flow-input', type: 'date', value: dayKey(new Date()), 'aria-label': 'Morning of' });
+    var bed = Flow.h('input', { class: 'flow-input', type: 'time', value: '23:00', 'aria-label': 'Went to bed' });
+    var wake = Flow.h('input', { class: 'flow-input', type: 'time', value: '07:00', 'aria-label': 'Woke up' });
+
+    body.appendChild(Flow.h('span', { class: 'flow-label', text: 'Morning of' }));
+    body.appendChild(date);
+    body.appendChild(Flow.h('span', { class: 'flow-label', text: 'Times', style: { marginTop: '12px' } }));
+    var times = Flow.h('div', { class: 'sl-times' });
+    times.appendChild(bed);
+    times.appendChild(wake);
+    body.appendChild(times);
+    body.appendChild(Flow.h('p', { class: 'flow-hint', text: 'Bed time is taken as the night before, unless it is after midday.' }));
+
+    Flow.sheet({
+      title: 'Add a night',
+      body: body,
+      actions: [
+        { label: 'Save it', onClick: function () {
+          if (!date.value || !bed.value || !wake.value) return Flow.toast('It needs all three');
+          var wakeAt = new Date(date.value + 'T' + wake.value);
+          var bedAt = new Date(date.value + 'T' + bed.value);
+          // A bedtime later in the clock than the wake time belongs to the
+          // evening before — 23:00 to 07:00, not 23:00 to 07:00 the same day.
+          if (bedAt >= wakeAt) bedAt.setDate(bedAt.getDate() - 1);
+          record(bedAt.toISOString(), wakeAt.toISOString());
+          s.save(); render(); Flow.haptic();
+        } },
+        { label: 'Cancel', kind: 'ghost' }
+      ]
+    });
+  }
+
+  Flow.$('#bed').addEventListener('click', function () {
+    s.pendingBed = new Date().toISOString();
+    s.save(); render(); Flow.haptic(30);
+    Flow.toast('Sleep well. Tap “Just woke up” in the morning.', 3200);
+  });
+
+  Flow.$('#wake').addEventListener('click', function () {
+    if (!s.pendingBed) return;
+    record(s.pendingBed, new Date().toISOString());
+    s.pendingBed = null;
+    s.save(); render(); Flow.haptic(30);
+  });
+
+  Flow.$('#manual').addEventListener('click', manualSheet);
+
+  render();
+});

@@ -1,0 +1,225 @@
+<!--css-->
+.st-habit {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-1);
+  padding: 14px;
+  margin-bottom: 10px;
+  transition: border-color 0.3s var(--ease);
+}
+.st-habit.is-done { border-color: color-mix(in srgb, var(--a2) 45%, transparent); }
+
+.st-top { display: flex; align-items: center; gap: 12px; }
+.st-tick {
+  flex: none;
+  width: 46px;
+  height: 46px;
+  display: grid;
+  place-items: center;
+  border: 2px solid var(--line-strong);
+  border-radius: 15px;
+  background: none;
+  color: transparent;
+  cursor: pointer;
+  transition: all 0.22s var(--ease);
+}
+.st-tick svg { width: 21px; height: 21px; }
+.st-habit.is-done .st-tick {
+  background: linear-gradient(135deg, var(--a1), var(--a2));
+  border-color: transparent;
+  color: #fff;
+  transform: scale(1.04);
+}
+.st-tick:active { transform: scale(0.9); }
+
+.st-name { flex: 1; min-width: 0; font-size: 16px; font-weight: 570; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.st-run { flex: none; text-align: right; }
+.st-run b { display: block; font-size: 20px; font-weight: 660; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; line-height: 1.1; }
+.st-run span { font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-3); }
+
+.st-grid { display: grid; grid-template-columns: repeat(28, 1fr); gap: 3px; margin-top: 13px; }
+.st-grid i { aspect-ratio: 1; border-radius: 2.5px; background: var(--bg-deep); }
+.st-grid i.on { background: linear-gradient(135deg, var(--a1), var(--a2)); }
+.st-grid i.today { box-shadow: 0 0 0 1.5px var(--ink-3); }
+
+.st-foot { display: flex; justify-content: space-between; margin-top: 9px; font-size: 12px; color: var(--ink-3); }
+
+.st-sum { display: flex; align-items: baseline; gap: 10px; margin-bottom: 4px; }
+
+<!--html-->
+<section class="flow-section">
+  <div id="answer"></div>
+  <div id="list" style="margin-top:16px"></div>
+</section>
+
+<div class="flow-dock">
+  <button class="flow-btn is-quiet" type="button" id="add">Add a habit</button>
+</div>
+
+<!--js-->
+/* Streak.
+ *
+ * Days are stored as plain "YYYY-MM-DD" strings in the phone's own timezone,
+ * not as timestamps. That matters more than it sounds: a tick at 11pm and a
+ * tick at 1am are different days to a person, and an app that quietly disagrees
+ * because it stored UTC will break someone's chain and lose their trust in one
+ * go. Anything that touches "which day is it" goes through dayKey. */
+
+Flow.ready(function () {
+  var s = Flow.state('habits', { list: [] });
+  var listEl = Flow.$('#list');
+  var answerEl = Flow.$('#answer');
+
+  function dayKey(offset) {
+    var d = new Date();
+    d.setDate(d.getDate() - (offset || 0));
+    return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+  }
+
+  function streak(habit) {
+    var run = 0;
+    // Today not being ticked yet does not break a chain — it has not ended,
+    // it just has not happened. Counting starts at yesterday in that case.
+    var start = habit.days.indexOf(dayKey(0)) > -1 ? 0 : 1;
+    for (var i = start; i < 4000; i++) {
+      if (habit.days.indexOf(dayKey(i)) > -1) run++;
+      else break;
+    }
+    return run;
+  }
+
+  function best(habit) {
+    var sorted = habit.days.slice().sort();
+    var run = 0;
+    var top = 0;
+    var prev = null;
+    sorted.forEach(function (key) {
+      var d = new Date(key + 'T12:00:00');
+      run = prev && (d - prev) <= 36 * 3600000 ? run + 1 : 1;
+      top = Math.max(top, run);
+      prev = d;
+    });
+    return top;
+  }
+
+  function toggle(habit) {
+    var key = dayKey(0);
+    var at = habit.days.indexOf(key);
+    if (at > -1) habit.days.splice(at, 1);
+    else { habit.days.push(key); Flow.haptic(30); }
+    s.save();
+    render();
+  }
+
+  function render() {
+    var doneToday = s.list.filter(function (h) { return h.days.indexOf(dayKey(0)) > -1; }).length;
+
+    answerEl.innerHTML = '';
+    var tile = Flow.h('div', { class: 'flow-tile' });
+    tile.appendChild(Flow.h('div', { class: 'flow-tile-label', text: 'Today' }));
+    tile.appendChild(Flow.h('div', {
+      class: 'flow-tile-value',
+      text: s.list.length ? doneToday + ' of ' + s.list.length : '—'
+    }));
+    tile.appendChild(Flow.h('div', {
+      class: 'flow-tile-note',
+      text: !s.list.length ? 'Add the first thing you want to do every day.'
+        : doneToday === s.list.length ? 'All of them. That is the whole job.'
+        : 'Longest run going: ' + s.list.reduce(function (a, h) { return Math.max(a, streak(h)); }, 0) + ' days.'
+    }));
+    answerEl.appendChild(tile);
+
+    listEl.innerHTML = '';
+    s.list.forEach(function (habit) {
+      var done = habit.days.indexOf(dayKey(0)) > -1;
+      var card = Flow.h('div', { class: 'st-habit' + (done ? ' is-done' : '') });
+
+      var top = Flow.h('div', { class: 'st-top' });
+      top.appendChild(Flow.h('button', {
+        class: 'st-tick', type: 'button', html: Flow.icons.check,
+        'aria-label': (done ? 'Undo ' : 'Tick ') + habit.name, 'aria-pressed': done ? 'true' : 'false',
+        onclick: function () { toggle(habit); }
+      }));
+      top.appendChild(Flow.h('span', {
+        class: 'st-name', text: habit.name,
+        onclick: function () { editSheet(habit); }, style: { cursor: 'pointer' }
+      }));
+      var run = streak(habit);
+      top.appendChild(Flow.h('span', { class: 'st-run' },
+        Flow.h('b', { text: String(run) }),
+        Flow.h('span', { text: run === 1 ? 'day' : 'days' })));
+      card.appendChild(top);
+
+      var grid = Flow.h('div', { class: 'st-grid' });
+      for (var i = 27; i >= 0; i--) {
+        var key = dayKey(i);
+        grid.appendChild(Flow.h('i', {
+          class: (habit.days.indexOf(key) > -1 ? 'on' : '') + (i === 0 ? ' today' : ''),
+          title: key
+        }));
+      }
+      card.appendChild(grid);
+
+      var b = best(habit);
+      card.appendChild(Flow.h('div', { class: 'st-foot' },
+        Flow.h('span', { text: 'four weeks' }),
+        Flow.h('span', { text: b > run ? 'best run ' + b + ' days' : 'this is your best run' })));
+
+      listEl.appendChild(card);
+    });
+
+    if (!s.list.length) {
+      listEl.appendChild(Flow.h('div', { class: 'flow-empty' },
+        Flow.h('strong', { text: 'Nothing to keep going yet' }),
+        'One or two habits works. Ten does not.'));
+    }
+  }
+
+  function editSheet(existing) {
+    var input = Flow.h('input', {
+      class: 'flow-input', placeholder: 'Read for 20 minutes', 'aria-label': 'Habit',
+      value: existing ? existing.name : ''
+    });
+    var actions = [{
+      label: existing ? 'Save it' : 'Add it', onClick: function () {
+        var name = input.value.trim().slice(0, 48);
+        if (!name) return;
+        if (existing) existing.name = name;
+        else s.list.push({ id: String(Date.now()), name: name, days: [] });
+        s.save(); render(); Flow.haptic();
+      }
+    }];
+    if (existing) {
+      actions.push({ label: 'Delete', kind: 'danger', onClick: function () {
+        Flow.confirm({
+          title: 'Delete ' + existing.name + '?',
+          lede: 'Its whole history goes with it.',
+          confirmLabel: 'Delete it', danger: true
+        }).then(function (ok) {
+          if (!ok) return;
+          s.list = s.list.filter(function (h) { return h.id !== existing.id; });
+          s.save(); render();
+        });
+      } });
+    }
+    actions.push({ label: 'Cancel', kind: 'ghost' });
+
+    Flow.sheet({
+      title: existing ? existing.name : 'A habit',
+      lede: existing ? 'Ticked on ' + existing.days.length + ' days so far.' : 'Something small, every day.',
+      body: Flow.h('div', {}, input),
+      actions: actions
+    });
+    setTimeout(function () { input.focus(); }, 420);
+  }
+
+  Flow.$('#add').addEventListener('click', function () { editSheet(null); });
+
+  // Left open overnight, the grid and the streaks would be a day stale.
+  document.addEventListener('visibilitychange', function () {
+    if (document.visibilityState === 'visible') render();
+  });
+
+  render();
+});

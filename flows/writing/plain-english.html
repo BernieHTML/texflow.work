@@ -1,0 +1,271 @@
+<!--css-->
+.pe-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 14px 0; }
+.pe-stat {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  padding: 10px 8px;
+  text-align: center;
+}
+.pe-stat b { display: block; font-size: 20px; font-weight: 660; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
+.pe-stat span { display: block; font-size: 10.5px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; color: var(--ink-3); margin-top: 2px; }
+
+.pe-out {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-1);
+  padding: 16px;
+  font-size: 16.5px;
+  line-height: 1.72;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.pe-out .s-long { background: color-mix(in srgb, #f59e0b 24%, transparent); border-radius: 4px; box-shadow: 0 0 0 2px color-mix(in srgb, #f59e0b 24%, transparent); }
+.pe-w { border-radius: 3px; padding: 0 1px; }
+.pe-w.w-jargon { background: color-mix(in srgb, #f43f5e 24%, transparent); cursor: help; border-bottom: 2px solid color-mix(in srgb, #f43f5e 60%, transparent); }
+.pe-w.w-passive { background: color-mix(in srgb, #8b5cf6 24%, transparent); }
+.pe-w.w-adverb { background: color-mix(in srgb, #0ea5e9 22%, transparent); }
+
+.pe-legend { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0 0; }
+.pe-key { display: inline-flex; align-items: center; gap: 7px; font-size: 13px; color: var(--ink-2); }
+.pe-key i { width: 13px; height: 13px; border-radius: 4px; display: inline-block; }
+
+.pe-swaps { margin-top: 8px; }
+.pe-swaps li { justify-content: space-between; }
+.pe-swaps del { color: var(--ink-3); text-decoration-color: color-mix(in srgb, var(--danger) 60%, transparent); }
+.pe-swaps b { color: var(--good); font-weight: 620; }
+
+<!--html-->
+<section class="flow-section">
+  <textarea class="flow-textarea" id="text" rows="7" placeholder="Paste the paragraph nobody understood." aria-label="Your text"></textarea>
+  <div class="pe-stats" id="stats"></div>
+  <p class="flow-hint" id="verdict"></p>
+</section>
+
+<section class="flow-section" id="result-wrap">
+  <span class="flow-label">Where it gets hard</span>
+  <div class="pe-out" id="out"></div>
+  <div class="pe-legend" id="legend"></div>
+</section>
+
+<section class="flow-section flow-hidden" id="swaps-wrap">
+  <span class="flow-label">Shorter words that mean the same</span>
+  <ul class="flow-list pe-swaps" id="swaps"></ul>
+</section>
+
+<!--js-->
+/* Plain English.
+ *
+ * Not a grammar checker and not an opinion about style — four mechanical
+ * things that reliably make a sentence hard to get through the first time:
+ * it is too long, it hides who did what, it uses a long word where a short one
+ * exists, or it leans on an adverb instead of a better verb. Everything is
+ * computed here, in the page, so a draft nobody has seen yet stays that way. */
+
+Flow.ready(function () {
+  // Long word on the left, the word people actually say on the right.
+  var SWAPS = {
+    utilise: 'use', utilize: 'use', utilised: 'used', utilized: 'used',
+    commence: 'start', commenced: 'started', terminate: 'end', terminated: 'ended',
+    facilitate: 'help', facilitated: 'helped', endeavour: 'try', endeavor: 'try',
+    ascertain: 'find out', additional: 'more', approximately: 'about',
+    assistance: 'help', attempt: 'try', obtain: 'get', purchase: 'buy',
+    require: 'need', requires: 'needs', required: 'needed', sufficient: 'enough',
+    demonstrate: 'show', demonstrates: 'shows', indicate: 'show', indicates: 'shows',
+    implement: 'do', implemented: 'done', initiate: 'start', prior: 'before',
+    subsequent: 'later', subsequently: 'later', currently: 'now', presently: 'now',
+    numerous: 'many', majority: 'most', minimise: 'cut', minimize: 'cut',
+    optimise: 'improve', optimize: 'improve', leverage: 'use', regarding: 'about',
+    concerning: 'about', accordingly: 'so', therefore: 'so', however: 'but',
+    furthermore: 'also', moreover: 'also', nevertheless: 'still',
+    notwithstanding: 'despite', pursuant: 'under', aforementioned: 'this',
+    henceforth: 'from now on', whilst: 'while', amongst: 'among', upon: 'on',
+    'in order to': 'to', 'due to the fact that': 'because', 'at this point in time': 'now',
+    'in the event that': 'if', 'with regard to': 'about', 'a large number of': 'many',
+    'has the ability to': 'can', 'is able to': 'can', 'in the near future': 'soon',
+    'take into consideration': 'consider', 'on a daily basis': 'daily',
+    'a sufficient number of': 'enough', 'despite the fact that': 'although'
+  };
+  var PARTICIPLES = /^(been|born|done|made|given|taken|seen|known|shown|held|kept|left|sent|built|written|told|found|paid|put|read|set|lost|won|caught|brought|bought|thought|taught|sold|told|understood|\w+ed|\w+en)$/i;
+  var BE = /^(am|is|are|was|were|be|been|being|get|gets|got)$/i;
+  var NOT_ADVERB = /^(only|early|likely|friendly|family|reply|apply|supply|holy|ugly|silly|lovely|daily|weekly|monthly|yearly)$/i;
+
+  var s = Flow.state('draft', { text: '' });
+  var el = {
+    text: Flow.$('#text'), stats: Flow.$('#stats'), out: Flow.$('#out'),
+    verdict: Flow.$('#verdict'), legend: Flow.$('#legend'),
+    swaps: Flow.$('#swaps'), swapsWrap: Flow.$('#swaps-wrap'), resultWrap: Flow.$('#result-wrap')
+  };
+
+  function syllables(word) {
+    var w = word.toLowerCase().replace(/[^a-z]/g, '');
+    if (w.length <= 3) return 1;
+    w = w.replace(/(?:[^laeiouy]es|ed|[^laeiouy]e)$/, '').replace(/^y/, '');
+    var groups = w.match(/[aeiouy]{1,2}/g);
+    return groups ? groups.length : 1;
+  }
+
+  // Sentences, kept with their offsets so the marks can be painted back onto
+  // the original text rather than onto a reconstruction of it.
+  function sentences(text) {
+    var out = [];
+    var re = /[^.!?\n]+[.!?]*(\n+|$|\s+)/g;
+    var m;
+    while ((m = re.exec(text))) {
+      if (!m[0].trim()) continue;
+      out.push({ start: m.index, end: m.index + m[0].length, text: m[0] });
+      if (re.lastIndex === m.index) re.lastIndex++;
+    }
+    return out;
+  }
+
+  function analyse(text) {
+    var sents = sentences(text);
+    var words = text.match(/[A-Za-z][A-Za-z'-]*/g) || [];
+    var syl = words.reduce(function (a, w) { return a + syllables(w); }, 0);
+    var perSentence = sents.length ? words.length / sents.length : 0;
+    var grade = sents.length && words.length
+      ? 0.39 * perSentence + 11.8 * (syl / words.length) - 15.59
+      : 0;
+
+    // Marks are (start, end, kind) spans over the raw text.
+    var marks = [];
+    var swapsFound = {};
+
+    Object.keys(SWAPS).forEach(function (from) {
+      var re = new RegExp('\\b' + from.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b', 'gi');
+      var m;
+      while ((m = re.exec(text))) {
+        marks.push({ start: m.index, end: m.index + m[0].length, kind: 'jargon', to: SWAPS[from] });
+        swapsFound[m[0].toLowerCase()] = SWAPS[from];
+      }
+    });
+
+    var wordRe = /[A-Za-z][A-Za-z'-]*/g;
+    var tokens = [];
+    var t;
+    while ((t = wordRe.exec(text))) tokens.push({ w: t[0], start: t.index, end: t.index + t[0].length });
+
+    tokens.forEach(function (tok, i) {
+      if (/ly$/i.test(tok.w) && tok.w.length > 5 && !NOT_ADVERB.test(tok.w)) {
+        marks.push({ start: tok.start, end: tok.end, kind: 'adverb' });
+      }
+      // "was written", "is being considered" — a form of *to be* followed by a
+      // past participle, with at most one word in between.
+      if (BE.test(tok.w)) {
+        for (var j = i + 1; j <= i + 2 && j < tokens.length; j++) {
+          if (PARTICIPLES.test(tokens[j].w) && !BE.test(tokens[j].w)) {
+            marks.push({ start: tok.start, end: tokens[j].end, kind: 'passive' });
+            break;
+          }
+        }
+      }
+    });
+
+    var long = sents.filter(function (sen) {
+      return (sen.text.match(/[A-Za-z][A-Za-z'-]*/g) || []).length > 25;
+    });
+
+    return {
+      words: words.length, sentences: sents.length, perSentence: perSentence,
+      grade: Math.max(0, grade), minutes: words.length / 220,
+      marks: marks, long: long, swaps: swapsFound,
+      passive: marks.filter(function (m) { return m.kind === 'passive'; }).length
+    };
+  }
+
+  // Overlapping marks would nest badly, so the highest-value one wins per
+  // character and runs are emitted in one pass.
+  var RANK = { jargon: 3, passive: 2, adverb: 1 };
+
+  function paint(text, a) {
+    var kinds = new Array(text.length).fill(null);
+    a.marks.forEach(function (m) {
+      for (var i = m.start; i < m.end && i < text.length; i++) {
+        if (!kinds[i] || RANK[m.kind] > RANK[kinds[i]]) kinds[i] = m.kind;
+      }
+    });
+    var longAt = new Array(text.length).fill(false);
+    a.long.forEach(function (sen) {
+      for (var i = sen.start; i < sen.end && i < text.length; i++) longAt[i] = true;
+    });
+
+    var html = '';
+    var i = 0;
+    while (i < text.length) {
+      var kind = kinds[i];
+      var isLong = longAt[i];
+      var j = i;
+      while (j < text.length && kinds[j] === kind && longAt[j] === isLong) j++;
+      var chunk = Flow.esc(text.slice(i, j));
+      if (kind) chunk = '<span class="pe-w w-' + kind + '">' + chunk + '</span>';
+      if (isLong) chunk = '<span class="s-long">' + chunk + '</span>';
+      html += chunk;
+      i = j;
+    }
+    return html;
+  }
+
+  function render() {
+    var text = el.text.value;
+    var a = analyse(text);
+    var has = a.words > 0;
+
+    el.stats.innerHTML = '';
+    [
+      [a.words, 'words'],
+      [a.sentences, 'sentences'],
+      [has ? Math.round(a.perSentence) : '—', 'per sentence'],
+      [has ? (a.minutes < 1 ? '<1' : Math.round(a.minutes)) + 'm' : '—', 'to read']
+    ].forEach(function (row) {
+      el.stats.appendChild(Flow.h('div', { class: 'pe-stat' },
+        Flow.h('b', { text: String(row[0]) }), Flow.h('span', { text: row[1] })));
+    });
+
+    el.verdict.textContent = !has ? 'Paste something in and it will show you where a reader slows down.'
+      : verdict(a);
+
+    el.resultWrap.classList.toggle('flow-hidden', !has);
+    el.out.innerHTML = has ? paint(text, a) : '';
+
+    el.legend.innerHTML = '';
+    [
+      ['#f59e0b', a.long.length + ' long ' + (a.long.length === 1 ? 'sentence' : 'sentences')],
+      ['#f43f5e', Object.keys(a.swaps).length + ' long ' + (Object.keys(a.swaps).length === 1 ? 'word' : 'words')],
+      ['#8b5cf6', a.passive + ' passive'],
+      ['#0ea5e9', a.marks.filter(function (m) { return m.kind === 'adverb'; }).length + ' adverbs']
+    ].forEach(function (row) {
+      el.legend.appendChild(Flow.h('span', { class: 'pe-key' },
+        Flow.h('i', { style: { background: row[0] } }), row[1]));
+    });
+
+    var swapKeys = Object.keys(a.swaps);
+    el.swapsWrap.classList.toggle('flow-hidden', !swapKeys.length);
+    el.swaps.innerHTML = '';
+    swapKeys.sort().forEach(function (from) {
+      el.swaps.appendChild(Flow.h('li', {},
+        Flow.h('span', { class: 'grow' }, Flow.h('del', { text: from })),
+        Flow.h('b', { text: a.swaps[from] })));
+    });
+  }
+
+  function verdict(a) {
+    var g = Math.round(a.grade);
+    var reader = g <= 8 ? 'Anyone can read this at speed.'
+      : g <= 11 ? 'Fine for most people, first time through.'
+      : g <= 14 ? 'Heavy going. Expect people to re-read sentences.'
+      : 'Dense. Most readers will give up before the end.';
+    return 'Reading age about ' + (g + 5) + ' — school year ' + g + '. ' + reader;
+  }
+
+  var timer;
+  el.text.value = s.text;
+  el.text.addEventListener('input', function () {
+    render();
+    clearTimeout(timer);
+    timer = setTimeout(function () { s.text = el.text.value; s.save(); }, 400);
+  });
+
+  render();
+});

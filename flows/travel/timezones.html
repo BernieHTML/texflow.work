@@ -1,0 +1,307 @@
+<!--css-->
+.tz-place { margin-bottom: 16px; }
+.tz-head { display: flex; align-items: baseline; gap: 10px; margin: 0 2px 6px; }
+.tz-city { font-size: 16px; font-weight: 600; letter-spacing: -0.01em; }
+.tz-when { font-size: 14px; color: var(--ink-2); font-variant-numeric: tabular-nums; margin-left: auto; }
+.tz-off { font-size: 12px; color: var(--ink-3); font-variant-numeric: tabular-nums; }
+
+.tz-strip {
+  position: relative;
+  display: flex;
+  height: 34px;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  touch-action: none;
+  cursor: ew-resize;
+}
+.tz-strip i { flex: 1; min-width: 0; border-right: 1px solid var(--line); }
+.tz-strip i:last-child { border-right: 0; }
+.tz-strip i.night { background: color-mix(in srgb, var(--ink) 9%, transparent); }
+.tz-strip i.work { background: color-mix(in srgb, var(--a2) 22%, transparent); }
+.tz-strip i.edge { background: color-mix(in srgb, var(--a2) 9%, transparent); }
+
+.tz-cursor {
+  position: absolute;
+  top: -3px;
+  bottom: -3px;
+  width: 3px;
+  border-radius: 2px;
+  background: var(--ink);
+  pointer-events: none;
+  transition: left 0.1s linear;
+}
+.tz-labels { display: flex; margin-top: 3px; font-size: 10px; color: var(--ink-3); }
+.tz-labels span { flex: 1; text-align: center; font-variant-numeric: tabular-nums; }
+
+.tz-verdict { display: flex; align-items: center; gap: 8px; margin-top: 6px; font-size: 13px; }
+.tz-dot { width: 9px; height: 9px; border-radius: 50%; flex: none; }
+.tz-good { background: var(--good); }
+.tz-ok { background: #f59e0b; }
+.tz-bad { background: var(--danger); }
+
+.tz-search { position: relative; }
+.tz-results { max-height: 46vh; overflow-y: auto; margin-top: 10px; }
+
+<!--html-->
+<section class="flow-section">
+  <div class="flow-tile">
+    <div class="flow-tile-label">Everyone is awake at</div>
+    <div class="flow-tile-value" id="best">—</div>
+    <div class="flow-tile-note" id="best-note">Add a couple of places.</div>
+  </div>
+</section>
+
+<section class="flow-section">
+  <div class="flow-segment" id="mode">
+    <button type="button" data-mode="now">Right now</button>
+    <button type="button" data-mode="scrub">Slide through the day</button>
+  </div>
+</section>
+
+<section class="flow-section" id="places"></section>
+
+<div class="flow-dock">
+  <button class="flow-btn" type="button" id="add">Add a place</button>
+</div>
+
+<!--js-->
+/* Time Zones.
+ *
+ * No network and no timezone database shipped in the file: `Intl` already has
+ * one, and it is the operating system's, which means it is right about daylight
+ * saving without anybody having to update anything. Every offset here is
+ * measured by formatting the same instant in two zones and subtracting — the
+ * long way round, but the only way that stays correct in October.
+ *
+ * The bar under each city is a whole day. Drag it and every other city moves
+ * with it, which is the question people actually have: if it is 4pm here, who
+ * is asleep? */
+
+Flow.ready(function () {
+  var CITIES = [
+    ['Sydney', 'Australia/Sydney'], ['Melbourne', 'Australia/Melbourne'], ['Brisbane', 'Australia/Brisbane'],
+    ['Perth', 'Australia/Perth'], ['Adelaide', 'Australia/Adelaide'], ['Auckland', 'Pacific/Auckland'],
+    ['Tokyo', 'Asia/Tokyo'], ['Seoul', 'Asia/Seoul'], ['Shanghai', 'Asia/Shanghai'],
+    ['Hong Kong', 'Asia/Hong_Kong'], ['Singapore', 'Asia/Singapore'], ['Jakarta', 'Asia/Jakarta'],
+    ['Bangkok', 'Asia/Bangkok'], ['Delhi', 'Asia/Kolkata'], ['Mumbai', 'Asia/Kolkata'],
+    ['Karachi', 'Asia/Karachi'], ['Dubai', 'Asia/Dubai'], ['Tel Aviv', 'Asia/Jerusalem'],
+    ['Istanbul', 'Europe/Istanbul'], ['Moscow', 'Europe/Moscow'], ['Athens', 'Europe/Athens'],
+    ['Berlin', 'Europe/Berlin'], ['Paris', 'Europe/Paris'], ['Madrid', 'Europe/Madrid'],
+    ['Rome', 'Europe/Rome'], ['Amsterdam', 'Europe/Amsterdam'], ['Stockholm', 'Europe/Stockholm'],
+    ['Warsaw', 'Europe/Warsaw'], ['London', 'Europe/London'], ['Dublin', 'Europe/Dublin'],
+    ['Lisbon', 'Europe/Lisbon'], ['Reykjavik', 'Atlantic/Reykjavik'], ['Lagos', 'Africa/Lagos'],
+    ['Cairo', 'Africa/Cairo'], ['Nairobi', 'Africa/Nairobi'], ['Johannesburg', 'Africa/Johannesburg'],
+    ['São Paulo', 'America/Sao_Paulo'], ['Buenos Aires', 'America/Argentina/Buenos_Aires'],
+    ['Santiago', 'America/Santiago'], ['Bogotá', 'America/Bogota'], ['Lima', 'America/Lima'],
+    ['Mexico City', 'America/Mexico_City'], ['Chicago', 'America/Chicago'], ['New York', 'America/New_York'],
+    ['Toronto', 'America/Toronto'], ['Halifax', 'America/Halifax'], ['Denver', 'America/Denver'],
+    ['Phoenix', 'America/Phoenix'], ['Los Angeles', 'America/Los_Angeles'], ['Vancouver', 'America/Vancouver'],
+    ['Anchorage', 'America/Anchorage'], ['Honolulu', 'Pacific/Honolulu'], ['Fiji', 'Pacific/Fiji'],
+    ['UTC', 'UTC']
+  ];
+
+  var here = (function () {
+    try { return Intl.DateTimeFormat().resolvedOptions().timeZone; } catch (e) { return 'UTC'; }
+  })();
+  var hereName = (CITIES.find(function (c) { return c[1] === here; }) || [here.split('/').pop().replace(/_/g, ' '), here])[0];
+
+  var s = Flow.state('zones', {
+    places: [[hereName, here], ['London', 'Europe/London'], ['New York', 'America/New_York']],
+    mode: 'now',
+    hour: new Date().getHours()
+  });
+
+  var el = { places: Flow.$('#places'), mode: Flow.$('#mode') };
+
+  // Offset in minutes between a zone and UTC at a given instant, worked out by
+  // asking Intl what the wall clock reads there and comparing.
+  var partsCache = {};
+  function offsetMinutes(zone, at) {
+    var key = zone + '|' + Math.floor(at / 60000);
+    if (partsCache[key] !== undefined) return partsCache[key];
+    var fmt;
+    try {
+      fmt = new Intl.DateTimeFormat('en-GB', {
+        timeZone: zone, hour12: false,
+        year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit'
+      });
+    } catch (e) { partsCache[key] = 0; return 0; }
+    var p = {};
+    fmt.formatToParts(new Date(at)).forEach(function (part) { p[part.type] = part.value; });
+    var asUtc = Date.UTC(+p.year, +p.month - 1, +p.day, +p.hour % 24, +p.minute, +p.second);
+    var mins = Math.round((asUtc - Math.floor(at / 1000) * 1000) / 60000);
+    partsCache[key] = mins;
+    return mins;
+  }
+
+  // The instant the strip is pointing at: now, or the chosen hour today in the
+  // *first* place on the list, which is the one people think of as "here".
+  function instant() {
+    if (s.mode === 'now') return Date.now();
+    var now = Date.now();
+    var off = offsetMinutes(s.places[0][1], now) * 60000;
+    // Shift into the anchor's local frame, snap to its midnight, add the hour
+    // the strip is pointing at, then shift back to a real instant.
+    var midnight = Math.floor((now + off) / 86400000) * 86400000;
+    return midnight + s.hour * 3600000 - off;
+  }
+
+  function localHour(zone, at) {
+    var mins = offsetMinutes(zone, at);
+    var utcMinutes = Math.floor(at / 60000);
+    return (((utcMinutes + mins) / 60) % 24 + 24) % 24;
+  }
+
+  function timeText(zone, at) {
+    try {
+      return new Intl.DateTimeFormat(undefined, { timeZone: zone, hour: 'numeric', minute: '2-digit' }).format(new Date(at));
+    } catch (e) { return '—'; }
+  }
+
+  function dayText(zone, at) {
+    try {
+      return new Intl.DateTimeFormat(undefined, { timeZone: zone, weekday: 'short' }).format(new Date(at));
+    } catch (e) { return ''; }
+  }
+
+  var band = function (h) { return h >= 9 && h < 17 ? 'work' : (h >= 7 && h < 21 ? 'edge' : 'night'); };
+
+  function render() {
+    Flow.$$('#mode button').forEach(function (b) {
+      b.setAttribute('aria-pressed', b.dataset.mode === s.mode ? 'true' : 'false');
+    });
+
+    var at = instant();
+    el.places.innerHTML = '';
+
+    s.places.forEach(function (place, index) {
+      var wrap = Flow.h('div', { class: 'tz-place' });
+      var head = Flow.h('div', { class: 'tz-head' });
+      head.appendChild(Flow.h('span', { class: 'tz-city', text: place[0] }));
+      var diff = (offsetMinutes(place[1], at) - offsetMinutes(s.places[0][1], at)) / 60;
+      head.appendChild(Flow.h('span', {
+        class: 'tz-off',
+        text: index === 0 ? 'you' : (diff === 0 ? 'same hour' : (diff > 0 ? '+' : '') + Flow.num(diff, Math.abs(diff % 1) > 0.01 ? 1 : 0) + ' h')
+      }));
+      head.appendChild(Flow.h('span', { class: 'tz-when', text: dayText(place[1], at) + ' ' + timeText(place[1], at) }));
+      wrap.appendChild(head);
+
+      var strip = Flow.h('div', { class: 'tz-strip', dataset: { index: index } });
+      var offset = offsetMinutes(place[1], at) - offsetMinutes(s.places[0][1], at);
+      for (var col = 0; col < 24; col++) {
+        var h = Math.floor((((col * 60 + offset) / 60) % 24 + 24) % 24);
+        strip.appendChild(Flow.h('i', { class: band(h) }));
+      }
+      var cursorHour = localHour(s.places[0][1], at);
+      strip.appendChild(Flow.h('div', { class: 'tz-cursor', style: { left: (cursorHour / 24) * 100 + '%' } }));
+      wrap.appendChild(strip);
+
+      if (index === 0) {
+        var labels = Flow.h('div', { class: 'tz-labels' });
+        [0, 6, 12, 18].forEach(function (h) {
+          labels.appendChild(Flow.h('span', { style: { flex: '6' }, text: (h === 0 ? '12am' : h === 12 ? '12pm' : h > 12 ? (h - 12) + 'pm' : h + 'am') }));
+        });
+        wrap.appendChild(labels);
+      }
+
+      if (s.places.length > 1) {
+        var remove = Flow.h('button', {
+          class: 'flow-x', type: 'button', 'aria-label': 'Remove ' + place[0], html: Flow.icons.x,
+          onclick: function () { s.places.splice(index, 1); s.save(); render(); }
+        });
+        head.insertBefore(remove, head.children[1]);
+      }
+
+      el.places.appendChild(wrap);
+    });
+
+    renderVerdict(at);
+    wireScrub();
+  }
+
+  function renderVerdict(at) {
+    var hours = s.places.map(function (p) { return localHour(p[1], at); });
+    var worst = hours.reduce(function (a, h) {
+      var rank = band(h) === 'work' ? 0 : band(h) === 'edge' ? 1 : 2;
+      return Math.max(a, rank);
+    }, 0);
+
+    Flow.$('#best').textContent = s.places.length < 2 ? '—' : timeText(s.places[0][1], at);
+    Flow.$('#best-note').textContent = s.places.length < 2
+      ? 'Add a second place and this tells you who is asleep.'
+      : worst === 0 ? 'Working hours everywhere. Book it.'
+        : worst === 1 ? 'Early or late for someone, but nobody is in bed.'
+          : 'Somebody is asleep. Try dragging the bar.';
+  }
+
+  var scrubbing = null;
+  function wireScrub() {
+    Flow.$$('.tz-strip').forEach(function (strip) {
+      strip.addEventListener('pointerdown', function (e) {
+        s.mode = 'scrub';
+        scrubbing = strip;
+        strip.setPointerCapture(e.pointerId);
+        scrub(e, strip);
+      });
+      strip.addEventListener('pointermove', function (e) { if (scrubbing === strip) scrub(e, strip); });
+      strip.addEventListener('pointerup', function () { scrubbing = null; s.save(); });
+      strip.addEventListener('pointercancel', function () { scrubbing = null; });
+    });
+  }
+
+  function scrub(e, strip) {
+    var rect = strip.getBoundingClientRect();
+    var frac = Math.min(0.999, Math.max(0, (e.clientX - rect.left) / rect.width));
+    // The bar you dragged shows *its* hours, so convert back to the anchor's.
+    var index = Number(strip.dataset.index);
+    var at = instant();
+    var shift = (offsetMinutes(s.places[index][1], at) - offsetMinutes(s.places[0][1], at)) / 60;
+    s.hour = Math.round(((frac * 24 - shift) % 24 + 24) % 24);
+    render();
+  }
+
+  function addSheet() {
+    var body = Flow.h('div', { class: 'tz-search' });
+    var input = Flow.h('input', { class: 'flow-input', placeholder: 'City or country', 'aria-label': 'Search' });
+    var results = Flow.h('ul', { class: 'flow-list tz-results' });
+    body.appendChild(input);
+    body.appendChild(results);
+
+    function paint() {
+      var q = input.value.trim().toLowerCase();
+      var hits = CITIES.filter(function (c) {
+        return !q || c[0].toLowerCase().indexOf(q) > -1 || c[1].toLowerCase().indexOf(q) > -1;
+      }).slice(0, 40);
+      results.innerHTML = '';
+      hits.forEach(function (c) {
+        results.appendChild(Flow.h('li', { style: { cursor: 'pointer' }, onclick: function () {
+          if (!s.places.some(function (p) { return p[1] === c[1] && p[0] === c[0]; })) s.places.push(c);
+          s.save(); handle.close(); render(); Flow.haptic();
+        } },
+          Flow.h('span', { class: 'grow' },
+            Flow.h('span', { class: 'name', text: c[0] }),
+            Flow.h('span', { class: 'sub', text: c[1].replace(/_/g, ' ') })),
+          Flow.h('span', { class: 'val', style: { fontWeight: '500', fontSize: '14px' }, text: timeText(c[1], Date.now()) })));
+      });
+    }
+
+    input.addEventListener('input', paint);
+    paint();
+    var handle = Flow.sheet({ title: 'Add a place', body: body });
+    setTimeout(function () { input.focus(); }, 420);
+  }
+
+  Flow.$$('#mode button').forEach(function (b) {
+    b.addEventListener('click', function () {
+      s.mode = b.dataset.mode;
+      if (s.mode === 'scrub') s.hour = Math.floor(localHour(s.places[0][1], Date.now()));
+      s.save(); render(); Flow.haptic();
+    });
+  });
+  Flow.$('#add').addEventListener('click', addSheet);
+
+  setInterval(function () { if (s.mode === 'now') { partsCache = {}; render(); } }, 30000);
+  render();
+});
