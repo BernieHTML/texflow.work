@@ -1,6 +1,6 @@
 // Service worker for the "Who Owes What" Flow. Scope is this directory only,
 // so a deleted copy takes nothing else with it.
-const CACHE = 'flow-owed-c162aebc18';
+const CACHE = 'flow-owed-2d77f09df2';
 const SHELL = ['./', './manifest.webmanifest', './icon-192.png', './icon-512.png', './icon-maskable-512.png'];
 
 self.addEventListener('install', (e) => {

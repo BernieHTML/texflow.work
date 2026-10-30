@@ -1,6 +1,6 @@
 // Service worker for the "Pace" Flow. Scope is this directory only,
 // so a deleted copy takes nothing else with it.
-const CACHE = 'flow-pace-6c1b5a9379';
+const CACHE = 'flow-pace-ad84d43d0a';
 const SHELL = ['./', './manifest.webmanifest', './icon-192.png', './icon-512.png', './icon-maskable-512.png'];
 
 self.addEventListener('install', (e) => {

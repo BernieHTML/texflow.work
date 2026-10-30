@@ -1,6 +1,6 @@
 // Service worker for the "Home Inventory" Flow. Scope is this directory only,
 // so a deleted copy takes nothing else with it.
-const CACHE = 'flow-inventory-8a3f8705e9';
+const CACHE = 'flow-inventory-ef4adc13c3';
 const SHELL = ['./', './manifest.webmanifest', './icon-192.png', './icon-512.png', './icon-maskable-512.png'];
 
 self.addEventListener('install', (e) => {

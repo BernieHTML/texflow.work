@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
+<meta name="theme-color" content="#0d0b1f">
+<title>Hi Lily — Mood Mirror</title>
+<meta name="description" content="A tiny emotion detector that reads your face with the camera. Built on a 3am call.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌈</text></svg>">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --mood: #ff6ec7;
+    --mood-2: #7c5cff;
+    --ink: #fdfbff;
+    --muted: rgba(253, 251, 255, .62);
+    --card: rgba(255, 255, 255, .07);
+    --stroke: rgba(255, 255, 255, .16);
+    --radius: 28px;
+  }
+
+  html, body { height: 100%; }
+
+  body {
+    font-family: ui-rounded, "SF Pro Rounded", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+    background: #0d0b1f;
+    color: var(--ink);
+    min-height: 100dvh;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -webkit-tap-highlight-color: transparent;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* --- animated background --- */
+  .blobs { position: fixed; inset: -20vh -20vw; z-index: 0; filter: blur(70px); opacity: .75; pointer-events: none; }
+  .blob { position: absolute; border-radius: 50%; mix-blend-mode: screen; transition: background 1.2s ease; }
+  .b1 { width: 60vmax; height: 60vmax; top: -10%; left: -15%; background: var(--mood); animation: drift1 18s ease-in-out infinite; }
+  .b2 { width: 50vmax; height: 50vmax; bottom: -15%; right: -15%; background: var(--mood-2); animation: drift2 22s ease-in-out infinite; }
+  .b3 { width: 40vmax; height: 40vmax; top: 35%; left: 30%; background: #35e0ff; opacity: .5; animation: drift3 26s ease-in-out infinite; }
+
+  @keyframes drift1 { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(12vw, 10vh) scale(1.2); } }
+  @keyframes drift2 { 0%,100% { transform: translate(0,0) scale(1.1); } 50% { transform: translate(-14vw,-8vh) scale(.9); } }
+  @keyframes drift3 { 0%,100% { transform: translate(0,0) scale(.9); } 50% { transform: translate(8vw,-14vh) scale(1.25); } }
+
+  .grain { position: fixed; inset: 0; z-index: 1; pointer-events: none; opacity: .05;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+
+  /* --- layout --- */
+  main {
+    position: relative; z-index: 2;
+    width: 100%; max-width: 460px; margin: 0 auto; flex: 1;
+    padding: max(22px, env(safe-area-inset-top)) 20px calc(28px + env(safe-area-inset-bottom));
+    display: flex; flex-direction: column; gap: 18px;
+  }
+
+  header { text-align: center; animation: rise .7s cubic-bezier(.2,.9,.3,1) both; }
+  .hi { font-size: clamp(30px, 9vw, 40px); font-weight: 800; letter-spacing: -.02em; line-height: 1.05; }
+  .hi span { background: linear-gradient(100deg, var(--mood), #ffd166 55%, var(--mood-2));
+             -webkit-background-clip: text; background-clip: text; color: transparent;
+             background-size: 220% 100%; animation: shimmer 6s linear infinite; }
+  .sub { margin-top: 8px; font-size: 14.5px; color: var(--muted); font-weight: 500; }
+  .sub b { color: var(--ink); font-weight: 700; }
+
+  @keyframes shimmer { to { background-position: 220% 0; } }
+  @keyframes rise { from { opacity: 0; transform: translateY(14px); } }
+
+  /* --- camera --- */
+  .stage {
+    position: relative; aspect-ratio: 1 / 1; width: 100%;
+    border-radius: 50%; overflow: hidden;
+    background: rgba(255,255,255,.05);
+    border: 1px solid var(--stroke);
+    box-shadow: 0 0 0 6px rgba(255,255,255,.04), 0 26px 60px -20px rgba(0,0,0,.7),
+                0 0 70px -14px var(--mood);
+    transition: box-shadow 1s ease;
+    animation: rise .7s .06s cubic-bezier(.2,.9,.3,1) both;
+    display: grid; place-items: center;
+  }
+  .stage.live::after {
+    content: ""; position: absolute; inset: -2px; border-radius: 50%; pointer-events: none;
+    border: 3px solid var(--mood); animation: pulse 2.4s ease-in-out infinite;
+  }
+  @keyframes pulse { 0%,100% { opacity: .35; transform: scale(1); } 50% { opacity: 1; transform: scale(1.02); } }
+
+  video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+          transform: scaleX(-1); opacity: 0; transition: opacity .6s ease; }
+  .stage.live video { opacity: 1; }
+
+  .placeholder { position: relative; text-align: center; padding: 0 34px; }
+  .placeholder .face { font-size: 58px; display: block; animation: bob 3.4s ease-in-out infinite; }
+  .placeholder p { margin-top: 12px; font-size: 14px; color: var(--muted); line-height: 1.5; }
+  @keyframes bob { 0%,100% { transform: translateY(0) rotate(-3deg); } 50% { transform: translateY(-9px) rotate(3deg); } }
+  .stage.live .placeholder { display: none; }
+
+  /* --- readout --- */
+  .readout { text-align: center; min-height: 104px; animation: rise .7s .12s cubic-bezier(.2,.9,.3,1) both; }
+  .emoji { font-size: 56px; line-height: 1; display: inline-block; }
+  .emoji.pop { animation: pop .5s cubic-bezier(.2,1.6,.4,1); }
+  @keyframes pop { 0% { transform: scale(.4) rotate(-14deg); opacity: 0; } 60% { transform: scale(1.14) rotate(4deg); } 100% { transform: scale(1) rotate(0); opacity: 1; } }
+  .label { margin-top: 6px; font-size: 25px; font-weight: 800; letter-spacing: -.01em; color: var(--mood); transition: color .6s ease; }
+  .hint { margin-top: 4px; font-size: 13px; color: var(--muted); min-height: 18px; }
+
+  /* --- bars --- */
+  .bars { display: flex; flex-direction: column; gap: 9px; animation: rise .7s .18s cubic-bezier(.2,.9,.3,1) both; }
+  .bar { display: grid; grid-template-columns: 26px 1fr 40px; align-items: center; gap: 10px;
+         background: var(--card); border: 1px solid var(--stroke); border-radius: 16px; padding: 9px 13px;
+         backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); }
+  .bar .ic { font-size: 17px; }
+  .bar .track { height: 8px; border-radius: 99px; background: rgba(255,255,255,.12); overflow: hidden; }
+  .bar .fill { height: 100%; width: 0%; border-radius: 99px; transition: width .28s cubic-bezier(.3,.9,.3,1), background .4s; }
+  .bar .pct { font-size: 12px; font-variant-numeric: tabular-nums; color: var(--muted); text-align: right; font-weight: 600; }
+
+  /* --- button --- */
+  .cta { position: sticky; bottom: 0; padding-top: 4px; animation: rise .7s .24s cubic-bezier(.2,.9,.3,1) both; }
+  button {
+    width: 100%; border: 0; cursor: pointer; font: inherit; font-weight: 800; font-size: 17px;
+    color: #17102b; padding: 17px 20px; border-radius: 22px;
+    background: linear-gradient(100deg, var(--mood), #ffd166 50%, var(--mood-2));
+    background-size: 200% 100%;
+    box-shadow: 0 14px 34px -12px var(--mood);
+    transition: transform .16s ease, box-shadow .3s ease, opacity .3s;
+    animation: shimmer 5s linear infinite;
+  }
+  button:active { transform: scale(.97); }
+  button[disabled] { opacity: .55; cursor: default; animation: none; }
+  button.ghost { background: var(--card); color: var(--ink); border: 1px solid var(--stroke);
+                 box-shadow: none; animation: none; font-size: 15px; padding: 13px; }
+
+  footer { text-align: center; font-size: 11.5px; color: rgba(253,251,255,.4); padding-bottom: 2px; }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition-duration: .01ms !important; }
+  }
+</style>
+</head>
+<body>
+
+<div class="blobs" aria-hidden="true">
+  <div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div>
+</div>
+<div class="grain" aria-hidden="true"></div>
+
+<main>
+  <header>
+    <h1 class="hi">Hi <span>Lily</span> 👋</h1>
+    <p class="sub">This was built on a <b>3am call</b>.</p>
+  </header>
+
+  <div class="stage" id="stage">
+    <video id="video" playsinline muted autoplay></video>
+    <div class="placeholder">
+      <span class="face">😊</span>
+      <p>Point the camera at your face and I'll guess how you feel. Everything stays on your phone.</p>
+    </div>
+  </div>
+
+  <div class="readout">
+    <div class="emoji" id="emoji">✨</div>
+    <div class="label" id="label">Ready when you are</div>
+    <div class="hint" id="hint">Tap start — your camera never leaves this page.</div>
+  </div>
+
+  <div class="bars" id="bars"></div>
+
+  <div class="cta">
+    <button id="start">Start the camera</button>
+  </div>
+
+  <footer>texflow.work/lily · runs entirely in your browser</footer>
+</main>
+
+<script type="module">
+const EMOTIONS = [
+  { key: 'happy',    name: 'Happy',     emoji: '😄', color: '#ffd166', c2: '#ff8fab' },
+  { key: 'surprise', name: 'Surprised', emoji: '😲', color: '#4cc9f0', c2: '#7c5cff' },
+  { key: 'sad',      name: 'Sad',       emoji: '🥺', color: '#748ffc', c2: '#4cc9f0' },
+  { key: 'angry',    name: 'Angry',     emoji: '😠', color: '#ff5c5c', c2: '#ff9f1c' },
+  { key: 'disgust',  name: 'Unimpressed', emoji: '😖', color: '#a0e548', c2: '#35e0ff' },
+  { key: 'neutral',  name: 'Neutral',   emoji: '😐', color: '#c9b8ff', c2: '#7c5cff' },
+];
+
+const $ = id => document.getElementById(id);
+const stage = $('stage'), video = $('video'), emojiEl = $('emoji'),
+      labelEl = $('label'), hintEl = $('hint'), barsEl = $('bars'), startBtn = $('start');
+
+// build bars
+const barRefs = {};
+for (const e of EMOTIONS) {
+  const row = document.createElement('div');
+  row.className = 'bar';
+  row.innerHTML = `<div class="ic">${e.emoji}</div>
+                   <div class="track"><div class="fill" style="background:linear-gradient(90deg,${e.color},${e.c2})"></div></div>
+                   <div class="pct">0%</div>`;
+  barsEl.appendChild(row);
+  barRefs[e.key] = { fill: row.querySelector('.fill'), pct: row.querySelector('.pct') };
+}
+
+const clamp01 = v => v < 0 ? 0 : v > 1 ? 1 : v;
+const smooth = Object.fromEntries(EMOTIONS.map(e => [e.key, e.key === 'neutral' ? 1 : 0]));
+let current = null;
+
+function setMood(e) {
+  document.documentElement.style.setProperty('--mood', e.color);
+  document.documentElement.style.setProperty('--mood-2', e.c2);
+  if (current !== e.key) {
+    current = e.key;
+    emojiEl.textContent = e.emoji;
+    emojiEl.classList.remove('pop'); void emojiEl.offsetWidth; emojiEl.classList.add('pop');
+    labelEl.textContent = e.name;
+  }
+}
+
+function render(scores) {
+  for (const e of EMOTIONS) {
+    smooth[e.key] += (scores[e.key] - smooth[e.key]) * 0.22;
+  }
+  const total = EMOTIONS.reduce((s, e) => s + smooth[e.key], 0) || 1;
+  let best = EMOTIONS[0], bestV = -1;
+  for (const e of EMOTIONS) {
+    const v = smooth[e.key] / total;
+    barRefs[e.key].fill.style.width = (v * 100).toFixed(0) + '%';
+    barRefs[e.key].pct.textContent = Math.round(v * 100) + '%';
+    if (v > bestV) { bestV = v; best = e; }
+  }
+  setMood(best);
+}
+
+// blendshapes -> emotions
+function scoreFrom(bs) {
+  const g = n => bs[n] || 0;
+  const pair = (a, b) => (g(a) + g(b)) / 2;
+
+  const smile   = pair('mouthSmileLeft', 'mouthSmileRight');
+  const frown   = pair('mouthFrownLeft', 'mouthFrownRight');
+  const browDn  = pair('browDownLeft', 'browDownRight');
+  const browUp  = pair('browOuterUpLeft', 'browOuterUpRight');
+  const browIn  = g('browInnerUp');
+  const eyeWide = pair('eyeWideLeft', 'eyeWideRight');
+  const squint  = pair('eyeSquintLeft', 'eyeSquintRight');
+  const cheek   = pair('cheekSquintLeft', 'cheekSquintRight');
+  const jaw     = g('jawOpen');
+  const sneer   = pair('noseSneerLeft', 'noseSneerRight');
+  const upperUp = pair('mouthUpperUpLeft', 'mouthUpperUpRight');
+  const press   = pair('mouthPressLeft', 'mouthPressRight');
+  const stretch = pair('mouthStretchLeft', 'mouthStretchRight');
+
+  const s = {
+    happy:    clamp01(smile * 1.65 + cheek * .55 - frown),
+    surprise: clamp01(jaw * 1.15 + browUp * .9 + browIn * .5 + eyeWide * .7 - smile * .7),
+    sad:      clamp01(frown * 1.5 + browIn * .8 - smile * 1.4 - jaw * .5),
+    angry:    clamp01(browDn * 1.5 + press * .6 + squint * .35 - smile * 1.2 - browUp),
+    disgust:  clamp01(sneer * 1.7 + upperUp * .8 + stretch * .3 - smile * .8),
+    neutral:  0,
+  };
+  const peak = Math.max(s.happy, s.surprise, s.sad, s.angry, s.disgust);
+  s.neutral = clamp01(1 - peak * 2.1) * 0.9 + 0.05;
+  return s;
+}
+
+let running = false;
+
+async function start() {
+  startBtn.disabled = true;
+  startBtn.textContent = 'Waking up the camera…';
+  hintEl.textContent = 'Loading the face model (a few seconds)…';
+
+  let stream;
+  try {
+    stream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: 'user', width: { ideal: 640 }, height: { ideal: 640 } }, audio: false
+    });
+  } catch (err) {
+    labelEl.textContent = 'No camera';
+    emojiEl.textContent = '📷';
+    hintEl.textContent = 'Camera access was blocked — allow it in your browser settings and try again.';
+    startBtn.disabled = false; startBtn.textContent = 'Try again';
+    return;
+  }
+
+  video.srcObject = stream;
+  await video.play().catch(() => {});
+  stage.classList.add('live');
+
+  let FaceLandmarker, FilesetResolver, landmarker;
+  try {
+    ({ FaceLandmarker, FilesetResolver } = await import('https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/vision_bundle.mjs'));
+    const fileset = await FilesetResolver.forVisionTasks('https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm');
+    landmarker = await FaceLandmarker.createFromOptions(fileset, {
+      baseOptions: {
+        modelAssetPath: 'https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task',
+        delegate: 'GPU'
+      },
+      outputFaceBlendshapes: true,
+      runningMode: 'VIDEO',
+      numFaces: 1
+    });
+  } catch (err) {
+    labelEl.textContent = 'Offline';
+    emojiEl.textContent = '🛰️';
+    hintEl.textContent = 'Could not load the face model. Check your connection and reload.';
+    startBtn.disabled = false; startBtn.textContent = 'Try again';
+    return;
+  }
+
+  startBtn.className = 'ghost';
+  startBtn.textContent = 'Stop';
+  startBtn.disabled = false;
+  startBtn.onclick = () => {
+    running = false;
+    stream.getTracks().forEach(t => t.stop());
+    stage.classList.remove('live');
+    labelEl.textContent = 'Paused';
+    emojiEl.textContent = '✨';
+    hintEl.textContent = 'Tap start whenever you want another read.';
+    startBtn.className = '';
+    startBtn.textContent = 'Start the camera';
+    startBtn.onclick = start;
+  };
+
+  hintEl.textContent = 'Looking for a face…';
+  running = true;
+  let last = -1, sawFace = false;
+
+  const loop = () => {
+    if (!running) return;
+    if (video.readyState >= 2 && video.currentTime !== last) {
+      last = video.currentTime;
+      const res = landmarker.detectForVideo(video, performance.now());
+      const shapes = res.faceBlendshapes?.[0]?.categories;
+      if (shapes && shapes.length) {
+        if (!sawFace) { sawFace = true; hintEl.textContent = 'Got you. Try a big grin 😄'; }
+        const bs = {};
+        for (const c of shapes) bs[c.categoryName] = c.score;
+        render(scoreFrom(bs));
+      } else if (sawFace) {
+        sawFace = false;
+        hintEl.textContent = 'Come back into frame…';
+      }
+    }
+    requestAnimationFrame(loop);
+  };
+  requestAnimationFrame(loop);
+}
+
+startBtn.onclick = start;
+
+if (!navigator.mediaDevices?.getUserMedia) {
+  startBtn.disabled = true;
+  startBtn.textContent = 'Camera not supported';
+  hintEl.textContent = 'This browser cannot open a camera. Try Safari or Chrome.';
+}
+</script>
+</body>
+</html>

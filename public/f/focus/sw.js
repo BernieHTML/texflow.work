@@ -1,6 +1,6 @@
 // Service worker for the "Focus" Flow. Scope is this directory only,
 // so a deleted copy takes nothing else with it.
-const CACHE = 'flow-focus-9558df9680';
+const CACHE = 'flow-focus-ce98badaad';
 const SHELL = ['./', './manifest.webmanifest', './icon-192.png', './icon-512.png', './icon-maskable-512.png'];
 
 self.addEventListener('install', (e) => {

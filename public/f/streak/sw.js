@@ -1,6 +1,6 @@
 // Service worker for the "Streak" Flow. Scope is this directory only,
 // so a deleted copy takes nothing else with it.
-const CACHE = 'flow-streak-adea97220c';
+const CACHE = 'flow-streak-6b698fc6a4';
 const SHELL = ['./', './manifest.webmanifest', './icon-192.png', './icon-512.png', './icon-maskable-512.png'];
 
 self.addEventListener('install', (e) => {

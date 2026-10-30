@@ -532,6 +532,34 @@ app.get('/texletter.md', (req, res) => {
 app.get('/terms-and-conditions', (req, res) => sendSeoHtml(req, res, join(__dirname, 'public', 'terms-and-conditions.html'), '/terms-and-conditions'));
 app.get('/privacy-policy', (req, res) => sendSeoHtml(req, res, join(__dirname, 'public', 'privacy-policy.html'), '/privacy-policy'));
 
+// --- Wave: a proximity-pairing bench test (not a Flow, not listed) ---
+app.get(['/wave', '/wave/'], (req, res) => res.sendFile(join(__dirname, 'public', 'wave', 'index.html')));
+
+// --- LTEC: an interactive lunar thermal energy conversion model ---
+// The paper and the slides both call it "LTEC system", so the spelling people
+// type by hand has to land in the right place. Express matches routes against
+// the *raw* pathname, so "/LTEC%20system" never matches a pattern containing a
+// space -- the path has to be decoded here first. Express also routes
+// case-insensitively, so this has to run before the routes below or
+// "/LTEC-System" would be served directly instead of redirected to canonical.
+app.use((req, res, next) => {
+  let decoded;
+  try { decoded = decodeURIComponent(req.path); } catch { return next(); }
+  if (!/^\/ltec[ _-]?system\/?$/i.test(decoded)) return next();
+  if (decoded === '/ltec-system' || decoded === '/ltec-system/') return next();
+  const q = req.originalUrl.indexOf('?');
+  return res.redirect(301, '/ltec-system' + (q === -1 ? '' : req.originalUrl.slice(q)));
+});
+
+// The slug is short so the QR code on the conference slide stays coarse and
+// easy to scan. The static middleware would serve /ltec-system/ on its own,
+// but these give the no-slash canonical URL without a redirect hop, and add
+// the /qr slide view, which has no directory of its own.
+app.get(['/ltec-system', '/ltec-system/'], (req, res) =>
+  res.sendFile(join(__dirname, 'public', 'ltec-system', 'index.html')));
+app.get(['/ltec-system/qr', '/ltec-system/qr/'], (req, res) =>
+  res.sendFile(join(__dirname, 'public', 'ltec-system', 'qr.html')));
+
 // --- Lunar South Pole PSR map ---
 app.get(['/psrmap', '/psrmap/'], (req, res) => res.sendFile(join(__dirname, 'public', 'psrmap', 'index.html')));
 

@@ -5,5 +5,7 @@ Disallow: /node_modules/
 Disallow: /private/
 Disallow: /temp/
 Disallow: /dev/
+Disallow: /wave
+Disallow: /revision
 
 Sitemap: https://texflow.work/sitemap.xml

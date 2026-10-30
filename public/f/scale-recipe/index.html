@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" style="--a1:#BE123C;--a2:#FB7185">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=5">
@@ -21,11 +21,10 @@
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<!-- Relative so the same file works at /f/<id>/ and at /s/<code>/. On a
-     downloaded copy these simply are not there, which costs nothing: the file
-     is already offline and already yours. -->
-<link rel="manifest" href="manifest.webmanifest">
-<link rel="icon" href="icon-192.png" type="image/png">
+<!-- The manifest is added by the runtime, and only when the Flow is being
+     served over http(s). A downloaded copy has no directory to resolve it
+     against, and a 404 on every open is not a thing to ship. -->
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20viewBox%3D%220%200%20100%20100%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22fg-fav%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%22%20stop-color%3D%22%23BE123C%22%2F%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23FB7185%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%22100%22%20height%3D%22100%22%20rx%3D%2223%22%20fill%3D%22url(%23fg-fav)%22%2F%3E%3Cg%20fill%3D%22%23fff%22%3E%3Cpath%20d%3D%22M38.4%2039.3L59.3%2039.3L59.3%2035.2L38.4%2035.2Z%22%2F%3E%3Cpath%20d%3D%22M40.4%2037.2L40.2%2038.3L39.8%2038.7L39.4%2039L38.4%2039.3L37.4%2039L37%2038.7L36.6%2038.3L36.4%2037.2L36.6%2036.2L37%2035.8L37.4%2035.5L38.4%2035.2L39.4%2035.5L39.8%2035.8L40.2%2036.2Z%22%2F%3E%3Cpath%20d%3D%22M61.3%2037.2L61%2038.3L60.7%2038.7L60.3%2039L59.3%2039.3L58.3%2039L57.8%2038.7L57.5%2038.3L57.3%2037.2L57.5%2036.2L57.8%2035.8L58.3%2035.5L59.3%2035.2L60.3%2035.5L60.7%2035.8L61%2036.2Z%22%2F%3E%3Cpath%20d%3D%22M57.3%2037L53.8%2067.2L57.8%2067.6L61.3%2037.5Z%22%2F%3E%3Cpath%20d%3D%22M61.3%2037.2L61%2038.3L60.7%2038.7L60.3%2039L59.3%2039.3L58.3%2039L57.8%2038.7L57.5%2038.3L57.3%2037.2L57.5%2036.2L57.8%2035.8L58.3%2035.5L59.3%2035.2L60.3%2035.5L60.7%2035.8L61%2036.2Z%22%2F%3E%3Cpath%20d%3D%22M57.8%2067.4L57.6%2068.4L57.2%2068.8L56.8%2069.2L55.8%2069.4L54.8%2069.2L54.4%2068.8L54%2068.4L53.8%2067.4L54%2066.4L54.4%2066L54.8%2065.6L55.8%2065.4L56.8%2065.6L57.2%2066L57.6%2066.4Z%22%2F%3E%3Cpath%20d%3D%22M55.8%2065.4L41.9%2065.4L41.9%2069.4L55.8%2069.4Z%22%2F%3E%3Cpath%20d%3D%22M57.8%2067.4L57.6%2068.4L57.2%2068.8L56.8%2069.2L55.8%2069.4L54.8%2069.2L54.4%2068.8L54%2068.4L53.8%2067.4L54%2066.4L54.4%2066L54.8%2065.6L55.8%2065.4L56.8%2065.6L57.2%2066L57.6%2066.4Z%22%2F%3E%3Cpath%20d%3D%22M43.9%2067.4L43.6%2068.4L43.3%2068.8L42.9%2069.2L41.9%2069.4L40.9%2069.2L40.4%2068.8L40.1%2068.4L39.9%2067.4L40.1%2066.4L40.4%2066L40.9%2065.6L41.9%2065.4L42.9%2065.6L43.3%2066L43.6%2066.4Z%22%2F%3E%3Cpath%20d%3D%22M43.9%2067.2L40.4%2037L36.4%2037.5L39.9%2067.6Z%22%2F%3E%3Cpath%20d%3D%22M43.9%2067.4L43.6%2068.4L43.3%2068.8L42.9%2069.2L41.9%2069.4L40.9%2069.2L40.4%2068.8L40.1%2068.4L39.9%2067.4L40.1%2066.4L40.4%2066L40.9%2065.6L41.9%2065.4L42.9%2065.6L43.3%2066L43.6%2066.4Z%22%2F%3E%3Cpath%20d%3D%22M40.4%2037.2L40.2%2038.3L39.8%2038.7L39.4%2039L38.4%2039.3L37.4%2039L37%2038.7L36.6%2038.3L36.4%2037.2L36.6%2036.2L37%2035.8L37.4%2035.5L38.4%2035.2L39.4%2035.5L39.8%2035.8L40.2%2036.2Z%22%2F%3E%3Cpath%20d%3D%22M57.5%2045.8L65.7%2048.7L66.8%2045.5L58.7%2042.6Z%22%2F%3E%3Cpath%20d%3D%22M59.9%2044.2L59.6%2045.1L59%2045.7L58.1%2045.9L57.3%2045.7L56.6%2045.1L56.4%2044.2L56.6%2043.3L57.3%2042.7L58.1%2042.5L59%2042.7L59.6%2043.3Z%22%2F%3E%3Cpath%20d%3D%22M68%2047.1L67.7%2048L67.1%2048.6L66.2%2048.8L65.4%2048.6L64.7%2048L64.5%2047.1L64.7%2046.2L65.4%2045.6L66.2%2045.4L67.1%2045.6L67.7%2046.2Z%22%2F%3E%3Cpath%20d%3D%22M64.5%2047.1L64.5%2055.8L68%2055.8L68%2047.1Z%22%2F%3E%3Cpath%20d%3D%22M68%2047.1L67.7%2048L67.1%2048.6L66.2%2048.8L65.4%2048.6L64.7%2048L64.5%2047.1L64.7%2046.2L65.4%2045.6L66.2%2045.4L67.1%2045.6L67.7%2046.2Z%22%2F%3E%3Cpath%20d%3D%22M68%2055.8L67.7%2056.7L67.1%2057.3L66.2%2057.5L65.4%2057.3L64.7%2056.7L64.5%2055.8L64.7%2054.9L65.4%2054.3L66.2%2054.1L67.1%2054.3L67.7%2054.9Z%22%2F%3E%3Cpath%20d%3D%22M65.8%2054.1L56.5%2056.4L57.4%2059.8L66.7%2057.5Z%22%2F%3E%3Cpath%20d%3D%22M68%2055.8L67.7%2056.7L67.1%2057.3L66.2%2057.5L65.4%2057.3L64.7%2056.7L64.5%2055.8L64.7%2054.9L65.4%2054.3L66.2%2054.1L67.1%2054.3L67.7%2054.9Z%22%2F%3E%3Cpath%20d%3D%22M58.7%2058.1L58.5%2059L57.8%2059.6L57%2059.9L56.1%2059.6L55.5%2059L55.2%2058.1L55.5%2057.3L56.1%2056.6L57%2056.4L57.8%2056.6L58.5%2057.3Z%22%2F%3E%3Cpath%20d%3D%22M43.6%2049.1L52.9%2049.1L52.9%2046.2L43.6%2046.2Z%22%2F%3E%3Cpath%20d%3D%22M45.1%2047.7L44.9%2048.4L44.3%2048.9L43.6%2049.1L42.9%2048.9L42.4%2048.4L42.2%2047.7L42.4%2047L42.9%2046.4L43.6%2046.2L44.3%2046.4L44.9%2047Z%22%2F%3E%3Cpath%20d%3D%22M54.4%2047.7L54.2%2048.4L53.6%2048.9L52.9%2049.1L52.2%2048.9L51.6%2048.4L51.5%2047.7L51.6%2047L52.2%2046.4L52.9%2046.2L53.6%2046.4L54.2%2047Z%22%2F%3E%3Cpath%20d%3D%22M44.8%2057.3L51.2%2057.3L51.2%2054.4L44.8%2054.4Z%22%2F%3E%3Cpath%20d%3D%22M46.2%2055.8L46%2056.5L45.5%2057.1L44.8%2057.3L44.1%2057.1L43.5%2056.5L43.3%2055.8L43.5%2055.1L44.1%2054.5L44.8%2054.4L45.5%2054.5L46%2055.1Z%22%2F%3E%3Cpath%20d%3D%22M52.6%2055.8L52.4%2056.5L51.9%2057.1L51.2%2057.3L50.4%2057.1L49.9%2056.5L49.7%2055.8L49.9%2055.1L50.4%2054.5L51.2%2054.4L51.9%2054.5L52.4%2055.1Z%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E" type="image/svg+xml">
 <!-- iOS reads only PNG here and reads it before anything else loads, so it is
      inlined: a file saved to Downloads still knows what it looks like. -->
 <link rel="apple-touch-icon" href="data:image/png;base64,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">
@@ -630,6 +629,31 @@ a { color: var(--a1); }
 }
 .flow-steps svg { width: 18px; height: 18px; vertical-align: -4px; margin: 0 2px; }
 
+/* What a Flow looks like where scripts do not run — the iOS Files preview,
+ * most of all. Without this it is an empty page under a title bar, which reads
+ * as broken rather than as "open me somewhere that can run me". */
+.flow-noscript {
+  margin: 22px 0;
+  padding: 24px 22px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-xl);
+  box-shadow: var(--shadow-1);
+}
+.flow-noscript h1 { font-size: 21px; font-weight: 640; letter-spacing: -0.025em; margin-bottom: 10px; }
+.flow-noscript p { color: var(--ink-2); font-size: 15.5px; margin-bottom: 12px; }
+.flow-noscript p:last-child { margin-bottom: 0; }
+.flow-noscript-why {
+  padding: 13px 15px;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+}
+.flow-noscript-why strong { color: var(--ink); }
+
+.flow-remove h2 { text-align: center; margin-bottom: 14px; }
+.flow-remove .flow-steps { margin-bottom: 4px; }
+
 /* The screen a deleted Flow leaves behind. */
 .flow-gone {
   display: flex;
@@ -643,7 +667,8 @@ a { color: var(--a1); }
 }
 .flow-gone .flow-mark-lg { width: 72px; height: 72px; filter: grayscale(1); opacity: 0.32; }
 .flow-gone h1 { font-size: 22px; font-weight: 650; letter-spacing: -0.02em; }
-.flow-gone p { color: var(--ink-2); max-width: 30ch; }
+.flow-gone p { color: var(--ink-2); max-width: 32ch; }
+.flow-gone .flow-btn { margin-top: 4px; }
 
 .flow-hidden { display: none !important; }
 
@@ -684,8 +709,28 @@ a { color: var(--a1); }
 </head>
 <body>
 <div class="flow-app">
-  <header class="flow-bar"></header>
+  <!-- The chrome is written here at build time rather than assembled by the
+       runtime. A Flow saved to a file and previewed somewhere that does not run
+       scripts — the iOS Files app, most notably — then still shows its own name,
+       its own mark and its own colour, and can say what to do about it. -->
+  <header class="flow-bar">
+    <span class="flow-mark-sm"><svg class="flow-mark" viewBox="0 0 100 100" role="img" aria-label="Recipe Scaler" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="fg-scale-recipe" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#BE123C"/><stop offset="1" stop-color="#FB7185"/></linearGradient></defs><rect width="100" height="100" rx="23" fill="url(#fg-scale-recipe)"/><g fill="#fff"><path d="M38.4 39.3L59.3 39.3L59.3 35.2L38.4 35.2Z"/><path d="M40.4 37.2L40.2 38.3L39.8 38.7L39.4 39L38.4 39.3L37.4 39L37 38.7L36.6 38.3L36.4 37.2L36.6 36.2L37 35.8L37.4 35.5L38.4 35.2L39.4 35.5L39.8 35.8L40.2 36.2Z"/><path d="M61.3 37.2L61 38.3L60.7 38.7L60.3 39L59.3 39.3L58.3 39L57.8 38.7L57.5 38.3L57.3 37.2L57.5 36.2L57.8 35.8L58.3 35.5L59.3 35.2L60.3 35.5L60.7 35.8L61 36.2Z"/><path d="M57.3 37L53.8 67.2L57.8 67.6L61.3 37.5Z"/><path d="M61.3 37.2L61 38.3L60.7 38.7L60.3 39L59.3 39.3L58.3 39L57.8 38.7L57.5 38.3L57.3 37.2L57.5 36.2L57.8 35.8L58.3 35.5L59.3 35.2L60.3 35.5L60.7 35.8L61 36.2Z"/><path d="M57.8 67.4L57.6 68.4L57.2 68.8L56.8 69.2L55.8 69.4L54.8 69.2L54.4 68.8L54 68.4L53.8 67.4L54 66.4L54.4 66L54.8 65.6L55.8 65.4L56.8 65.6L57.2 66L57.6 66.4Z"/><path d="M55.8 65.4L41.9 65.4L41.9 69.4L55.8 69.4Z"/><path d="M57.8 67.4L57.6 68.4L57.2 68.8L56.8 69.2L55.8 69.4L54.8 69.2L54.4 68.8L54 68.4L53.8 67.4L54 66.4L54.4 66L54.8 65.6L55.8 65.4L56.8 65.6L57.2 66L57.6 66.4Z"/><path d="M43.9 67.4L43.6 68.4L43.3 68.8L42.9 69.2L41.9 69.4L40.9 69.2L40.4 68.8L40.1 68.4L39.9 67.4L40.1 66.4L40.4 66L40.9 65.6L41.9 65.4L42.9 65.6L43.3 66L43.6 66.4Z"/><path d="M43.9 67.2L40.4 37L36.4 37.5L39.9 67.6Z"/><path d="M43.9 67.4L43.6 68.4L43.3 68.8L42.9 69.2L41.9 69.4L40.9 69.2L40.4 68.8L40.1 68.4L39.9 67.4L40.1 66.4L40.4 66L40.9 65.6L41.9 65.4L42.9 65.6L43.3 66L43.6 66.4Z"/><path d="M40.4 37.2L40.2 38.3L39.8 38.7L39.4 39L38.4 39.3L37.4 39L37 38.7L36.6 38.3L36.4 37.2L36.6 36.2L37 35.8L37.4 35.5L38.4 35.2L39.4 35.5L39.8 35.8L40.2 36.2Z"/><path d="M57.5 45.8L65.7 48.7L66.8 45.5L58.7 42.6Z"/><path d="M59.9 44.2L59.6 45.1L59 45.7L58.1 45.9L57.3 45.7L56.6 45.1L56.4 44.2L56.6 43.3L57.3 42.7L58.1 42.5L59 42.7L59.6 43.3Z"/><path d="M68 47.1L67.7 48L67.1 48.6L66.2 48.8L65.4 48.6L64.7 48L64.5 47.1L64.7 46.2L65.4 45.6L66.2 45.4L67.1 45.6L67.7 46.2Z"/><path d="M64.5 47.1L64.5 55.8L68 55.8L68 47.1Z"/><path d="M68 47.1L67.7 48L67.1 48.6L66.2 48.8L65.4 48.6L64.7 48L64.5 47.1L64.7 46.2L65.4 45.6L66.2 45.4L67.1 45.6L67.7 46.2Z"/><path d="M68 55.8L67.7 56.7L67.1 57.3L66.2 57.5L65.4 57.3L64.7 56.7L64.5 55.8L64.7 54.9L65.4 54.3L66.2 54.1L67.1 54.3L67.7 54.9Z"/><path d="M65.8 54.1L56.5 56.4L57.4 59.8L66.7 57.5Z"/><path d="M68 55.8L67.7 56.7L67.1 57.3L66.2 57.5L65.4 57.3L64.7 56.7L64.5 55.8L64.7 54.9L65.4 54.3L66.2 54.1L67.1 54.3L67.7 54.9Z"/><path d="M58.7 58.1L58.5 59L57.8 59.6L57 59.9L56.1 59.6L55.5 59L55.2 58.1L55.5 57.3L56.1 56.6L57 56.4L57.8 56.6L58.5 57.3Z"/><path d="M43.6 49.1L52.9 49.1L52.9 46.2L43.6 46.2Z"/><path d="M45.1 47.7L44.9 48.4L44.3 48.9L43.6 49.1L42.9 48.9L42.4 48.4L42.2 47.7L42.4 47L42.9 46.4L43.6 46.2L44.3 46.4L44.9 47Z"/><path d="M54.4 47.7L54.2 48.4L53.6 48.9L52.9 49.1L52.2 48.9L51.6 48.4L51.5 47.7L51.6 47L52.2 46.4L52.9 46.2L53.6 46.4L54.2 47Z"/><path d="M44.8 57.3L51.2 57.3L51.2 54.4L44.8 54.4Z"/><path d="M46.2 55.8L46 56.5L45.5 57.1L44.8 57.3L44.1 57.1L43.5 56.5L43.3 55.8L43.5 55.1L44.1 54.5L44.8 54.4L45.5 54.5L46 55.1Z"/><path d="M52.6 55.8L52.4 56.5L51.9 57.1L51.2 57.3L50.4 57.1L49.9 56.5L49.7 55.8L49.9 55.1L50.4 54.5L51.2 54.4L51.9 54.5L52.4 55.1Z"/></g></svg></span>
+    <span class="flow-bar-title">Recipe Scaler</span>
+    <span class="flow-bar-spacer"></span>
+    <button class="flow-icon-btn" id="flow-menu" type="button" aria-label="Menu"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="12" cy="5" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="12" cy="19" r="1.6"/></svg></button>
+  </header>
   <main class="flow-main">
+    <noscript>
+      <div class="flow-noscript">
+        <h1>Recipe Scaler needs JavaScript</h1>
+        <p>Everything this Flow does happens on your device, in this page — so with
+           scripts switched off there is nothing left of it but the name.</p>
+        <p class="flow-noscript-why"><strong>Previewing a downloaded file?</strong>
+           The iOS Files app shows HTML without running it. Open the file in a
+           browser instead: from Safari's downloads list, or Share → open in a browser.</p>
+        <p><a href="https://texflow.work/f/scale-recipe/">Or use it at texflow.work/f/scale-recipe</a></p>
+      </div>
+    </noscript>
 <section class="flow-section">
   <div class="sr-servings">
     <div>
@@ -757,6 +802,10 @@ a { color: var(--a1); }
   var ua = navigator.userAgent || '';
   var isIOS = /iPad|iPhone|iPod/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
   var isAndroid = /Android/.test(ua);
+  // Where the OS share sheet has AirDrop at the top of it, the offline handover
+  // is worth naming — people know what AirDrop is, they do not know what
+  // navigator.share is.
+  var airdroppy = /iPad|iPhone|iPod|Macintosh/.test(ua);
   var standalone = window.matchMedia('(display-mode: standalone)').matches
     || window.navigator.standalone === true;
 
@@ -779,11 +828,26 @@ a { color: var(--a1); }
 
   // ---------------------------------------------------------------- storage ---
 
-  // localStorage is not a given: Safari refuses it on file:// in some versions,
-  // and private windows can throw on write rather than on read. So it is probed
-  // once, and a Flow that cannot persist says so instead of silently forgetting.
-  var memory = {};
-  var backing = (function () {
+  // Storage is the difference between a Flow you can rely on and a demo, and on
+  // a downloaded copy it is the thing most likely to be missing: WebKit refuses
+  // localStorage outright on a `file://` origin, and a private window can throw
+  // on write rather than on read.
+  //
+  // So there are three tiers, tried in order — localStorage, then IndexedDB
+  // (which several browsers allow on file:// where they refuse localStorage),
+  // then memory. Everything a Flow reads comes out of an in-memory map filled
+  // once at boot, which keeps the API the twenty Flows use synchronous whatever
+  // ends up underneath it.
+
+  var NS = 'tf:' + (META.id || 'flow') + ':';
+  var IDB_NAME = 'texflow';
+  var IDB_STORE = 'flows';
+
+  var mem = {};
+  var backend = null;   // 'local' | 'idb' | null
+  var idb = null;
+
+  function tryLocal() {
     try {
       var k = '__tf_probe__';
       window.localStorage.setItem(k, '1');
@@ -792,62 +856,119 @@ a { color: var(--a1); }
     } catch (e) {
       return null;
     }
-  })();
+  }
 
-  var NS = 'tf:' + (META.id || 'flow') + ':';
+  function openIdb() {
+    return new Promise(function (resolve) {
+      if (!window.indexedDB) return resolve(null);
+      var settled = false;
+      var done = function (v) { if (!settled) { settled = true; resolve(v); } };
+      var req;
+      try { req = window.indexedDB.open(IDB_NAME, 1); } catch (e) { return done(null); }
+      req.onupgradeneeded = function () {
+        try { req.result.createObjectStore(IDB_STORE); } catch (e) {}
+      };
+      req.onsuccess = function () { done(req.result); };
+      req.onerror = function () { done(null); };
+      req.onblocked = function () { done(null); };
+      // Safari has been seen to leave the request hanging on file:// rather
+      // than erroring, and a Flow must never sit on a blank screen waiting for
+      // a database it was only ever going to be nice to have.
+      setTimeout(function () { done(null); }, 1500);
+    });
+  }
+
+  function idbRead(db) {
+    return new Promise(function (resolve) {
+      try {
+        var req = db.transaction(IDB_STORE, 'readonly').objectStore(IDB_STORE).get(NS);
+        req.onsuccess = function () { resolve(req.result || null); };
+        req.onerror = function () { resolve(null); };
+      } catch (e) { resolve(null); }
+    });
+  }
+
+  function idbWrite(db, value) {
+    try {
+      db.transaction(IDB_STORE, 'readwrite').objectStore(IDB_STORE).put(value, NS);
+    } catch (e) { /* the next write will try again */ }
+  }
+
+  function initStore() {
+    if (tryLocal()) {
+      backend = 'local';
+      try {
+        for (var i = 0; i < window.localStorage.length; i++) {
+          var k = window.localStorage.key(i);
+          if (k && k.indexOf(NS) === 0) {
+            try { mem[k.slice(NS.length)] = JSON.parse(window.localStorage.getItem(k)); } catch (e) {}
+          }
+        }
+      } catch (e) {}
+      return Promise.resolve();
+    }
+    return openIdb().then(function (db) {
+      if (!db) return;
+      idb = db;
+      backend = 'idb';
+      return idbRead(db).then(function (saved) {
+        if (saved && typeof saved === 'object') mem = saved;
+      });
+    });
+  }
+
+  var flushTimer = null;
+  function persist(key) {
+    if (backend === 'local') {
+      try {
+        if (mem[key] === undefined) window.localStorage.removeItem(NS + key);
+        else window.localStorage.setItem(NS + key, JSON.stringify(mem[key]));
+      } catch (e) {
+        backend = null;
+        toast('Out of space — changes are only in memory now');
+      }
+      return;
+    }
+    if (backend === 'idb') {
+      // One record for the whole Flow, written on a short debounce: these are
+      // kilobytes, and a keystroke should not cost a transaction.
+      clearTimeout(flushTimer);
+      flushTimer = setTimeout(function () { idbWrite(idb, mem); }, 120);
+    }
+  }
 
   var store = {
-    persistent: !!backing,
+    get persistent() { return backend !== null; },
+    get where() { return backend === 'local' ? 'this device' : backend === 'idb' ? 'this device' : 'memory only'; },
     get: function (key, fallback) {
-      var raw;
-      try {
-        raw = backing ? backing.getItem(NS + key) : memory[key];
-      } catch (e) { raw = memory[key]; }
-      if (raw === null || raw === undefined) return fallback;
-      try { return JSON.parse(raw); } catch (e) { return fallback; }
+      return mem[key] === undefined ? fallback : JSON.parse(JSON.stringify(mem[key]));
     },
     set: function (key, value) {
-      var raw = JSON.stringify(value);
-      memory[key] = raw;
-      if (backing) {
-        try { backing.setItem(NS + key, raw); }
-        catch (e) { store.persistent = false; toast('Out of space — this change is only in memory'); }
-      }
+      // Stored through JSON so a Flow can never keep a live reference to
+      // something a later read would see change underneath it.
+      mem[key] = JSON.parse(JSON.stringify(value));
+      persist(key);
       return value;
     },
     del: function (key) {
-      delete memory[key];
-      if (backing) { try { backing.removeItem(NS + key); } catch (e) {} }
+      delete mem[key];
+      persist(key);
     },
     all: function () {
-      var out = {};
-      if (backing) {
-        try {
-          for (var i = 0; i < backing.length; i++) {
-            var k = backing.key(i);
-            if (k && k.indexOf(NS) === 0) out[k.slice(NS.length)] = JSON.parse(backing.getItem(k));
-          }
-          return out;
-        } catch (e) { /* fall through to memory */ }
-      }
-      Object.keys(memory).forEach(function (k) { try { out[k] = JSON.parse(memory[k]); } catch (e) {} });
-      return out;
+      return JSON.parse(JSON.stringify(mem));
     },
     replace: function (data) {
       store.clear();
       Object.keys(data || {}).forEach(function (k) { store.set(k, data[k]); });
     },
     clear: function () {
-      memory = {};
-      if (!backing) return;
-      try {
-        var doomed = [];
-        for (var i = 0; i < backing.length; i++) {
-          var k = backing.key(i);
-          if (k && k.indexOf(NS) === 0) doomed.push(k);
-        }
-        doomed.forEach(function (k) { backing.removeItem(k); });
-      } catch (e) {}
+      var keys = Object.keys(mem);
+      mem = {};
+      if (backend === 'local') {
+        keys.forEach(function (k) { try { window.localStorage.removeItem(NS + k); } catch (e) {} });
+      } else if (backend === 'idb') {
+        idbWrite(idb, {});
+      }
     }
   };
 
@@ -926,7 +1047,8 @@ a { color: var(--a1); }
     plus: S + '<path d="M12 5v14M5 12h14"/></svg>',
     minus: S + '<path d="M5 12h14"/></svg>',
     home: S + '<path d="M4 11l8-7 8 7"/><path d="M6.5 9.5V20h11V9.5"/></svg>',
-    link: S + '<path d="M10 13.5a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1.4 1.4"/><path d="M14 10.5a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1.4-1.4"/></svg>'
+    link: S + '<path d="M10 13.5a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1.4 1.4"/><path d="M14 10.5a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1.4-1.4"/></svg>',
+    airdrop: S + '<path d="M12 21.2 8.4 16.4a4.5 4.5 0 1 1 7.2 0z"/><path d="M6.6 11.2a7.5 7.5 0 0 1 10.8 0"/><path d="M3.6 7.6a12 12 0 0 1 16.8 0"/></svg>'
   };
 
   // ----------------------------------------------------------------- toast ---
@@ -1134,17 +1256,56 @@ a { color: var(--a1); }
 
   var slug = function (s) { return String(s).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''); };
 
-  // Hand back the file, optionally with the current data baked into it — so a
-  // downloaded copy opens on the same shopping list you were just looking at.
+  // The file, optionally with the current data baked into it — so a copy opens
+  // on the same shopping list you were just looking at.
+  function flowHtml(withData) {
+    if (!withData) return PRISTINE;
+    var seed = '<script id="flow-seed" type="application/json">'
+      + JSON.stringify(store.all()).replace(/<\//g, '<\\/')
+      + '<\/script>';
+    return PRISTINE.indexOf('</head>') > -1
+      ? PRISTINE.replace('</head>', seed + '\n</head>')
+      : seed + PRISTINE;
+  }
+
+  var fileName = function () { return (META.name || 'flow') + '.html'; };
+
   function saveFile(withData) {
-    var html = PRISTINE;
-    if (withData) {
-      var seed = '<script id="flow-seed" type="application/json">'
-        + JSON.stringify(store.all()).replace(/<\//g, '<\\/')
-        + '<\/script>';
-      html = html.indexOf('</head>') > -1 ? html.replace('</head>', seed + '\n</head>') : seed + html;
+    saveBlob(new Blob([flowHtml(withData)], { type: 'text/html' }), fileName());
+  }
+
+  // Handing the whole app over as a file, through the operating system's own
+  // share sheet — which on an iPhone or a Mac means AirDrop. Two phones in a
+  // room with no signal between them can still pass a Flow across, and what
+  // lands is the working tool rather than a link to one.
+  function fileFor(withData) {
+    try {
+      return new File([flowHtml(withData)], fileName(), { type: 'text/html' });
+    } catch (e) {
+      return null;
     }
-    saveBlob(new Blob([html], { type: 'text/html' }), (META.name || 'flow') + '.html');
+  }
+
+  function canSendFile() {
+    if (!navigator.share || !navigator.canShare) return false;
+    var probe = fileFor(false);
+    if (!probe) return false;
+    try { return navigator.canShare({ files: [probe] }); } catch (e) { return false; }
+  }
+
+  function sendFile(withData) {
+    var file = fileFor(withData);
+    if (!file) return saveFile(withData);
+    navigator.share({
+      files: [file],
+      title: META.name,
+      text: META.name + ' — a TexFlow tool. Open it in a browser; it needs nothing else.'
+    }).catch(function (e) {
+      // A cancelled share sheet is not a failure, and should not become one.
+      if (e && e.name === 'AbortError') return;
+      saveFile(withData);
+      toast('Shared it as a download instead');
+    });
   }
 
   // A file downloaded "with my data" carries a seed block. It is lifted out of
@@ -1313,12 +1474,18 @@ a { color: var(--a1); }
     store.set('__coached', true);
   }
 
+  var hasData = function () {
+    return Object.keys(store.all()).filter(function (k) { return k.indexOf('__') !== 0; }).length > 0;
+  };
+  var sizeKb = function () { return Math.max(1, Math.round(PRISTINE.length / 1024)); };
+
+  // Saving is for keeping it yourself, so your data comes along by default.
   function saveFileSheet() {
-    var hasData = Object.keys(store.all()).filter(function (k) { return k.indexOf('__') !== 0; }).length > 0;
+    var mine = hasData();
     sheet({
       title: 'Save ' + META.name + ' to this device',
-      lede: 'One file, about ' + Math.max(1, Math.round(PRISTINE.length / 1024)) + ' KB. Open it any time, with or without a signal. Nothing about it needs texflow.work again.',
-      actions: hasData ? [
+      lede: 'One file, about ' + sizeKb() + ' KB. Open it any time, with or without a signal. Nothing about it needs texflow.work again.',
+      actions: mine ? [
         { label: 'Save it with my data', onClick: function () { saveFile(true); toast('Check your downloads'); } },
         { label: 'Save an empty one', kind: 'quiet', onClick: function () { saveFile(false); toast('Check your downloads'); } },
         { label: 'Cancel', kind: 'ghost' }
@@ -1326,6 +1493,39 @@ a { color: var(--a1); }
         { label: 'Save the file', icon: 'download', onClick: function () { saveFile(false); toast('Check your downloads'); } },
         { label: 'Cancel', kind: 'ghost' }
       ]
+    });
+  }
+
+  // Sending is for giving it to somebody else, so your data stays behind unless
+  // you say otherwise. A packing list shared by accident is a small betrayal.
+  function sendFileSheet() {
+    var mine = hasData();
+    var actions = [{
+      label: airdroppy ? 'AirDrop or share it' : 'Share the file',
+      onClick: function () { sendFile(false); }
+    }];
+    if (mine) {
+      actions.push({
+        label: 'Send it with my data in it',
+        kind: 'quiet',
+        onClick: function () {
+          confirm({
+            title: 'Send your data too?',
+            lede: 'Everything you have put into ' + META.name + ' travels inside the file. Only do this if the person on the other end is meant to see it.',
+            confirmLabel: 'Yes, include it'
+          }).then(function (ok) { if (ok) sendFile(true); });
+        }
+      });
+    }
+    actions.push({ label: 'Cancel', kind: 'ghost' });
+
+    sheet({
+      title: 'Send ' + META.name + ' as a file',
+      lede: airdroppy
+        ? 'About ' + sizeKb() + ' KB, and it is the whole app — AirDrop it across the table with no signal at either end. Whoever gets it opens it in a browser and it works.'
+        : 'About ' + sizeKb() + ' KB, and it is the whole app. No link, no server, no network needed at either end.',
+      body: mine ? null : undefined,
+      actions: actions
     });
   }
 
@@ -1376,6 +1576,32 @@ a { color: var(--a1); }
     });
   }
 
+  // No browser lets a page remove its own home-screen icon — there is no API
+  // for it on iOS or Android, by design. The next best thing is to be certain
+  // the icon is now harmless (it opens this) and to say, in the right words for
+  // the right phone, how to get rid of it.
+  function homeScreenSteps() {
+    var wrap = h('div', { class: 'flow-remove' });
+    wrap.appendChild(h('h2', { text: 'Taking the icon off' }));
+    var steps = h('ol', { class: 'flow-steps' });
+    var add = function (n, html) {
+      steps.appendChild(h('li', {}, h('span', { class: 'n', text: String(n) }), h('span', { html: html })));
+    };
+    if (isIOS) {
+      add(1, 'Touch and hold the <strong>' + esc(META.name) + '</strong> icon on your Home Screen');
+      add(2, 'Choose <strong>Remove Bookmark</strong>, or <strong>Delete Bookmark</strong>');
+      add(3, 'Confirm. It is gone from the phone as well as from here.');
+    } else if (isAndroid) {
+      add(1, 'Touch and hold the <strong>' + esc(META.name) + '</strong> icon');
+      add(2, 'Drag it to <strong>Uninstall</strong>, or choose <strong>Remove</strong>');
+    } else {
+      add(1, 'Open the app, then its menu');
+      add(2, 'Choose <strong>Uninstall</strong> — in Chrome it is under the three dots in the app window');
+    }
+    wrap.appendChild(steps);
+    return wrap;
+  }
+
   function goneScreen(wasCloud) {
     document.body.innerHTML = '';
     var wrap = h('div', { class: 'flow-gone' });
@@ -1383,11 +1609,19 @@ a { color: var(--a1); }
     wrap.appendChild(h('h1', { text: META.name + ' is gone' }));
     wrap.appendChild(h('p', {
       text: wasCloud
-        ? 'The link no longer works and nothing of yours is left on it. If it is still on your home screen, hold the icon and remove it.'
+        ? 'The link no longer works and nothing of yours is left on it.'
         : 'Everything stored in this copy has been erased.'
     }));
+
+    // Only worth saying if there is an icon to remove.
+    if (env.installed || wasCloud) {
+      wrap.appendChild(h('button', {
+        class: 'flow-btn is-quiet', type: 'button', style: { width: 'auto', marginTop: '6px' },
+        onclick: function () { sheet({ body: homeScreenSteps(), actions: [{ label: 'Done', kind: 'ghost' }] }); }
+      }, 'How do I remove the icon?'));
+    }
     if (env.canReachServer) {
-      wrap.appendChild(h('a', { class: 'flow-btn is-quiet', href: ORIGIN + '/flows', style: { width: 'auto', marginTop: '10px', textDecoration: 'none' } }, 'Find another Flow'));
+      wrap.appendChild(h('a', { class: 'flow-btn is-ghost', href: ORIGIN + '/flows', style: { width: 'auto', textDecoration: 'none' } }, 'Find another Flow'));
     }
     document.body.appendChild(wrap);
   }
@@ -1405,9 +1639,17 @@ a { color: var(--a1); }
     var list = h('div', { class: 'flow-menu' });
     var handle;
 
-    list.appendChild(menuItem('share', 'Send it to someone',
-      'They get their own copy, not yours',
-      function () { handle.close(); share(); }, 'is-accent'));
+    if (env.canReachServer) {
+      list.appendChild(menuItem('share', 'Send a link',
+        'They get their own copy, not yours',
+        function () { handle.close(); share(); }, 'is-accent'));
+    }
+
+    if (canSendFile()) {
+      list.appendChild(menuItem('airdrop', airdroppy ? 'AirDrop the file' : 'Send the file',
+        'Hands over the whole app — no signal needed',
+        function () { handle.close(); sendFileSheet(); }, env.canReachServer ? '' : 'is-accent'));
+    }
 
     if (!env.installed && env.mode !== 'file') {
       list.appendChild(menuItem('home', 'Add to Home Screen',
@@ -1443,7 +1685,7 @@ a { color: var(--a1); }
     var body = h('div');
     var rows = [
       ['Running from', where],
-      ['Storage', store.persistent ? 'Saved on this device' : 'Memory only — back up before you close it'],
+      ['Storage', store.persistent ? 'Saved on ' + store.where : 'Memory only — back up before you close it'],
       ['Offline', env.mode === 'file' ? 'Always' : (navigator.serviceWorker ? 'Yes, once it has loaded once' : 'Not on this browser')],
       ['Sends data anywhere', 'No. Everything stays on this device.']
     ];
@@ -1459,17 +1701,19 @@ a { color: var(--a1); }
 
   // ----------------------------------------------------------------- chrome ---
 
-  function buildChrome() {
+  function wireChrome() {
     var bar = $('.flow-bar');
-    if (!bar) return;
-    bar.innerHTML = '';
-    if (META.mark) bar.appendChild(h('span', { class: 'flow-mark-sm', html: META.mark }));
-    bar.appendChild(h('span', { class: 'flow-bar-title', text: META.name || 'Flow' }));
-    bar.appendChild(h('span', { class: 'flow-bar-spacer' }));
-    bar.appendChild(h('button', {
-      class: 'flow-icon-btn', type: 'button', 'aria-label': 'Menu', html: ICON.more, onclick: openMenu
-    }));
+    var menu = $('#flow-menu');
+    if (menu) menu.addEventListener('click', openMenu);
 
+    // The manifest only means anything when there is a directory to resolve it
+    // against. A downloaded copy has none, so linking it there would buy a 404
+    // on every open and nothing else.
+    if (env.canReachServer && basePath() !== '/') {
+      document.head.appendChild(h('link', { rel: 'manifest', href: 'manifest.webmanifest' }));
+    }
+
+    if (!bar) return;
     var sentinel = h('div', { style: { position: 'absolute', top: '0', height: '1px', width: '1px' } });
     document.body.appendChild(sentinel);
     if (window.IntersectionObserver) {
@@ -1509,20 +1753,45 @@ a { color: var(--a1); }
   function boot() {
     if (booted) return;
     booted = true;
+
+    // Order matters. The seed comes out of the document, then the document is
+    // captured verbatim — otherwise re-saving the file would bake a second,
+    // staler seed in beside the first.
     var seed = takeSeed();
     PRISTINE = '<!doctype html>\n' + document.documentElement.outerHTML;
-    applySeed(seed);
-    document.documentElement.style.setProperty('--a1', (META.colors && META.colors[0]) || '#0369a1');
-    document.documentElement.style.setProperty('--a2', (META.colors && META.colors[1]) || '#38bdf8');
-    buildChrome();
-    readyFns.forEach(function (fn) { try { fn(); } catch (e) { console.error(e); } });
-    registerWorker();
-    maybeCoach();
+
+    // Storage may have to open a database, so the Flow's own code does not run
+    // until it is known what it is reading from. Nothing is drawn twice and
+    // nothing starts from defaults it is about to throw away.
+    initStore().then(function () {
+      applySeed(seed);
+      wireChrome();
+      readyFns.forEach(function (fn) { try { fn(); } catch (e) { console.error(e); } });
+      registerWorker();
+      maybeCoach();
+      if (!store.persistent) warnAboutStorage();
+    });
+
     // Any first tap is a user gesture; use it to unlock audio for the timers.
     document.addEventListener('pointerdown', function once() {
       document.removeEventListener('pointerdown', once);
       try { audio(); } catch (e) {}
     }, { once: true });
+  }
+
+  // A Flow that cannot remember anything has to say so once, plainly, and offer
+  // the way out — rather than quietly losing an afternoon's list.
+  function warnAboutStorage() {
+    setTimeout(function () {
+      sheet({
+        title: 'This copy cannot save',
+        lede: 'The browser will not let a file opened from disk store anything, so what you do here lasts until you close the tab. Everything still works — it just will not be here tomorrow.',
+        actions: [
+          { label: 'Back up my data when I am done', kind: 'quiet', onClick: exportData },
+          { label: 'Understood', kind: 'ghost' }
+        ]
+      });
+    }, 900);
   }
 
   window.Flow = {
@@ -1538,7 +1807,8 @@ a { color: var(--a1); }
     keepAwake: function (on) { wakeLockWanted = !!on; keepAwake(!!on); },
     saveBlob: saveBlob, pickFile: pickFile,
     share: share, copyLink: copyLink,
-    saveFile: saveFileSheet, exportData: exportData, importData: importData,
+    saveFile: saveFileSheet, sendFile: sendFileSheet, canSendFile: canSendFile,
+    exportData: exportData, importData: importData,
     install: function () { installCoach(false); },
     remove: remove, openMenu: openMenu
   };

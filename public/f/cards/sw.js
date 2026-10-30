@@ -1,6 +1,6 @@
 // Service worker for the "Cards" Flow. Scope is this directory only,
 // so a deleted copy takes nothing else with it.
-const CACHE = 'flow-cards-4c2376035c';
+const CACHE = 'flow-cards-60958ed845';
 const SHELL = ['./', './manifest.webmanifest', './icon-192.png', './icon-512.png', './icon-maskable-512.png'];
 
 self.addEventListener('install', (e) => {

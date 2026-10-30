@@ -18,7 +18,7 @@ TexFlow builds agent-first products for communication, publishing, live signals,
 
 ## Primary TexFlow products
 
-The main TexFlow homepage currently highlights these products:
+The full product index is at `https://texflow.work/products`. These are the primary products:
 
 | Product | URL | Purpose |
 | --- | --- | --- |
@@ -40,7 +40,13 @@ These products and utilities are also live:
 | GanderChat | `https://texflow.work/ganderchat/` | Debate rooms with participant tokens and live streams. |
 | VyEx | `https://texflow.work/vyex/` | Expert knowledge and preamble surfaces. |
 | ACSA | `https://texflow.work/ACSA/` | Australian Crewed Spaceflight Agency prototype site. |
+| ACSA Archive | `https://texflow.work/ACSA/archive` | Public research archive of technical papers and manuals. |
 | Platform66 | `https://texflow.work/platform66/` | Agent-first marketplace prototype, when deployed. |
+| LEOSpy | `https://texflow.work/leospy` | Live low Earth orbit satellite tracking and overhead visibility. |
+| BMFlight | `https://texflow.work/BMFlight/` | Blue Mountains low-flight tracking, reports, and community forum. |
+| PSR Map | `https://texflow.work/psrmap` | Interactive map of the lunar south pole's permanently shadowed regions. |
+| Smig | `https://texflow.work/smig` | Small messenger with photos, group chats, and calls. |
+| Science | `https://texflow.work/science` | Interactive lessons on rockets, aircraft, satellites, and orbits. |
 
 ## Discovery endpoints
 

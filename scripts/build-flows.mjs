@@ -137,6 +137,7 @@ async function buildFlow(flow, shell, runtimeCss, runtimeJs) {
 
   // The chrome draws the mark as inline SVG rather than fetching the PNG, so a
   // Flow opened with no network still shows its own face.
+  const mark = iconSvg(flow);
   const meta = {
     id: flow.id,
     name: flow.name,
@@ -144,10 +145,15 @@ async function buildFlow(flow, shell, runtimeCss, runtimeJs) {
     blurb: flow.blurb,
     area: flow.area,
     colors: flow.colors,
-    mark: iconSvg(flow)
+    mark
   };
 
   const html = shell
+    .replace(/\{\{A1\}\}/g, flow.colors[0])
+    .replace(/\{\{A2\}\}/g, flow.colors[1])
+    .replace('{{ICON_SVG}}', faviconDataUri(flow))
+    .replace('{{ICON_MORE}}', MORE_ICON)
+    .replace('{{MARK}}', () => mark)
     .replace(/\{\{NAME\}\}/g, escapeAttr(flow.name))
     .replace(/\{\{TAGLINE\}\}/g, escapeAttr(flow.tagline))
     .replace(/\{\{BLURB\}\}/g, escapeAttr(flow.blurb))
@@ -159,11 +165,38 @@ async function buildFlow(flow, shell, runtimeCss, runtimeJs) {
     .replace('{{FLOW_HTML}}', () => src.html)
     .replace('{{FLOW_JS}}', () => src.js);
 
+  assertSelfContained(flow, html);
+
   const version = createHash('sha256').update(html).digest('hex').slice(0, 10);
   await writeFile(join(dir, 'index.html'), html);
   await writeFile(join(dir, 'sw.js'), workerFor(flow, version));
 
   return { flow, bytes: Buffer.byteLength(html), version };
+}
+
+// The menu button is in the static markup now, so its glyph has to be too.
+const MORE_ICON = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">'
+  + '<circle cx="12" cy="5" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="12" cy="19" r="1.6"/></svg>';
+
+// A tiny SVG favicon rather than a link to the PNG next door: a downloaded copy
+// has no next door, and this costs a few hundred bytes instead of nine kilobytes.
+function faviconDataUri(flow) {
+  const svg = iconSvg(flow, { idSuffix: 'fav' }).replace(/ class="flow-mark"| role="img"| aria-label="[^"]*"/g, '');
+  return 'data:image/svg+xml,' + encodeURIComponent(svg);
+}
+
+// The promise the whole product rests on: the copy served from texflow.work and
+// the copy sitting in someone's Downloads are the same bytes, and neither needs
+// anything else to exist. One stray <script src> would break that silently, so
+// the build refuses to produce a Flow that reaches outside itself.
+function assertSelfContained(flow, html) {
+  const refs = [...html.matchAll(/(?:src|href)\s*=\s*"([^"]*)"/g)]
+    .map((m) => m[1])
+    .filter((u) => u && !u.startsWith('data:') && !u.startsWith('#') && !/^https:\/\/texflow\.work\//.test(u));
+  if (refs.length) {
+    throw new Error(`${flow.id} reaches outside its own file: ${[...new Set(refs)].join(', ')}`);
+  }
+  if (/<link[^>]+rel="stylesheet"/i.test(html)) throw new Error(`${flow.id} links an external stylesheet`);
 }
 
 function escapeAttr(s) {

@@ -1,6 +1,6 @@
 // Service worker for the "Plant Care" Flow. Scope is this directory only,
 // so a deleted copy takes nothing else with it.
-const CACHE = 'flow-plants-a0d38287a4';
+const CACHE = 'flow-plants-bb2bf30ff7';
 const SHELL = ['./', './manifest.webmanifest', './icon-192.png', './icon-512.png', './icon-maskable-512.png'];
 
 self.addEventListener('install', (e) => {

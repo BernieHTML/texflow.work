@@ -9,7 +9,10 @@
     "dev": "node --watch server.js",
     "seo:generate": "node scripts/generate-seo.js",
     "flows:build": "node scripts/build-flows.mjs",
-    "build:platform66": "cd Platform66 && npm install && npm run build"
+    "build:platform66": "cd Platform66 && npm install && npm run build",
+    "flows:check": "node scripts/check-flows.mjs",
+    "ltec:build": "node scripts/build-ltec.mjs",
+    "ltec:test": "node --test 'tests/*.test.mjs'"
   },
   "dependencies": {
     "dotenv": "^16.6.1",

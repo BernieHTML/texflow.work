@@ -1,0 +1,1609 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=5">
+<title>LTEC: a lunar heat engine you can play with &middot; TexFlow</title>
+<meta name="description" content="An interactive first-order model of Lunar Thermal Energy Conversion: run a heat engine between a permanently shadowed crater at 28 K and a sunlit rim at 118 K, and see how much power it makes.">
+<meta name="author" content="B. Dyke">
+<meta name="theme-color" content="#05070e">
+<meta name="color-scheme" content="dark light">
+<link rel="canonical" href="https://texflow.work/ltec-system">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="TexFlow">
+<meta property="og:title" content="LTEC: a lunar heat engine you can play with">
+<meta property="og:description" content="Run a heat engine between a permanently shadowed crater at 28 K and a sunlit rim at 118 K. Move the sliders, watch the power change.">
+<meta property="og:url" content="https://texflow.work/ltec-system">
+<meta property="og:image" content="https://texflow.work/ltec-system/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="LTEC: a lunar thermal energy conversion model, 28 K shadow to 118 K sunlight.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="LTEC: a lunar heat engine you can play with">
+<meta name="twitter:description" content="An interactive first-order model of lunar thermal energy conversion at the south pole.">
+<meta name="twitter:image" content="https://texflow.work/ltec-system/og.png">
+
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%23070a12'/%3E%3Cpath d='M50 16a34 34 0 100 68 34 34 0 010-68z' fill='%2338bdf8'/%3E%3Cpath d='M50 16a34 34 0 010 68' fill='%23fbbf24'/%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="/ltec-system/icon-180.png">
+<link rel="manifest" href="/ltec-system/manifest.webmanifest">
+
+<!-- The two things worth fetching early: the body face and the plate behind
+     everything. Both are served from this origin; nothing here calls out. -->
+<link rel="preload" href="/ltec-system/inter-var.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/ltec-system/moon-south-pole.jpg" as="image">
+
+<style>
+/* ------------------------------------------------------------------ type ---
+   Two variable faces, subset to latin and self-hosted: Space Grotesk for
+   display and for every live number, Inter for everything that is read as
+   prose. 70 KB for the pair, and no request leaves this origin.            */
+@font-face {
+  font-family: 'Inter var';
+  src: url('/ltec-system/inter-var.woff2') format('woff2');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Space Grotesk var';
+  src: url('/ltec-system/space-grotesk-var.woff2') format('woff2');
+  font-weight: 300 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --cold: #4cc5fb;
+  --cold-deep: #0a7fc2;
+  --hot: #fcc33a;
+  --hot-deep: #d98c07;
+  --power: #5be58c;
+  --power-deep: #16a34a;
+  --warn: #fda45a;
+  --danger: #fb8585;
+  --focus: #8fdcff;
+
+  --ink: #f2f6fd;
+  --ink-2: #c2cde2;
+  --ink-3: #93a1ba;
+
+  /* Glass over the plate. The scrim is what keeps text at AA contrast over a
+     photograph that has both pure black and near-white in it. */
+  --base: #05080f;
+  --scrim: rgba(5, 8, 15, 0.86);
+  --scrim-top: rgba(5, 8, 15, 0.95);
+  --glass: rgba(12, 17, 29, 0.78);
+  --glass-2: rgba(20, 27, 44, 0.62);
+  --line: rgba(255, 255, 255, 0.13);
+  --line-soft: rgba(255, 255, 255, 0.07);
+
+  --sans: 'Inter var', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --display: 'Space Grotesk var', 'Inter var', system-ui, -apple-system, sans-serif;
+  /* Readouts: Inter, with tabular figures locked on so digits do not shuffle
+     width as a slider moves. */
+  --figures: 'Inter var', system-ui, -apple-system, sans-serif;
+  --mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
+
+  --r-sm: 10px;
+  --r: 14px;
+  --r-lg: 20px;
+  --tap: 44px;
+  color-scheme: dark;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --cold: #0b6ea8;
+    --cold-deep: #075985;
+    --hot: #a45c06;
+    --hot-deep: #7c4306;
+    --power: #11763a;
+    --power-deep: #0f5c2e;
+    --warn: #b4530c;
+    --danger: #b02020;
+    --focus: #0b6ea8;
+
+    --ink: #0b1220;
+    --ink-2: #39455d;
+    --ink-3: #5a6880;
+
+    --base: #eef2f8;
+    --scrim: rgba(241, 245, 250, 0.93);
+    --scrim-top: rgba(241, 245, 250, 0.975);
+    --glass: rgba(255, 255, 255, 0.84);
+    --glass-2: rgba(243, 246, 251, 0.78);
+    --line: rgba(11, 18, 32, 0.14);
+    --line-soft: rgba(11, 18, 32, 0.08);
+    color-scheme: light;
+  }
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-padding-top: 16px; }
+
+/* ------------------------------------------------------------------ plate ---
+   A real LROC WAC mosaic of the south pole, fixed behind the whole page. The
+   black in it is not styling: those are the permanently shadowed regions this
+   model runs its cold side in.
+
+   It arrives in two steps. A 20px inline thumbnail paints with the first
+   frame, blurred up to fill the viewport; the 208 KB plate fades in over it
+   once decoded, so a slow hall wifi never shows an empty page.              */
+/* Three fixed layers, painted back to front: the blurred thumbnail, the real
+   plate over it, then the scrim over both.
+
+   The scrim cannot live on `body`'s own background: a body background
+   propagates to the root canvas and is painted behind every negative z-index
+   child, so the photograph would cover it and the page would be unreadable.
+   It gets a layer of its own. */
+body::before,
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+body::before {
+  z-index: -3;
+  background-image: url('data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAoHBwgHBgoICAgLCgoLDhgQDg0NDh0VFhEYIx8lJCIfIiEmKzcvJik0KSEiMEExNDk7Pj4+JS5ESUM8SDc9PjsBCgsLDg0OHBAQHDsoIig7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7O//AABEIABQAFAMBEQACEQEDEQH/xAGiAAABBQEBAQEBAQAAAAAAAAAAAQIDBAUGBwgJCgsQAAIBAwMCBAMFBQQEAAABfQECAwAEEQUSITFBBhNRYQcicRQygZGhCCNCscEVUtHwJDNicoIJChYXGBkaJSYnKCkqNDU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6g4SFhoeIiYqSk5SVlpeYmZqio6Slpqeoqaqys7S1tre4ubrCw8TFxsfIycrS09TV1tfY2drh4uPk5ebn6Onq8fLz9PX29/j5+gEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoLEQACAQIEBAMEBwUEBAABAncAAQIDEQQFITEGEkFRB2FxEyIygQgUQpGhscEJIzNS8BVictEKFiQ04SXxFxgZGiYnKCkqNTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqCg4SFhoeIiYqSk5SVlpeYmZqio6Slpqeoqaqys7S1tre4ubrCw8TFxsfIycrS09TV1tfY2dri4+Tl5ufo6ery8/T19vf4+fr/2gAMAwEAAhEDEQA/APPpJRJeiykb7PbwuXlk/vlRzz6E5Ix/e9hV+RJCPEYWIxi2eRWK4jlkDx8DAwpH+felzBYmgl0OSFWm09xIR8wWaMDP0JyKegalSdZbOQW0crPMshj+YYEeMYIPryRSGVYUW4cupVTGpfIHof8AHP50gFa0juiZlxCH52BhgfT2osBZDs7ySMdzOzOxPc5x/j+dMQyJFjtroKvSNm/IqB/M0DJJY1RYwADlM/MAe5oEf//Z');
+  filter: blur(26px) saturate(0.9);
+  transform: scale(1.1);
+}
+body::after {
+  z-index: -2;
+  background-image: url('/ltec-system/moon-south-pole.jpg');
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+body.plate-ready::after { opacity: 1; }
+
+/* The scrim. Weighted towards the top, because that is where the masthead
+   has to sit over whatever the photograph happens to be doing there, and the
+   south pole mosaic has near-white crater rims in it. */
+html::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(180deg,
+    var(--scrim-top) 0%,
+    var(--scrim) 34%,
+    var(--scrim) 100%);
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--base);
+  color: var(--ink);
+  font: 16px/1.55 var(--sans);
+  font-variant-numeric: tabular-nums;
+  padding: 0 0 48px;
+  overflow-x: hidden;
+}
+body::marker { content: none; }
+
+.wrap { max-width: 1180px; margin: 0 auto; padding: 0 16px; }
+
+/* ------------------------------------------------------------------- head ---*/
+header.masthead { padding: 26px 0 16px; }
+.eyebrow {
+  font-family: var(--display);
+  font-size: 11.5px; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--cold); margin: 0 0 8px; font-weight: 600;
+}
+h1 {
+  font-family: var(--display);
+  font-size: clamp(25px, 5.6vw, 42px); line-height: 1.1; margin: 0 0 10px;
+  letter-spacing: -0.02em; font-weight: 700;
+}
+.standfirst { margin: 0; color: var(--ink-2); font-size: 15.5px; max-width: 60ch; }
+
+/* ------------------------------------------------------------------ cards ---*/
+.card {
+  background: var(--glass);
+  -webkit-backdrop-filter: blur(16px) saturate(1.2);
+  backdrop-filter: blur(16px) saturate(1.2);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  padding: 16px;
+  margin: 0 0 14px;
+  box-shadow: 0 10px 34px rgba(0, 0, 0, 0.30);
+}
+@media (prefers-color-scheme: light) {
+  .card { box-shadow: 0 6px 22px rgba(11, 18, 32, 0.10); }
+}
+.card > h2 {
+  font-family: var(--display);
+  font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--ink-3); margin: 0 0 14px; font-weight: 600;
+}
+
+/* ------------------------------------------------------------------ stage ---
+   The loop is the page. On a wide screen it sits beside its controls so both
+   are in view at once; on a phone it stacks, and the expand button is what
+   puts the diagram and the sliders on screen together.                      */
+.stage { display: grid; gap: 14px; align-items: start; }
+@media (min-width: 1000px) {
+  .stage { grid-template-columns: minmax(0, 1.35fr) minmax(340px, 1fr); }
+  .stage > .stage-left { position: sticky; top: 14px; }
+}
+
+.loop-card { position: relative; padding: 14px; }
+.loop-head {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 10px; margin-bottom: 10px;
+}
+.loop-head h2 { margin: 0; }
+.diagram {
+  width: 100%; height: auto; display: block;
+  border-radius: var(--r);
+  background: #04060c;
+}
+
+.expand {
+  display: inline-flex; align-items: center; gap: 7px;
+  min-height: var(--tap); padding: 7px 14px;
+  border-radius: 999px; border: 1px solid var(--line);
+  background: var(--glass-2); color: var(--ink-2);
+  font: 600 13px/1 var(--sans); cursor: pointer;
+}
+.expand:hover { border-color: var(--cold); color: var(--cold); }
+.expand svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2; }
+
+/* ---------------------------------------------------------------- readout ---*/
+.hero { display: flex; align-items: baseline; gap: 9px; flex-wrap: wrap; }
+.hero-value {
+  font-family: var(--figures);
+  font-feature-settings: 'tnum' 1;
+  font-size: clamp(40px, 11vw, 62px); font-weight: 700; line-height: 1;
+  color: var(--power); letter-spacing: -0.03em;
+}
+.hero-unit { font-size: clamp(15px, 4vw, 19px); font-weight: 600; color: var(--power); opacity: 0.9; }
+.hero-label { font-size: 13px; color: var(--ink-3); width: 100%; margin-top: 5px; }
+
+.badge {
+  display: none; align-items: center; gap: 6px;
+  margin-top: 10px; padding: 7px 12px;
+  background: color-mix(in srgb, var(--power) 18%, transparent);
+  border: 1px solid color-mix(in srgb, var(--power) 45%, transparent);
+  color: var(--power); border-radius: 999px;
+  font-size: 13px; font-weight: 650; width: fit-content;
+}
+.badge.on { display: inline-flex; }
+
+.stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-top: 13px; }
+@media (min-width: 560px) { .stats { grid-template-columns: repeat(4, 1fr); } }
+@media (min-width: 1000px) { .stats { grid-template-columns: repeat(2, 1fr); } }
+.stat {
+  background: var(--glass-2); border: 1px solid var(--line-soft);
+  border-radius: var(--r-sm); padding: 9px 11px;
+}
+.stat-k { font-size: 11px; color: var(--ink-3); display: block; margin-bottom: 1px; }
+.stat-v { font-family: var(--figures); font-feature-settings: 'tnum' 1; font-size: clamp(17px, 4.4vw, 21px); font-weight: 600; letter-spacing: -0.01em; }
+.stat-u { font-size: 12px; color: var(--ink-3); font-weight: 500; margin-left: 2px; }
+.stat.is-eff .stat-v { color: var(--cold); }
+.stat.is-heat .stat-v { color: var(--hot); }
+.stat.is-prac .stat-v { color: var(--power); }
+
+.summary {
+  margin: 12px 0 0; padding: 11px 12px;
+  background: var(--glass-2); border: 1px solid var(--line-soft);
+  border-left: 3px solid var(--cold);
+  border-radius: var(--r-sm);
+  font-size: 14.5px; color: var(--ink-2);
+}
+.summary strong { color: var(--ink); font-weight: 650; }
+
+.notice {
+  display: none; margin: 10px 0 0; padding: 11px 12px;
+  border-radius: var(--r-sm); font-size: 14px;
+  background: color-mix(in srgb, var(--danger) 16%, transparent);
+  border: 1px solid color-mix(in srgb, var(--danger) 42%, transparent);
+  color: var(--ink);
+}
+.notice.on { display: block; }
+.notice.warn {
+  background: color-mix(in srgb, var(--warn) 17%, transparent);
+  border-color: color-mix(in srgb, var(--warn) 44%, transparent);
+}
+
+/* ----------------------------------------------------------------- inputs ---*/
+.field { padding: 11px 0; border-top: 1px solid var(--line-soft); }
+.field:first-of-type { border-top: 0; padding-top: 0; }
+.field-head { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+.field-head label { font-size: 14px; font-weight: 600; color: var(--ink); flex: 0 1 auto; }
+.field-val {
+  margin-left: auto; font-family: var(--figures); font-feature-settings: 'tnum' 1; font-weight: 600;
+  font-size: 14px; color: var(--cold); flex: none;
+}
+
+.info {
+  width: 20px; height: 20px; flex: none; padding: 0; cursor: pointer;
+  border-radius: 50%; border: 1px solid var(--line);
+  background: var(--glass-2); color: var(--ink-3);
+  font: 600 12px/1 var(--sans);
+  display: inline-flex; align-items: center; justify-content: center;
+}
+.info:hover, .info[aria-expanded="true"] { color: var(--cold); border-color: var(--cold); }
+.help {
+  display: none; margin: 0 0 10px; padding: 10px 11px;
+  background: var(--glass-2); border: 1px solid var(--line-soft);
+  border-radius: var(--r-sm); font-size: 13.5px; color: var(--ink-2);
+}
+.help.on { display: block; }
+.help b { color: var(--ink); font-weight: 650; }
+
+.controls { display: flex; align-items: center; gap: 8px; }
+.stepper {
+  width: var(--tap); height: var(--tap); flex: none;
+  border-radius: var(--r-sm); border: 1px solid var(--line);
+  background: var(--glass-2); color: var(--ink);
+  font: 600 20px/1 var(--sans); cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  -webkit-tap-highlight-color: transparent;
+}
+.stepper:hover { border-color: var(--cold); color: var(--cold); }
+.stepper:active { transform: scale(0.95); }
+.num {
+  width: 100px; flex: none; height: var(--tap);
+  border-radius: var(--r-sm); border: 1px solid var(--line);
+  background: rgba(0, 0, 0, 0.28); color: var(--ink);
+  font: 600 16px/1 var(--mono); font-variant-numeric: tabular-nums;
+  text-align: right; padding: 0 8px;
+}
+@media (prefers-color-scheme: light) { .num { background: rgba(255, 255, 255, 0.7); } }
+.num:focus-visible { outline: 2px solid var(--focus); outline-offset: 1px; border-color: var(--focus); }
+.unit { font-size: 13px; color: var(--ink-3); flex: none; min-width: 40px; }
+
+input[type="range"] {
+  -webkit-appearance: none; appearance: none;
+  width: 100%; height: var(--tap); margin: 2px 0 0;
+  background: transparent; cursor: pointer; display: block;
+}
+input[type="range"]::-webkit-slider-runnable-track {
+  height: 8px; border-radius: 999px;
+  background: linear-gradient(90deg, var(--track-fill, var(--cold)) var(--pct, 50%), rgba(255,255,255,0.16) var(--pct, 50%));
+}
+input[type="range"]::-moz-range-track {
+  height: 8px; border-radius: 999px;
+  background: linear-gradient(90deg, var(--track-fill, var(--cold)) var(--pct, 50%), rgba(255,255,255,0.16) var(--pct, 50%));
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none; appearance: none;
+  width: 26px; height: 26px; margin-top: -9px;
+  border-radius: 50%; background: #fff;
+  border: 3px solid var(--track-fill, var(--cold));
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.55);
+}
+input[type="range"]::-moz-range-thumb {
+  width: 20px; height: 20px; border-radius: 50%;
+  background: #fff; border: 3px solid var(--track-fill, var(--cold));
+}
+input[type="range"]:focus-visible { outline: 2px solid var(--focus); outline-offset: 4px; border-radius: 999px; }
+
+.ticks { display: flex; justify-content: space-between; font-size: 11px; color: var(--ink-3); margin-top: -2px; }
+.ticks.log { display: block; position: relative; height: 22px; margin-top: 0; }
+.ticks.log span { position: absolute; top: 7px; transform: translateX(-50%); white-space: nowrap; }
+.ticks.log span::before {
+  content: ""; position: absolute; left: 50%; top: -7px;
+  width: 1px; height: 5px; background: var(--line);
+}
+.ticks.log span.edge-l { transform: none; }
+.ticks.log span.edge-l::before { left: 0; }
+.ticks.log span.edge-r { transform: translateX(-100%); }
+.ticks.log span.edge-r::before { left: auto; right: 0; }
+
+/* ---------------------------------------------------------------- presets ---*/
+.chips { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 4px; }
+.chip {
+  min-height: 40px; padding: 8px 13px;
+  border-radius: 999px; border: 1px solid var(--line);
+  background: var(--glass-2); color: var(--ink-2);
+  font: 600 13px/1.2 var(--sans); cursor: pointer;
+}
+.chip:hover { border-color: var(--cold); color: var(--cold); }
+.chip[aria-pressed="true"] { background: color-mix(in srgb, var(--cold) 20%, transparent); border-color: var(--cold); color: var(--cold); }
+.chip.reset { border-style: dashed; }
+
+/* ------------------------------------------------------------- disclosure ---*/
+details.adv { margin-top: 10px; border-top: 1px solid var(--line-soft); padding-top: 2px; }
+details.adv > summary {
+  cursor: pointer; padding: 11px 0; font-size: 13.5px; font-weight: 600; color: var(--ink-2);
+  list-style: none; display: flex; align-items: center; gap: 8px; min-height: var(--tap);
+}
+details.adv > summary::-webkit-details-marker { display: none; }
+details.adv > summary::before {
+  content: "\203A"; display: inline-block; transition: transform 0.18s ease;
+  font-size: 18px; color: var(--ink-3);
+}
+details.adv[open] > summary::before { transform: rotate(90deg); }
+details.adv > summary:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; border-radius: 6px; }
+
+/* ------------------------------------------------------------- benchmarks ---*/
+.bench { display: grid; gap: 11px; }
+.bench-top { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; font-size: 13.5px; }
+.bench-name { color: var(--ink-2); }
+.bench-num { color: var(--ink); font-weight: 650; font-size: 13.5px; font-family: var(--figures); font-feature-settings: 'tnum' 1; }
+.bar { height: 13px; border-radius: 999px; background: rgba(0,0,0,0.3); border: 1px solid var(--line-soft); overflow: hidden; }
+@media (prefers-color-scheme: light) { .bar { background: rgba(11,18,32,0.07); } }
+.bar > i { display: block; height: 100%; border-radius: 999px; transition: width 0.14s linear; }
+.bench-row.you .bar > i { background: linear-gradient(90deg, var(--power-deep), var(--power)); }
+.bench-row.nasa .bar > i { background: color-mix(in srgb, var(--ink-3) 60%, transparent); }
+.bench-row.iss .bar > i { background: color-mix(in srgb, var(--cold) 60%, transparent); }
+.bench-row.you .bench-name { color: var(--power); font-weight: 650; }
+
+.crew { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--line-soft); }
+.crew-figs { display: flex; gap: 3px; flex-wrap: wrap; }
+.crew-figs svg { width: 15px; height: 32px; flex: none; }
+.crew-text { font-size: 14px; color: var(--ink-2); margin: 0; }
+.crew-text b { color: var(--ink); font-size: 16px; font-family: var(--figures); }
+
+/* -------------------------------------------------------------- explainer ---*/
+.prose { max-width: 70ch; }
+.prose h3 {
+  font-family: var(--display); font-size: 16px; font-weight: 600;
+  margin: 20px 0 7px; color: var(--ink);
+}
+.prose h3:first-child { margin-top: 0; }
+.prose p { margin: 0 0 11px; color: var(--ink-2); font-size: 14.5px; }
+.prose b { color: var(--ink); }
+.eq {
+  font-family: var(--mono); font-size: 13.5px; color: var(--ink);
+  background: rgba(0, 0, 0, 0.3); border: 1px solid var(--line-soft);
+  border-radius: var(--r-sm); padding: 11px 13px; margin: 0 0 9px;
+  overflow-x: auto; white-space: nowrap;
+}
+@media (prefers-color-scheme: light) { .eq { background: rgba(11,18,32,0.05); } }
+.eq span { color: var(--ink-3); }
+
+/* ------------------------------------------------------------ reality box ---*/
+.toggle-row { display: flex; align-items: flex-start; gap: 12px; }
+.switch { position: relative; flex: none; width: 52px; height: 30px; margin-top: 2px; }
+.switch input { position: absolute; opacity: 0; width: 100%; height: 100%; margin: 0; cursor: pointer; z-index: 2; }
+.switch .track {
+  position: absolute; inset: 0; border-radius: 999px;
+  background: rgba(255,255,255,0.14); border: 1px solid var(--line);
+  transition: background 0.18s ease;
+}
+.switch .knob {
+  position: absolute; top: 4px; left: 4px; width: 22px; height: 22px;
+  border-radius: 50%; background: var(--ink-2);
+  transition: transform 0.18s ease, background 0.18s ease;
+}
+.switch input:checked ~ .track { background: color-mix(in srgb, var(--warn) 58%, transparent); border-color: var(--warn); }
+.switch input:checked ~ .knob { transform: translateX(22px); background: #fff; }
+.switch input:focus-visible ~ .track { outline: 2px solid var(--focus); outline-offset: 2px; }
+.toggle-text label { font-weight: 650; font-size: 14.5px; display: block; cursor: pointer; }
+.toggle-text p { margin: 5px 0 0; font-size: 13.5px; color: var(--ink-2); }
+.beyond {
+  display: inline-block; margin-left: 6px; padding: 2px 7px; border-radius: 999px;
+  font-size: 10.5px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase;
+  background: color-mix(in srgb, var(--warn) 20%, transparent);
+  border: 1px solid color-mix(in srgb, var(--warn) 48%, transparent);
+  color: var(--warn);
+}
+#realityOut { display: none; margin-top: 14px; }
+#realityOut.on { display: block; }
+.rc-grid { display: grid; gap: 10px; grid-template-columns: 1fr; }
+@media (min-width: 620px) { .rc-grid { grid-template-columns: 1fr 1fr; } }
+.rc-box { background: var(--glass-2); border: 1px solid var(--line-soft); border-radius: var(--r-sm); padding: 12px; }
+.rc-box .k { font-size: 12.5px; color: var(--ink-3); display: block; margin-bottom: 3px; }
+.rc-box .v { font-family: var(--figures); font-feature-settings: 'tnum' 1; font-size: 21px; font-weight: 600; }
+.rc-box .v .u { font-size: 13px; color: var(--ink-3); font-weight: 500; }
+.rc-box .sub { font-size: 12.5px; color: var(--ink-3); margin: 4px 0 0; }
+
+/* ----------------------------------------------------------------- share ---*/
+.share { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.btn {
+  min-height: var(--tap); padding: 10px 16px;
+  border-radius: var(--r-sm); border: 1px solid var(--line);
+  background: var(--glass-2); color: var(--ink);
+  font: 650 14px/1.2 var(--sans); cursor: pointer;
+  display: inline-flex; align-items: center; text-decoration: none;
+}
+.btn:hover { border-color: var(--cold); color: var(--cold); }
+.btn.primary { background: color-mix(in srgb, var(--cold) 22%, transparent); border-color: var(--cold); color: var(--cold); }
+.share-note { font-size: 13px; color: var(--ink-3); }
+
+/* ---------------------------------------------------------------- footer ----*/
+/* The masthead has the weighted top of the scrim behind it; the footer is the
+   other block of prose sitting straight on the photograph, so it gets the same
+   glass the cards use rather than relying on the plate being dark down there. */
+footer.foot {
+  margin-top: 24px; color: var(--ink-3); font-size: 13px;
+  background: var(--glass);
+  -webkit-backdrop-filter: blur(16px) saturate(1.2);
+  backdrop-filter: blur(16px) saturate(1.2);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  padding: 16px;
+}
+footer.foot p { margin: 0 0 9px; max-width: 76ch; }
+footer.foot cite { font-style: normal; color: var(--ink-2); }
+.disclaimer { padding: 12px 13px; background: var(--glass); border: 1px solid var(--line); border-radius: var(--r-sm); }
+a { color: var(--cold); }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.sr {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+/* ------------------------------------------------------------ full screen ---
+   The real fullscreen API is refused for arbitrary elements on iOS, which is
+   most of a conference audience, so this is a fixed overlay instead. The
+   diagram and the controls are MOVED into it rather than duplicated, so there
+   is only ever one live copy of the state.                                   */
+#fsRoot {
+  position: fixed; inset: 0; z-index: 100;
+  display: none; flex-direction: column; gap: 0;
+  background: rgba(3, 5, 10, 0.97);
+  -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px);
+  padding: max(10px, env(safe-area-inset-top)) 10px max(10px, env(safe-area-inset-bottom));
+}
+@media (prefers-color-scheme: light) { #fsRoot { background: rgba(240, 244, 250, 0.975); } }
+body.fs #fsRoot { display: flex; }
+body.fs { overflow: hidden; }
+
+#fsRoot .fs-bar { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 2px 4px 8px; }
+#fsRoot .fs-title { font-family: var(--display); font-weight: 600; font-size: 14px; color: var(--ink-2); }
+#fsRoot .fs-col { display: flex; flex-direction: column; min-width: 0; flex: 0 0 auto; }
+#fsRoot .fs-slot-loop { flex: 0 0 auto; min-height: 0; display: flex; }
+#fsRoot .fs-slot-controls {
+  flex: 1 1 auto; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch;
+  padding-right: 2px;
+}
+
+/* In the overlay the loop takes the room, and the cards lose their chrome. */
+body.fs .loop-card,
+body.fs .controls-card {
+  margin: 0; border: 0; background: transparent; box-shadow: none;
+  -webkit-backdrop-filter: none; backdrop-filter: none; padding: 0;
+}
+body.fs .loop-card { flex: 1 1 auto; display: flex; flex-direction: column; min-height: 0; }
+body.fs .loop-head { display: none; }
+/* Transparent in the overlay, so the letterbox bands either side of the
+   diagram are the overlay itself rather than a slightly different black. */
+body.fs .diagram { width: 100%; height: auto; background: transparent; }
+body.fs .loop-caption { display: none; }
+/* Everything that is reading rather than driving comes out of the way. */
+body.fs .help, body.fs .adv, body.fs .controls-card > h2, body.fs .ticks { display: none; }
+body.fs .field { padding: 4px 0; }
+body.fs .field-head { margin-bottom: 4px; }
+body.fs .chips { margin-bottom: 8px; }
+body.fs input[type="range"] { margin-top: 0; }
+
+@media (min-width: 900px) and (orientation: landscape) {
+  #fsRoot { flex-direction: row; gap: 14px; align-items: stretch; }
+  #fsRoot .fs-col { flex: 1 1 auto; }
+  #fsRoot .fs-slot-loop { flex: 1 1 auto; }
+  /* With room to spare the diagram does fill its column. */
+  body.fs .diagram { height: 100%; min-height: 0; }
+  #fsRoot .fs-slot-controls { flex: 0 0 360px; max-width: 360px; }
+}
+
+.fs-close {
+  width: var(--tap); height: var(--tap); flex: none; cursor: pointer;
+  border-radius: 50%; border: 1px solid var(--line);
+  background: var(--glass-2); color: var(--ink);
+  font: 600 18px/1 var(--sans);
+  display: inline-flex; align-items: center; justify-content: center;
+}
+.fs-close:hover { border-color: var(--cold); color: var(--cold); }
+
+/* The live number stays on screen in the overlay. */
+.fs-readout { display: none; align-items: baseline; gap: 7px; }
+body.fs .fs-readout { display: flex; }
+.fs-readout b { font-family: var(--figures); font-feature-settings: 'tnum' 1; font-size: 22px; font-weight: 700; color: var(--power); }
+.fs-readout span { font-size: 12px; color: var(--ink-3); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none !important; animation: none !important; }
+}
+</style>
+</head>
+<body>
+
+<!-- The overlay the loop and its controls move into. Empty until opened. -->
+<div id="fsRoot" role="dialog" aria-modal="true" aria-label="Full screen loop" aria-hidden="true">
+  <div class="fs-col">
+    <div class="fs-bar">
+      <span class="fs-title">LTEC loop</span>
+      <span class="fs-readout"><b id="fsValue">45.7</b><span>kW electrical</span></span>
+      <button class="fs-close" type="button" id="fsClose" aria-label="Close full screen">&times;</button>
+    </div>
+    <div class="fs-slot-loop" id="fsSlotLoop"></div>
+  </div>
+  <div class="fs-slot-controls" id="fsSlotControls"></div>
+</div>
+
+<div class="wrap">
+
+<header class="masthead">
+  <p class="eyebrow">Lunar Thermal Energy Conversion</p>
+  <h1>A heat engine between a 28&nbsp;K crater and a 118&nbsp;K sunlit rim</h1>
+  <p class="standfirst">
+    The Moon's south pole puts some of the coldest ground in the solar system a few kilometres from
+    some of the most reliably sunlit. Move the sliders and watch the loop respond.
+  </p>
+</header>
+
+<!-- ====================================================== the interactive === -->
+<div class="stage">
+
+  <div class="stage-left">
+    <section class="card loop-card" id="loopCard">
+      <div class="loop-head">
+        <h2>The loop</h2>
+        <button class="expand" type="button" id="expandBtn" aria-label="Open the loop full screen">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20 15v5h-5M20 9V4h-5M4 15v5h5"/></svg>
+          Full screen
+        </button>
+      </div>
+
+      <svg class="diagram" id="diagram" viewBox="0 0 760 380" preserveAspectRatio="xMidYMid meet"
+           role="img" aria-labelledby="diagTitle diagDesc">
+        <title id="diagTitle">Schematic of the LTEC loop</title>
+        <desc id="diagDesc">Working fluid boils in the sunlit region, expands right to left through a turbine driving a generator, condenses in the permanently shadowed region, and is pumped back along a buried return line to the evaporator.</desc>
+        <defs>
+          <linearGradient id="skyGrad" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#05070e"/>
+            <stop offset="45%" stop-color="#070b16"/>
+            <stop offset="100%" stop-color="#1a1508"/>
+          </linearGradient>
+          <linearGradient id="pipeGrad" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#4cc5fb" id="gradCold"/>
+            <stop offset="100%" stop-color="#fcc33a" id="gradHot"/>
+          </linearGradient>
+          <radialGradient id="bulbGrad">
+            <stop offset="0%" stop-color="#5be58c" stop-opacity="0.95"/>
+            <stop offset="55%" stop-color="#5be58c" stop-opacity="0.30"/>
+            <stop offset="100%" stop-color="#5be58c" stop-opacity="0"/>
+          </radialGradient>
+        </defs>
+
+        <rect width="760" height="380" fill="url(#skyGrad)"/>
+        <g id="stars" opacity="0.55"></g>
+
+        <circle id="sun" cx="690" cy="88" r="26" fill="#fcc33a" opacity="0.9"/>
+        <circle cx="690" cy="88" r="46" fill="#fcc33a" opacity="0.10"/>
+        <g stroke="#fcc33a" stroke-width="2.5" stroke-linecap="round" opacity="0.5">
+          <path d="M640 110 L600 128"/><path d="M646 128 L608 146"/><path d="M652 146 L616 163"/>
+        </g>
+
+        <path d="M0 268 L120 262 L200 250 L300 254 L380 240 L470 214 L560 196 L650 186 L760 182 L760 380 L0 380 Z"
+              fill="#0d1422" stroke="#222d49" stroke-width="1.5"/>
+        <path d="M0 268 L120 262 L200 250 L300 254 L380 240 L470 214 L560 196 L650 186 L760 182"
+              fill="none" stroke="#2b3a56" stroke-width="2"/>
+        <rect x="0" y="240" width="330" height="140" fill="#4cc5fb" opacity="0.07"/>
+
+        <path id="loopPath" d="M150 232 L150 120 Q150 104 166 104 L594 104 Q610 104 610 120 L610 232"
+              fill="none" stroke="url(#pipeGrad)" stroke-width="9" stroke-linecap="round"/>
+        <path id="flowDash" d="M150 232 L150 120 Q150 104 166 104 L594 104 Q610 104 610 120 L610 232"
+              fill="none" stroke="#f2f6fd" stroke-width="2.5" stroke-linecap="round"
+              stroke-dasharray="10 26" opacity="0.55"/>
+
+        <path id="returnPath" d="M112 254 L80 254 L80 344 L700 344 L700 212 L648 212"
+              fill="none" stroke="#0a7fc2" stroke-width="6" stroke-linecap="round" opacity="0.75"/>
+        <path id="returnDash" d="M112 254 L80 254 L80 344 L700 344 L700 212 L648 212"
+              fill="none" stroke="#4cc5fb" stroke-width="2" stroke-linecap="round"
+              stroke-dasharray="8 24" opacity="0.5"/>
+
+        <g id="condenser">
+          <rect x="112" y="228" width="76" height="52" rx="12" fill="#0b1322" stroke="#4cc5fb" stroke-width="2.5"/>
+          <g stroke="#4cc5fb" stroke-width="2" opacity="0.8" fill="none">
+            <path d="M124 244 h52"/><path d="M124 254 h52"/><path d="M124 264 h52"/>
+          </g>
+        </g>
+        <g id="evaporator">
+          <rect x="572" y="186" width="76" height="52" rx="12" fill="#1a1407" stroke="#fcc33a" stroke-width="2.5"/>
+          <g stroke="#fcc33a" stroke-width="2" opacity="0.8" fill="none">
+            <path d="M584 202 h52"/><path d="M584 212 h52"/><path d="M584 222 h52"/>
+          </g>
+        </g>
+
+        <g id="pump">
+          <circle cx="390" cy="344" r="15" fill="#0f1526" stroke="#0a7fc2" stroke-width="2.5"/>
+          <path d="M384 336 L400 344 L384 352 Z" fill="#4cc5fb"/>
+        </g>
+
+        <g id="turbine">
+          <circle cx="352" cy="104" r="30" fill="#0f1526" stroke="#222d49" stroke-width="2"/>
+          <g id="blades" stroke="#c2cde2" stroke-width="3.5" stroke-linecap="round">
+            <path d="M352 84 L352 124"/><path d="M335 94 L369 114"/><path d="M335 114 L369 94"/>
+          </g>
+          <circle cx="352" cy="104" r="5" fill="#f2f6fd"/>
+        </g>
+        <path d="M382 104 L404 104" stroke="#93a1ba" stroke-width="3"/>
+        <g id="generator">
+          <rect x="404" y="80" width="56" height="48" rx="10" fill="#0f1526" stroke="#5be58c" stroke-width="2.5"/>
+          <text x="432" y="110" text-anchor="middle" font-family="ui-monospace, monospace" font-size="20" font-weight="700" fill="#5be58c">G</text>
+        </g>
+        <circle id="bulbGlow" cx="432" cy="104" r="40" fill="url(#bulbGrad)" opacity="0.9"/>
+
+        <path d="M528 98 L514 104 L528 110 Z" fill="#c2cde2"/>
+        <path d="M266 98 L252 104 L266 110 Z" fill="#c2cde2"/>
+        <path d="M246 338 L260 344 L246 350 Z" fill="#4cc5fb"/>
+
+        <text x="150" y="300" text-anchor="middle" font-size="11.5" fill="#93a1ba">PSR &mdash; condenser</text>
+        <text x="150" y="318" text-anchor="middle" font-size="13" font-weight="600" fill="#4cc5fb" id="svgTc">28 K</text>
+        <text x="610" y="258" text-anchor="middle" font-size="11.5" fill="#93a1ba">Sunlit rim &mdash; evaporator</text>
+        <text x="610" y="276" text-anchor="middle" font-size="13" font-weight="600" fill="#fcc33a" id="svgTh">118 K</text>
+        <text x="432" y="150" text-anchor="middle" font-size="15" font-weight="700" fill="#5be58c" id="svgPower">45.7 kW</text>
+        <text x="352" y="62" text-anchor="middle" font-size="11.5" fill="#93a1ba">turbine</text>
+        <text x="266" y="92" text-anchor="middle" font-size="11.5" fill="#93a1ba">&larr; exhaust</text>
+        <text x="492" y="92" text-anchor="middle" font-size="11.5" fill="#93a1ba">&larr; vapour</text>
+        <text x="302" y="336" text-anchor="middle" font-size="11.5" fill="#93a1ba">pumped liquid &rarr;</text>
+      </svg>
+
+      <p class="loop-caption" style="font-size:12.5px;color:var(--ink-3);margin:8px 0 0">
+        Fluid boils at the sunlit rim, travels right to left through the turbine, condenses in the
+        shadow, and is pumped back along a buried return line.
+      </p>
+    </section>
+
+    <section class="card" id="readoutCard">
+      <div class="hero">
+        <span class="hero-value" id="heroValue">45.7</span>
+        <span class="hero-unit">kW electrical</span>
+        <span class="hero-label">Practical output &mdash; what an Organic Rankine Cycle would really deliver</span>
+      </div>
+
+      <span class="badge" id="badgeNasa">&#9889; Beats NASA's 40&nbsp;kW fission target</span>
+
+      <div class="notice" id="noticeTemp" role="status">
+        The sunlit side has to be <b>warmer</b> than the shadowed side for a heat engine to run.
+        Raise the high-illumination temperature above the PSR temperature and the power comes back.
+      </div>
+      <div class="notice warn" id="noticeEq" role="status"></div>
+      <div class="notice warn" id="noticeNet" role="status">
+        At this temperature the pipe radiates away more heat than the Sun delivers, so there is
+        nothing left to run the engine. Lower the hot-side temperature, or raise the absorptivity.
+      </div>
+
+      <div class="stats">
+        <div class="stat is-eff">
+          <span class="stat-k">Carnot efficiency</span>
+          <span class="stat-v" id="statEta">76.3</span><span class="stat-u">%</span>
+        </div>
+        <div class="stat is-heat">
+          <span class="stat-k">Heat collected</span>
+          <span class="stat-v" id="statQ">136</span><span class="stat-u">kW</span>
+        </div>
+        <div class="stat">
+          <span class="stat-k">Theoretical max</span>
+          <span class="stat-v" id="statWmax">104</span><span class="stat-u">kW</span>
+        </div>
+        <div class="stat is-prac">
+          <span class="stat-k">Practical output</span>
+          <span class="stat-v" id="statWprac">45.7</span><span class="stat-u">kW</span>
+        </div>
+      </div>
+
+      <p class="summary" id="summary"></p>
+    </section>
+  </div>
+
+  <!-- --------------------------------------------------------- the sliders -->
+  <section class="card controls-card" id="controlsCard">
+    <h2>What you can change</h2>
+
+    <div class="chips" role="group" aria-label="Preset configurations">
+      <button class="chip" type="button" data-preset="paper" aria-pressed="true">Paper baseline</button>
+      <button class="chip" type="button" data-preset="warm" aria-pressed="false">Warmer rim</button>
+      <button class="chip" type="button" data-preset="dusty" aria-pressed="false">Dusty pipes</button>
+      <button class="chip" type="button" data-preset="iss" aria-pressed="false">ISS-sized</button>
+      <button class="chip reset" type="button" id="resetBtn">&#8634; Reset</button>
+    </div>
+
+    <div class="field">
+      <div class="field-head">
+        <label for="S">Solar flux</label>
+        <button class="info" type="button" aria-expanded="false" aria-controls="help-S" aria-label="About solar flux">i</button>
+        <span class="field-val" id="val-S">1.361 kW/m&sup2;</span>
+      </div>
+      <div class="help" id="help-S">
+        How much sunlight energy lands on each square metre. <b>The paper uses 1.361&nbsp;kW/m&sup2;</b>,
+        the full value in space at the Moon's distance. In reality the poles see less: the Sun sits
+        within about 1.5&deg; of the horizon, so it grazes the pipe rather than facing it squarely.
+      </div>
+      <div class="controls">
+        <button class="stepper" type="button" data-step="S" data-dir="-1" aria-label="Decrease solar flux">&minus;</button>
+        <input class="num" id="S-num" type="number" min="0" max="1.5" step="0.001" inputmode="decimal" aria-label="Solar flux in kilowatts per square metre">
+        <span class="unit">kW/m&sup2;</span>
+        <button class="stepper" type="button" data-step="S" data-dir="1" aria-label="Increase solar flux">+</button>
+      </div>
+      <input type="range" id="S" min="0" max="1.5" step="0.001" style="--track-fill: var(--hot)" aria-label="Solar flux slider">
+      <div class="ticks"><span>0</span><span>0.75</span><span>1.5</span></div>
+    </div>
+
+    <div class="field">
+      <div class="field-head">
+        <label for="Tc">PSR temperature</label>
+        <button class="info" type="button" aria-expanded="false" aria-controls="help-Tc" aria-label="About PSR temperature">i</button>
+        <span class="field-val" id="val-Tc">28 K</span>
+      </div>
+      <div class="help" id="help-Tc">
+        A permanently shadowed region is crater floor that has not seen sunlight for billions of
+        years. <b>The paper models 28&nbsp;K</b> &mdash; about &minus;245&nbsp;&deg;C &mdash; and cites
+        PSRs across the range 20&ndash;120&nbsp;K. This is the engine's cold sink.
+      </div>
+      <div class="controls">
+        <button class="stepper" type="button" data-step="Tc" data-dir="-1" aria-label="Decrease PSR temperature">&minus;</button>
+        <input class="num" id="Tc-num" type="number" min="20" max="120" step="1" inputmode="numeric" aria-label="PSR temperature in kelvin">
+        <span class="unit">K</span>
+        <button class="stepper" type="button" data-step="Tc" data-dir="1" aria-label="Increase PSR temperature">+</button>
+      </div>
+      <input type="range" id="Tc" min="20" max="120" step="1" style="--track-fill: var(--cold)" aria-label="PSR temperature slider">
+      <div class="ticks"><span>20</span><span>70</span><span>120</span></div>
+    </div>
+
+    <div class="field">
+      <div class="field-head">
+        <label for="Th">Sunlit rim temperature</label>
+        <button class="info" type="button" aria-expanded="false" aria-controls="help-Th" aria-label="About the sunlit rim temperature">i</button>
+        <span class="field-val" id="val-Th">118 K</span>
+      </div>
+      <div class="help" id="help-Th">
+        The temperature of the sunlit ground and pipework near the Shackleton rim.
+        <b>The paper models 118&nbsp;K</b>, and notes in its introduction that such regions can
+        exceed 200&nbsp;K. It has to stay above the cold side, or there is no engine.
+      </div>
+      <div class="controls">
+        <button class="stepper" type="button" data-step="Th" data-dir="-1" aria-label="Decrease rim temperature">&minus;</button>
+        <input class="num" id="Th-num" type="number" min="100" max="400" step="1" inputmode="numeric" aria-label="Sunlit rim temperature in kelvin">
+        <span class="unit">K</span>
+        <button class="stepper" type="button" data-step="Th" data-dir="1" aria-label="Increase rim temperature">+</button>
+      </div>
+      <input type="range" id="Th" min="100" max="400" step="1" style="--track-fill: var(--hot)" aria-label="Sunlit rim temperature slider">
+      <div class="ticks"><span>100</span><span>250</span><span>400</span></div>
+    </div>
+
+    <div class="field">
+      <div class="field-head">
+        <label for="A">Total pipe area</label>
+        <button class="info" type="button" aria-expanded="false" aria-controls="help-A" aria-label="About pipe area">i</button>
+        <span class="field-val" id="val-A">100 m&sup2;</span>
+      </div>
+      <div class="help" id="help-A">
+        The projected area the pipes present to the Sun &mdash; diameter &times; length, as in the
+        paper: a 0.1&nbsp;m pipe running 100&nbsp;m is 10&nbsp;m&sup2;. <b>The default here is
+        100&nbsp;m&sup2;</b>, ten such runs. The slider is logarithmic, so the small end stays usable.
+        2,500&nbsp;m&sup2; is roughly the ISS solar array area.
+      </div>
+      <div class="controls">
+        <button class="stepper" type="button" data-step="A" data-dir="-1" aria-label="Decrease pipe area">&minus;</button>
+        <input class="num" id="A-num" type="number" min="1" max="5000" step="1" inputmode="numeric" aria-label="Total pipe area in square metres">
+        <span class="unit">m&sup2;</span>
+        <button class="stepper" type="button" data-step="A" data-dir="1" aria-label="Increase pipe area">+</button>
+      </div>
+      <input type="range" id="A" min="0" max="1000" step="1" style="--track-fill: var(--power)" aria-label="Total pipe area slider, logarithmic">
+      <div class="ticks log" aria-hidden="true">
+        <span class="edge-l" style="left:0%">1</span>
+        <span style="left:27.0%">10</span>
+        <span style="left:54.1%">100</span>
+        <span style="left:81.1%">1k</span>
+        <span class="edge-r" style="left:91.9%">2.5k</span>
+      </div>
+    </div>
+
+    <div class="field">
+      <div class="field-head">
+        <label for="alpha">Pipe absorptivity</label>
+        <button class="info" type="button" aria-expanded="false" aria-controls="help-alpha" aria-label="About absorptivity">i</button>
+        <span class="field-val" id="val-alpha">1</span>
+      </div>
+      <div class="help" id="help-alpha">
+        The fraction of incoming sunlight the pipe actually absorbs, from 0 (a perfect mirror) to
+        1 (a perfect black body). <b>The paper assumes 1.0</b>, which is idealised. Lunar dust
+        settling on a surface is the usual reason the real figure drifts downward.
+      </div>
+      <div class="controls">
+        <button class="stepper" type="button" data-step="alpha" data-dir="-1" aria-label="Decrease absorptivity">&minus;</button>
+        <input class="num" id="alpha-num" type="number" min="0" max="1" step="0.01" inputmode="decimal" aria-label="Pipe absorptivity, 0 to 1">
+        <span class="unit">&alpha;</span>
+        <button class="stepper" type="button" data-step="alpha" data-dir="1" aria-label="Increase absorptivity">+</button>
+      </div>
+      <input type="range" id="alpha" min="0" max="1" step="0.01" style="--track-fill: var(--hot)" aria-label="Pipe absorptivity slider">
+      <div class="ticks"><span>0</span><span>0.5</span><span>1.0</span></div>
+    </div>
+
+    <details class="adv">
+      <summary>Advanced constants</summary>
+
+      <div class="field">
+        <div class="field-head">
+          <label for="orc">ORC fraction of Carnot</label>
+          <button class="info" type="button" aria-expanded="false" aria-controls="help-orc" aria-label="About the ORC fraction">i</button>
+          <span class="field-val" id="val-orc">0.44</span>
+        </div>
+        <div class="help" id="help-orc">
+          No real engine reaches the Carnot limit. <b>The paper takes 0.44</b>: an Organic Rankine
+          Cycle delivering about 44% of the theoretical maximum. Set it to 1 to see the Carnot limit.
+        </div>
+        <div class="controls">
+          <button class="stepper" type="button" data-step="orc" data-dir="-1" aria-label="Decrease ORC fraction">&minus;</button>
+          <input class="num" id="orc-num" type="number" min="0" max="1" step="0.01" inputmode="decimal" aria-label="ORC fraction of Carnot">
+          <span class="unit">&eta;</span>
+          <button class="stepper" type="button" data-step="orc" data-dir="1" aria-label="Increase ORC fraction">+</button>
+        </div>
+        <input type="range" id="orc" min="0" max="1" step="0.01" style="--track-fill: var(--power)" aria-label="ORC fraction slider">
+      </div>
+
+      <div class="field">
+        <div class="field-head">
+          <label for="f">Illumination fraction</label>
+          <button class="info" type="button" aria-expanded="false" aria-controls="help-f" aria-label="About the illumination fraction">i</button>
+          <span class="field-val" id="val-f">1</span>
+        </div>
+        <div class="help" id="help-f">
+          The share of the time the collector is actually in sunlight. <b>The default is 1.0</b>,
+          matching the paper's instantaneous figure. The paper notes the Shackleton rim is sunlit
+          about 94% of the year, so 0.94 is the honest annual average.
+        </div>
+        <div class="controls">
+          <button class="stepper" type="button" data-step="f" data-dir="-1" aria-label="Decrease illumination fraction">&minus;</button>
+          <input class="num" id="f-num" type="number" min="0" max="1" step="0.01" inputmode="decimal" aria-label="Illumination fraction">
+          <span class="unit">f</span>
+          <button class="stepper" type="button" data-step="f" data-dir="1" aria-label="Increase illumination fraction">+</button>
+        </div>
+        <input type="range" id="f" min="0" max="1" step="0.01" style="--track-fill: var(--hot)" aria-label="Illumination fraction slider">
+      </div>
+
+      <div class="field">
+        <div class="field-head">
+          <label for="eps">Pipe emissivity</label>
+          <button class="info" type="button" aria-expanded="false" aria-controls="help-eps" aria-label="About pipe emissivity">i</button>
+          <span class="field-val" id="val-eps">1</span>
+        </div>
+        <div class="help" id="help-eps">
+          How readily the pipe radiates heat back out. Only used by the reality check at the foot of
+          the page. <b>It tracks absorptivity by default</b>, which is the grey-body assumption.
+        </div>
+        <div class="controls">
+          <button class="stepper" type="button" data-step="eps" data-dir="-1" aria-label="Decrease emissivity">&minus;</button>
+          <input class="num" id="eps-num" type="number" min="0.01" max="1" step="0.01" inputmode="decimal" aria-label="Pipe emissivity">
+          <span class="unit">&epsilon;</span>
+          <button class="stepper" type="button" data-step="eps" data-dir="1" aria-label="Increase emissivity">+</button>
+        </div>
+        <input type="range" id="eps" min="0.01" max="1" step="0.01" style="--track-fill: var(--warn)" aria-label="Pipe emissivity slider">
+        <p style="font-size:12.5px;color:var(--ink-3);margin:4px 0 0" id="epsNote">Tracking absorptivity (&epsilon; = &alpha;).</p>
+      </div>
+
+      <div class="field">
+        <div class="field-head">
+          <label for="epsr">Radiator emissivity</label>
+          <button class="info" type="button" aria-expanded="false" aria-controls="help-epsr" aria-label="About radiator emissivity">i</button>
+          <span class="field-val" id="val-epsr">0.9</span>
+        </div>
+        <div class="help" id="help-epsr">
+          The emissivity assumed for a purpose-built cold-side radiator. <b>0.9</b> is typical for
+          spacecraft radiator coatings. Only used by the reality check.
+        </div>
+        <div class="controls">
+          <button class="stepper" type="button" data-step="epsr" data-dir="-1" aria-label="Decrease radiator emissivity">&minus;</button>
+          <input class="num" id="epsr-num" type="number" min="0.01" max="1" step="0.01" inputmode="decimal" aria-label="Radiator emissivity">
+          <span class="unit">&epsilon;<sub>r</sub></span>
+          <button class="stepper" type="button" data-step="epsr" data-dir="1" aria-label="Increase radiator emissivity">+</button>
+        </div>
+        <input type="range" id="epsr" min="0.01" max="1" step="0.01" style="--track-fill: var(--cold)" aria-label="Radiator emissivity slider">
+      </div>
+    </details>
+  </section>
+</div>
+
+<!-- ============================================================ comparison === -->
+<section class="card">
+  <h2>How it compares</h2>
+  <div class="bench">
+    <div class="bench-row you">
+      <div class="bench-top"><span class="bench-name">Your configuration</span><span class="bench-num" id="bYouN">45.7 kW</span></div>
+      <div class="bar"><i id="bYou" style="width:50%"></i></div>
+    </div>
+    <div class="bench-row nasa">
+      <div class="bench-top"><span class="bench-name">NASA Fission Surface Power target</span><span class="bench-num">40 kW</span></div>
+      <div class="bar"><i id="bNasa" style="width:44%"></i></div>
+    </div>
+    <div class="bench-row iss">
+      <div class="bench-top"><span class="bench-name">ISS solar arrays</span><span class="bench-num">75&ndash;90 kW</span></div>
+      <div class="bar"><i id="bIss" style="width:100%"></i></div>
+    </div>
+  </div>
+  <div class="crew">
+    <div class="crew-figs" id="crewFigs" aria-hidden="true"></div>
+    <p class="crew-text" id="crewText"></p>
+  </div>
+</section>
+
+<!-- =============================================================== sharing === -->
+<section class="card">
+  <h2>Share this configuration</h2>
+  <div class="share">
+    <button class="btn primary" type="button" id="copyBtn">Copy link to these settings</button>
+    <a class="btn" href="/ltec-system/qr">Slide QR code</a>
+    <span class="share-note" id="shareNote" role="status"></span>
+  </div>
+  <p style="font-size:12.5px;color:var(--ink-3);margin:10px 0 0">
+    Every slider is in the address bar, so the link you copy reopens exactly this configuration.
+  </p>
+</section>
+
+<!-- ============================================================ the writing === -->
+<section class="card">
+  <h2>How it works</h2>
+  <div class="prose">
+    <p>
+      LTEC is an Organic Rankine Cycle heat engine, modelled on OTEC &mdash; the ocean systems that
+      make power from the difference between warm surface water and the cold deep. Here the two
+      reservoirs are a <b>permanently shadowed crater floor</b>, which has not seen sunlight in
+      billions of years and sits near 28&nbsp;K, and the <b>high-illumination ground near the
+      Shackleton rim</b>, which the Sun grazes almost continuously and which the paper models at
+      118&nbsp;K.
+    </p>
+    <p>
+      A working fluid is pumped through pipes in the sunlit region, where it evaporates. The vapour
+      spins a turbine and its generator, then returns to a condenser in the shadow, where it gives up
+      its remaining heat and is pumped back out to the rim.
+    </p>
+
+    <h3>The four equations</h3>
+    <div class="eq">&eta;<sub>C</sub> = 1 &minus; T<sub>c</sub> / T<sub>h</sub><span>   &larr; Carnot efficiency</span></div>
+    <div class="eq">Q<sub>H</sub> = A &times; S &times; &alpha; &times; f<span>   &larr; heat collected, kW</span></div>
+    <div class="eq">W<sub>max</sub> = &eta;<sub>C</sub> &times; Q<sub>H</sub><span>   &larr; theoretical maximum</span></div>
+    <div class="eq">W<sub>prac</sub> = &eta;<sub>ORC</sub> &times; &eta;<sub>C</sub> &times; Q<sub>H</sub><span>   &larr; with &eta;<sub>ORC</sub> = 0.44</span></div>
+    <p>
+      <b>A</b> is the projected pipe area, diameter &times; length, exactly as the paper takes it: a
+      0.1&nbsp;m pipe running 100&nbsp;m counts as 10&nbsp;m&sup2;. Nothing is rounded between those
+      four steps; only what you see is rounded, to three significant figures.
+    </p>
+
+    <h3>On the 2,575 kW in the paper</h3>
+    <p>
+      At 2,500&nbsp;m&sup2; this page shows 2,595&nbsp;kW theoretical maximum where the paper prints
+      2,575&nbsp;kW. The difference is rounding, not physics: the paper rounds the Carnot efficiency
+      to 0.76 and the per-10&nbsp;m&sup2; output to 10.3&nbsp;kW before scaling up.
+    </p>
+
+    <h3>What this is not</h3>
+    <p>
+      A first-order, idealised, upper-bound model, built for illustration during a talk. It is not an
+      engineering design: it assumes perfect heat transfer, and says nothing about working-fluid
+      selection, pumping power, pressure drop, pipe mass, or how ten kilometres of plumbing reaches
+      the lunar south pole. Treat every number as the best case physics permits.
+    </p>
+  </div>
+</section>
+
+<!-- ========================================================= reality check === -->
+<section class="card">
+  <h2>Reality check</h2>
+  <div class="toggle-row">
+    <span class="switch">
+      <input type="checkbox" id="rc" aria-describedby="rcDesc">
+      <span class="track" aria-hidden="true"></span>
+      <span class="knob" aria-hidden="true"></span>
+    </span>
+    <div class="toggle-text">
+      <label for="rc">Include radiative losses and heat rejection <span class="beyond">Beyond the paper</span></label>
+      <p id="rcDesc">
+        The paper models collection only. A real pipe at 118&nbsp;K also radiates heat back into
+        space from its whole circumference, and whatever the turbine does not convert has to be
+        dumped somewhere. Turn this on to subtract both &mdash; every number above updates too.
+      </p>
+    </div>
+  </div>
+
+  <div id="realityOut">
+    <div class="rc-grid">
+      <div class="rc-box">
+        <span class="k">Heat radiated back out</span>
+        <span class="v" style="color:var(--warn)" id="rcLoss">&mdash;</span>
+        <p class="sub">A pipe radiates from its whole circumference, &pi; times the area it collects over.</p>
+      </div>
+      <div class="rc-box">
+        <span class="k">Equilibrium pipe temperature</span>
+        <span class="v" style="color:var(--hot)" id="rcTeq">&mdash;</span>
+        <p class="sub">The hottest sunlight alone can drive this pipe.</p>
+      </div>
+      <div class="rc-box">
+        <span class="k">Net heat into the engine</span>
+        <span class="v" style="color:var(--hot)" id="rcNet">&mdash;</span>
+        <p class="sub">Collected, minus what is re-radiated.</p>
+      </div>
+      <div class="rc-box">
+        <span class="k">Heat to reject at the cold end</span>
+        <span class="v" style="color:var(--cold)" id="rcQc">&mdash;</span>
+        <p class="sub">Everything the turbine does not turn into electricity.</p>
+      </div>
+    </div>
+    <div class="rc-box" style="margin-top:10px">
+      <span class="k">Best-case cold radiator area</span>
+      <span class="v" style="color:var(--cold)" id="rcRad">&mdash;</span>
+      <p class="sub" id="rcRadSub"></p>
+    </div>
+  </div>
+</section>
+
+<footer class="foot">
+  <p>
+    Based on <cite>&ldquo;Development of a Lunar Thermal Energy Conversion (LTEC) system, leveraging
+    Permanently Shadowed Regions (PSR) and surrounding high-illumination regions&rdquo;</cite> by
+    B.&nbsp;Dyke. PSR and high-illumination temperatures after Zhong et&nbsp;al.
+  </p>
+  <p>
+    Background: LROC WAC mosaic of the lunar south pole, NASA/GSFC/Arizona State University. The
+    black in it is not a design choice &mdash; those are the permanently shadowed regions.
+  </p>
+  <p>
+    <a href="/psrmap">Lunar south pole PSR map</a> &middot;
+    <a href="/">TexFlow</a>
+  </p>
+</footer>
+
+</div>
+
+<script type="module">
+import { calc, DEFAULTS, OPT_DEFAULTS } from '/ltec-system/calc.js';
+
+/* ------------------------------------------------------------ formatting ---
+   Three significant figures everywhere, with an explicit locale: a browser set
+   to a comma-decimal locale would otherwise render 2,400 m2 as "2,4", which is
+   a different number entirely.                                               */
+const LOCALE = 'en-GB';
+
+function sig3(x) {
+  if (!Number.isFinite(x)) return '—';
+  if (x === 0) return '0';
+  const mag = Math.floor(Math.log10(Math.abs(x)));
+  const decimals = Math.min(6, Math.max(0, 2 - mag));
+  return Number(x.toFixed(decimals))
+    .toLocaleString(LOCALE, { minimumFractionDigits: 0, maximumFractionDigits: decimals });
+}
+
+function bigArea(x) {
+  if (!Number.isFinite(x)) return '—';
+  if (x >= 1e9) return sig3(x / 1e9) + ' billion';
+  if (x >= 1e6) return sig3(x / 1e6) + ' million';
+  return sig3(x);
+}
+
+const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
+const $ = (id) => document.getElementById(id);
+
+/* --------------------------------------------------------------- the area --
+   A linear slider over 1-5000 m2 spends four fifths of its travel above
+   1,000 m2 and is useless at the paper's own 10 m2, so the track is log. */
+const A_MIN = 1, A_MAX = 5000, A_STEPS = 1000;
+const sliderToArea = (t) => A_MIN * Math.pow(A_MAX / A_MIN, t / A_STEPS);
+const areaToSlider = (a) => A_STEPS * Math.log(clamp(a, A_MIN, A_MAX) / A_MIN) / Math.log(A_MAX / A_MIN);
+
+/* ------------------------------------------------------------------ state ---*/
+const SPEC = {
+  S:     { min: 0,    max: 1.5,  step: 0.001, dflt: DEFAULTS.S,     param: 'S',  unit: ' kW/m²' },
+  Tc:    { min: 20,   max: 120,  step: 1,     dflt: DEFAULTS.Tc,    param: 'Tc', unit: ' K' },
+  Th:    { min: 100,  max: 400,  step: 1,     dflt: DEFAULTS.Th,    param: 'Th', unit: ' K' },
+  A:     { min: 1,    max: 5000, step: 1,     dflt: DEFAULTS.A,     param: 'A',  unit: ' m²' },
+  alpha: { min: 0,    max: 1,    step: 0.01,  dflt: DEFAULTS.alpha, param: 'a',  unit: '' },
+  orc:   { min: 0,    max: 1,    step: 0.01,  dflt: OPT_DEFAULTS.etaORC, param: 'orc',  unit: '' },
+  f:     { min: 0,    max: 1,    step: 0.01,  dflt: OPT_DEFAULTS.f,      param: 'f',    unit: '' },
+  eps:   { min: 0.01, max: 1,    step: 0.01,  dflt: null,                param: 'eps',  unit: '' },
+  epsr:  { min: 0.01, max: 1,    step: 0.01,  dflt: OPT_DEFAULTS.radEmissivity, param: 'epsr', unit: '' }
+};
+
+const state = {};
+for (const [k, s] of Object.entries(SPEC)) state[k] = s.dflt;
+state.rc = false;
+
+/* -------------------------------------------------------------------- URL ---*/
+function readURL() {
+  const q = new URLSearchParams(location.search);
+  for (const [k, s] of Object.entries(SPEC)) {
+    if (!q.has(s.param)) continue;
+    const raw = Number(q.get(s.param));
+    // Anything unparseable or out of range silently keeps the paper value,
+    // because a mistyped link at a conference should still show the model.
+    if (Number.isFinite(raw)) state[k] = clamp(raw, s.min, s.max);
+  }
+  if (q.has('rc')) state.rc = q.get('rc') === '1' || q.get('rc') === 'true';
+}
+
+function buildQuery() {
+  const q = new URLSearchParams();
+  q.set('S', String(state.S));
+  q.set('Tc', String(state.Tc));
+  q.set('Th', String(state.Th));
+  q.set('A', String(state.A));
+  q.set('a', String(state.alpha));
+  if (state.orc !== SPEC.orc.dflt) q.set('orc', String(state.orc));
+  if (state.f !== SPEC.f.dflt) q.set('f', String(state.f));
+  if (state.eps !== null) q.set('eps', String(state.eps));
+  if (state.epsr !== SPEC.epsr.dflt) q.set('epsr', String(state.epsr));
+  if (state.rc) q.set('rc', '1');
+  return q.toString();
+}
+
+let urlTimer = 0;
+function syncURL() {
+  clearTimeout(urlTimer);
+  urlTimer = setTimeout(() => {
+    history.replaceState(null, '', location.pathname + '?' + buildQuery());
+  }, 180);
+}
+
+/* ------------------------------------------------------------------ inputs ---*/
+function setValue(key, value, { fromSlider = false } = {}) {
+  const s = SPEC[key];
+  let v = clamp(Number(value), s.min, s.max);
+  if (!Number.isFinite(v)) v = s.dflt ?? s.min;
+  // Snap to the step so the number field and the slider never disagree by a
+  // trailing float, then round away the float noise that snapping introduces.
+  const decimals = (String(s.step).split('.')[1] || '').length;
+  v = Number((Math.round(v / s.step) * s.step).toFixed(decimals));
+  state[key] = v;
+  paintInput(key, { skipSlider: fromSlider });
+  render();
+  syncURL();
+}
+
+function paintInput(key, { skipSlider = false } = {}) {
+  const s = SPEC[key];
+  const slider = $(key);
+  const num = $(key + '-num');
+  // Emissivity is the one control that follows another unless it is touched.
+  const value = key === 'eps' ? (state.eps === null ? state.alpha : state.eps) : state[key];
+
+  if (num && document.activeElement !== num) num.value = String(value);
+  const badge = $('val-' + key);
+  if (badge) badge.textContent = sig3(value) + s.unit;
+  if (!slider) return;
+  if (!skipSlider) slider.value = key === 'A' ? String(areaToSlider(value)) : String(value);
+  const pct = key === 'A'
+    ? (areaToSlider(value) / A_STEPS) * 100
+    : ((value - s.min) / (s.max - s.min)) * 100;
+  slider.style.setProperty('--pct', pct.toFixed(2) + '%');
+}
+
+for (const key of Object.keys(SPEC)) {
+  const slider = $(key);
+  const num = $(key + '-num');
+
+  if (slider) slider.addEventListener('input', () => {
+    const raw = Number(slider.value);
+    setValue(key, key === 'A' ? Math.round(sliderToArea(raw)) : raw, { fromSlider: true });
+    if (key === 'eps') markEpsTouched();
+    if (key === 'A') paintInput('A', { skipSlider: true });
+  });
+
+  if (num) {
+    num.addEventListener('input', () => {
+      const v = Number(num.value);
+      if (num.value === '' || !Number.isFinite(v)) return;   // let them finish typing
+      setValue(key, v);
+      if (key === 'eps') markEpsTouched();
+    });
+    num.addEventListener('blur', () => { setValue(key, num.value); paintInput(key); });
+  }
+}
+
+function markEpsTouched() {
+  if (state.eps === null) state.eps = Number($('eps').value);
+  $('epsNote').textContent = 'Overridden. Reset to go back to tracking α.';
+}
+
+document.querySelectorAll('.stepper').forEach((btn) => {
+  btn.addEventListener('click', () => {
+    const key = btn.dataset.step;
+    const dir = Number(btn.dataset.dir);
+    const s = SPEC[key];
+    const current = key === 'eps' ? (state.eps === null ? state.alpha : state.eps) : state[key];
+    // On the log area slider a fixed +1 m2 is meaningless at 2,500 m2, so the
+    // stepper moves by a proportion of the track instead.
+    const next = key === 'A'
+      ? Math.round(clamp(sliderToArea(areaToSlider(current) + dir * 20), s.min, s.max))
+      : current + dir * s.step;
+    setValue(key, next);
+    if (key === 'eps') markEpsTouched();
+  });
+});
+
+$('rc').addEventListener('change', () => {
+  state.rc = $('rc').checked;
+  render();
+  syncURL();
+});
+
+document.querySelectorAll('.info').forEach((btn) => {
+  btn.addEventListener('click', () => {
+    const panel = $(btn.getAttribute('aria-controls'));
+    const open = btn.getAttribute('aria-expanded') === 'true';
+    btn.setAttribute('aria-expanded', String(!open));
+    panel.classList.toggle('on', !open);
+  });
+});
+
+/* ---------------------------------------------------------------- presets ---*/
+const PRESETS = { paper: {}, warm: { Th: 200 }, dusty: { alpha: 0.6 }, iss: { A: 2500 } };
+
+function applyPreset(name) {
+  for (const [k, s] of Object.entries(SPEC)) state[k] = s.dflt;
+  state.rc = $('rc').checked;      // the reality check is a view, not a scenario
+  Object.assign(state, PRESETS[name] || {});
+  $('epsNote').textContent = 'Tracking absorptivity (ε = α).';
+  Object.keys(SPEC).forEach((k) => paintInput(k));
+  document.querySelectorAll('[data-preset]').forEach((c) =>
+    c.setAttribute('aria-pressed', String(c.dataset.preset === name)));
+  render();
+  syncURL();
+}
+
+document.querySelectorAll('[data-preset]').forEach((chip) =>
+  chip.addEventListener('click', () => applyPreset(chip.dataset.preset)));
+
+$('resetBtn').addEventListener('click', () => {
+  $('rc').checked = false;
+  state.rc = false;
+  applyPreset('paper');
+});
+
+/* ------------------------------------------------------------------ share ---*/
+$('copyBtn').addEventListener('click', async () => {
+  const url = location.origin + location.pathname + '?' + buildQuery();
+  const note = $('shareNote');
+  try {
+    await navigator.clipboard.writeText(url);
+    note.textContent = 'Copied.';
+  } catch {
+    // Clipboard access is blocked in plenty of mobile browsers; falling back
+    // to a selected input is better than telling someone it failed.
+    const tmp = document.createElement('input');
+    tmp.value = url;
+    document.body.appendChild(tmp);
+    tmp.select();
+    try { document.execCommand('copy'); note.textContent = 'Copied.'; }
+    catch { note.textContent = 'Copy from the address bar.'; }
+    tmp.remove();
+  }
+  setTimeout(() => { note.textContent = ''; }, 2600);
+});
+
+/* ------------------------------------------------------------ full screen ---
+   The loop and its controls are moved into the overlay, not copied, so there
+   is one live diagram and one set of sliders however the page is being
+   viewed. Anchors remember where each card came from.                       */
+const anchors = new Map();
+
+function openFs() {
+  for (const [card, slot] of [[$('loopCard'), $('fsSlotLoop')], [$('controlsCard'), $('fsSlotControls')]]) {
+    const anchor = document.createComment('slot');
+    card.parentNode.insertBefore(anchor, card);
+    anchors.set(card, anchor);
+    slot.appendChild(card);
+  }
+  document.body.classList.add('fs');
+  $('fsRoot').setAttribute('aria-hidden', 'false');
+  $('fsClose').focus();
+}
+
+function closeFs() {
+  for (const card of [$('loopCard'), $('controlsCard')]) {
+    const anchor = anchors.get(card);
+    if (anchor && anchor.parentNode) {
+      anchor.parentNode.insertBefore(card, anchor);
+      anchor.remove();
+    }
+    anchors.delete(card);
+  }
+  document.body.classList.remove('fs');
+  $('fsRoot').setAttribute('aria-hidden', 'true');
+  $('expandBtn').focus();
+}
+
+$('expandBtn').addEventListener('click', openFs);
+$('fsClose').addEventListener('click', closeFs);
+addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && document.body.classList.contains('fs')) closeFs();
+});
+
+/* ------------------------------------------------------------- schematic ---
+   Temperatures drive colour directly, so the picture is never out of step
+   with the numbers: a 400 K rim really does glow hotter than a 118 K one.   */
+function coldColour(Tc) {
+  const t = clamp((Tc - 20) / 100, 0, 1);
+  return `hsl(${(202 - t * 14).toFixed(0)}, 92%, ${(50 + t * 22).toFixed(0)}%)`;
+}
+function hotColour(Th) {
+  const t = clamp((Th - 100) / 300, 0, 1);
+  return `hsl(${(46 - t * 32).toFixed(0)}, 95%, ${(54 + t * 10).toFixed(0)}%)`;
+}
+
+// A fixed star field, seeded so it does not reshuffle on every repaint.
+(function stars() {
+  let seed = 20260118;
+  const rnd = () => (seed = (seed * 1103515245 + 12345) & 0x7fffffff) / 0x7fffffff;
+  const parts = [];
+  for (let i = 0; i < 46; i++) {
+    const x = (rnd() * 740 + 10).toFixed(1);
+    const y = (rnd() * 190 + 8).toFixed(1);
+    const r = (rnd() * 1.1 + 0.4).toFixed(2);
+    parts.push(`<circle cx="${x}" cy="${y}" r="${r}" fill="#dbe6ff" opacity="${(rnd() * 0.5 + 0.25).toFixed(2)}"/>`);
+  }
+  $('stars').innerHTML = parts.join('');
+})();
+
+function paintDiagram(r) {
+  const cold = coldColour(r.Tc);
+  const hot = r.tempsValid ? hotColour(r.Th) : '#93a1ba';
+
+  $('gradCold').setAttribute('stop-color', cold);
+  $('gradHot').setAttribute('stop-color', hot);
+
+  $('condenser').firstElementChild.setAttribute('stroke', cold);
+  $('condenser').lastElementChild.setAttribute('stroke', cold);
+  $('evaporator').firstElementChild.setAttribute('stroke', hot);
+  $('evaporator').lastElementChild.setAttribute('stroke', hot);
+
+  const tc = $('svgTc'), th = $('svgTh');
+  tc.textContent = `${sig3(r.Tc)} K`;
+  tc.setAttribute('fill', cold);
+  th.textContent = `${sig3(r.Th)} K`;
+  th.setAttribute('fill', hot);
+
+  // The sun dims with the flux that is actually arriving.
+  const lit = clamp(r.S / 1.361, 0, 1) * (r.f ?? 1);
+  $('sun').setAttribute('opacity', (0.18 + lit * 0.74).toFixed(2));
+
+  // The output bulb grows with power, on a square-root scale so the small
+  // configurations stay visible instead of collapsing to a dot.
+  const scale = Math.sqrt(clamp(r.WPrac / 200, 0, 1));
+  $('bulbGlow').setAttribute('r', (10 + scale * 46).toFixed(1));
+  $('bulbGlow').setAttribute('opacity', r.WPrac > 0 ? '0.95' : '0');
+  $('svgPower').textContent = r.WPrac > 0 ? `${sig3(r.WPrac)} kW` : 'no output';
+  $('svgPower').setAttribute('fill', r.WPrac > 0 ? '#5be58c' : '#93a1ba');
+  $('generator').lastElementChild.setAttribute('fill', r.WPrac > 0 ? '#5be58c' : '#93a1ba');
+
+  // A stopped engine should not show fluid moving round the loop.
+  $('flowDash').style.display = r.WPrac > 0 ? '' : 'none';
+  $('returnDash').style.display = r.WPrac > 0 ? '' : 'none';
+  $('blades').setAttribute('stroke', r.WPrac > 0 ? '#f2f6fd' : '#93a1ba');
+}
+
+/* ------------------------------------------------------------- crew figures ---*/
+const FIGURE = '<svg viewBox="0 0 10 22" aria-hidden="true"><circle cx="5" cy="4" r="3.1" fill="CLR"/><path d="M5 8.4c-2.5 0-4 1.6-4 3.9v4.2h1.5l.4 5h4.2l.4-5H9v-4.2c0-2.3-1.5-3.9-4-3.9z" fill="CLR"/></svg>';
+
+function paintCrew(r) {
+  const low = Math.floor(r.crewLow);
+  const high = Math.floor(r.crewHigh);
+  const shown = Math.min(high, 24);
+  let html = '';
+  for (let i = 0; i < shown; i++) {
+    html += FIGURE.replaceAll('CLR', i < low ? 'var(--power)' : 'var(--power-deep)');
+  }
+  $('crewFigs').innerHTML = html;
+
+  const text = $('crewText');
+  if (r.WPrac <= 0) {
+    text.innerHTML = 'No output, so no one is being kept alive by this configuration.';
+  } else if (high < 1) {
+    text.innerHTML = 'Not quite enough for one person &mdash; a crew member needs roughly <b>10.7&ndash;12.9&nbsp;kW</b> on the ISS proxy.';
+  } else {
+    const range = low === high || low < 1 ? `about <b>${high}</b>` : `about <b>${low}&ndash;${high}</b>`;
+    const extra = high > 24 ? ' (only the first 24 are drawn)' : '';
+    text.innerHTML = `Powers ${range} crew, at the ISS proxy of 75&ndash;90&nbsp;kW for 7 people${extra}.`;
+  }
+}
+
+/* --------------------------------------------------------------- sentence ---*/
+function summarise(r) {
+  if (!r.tempsValid) {
+    return 'With the sunlit side no warmer than the shadow, there is no temperature difference to work with and the engine produces <strong>nothing at all</strong>.';
+  }
+  if (r.WPrac <= 0) {
+    return 'At these settings the pipe loses as much heat as it gathers, so there is <strong>no net power</strong> to take out.';
+  }
+  const low = Math.floor(r.crewLow);
+  const high = Math.floor(r.crewHigh);
+  const people = high < 1 ? 'less than one person'
+    : (low === high || low < 1) ? `about <strong>${high}</strong> ${high === 1 ? 'person' : 'people'}`
+    : `about <strong>${low}&ndash;${high}</strong> people`;
+
+  const ratio = r.WPrac / 40;
+  let versus;
+  if (ratio >= 0.85 && ratio <= 1.25) versus = "roughly the same as NASA's fission surface power target";
+  else if (ratio > 1.25) versus = `<strong>${sig3(ratio)}×</strong> NASA's 40 kW fission target`;
+  else versus = `about <strong>${sig3(ratio * 100)}%</strong> of NASA's 40 kW fission target`;
+
+  return `Your <strong>${sig3(r.A)} m²</strong> of pipe could power ${people}, ${versus}.`;
+}
+
+/* ----------------------------------------------------------------- render ---*/
+let frame = 0;
+function render() {
+  cancelAnimationFrame(frame);
+  frame = requestAnimationFrame(paint);
+}
+
+function paint() {
+  const r = calc(
+    { S: state.S, Tc: state.Tc, Th: state.Th, A: state.A, alpha: state.alpha },
+    { etaORC: state.orc, f: state.f, realityCheck: state.rc,
+      emissivity: state.eps, radEmissivity: state.epsr }
+  );
+
+  $('heroValue').textContent = sig3(r.WPrac);
+  $('fsValue').textContent = sig3(r.WPrac);
+  $('statEta').textContent = sig3(r.etaC * 100);
+  $('statQ').textContent = sig3(r.QH);
+  $('statWmax').textContent = sig3(r.WMax);
+  $('statWprac').textContent = sig3(r.WPrac);
+
+  $('badgeNasa').classList.toggle('on', r.WPrac >= 40);
+  $('noticeTemp').classList.toggle('on', !r.tempsValid);
+
+  const starved = r.realityCheck && r.tempsValid && r.QH <= 0;
+  $('noticeNet').classList.toggle('on', starved);
+  $('noticeEq').classList.toggle('on', r.ThAboveTeq && !starved);
+  if (r.ThAboveTeq && !starved) {
+    $('noticeEq').innerHTML =
+      `Sunlight alone cannot hold a pipe above about <b>${sig3(r.Teq)} K</b> here, and you have ` +
+      `asked for <b>${sig3(r.Th)} K</b>. The numbers still follow your inputs, but that hot side ` +
+      `would need a heat source the model does not have.`;
+  }
+
+  $('summary').innerHTML = summarise(r);
+
+  // Benchmarks share one scale, so the bars are honestly comparable.
+  const scaleMax = Math.max(r.WPrac, 90) * 1.04;
+  $('bYou').style.width = ((r.WPrac / scaleMax) * 100).toFixed(1) + '%';
+  $('bNasa').style.width = ((40 / scaleMax) * 100).toFixed(1) + '%';
+  $('bIss').style.width = ((90 / scaleMax) * 100).toFixed(1) + '%';
+  $('bYouN').textContent = sig3(r.WPrac) + ' kW';
+
+  paintCrew(r);
+
+  $('realityOut').classList.toggle('on', r.realityCheck);
+  if (r.realityCheck) {
+    $('rcLoss').innerHTML = `${sig3(r.QLoss)} <span class="u">kW</span>`;
+    $('rcTeq').innerHTML = `${sig3(r.Teq)} <span class="u">K</span>`;
+    $('rcNet').innerHTML = `${sig3(r.QH)} <span class="u">kW</span>`;
+    $('rcQc').innerHTML = `${sig3(r.QC)} <span class="u">kW</span>`;
+    $('rcRad').innerHTML = `${bigArea(r.ARad)} <span class="u">m²</span>`;
+    $('rcRadSub').textContent =
+      `A lower bound, and an absurd one: at ${sig3(r.Tc)} K a radiator sheds only about ` +
+      `${sig3(r.radFlux)} W per square metre, so rejecting ${sig3(r.QC)} kW into the cold takes ` +
+      `an impossible amount of surface. Heat rejection, not collection, is what this concept has to solve.`;
+  }
+
+  paintDiagram(r);
+
+  document.title = r.WPrac > 0 ? `${sig3(r.WPrac)} kW · LTEC model` : 'LTEC model';
+}
+
+/* -------------------------------------------------------------------- boot ---*/
+readURL();
+$('rc').checked = state.rc;
+Object.keys(SPEC).forEach((k) => paintInput(k));
+if (state.eps !== null) $('epsNote').textContent = 'Overridden. Reset to go back to tracking α.';
+// A link with parameters is someone else's configuration, not the paper's.
+const isPaper = Object.entries(SPEC).every(([k, s]) => s.dflt === null ? state[k] === null : state[k] === s.dflt);
+document.querySelectorAll('[data-preset]').forEach((c) =>
+  c.setAttribute('aria-pressed', String(isPaper && c.dataset.preset === 'paper')));
+paint();
+
+// The 208 KB plate fades in only once it has actually decoded, so a slow
+// connection shows the blurred thumbnail rather than a half-painted image.
+{
+  const plate = new Image();
+  plate.onload = () => document.body.classList.add('plate-ready');
+  plate.src = '/ltec-system/moon-south-pole.jpg';
+  if (plate.complete) document.body.classList.add('plate-ready');
+}
+
+if ('serviceWorker' in navigator) {
+  addEventListener('load', () => navigator.serviceWorker.register('/ltec-system/sw.js').catch(() => {}));
+}
+</script>
+</body>
+</html>

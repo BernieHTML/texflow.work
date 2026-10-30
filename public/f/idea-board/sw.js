@@ -1,6 +1,6 @@
 // Service worker for the "Idea Board" Flow. Scope is this directory only,
 // so a deleted copy takes nothing else with it.
-const CACHE = 'flow-idea-board-c20ce6e89e';
+const CACHE = 'flow-idea-board-44653b18a2';
 const SHELL = ['./', './manifest.webmanifest', './icon-192.png', './icon-512.png', './icon-maskable-512.png'];
 
 self.addEventListener('install', (e) => {

@@ -1,0 +1,38 @@
+{
+  "name": "Atoms to Archaeopteryx",
+  "short_name": "Revision",
+  "description": "Yearly science exam revision: 140 questions on chemistry, plate tectonics, evolution, scientific method, motion and body systems.",
+  "start_url": ".",
+  "scope": ".",
+  "id": ".",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#f2f5f8",
+  "theme_color": "#4536c9",
+  "categories": [
+    "education"
+  ],
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

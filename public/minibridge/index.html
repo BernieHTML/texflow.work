@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <!-- viewport-fit=cover + the safe-area insets in app.css are what make this
+         sit correctly under the notch and above the home indicator. -->
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no"
+    />
+    <title>MiniBridge</title>
+    <meta name="description" content="A chat with a model on your own phone." />
+
+    <link rel="manifest" href="/minibridge/manifest.webmanifest" />
+    <meta name="theme-color" content="#F4F2F5" />
+
+    <!-- iOS standalone. apple-mobile-web-app-capable is still what Safari reads
+         for "no browser chrome" when added to the home screen, and being on the
+         Home Screen is also what makes Web Push possible at all. -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="MiniBridge" />
+    <link rel="apple-touch-icon" href="/minibridge/icon-180.png" />
+    <link rel="icon" href="/minibridge/icon.svg" type="image/svg+xml" />
+    <script type="module" crossorigin src="/minibridge/assets/index-CIKEYF80.js"></script>
+    <link rel="stylesheet" crossorigin href="/minibridge/assets/index-BgYtqbok.css">
+  </head>
+  <body>
+    <div id="app"></div>
+  </body>
+</html>

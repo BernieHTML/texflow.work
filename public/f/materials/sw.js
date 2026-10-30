@@ -1,6 +1,6 @@
 // Service worker for the "Materials" Flow. Scope is this directory only,
 // so a deleted copy takes nothing else with it.
-const CACHE = 'flow-materials-30fa8d86aa';
+const CACHE = 'flow-materials-bab3247240';
 const SHELL = ['./', './manifest.webmanifest', './icon-192.png', './icon-512.png', './icon-maskable-512.png'];
 
 self.addEventListener('install', (e) => {
