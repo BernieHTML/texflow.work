@@ -1,9 +1,0 @@
-User-agent: *
-Allow: /
-Disallow: /api/
-Disallow: /node_modules/
-Disallow: /private/
-Disallow: /temp/
-Disallow: /dev/
-
-Sitemap: https://texflow.work/sitemap.xml

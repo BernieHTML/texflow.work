@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /_src/
+Disallow: /wave
+Disallow: /revision
+
+Sitemap: https://texflow.work/sitemap.xml

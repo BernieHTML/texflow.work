@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TexFlow</title>
+<meta name="description" content="TexFlow — coming soon.">
+<meta name="theme-color" content="#07080c">
+<link rel="icon" href="texflowlogo.png" type="image/png">
+<link rel="canonical" href="https://texflow.work/">
+<meta property="og:title" content="TexFlow">
+<meta property="og:description" content="TexFlow — coming soon.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://texflow.work/">
+<meta property="og:image" content="https://texflow.work/texflowlogo.png">
+<meta name="twitter:card" content="summary">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #f2f4f8;
+    --ink-dim: #8b93a7;
+    --space: #07080c;
+    --moon-size: clamp(190px, 46vmin, 380px);
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body { height: 100%; }
+
+  body {
+    margin: 0;
+    background: var(--space);
+    color: var(--ink);
+    font-family: 'Outfit', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(2rem, 7vmin, 4.5rem);
+    padding: 2rem 16px;
+    overflow: hidden;
+    text-align: center;
+  }
+
+  /* The starfield is two tiled radial-gradient layers rather than hundreds of
+     elements, drifting at different speeds so the sky has some depth to it. */
+  .sky {
+    position: fixed;
+    inset: -10%;
+    z-index: 0;
+    pointer-events: none;
+    background-image:
+      radial-gradient(1.4px 1.4px at 18% 24%, rgba(255,255,255,.75), transparent 100%),
+      radial-gradient(1.1px 1.1px at 72% 12%, rgba(255,255,255,.55), transparent 100%),
+      radial-gradient(1.6px 1.6px at 41% 71%, rgba(255,255,255,.7), transparent 100%),
+      radial-gradient(1px 1px at 88% 58%, rgba(255,255,255,.5), transparent 100%),
+      radial-gradient(1.2px 1.2px at 9% 83%, rgba(255,255,255,.6), transparent 100%),
+      radial-gradient(1px 1px at 57% 41%, rgba(255,255,255,.45), transparent 100%);
+    background-size: 420px 420px, 300px 300px, 520px 520px, 260px 260px, 380px 380px, 340px 340px;
+    animation: drift 240s linear infinite;
+  }
+
+  @keyframes drift {
+    to { transform: translate3d(-420px, -300px, 0); }
+  }
+
+  .moon-wrap {
+    position: relative;
+    z-index: 1;
+    width: var(--moon-size);
+    height: var(--moon-size);
+    flex: none;
+  }
+
+  /* A sphere is faked in three layers: a strip of cratered ground that scrolls
+     sideways inside a circle, a lit side, and a limb that falls into shadow.
+     The ground is the only moving part, which is what reads as rotation. */
+  .moon {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    overflow: hidden;
+    background: #6f6c68;
+    box-shadow:
+      0 0 clamp(30px, 9vmin, 80px) rgba(188, 198, 224, .13),
+      0 0 clamp(80px, 22vmin, 200px) rgba(140, 158, 200, .07);
+  }
+
+  .ground {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    /* Two texture widths side by side, so translating by exactly half the
+       element returns to an identical pixel and the loop has no seam. */
+    width: 200%;
+    background-repeat: repeat-x;
+    background-size: 50% 100%;
+    animation: spin 48s linear infinite;
+  }
+
+  @keyframes spin {
+    to { transform: translateX(-50%); }
+  }
+
+  /* Sunlight from the upper left, and the terminator curving away at the right. */
+  .moon::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background:
+      radial-gradient(circle at 30% 26%, rgba(255,252,244,.42) 0%, rgba(255,252,244,.10) 34%, transparent 58%),
+      radial-gradient(circle at 76% 72%, rgba(4,5,9,.80) 0%, rgba(4,5,9,.42) 36%, transparent 68%);
+    mix-blend-mode: normal;
+  }
+
+  /* A hairline rim keeps the disc from dissolving into the background. */
+  .moon::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    border-radius: 50%;
+    box-shadow:
+      inset 0 0 1px 1px rgba(255,255,255,.10),
+      inset -8px -10px clamp(18px, 5vmin, 44px) rgba(0,0,0,.55);
+  }
+
+  .word {
+    position: relative;
+    z-index: 1;
+  }
+
+  h1 {
+    margin: 0;
+    font-size: clamp(2.9rem, 13vw, 8.5rem);
+    font-weight: 600;
+    letter-spacing: -0.035em;
+    line-height: .92;
+    background: linear-gradient(180deg, #ffffff 0%, #b9c2d6 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  p {
+    margin: clamp(.7rem, 2.4vmin, 1.3rem) 0 0;
+    font-size: clamp(.95rem, 3.4vw, 1.45rem);
+    font-weight: 300;
+    letter-spacing: .34em;
+    text-transform: uppercase;
+    color: var(--ink-dim);
+    /* The tracking is applied to the right of the last letter too, which
+       throws the line off centre without this. */
+    text-indent: .34em;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ground, .sky { animation: none; }
+  }
+</style>
+</head>
+<body>
+  <div class="sky" aria-hidden="true"></div>
+
+  <div class="moon-wrap">
+    <div class="moon" role="img" aria-label="A slowly rotating moon">
+      <div class="ground" id="ground"></div>
+    </div>
+  </div>
+
+  <div class="word">
+    <h1>TexFlow</h1>
+    <p>Coming&nbsp;Soon</p>
+  </div>
+
+<script>
+(function () {
+  'use strict';
+
+  // The surface is drawn once into a canvas rather than shipped as an image:
+  // it costs nothing to download, and it can be made to tile exactly, which a
+  // photograph of the Moon cannot. A crater that overhangs either edge is drawn
+  // again on the opposite side, so the strip meets itself cleanly.
+  var W = 1024;
+  var H = 512;
+
+  var canvas = document.createElement('canvas');
+  canvas.width = W;
+  canvas.height = H;
+  var ctx = canvas.getContext('2d');
+
+  if (!ctx) return;
+
+  // A fixed seed so every visit sees the same Moon.
+  var seed = 20261030;
+  function rand() {
+    seed = (seed * 1103515245 + 12345) & 0x7fffffff;
+    return seed / 0x7fffffff;
+  }
+
+  ctx.fillStyle = '#75726d';
+  ctx.fillRect(0, 0, W, H);
+
+  // Maria: the big dark basins. Soft, low contrast, laid down first so craters
+  // sit on top of them.
+  function mare(x, y, r) {
+    var g = ctx.createRadialGradient(x, y, 0, x, y, r);
+    g.addColorStop(0, 'rgba(58,57,56,.55)');
+    g.addColorStop(.6, 'rgba(62,61,60,.28)');
+    g.addColorStop(1, 'rgba(70,69,67,0)');
+    ctx.fillStyle = g;
+    ctx.beginPath();
+    ctx.arc(x, y, r, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  for (var m = 0; m < 14; m += 1) {
+    var mx = rand() * W;
+    var my = rand() * H;
+    var mr = 60 + rand() * 150;
+    mare(mx, my, mr);
+    if (mx - mr < 0) mare(mx + W, my, mr);
+    if (mx + mr > W) mare(mx - W, my, mr);
+  }
+
+  // What makes a crater read as a hollow rather than a blister is which wall
+  // catches the light. Looking into a bowl lit from the upper left, the wall
+  // nearest the light is the one in shadow and the far wall is lit — the
+  // opposite of a dome. Get that backwards and the surface fills with bubbles.
+  var TAU = Math.PI * 2;
+
+  // `k` scales how hard the crater is cut. Small pits are shallow and barely
+  // register; only the big ones get a pronounced rim. Giving every crater the
+  // same contrast is what turns a surface into froth.
+  function crater(x, y, r, k) {
+    var off = r * 0.42;
+
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(x, y, r, 0, TAU);
+    ctx.clip();
+
+    // The floor, a little darker than the ground around it.
+    ctx.fillStyle = 'rgba(54,53,51,' + (.17 * k).toFixed(3) + ')';
+    ctx.fillRect(x - r, y - r, r * 2, r * 2);
+
+    // Near wall, toward the light: in shadow.
+    var shade = ctx.createRadialGradient(x - off, y - off, 0, x - off, y - off, r * 1.45);
+    shade.addColorStop(0, 'rgba(20,19,18,' + (.34 * k).toFixed(3) + ')');
+    shade.addColorStop(.55, 'rgba(20,19,18,' + (.12 * k).toFixed(3) + ')');
+    shade.addColorStop(1, 'rgba(20,19,18,0)');
+    ctx.fillStyle = shade;
+    ctx.fillRect(x - r, y - r, r * 2, r * 2);
+
+    // Far wall, away from the light: catching it.
+    var lit = ctx.createRadialGradient(x + off, y + off, 0, x + off, y + off, r * 1.35);
+    lit.addColorStop(0, 'rgba(255,251,241,' + (.24 * k).toFixed(3) + ')');
+    lit.addColorStop(.6, 'rgba(255,251,241,' + (.08 * k).toFixed(3) + ')');
+    lit.addColorStop(1, 'rgba(255,251,241,0)');
+    ctx.fillStyle = lit;
+    ctx.fillRect(x - r, y - r, r * 2, r * 2);
+
+    ctx.restore();
+
+    // The raised rim, bright only on the arc facing the light. Canvas angles
+    // run clockwise from the positive x axis with y pointing down, so the
+    // upper left lies between about 0.85pi and 1.6pi.
+    ctx.lineWidth = Math.max(.5, r * .09);
+    ctx.strokeStyle = 'rgba(255,252,244,' + (.17 * k).toFixed(3) + ')';
+    ctx.beginPath();
+    ctx.arc(x, y, r * .96, Math.PI * .85, Math.PI * 1.6);
+    ctx.stroke();
+
+    // And a thin dark edge where the far rim drops away.
+    ctx.strokeStyle = 'rgba(18,17,16,' + (.13 * k).toFixed(3) + ')';
+    ctx.beginPath();
+    ctx.arc(x, y, r * .96, Math.PI * -.15, Math.PI * .6);
+    ctx.stroke();
+  }
+
+  // Craters are laid down in three passes rather than drawn from one
+  // distribution: a handful of big basins, a scattering of ordinary ones, and
+  // a great many shallow pits. That is roughly how the real surface is
+  // graded, and it keeps the large features readable instead of lost in a
+  // uniform field of the same-sized circles.
+  function scatter(count, min, max, k) {
+    for (var i = 0; i < count; i += 1) {
+      var x = rand() * W;
+      var y = rand() * H;
+      var t = rand();
+      var r = min + t * t * (max - min);
+      var strength = k * (.75 + rand() * .5);
+      crater(x, y, r, strength);
+      // Anything overhanging an edge is drawn again on the far side so the
+      // strip meets itself.
+      if (x - r * 1.2 < 0) crater(x + W, y, r, strength);
+      if (x + r * 1.2 > W) crater(x - W, y, r, strength);
+    }
+  }
+
+  scatter(16, 34, 78, 1.0);
+  scatter(90, 10, 30, .85);
+  scatter(620, 1.4, 8, .5);
+
+  // Fine grain, so the surface does not look like smooth plastic up close.
+  for (var d = 0; d < 2600; d += 1) {
+    var dx = rand() * W;
+    var dy = rand() * H;
+    ctx.fillStyle = rand() > .5 ? 'rgba(255,255,255,.035)' : 'rgba(0,0,0,.045)';
+    ctx.fillRect(dx, dy, 1.5, 1.5);
+  }
+
+  var ground = document.getElementById('ground');
+  if (ground) ground.style.backgroundImage = 'url(' + canvas.toDataURL('image/png') + ')';
+})();
+</script>
+</body>
+</html>

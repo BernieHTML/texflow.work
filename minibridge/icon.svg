@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="MiniBridge">
+  <!-- The mark is the product's idea in one shape: a well pressed into the
+       paper, with something small rising up out of it. Chalk ground, plum well,
+       and the single honey dot — the same rationing as the app, where honey
+       only ever means "something arrived". -->
+  <defs>
+    <linearGradient id="paper" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FBFAFB"/>
+      <stop offset="1" stop-color="#EFEBF2"/>
+    </linearGradient>
+    <radialGradient id="hollow" cx="50%" cy="38%" r="62%">
+      <stop offset="0" stop-color="#5B3A6E"/>
+      <stop offset="1" stop-color="#3B2349"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="512" height="512" fill="url(#paper)"/>
+
+  <!-- the well -->
+  <ellipse cx="256" cy="300" rx="132" ry="118" fill="url(#hollow)"/>
+  <!-- inner lip catches the light at the bottom, so it reads as a recess
+       rather than a plum disc sitting on top -->
+  <ellipse cx="256" cy="300" rx="132" ry="118" fill="none"
+           stroke="#FBFAFB" stroke-opacity="0.5" stroke-width="7"
+           stroke-dasharray="230 500" stroke-dashoffset="-118"/>
+
+  <!-- what came out of it -->
+  <circle cx="256" cy="150" r="47" fill="#E4B363"/>
+</svg>

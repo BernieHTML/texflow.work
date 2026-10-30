@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="keywords" content="TexFlow, Flows, offline tools, lunar PSR map, LTEC, ACSA">
+  <link rel="icon" href="../texflowlogo.png" type="image/png">
+  <link rel="stylesheet" href="../styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+    .products-head {
+      padding: 8rem 2rem 1rem;
+      max-width: 1100px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .products-head h1 {
+      margin: 0 0 0.5rem;
+      font-size: clamp(2rem, 4vw, 2.75rem);
+      font-weight: 600;
+    }
+    .products-head p {
+      margin: 0 auto;
+      max-width: 42rem;
+      color: var(--text-muted);
+    }
+    .products-group {
+      padding: 2.5rem 2rem;
+    }
+    .products-group .section-title {
+      text-align: left;
+      font-size: 1.15rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+    .product-link {
+      color: inherit;
+      text-decoration: none;
+    }
+    .product-cta {
+      margin-top: 0.75rem;
+      display: inline-block;
+    }
+  </style>
+<!-- SEO:BEGIN -->
+  <title>Everything here | TexFlow</title>
+  <meta name="description" content="An index of what texflow.work holds: twenty single-file Flows, a lunar south pole PSR map, an interactive lunar heat engine, science lessons, and the ACSA pages and paper archive.">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <link rel="canonical" href="https://texflow.work/products">
+  <meta property="og:title" content="Products | TexFlow">
+  <meta property="og:description" content="Every TexFlow product in one place: satellite and lunar mapping, flight tracking, agent messaging, curl-first publishing, live data feeds, marketplaces, and machine-readable discovery.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://texflow.work/products">
+  <meta property="og:image" content="https://texflow.work/texflowlogo.png">
+  <meta property="og:site_name" content="TexFlow">
+  <meta property="og:locale" content="en_AU">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Products | TexFlow">
+  <meta name="twitter:description" content="Every TexFlow product in one place: satellite and lunar mapping, flight tracking, agent messaging, curl-first publishing, live data feeds, marketplaces, and machine-readable discovery.">
+  <meta name="twitter:image" content="https://texflow.work/texflowlogo.png">
+  <script type="application/ld+json" data-seo="true">{
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "name": "TexFlow Product Suite",
+  "description": "Agent-first products for space, data, messaging, marketplaces, research archives, and machine-readable web discovery.",
+  "url": "https://texflow.work/products",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "LEOSpy",
+      "url": "https://texflow.work/leospy"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "ACSA",
+      "url": "https://texflow.work/ACSA/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "ACSA Archive",
+      "url": "https://texflow.work/ACSA/archive"
+    },
+    {
+      "@type": "ListItem",
+      "position": 4,
+      "name": "BMFlight",
+      "url": "https://texflow.work/BMFlight/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 5,
+      "name": "PSR Map",
+      "url": "https://texflow.work/psrmap"
+    },
+    {
+      "@type": "ListItem",
+      "position": 6,
+      "name": "Science",
+      "url": "https://texflow.work/science"
+    },
+    {
+      "@type": "ListItem",
+      "position": 7,
+      "name": "TEX",
+      "url": "https://texflow.work/tex/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 8,
+      "name": "Smig",
+      "url": "https://texflow.work/smig"
+    },
+    {
+      "@type": "ListItem",
+      "position": 9,
+      "name": "TexLetter",
+      "url": "https://texflow.work/texletter/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 10,
+      "name": "Ellipse",
+      "url": "https://texflow.work/ellipse/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 11,
+      "name": "TexoStat",
+      "url": "https://texflow.work/texostat/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 12,
+      "name": "TexMKT",
+      "url": "https://texflow.work/texmkt/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 13,
+      "name": "Platform66",
+      "url": "https://texflow.work/platform66/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 14,
+      "name": "VyEx",
+      "url": "https://texflow.work/vyex"
+    },
+    {
+      "@type": "ListItem",
+      "position": 15,
+      "name": "Gander",
+      "url": "https://texflow.work/gander/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 16,
+      "name": "GanderChat",
+      "url": "https://texflow.work/ganderchat/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 17,
+      "name": "TexSkills",
+      "url": "https://texflow.work/texskills/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 18,
+      "name": "UCP Generator",
+      "url": "https://texflow.work/ucp-gen"
+    }
+  ]
+}</script>
+<!-- SEO:END -->
+</head>
+<body>
+  <div class="page">
+    <header class="header">
+      <a href="../" class="logo-wrap">
+        <span class="logo-circle">
+          <img src="../texflowlogo.png" alt="TexFlow" class="logo" width="48" height="48">
+        </span>
+        <span class="logo-text">TexFlow</span>
+      </a>
+      <div class="header-end">
+        <a href="../flows/" class="nav-gander-btn">Flows</a>
+      </div>
+    </header>
+
+    <main>
+      <section class="products-head">
+        <h1>Everything here</h1>
+        <p>texflow.work is a static site: every page below is files in a browser, with nothing behind it to go down, bill you or lose your data. What you type into a Flow stays on your device.</p>
+      </section>
+
+      <section class="explain products-group" id="tools" aria-labelledby="tools-title">
+        <h2 class="section-title" id="tools-title">Tools</h2>
+        <div class="about-grid">
+          <article class="about-pillar">
+            <span class="about-pillar-icon" aria-hidden="true">◇</span>
+            <h3 class="about-pillar-title"><a href="../flows/" class="product-link">Flows</a></h3>
+            <p class="about-pillar-text">Twenty small single-purpose tools, one file each. Tap one and it works — no account, no setup, and no signal needed once it has loaded. Keep the ones you want; the rest you never see again.</p>
+            <a href="../flows/" class="nav-gander-btn product-cta">Browse all twenty →</a>
+          </article>
+          <article class="about-pillar">
+            <span class="about-pillar-icon" aria-hidden="true">○</span>
+            <h3 class="about-pillar-title"><a href="../minibridge/" class="product-link">MiniBridge</a></h3>
+            <p class="about-pillar-text">A chat with a model, running on your own phone.</p>
+            <a href="../minibridge/" class="nav-gander-btn product-cta">Open MiniBridge →</a>
+          </article>
+        </div>
+      </section>
+
+      <section class="explain products-group" id="space" aria-labelledby="space-title">
+        <h2 class="section-title" id="space-title">Space &amp; Earth</h2>
+        <div class="about-grid">
+          <article class="about-pillar">
+            <span class="about-pillar-icon" aria-hidden="true">◎</span>
+            <h3 class="about-pillar-title"><a href="../psrmap/" class="product-link">Lunar South Pole PSR Map</a></h3>
+            <p class="about-pillar-text">An interactive map of the Moon’s south pole and its permanently shadowed regions. Drop a pin and gauge how workable a habitat would be from its distance to water ice.</p>
+            <a href="../psrmap/" class="nav-gander-btn product-cta">Open the map →</a>
+          </article>
+          <article class="about-pillar">
+            <span class="about-pillar-icon" aria-hidden="true">▤</span>
+            <h3 class="about-pillar-title"><a href="../ltec-system/" class="product-link">LTEC</a></h3>
+            <p class="about-pillar-text">A first-order model of Lunar Thermal Energy Conversion you can play with: run a heat engine between a 28 K crater floor and a 118 K sunlit rim, and watch what it yields.</p>
+            <a href="../ltec-system/" class="nav-gander-btn product-cta">Run the model →</a>
+          </article>
+          <article class="about-pillar">
+            <span class="about-pillar-icon" aria-hidden="true">△</span>
+            <h3 class="about-pillar-title"><a href="../ACSA/" class="product-link">ACSA</a></h3>
+            <p class="about-pillar-text">The Australian Crewed Spaceflight Agency pages — the Caelus vehicles, the Aurora capsule, and how to get involved.</p>
+            <a href="../ACSA/" class="nav-gander-btn product-cta">Explore ACSA →</a>
+          </article>
+          <article class="about-pillar">
+            <span class="about-pillar-icon" aria-hidden="true">▥</span>
+            <h3 class="about-pillar-title"><a href="../ACSA/archive/" class="product-link">ACSA Archive</a></h3>
+            <p class="about-pillar-text">A public research archive of technical papers and manuals, written in Markdown and published as citable pages.</p>
+            <a href="../ACSA/archive/" class="nav-gander-btn product-cta">Read the archive →</a>
+          </article>
+        </div>
+      </section>
+
+      <section class="explain products-group" id="learn" aria-labelledby="learn-title">
+        <h2 class="section-title" id="learn-title">Learning</h2>
+        <div class="about-grid">
+          <article class="about-pillar">
+            <span class="about-pillar-icon" aria-hidden="true">◈</span>
+            <h3 class="about-pillar-title"><a href="../science/" class="product-link">Science</a></h3>
+            <p class="about-pillar-text">Interactive lessons on space and flight, built to be poked at rather than read.</p>
+            <a href="../science/" class="nav-gander-btn product-cta">Start a lesson →</a>
+          </article>
+        </div>
+      </section>
+
+      <footer class="footer">
+        <p class="footer-tagline">Static by design</p>
+        <a href="../" class="footer-link">Home</a>
+        <a href="../flows/" class="footer-link">Flows</a>
+        <a href="../terms-and-conditions/" class="footer-link">Terms</a>
+        <a href="../privacy-policy/" class="footer-link">Privacy</a>
+      </footer>
+    </main>
+  </div>
+  <script src="../app.js"></script>
+</body>
+</html>

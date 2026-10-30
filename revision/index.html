@@ -1,0 +1,1302 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=5">
+<title>Atoms to Archaeopteryx &middot; TexFlow</title>
+<meta name="description" content="Yearly science exam revision: 140 questions on chemistry, plate tectonics, evolution, scientific method, motion and body systems.">
+<!-- Personal revision tool, not part of the public site. -->
+<meta name="robots" content="noindex, nofollow">
+<meta name="application-name" content="Revision">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Revision">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#f2f5f8" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0c1118" media="(prefers-color-scheme: dark)">
+<meta name="color-scheme" content="light dark">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon-180.png">
+<!-- The page was written against a host that supplied this reset. It is kept
+     verbatim so the layout and the safe-area insets behave the same here. -->
+<style>
+:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{margin:0;font:14px system-ui,-apple-system,sans-serif}
+img{max-width:100%}
+[hidden]{display:none!important}
+</style>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Public+Sans:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+/* Layout: single scrolling column, sticky instrument bar on top, thumb-sized answer targets at the bottom of each card. */
+:root{
+  --bg:#f2f5f8; --surface:#ffffff; --surface-2:#e7ecf2; --surface-3:#dbe2ea;
+  --ink:#0f1620; --ink-2:#4d5a6b; --ink-3:#73808f; --line:#d3dbe5;
+  --accent:#4536c9; --accent-soft:#e8e5ff; --accent-ink:#ffffff;
+  --good:#11804a; --good-soft:#dcf3e5; --bad:#b93327; --bad-soft:#fbe4e1; --warn:#9a6208;
+  --t-chem:#c0442c; --t-plates:#9a5f12; --t-evol:#107a63; --t-method:#4f5a6b; --t-motion:#2560cf; --t-body:#7f3aa8;
+  --shadow:0 1px 2px rgba(15,22,32,.06), 0 8px 24px -14px rgba(15,22,32,.25);
+  --display:"Bricolage Grotesque","Public Sans",system-ui,sans-serif;
+  --body:"Public Sans",system-ui,-apple-system,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0c1118; --surface:#141b24; --surface-2:#1c2531; --surface-3:#26313f;
+  --ink:#e8eef6; --ink-2:#a2b0c2; --ink-3:#7d8b9d; --line:#2a3545;
+  --accent:#a396ff; --accent-soft:#232045; --accent-ink:#13101f;
+  --good:#4cc484; --good-soft:#12301f; --bad:#ff8273; --bad-soft:#331815; --warn:#e0a34a;
+  --t-chem:#f0836a; --t-plates:#d9a24e; --t-evol:#48c3a6; --t-method:#93a3b7; --t-motion:#79a8ff; --t-body:#c388e8;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 28px -16px rgba(0,0,0,.8);
+  color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --bg:#0c1118; --surface:#141b24; --surface-2:#1c2531; --surface-3:#26313f;
+  --ink:#e8eef6; --ink-2:#a2b0c2; --ink-3:#7d8b9d; --line:#2a3545;
+  --accent:#a396ff; --accent-soft:#232045; --accent-ink:#13101f;
+  --good:#4cc484; --good-soft:#12301f; --bad:#ff8273; --bad-soft:#331815; --warn:#e0a34a;
+  --t-chem:#f0836a; --t-plates:#d9a24e; --t-evol:#48c3a6; --t-method:#93a3b7; --t-motion:#79a8ff; --t-body:#c388e8;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 28px -16px rgba(0,0,0,.8);
+  color-scheme:dark;
+}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.5;-webkit-text-size-adjust:100%}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:20;background:var(--surface)}
+.wrap{max-width:760px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 48px}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0;line-height:1.12;letter-spacing:-.015em}
+p{margin:0}
+button{font:inherit;color:inherit;font-family:var(--body);cursor:pointer;background:none;border:none}
+button:focus-visible,input:focus-visible,a:focus-visible{outline:2.5px solid var(--accent);outline-offset:2px;border-radius:4px}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+
+/* ── instrument bar ─────────────────────────────── */
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:15;background:var(--surface);border-bottom:1px solid var(--line)}
+.bar-in{max-width:760px;margin:0 auto;display:flex;align-items:center;gap:12px;min-height:54px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.mark{font-family:var(--mono);font-size:13px;font-weight:600;letter-spacing:.06em;color:var(--ink-2);white-space:nowrap}
+.mark b{color:var(--accent)}
+.bar-sp{flex:1}
+.pill{font-family:var(--mono);font-size:12px;font-weight:600;padding:5px 10px;border-radius:999px;background:var(--surface-2);color:var(--ink-2);white-space:nowrap;border:1px solid var(--line)}
+.pill.hot{background:var(--accent-soft);color:var(--accent);border-color:transparent}
+.ghost{font-size:13px;font-weight:600;padding:7px 12px;border-radius:8px;border:1px solid var(--line);color:var(--ink-2);background:var(--surface)}
+.ghost:hover{background:var(--surface-2);color:var(--ink)}
+
+/* ── home ───────────────────────────────────────── */
+.hero{padding-block:30px 22px;display:flex;flex-direction:column;gap:14px}
+.eyebrow{font-family:var(--mono);font-size:11.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}
+.hero h1{font-size:clamp(34px,9vw,52px);font-weight:800}
+.hero h1 em{font-style:normal;color:var(--accent)}
+.lede{color:var(--ink-2);max-width:60ch;font-size:16.5px}
+.count{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 14px;padding:14px 16px;background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow)}
+.count .big{font-family:var(--display);font-weight:800;font-size:40px;line-height:1;color:var(--accent)}
+.count .cap{font-size:14px;color:var(--ink-2)}
+.count input{font-family:var(--mono);font-size:13px;padding:6px 8px;border-radius:8px;border:1px solid var(--line);background:var(--surface-2);color:var(--ink);margin-left:auto}
+
+.sect{margin-top:30px}
+.sect-h{display:flex;align-items:baseline;gap:10px;margin-bottom:12px}
+.sect-h h2{font-size:19px;font-weight:600}
+.sect-h span{font-family:var(--mono);font-size:12px;color:var(--ink-3)}
+
+.modes{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.mode{display:flex;flex-direction:column;gap:5px;align-items:flex-start;text-align:left;padding:16px;border-radius:14px;border:1px solid var(--line);background:var(--surface);box-shadow:var(--shadow);transition:transform .12s ease,border-color .12s ease}
+.mode:hover{transform:translateY(-2px);border-color:var(--accent)}
+.mode .t{font-family:var(--display);font-size:17px;font-weight:700}
+.mode .d{font-size:13.5px;color:var(--ink-2);line-height:1.4}
+.mode.primary{background:var(--accent);border-color:var(--accent)}
+.mode.primary .t,.mode.primary .d{color:var(--accent-ink)}
+.mode.primary .d{opacity:.85}
+
+.topics{display:flex;flex-direction:column;gap:8px}
+.topic{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:12px;width:100%;text-align:left;padding:13px 14px;border-radius:12px;border:1px solid var(--line);background:var(--surface)}
+.topic:hover{border-color:var(--tc,var(--accent))}
+.topic .dot{width:10px;height:10px;border-radius:3px;background:var(--tc)}
+.topic .nm{font-weight:600;font-size:15.5px;min-width:0}
+.topic .sub{font-size:12.5px;color:var(--ink-3);font-family:var(--mono)}
+.topic .score{font-family:var(--mono);font-size:12.5px;color:var(--ink-2);text-align:right;white-space:nowrap}
+.meter{height:5px;border-radius:999px;background:var(--surface-3);overflow:hidden;margin-top:6px}
+.meter i{display:block;height:100%;background:var(--tc);border-radius:999px;transition:width .4s ease}
+
+/* ── quiz card ──────────────────────────────────── */
+.prog{height:4px;background:var(--surface-3);border-radius:999px;overflow:hidden;margin-top:18px}
+.prog i{display:block;height:100%;background:var(--accent);transition:width .25s ease}
+.qmeta{display:flex;align-items:center;gap:10px;margin:14px 0 10px;flex-wrap:wrap}
+.chip{font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:4px 9px;border-radius:999px;color:var(--accent-ink);background:var(--tc,var(--accent))}
+.chip.flat{background:var(--surface-2);color:var(--ink-3)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:20px;box-shadow:var(--shadow)}
+.qtext{font-family:var(--display);font-size:clamp(20px,5.2vw,25px);font-weight:600;line-height:1.26;letter-spacing:-.01em}
+.qhint{margin-top:8px;font-size:13.5px;color:var(--ink-3)}
+.fig{margin:16px 0 4px;overflow-x:auto}
+.fig svg{display:block;max-width:100%;height:auto;margin:0 auto}
+.opts{display:flex;flex-direction:column;gap:9px;margin-top:18px}
+.opt{display:flex;align-items:flex-start;gap:11px;text-align:left;padding:13px 14px;border-radius:12px;border:1.5px solid var(--line);background:var(--surface);font-size:15.5px;line-height:1.35;transition:border-color .1s ease,background .1s ease}
+.opt:hover:not(:disabled){border-color:var(--accent);background:var(--accent-soft)}
+.opt .key{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--ink-3);border:1px solid var(--line);border-radius:6px;min-width:22px;height:22px;display:grid;place-items:center;flex:none;margin-top:1px}
+.opt.on{border-color:var(--accent);background:var(--accent-soft)}
+.opt.on .key{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.opt.right{border-color:var(--good);background:var(--good-soft)}
+.opt.wrong{border-color:var(--bad);background:var(--bad-soft)}
+.opt:disabled{cursor:default;opacity:1}
+.opt .tag{margin-left:auto;font-family:var(--mono);font-size:11px;font-weight:600;flex:none;padding-top:3px}
+.opt.right .tag{color:var(--good)}
+.opt.wrong .tag{color:var(--bad)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}
+.two .opt{justify-content:center;font-family:var(--display);font-size:17px;font-weight:700}
+
+.numrow{display:flex;gap:10px;align-items:center;margin-top:18px;flex-wrap:wrap}
+.numrow input{font-family:var(--mono);font-size:19px;font-weight:600;padding:12px 14px;border-radius:12px;border:1.5px solid var(--line);background:var(--surface-2);color:var(--ink);width:150px;max-width:100%}
+.unit{font-family:var(--mono);font-size:15px;color:var(--ink-2)}
+textarea{font-family:var(--body);font-size:15.5px;line-height:1.45;width:100%;min-height:110px;margin-top:18px;padding:13px;border-radius:12px;border:1.5px solid var(--line);background:var(--surface-2);color:var(--ink);resize:vertical}
+
+.bank{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.tok{padding:9px 13px;border-radius:999px;border:1.5px solid var(--line);background:var(--surface);font-size:14.5px;font-weight:600}
+.tok:hover:not(:disabled){border-color:var(--accent)}
+.tok.used{opacity:.35;text-decoration:line-through}
+.tok:disabled{cursor:default}
+.slots{display:flex;flex-direction:column;gap:9px;margin-top:16px}
+.slot{display:grid;grid-template-columns:28px 1fr;gap:11px;align-items:start}
+.slot .n{font-family:var(--mono);font-size:13px;font-weight:600;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--accent);color:var(--accent-ink);flex:none}
+.slot .n.plain{background:var(--surface-3);color:var(--ink-2)}
+.slot .drop{min-height:46px;border-radius:10px;border:1.5px dashed var(--line);background:var(--surface-2);display:flex;align-items:center;padding:8px 12px;font-size:15px;color:var(--ink-3);gap:8px;flex-wrap:wrap}
+.slot .drop.filled{border-style:solid;color:var(--ink);font-weight:600;background:var(--surface)}
+.slot .drop.right{border-color:var(--good);background:var(--good-soft)}
+.slot .drop.wrong{border-color:var(--bad);background:var(--bad-soft)}
+.slot .lbl{font-size:14.5px;line-height:1.35;padding-top:4px;color:var(--ink-2)}
+.slot .lbl b{color:var(--ink);font-weight:600}
+.slot .fix{font-family:var(--mono);font-size:11.5px;color:var(--good);margin-left:auto}
+.ord{display:flex;flex-direction:column;gap:8px;margin-top:16px}
+.ordrow{display:flex;align-items:center;gap:10px;padding:11px 13px;border-radius:11px;border:1.5px solid var(--line);background:var(--surface);font-size:15px;line-height:1.35}
+.ordrow .n{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--accent)}
+.ordrow.right{border-color:var(--good);background:var(--good-soft)}
+.ordrow.wrong{border-color:var(--bad);background:var(--bad-soft)}
+
+.fb{margin-top:16px;border-radius:14px;padding:16px;border:1px solid var(--line);background:var(--surface-2)}
+.fb.ok{border-color:var(--good);background:var(--good-soft)}
+.fb.no{border-color:var(--bad);background:var(--bad-soft)}
+.fb .v{font-family:var(--display);font-weight:800;font-size:15px;letter-spacing:.01em;display:flex;align-items:center;gap:8px}
+.fb.ok .v{color:var(--good)}
+.fb.no .v{color:var(--bad)}
+.fb .body{margin-top:8px;font-size:15px;line-height:1.5;color:var(--ink)}
+.fb .body strong{font-weight:700}
+.fb .model{margin-top:10px;padding-top:10px;border-top:1px dashed var(--line);font-size:15px;line-height:1.5}
+.fb .model .h{font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);display:block;margin-bottom:5px}
+.selfmark{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.selfmark button{font-size:13px;font-weight:600;padding:8px 12px;border-radius:9px;border:1.5px solid var(--line);background:var(--surface)}
+.selfmark button:hover{border-color:var(--accent)}
+.actions{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap}
+.btn{font-family:var(--display);font-size:16px;font-weight:700;padding:14px 22px;border-radius:12px;background:var(--accent);color:var(--accent-ink);flex:1;min-width:150px}
+.btn:disabled{opacity:.4;cursor:default}
+.btn.sec{background:var(--surface);color:var(--ink);border:1.5px solid var(--line);flex:0 0 auto;min-width:0}
+
+/* ── results ────────────────────────────────────── */
+.score{display:flex;align-items:center;gap:20px;flex-wrap:wrap;padding:22px;border-radius:16px;background:var(--surface);border:1px solid var(--line);box-shadow:var(--shadow);margin-top:22px}
+.ring{width:108px;height:108px;flex:none}
+.score .pct{font-family:var(--display);font-size:38px;font-weight:800;line-height:1}
+.score .sl{color:var(--ink-2);font-size:15px;margin-top:4px;max-width:34ch}
+.rows{display:flex;flex-direction:column;gap:7px;margin-top:14px}
+.row{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;padding:11px 14px;border-radius:11px;background:var(--surface);border:1px solid var(--line)}
+.row .nm{font-weight:600;font-size:14.5px}
+.miss{margin-top:10px;display:flex;flex-direction:column;gap:10px}
+.missq{padding:15px;border-radius:13px;background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--bad)}
+.missq .q{font-weight:600;font-size:15.5px;line-height:1.35}
+.missq .a{margin-top:7px;font-size:14.5px;color:var(--ink-2);line-height:1.5}
+.missq .a b{color:var(--good);font-weight:700}
+.missq button{font-size:12.5px;font-weight:600;margin-top:9px;padding:6px 11px;border-radius:8px;border:1.5px solid var(--line)}
+
+/* ── flashcards ─────────────────────────────────── */
+.fc{margin-top:22px;border-radius:16px;border:1px solid var(--line);background:var(--surface);box-shadow:var(--shadow);padding:24px 20px;min-height:260px;display:flex;flex-direction:column;gap:14px;justify-content:center;text-align:center}
+.fc .front{font-family:var(--display);font-size:clamp(21px,5.4vw,27px);font-weight:600;line-height:1.25}
+.fc .back{font-size:16px;line-height:1.55;color:var(--ink-2);text-align:left}
+.fc .back.hidden{display:none}
+.tip{margin-top:14px;font-size:13px;color:var(--ink-3);text-align:center}
+.foot{margin-top:38px;padding-top:16px;border-top:1px solid var(--line);font-size:13px;color:var(--ink-3);display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+.foot button{font-size:13px;color:var(--ink-3);text-decoration:underline;text-underline-offset:3px}
+.foot button:hover{color:var(--bad)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+@media (max-width:420px){.two{grid-template-columns:1fr}.btn{min-width:0}}
+</style>
+</head>
+<body>
+<div class="bar"><div class="bar-in">
+  <span class="mark">A<b>&rarr;</b>A &middot; <span id="barTopic">science revision</span></span>
+  <span class="bar-sp"></span>
+  <span class="pill" id="barCount">&nbsp;</span>
+  <button class="ghost" id="barExit" hidden>Home</button>
+</div></div>
+
+<div class="wrap" id="view"></div>
+
+<script>
+"use strict";
+/* ═══════════════ topics ═══════════════ */
+const TOPICS=[
+ {id:"chem",  name:"Chemistry in the Home",      tc:"var(--t-chem)",   note:"atoms, acids, equations, rates"},
+ {id:"plates",name:"Earth, Plates & Disasters",  tc:"var(--t-plates)", note:"layers, Wegener, boundaries"},
+ {id:"evol",  name:"Evolution & Fossils",        tc:"var(--t-evol)",   note:"Darwin, selection, strata"},
+ {id:"method",name:"Science Fair Method",        tc:"var(--t-method)", note:"variables, write-up, graphs"},
+ {id:"motion",name:"Motion & Newton's Laws",     tc:"var(--t-motion)", note:"speed, graphs, three laws"},
+ {id:"body",  name:"Cells, Nerves & Hormones",   tc:"var(--t-body)",   note:"needs, hierarchy, CNS"}
+];
+const TMAP={};TOPICS.forEach(t=>TMAP[t.id]=t);
+
+/* ═══════════════ figures ═══════════════ */
+const PH=["#b3202a","#cf3a26","#e05a1f","#ef7f1a","#f2a81c","#e8c927","#c3d430","#58b84a","#3fae8e","#2f8fb5","#2e6fb0","#3b53a4","#4a3e9c","#5a3391","#63277f"];
+function phStrip(){
+  let c="";
+  for(let i=0;i<15;i++){
+    c+='<rect x="'+(10+i*22)+'" y="14" width="22" height="40" fill="'+PH[i]+'"/>';
+    c+='<text x="'+(21+i*22)+'" y="72" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="12" fill="var(--ink-2)">'+i+'</text>';
+  }
+  return '<svg viewBox="0 0 350 86" role="img" aria-label="Universal indicator colour chart from pH 0 to pH 14">'+c+'</svg>';
+}
+function pin(n,px,py,tx,ty){
+  return '<line x1="'+px+'" y1="'+py+'" x2="'+tx+'" y2="'+ty+'" stroke="var(--ink-3)" stroke-width="1.4"/>'+
+         '<circle cx="'+tx+'" cy="'+ty+'" r="3" fill="var(--ink)"/>'+
+         '<circle cx="'+px+'" cy="'+py+'" r="13" fill="var(--accent)"/>'+
+         '<text x="'+px+'" y="'+(py+4.5)+'" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="13" font-weight="600" fill="var(--accent-ink)">'+n+'</text>';
+}
+const FIGS={
+ ph:phStrip(),
+ atom:'<svg viewBox="0 0 360 260" role="img" aria-label="Atom with two electron shells, a nucleus and four numbered pointers">'+
+   '<circle cx="180" cy="130" r="100" fill="none" stroke="var(--line)" stroke-width="1.6"/>'+
+   '<circle cx="180" cy="130" r="58" fill="none" stroke="var(--line)" stroke-width="1.6"/>'+
+   '<circle cx="180" cy="130" r="28" fill="var(--surface-2)" stroke="var(--ink-3)" stroke-width="1.2" stroke-dasharray="4 3"/>'+
+   '<circle cx="171" cy="122" r="9.5" fill="var(--t-chem)"/><circle cx="189" cy="138" r="9.5" fill="var(--t-chem)"/>'+
+   '<circle cx="189" cy="121" r="9.5" fill="var(--ink-3)"/><circle cx="170" cy="139" r="9.5" fill="var(--ink-3)"/>'+
+   '<circle cx="122" cy="130" r="7.5" fill="var(--t-motion)"/><circle cx="180" cy="30" r="7.5" fill="var(--t-motion)"/><circle cx="280" cy="130" r="7.5" fill="var(--t-motion)"/>'+
+   pin(1,330,205,287,136)+pin(2,30,46,163,116)+pin(3,330,46,197,114)+pin(4,30,210,157,150)+
+  '</svg>',
+ earth:'<svg viewBox="0 0 360 252" role="img" aria-label="Cutaway of the Earth with four concentric layers and numbered pointers">'+
+   '<circle cx="130" cy="126" r="105" fill="#9a5f12"/>'+
+   '<circle cx="130" cy="126" r="98" fill="#c6552f"/>'+
+   '<circle cx="130" cy="126" r="55" fill="#ef8c1c"/>'+
+   '<circle cx="130" cy="126" r="28" fill="#f6d558"/>'+
+   '<circle cx="130" cy="126" r="105" fill="none" stroke="var(--ink)" stroke-opacity=".25" stroke-width="1"/>'+
+   pin(1,322,42,207,62)+pin(2,322,96,190,86)+pin(3,322,150,160,96)+pin(4,322,204,144,112)+
+  '</svg>',
+ tapes:'<svg viewBox="0 0 350 212" role="img" aria-label="Three ticker timer tapes labelled A, B and C with different dot spacings">'+
+   (function(){
+     const rows=[{y:34,lab:"A",d:[14,46,78,110,142,174,206,238,270,302]},
+                 {y:104,lab:"B",d:[14,24,40,64,98,142,196,260,334]},
+                 {y:174,lab:"C",d:[14,88,152,206,250,284,308,322,330]}];
+     let s="";
+     rows.forEach(r=>{
+       s+='<rect x="8" y="'+(r.y-20)+'" width="334" height="40" rx="6" fill="var(--surface-2)" stroke="var(--line)"/>';
+       s+='<text x="18" y="'+(r.y-26)+'" font-family="IBM Plex Mono,monospace" font-size="13" font-weight="600" fill="var(--ink-2)">tape '+r.lab+'</text>';
+       r.d.forEach(x=>{s+='<circle cx="'+(x+6)+'" cy="'+r.y+'" r="4" fill="var(--ink)"/>';});
+       s+='<path d="M14 '+(r.y+26)+' l10 -5 v10 z" fill="var(--ink-3)"/>';
+       s+='<text x="30" y="'+(r.y+30)+'" font-family="IBM Plex Mono,monospace" font-size="10.5" fill="var(--ink-3)">direction of pull</text>';
+     });
+     return s;
+   })()+'</svg>',
+ dt:'<svg viewBox="0 0 360 272" role="img" aria-label="Distance versus time graph with three sections">'+
+   (function(){
+     const x0=52,y0=222,w=282,h=186,T=12,D=60;
+     const X=t=>x0+t/T*w, Y=d=>y0-d/D*h;
+     let s="";
+     for(let t=0;t<=12;t+=2){s+='<line x1="'+X(t)+'" y1="'+y0+'" x2="'+X(t)+'" y2="'+(y0-h)+'" stroke="var(--line)" stroke-width="1"/>';
+       s+='<text x="'+X(t)+'" y="'+(y0+18)+'" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="11" fill="var(--ink-3)">'+t+'</text>';}
+     for(let d=0;d<=60;d+=10){s+='<line x1="'+x0+'" y1="'+Y(d)+'" x2="'+(x0+w)+'" y2="'+Y(d)+'" stroke="var(--line)" stroke-width="1"/>';
+       s+='<text x="'+(x0-8)+'" y="'+(Y(d)+4)+'" text-anchor="end" font-family="IBM Plex Mono,monospace" font-size="11" fill="var(--ink-3)">'+d+'</text>';}
+     s+='<line x1="'+x0+'" y1="'+y0+'" x2="'+(x0+w)+'" y2="'+y0+'" stroke="var(--ink-2)" stroke-width="1.8"/>';
+     s+='<line x1="'+x0+'" y1="'+y0+'" x2="'+x0+'" y2="'+(y0-h)+'" stroke="var(--ink-2)" stroke-width="1.8"/>';
+     s+='<polyline points="'+X(0)+','+Y(0)+' '+X(4)+','+Y(20)+' '+X(8)+','+Y(20)+' '+X(12)+','+Y(50)+'" fill="none" stroke="var(--t-motion)" stroke-width="3.2" stroke-linejoin="round"/>';
+     [[0,0],[4,20],[8,20],[12,50]].forEach(p=>{s+='<circle cx="'+X(p[0])+'" cy="'+Y(p[1])+'" r="4.2" fill="var(--t-motion)"/>';});
+     s+='<text x="'+X(2)+'" y="'+(Y(20)-8)+'" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="11.5" font-weight="600" fill="var(--ink-2)">P</text>';
+     s+='<text x="'+X(6)+'" y="'+(Y(20)-8)+'" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="11.5" font-weight="600" fill="var(--ink-2)">Q</text>';
+     s+='<text x="'+X(10.4)+'" y="'+(Y(32))+'" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="11.5" font-weight="600" fill="var(--ink-2)">R</text>';
+     s+='<text x="'+(x0+w/2)+'" y="266" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="11.5" fill="var(--ink-2)">time (s)</text>';
+     s+='<text x="14" y="'+(y0-h/2)+'" text-anchor="middle" transform="rotate(-90 14 '+(y0-h/2)+')" font-family="IBM Plex Mono,monospace" font-size="11.5" fill="var(--ink-2)">distance (m)</text>';
+     return s;
+   })()+'</svg>',
+ st:'<svg viewBox="0 0 360 272" role="img" aria-label="Speed versus time graph with three sections">'+
+   (function(){
+     const x0=52,y0=222,w=282,h=186,T=10,V=20;
+     const X=t=>x0+t/T*w, Y=v=>y0-v/V*h;
+     let s="";
+     for(let t=0;t<=10;t+=2){s+='<line x1="'+X(t)+'" y1="'+y0+'" x2="'+X(t)+'" y2="'+(y0-h)+'" stroke="var(--line)" stroke-width="1"/>';
+       s+='<text x="'+X(t)+'" y="'+(y0+18)+'" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="11" fill="var(--ink-3)">'+t+'</text>';}
+     for(let v=0;v<=20;v+=5){s+='<line x1="'+x0+'" y1="'+Y(v)+'" x2="'+(x0+w)+'" y2="'+Y(v)+'" stroke="var(--line)" stroke-width="1"/>';
+       s+='<text x="'+(x0-8)+'" y="'+(Y(v)+4)+'" text-anchor="end" font-family="IBM Plex Mono,monospace" font-size="11" fill="var(--ink-3)">'+v+'</text>';}
+     s+='<line x1="'+x0+'" y1="'+y0+'" x2="'+(x0+w)+'" y2="'+y0+'" stroke="var(--ink-2)" stroke-width="1.8"/>';
+     s+='<line x1="'+x0+'" y1="'+y0+'" x2="'+x0+'" y2="'+(y0-h)+'" stroke="var(--ink-2)" stroke-width="1.8"/>';
+     s+='<polyline points="'+X(0)+','+Y(0)+' '+X(4)+','+Y(20)+' '+X(7)+','+Y(20)+' '+X(10)+','+Y(0)+'" fill="none" stroke="var(--t-evol)" stroke-width="3.2" stroke-linejoin="round"/>';
+     [[0,0],[4,20],[7,20],[10,0]].forEach(p=>{s+='<circle cx="'+X(p[0])+'" cy="'+Y(p[1])+'" r="4.2" fill="var(--t-evol)"/>';});
+     s+='<text x="'+X(1.6)+'" y="'+Y(9)+'" font-family="IBM Plex Mono,monospace" font-size="11.5" font-weight="600" fill="var(--ink-2)">L</text>';
+     s+='<text x="'+X(5.5)+'" y="'+(Y(20)-8)+'" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="11.5" font-weight="600" fill="var(--ink-2)">M</text>';
+     s+='<text x="'+X(8.8)+'" y="'+Y(11)+'" font-family="IBM Plex Mono,monospace" font-size="11.5" font-weight="600" fill="var(--ink-2)">N</text>';
+     s+='<text x="'+(x0+w/2)+'" y="266" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="11.5" fill="var(--ink-2)">time (s)</text>';
+     s+='<text x="14" y="'+(y0-h/2)+'" text-anchor="middle" transform="rotate(-90 14 '+(y0-h/2)+')" font-family="IBM Plex Mono,monospace" font-size="11.5" fill="var(--ink-2)">speed (m/s)</text>';
+     return s;
+   })()+'</svg>',
+ strata:'<svg viewBox="0 0 360 300" role="img" aria-label="Two rock columns, A with four layers and B offset lower with four layers">'+
+   (function(){
+     const rock={sandstone:"#a06f14",shale:"#5a6779",coal:"#22272f",limestone:"#6d7b60",mudstone:"#6b4f39"};
+     const colA=[["A","sandstone"],["B","shale"],["C","coal"],["D","limestone"]];
+     const colB=[["E","shale"],["F","coal"],["G","limestone"],["H","mudstone"]];
+     let s='<text x="100" y="22" text-anchor="middle" font-family="Bricolage Grotesque,sans-serif" font-size="16" font-weight="700" fill="var(--ink)">column A</text>'+
+           '<text x="262" y="22" text-anchor="middle" font-family="Bricolage Grotesque,sans-serif" font-size="16" font-weight="700" fill="var(--ink)">column B</text>';
+     function stack(cols,x,top){
+       cols.forEach((c,i)=>{
+         const y=top+i*52;
+         s+='<rect x="'+x+'" y="'+y+'" width="126" height="52" fill="'+rock[c[1]]+'" stroke="var(--surface)" stroke-width="2"/>';
+         s+='<text x="'+(x+12)+'" y="'+(y+24)+'" font-family="IBM Plex Mono,monospace" font-size="15" font-weight="600" fill="#ffffff">'+c[0]+'</text>';
+         s+='<text x="'+(x+12)+'" y="'+(y+41)+'" font-family="Public Sans,sans-serif" font-size="11.5" fill="#ffffff" opacity=".9">'+c[1]+'</text>';
+       });
+       s+='<rect x="'+x+'" y="'+top+'" width="126" height="'+(cols.length*52)+'" fill="none" stroke="var(--ink)" stroke-opacity=".3"/>';
+     }
+     stack(colA,37,30);stack(colB,199,82);
+     s+='<text x="178" y="296" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="11" fill="var(--ink-3)">layers undisturbed &middot; not to scale</text>';
+     return s;
+   })()+'</svg>'
+};
+
+/* ═══════════════ question bank ═══════════════ */
+/* t: mc | multi | tf | num | short | order | match | label */
+const BANK=[
+/* ───────── Chemistry in the Home ───────── */
+{id:"c1",tp:"chem",t:"label",fig:"atom",q:"Label the four parts of this atom.",
+ pins:[{lab:"electron"},{lab:"proton"},{lab:"neutron"},{lab:"nucleus"}],
+ why:"Protons (positive) and neutrons (no charge) sit together in the nucleus. Electrons (negative) orbit it in shells."},
+{id:"c2",tp:"chem",t:"mc",q:"Which subatomic particle has no electrical charge?",
+ opts:["Neutron","Proton","Electron","Nucleus"],a:0,why:"Neutrons are neutral. Protons are positive, electrons negative."},
+{id:"c3",tp:"chem",t:"mc",q:"Where in the atom is nearly all of the mass found?",
+ opts:["In the nucleus","Spread evenly through the atom","In the outer shell","In the electrons"],a:0,
+ why:"Protons and neutrons have almost all the mass, and both are in the nucleus. Electrons are about 1/1836 the mass of a proton."},
+{id:"c4",tp:"chem",t:"short",q:"Define an element.",need:2,
+ keys:[["one type","single type","same type","only one kind","one kind"],["atom"],["cannot be broken","pure substance","simplest"]],
+ model:"A pure substance made of only one type of atom. It cannot be broken down into anything simpler by chemical means. Example: oxygen, gold, carbon."},
+{id:"c5",tp:"chem",t:"short",q:"Define a compound.",need:2,
+ keys:[["two or more","2 or more","different element"],["chemically","bonded","bond"],["fixed ratio","fixed proportion","set ratio"]],
+ model:"A pure substance made of two or more different elements chemically bonded together in a fixed ratio. Its properties differ from the elements it is made of, and it can only be separated chemically. Example: water (H2O)."},
+{id:"c6",tp:"chem",t:"short",q:"Define a molecule.",need:1,
+ keys:[["two or more atom","2 or more atom","atoms joined","atoms bonded","group of atoms"],["covalent","chemically bonded","bonded together"]],
+ model:"Two or more atoms chemically bonded (usually covalently) to form the smallest unit of a substance. It can be atoms of the same element (O2) or of different elements (CO2)."},
+{id:"c7",tp:"chem",t:"short",q:"Define a mixture.",need:2,
+ keys:[["two or more","2 or more"],["not chemically","no chemical","physically","not bonded"],["physical","separated","filtering","distillation"]],
+ model:"Two or more substances physically combined but not chemically bonded. Each keeps its own properties, the proportions can vary, and it can be separated by physical means such as filtering, evaporating or using a magnet. Example: air, salt water."},
+{id:"c8",tp:"chem",t:"mc",q:"Air is best classified as a:",
+ opts:["Mixture","Compound","Element","Molecule"],a:0,
+ why:"Air is nitrogen, oxygen, argon and carbon dioxide mixed physically in varying proportions, not chemically bonded."},
+{id:"c9",tp:"chem",t:"mc",q:"Water (H₂O) is best classified as a:",
+ opts:["Compound","Mixture","Element","Solution"],a:0,
+ why:"Two different elements (hydrogen and oxygen) chemically bonded in a fixed 2:1 ratio."},
+{id:"c10",tp:"chem",t:"mc",q:"In an ionic compound, what happens to the electrons?",
+ opts:["They are transferred from the metal to the non-metal","They are shared equally between two non-metals","They are destroyed","They stay on the metal atom"],a:0,
+ why:"The metal loses electrons to become a positive ion, the non-metal gains them to become a negative ion. The opposite charges attract."},
+{id:"c11",tp:"chem",t:"mc",q:"A covalent bond forms when:",
+ opts:["Two non-metals share a pair of electrons","A metal transfers electrons to a non-metal","Two metals pool their electrons","Ions attract each other"],a:0,
+ why:"Covalent bonding is the sharing of electron pairs between non-metal atoms."},
+{id:"c12",tp:"chem",t:"match",q:"Match each property to the type of compound it describes.",
+ pairs:[["High melting point, forms a giant lattice","Ionic"],["Conducts electricity when molten or dissolved","Ionic"],["Low melting and boiling points","Covalent"],["Made of separate small molecules that do not conduct","Covalent"]],
+ why:"Ionic: metal + non-metal, electrons transferred, giant lattice, high melting point, conducts when molten or in solution, usually soluble in water, hard and brittle. Covalent: non-metals only, electrons shared, discrete molecules, weak forces between molecules so low melting point, does not conduct electricity."},
+{id:"c13",tp:"chem",t:"mc",q:"Name the compound NaCl.",
+ opts:["Sodium chloride","Sodium chlorine","Sodium chlorate","Natrium chloride"],a:0,
+ why:"Metal first with its full name, then the non-metal ending in -ide. NaCl = sodium chloride (table salt)."},
+{id:"c14",tp:"chem",t:"mc",q:"Name the compound HCl (in solution).",
+ opts:["Hydrochloric acid","Hydrogen chloride acid","Chloric acid","Hydrocyanic acid"],a:0,
+ why:"Dissolved in water it is hydrochloric acid. As a pure gas it is called hydrogen chloride. It is found in your stomach."},
+{id:"c15",tp:"chem",t:"mc",q:"Name the compound H₂SO₄.",
+ opts:["Sulfuric acid","Sulfurous acid","Hydrosulfuric acid","Sulfur hydroxide"],a:0,
+ why:"H2SO4 is sulfuric acid, the acid used in car batteries. (H2SO3 is sulfurous acid.)"},
+{id:"c16",tp:"chem",t:"multi",q:"Which of these household chemicals are ACIDS? Select all that apply.",
+ opts:["Vinegar","Lemon juice","Bleach","Soap","Pure water"],a:[0,1],
+ why:"Vinegar (acetic acid, pH ~3) and lemon juice (citric acid, pH ~2) are acids. Bleach (pH ~12.5) and soap (pH ~9-10) are bases. Pure water is neutral."},
+{id:"c17",tp:"chem",t:"mc",q:"Classify bleach.",opts:["Base","Acid","Neutral","Indicator"],a:0,
+ why:"Bleach contains sodium hypochlorite and is strongly basic, around pH 12-13. It feels slippery and is corrosive."},
+{id:"c18",tp:"chem",t:"mc",q:"Classify soap.",opts:["Base","Acid","Neutral","Salt"],a:0,
+ why:"Soap is a weak base, about pH 9-10. Bases feel slippery, which is why soap is slimy."},
+{id:"c19",tp:"chem",t:"short",q:"Explain how indicators are used in the lab.",need:2,
+ keys:[["change colour","change color","colour change","color change"],["ph","acid","base","alkaline"],["drop","add","dip","compare","chart","universal","litmus"]],
+ model:"An indicator is a substance that changes colour depending on the pH of the solution it is in. In the lab you add a few drops of the indicator to the solution (or dip indicator paper into it), then compare the colour produced against a known colour chart to work out whether the substance is acidic, basic or neutral. Litmus gives acid/base only (red in acid, blue in base); universal indicator gives an approximate pH number."},
+{id:"c20",tp:"chem",t:"mc",fig:"ph",q:"According to the universal indicator chart above, what pH range do ACIDS have?",
+ opts:["Below 7 (0-6)","Exactly 7","Above 7 (8-14)","Any value from 0 to 14"],a:0,
+ why:"Acids: pH 0-6 (red/orange/yellow). Neutral: pH 7 (green). Bases: pH 8-14 (blue/purple). The lower the number, the stronger the acid."},
+{id:"c21",tp:"chem",t:"mc",fig:"ph",q:"A solution turns universal indicator dark purple. What is it?",
+ opts:["A strong base","A strong acid","Neutral","A weak acid"],a:0,
+ why:"Purple is the top of the scale, around pH 13-14, so it is a strong base. Strong acids give red."},
+{id:"c22",tp:"chem",t:"mc",q:"Red litmus paper is dipped into a solution and turns blue. The solution is:",
+ opts:["A base","An acid","Neutral","A salt"],a:0,
+ why:"Red litmus turns blue in a base. Blue litmus turns red in an acid. Neither changes in a neutral solution."},
+{id:"c23",tp:"chem",t:"short",q:"Explain what is happening to the atoms in a molecule during a chemical reaction.",need:2,
+ keys:[["bond"],["break","broken"],["new","rearrang","form","reform","join"]],
+ model:"The bonds holding the atoms together are broken and the atoms are rearranged, forming new bonds and therefore new substances (the products). The atoms themselves are not created, destroyed or changed into other atoms. Exactly the same atoms are present before and after, just joined up in a different way."},
+{id:"c24",tp:"chem",t:"short",q:"State the Law of Conservation of Mass.",need:2,
+ keys:[["mass"],["reactant","before","products","after","equal","same"],["not be created","cannot be created","neither created","destroyed","conserved"]],
+ model:"In a chemical reaction, matter cannot be created or destroyed, so the total mass of the reactants always equals the total mass of the products. The number of atoms of each element is the same before and after the reaction."},
+{id:"c25",tp:"chem",t:"num",q:"4.0 g of magnesium burns completely in 2.7 g of oxygen. What mass of magnesium oxide is produced, in grams?",
+ a:6.7,tol:0.05,unit:"g",
+ why:"By conservation of mass, mass of products = mass of reactants = 4.0 + 2.7 = 6.7 g. Nothing is lost; the extra mass comes from the oxygen that joined on."},
+{id:"c26",tp:"chem",t:"short",q:"Write the general word equation for a NEUTRALISATION reaction.",need:2,
+ keys:[["acid"],["base","alkali","hydroxide"],["salt"],["water"]],
+ model:"acid + base → salt + water"},
+{id:"c27",tp:"chem",t:"mc",q:"Identify the products of the reaction between hydrochloric acid and sodium hydroxide.",
+ opts:["Sodium chloride + water","Sodium chloride + hydrogen","Sodium hydroxide + chlorine","Sodium carbonate + water"],a:0,
+ why:"Acid + base → salt + water. HCl + NaOH → NaCl + H2O, so the products are sodium chloride and water."},
+{id:"c28",tp:"chem",t:"short",q:"Write the general word equation for an ACID and CARBONATE reaction.",need:3,
+ keys:[["acid"],["carbonate"],["salt"],["water"],["carbon dioxide","co2"]],
+ model:"acid + metal carbonate → salt + water + carbon dioxide"},
+{id:"c29",tp:"chem",t:"mc",q:"Identify the products of the reaction between sulfuric acid and calcium carbonate.",
+ opts:["Calcium sulfate + water + carbon dioxide","Calcium sulfate + hydrogen","Calcium sulfide + water","Calcium carbonate + sulfur dioxide"],a:0,
+ why:"Acid + carbonate → salt + water + carbon dioxide. The salt from sulfuric acid is a sulfate: H2SO4 + CaCO3 → CaSO4 + H2O + CO2. The fizzing is the CO2."},
+{id:"c30",tp:"chem",t:"short",q:"Write the general word equation for an ACID and METAL reaction.",need:2,
+ keys:[["acid"],["metal"],["salt"],["hydrogen"]],
+ model:"acid + metal → salt + hydrogen gas"},
+{id:"c31",tp:"chem",t:"mc",q:"Identify the products of the reaction between magnesium and hydrochloric acid.",
+ opts:["Magnesium chloride + hydrogen","Magnesium chloride + water","Magnesium oxide + chlorine","Magnesium hydroxide + hydrogen"],a:0,
+ why:"Acid + metal → salt + hydrogen. Mg + 2HCl → MgCl2 + H2. The bubbles are hydrogen, which pops with a lit splint."},
+{id:"c32",tp:"chem",t:"mc",q:"Identify the products of the complete combustion of a hydrocarbon in oxygen.",
+ opts:["Carbon dioxide + water","Carbon monoxide + hydrogen","Carbon + water","Carbon dioxide + hydrogen"],a:0,
+ why:"hydrocarbon + oxygen → carbon dioxide + water (+ energy released as heat and light). If oxygen is limited, incomplete combustion also gives carbon monoxide and soot (carbon)."},
+{id:"c33",tp:"chem",t:"match",q:"Match each gas to the test that identifies it.",
+ pairs:[["Hydrogen","Burns with a squeaky pop when a lit splint is held near"],["Carbon dioxide","Turns limewater milky/cloudy"],["Oxygen","Relights a glowing splint"]],
+ why:"These three tests come up constantly when you are asked to identify the gas produced by a reaction."},
+{id:"c34",tp:"chem",t:"short",q:"Explain how increasing the CONCENTRATION of the reactants affects the rate of reaction.",need:2,
+ keys:[["faster","increase","speeds","quicker"],["more particles","more reactant particles","crowded","per volume","closer"],["collision","collide"]],
+ model:"Increasing the concentration speeds the reaction up. A more concentrated solution has more reactant particles in the same volume, so the particles are closer together and collide more often. More collisions per second means more successful collisions per second, so the rate increases."},
+{id:"c35",tp:"chem",t:"short",q:"Explain how increasing the TEMPERATURE affects the rate of reaction.",need:2,
+ keys:[["faster","increase","speeds","quicker"],["kinetic energy","more energy","move faster","moving faster"],["collide","collision"]],
+ model:"Increasing the temperature speeds the reaction up. The particles gain kinetic energy and move faster, so they collide more frequently. The collisions also have more energy, so a greater proportion of them have enough energy to react. Both effects increase the rate."},
+{id:"c36",tp:"chem",t:"short",q:"Explain how increasing the SURFACE AREA of a solid reactant affects the rate of reaction.",need:2,
+ keys:[["faster","increase","speeds","quicker"],["more","exposed","available","smaller pieces","powder"],["collide","collision","contact"]],
+ model:"Increasing the surface area (for example by grinding a solid into a powder or cutting it into smaller pieces) speeds the reaction up. More of the solid's particles are exposed to the other reactant, so there are more places for collisions to happen and more collisions per second."},
+{id:"c37",tp:"chem",t:"short",q:"Explain how a CATALYST affects the rate of reaction.",need:2,
+ keys:[["faster","increase","speeds","quicker"],["not used up","unchanged","is not consumed","reused","without being used"],["activation energy","lower","easier","alternative pathway"]],
+ model:"A catalyst speeds the reaction up by lowering the activation energy, which is the minimum energy a collision needs in order to react. More collisions are therefore successful. The catalyst is not used up or chemically changed, so it can be recovered and used again."},
+{id:"c38",tp:"chem",t:"mc",q:"Which set-up would make marble chips react FASTEST with hydrochloric acid?",
+ opts:["Powdered marble in warm, concentrated acid","Large marble chips in cold, dilute acid","Large marble chips in warm, dilute acid","Powdered marble in cold, dilute acid"],a:0,
+ why:"All three rate factors stacked in the same direction: biggest surface area (powder), highest temperature and highest concentration."},
+{id:"c39",tp:"chem",t:"tf",q:"True or false: a catalyst is used up during the reaction.",a:false,
+ why:"False. A catalyst speeds up the reaction without being used up or permanently changed, so a small amount can be used over and over."},
+
+/* ───────── Earth, Plates & Disasters ───────── */
+{id:"p1",tp:"plates",t:"label",fig:"earth",q:"Label the four layers of the Earth, from the outside in.",
+ pins:[{lab:"crust"},{lab:"mantle"},{lab:"outer core"},{lab:"inner core"}],
+ why:"Crust (thin, solid rock) → mantle (thickest layer, semi-molten rock that convects) → outer core (liquid iron and nickel) → inner core (solid iron and nickel, hottest at about 5500°C)."},
+{id:"p2",tp:"plates",t:"mc",q:"Which layer of the Earth is the thinnest?",
+ opts:["The crust","The mantle","The outer core","The inner core"],a:0,
+ why:"The crust is only about 5-70 km thick. The mantle is the thickest layer at roughly 2900 km."},
+{id:"p3",tp:"plates",t:"mc",q:"The inner core is solid even though it is the hottest layer. Why?",
+ opts:["The enormous pressure on it keeps it solid","It has cooled down from the outside","It is made of rock, not metal","It contains no iron"],a:0,
+ why:"Pressure from all the layers above raises the melting point of the iron and nickel enough to keep the inner core solid."},
+{id:"p4",tp:"plates",t:"mc",q:"Which scientist proposed the theory of continental drift?",
+ opts:["Alfred Wegener","Charles Darwin","Isaac Newton","Charles Lyell"],a:0,
+ why:"Alfred Wegener, a German meteorologist, published the idea in 1912. It was rejected for decades because he could not explain what force moved the continents."},
+{id:"p5",tp:"plates",t:"short",q:"What is continental drift?",need:2,
+ keys:[["continent"],["joined","one landmass","together","single"],["moved","move","drift","apart","slowly"]],
+ model:"The idea that the continents were once joined together as a single landmass and have since slowly moved (drifted) across the Earth's surface to their present positions, and are still moving today at a few centimetres per year."},
+{id:"p6",tp:"plates",t:"mc",q:"What was the name of the original supercontinent?",
+ opts:["Pangaea","Panthalassa","Laurasia","Gondwana"],a:0,
+ why:"Pangaea, meaning 'all land'. The ocean surrounding it was Panthalassa."},
+{id:"p7",tp:"plates",t:"mc",q:"Pangaea first split into which two continents?",
+ opts:["Laurasia in the north and Gondwana in the south","Eurasia and Africa","Pangaea and Panthalassa","Atlantis and Gondwana"],a:0,
+ why:"Laurasia became North America, Europe and Asia. Gondwana became South America, Africa, Antarctica, India and Australia."},
+{id:"p8",tp:"plates",t:"multi",q:"Which of these are genuine EVIDENCE for continental drift? Select all that apply.",
+ opts:["The coastlines of the continents fit together like a jigsaw","Matching fossils of the same species on continents now separated by ocean","Matching rock types and mountain ranges on opposite sides of an ocean","Glacial deposits and scratches found in places that are now hot","Countries on different continents speak similar languages","The same living animals are found on every continent today"],a:[0,1,2,3],
+ why:"Jigsaw fit, matching fossils (Glossopteris, Lystrosaurus), matching rock and mountain belts, and glacial evidence in now-tropical regions are Wegener's four main lines of evidence. Later evidence came from mid-ocean ridges, sea-floor spreading, magnetic striping, earthquake and volcano distribution, and GPS measurements."},
+{id:"p9",tp:"plates",t:"short",q:"How do matching fossils on separate continents support continental drift?",need:2,
+ keys:[["same species","identical","same fossil","same plant","same animal"],["could not","cannot","unable","impossible","not have swum","not cross","not have crossed"],["ocean","sea","joined","together","one landmass"]],
+ model:"Fossils of the same species (such as the plant Glossopteris and the reptile Lystrosaurus) are found in South America, Africa, India, Antarctica and Australia. These organisms could not have swum or drifted thousands of kilometres across an ocean, so the land they lived on must have been joined together when they were alive, and has since separated."},
+{id:"p10",tp:"plates",t:"match",q:"Match each plate boundary to how the plates move there.",
+ pairs:[["Divergent","The plates move apart and magma rises to fill the gap"],["Convergent","The plates move towards each other and one is forced down (subducted)"],["Transform","The plates slide past each other sideways"]],
+ why:"Divergent = apart, convergent = together, transform = sliding past. Everything else about a boundary follows from its movement."},
+{id:"p11",tp:"plates",t:"match",q:"Match each plate boundary to the landforms found there.",
+ pairs:[["Divergent","Mid-ocean ridges, rift valleys and new sea floor"],["Convergent","Deep ocean trenches, fold mountains and explosive volcanoes"],["Transform","A fault line with no volcanoes but strong shallow earthquakes"]],
+ why:"Divergent: Mid-Atlantic Ridge, East African Rift, Iceland. Convergent: the Andes, Himalayas, Mariana Trench, Japan. Transform: the San Andreas Fault."},
+{id:"p12",tp:"plates",t:"mc",q:"The Himalayas formed where two continental plates collided. Which boundary is that?",
+ opts:["Convergent","Divergent","Transform","Passive"],a:0,
+ why:"India is still pushing into Asia. Neither plate subducts easily, so the crust crumples upwards into fold mountains, and the Himalayas keep rising."},
+{id:"p13",tp:"plates",t:"mc",q:"New sea floor is created at which type of plate boundary?",
+ opts:["Divergent","Convergent","Transform","None of them"],a:0,
+ why:"At a divergent boundary the plates pull apart, magma rises, cools and forms new oceanic crust. This is sea-floor spreading, seen along the Mid-Atlantic Ridge."},
+{id:"p14",tp:"plates",t:"mc",q:"The San Andreas Fault in California is an example of which boundary?",
+ opts:["Transform","Divergent","Convergent","Subduction zone"],a:0,
+ why:"The Pacific and North American plates grind past one another. Friction locks them, stress builds, and the sudden slip causes strong shallow earthquakes without volcanoes."},
+{id:"p15",tp:"plates",t:"tf",q:"True or false: a severe earthquake is likely to occur in Sydney.",a:false,
+ why:"False. Sydney sits near the middle of the Indo-Australian Plate, a long way from any plate boundary, so there is very little stress build-up. Only small intraplate quakes occur."},
+{id:"p16",tp:"plates",t:"short",q:"Would a severe earthquake be likely in Sydney? Explain why or why not.",need:2,
+ keys:[["unlikely","no","not likely","low"],["middle","centre","center","interior","intraplate","within"],["plate","indo-australian"],["boundary","edge","fault","margin"]],
+ model:"No, it is unlikely. Severe earthquakes happen at plate boundaries, where plates grind against each other and build up huge stress that is released suddenly. Sydney lies near the middle of the Indo-Australian Plate, thousands of kilometres from the nearest boundary, so very little stress accumulates. Small intraplate earthquakes can still happen (Newcastle, 1989, magnitude 5.6), but a severe one is very unlikely."},
+{id:"p17",tp:"plates",t:"mc",q:"What causes the plates to move?",
+ opts:["Convection currents in the mantle","The spin of the Earth on its axis","The pull of the Moon's gravity","Wind and ocean currents"],a:0,
+ why:"Heat from the core (partly from radioactive decay) makes hot mantle rock rise, spread sideways, cool and sink, forming convection currents. These drag the plates along, helped by ridge push and slab pull."},
+{id:"p18",tp:"plates",t:"short",q:"Explain what causes continental drift.",need:3,
+ keys:[["heat","hot","core","radioactive"],["convection","current"],["mantle"],["rise","rises","sink","sinks","circulate"],["plate","crust","drag","carr"]],
+ model:"Heat from the Earth's core heats the semi-molten rock of the mantle. The hot rock becomes less dense and rises; near the crust it cools, becomes denser and sinks again. This circular flow is a convection current. The currents drag the tectonic plates sitting on top of the mantle, and the continents are carried with them. Ridge push (new crust at ridges) and slab pull (dense old crust sinking at trenches) add to the movement."},
+{id:"p19",tp:"plates",t:"multi",q:"How has technology reduced deaths and injuries from natural disasters? Select all that apply.",
+ opts:["Seismographs and monitoring networks detect activity early","Early warning systems send alerts by siren, TV and phone","Deep-ocean tsunami buoys detect waves before they reach land","Satellites and GIS map hazards so building is restricted in risky areas","Engineering standards let buildings flex instead of collapsing","Technology can stop tectonic plates from moving"],a:[0,1,2,3,4],
+ why:"Technology cannot prevent the event, only reduce its impact: detect it early, warn people, evacuate, build to withstand it, and find survivors faster with drones and thermal imaging."},
+{id:"p20",tp:"plates",t:"mc",q:"Which instrument detects and records earthquake waves?",
+ opts:["Seismograph","Barometer","Anemometer","Spectroscope"],a:0,
+ why:"A seismograph (seismometer) records the ground's vibrations as a seismogram, which is used to find the magnitude and epicentre."},
+
+/* ───────── Evolution & Fossils ───────── */
+{id:"e1",tp:"evol",t:"short",q:"What is the Theory of Evolution?",need:2,
+ keys:[["species","population","organism","living things"],["change","changed","changing"],["over time","generation","over many years","gradual"],["common ancestor","natural selection","descend"]],
+ model:"The theory that species of living things change gradually over many generations, and that all species have descended from earlier, different species with a common ancestor. The main mechanism driving the change is natural selection."},
+{id:"e2",tp:"evol",t:"mc",q:"Which scientist proposed the theory of evolution by natural selection?",
+ opts:["Charles Darwin","Alfred Wegener","Gregor Mendel","Carl Linnaeus"],a:0,
+ why:"Charles Darwin, in On the Origin of Species (1859), after his voyage on HMS Beagle. Alfred Russel Wallace reached the same idea independently."},
+{id:"e3",tp:"evol",t:"short",q:"Define natural selection.",need:3,
+ keys:[["variation","vary","different","varies"],["survive","survival","better suited","advantage","adapted"],["reproduce","breed","offspring"],["pass on","inherit","passed","genes"]],
+ model:"The process where individuals in a population that have inherited variations best suited to their environment are more likely to survive and reproduce. They pass those favourable traits on to their offspring, so the proportion of individuals with the trait increases each generation and the population gradually changes. Often summed up as 'survival of the fittest'."},
+{id:"e4",tp:"evol",t:"order",q:"Put the steps of natural selection into the correct order.",
+ items:["Natural variation already exists within a population","More offspring are produced than the environment can support, so there is competition","Individuals with the most useful variation survive; others die or fail to breed","The survivors reproduce and pass their useful traits to their offspring","Over many generations the trait becomes common and the population changes"],
+ why:"Variation → competition/selection pressure → differential survival → inheritance → change in the population over generations. The variation must come FIRST; the environment selects from it, it does not create it."},
+{id:"e5",tp:"evol",t:"short",q:"Explain how the different finch species on the Galapagos Islands came to be.",need:3,
+ keys:[["ancestor","original","one species","mainland","arrived"],["island","separate","isolat"],["food","beak","seed","insect"],["survive","surviv","reproduce","advantage","suited"],["generation","new species","speciation","over time"]],
+ model:"One ancestral finch species arrived from the South American mainland and spread to the different islands. Each island offered different food (large hard seeds, small seeds, insects, cactus). Natural variation in beak size and shape already existed. On each island the birds whose beaks suited the available food survived better and reproduced, passing those beaks on, while others died out. Because the islands kept the populations isolated, they could not interbreed, so the differences built up over many generations until the populations became separate species, each with a beak adapted to its own food source."},
+{id:"e6",tp:"evol",t:"short",q:"Some bacteria now resist common antibiotics. Using evolution and natural selection, describe how this happened.",need:3,
+ keys:[["variation","mutation","random","some bacteria"],["resistant","resistance"],["survive","surviv","not killed"],["reproduce","divide","multiply","pass"],["generation","population","majority","most"]],
+ model:"Random mutations in the bacterial population mean a few individuals already carry a gene that makes them resistant to the antibiotic. When the antibiotic is used, it kills the non-resistant bacteria, but the resistant ones survive. With the competition removed, the survivors reproduce rapidly and pass the resistance gene to their offspring (and can even transfer it to other bacteria on plasmids). After a few generations almost the whole population is resistant and the antibiotic no longer works. Overusing antibiotics, or not finishing a course, increases this selection pressure."},
+{id:"e7",tp:"evol",t:"mc",q:"Which statement about antibiotic resistance is scientifically correct?",
+ opts:["Resistance already existed by chance in a few bacteria, which then survived and reproduced","Each bacterium learns to resist the antibiotic while it is being attacked","The antibiotic makes bacteria stronger","Bacteria choose to become resistant in order to survive"],a:0,
+ why:"Natural selection acts on variation that is already there. Individuals do not change themselves to suit the environment, and the environment does not create the useful trait on demand. Losing this distinction is the most common marking error on evolution questions."},
+{id:"e8",tp:"evol",t:"multi",q:"Which of these are evidence for the theory of evolution? Select all that apply.",
+ opts:["The fossil record","Homologous structures such as the pentadactyl limb","Similarities in DNA between related species","Similar early embryos in different vertebrates","Vestigial structures such as the human appendix","All fossils are found in the same rock layer"],a:[0,1,2,3,4],
+ why:"Fossils show organisms changing over time and include transitional forms. Homologous structures (the same five-bone limb plan in a human arm, bat wing, whale flipper) suggest a shared ancestor. The more closely related two species are, the more similar their DNA. Vertebrate embryos look alike early on. Vestigial organs are left over from ancestors that used them. Biogeography and selective breeding add more."},
+{id:"e9",tp:"evol",t:"short",q:"How does the fossil record support the theory of evolution?",need:2,
+ keys:[["older","deeper","age","dated","layer"],["simple","different","change","changed","progress"],["transitional","intermediate","link","gradual","over time"]],
+ model:"Fossils in older, deeper rock layers are simpler and quite different from the species alive today, while younger layers contain forms progressively more like modern species. This shows that life has changed gradually over millions of years. The record also contains transitional fossils, such as Archaeopteryx, which show features of two different groups and link them to a common ancestor."},
+{id:"e10",tp:"evol",t:"mc",q:"A human arm, a bat wing and a whale flipper all contain the same arrangement of bones. This is evidence from:",
+ opts:["Comparative anatomy (homologous structures)","Comparative embryology","Biogeography","The fossil record"],a:0,
+ why:"The shared five-digit (pentadactyl) limb plan does different jobs in each animal but has the same underlying structure, which points to a common ancestor rather than separate origins."},
+{id:"e11",tp:"evol",t:"order",q:"Put the stages of fossil formation into the correct order.",
+ items:["The organism dies and falls into mud, silt or sand","It is buried quickly by layers of sediment before it can rot or be eaten","The soft parts decay, leaving the hard parts such as bone, teeth or shell","More sediment builds up; pressure compacts the layers into sedimentary rock","Minerals from groundwater seep in and slowly replace the remains, turning them to stone","Uplift and erosion of the rock above finally expose the fossil at the surface"],
+ why:"Death → rapid burial → soft parts decay → compaction into rock → permineralisation → uplift and erosion exposes it. Rapid burial is the critical step: without it scavengers and decay destroy the remains."},
+{id:"e12",tp:"evol",t:"multi",q:"What are the BEST conditions for a fossil to form? Select all that apply.",
+ opts:["Rapid burial in fine sediment","Little or no oxygen, so decay bacteria cannot work","The organism has hard parts such as bone or shell","The layers stay undisturbed by heat and pressure afterwards","The body is left exposed on the surface for a long time","Plenty of scavengers in the area"],a:[0,1,2,3],
+ why:"Most organisms never fossilise. It needs quick burial in sediment (usually underwater), anaerobic conditions, hard body parts, and no later disturbance. Very dry, very cold or oxygen-free places (amber, ice, peat bogs) can also preserve soft parts."},
+{id:"e13",tp:"evol",t:"short",q:"What is the Law of Superposition?",need:2,
+ keys:[["oldest","older"],["bottom","below","beneath","lower"],["youngest","newest","younger","top","above"]],
+ model:"In an undisturbed sequence of sedimentary rock layers, the oldest layer is at the bottom and each layer above it is younger, because sediment is deposited one layer on top of another over time. The youngest layer is at the top."},
+{id:"e14",tp:"evol",t:"short",q:"What is an index fossil?",need:2,
+ keys:[["short","brief","limited","narrow","known period","specific time"],["widespread","wide area","many places","geographically","worldwide"],["date","dating","age","correlate","compare","match"]],
+ model:"A fossil of a species that existed for only a short, well-known period of geological time but was widespread geographically. Because it is easy to recognise and its age is known, finding it in a rock layer dates that layer and lets geologists correlate (match up) layers of the same age in different places."},
+{id:"e15",tp:"evol",t:"mc",fig:"strata",q:"In the diagram, which layer in column B matches (correlates with) layer C in column A?",
+ opts:["F","E","G","H"],a:0,
+ why:"Correlate by rock type, not position. C is coal, and the coal layer in column B is F. The matching pairs are B–E (shale), C–F (coal) and D–G (limestone)."},
+{id:"e16",tp:"evol",t:"mc",fig:"strata",q:"Which is the OLDEST rock layer shown in the diagram?",
+ opts:["H","A","D","E"],a:0,
+ why:"By the Law of Superposition the lowest layer is the oldest. H sits below G, which correlates with D, so H is deeper than every layer in column A and is the oldest rock shown."},
+{id:"e17",tp:"evol",t:"mc",fig:"strata",q:"Which is the YOUNGEST rock layer shown in the diagram?",
+ opts:["A","E","H","D"],a:0,
+ why:"A is the top layer of column A, and column B has nothing above E (which correlates with B, the layer directly under A). So A is the youngest."},
+{id:"e18",tp:"evol",t:"mc",fig:"strata",q:"Which column contains the older rock, A or B?",
+ opts:["Column B, because it extends deeper and contains layer H","Column A, because it is drawn higher on the page","Column A, because it has the layer on top","They are exactly the same age"],a:0,
+ why:"Once the layers are correlated, column B reaches further down into the sequence (it includes H, below all the shared layers), so it contains the older rock. Column A contains the younger rock (layer A)."},
+{id:"e19",tp:"evol",t:"mc",q:"Why is Archaeopteryx significant?",
+ opts:["It is a transitional fossil showing that birds evolved from reptiles/dinosaurs","It is the oldest fossil ever found","It proves continental drift","It is an index fossil used to date rocks worldwide"],a:0,
+ why:"Archaeopteryx is a transitional (intermediate) fossil: it has feathers and wings like a bird, but teeth, clawed fingers on its wings and a long bony tail like a reptile. It is strong evidence of a link between the two groups."},
+{id:"e20",tp:"evol",t:"multi",q:"Which features of Archaeopteryx are REPTILE features? Select all that apply.",
+ opts:["Teeth in its jaws","Claws on its wings","A long bony tail","Feathers","Wings"],a:[0,1,2],
+ why:"Reptile features: teeth, clawed fingers, long bony tail. Bird features: feathers and wings. Having both at once is what makes it transitional."},
+
+/* ───────── Science Fair Method ───────── */
+{id:"m1",tp:"method",t:"mc",q:"What is the INDEPENDENT variable?",
+ opts:["The one thing the experimenter deliberately changes","The thing that is measured as the result","Everything kept the same","The equipment used"],a:0,
+ why:"Independent = what you change (and only one thing). Dependent = what you measure. Controlled = everything you keep the same."},
+{id:"m2",tp:"method",t:"mc",q:"What is the DEPENDENT variable?",
+ opts:["The thing you measure or observe, which may change as a result","The thing you deliberately change","A variable kept constant","The hypothesis"],a:0,
+ why:"It 'depends' on the independent variable. It is what you record in your results table and plot on the y-axis."},
+{id:"m3",tp:"method",t:"mc",q:"What are CONTROLLED variables?",
+ opts:["All the other variables kept the same so they cannot affect the result","The variables you change one at a time","The results of the experiment","The control group only"],a:0,
+ why:"Keeping everything else constant is what makes the experiment a FAIR TEST, so any change in the dependent variable can only be due to the independent variable. That is what makes the experiment valid."},
+{id:"m4",tp:"method",t:"mc",q:"A student tests how water temperature affects how long a tablet takes to dissolve. What is the INDEPENDENT variable?",
+ opts:["The temperature of the water","The time taken to dissolve","The volume of water","The brand of tablet"],a:0,
+ why:"Temperature is what the student deliberately changes. Time to dissolve is what is measured (dependent). Volume of water and brand of tablet must be controlled."},
+{id:"m5",tp:"method",t:"mc",q:"In the same experiment, what is the DEPENDENT variable?",
+ opts:["The time taken for the tablet to dissolve","The temperature of the water","The size of the beaker","The stirring"],a:0,
+ why:"It is what you measure with a stopwatch, and it depends on the temperature you chose."},
+{id:"m6",tp:"method",t:"multi",q:"In the same experiment, which variables must be CONTROLLED? Select all that apply.",
+ opts:["Volume of water","Brand and mass of tablet","Whether the mixture is stirred","Type of container","The temperature of the water"],a:[0,1,2,3],
+ why:"Everything except the independent variable (temperature) and the dependent variable (time) must be kept the same, or you cannot tell what caused the change."},
+{id:"m7",tp:"method",t:"short",q:"Compare qualitative and quantitative data.",need:3,
+ keys:[["qualitative"],["quantitative"],["describ","word","observ","quality","colour","color"],["number","numeric","measur","unit"]],
+ model:"Qualitative data describes qualities in words, from observations rather than measurement: colour, smell, texture, whether a gas was produced. Quantitative data is numerical, taken with measuring instruments and recorded with units: mass in grams, time in seconds, temperature in °C. Quantitative data can be graphed and is easier to compare objectively; qualitative data gives detail that numbers miss. Good experiments usually collect both."},
+{id:"m8",tp:"method",t:"match",q:"Classify each piece of data as qualitative or quantitative.",
+ pairs:[["The solution turned cloudy and pale blue","Qualitative"],["The nail smelled metallic and felt rough","Qualitative"],["The temperature rose to 42.5 °C","Quantitative"],["The tablet dissolved in 18.3 seconds","Quantitative"]],
+ why:"If it has a number and a unit it is quantitative. If it is a description in words it is qualitative."},
+{id:"m9",tp:"method",t:"match",q:"Match each section of a scientific write-up to what belongs in it.",
+ pairs:[["Aim","One sentence stating what you are trying to find out"],["Hypothesis","A testable prediction linking the independent and dependent variable"],["Risk assessment","Each hazard, its risk, and the control measure or safety equipment used"],["Method","A numbered, repeatable list of steps plus the equipment and amounts used"],["Results","Tables with headings and units, and graphs of the data, with no interpretation"],["Discussion","Explaining the trend, errors, reliability and validity, and improvements"],["Conclusion","A short statement answering the aim and saying if the hypothesis was supported"]],
+ why:"Aim = what and why. Hypothesis = 'If the [IV] is increased, then the [DV] will...'. Risk assessment = hazard, risk, control. Method = equipment list, numbered past-tense steps, diagram, detailed enough to repeat exactly. Results = raw data, tables, graphs only. Discussion = explain the science behind the trend, compare to the hypothesis, identify sources of error, comment on reliability and validity, suggest improvements. Conclusion = one or two sentences answering the aim, referring to the data."},
+{id:"m10",tp:"method",t:"mc",q:"Which of these is the best HYPOTHESIS?",
+ opts:["If the water temperature is increased, the tablet will dissolve faster.","I think the experiment will work.","Temperature and dissolving.","Hot water is interesting to test with tablets."],a:0,
+ why:"A hypothesis must be a testable prediction with a direction, linking the independent variable to the dependent variable. The 'If... then...' form does this."},
+{id:"m11",tp:"method",t:"mc",q:"What is the best way to improve the RELIABILITY of an experiment?",
+ opts:["Repeat each test at least three times and average the results","Use more expensive equipment","Change two variables at once to save time","Write a longer discussion"],a:0,
+ why:"Reliability is about getting consistent results you can trust, so you repeat trials and average them, which also reduces the effect of random error. Changing only one variable at a time is about VALIDITY, not reliability."},
+{id:"m12",tp:"method",t:"mc",q:"What makes an experiment VALID?",
+ opts:["Only the independent variable is changed and all others are controlled, so it actually tests the aim","The results come out as predicted","The experiment is repeated many times","The method is written neatly"],a:0,
+ why:"Validity = the experiment measures what it claims to measure. That needs one variable changed, the rest controlled, a suitable control test, and measurements appropriate to the aim."},
+{id:"m13",tp:"method",t:"multi",q:"You are designing an experiment on what causes iron nails to corrode. Which set-ups do you need? Select all that apply.",
+ opts:["A nail in tap water (water + oxygen)","A nail in salt water","A nail in boiled water with a layer of oil on top (water, no oxygen)","A nail in dry air sealed with a drying agent such as calcium chloride (oxygen, no water)","A nail in salt water that is also boiled and sealed","A nail wrapped in paper on the bench as the only test"],a:[0,1,2,3,4],
+ why:"To test which factor matters you must remove one factor at a time. Boiling drives dissolved oxygen out and the oil layer stops more dissolving. Calcium chloride keeps the air dry. Tap water is the control for comparison. Independent variable = the conditions the nail is in; dependent variable = amount of rust (mass gained, or percentage of the surface rusted); controlled = identical new nails, same volume of liquid, same test tubes, same temperature, same length of time. Reliability: three identical nails per condition, averaged."},
+{id:"m14",tp:"method",t:"mc",q:"In the corrosion experiment, what is the best DEPENDENT variable to measure?",
+ opts:["The mass of rust formed, or the percentage of the nail's surface covered in rust","The amount of salt added","The type of liquid in the test tube","The number of test tubes used"],a:0,
+ why:"The dependent variable is the amount of corrosion. Measuring the change in mass on a balance, or rating the surface area covered against a scale, gives you quantitative data you can graph."},
+{id:"m15",tp:"method",t:"multi",q:"What must a RISK ASSESSMENT include? Select all that apply.",
+ opts:["The hazard","How likely and how serious the harm would be","The control measure that reduces the risk","Safety equipment such as goggles, gloves or a lab coat","The results of the experiment"],a:[0,1,2,3],
+ why:"For each hazard you state the risk and what you will do about it, e.g. 'Hydrochloric acid is corrosive and could burn skin or eyes — wear safety goggles and gloves, and wash spills with plenty of water.'"},
+{id:"m16",tp:"method",t:"order",q:"Put the steps for graphing data into the correct order.",
+ items:["Choose the graph type: line graph for continuous numerical data, column graph for categories","Put the independent variable on the horizontal (x) axis and the dependent variable on the vertical (y) axis","Choose an even scale for each axis that uses most of the page","Label both axes with the quantity and its unit","Plot each point from the results table accurately","Draw a line of best fit, or join the points, and add a legend if there is more than one data set","Give the graph a title that names both variables"],
+ why:"Type → axes → scale → labels with units → plot → line of best fit → title. A title like 'The effect of water temperature on dissolving time' names both variables."},
+{id:"m17",tp:"method",t:"mc",q:"Which variable goes on the horizontal (x) axis of a graph?",
+ opts:["The independent variable","The dependent variable","Whichever has bigger numbers","The controlled variables"],a:0,
+ why:"Independent on x, dependent on y. Remember DRY MIX: Dependent, Responding, Y-axis / Manipulated, Independent, X-axis."},
+{id:"m18",tp:"method",t:"multi",q:"Which features must every graph have? Select all that apply.",
+ opts:["A title naming both variables","Both axes labelled with the quantity and its unit","An even, consistent scale on each axis","A legend if more than one data set is plotted","A copy of the method written underneath"],a:[0,1,2,3],
+ why:"Marks are lost most often for a missing unit on an axis label or an uneven scale."},
+{id:"m19",tp:"method",t:"mc",q:"Why must a method be written in numbered steps with exact amounts?",
+ opts:["So another scientist could repeat it exactly and check the results","To make the report longer","So you remember what equipment to buy","Because the discussion depends on it"],a:0,
+ why:"Repeatability is central to science. If somebody else follows your method and gets the same results, the findings are reliable. Include amounts, times, temperatures and the equipment list."},
+
+/* ───────── Motion & Newton's Laws ───────── */
+{id:"n1",tp:"motion",t:"mc",q:"Which scientist proposed the three laws of motion?",
+ opts:["Sir Isaac Newton","Galileo Galilei","Albert Einstein","Robert Hooke"],a:0,
+ why:"Sir Isaac Newton published them in the Principia (1687). The unit of force, the newton (N), is named after him."},
+{id:"n2",tp:"motion",t:"mc",q:"What is the SI unit of distance, and the usual unit of speed?",
+ opts:["Metre (m) and metres per second (m/s)","Kilometre (km) and km/h only","Centimetre (cm) and m/s²","Metre (m) and newtons (N)"],a:0,
+ why:"Distance: metre (m). Speed: metres per second (m/s), or km/h in everyday use. Acceleration: m/s²."},
+{id:"n3",tp:"motion",t:"short",q:"Write the formula for calculating speed.",need:2,
+ keys:[["speed","v ="],["distance"],["time"],["divid","over","÷","per"]],
+ model:"speed = distance ÷ time    (v = d / t). Rearranged: d = v × t and t = d ÷ v."},
+{id:"n4",tp:"motion",t:"num",q:"Convert 50 km/h into m/s. Give your answer to one decimal place.",
+ a:13.9,tol:0.25,unit:"m/s",
+ why:"50 km/h = 50 × 1000 m ÷ 3600 s = 50000/3600 = 13.9 m/s. Shortcut: divide km/h by 3.6. (To go the other way, multiply m/s by 3.6.)"},
+{id:"n5",tp:"motion",t:"num",q:"A car travels 150 m in 10 s. Calculate its average speed in m/s.",
+ a:15,tol:0.1,unit:"m/s",why:"speed = distance ÷ time = 150 ÷ 10 = 15 m/s."},
+{id:"n6",tp:"motion",t:"num",q:"A runner covers 100 m in 12.5 s. Calculate the average speed in m/s.",
+ a:8,tol:0.1,unit:"m/s",why:"speed = 100 ÷ 12.5 = 8 m/s."},
+{id:"n7",tp:"motion",t:"num",q:"A cyclist rides at 6 m/s for 45 s. How far do they travel, in metres?",
+ a:270,tol:1,unit:"m",why:"distance = speed × time = 6 × 45 = 270 m."},
+{id:"n8",tp:"motion",t:"match",fig:"tapes",q:"Match each ticker timer tape above to the motion it shows.",
+ pairs:[["Tape A","Uniform motion: constant speed"],["Tape B","Acceleration: speeding up"],["Tape C","Deceleration: slowing down"]],
+ why:"The timer makes dots at a constant rate, so the gap between dots shows how far the tape moved in that fixed time. Evenly spaced dots = constant speed. Gaps getting bigger = accelerating. Gaps getting smaller = decelerating."},
+{id:"n9",tp:"motion",t:"mc",q:"On a ticker timer tape, the dots get progressively FURTHER apart. What does this show?",
+ opts:["The object is accelerating","The object is slowing down","The object is at rest","The object is moving at constant speed"],a:0,
+ why:"Each dot is made after the same time interval, so a bigger gap means a greater distance covered in that time, which means a higher speed."},
+{id:"n10",tp:"motion",t:"mc",fig:"dt",q:"On this DISTANCE-time graph, what does the flat section Q represent?",
+ opts:["The object is stationary (not moving)","The object is moving at constant speed","The object is accelerating","The object is going backwards"],a:0,
+ why:"On a distance-time graph, flat means distance is not changing, so the object is stopped. The slope (gradient) is the speed: steeper = faster, flat = stopped."},
+{id:"n11",tp:"motion",t:"num",fig:"dt",q:"Calculate the average speed of the object during the first section (P) of the graph, in m/s.",
+ a:5,tol:0.1,unit:"m/s",
+ why:"In section P the object travels from 0 m to 20 m between 0 s and 4 s. speed = distance ÷ time = 20 ÷ 4 = 5 m/s."},
+{id:"n12",tp:"motion",t:"num",fig:"dt",q:"Calculate the average speed for the whole 12-second journey, in m/s. Give your answer to one decimal place.",
+ a:4.2,tol:0.2,unit:"m/s",
+ why:"Total distance = 50 m, total time = 12 s. Average speed = 50 ÷ 12 = 4.2 m/s. Always use the TOTAL distance and TOTAL time, including any time spent stopped."},
+{id:"n13",tp:"motion",t:"mc",fig:"dt",q:"In which section is the object moving FASTEST?",
+ opts:["R, because its slope is the steepest","P, because it starts first","Q, because it is flat","All sections are the same"],a:0,
+ why:"On a distance-time graph the steeper the slope, the greater the speed. P = 20÷4 = 5 m/s, Q = 0 m/s, R = 30÷4 = 7.5 m/s."},
+{id:"n14",tp:"motion",t:"short",q:"Write the formula for calculating acceleration.",need:2,
+ keys:[["acceler","a ="],["change in","final","v u","v-u","v − u"],["time"],["divid","over","÷"]],
+ model:"acceleration = change in speed ÷ time taken, that is a = (v − u) / t, where v is the final speed, u is the starting speed and t is the time taken."},
+{id:"n15",tp:"motion",t:"mc",q:"What is acceleration, and what units is it measured in?",
+ opts:["The rate of change of speed (or velocity), measured in m/s²","The distance travelled each second, measured in m/s","The force on an object, measured in newtons","The total distance divided by total time, measured in m/s"],a:0,
+ why:"Acceleration tells you how quickly the speed is changing, so it is metres per second, per second: m/s². A negative acceleration means the object is slowing down (deceleration)."},
+{id:"n16",tp:"motion",t:"num",q:"A car speeds up from rest to 20 m/s in 5 s. Calculate its acceleration in m/s².",
+ a:4,tol:0.1,unit:"m/s²",why:"a = (v − u) ÷ t = (20 − 0) ÷ 5 = 4 m/s²."},
+{id:"n17",tp:"motion",t:"num",q:"A train slows from 30 m/s to 10 m/s in 4 s. Calculate its acceleration in m/s² (include the sign).",
+ a:-5,tol:0.1,unit:"m/s²",
+ why:"a = (10 − 30) ÷ 4 = −20 ÷ 4 = −5 m/s². The negative sign shows it is decelerating."},
+{id:"n18",tp:"motion",t:"mc",fig:"st",q:"On this SPEED-time graph, what does the flat section M represent?",
+ opts:["Constant speed, with zero acceleration","The object is stationary","The object is accelerating steadily","The object is reversing"],a:0,
+ why:"Careful: this is a SPEED-time graph, not a distance-time graph. Flat means the speed is not changing, so the object moves at a constant speed and its acceleration is zero. (On a DISTANCE-time graph, flat means stopped.)"},
+{id:"n19",tp:"motion",t:"num",fig:"st",q:"Calculate the acceleration during section L of the speed-time graph, in m/s².",
+ a:5,tol:0.1,unit:"m/s²",
+ why:"The speed rises from 0 to 20 m/s in 4 s. a = (20 − 0) ÷ 4 = 5 m/s². On a speed-time graph, the slope IS the acceleration."},
+{id:"n20",tp:"motion",t:"mc",fig:"st",q:"What does the slope of a speed-time graph tell you?",
+ opts:["The acceleration: upwards means speeding up, downwards means slowing down","The speed of the object","The distance travelled","The force applied"],a:0,
+ why:"Slope of a speed-time graph = acceleration. The AREA under a speed-time graph = distance travelled."},
+{id:"n21",tp:"motion",t:"num",fig:"st",q:"Use the area under section M to find the distance travelled between 4 s and 7 s, in metres.",
+ a:60,tol:1,unit:"m",
+ why:"The area under a speed-time graph is the distance travelled. Section M is a rectangle: 20 m/s × 3 s = 60 m."},
+{id:"n22",tp:"motion",t:"short",q:"Briefly state Newton's FIRST law of motion.",need:2,
+ keys:[["rest","stationary","stay","remain"],["constant","continue","keeps moving","same speed","straight line","uniform"],["force","unbalanced","net","acted"]],
+ model:"An object at rest stays at rest, and an object in motion keeps moving at a constant speed in a straight line, unless an unbalanced (net) external force acts on it. This tendency to resist a change in motion is called inertia."},
+{id:"n23",tp:"motion",t:"short",q:"Briefly state Newton's SECOND law of motion.",need:2,
+ keys:[["force","f ="],["mass","m"],["acceler","a"],["f = ma","proportional","equals"]],
+ model:"The acceleration of an object is directly proportional to the net force on it and inversely proportional to its mass: F = m × a. So a bigger force gives a bigger acceleration, and the same force gives a heavier object a smaller acceleration."},
+{id:"n24",tp:"motion",t:"short",q:"Briefly state Newton's THIRD law of motion.",need:2,
+ keys:[["every action","for every","action"],["equal"],["opposite"],["reaction","force"]],
+ model:"For every action force there is an equal and opposite reaction force. The two forces are the same size, act in opposite directions, and act on two different objects — which is why they do not simply cancel out."},
+{id:"n25",tp:"motion",t:"num",q:"Use F = ma. What net force is needed to accelerate a 1200 kg car at 3 m/s²? Answer in newtons.",
+ a:3600,tol:5,unit:"N",why:"F = m × a = 1200 × 3 = 3600 N."},
+{id:"n26",tp:"motion",t:"num",q:"A net force of 50 N acts on a 10 kg box. Calculate its acceleration in m/s².",
+ a:5,tol:0.1,unit:"m/s²",why:"Rearrange F = ma to a = F ÷ m = 50 ÷ 10 = 5 m/s²."},
+{id:"n27",tp:"motion",t:"mc",q:"A bus brakes suddenly and a standing passenger lurches forward. Which law explains this?",
+ opts:["The first law: the passenger's inertia keeps them moving forward","The second law, because F = ma","The third law, because of an equal and opposite reaction","None of them; it is friction"],a:0,
+ why:"The bus is slowed by a force, but no force acted on the passenger, so their body keeps moving at the original speed. This is inertia, Newton's first law."},
+{id:"n28",tp:"motion",t:"mc",q:"A rocket pushes hot gas downwards and the rocket itself moves upwards. Which law is this?",
+ opts:["The third law","The first law","The second law","The law of conservation of mass"],a:0,
+ why:"Action: the rocket pushes the exhaust gas down. Reaction: the gas pushes the rocket up with an equal and opposite force."},
+{id:"n29",tp:"motion",t:"short",q:"Explain how seat belts, air bags and crumple zones protect people in a car crash.",need:3,
+ keys:[["time","slower","longer","gradual"],["force","forces"],["reduce","less","smaller","lower"],["spread","area","cushion","over a larger","absorb"],["inertia","first law","keep moving","continue"]],
+ model:"In a crash your body keeps moving forward at the car's original speed because of inertia (Newton's first law). All three devices increase the TIME over which you are brought to a stop. Because acceleration is the change in speed divided by time, a longer stopping time means a smaller deceleration, and since F = ma a smaller deceleration means a smaller force on your body. Crumple zones deform and absorb the kinetic energy, so the car stops over a longer distance and time instead of instantly. A seat belt stops you being thrown into the windscreen and spreads the force over the strong parts of your chest and hips rather than one small area. An air bag cushions your head and chest, again increasing the stopping time and spreading the force over a larger area."},
+{id:"n30",tp:"motion",t:"mc",q:"A crumple zone reduces injury mainly because it:",
+ opts:["Increases the time taken for the car to stop, reducing the force on the people inside","Makes the car heavier so it accelerates less","Bounces the car back off the obstacle","Stops the car instantly"],a:0,
+ why:"A longer stopping time means a smaller deceleration, and F = ma means a smaller force. Stopping instantly would be the most dangerous possible outcome."},
+
+/* ───────── Cells, Nerves & Hormones ───────── */
+{id:"b1",tp:"body",t:"multi",q:"What does a cell NEED in order to stay alive and function? Select all that apply.",
+ opts:["Oxygen for respiration","Nutrients such as glucose for energy","Water","Removal of wastes such as carbon dioxide and urea","A suitable temperature and pH","Direct sunlight at all times"],a:[0,1,2,3,4],
+ why:"Cells need a constant supply of oxygen, glucose and water, a way to get rid of wastes, and a stable internal environment (temperature and pH). Keeping those conditions steady is homeostasis. Only plant cells with chloroplasts need light."},
+{id:"b2",tp:"body",t:"order",q:"Put the levels of organisation in a multicellular organism in order, from smallest to largest.",
+ items:["Cell","Tissue","Organ","Organ system","Organism"],
+ why:"Cells → tissues (groups of similar cells doing one job) → organs (several tissues together) → organ systems (organs working together) → organism. Example: muscle cell → muscle tissue → heart → circulatory system → human."},
+{id:"b3",tp:"body",t:"mc",q:"A group of similar cells working together to do the same job is called:",
+ opts:["A tissue","An organ","An organ system","An organelle"],a:0,
+ why:"For example muscle tissue, nervous tissue or epithelial tissue. Several tissues together make an organ."},
+{id:"b4",tp:"body",t:"mc",q:"The stomach is an example of:",
+ opts:["An organ","A tissue","An organ system","A cell"],a:0,
+ why:"The stomach is made of several tissues (muscle, epithelial, nervous, connective) working together for one function. It is part of the digestive system."},
+{id:"b5",tp:"body",t:"match",q:"Match each feature to the system it describes: the NERVOUS system or the ENDOCRINE system.",
+ pairs:[["Sends electrical impulses along neurons","Nervous system"],["Response is very fast but short-lived","Nervous system"],["Message travels to a specific target along a fixed pathway","Nervous system"],["Sends chemical messengers called hormones","Endocrine system"],["Messengers travel in the bloodstream to reach the whole body","Endocrine system"],["Response is slower but longer-lasting","Endocrine system"]],
+ why:"Both systems control and coordinate the body and both help maintain homeostasis using feedback. The difference is the messenger (electrical impulse vs hormone), the route (neuron vs bloodstream), the speed (milliseconds vs seconds to hours) and how long the effect lasts."},
+{id:"b6",tp:"body",t:"short",q:"Compare the endocrine and nervous systems.",need:3,
+ keys:[["hormone"],["nerve","neuron","impulse","electrical"],["blood","bloodstream"],["fast","quick","rapid","slow","faster","slower"],["long","short","lasting","brief"]],
+ model:"Both are control and coordination systems that help keep the body in homeostasis, and both work by detecting a change and triggering a response. They differ in how the message is sent. The nervous system sends electrical impulses along neurons to a specific target organ, so responses are extremely fast (fractions of a second) but short-lived; it controls things like reflexes and muscle movement. The endocrine system releases chemical messengers called hormones from glands into the bloodstream, which carries them all over the body to any cell with the matching receptor, so responses are slower to start but last much longer; it controls things like growth, blood glucose and reproduction."},
+{id:"b7",tp:"body",t:"mc",q:"How does the endocrine system carry its messages?",
+ opts:["Hormones released by glands and carried in the bloodstream","Electrical impulses along nerve cells","Through the lymph vessels only","By diffusion through the skin"],a:0,
+ why:"Glands such as the pancreas, thyroid and adrenal glands secrete hormones into the blood, which carries them to target cells anywhere in the body."},
+{id:"b8",tp:"body",t:"multi",q:"The central nervous system (CNS) is made up of which parts? Select all that apply.",
+ opts:["The brain","The spinal cord","The nerves in the arms and legs","The sense organs"],a:[0,1],
+ why:"CNS = brain + spinal cord only. Everything else is the peripheral nervous system."},
+{id:"b9",tp:"body",t:"short",q:"Describe the central nervous system and the peripheral nervous system.",need:3,
+ keys:[["brain"],["spinal cord"],["periph"],["nerve"],["process","interpret","control","coordinat","decision","integrat"],["receptor","sensory","motor","effector","muscle","gland"]],
+ model:"The central nervous system (CNS) is the brain and the spinal cord. It is the control centre: it receives information from receptors, processes and interprets it, makes decisions, and sends out instructions, as well as coordinating reflexes through the spinal cord. The peripheral nervous system (PNS) is all the nerves outside the brain and spinal cord. It is the communication network: sensory neurons carry messages from receptors in the sense organs to the CNS, and motor neurons carry instructions from the CNS out to effectors (muscles and glands) so a response can be made."},
+{id:"b10",tp:"body",t:"mc",q:"Sensory neurons carry messages:",
+ opts:["From receptors to the central nervous system","From the CNS to muscles and glands","Only within the brain","From one muscle to another"],a:0,
+ why:"Sensory (afferent) neurons carry information IN to the CNS. Motor (efferent) neurons carry instructions OUT to effectors — the muscles and glands that produce the response."},
+{id:"b11",tp:"body",t:"mc",q:"Motor neurons carry messages from the CNS to:",
+ opts:["Effectors, which are muscles and glands","Receptors in the sense organs","The spinal cord","Other sensory neurons"],a:0,
+ why:"The pathway is: stimulus → receptor → sensory neuron → CNS → motor neuron → effector → response."},
+{id:"b12",tp:"body",t:"mc",q:"Which system would respond faster to standing on a sharp object?",
+ opts:["The nervous system, in a fraction of a second","The endocrine system, in a few minutes","Both at exactly the same speed","Neither; it is a muscular response only"],a:0,
+ why:"Electrical impulses travel along neurons far faster than hormones can be carried in the blood. A withdrawal reflex is coordinated by the spinal cord before the brain is even aware of it."}
+];
+
+/* ═══════════════ storage ═══════════════ */
+const KEY="a2a-progress-v1";
+let save={stats:{},exam:"2026-10-27"};
+try{const r=localStorage.getItem(KEY);if(r){const p=JSON.parse(r);if(p&&typeof p==="object"){save.stats=p.stats||{};save.exam=p.exam||save.exam;}}}catch(e){}
+function persist(){try{localStorage.setItem(KEY,JSON.stringify(save));}catch(e){}}
+function stat(id){return save.stats[id]||(save.stats[id]={seen:0,ok:0,last:null});}
+
+/* ═══════════════ helpers ═══════════════ */
+const $=s=>document.querySelector(s);
+const view=$("#view");
+function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function norm(s){return(" "+String(s).toLowerCase().replace(/[^a-z0-9°]+/g," ")+" ").replace(/\s+/g," ");}
+function daysToExam(){
+  const t=new Date();const e=new Date(save.exam+"T00:00:00");
+  const a=new Date(t.getFullYear(),t.getMonth(),t.getDate());
+  const b=new Date(e.getFullYear(),e.getMonth(),e.getDate());
+  return Math.round((b-a)/86400000);
+}
+function examLabel(){
+  const d=daysToExam();
+  if(d>1)return d+" days to go";
+  if(d===1)return "tomorrow";
+  if(d===0)return "today — good luck";
+  return "exam has passed";
+}
+function shortScore(q,txt){
+  const n=norm(txt||"");
+  let hit=0;const got=[];
+  (q.keys||[]).forEach(group=>{
+    const f=group.some(k=>{const t=norm(k).trim();return t.length>0&&n.indexOf(t)>-1;});
+    if(f){hit++;got.push(group[0]);}
+  });
+  return {hit:hit,need:q.need||1,ok:hit>=(q.need||1)};
+}
+function correct(q,g){
+  switch(q.t){
+    case "mc": return g===q.a;
+    case "tf": return g===q.a;
+    case "multi": return g&&g.slice().sort().join(",")===q.a.slice().sort().join(",");
+    case "num": return g!==null&&g!==undefined&&isFinite(g)&&Math.abs(g-q.a)<=(q.tol||0.01);
+    case "order": return g&&g.length===q.items.length&&g.every((v,i)=>v===i);
+    case "match": return g&&q.pairs.every((p,i)=>g[i]===i);
+    case "label": return g&&q.pins.every((p,i)=>g[i]===i);
+    case "short": return shortScore(q,g).ok;
+  }
+  return false;
+}
+function answerText(q){
+  switch(q.t){
+    case "mc": return q.opts[q.a];
+    case "tf": return q.a?"True":"False";
+    case "multi": return q.a.map(i=>q.opts[i]).join(" · ");
+    case "num": return q.a+" "+(q.unit||"");
+    case "order": return q.items.map((it,i)=>(i+1)+". "+it).join("  ");
+    case "match": return q.pairs.map(p=>p[0]+" → "+p[1]).join("  ·  ");
+    case "label": return q.pins.map((p,i)=>(i+1)+" = "+p.lab).join("  ·  ");
+    case "short": return q.model;
+  }
+  return "";
+}
+
+/* ═══════════════ session state ═══════════════ */
+/* Options are stored answer-first in the bank, so every question is re-shuffled
+   each time it is served. "None of them" style options stay last. */
+const PINLAST=/^(none |all of|all sections|both at|neither)/i;
+function prepare(q){
+  const c=Object.assign({},q);
+  delete c.ordShuf;delete c.rShuf;
+  if(q.t==="mc"||q.t==="multi"){
+    const idx=q.opts.map((_,i)=>i);
+    const perm=shuffle(idx.filter(i=>!PINLAST.test(q.opts[i]))).concat(idx.filter(i=>PINLAST.test(q.opts[i])));
+    c.opts=perm.map(i=>q.opts[i]);
+    c.a=q.t==="mc"?perm.indexOf(q.a):q.a.map(i=>perm.indexOf(i)).sort((x,y)=>x-y);
+  }
+  return c;
+}
+let S=null; /* {mode,queue,i,given[],ok[],locked[],mock,title,tc} */
+let draft=null;
+
+function startSession(opts){
+  S={mode:opts.mode,title:opts.title,tc:opts.tc||"var(--accent)",mock:!!opts.mock,
+     queue:opts.queue.map(prepare),i:0,given:[],ok:[],locked:[]};
+  draft=null;
+  go("quiz");
+}
+function pickTopic(id){
+  const t=TMAP[id];
+  startSession({mode:"topic",title:t.name,tc:t.tc,queue:shuffle(BANK.filter(q=>q.tp===id))});
+}
+function weight(q){
+  const s=save.stats[q.id];
+  if(!s||!s.seen)return 3;
+  if(s.last===false)return 5;
+  if(s.last===true)return 1;
+  return 2;
+}
+function pickWeighted(n,pool){
+  const bag=[];
+  pool.forEach(q=>{const w=weight(q);for(let k=0;k<w;k++)bag.push(q);});
+  const out=[],seen={};
+  const mixed=shuffle(bag);
+  for(const q of mixed){if(!seen[q.id]){seen[q.id]=1;out.push(q);if(out.length>=n)break;}}
+  return out;
+}
+function quickTen(){startSession({mode:"quick",title:"Quick 10",queue:pickWeighted(10,BANK)});}
+function weakSpots(){
+  const pool=BANK.filter(q=>{const s=save.stats[q.id];return !s||!s.seen||s.last===false;});
+  if(!pool.length){alertBox("nothing weak left");return;}
+  startSession({mode:"weak",title:"Weak spots",queue:shuffle(pool).slice(0,20)});
+}
+function mockExam(){
+  const per=Math.max(5,Math.round(42/TOPICS.length));
+  let q=[];
+  TOPICS.forEach(t=>{q=q.concat(pickWeighted(per,BANK.filter(x=>x.tp===t.id)));});
+  startSession({mode:"mock",title:"Mock exam",mock:true,queue:shuffle(q)});
+}
+let noteTimer=null;
+function alertBox(msg){
+  const b=$("#barCount");if(!b)return;
+  b.textContent=msg.slice(0,28);b.classList.add("hot");
+  clearTimeout(noteTimer);noteTimer=setTimeout(paintBar,4200);
+}
+
+/* ═══════════════ router ═══════════════ */
+let screen="home";
+function go(s){screen=s;window.scrollTo(0,0);render();}
+function render(){
+  if(screen==="home")homeScreen();
+  else if(screen==="quiz")quizScreen();
+  else if(screen==="results")resultsScreen();
+  else if(screen==="cards")cardScreen();
+  paintBar();
+}
+function paintBar(){
+  const bt=$("#barTopic"),bc=$("#barCount"),bx=$("#barExit");
+  bc.classList.remove("hot");
+  if(screen==="quiz"&&S){
+    bt.textContent=S.title;
+    bc.textContent=(S.i+1)+" / "+S.queue.length;
+    bx.hidden=false;
+  }else if(screen==="cards"){
+    bt.textContent="Definition cards";bc.textContent=(cardIdx+1)+" / "+CARDS.length;bx.hidden=false;
+  }else if(screen==="results"&&S){
+    bt.textContent=S.title;
+    const sc=S.ok.filter(Boolean).length;
+    bc.textContent=sc+" / "+S.queue.length;bx.hidden=false;
+  }else{
+    bt.textContent="science revision";
+    bc.textContent=examLabel();bc.classList.add("hot");bx.hidden=true;
+  }
+}
+$("#barExit").addEventListener("click",()=>go("home"));
+
+/* ═══════════════ home ═══════════════ */
+function homeScreen(){
+  const answered=Object.keys(save.stats).filter(k=>save.stats[k].seen).length;
+  const mastered=BANK.filter(q=>save.stats[q.id]&&save.stats[q.id].last===true).length;
+  let h="";
+  h+='<div class="hero">'+
+     '<span class="eyebrow">yearly exam · '+esc(new Date(save.exam+"T00:00:00").toLocaleDateString(undefined,{weekday:"long",day:"numeric",month:"long"}))+'</span>'+
+     '<h1>Atoms to <em>Archaeopteryx</em></h1>'+
+     '<p class="lede">Every dot point on your revision sheet, turned into '+BANK.length+' questions across five units. Answer, see the model answer, repeat the ones you miss.</p>'+
+     '<div class="count"><span class="big mono">'+Math.max(0,daysToExam())+'</span>'+
+       '<span class="cap">'+esc(examLabel())+'<br>'+mastered+' of '+BANK.length+' questions correct on the last try</span>'+
+       '<input type="date" id="examDate" value="'+esc(save.exam)+'" aria-label="Exam date"></div>'+
+     '</div>';
+
+  h+='<div class="sect"><div class="sect-h"><h2>Start a round</h2><span>'+answered+' attempted</span></div><div class="modes">'+
+     '<button class="mode primary" data-go="quick"><span class="t">Quick 10</span><span class="d">Ten questions, mixed units, weighted towards what you keep getting wrong.</span></button>'+
+     '<button class="mode" data-go="mock"><span class="t">Mock exam</span><span class="d">About 42 questions, all five units, no feedback until the end.</span></button>'+
+     '<button class="mode" data-go="weak"><span class="t">Weak spots</span><span class="d">Only the questions you missed or have never seen.</span></button>'+
+     '<button class="mode" data-go="cards"><span class="t">Definition cards</span><span class="d">Flip through the definitions, laws and formulas you have to state.</span></button>'+
+     '</div></div>';
+
+  h+='<div class="sect"><div class="sect-h"><h2>By unit</h2><span>tap to drill</span></div><div class="topics">';
+  TOPICS.forEach(t=>{
+    const qs=BANK.filter(q=>q.tp===t.id);
+    const ok=qs.filter(q=>save.stats[q.id]&&save.stats[q.id].last===true).length;
+    const pct=Math.round(ok/qs.length*100);
+    h+='<button class="topic" data-topic="'+t.id+'" style="--tc:'+t.tc+'">'+
+       '<span class="dot"></span>'+
+       '<span class="nm">'+esc(t.name)+'<span class="meter"><i style="width:'+pct+'%"></i></span>'+
+       '<span class="sub">'+esc(t.note)+'</span></span>'+
+       '<span class="score">'+ok+'/'+qs.length+'<br>'+pct+'%</span></button>';
+  });
+  h+='</div></div>';
+  h+='<div class="foot"><span>Progress is saved in this browser only.</span><button id="reset">Reset all progress</button></div>';
+  view.innerHTML=h;
+
+  view.querySelectorAll("[data-topic]").forEach(b=>b.addEventListener("click",()=>pickTopic(b.dataset.topic)));
+  view.querySelectorAll("[data-go]").forEach(b=>b.addEventListener("click",()=>{
+    const m=b.dataset.go;
+    if(m==="quick")quickTen();else if(m==="mock")mockExam();else if(m==="weak")weakSpots();
+    else{cardIdx=0;cardBack=false;go("cards");}
+  }));
+  $("#examDate").addEventListener("change",e=>{if(e.target.value){save.exam=e.target.value;persist();render();}});
+  $("#reset").addEventListener("click",()=>{save.stats={};persist();render();alertBox("Progress cleared");});
+}
+
+/* ═══════════════ quiz ═══════════════ */
+function quizScreen(){
+  if(!S){go("home");return;}
+  if(S.i>=S.queue.length){go("results");return;}
+  const q=S.queue[S.i],t=TMAP[q.tp];
+  const locked=!!S.locked[S.i];
+  const pct=Math.round(S.i/S.queue.length*100);
+  let h='<div class="prog"><i style="width:'+pct+'%"></i></div>';
+  h+='<div class="qmeta"><span class="chip" style="--tc:'+t.tc+'">'+esc(t.name)+'</span>';
+  h+='<span class="chip flat">'+({mc:"multiple choice",multi:"select all",tf:"true / false",num:"calculate",short:"written answer",order:"put in order",match:"match",label:"label the diagram"})[q.t]+'</span></div>';
+  h+='<div class="card"><p class="qtext">'+esc(q.q)+'</p>';
+  if(q.fig)h+='<div class="fig">'+FIGS[q.fig]+'</div>';
+  h+=bodyFor(q,locked);
+  if(locked&&!S.mock)h+=feedbackFor(q);
+  h+='<div class="actions">';
+  if(!locked)h+='<button class="btn" id="check"'+(ready(q)?"":" disabled")+'>'+(S.mock?"Answer and continue":"Check answer")+'</button>';
+  else h+='<button class="btn" id="next">'+(S.i+1>=S.queue.length?"See results":"Next question")+'</button>';
+  if(!locked&&(q.t==="short"))h+='<button class="btn sec" id="skip">Show answer</button>';
+  h+='</div></div>';
+  view.innerHTML=h;
+  wire(q,locked);
+}
+function ready(q){
+  const g=draft;
+  if(q.t==="short")return typeof g==="string"&&g.trim().length>0;
+  if(q.t==="multi")return Array.isArray(g)&&g.length>0;
+  if(q.t==="num")return g!==null&&g!==undefined&&g!==""&&isFinite(Number(g));
+  if(q.t==="order")return Array.isArray(g)&&g.length===q.items.length;
+  if(q.t==="match")return Array.isArray(g)&&g.filter(v=>v!==null&&v!==undefined).length===q.pairs.length;
+  if(q.t==="label")return Array.isArray(g)&&g.filter(v=>v!==null&&v!==undefined).length===q.pins.length;
+  return g!==null&&g!==undefined;
+}
+function stateFor(q,i,locked){
+  /* class for an option button */
+  const g=locked?S.given[S.i]:draft;
+  if(!locked){
+    if(q.t==="multi")return Array.isArray(g)&&g.indexOf(i)>-1?"on":"";
+    return g===i?"on":"";
+  }
+  if(S.mock){
+    if(q.t==="multi")return Array.isArray(g)&&g.indexOf(i)>-1?"on":"";
+    return g===i?"on":"";
+  }
+  const isA=q.t==="multi"?q.a.indexOf(i)>-1:(q.t==="tf"?(i===0)===q.a:q.a===i);
+  const chose=q.t==="multi"?(Array.isArray(g)&&g.indexOf(i)>-1):(q.t==="tf"?g===(i===0):g===i);
+  if(isA)return "right";
+  if(chose)return "wrong";
+  return "";
+}
+function bodyFor(q,locked){
+  let h="";
+  if(q.t==="mc"||q.t==="multi"){
+    if(q.t==="multi")h+='<p class="qhint">Select every correct option, then check.</p>';
+    h+='<div class="opts">';
+    q.opts.forEach((o,i)=>{
+      const st=stateFor(q,i,locked);
+      const tag=(locked&&!S.mock)?(st==="right"?'<span class="tag">correct</span>':(st==="wrong"?'<span class="tag">your pick</span>':"")):"";
+      h+='<button class="opt '+st+'" data-opt="'+i+'"'+(locked?" disabled":"")+'><span class="key">'+(i+1)+'</span><span>'+esc(o)+'</span>'+tag+'</button>';
+    });
+    h+='</div>';
+  }
+  else if(q.t==="tf"){
+    h+='<div class="two">';
+    ["True","False"].forEach((o,i)=>{
+      const st=stateFor(q,i,locked);
+      h+='<button class="opt '+st+'" data-tf="'+(i===0?1:0)+'"'+(locked?" disabled":"")+'>'+o+'</button>';
+    });
+    h+='</div>';
+  }
+  else if(q.t==="num"){
+    const g=locked?S.given[S.i]:draft;
+    h+='<div class="numrow"><input type="text" inputmode="decimal" id="numIn" value="'+(g===null||g===undefined?"":esc(g))+'" placeholder="0" autocomplete="off"'+(locked?" disabled":"")+'>'+
+       '<span class="unit">'+esc(q.unit||"")+'</span></div>';
+  }
+  else if(q.t==="short"){
+    const g=locked?S.given[S.i]:(draft||"");
+    h+='<p class="qhint">Write it out the way you would in the exam — full sentences, key words included.</p>';
+    h+='<textarea id="shortIn" placeholder="Your answer..."'+(locked?" disabled":"")+'>'+esc(g||"")+'</textarea>';
+  }
+  else if(q.t==="order"){
+    const g=locked?S.given[S.i]:(draft||[]);
+    const order=q.ordShuf||(q.ordShuf=shuffle(q.items.map((_,i)=>i)));
+    h+='<p class="qhint">Tap the steps in the right order.</p><div class="ord">';
+    g.forEach((oi,pos)=>{
+      let cls="";
+      if(locked&&!S.mock)cls=oi===pos?"right":"wrong";
+      h+='<div class="ordrow '+cls+'"><span class="n">'+(pos+1)+'</span><span>'+esc(q.items[oi])+'</span>'+
+         (!locked?'<button class="tag" data-undo="'+pos+'" style="margin-left:auto;font-size:11px;color:var(--ink-3)">remove</button>':"")+'</div>';
+    });
+    h+='</div>';
+    if(!locked){
+      h+='<div class="bank">';
+      order.forEach(oi=>{if(g.indexOf(oi)<0)h+='<button class="tok" data-pick="'+oi+'">'+esc(q.items[oi])+'</button>';});
+      h+='</div>';
+    }
+    if(locked&&!S.mock&&!correct(q,S.given[S.i])){
+      h+='<div class="slots">';
+      q.items.forEach((it,i)=>{h+='<div class="slot"><span class="n plain">'+(i+1)+'</span><span class="lbl"><b>'+esc(it)+'</b></span></div>';});
+      h+='</div>';
+    }
+  }
+  else if(q.t==="match"||q.t==="label"){
+    const isLabel=q.t==="label";
+    const rights=isLabel?q.pins.map(p=>p.lab):q.pairs.map(p=>p[1]);
+    const lefts=isLabel?q.pins.map((p,i)=>"Pointer "+(i+1)):q.pairs.map(p=>p[0]);
+    if(!q.rShuf)q.rShuf=shuffle(rights.map((_,i)=>i));
+    const g=locked?S.given[S.i]:(draft||rights.map(()=>null));
+    h+='<p class="qhint">'+(isLabel?"Tap a label, then tap the numbered pointer it belongs to.":"Tap an answer, then the row it belongs to.")+'</p>';
+    h+='<div class="bank" id="bankRow">';
+    q.rShuf.forEach(ri=>{
+      const used=g.indexOf(ri)>-1;
+      h+='<button class="tok '+(used?"used":"")+(pickedTok===ri?" on":"")+'" data-tok="'+ri+'"'+(locked?" disabled":"")+'>'+esc(rights[ri])+'</button>';
+    });
+    h+='</div><div class="slots">';
+    lefts.forEach((l,i)=>{
+      const v=g[i];
+      let cls=v===null||v===undefined?"":"filled";
+      if(locked&&!S.mock)cls="filled "+(v===i?"right":"wrong");
+      h+='<div class="slot"><span class="n">'+(i+1)+'</span><div style="min-width:0">'+
+         (isLabel?"":'<span class="lbl"><b>'+esc(l)+'</b></span>')+
+         '<div class="drop '+cls+'" data-slot="'+i+'">'+(v===null||v===undefined?"tap to fill":esc(rights[v]))+
+         ((locked&&!S.mock&&v!==i)?'<span class="fix">'+esc(rights[i])+'</span>':"")+'</div></div></div>';
+    });
+    h+='</div>';
+  }
+  return h;
+}
+function feedbackFor(q){
+  const g=S.given[S.i],ok=S.ok[S.i];
+  let h='<div class="fb '+(ok?"ok":"no")+'">';
+  h+='<span class="v">'+(ok?"Correct":"Not quite")+'</span>';
+  if(q.t==="short"){
+    const sc=shortScore(q,g);
+    h+='<div class="body">You included '+sc.hit+' of the '+sc.need+' key ideas this answer needs.</div>';
+    h+='<div class="model"><span class="h">Model answer</span>'+esc(q.model)+'</div>';
+    h+='<div class="selfmark"><button data-mark="1">I had this — mark correct</button><button data-mark="0">I missed it — mark wrong</button></div>';
+  }else{
+    if(!ok)h+='<div class="body"><strong>Answer:</strong> '+esc(answerText(q))+'</div>';
+    if(q.why)h+='<div class="body">'+esc(q.why)+'</div>';
+  }
+  h+='</div>';
+  return h;
+}
+let pickedTok=null;
+function wire(q,locked){
+  if(!locked){
+    view.querySelectorAll("[data-opt]").forEach(b=>b.addEventListener("click",()=>{
+      const i=+b.dataset.opt;
+      if(q.t==="multi"){
+        const a=Array.isArray(draft)?draft.slice():[];
+        const k=a.indexOf(i);if(k>-1)a.splice(k,1);else a.push(i);draft=a;
+      }else draft=i;
+      quizScreen();
+    }));
+    view.querySelectorAll("[data-tf]").forEach(b=>b.addEventListener("click",()=>{draft=b.dataset.tf==="1";quizScreen();}));
+    const ni=$("#numIn");if(ni){ni.addEventListener("input",()=>{draft=ni.value;const c=$("#check");if(c)c.disabled=!ready(q);});
+      ni.addEventListener("keydown",e=>{if(e.key==="Enter"&&ready(q))submit(q);});ni.focus({preventScroll:true});}
+    const si=$("#shortIn");if(si){si.addEventListener("input",()=>{draft=si.value;const c=$("#check");if(c)c.disabled=!ready(q);});}
+    view.querySelectorAll("[data-pick]").forEach(b=>b.addEventListener("click",()=>{
+      const a=Array.isArray(draft)?draft.slice():[];a.push(+b.dataset.pick);draft=a;quizScreen();}));
+    view.querySelectorAll("[data-undo]").forEach(b=>b.addEventListener("click",()=>{
+      const a=draft.slice();a.splice(+b.dataset.undo,1);draft=a;quizScreen();}));
+    view.querySelectorAll("[data-tok]").forEach(b=>b.addEventListener("click",()=>{
+      pickedTok=pickedTok===+b.dataset.tok?null:+b.dataset.tok;quizScreen();}));
+    view.querySelectorAll("[data-slot]").forEach(b=>b.addEventListener("click",()=>{
+      const i=+b.dataset.slot;
+      const n=(q.t==="label"?q.pins.length:q.pairs.length);
+      const a=Array.isArray(draft)?draft.slice():new Array(n).fill(null);
+      if(pickedTok===null){a[i]=null;}
+      else{const prev=a.indexOf(pickedTok);if(prev>-1)a[prev]=null;a[i]=pickedTok;pickedTok=null;}
+      draft=a;quizScreen();}));
+    const c=$("#check");if(c)c.addEventListener("click",()=>submit(q));
+    const sk=$("#skip");if(sk)sk.addEventListener("click",()=>{if(draft===null||draft===undefined)draft="";submit(q);});
+  }else{
+    const nx=$("#next");if(nx){nx.addEventListener("click",next);nx.focus({preventScroll:true});}
+    view.querySelectorAll("[data-mark]").forEach(b=>b.addEventListener("click",()=>{
+      const ok=b.dataset.mark==="1";
+      S.ok[S.i]=ok;const s=stat(q.id);
+      if(ok&&s.last!==true)s.ok++;if(!ok&&s.last===true)s.ok=Math.max(0,s.ok-1);
+      s.last=ok;persist();quizScreen();}));
+  }
+}
+function submit(q){
+  let g=draft;
+  if(q.t==="num")g=g===""||g===null||g===undefined?null:Number(String(g).replace(/\u2212/g,"-").replace(/[^0-9.\-]/g,""));
+  const ok=correct(q,g);
+  S.given[S.i]=g;S.ok[S.i]=ok;S.locked[S.i]=true;
+  const s=stat(q.id);s.seen++;if(ok)s.ok++;s.last=ok;persist();
+  pickedTok=null;
+  if(S.mock)next();else{quizScreen();}
+}
+function next(){
+  S.i++;draft=null;pickedTok=null;
+  if(S.i>=S.queue.length)go("results");else{window.scrollTo(0,0);quizScreen();paintBar();}
+}
+document.addEventListener("keydown",e=>{
+  if(screen!=="quiz"||!S)return;
+  const q=S.queue[S.i];if(!q)return;
+  if(document.activeElement&&/INPUT|TEXTAREA/.test(document.activeElement.tagName))return;
+  if(S.locked[S.i]&&(e.key==="Enter"||e.key===" ")){e.preventDefault();next();return;}
+  if(!S.locked[S.i]){
+    if((q.t==="mc"||q.t==="multi")&&/^[1-9]$/.test(e.key)){
+      const i=+e.key-1;if(i<q.opts.length){const b=view.querySelector('[data-opt="'+i+'"]');if(b)b.click();}
+    }
+    if(q.t==="tf"&&(e.key==="t"||e.key==="T"||e.key==="f"||e.key==="F")){
+      const b=view.querySelector('[data-tf="'+(/t/i.test(e.key)?1:0)+'"]');if(b)b.click();
+    }
+    if(e.key==="Enter"&&ready(q)){e.preventDefault();submit(q);}
+  }
+});
+
+/* ═══════════════ results ═══════════════ */
+function resultsScreen(){
+  if(!S){go("home");return;}
+  const n=S.queue.length,sc=S.ok.filter(Boolean).length,pct=Math.round(sc/n*100);
+  const r=46,C=2*Math.PI*r;
+  let h='<div class="score">'+
+    '<svg class="ring" viewBox="0 0 108 108" role="img" aria-label="'+pct+' per cent">'+
+    '<circle cx="54" cy="54" r="'+r+'" fill="none" stroke="var(--surface-3)" stroke-width="11"/>'+
+    '<circle cx="54" cy="54" r="'+r+'" fill="none" stroke="'+(pct>=80?"var(--good)":pct>=55?"var(--warn)":"var(--bad)")+'" stroke-width="11" stroke-linecap="round" stroke-dasharray="'+(C*pct/100)+' '+C+'" transform="rotate(-90 54 54)"/>'+
+    '<text x="54" y="60" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="21" font-weight="600" fill="var(--ink)">'+pct+'%</text></svg>'+
+    '<div><div class="pct mono">'+sc+' / '+n+'</div><p class="sl">'+esc(verdict(pct))+'</p></div></div>';
+
+  const byT={};
+  S.queue.forEach((q,i)=>{(byT[q.tp]=byT[q.tp]||[0,0]);byT[q.tp][1]++;if(S.ok[i])byT[q.tp][0]++;});
+  h+='<div class="sect"><div class="sect-h"><h2>By unit</h2><span>this round</span></div><div class="rows">';
+  TOPICS.forEach(t=>{if(!byT[t.id])return;const d=byT[t.id];
+    h+='<div class="row"><span class="nm">'+esc(t.name)+'<span class="meter" style="--tc:'+t.tc+'"><i style="width:'+Math.round(d[0]/d[1]*100)+'%"></i></span></span><span class="mono" style="font-size:13px">'+d[0]+'/'+d[1]+'</span></div>';
+  });
+  h+='</div></div>';
+
+  const miss=S.queue.map((q,i)=>[q,i]).filter(p=>!S.ok[p[1]]);
+  if(miss.length){
+    h+='<div class="sect"><div class="sect-h"><h2>Go over these</h2><span>'+miss.length+' to fix</span></div><div class="miss">';
+    miss.forEach(p=>{
+      const q=p[0],i=p[1];
+      h+='<div class="missq"><p class="q">'+esc(q.q)+'</p>'+
+         '<p class="a"><b>'+esc(q.t==="short"?"Model answer:":"Answer:")+'</b> '+esc(answerText(q))+'</p>'+
+         (q.why&&q.t!=="short"?'<p class="a">'+esc(q.why)+'</p>':"")+
+         (q.t==="short"?'<button data-remark="'+i+'">I actually had this — mark correct</button>':"")+
+         '</div>';
+    });
+    h+='</div></div>';
+  }
+  h+='<div class="actions">';
+  if(miss.length)h+='<button class="btn" id="retry">Retry the '+miss.length+' I missed</button>';
+  h+='<button class="btn'+(miss.length?" sec":"")+'" id="home2">Back to home</button></div>';
+  view.innerHTML=h;
+  const rt=$("#retry");if(rt)rt.addEventListener("click",()=>{
+    startSession({mode:"retry",title:"Second pass",queue:shuffle(miss.map(p=>p[0]))});});
+  $("#home2").addEventListener("click",()=>go("home"));
+  view.querySelectorAll("[data-remark]").forEach(b=>b.addEventListener("click",()=>{
+    const i=+b.dataset.remark,q=S.queue[i];
+    S.ok[i]=true;const s=stat(q.id);if(s.last!==true)s.ok++;s.last=true;persist();resultsScreen();paintBar();}));
+}
+function verdict(p){
+  if(p>=90)return "Exam-ready on this material. Keep the written answers tight and move to another unit.";
+  if(p>=75)return "Solid. Work through the list below, then run the same round again tomorrow.";
+  if(p>=50)return "Half of it is there. Read each model answer below out loud, then retry the ones you missed.";
+  return "This unit needs a proper read before drilling again. Start with the definition cards.";
+}
+
+/* ═══════════════ definition cards ═══════════════ */
+const CARDS=BANK.filter(q=>q.t==="short").map(q=>({f:q.q,b:q.model,tp:q.tp}))
+ .concat([
+  {f:"Formula: speed",b:"speed = distance ÷ time    (v = d/t)",tp:"motion"},
+  {f:"Formula: acceleration",b:"acceleration = (final speed − starting speed) ÷ time    a = (v − u)/t, in m/s²",tp:"motion"},
+  {f:"Formula: force",b:"force = mass × acceleration    (F = ma), in newtons",tp:"motion"},
+  {f:"Convert km/h to m/s",b:"Divide by 3.6. So 50 km/h ÷ 3.6 = 13.9 m/s. Going the other way, multiply by 3.6.",tp:"motion"},
+  {f:"pH ranges",b:"Acid: below 7 (0–6). Neutral: exactly 7. Base: above 7 (8–14). The further from 7, the stronger.",tp:"chem"},
+  {f:"Word equation: neutralisation",b:"acid + base → salt + water",tp:"chem"},
+  {f:"Word equation: acid + carbonate",b:"acid + metal carbonate → salt + water + carbon dioxide",tp:"chem"},
+  {f:"Word equation: acid + metal",b:"acid + metal → salt + hydrogen gas",tp:"chem"},
+  {f:"Word equation: combustion",b:"hydrocarbon + oxygen → carbon dioxide + water (+ energy)",tp:"chem"},
+  {f:"Four factors that change reaction rate",b:"Concentration, temperature, surface area, catalyst. All four work by changing how often particles collide, or how many collisions have enough energy to react.",tp:"chem"},
+  {f:"Layers of the Earth, outside in",b:"Crust → mantle → outer core → inner core.",tp:"plates"},
+  {f:"The three plate boundaries",b:"Divergent: plates move apart — mid-ocean ridges, rift valleys, new sea floor. Convergent: plates move together, one subducts — trenches, fold mountains, volcanoes. Transform: plates slide past — faults and strong shallow earthquakes, no volcanoes.",tp:"plates"},
+  {f:"Pangaea",b:"The original supercontinent. It split into Laurasia in the north and Gondwana in the south. Proposed by Alfred Wegener (1912).",tp:"plates"},
+  {f:"Evidence for continental drift",b:"Jigsaw fit of the coastlines; matching fossils on separated continents; matching rock types and mountain ranges; glacial deposits in now-tropical regions. Later: mid-ocean ridges, sea-floor spreading, magnetic striping, earthquake and volcano distribution, GPS.",tp:"plates"},
+  {f:"Evidence for evolution",b:"Fossil record including transitional fossils; comparative anatomy (homologous structures like the pentadactyl limb); DNA and biochemical similarity; comparative embryology; vestigial structures; biogeography; observed cases such as antibiotic resistance.",tp:"evol"},
+  {f:"Law of Superposition",b:"In undisturbed sedimentary layers, the oldest layer is at the bottom and the youngest is at the top.",tp:"evol"},
+  {f:"Archaeopteryx",b:"A transitional fossil: feathers and wings (bird) with teeth, clawed wings and a long bony tail (reptile). Evidence that birds evolved from reptiles.",tp:"evol"},
+  {f:"The three variables",b:"Independent: the one thing you change. Dependent: the thing you measure. Controlled: everything else kept the same, which makes it a fair test.",tp:"method"},
+  {f:"Reliability vs validity",b:"Reliability: repeat the test at least three times and average, so the results are consistent. Validity: change only the independent variable and control the rest, so the experiment actually tests the aim.",tp:"method"},
+  {f:"Hierarchy of organisation",b:"Cell → tissue → organ → organ system → organism.",tp:"body"},
+  {f:"CNS and PNS",b:"CNS = brain + spinal cord, the control centre that processes information and decides the response. PNS = all the nerves outside it; sensory neurons carry messages in from receptors, motor neurons carry instructions out to effectors (muscles and glands).",tp:"body"}
+ ]);
+let cardIdx=0,cardBack=false;
+function cardScreen(){
+  const c=CARDS[cardIdx],t=TMAP[c.tp];
+  let h='<div class="qmeta" style="margin-top:18px"><span class="chip" style="--tc:'+t.tc+'">'+esc(t.name)+'</span>'+
+        '<span class="chip flat">card '+(cardIdx+1)+' of '+CARDS.length+'</span></div>';
+  h+='<div class="fc"><p class="front">'+esc(c.f)+'</p>'+
+     '<p class="back'+(cardBack?"":" hidden")+'">'+esc(c.b)+'</p></div>';
+  h+='<div class="actions"><button class="btn" id="flip">'+(cardBack?"Hide answer":"Show answer")+'</button>'+
+     '<button class="btn sec" id="prevC">←</button><button class="btn sec" id="nextC">→</button></div>';
+  h+='<p class="tip">Space to flip, arrow keys to move between cards.</p>';
+  view.innerHTML=h;
+  $("#flip").addEventListener("click",()=>{cardBack=!cardBack;cardScreen();});
+  $("#nextC").addEventListener("click",()=>{cardIdx=(cardIdx+1)%CARDS.length;cardBack=false;cardScreen();paintBar();});
+  $("#prevC").addEventListener("click",()=>{cardIdx=(cardIdx-1+CARDS.length)%CARDS.length;cardBack=false;cardScreen();paintBar();});
+}
+document.addEventListener("keydown",e=>{
+  if(screen!=="cards")return;
+  if(e.key===" "){e.preventDefault();cardBack=!cardBack;cardScreen();}
+  if(e.key==="ArrowRight"){cardIdx=(cardIdx+1)%CARDS.length;cardBack=false;cardScreen();paintBar();}
+  if(e.key==="ArrowLeft"){cardIdx=(cardIdx-1+CARDS.length)%CARDS.length;cardBack=false;cardScreen();paintBar();}
+});
+
+/* ═══════════════ boot ═══════════════ */
+function start(){render();}
+if(window.claude&&window.claude.hot&&window.claude.hot.ready)window.claude.hot.ready(start);else start();
+if(window.claude&&window.claude.hot&&window.claude.hot.snapshot)window.claude.hot.snapshot(()=>({}));
+</script>
+<script>
+// Offline, so a train with no signal is still revision time. Scope is this
+// directory only, and registration waits for the page to finish loading.
+if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
+  addEventListener('load', function () {
+    navigator.serviceWorker.register('sw.js').catch(function () {});
+  });
+}
+</script>
+</body>
+</html>

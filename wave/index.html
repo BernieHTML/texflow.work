@@ -1,0 +1,1194 @@
+<!doctype html>
+<html lang="en" style="--a1:#0e7490;--a2:#22d3ee">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=5">
+<title>Wave (test) · TexFlow</title>
+<meta name="description" content="A dev test page: two phones agree they are in the same room by trading a short key over near-ultrasonic tones.">
+<!-- Deliberately not a Flow and deliberately not findable. It is a bench test
+     for a pairing mechanism, and it should not turn up in search or in the
+     browse grid while it is still being decided on. -->
+<meta name="robots" content="noindex, nofollow">
+<meta name="application-name" content="Wave">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Wave">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#f6f6f7" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0c0c0e" media="(prefers-color-scheme: dark)">
+<meta name="color-scheme" content="light dark">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%230e7490'/%3E%3Cg fill='none' stroke='%23e0f7ff' stroke-width='7' stroke-linecap='round'%3E%3Cpath d='M50 38v24'/%3E%3Cpath d='M34 28a30 30 0 000 44'/%3E%3Cpath d='M66 28a30 30 0 010 44'/%3E%3C/g%3E%3C/svg%3E">
+<style>
+/* The tokens and the chrome are lifted from the Flow runtime so this sits in
+   the same visual language, but nothing is shared: one file, no network. */
+:root {
+  --a1: #0e7490;
+  --a2: #22d3ee;
+  --bg: #f6f6f7;
+  --bg-deep: #eeeef1;
+  --surface: #ffffff;
+  --surface-2: #fafafb;
+  --line: rgba(9, 9, 11, 0.09);
+  --line-strong: rgba(9, 9, 11, 0.16);
+  --ink: #18181b;
+  --ink-2: #52525b;
+  --ink-3: #8b8b95;
+  --danger: #dc2626;
+  --good: #15803d;
+  --warn: #b45309;
+  --shadow-1: 0 1px 2px rgba(9, 9, 11, 0.04), 0 1px 3px rgba(9, 9, 11, 0.05);
+  --shadow-2: 0 2px 6px rgba(9, 9, 11, 0.05), 0 12px 28px rgba(9, 9, 11, 0.09);
+  --r-sm: 10px;
+  --r: 14px;
+  --r-lg: 20px;
+  --r-xl: 26px;
+  --pad: 18px;
+  --header: 56px;
+  --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  --ease: cubic-bezier(0.32, 0.72, 0, 1);
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0c0c0e;
+    --bg-deep: #08080a;
+    --surface: #17171a;
+    --surface-2: #1e1e22;
+    --line: rgba(255, 255, 255, 0.09);
+    --line-strong: rgba(255, 255, 255, 0.18);
+    --ink: #f4f4f5;
+    --ink-2: #a1a1aa;
+    --ink-3: #71717a;
+    --danger: #f87171;
+    --good: #4ade80;
+    --warn: #fbbf24;
+    --shadow-1: 0 1px 2px rgba(0, 0, 0, 0.4);
+    --shadow-2: 0 2px 6px rgba(0, 0, 0, 0.4), 0 12px 28px rgba(0, 0, 0, 0.5);
+    color-scheme: dark;
+  }
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+/* .flow-btn sets display, and an author rule beats the browser's own
+   [hidden] { display: none }. Without this the buttons meant to appear later
+   are all on screen at once. */
+[hidden] { display: none !important; }
+html, body { margin: 0; padding: 0; min-height: 100%; overscroll-behavior-y: none; }
+body {
+  font-family: var(--font);
+  font-size: 16px;
+  line-height: 1.45;
+  color: var(--ink);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-text-size-adjust: 100%;
+}
+button, input, select { font: inherit; color: inherit; }
+input, select { -webkit-appearance: none; appearance: none; }
+h1, h2, h3, p, ul { margin: 0; }
+ul { padding: 0; list-style: none; }
+a { color: var(--a1); }
+@media (prefers-color-scheme: dark) { a { color: var(--a2); } }
+
+.flow-app { display: flex; flex-direction: column; min-height: 100dvh; }
+.flow-bar {
+  position: sticky; top: 0; z-index: 40;
+  display: flex; align-items: center; gap: 10px;
+  height: calc(var(--header) + env(safe-area-inset-top));
+  padding: env(safe-area-inset-top) max(var(--pad), env(safe-area-inset-left)) 0 max(var(--pad), env(safe-area-inset-right));
+  background: color-mix(in srgb, var(--bg) 82%, transparent);
+  backdrop-filter: saturate(1.6) blur(16px);
+  -webkit-backdrop-filter: saturate(1.6) blur(16px);
+  border-bottom: 1px solid var(--line);
+}
+.flow-mark-sm { flex: none; display: block; width: 28px; height: 28px; }
+.flow-bar-title { font-size: 16px; font-weight: 600; letter-spacing: -0.01em; }
+.wv-test-tag {
+  flex: none; margin-left: 2px;
+  font-size: 11px; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase;
+  color: var(--warn);
+  border: 1px solid color-mix(in srgb, var(--warn) 40%, transparent);
+  border-radius: 999px; padding: 2px 8px;
+}
+.flow-main {
+  flex: 1; display: flex; flex-direction: column;
+  width: 100%; max-width: 620px; margin: 0 auto;
+  padding: 16px max(var(--pad), env(safe-area-inset-left)) 0 max(var(--pad), env(safe-area-inset-right));
+}
+.flow-section { padding-bottom: 18px; }
+.flow-dock {
+  position: sticky; bottom: 0; z-index: 30;
+  margin: 16px calc(var(--pad) * -1) 0; margin-top: auto;
+  padding: 12px var(--pad) calc(12px + env(safe-area-inset-bottom));
+  background: linear-gradient(to top, var(--bg) 62%, transparent);
+  display: grid; gap: 9px;
+}
+
+.flow-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  width: 100%; min-height: 52px; padding: 0 20px;
+  border: 0; border-radius: var(--r);
+  background: linear-gradient(135deg, var(--a1), var(--a2));
+  color: #fff; font-size: 16px; font-weight: 600; letter-spacing: -0.01em;
+  text-decoration: none; cursor: pointer; box-shadow: var(--shadow-1);
+  transition: transform 0.16s var(--ease), filter 0.16s, opacity 0.16s;
+}
+.flow-btn:active { transform: scale(0.975); filter: brightness(0.95); }
+.flow-btn[disabled] { opacity: 0.4; pointer-events: none; }
+.flow-btn.is-quiet { background: var(--surface); color: var(--ink); border: 1px solid var(--line-strong); box-shadow: none; }
+.flow-btn.is-ghost { background: none; color: var(--ink-2); box-shadow: none; font-weight: 550; min-height: 44px; }
+
+.flow-lede { color: var(--ink-2); font-size: 14.5px; }
+.flow-lede + .flow-lede { margin-top: 8px; }
+
+.flow-card {
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: var(--r-lg); box-shadow: var(--shadow-1);
+  padding: 15px; margin-top: 14px;
+}
+.flow-label {
+  font-size: 11px; font-weight: 650; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--ink-3);
+}
+
+/* ------------------------------------------------------------------- keys */
+
+.wv-keys { display: grid; grid-template-columns: 1fr; gap: 10px; margin-top: 14px; }
+.wv-keys.is-paired { grid-template-columns: 1fr 1fr; }
+.wv-key {
+  border-radius: var(--r-xl); padding: 16px 16px 18px;
+  color: #fff; background: linear-gradient(135deg, var(--a1), var(--a2));
+  box-shadow: var(--shadow-2);
+}
+.wv-key.is-peer { background: linear-gradient(135deg, #15803d, #4ade80); }
+.wv-key-label { font-size: 11px; font-weight: 650; letter-spacing: 0.08em; text-transform: uppercase; opacity: 0.8; }
+.wv-key-value {
+  font-family: var(--mono); font-size: clamp(26px, 10vw, 40px); font-weight: 650;
+  letter-spacing: 0.04em; line-height: 1.15; margin-top: 8px;
+}
+.wv-key-value.is-hidden { letter-spacing: 0.12em; opacity: 0.55; }
+.wv-keys.is-paired .wv-key-value { font-size: clamp(20px, 7vw, 28px); }
+
+/* --------------------------------------------------------------- monitor */
+
+.wv-monitor { display: none; }
+.wv-monitor.is-on { display: block; }
+
+.wv-state { display: flex; align-items: center; gap: 10px; }
+.wv-dot {
+  flex: none; width: 12px; height: 12px; border-radius: 50%;
+  background: var(--ink-3); transition: background 0.2s;
+}
+.wv-dot.is-send { background: var(--a2); box-shadow: 0 0 0 6px color-mix(in srgb, var(--a2) 22%, transparent); }
+.wv-dot.is-listen { background: var(--good); }
+.wv-dot.is-hold { background: var(--warn); }
+.wv-dot.is-bad { background: var(--danger); box-shadow: 0 0 0 5px color-mix(in srgb, var(--danger) 20%, transparent); }
+.wv-state-text.is-bad { color: var(--danger); }
+
+.wv-tones {
+  margin-top: 9px; font-family: var(--mono); font-size: 11.5px; line-height: 1.7;
+  color: var(--ink-3); word-spacing: 0.1em;
+}
+.wv-tones b { color: var(--ink-2); font-weight: 600; }
+.wv-best { color: var(--ink-2); }
+.wv-best.is-over { color: var(--good); font-weight: 600; }
+.wv-state-text { font-size: 15px; font-weight: 600; }
+.wv-state-sub { margin-left: auto; font-family: var(--mono); font-size: 12.5px; color: var(--ink-3); }
+
+/* The ring is driven off the scheduled AudioContext start time, so if it blips
+   the oscillator really did fire. It is the cheapest way to tell "the tone is
+   inaudible" apart from "nothing is being sent". */
+.wv-pulse-wrap { display: grid; place-items: center; height: 108px; margin: 6px 0 2px; }
+.wv-pulse { position: relative; width: 74px; height: 74px; display: grid; place-items: center; }
+.wv-pulse i {
+  position: absolute; inset: 0; border-radius: 50%;
+  border: 2px solid color-mix(in srgb, var(--a2) 60%, transparent);
+  opacity: 0; transform: scale(0.55);
+}
+.wv-pulse.is-live i { animation: wv-ring 0.9s var(--ease) infinite; }
+.wv-pulse.is-live i:nth-child(2) { animation-delay: 0.3s; }
+.wv-pulse.is-live i:nth-child(3) { animation-delay: 0.6s; }
+@keyframes wv-ring {
+  0% { opacity: 0.9; transform: scale(0.5); }
+  100% { opacity: 0; transform: scale(1.5); }
+}
+.wv-pulse b {
+  position: relative; width: 46px; height: 46px; border-radius: 50%;
+  background: var(--bg-deep); display: grid; place-items: center;
+  font-family: var(--mono); font-size: 11px; font-weight: 700; color: var(--ink-3);
+  transition: background 0.18s, color 0.18s, transform 0.18s var(--ease);
+}
+.wv-pulse.is-live b {
+  background: linear-gradient(135deg, var(--a1), var(--a2)); color: #fff; transform: scale(1.08);
+}
+
+.wv-meter { margin-top: 4px; }
+.wv-meter-row { display: flex; align-items: baseline; gap: 8px; }
+.wv-meter-row span { font-family: var(--mono); font-size: 12.5px; color: var(--ink-2); margin-left: auto; }
+.wv-bar { height: 7px; border-radius: 4px; background: var(--bg-deep); overflow: hidden; margin-top: 7px; }
+.wv-bar i { display: block; height: 100%; width: 0; border-radius: 4px; background: linear-gradient(90deg, var(--a1), var(--a2)); transition: width 0.1s linear; }
+.wv-bar i.is-over { background: linear-gradient(90deg, var(--good), var(--good)); }
+.wv-gate { position: relative; height: 0; }
+.wv-gate i {
+  position: absolute; top: -11px; width: 2px; height: 15px;
+  background: var(--ink-3); border-radius: 1px;
+}
+
+.wv-log {
+  margin-top: 12px; max-height: 260px; overflow-y: auto;
+  font-family: var(--mono); font-size: 12px; line-height: 1.6;
+  background: var(--bg-deep); border-radius: var(--r); padding: 10px 11px;
+  -webkit-overflow-scrolling: touch;
+}
+.wv-log li { display: flex; gap: 8px; color: var(--ink-2); }
+.wv-log li em { flex: none; font-style: normal; color: var(--ink-3); }
+.wv-log li.is-good { color: var(--good); font-weight: 600; }
+.wv-log li.is-bad { color: var(--danger); }
+.wv-log li.is-warn { color: var(--warn); }
+
+/* ------------------------------------------------------------------ tuning */
+
+details.wv-tune { margin-top: 14px; }
+details.wv-tune summary {
+  list-style: none; cursor: pointer; font-size: 13px; font-weight: 600;
+  color: var(--ink-2); padding: 6px 0;
+}
+details.wv-tune summary::-webkit-details-marker { display: none; }
+details.wv-tune summary::before { content: '▸ '; color: var(--ink-3); }
+details.wv-tune[open] summary::before { content: '▾ '; }
+.wv-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.wv-field { display: grid; gap: 5px; }
+.wv-field label { font-size: 11px; font-weight: 650; letter-spacing: 0.05em; text-transform: uppercase; color: var(--ink-3); }
+.wv-field input, .wv-field select {
+  min-height: 42px; padding: 0 11px; border-radius: var(--r-sm);
+  border: 1px solid var(--line-strong); background: var(--surface-2);
+  font-family: var(--mono); font-size: 14px;
+}
+.wv-field.is-wide { grid-column: 1 / -1; }
+.wv-note { font-size: 12.5px; color: var(--ink-3); margin-top: 10px; }
+
+/* ------------------------------------------------------------------- done */
+
+.wv-done { display: none; text-align: center; padding: 6px 0 2px; }
+.wv-done.is-on { display: block; }
+.wv-tick { width: 76px; height: 76px; display: block; margin: 4px auto 10px; }
+.wv-tick circle, .wv-tick path { fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.wv-tick circle { stroke: color-mix(in srgb, var(--good) 45%, transparent); stroke-width: 3; stroke-dasharray: 145; stroke-dashoffset: 145; animation: wv-draw 0.5s var(--ease) forwards; }
+.wv-tick path { stroke: var(--good); stroke-width: 5; stroke-dasharray: 44; stroke-dashoffset: 44; animation: wv-draw 0.32s var(--ease) 0.34s forwards; }
+@keyframes wv-draw { to { stroke-dashoffset: 0; } }
+.wv-done h2 { font-size: 20px; font-weight: 660; letter-spacing: -0.02em; }
+
+.wv-err {
+  display: none; margin-top: 12px; padding: 12px 13px;
+  border-radius: var(--r); font-size: 13.5px;
+  background: color-mix(in srgb, var(--danger) 10%, var(--surface));
+  border: 1px solid color-mix(in srgb, var(--danger) 30%, transparent);
+  color: var(--ink);
+}
+.wv-err.is-on { display: block; }
+
+.wv-foot { padding: 18px 0 26px; font-size: 12.5px; color: var(--ink-3); }
+
+/* The page serves two jobs: hosted it hands out cards, saved it is one. */
+body.is-card .wv-hosted { display: none !important; }
+body:not(.is-card) .wv-cardonly { display: none !important; }
+
+.flow-input {
+  width: 100%; min-height: 46px; padding: 0 13px; margin-top: 10px;
+  border: 1px solid var(--line-strong); border-radius: var(--r-sm);
+  background: var(--surface-2); font-size: 15px;
+}
+.flow-input::placeholder { color: var(--ink-3); }
+
+/* ------------------------------------------------------------- card face */
+
+.wv-card {
+  position: relative; overflow: hidden;
+  border-radius: var(--r-xl); padding: 20px;
+  color: #fff; background: linear-gradient(135deg, var(--a1), var(--a2));
+  box-shadow: var(--shadow-2);
+}
+/* Three arcs echoing the mark, big and faint, so the face reads as a card
+   rather than a coloured box. Drawn, not fetched. */
+.wv-card::before {
+  content: ''; position: absolute; right: -70px; top: -70px;
+  width: 230px; height: 230px; border-radius: 50%;
+  border: 26px solid rgba(255, 255, 255, 0.09);
+  box-shadow: 0 0 0 26px rgba(255, 255, 255, 0.06);
+  pointer-events: none;
+}
+.wv-card > * { position: relative; }
+.wv-card-top { display: flex; align-items: center; gap: 9px; }
+.wv-card-brand { font-size: 11.5px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; opacity: 0.9; }
+.wv-card-chip {
+  margin-left: auto; font-size: 10px; font-weight: 700; letter-spacing: 0.09em;
+  text-transform: uppercase; border: 1px solid rgba(255, 255, 255, 0.55);
+  border-radius: 999px; padding: 2px 8px; opacity: 0.92;
+}
+.wv-card-code {
+  font-family: var(--mono); font-size: clamp(32px, 12.5vw, 48px); font-weight: 680;
+  letter-spacing: 0.07em; line-height: 1.1; margin: 18px 0 3px;
+}
+.wv-card-name { font-size: 15px; font-weight: 600; opacity: 0.95; min-height: 22px; }
+.wv-card-meta {
+  display: flex; justify-content: space-between; gap: 10px; margin-top: 14px;
+  font-size: 11.5px; opacity: 0.8; font-variant-numeric: tabular-nums;
+}
+</style>
+</head>
+<body>
+<div class="flow-app">
+  <header class="flow-bar">
+    <span class="flow-mark-sm" aria-hidden="true">
+      <svg viewBox="0 0 100 100" width="28" height="28"><rect width="100" height="100" rx="22" fill="url(#wvg)"/><defs><linearGradient id="wvg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0e7490"/><stop offset="1" stop-color="#22d3ee"/></linearGradient></defs><g fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round" opacity="0.95"><path d="M50 38v24"/><path d="M34 28a30 30 0 000 44"/><path d="M66 28a30 30 0 010 44"/></g></svg>
+    </span>
+    <span class="flow-bar-title">Wave</span>
+    <span class="wv-test-tag">test</span>
+  </header>
+
+  <main class="flow-main">
+    <noscript>
+      <div class="flow-card">
+        <h1 style="font-size:19px">Wave needs JavaScript</h1>
+        <p class="flow-lede">The whole handshake happens in this page, on this device. With
+           scripts off there is nothing here but the name.</p>
+      </div>
+    </noscript>
+
+    <section class="flow-section">
+      <div class="wv-cardonly">
+        <div class="wv-card">
+          <div class="wv-card-top">
+            <span class="wv-card-brand">TexFlow · Wave</span>
+            <span class="wv-card-chip">test</span>
+          </div>
+          <div class="wv-card-code" id="card-code">------</div>
+          <div class="wv-card-name" id="card-name-out"></div>
+          <div class="wv-card-meta">
+            <span>Issued <span id="card-issued">—</span></span>
+            <span>Offline · no network</span>
+          </div>
+        </div>
+        <p class="flow-lede" style="margin-top:14px">Hold this device beside another Wave card
+           and press <em>Wave</em>. Each card listens for the other's code and confirms on its
+           own — there is nothing in the middle to ask.</p>
+      </div>
+
+      <div class="wv-hosted">
+        <p class="flow-lede"><strong>Bench test, not a Flow.</strong> Two phones trade a short random
+           key over near-ultrasonic tones. If this device decodes the other one's key, the two
+           of them were in the same room — which is the only thing being proved here.</p>
+        <p class="flow-lede">Open this page on both phones, tap <em>Access key</em> on each, then
+           <em>Test</em>. Hold them within arm's length. Nothing is sent to a server and nothing
+           is kept: the key dies with the tab.</p>
+      </div>
+
+      <div class="wv-keys" id="keys">
+        <div class="wv-key">
+          <div class="wv-key-label">This device</div>
+          <div class="wv-key-value is-hidden" id="own-key">••••••</div>
+        </div>
+      </div>
+
+      <div class="wv-err" id="err"></div>
+
+      <div class="wv-done" id="done">
+        <svg class="wv-tick" viewBox="0 0 52 52" aria-hidden="true">
+          <circle cx="26" cy="26" r="23"/>
+          <path d="M15.5 27.5 L22.5 34.5 L37 19.5"/>
+        </svg>
+        <h2>Same room</h2>
+        <p class="flow-lede" id="done-note"></p>
+      </div>
+
+      <div class="flow-card wv-monitor" id="monitor">
+        <div class="wv-state">
+          <span class="wv-dot" id="dot"></span>
+          <span class="wv-state-text" id="state">Idle</span>
+          <span class="wv-state-sub" id="cycles">cycle 0</span>
+        </div>
+
+        <div class="wv-pulse-wrap">
+          <div class="wv-pulse" id="pulse"><i></i><i></i><i></i><b id="pulse-label">—</b></div>
+        </div>
+
+        <div class="wv-meter">
+          <div class="wv-meter-row">
+            <span class="flow-label" style="margin:0">Tone above noise</span>
+            <span id="snr">—</span>
+          </div>
+          <div class="wv-bar"><i id="bar"></i></div>
+          <div class="wv-gate"><i id="gate" style="left:0"></i></div>
+          <div class="wv-tones" id="tones">waiting for the first reading…</div>
+        </div>
+
+        <ul class="wv-log" id="log"></ul>
+      </div>
+
+      <details class="wv-tune">
+        <summary>Tuning &amp; diagnostics</summary>
+        <div class="flow-card" style="margin-top:8px">
+          <div class="wv-fields">
+            <div class="wv-field is-wide">
+              <label for="band">Band</label>
+              <select id="band">
+                <option value="ultra" selected>Ultrasonic — 18.0 / 19.0 / 19.5 kHz</option>
+                <option value="high">High — 15.0 / 15.8 / 16.4 kHz</option>
+                <option value="audible">Audible — 4.0 / 4.8 / 5.4 kHz (debug)</option>
+              </select>
+            </div>
+            <div class="wv-field">
+              <label for="bit">Bit, ms</label>
+              <input id="bit" type="number" inputmode="numeric" min="30" max="200" step="5" value="60">
+            </div>
+            <div class="wv-field">
+              <label for="pre">Preamble, ms</label>
+              <input id="pre" type="number" inputmode="numeric" min="120" max="600" step="10" value="220">
+            </div>
+            <div class="wv-field">
+              <label for="gapmin">Gap min, ms</label>
+              <input id="gapmin" type="number" inputmode="numeric" min="200" max="9000" step="100" value="1800">
+            </div>
+            <div class="wv-field">
+              <label for="gapmax">Gap max, ms</label>
+              <input id="gapmax" type="number" inputmode="numeric" min="300" max="12000" step="100" value="6800">
+            </div>
+            <div class="wv-field">
+              <label for="gain">Tone level</label>
+              <input id="gain" type="number" inputmode="decimal" min="0.05" max="1" step="0.05" value="0.45">
+            </div>
+            <div class="wv-field">
+              <label for="snrmin">Min SNR, dB</label>
+              <input id="snrmin" type="number" inputmode="numeric" min="2" max="30" step="1" value="8">
+            </div>
+          </div>
+          <p class="wv-note" id="diag">Audio not started yet.</p>
+          <p class="wv-note">Min SNR is the proximity knob: raise it and the two phones have to be
+             closer before a burst counts. Changes apply from the next cycle.</p>
+        </div>
+      </details>
+
+      <div class="flow-card wv-hosted" style="margin-top:16px">
+        <div class="flow-label">Take a card with you</div>
+        <p class="flow-lede" style="margin-top:8px">A card is this same page saved as one file with
+           its own code baked into it. It needs no network at all — the tones, the listening and the
+           decoding all happen on the device, so a card works on a plane, in a basement, or with the
+           phone in flight mode.</p>
+        <input class="flow-input" id="card-name" maxlength="32" placeholder="Name this card (optional)" aria-label="Card name">
+        <button class="flow-btn is-quiet" type="button" id="make-card" style="margin-top:10px">Download a card</button>
+        <p class="wv-note" id="card-note">Every download gets its own random code.</p>
+      </div>
+    </section>
+
+    <div class="flow-dock">
+      <button class="flow-btn wv-cardonly" type="button" id="wave">Wave</button>
+      <button class="flow-btn wv-hosted" type="button" id="access">Access key</button>
+      <button class="flow-btn is-quiet wv-hosted" type="button" id="test" hidden>Test</button>
+      <a class="flow-btn wv-hosted" id="open-streak" href="https://texflow.work/f/streak/" hidden>Open Streak</a>
+      <button class="flow-btn is-ghost" type="button" id="again" hidden>Run it again</button>
+    </div>
+
+    <p class="wv-foot wv-hosted">/wave · a proximity-pairing bench test. Not listed, not indexed, not a Flow.</p>
+    <p class="wv-foot wv-cardonly">A TexFlow Wave card · works with no network · texflow.work/wave</p>
+  </main>
+</div>
+
+<script>
+/* Wave — proving two phones are in the same room with sound.
+ *
+ * The shape of it: each device makes up a 24-bit key, spells it out as a binary
+ * FSK tone burst somewhere just above hearing, and listens for the other one
+ * doing the same. Decode the peer's key with the checksum intact and you have
+ * learned one fact — the other phone's speaker was close enough for its tones
+ * to survive the trip. That is the whole claim. It is not authentication and
+ * there is no server to arbitrate it, so each device decides for itself and one
+ * will always get there a moment before the other.
+ *
+ * Three things here are less obvious than they look:
+ *
+ *   1. A device is deaf while it transmits. Its own burst buries everything
+ *      else, so decode attempts inside a known transmit window (plus a margin)
+ *      are thrown away rather than fought. We schedule our own playback, so we
+ *      know those windows exactly and never have to touch the mic.
+ *
+ *   2. Two devices left to a fixed rhythm can talk past each other forever, so
+ *      the pause between bursts is randomised. But jitter alone is a random
+ *      walk and far too slow to find alignment, so the receiver also *yields*:
+ *      hearing a preamble in its own quiet stretch, it holds its next burst
+ *      until the incoming one has finished. That turns "their whole burst must
+ *      land in my gap" into "their burst must merely start in my gap", which is
+ *      the difference between pairing in seconds and pairing in minutes.
+ *
+ *   3. Symbol timing is recovered by searching. The preamble edge is only known
+ *      to within an FFT window, so the decoder tries a spread of start offsets
+ *      and keeps whichever one the checksum agrees with.
+ */
+(function () {
+  'use strict';
+
+  var BANDS = {
+    ultra:   { f0: 18000, f1: 19000, fp: 19500 },
+    high:    { f0: 15000, f1: 15800, fp: 16400 },
+    audible: { f0: 4000,  f1: 4800,  fp: 5400  }
+  };
+
+  var PAYLOAD_BITS = 32;      // 24 bits of key, 8 bits of CRC
+  var TX_MARGIN = 0.1;        // seconds of deaf time either side of our own burst
+  // A device is deaf while it transmits, so when B decodes A's burst, A heard
+  // nothing — the two of them can only pair on separate crossings. A winner that
+  // simply went quiet would strand the other phone forever. So validation stops
+  // the listening, not the talking: a short tail of bursts goes out, fast and
+  // close together now there is nothing to listen around, and then it is done.
+  var TAIL_BURSTS = 10;
+  var TAIL_GAP = [0.7, 1.5];
+  var POLL_MS = 8;            // analyser sampling interval
+  var FFT = 1024;             // ~21 ms window at 48 kHz; bins ~47 Hz apart
+  var BUFFER_S = 14;          // how much listening history the decoder can reach back into
+  var OFFSETS = [];           // symbol-clock guesses, in seconds, around the detected edge
+  for (var d = -60; d <= 60; d += 6) OFFSETS.push(d / 1000);
+
+  var $ = function (id) { return document.getElementById(id); };
+
+  // ----------------------------------------------------------- who we are ---
+
+  /* These three slots are the whole trick behind the downloadable card.
+   *
+   * Served from texflow.work they are untouched, the page behaves as the bench
+   * test, and its Download button fetches its *own* source, stamps a fresh
+   * random code into the slots, and hands back the result as a file. Opened
+   * from that file the slots are filled, so the same code that was just
+   * downloaded becomes this card's fixed identity and the page wears a card
+   * face instead of a test harness.
+   *
+   * One file, one modem, no build step, and a card is provably the same code
+   * that was tested — because it is byte-for-byte the same file with six hex
+   * characters changed. */
+  var CARD = { code: '@@WAVE_CODE@@', name: '@@WAVE_NAME@@', issued: '@@WAVE_ISSUED@@' };
+  var IS_CARD = /^[0-9A-F]{6}$/.test(CARD.code);
+
+  var ownBytes = new Uint8Array(3);
+  if (IS_CARD) {
+    for (var ci = 0; ci < 3; ci++) ownBytes[ci] = parseInt(CARD.code.substr(ci * 2, 2), 16);
+  } else {
+    (crypto.getRandomValues ? crypto : window.msCrypto).getRandomValues(ownBytes);
+  }
+  var ownCrc = crc8(ownBytes);
+  var ownHex = hex(ownBytes);
+
+  function hex(bytes) {
+    var s = '';
+    for (var i = 0; i < bytes.length; i++) s += ('0' + bytes[i].toString(16)).slice(-2);
+    return s.toUpperCase();
+  }
+
+  // Integrity, not security: it only has to catch a flipped symbol.
+  function crc8(bytes) {
+    var c = 0;
+    for (var i = 0; i < bytes.length; i++) {
+      c ^= bytes[i];
+      for (var b = 0; b < 8; b++) c = (c & 0x80) ? ((c << 1) ^ 0x07) & 0xff : (c << 1) & 0xff;
+    }
+    return c;
+  }
+
+  function bitsOf(bytes, crc) {
+    var out = [];
+    var all = [bytes[0], bytes[1], bytes[2], crc];
+    for (var i = 0; i < all.length; i++)
+      for (var b = 7; b >= 0; b--) out.push((all[i] >> b) & 1);
+    return out;
+  }
+
+  var ownBits = bitsOf(ownBytes, ownCrc);
+
+  // ---------------------------------------------------------------- state ---
+
+  var ctx = null, analyser = null, micStream = null, micSrc = null, freq = null;
+  var running = false, startedAt = -1, tail = 0, tailTimer = null;
+  var cycle = 0, pollTimer = null, cycleTimer = null;
+  var txWindows = [];         // [{a,b}] in AudioContext time: when we are deaf
+  var reads = [];             // rolling {t,e0,e1,ep,fl}
+  var inboundUntil = 0;       // hold our own transmitter until this AudioContext time
+  var pending = null;         // a burst we have heard the start of and will decode
+  var holdoffUntil = 0;       // ignore new preambles until this time
+  var run = null;             // preamble run being accumulated
+  var cfg = null;
+
+  function readCfg() {
+    var band = BANDS[$('band').value] || BANDS.ultra;
+    return {
+      band: band,
+      bit: clamp(+$('bit').value || 60, 30, 200) / 1000,
+      pre: clamp(+$('pre').value || 220, 120, 600) / 1000,
+      // The gap is wide and heavily randomised on purpose. Jitter of a few
+      // hundred ms is a random walk that takes hundreds of cycles to find
+      // alignment; a gap drawn fresh from a range wider than the burst
+      // re-rolls the phase every cycle instead.
+      gapMin: clamp(+$('gapmin').value || 1800, 200, 9000) / 1000,
+      gapMax: clamp(+$('gapmax').value || 6800, 300, 12000) / 1000,
+      gain: clamp(+$('gain').value || 0.45, 0.05, 1),
+      snr: clamp(+$('snrmin').value || 8, 2, 30)
+    };
+  }
+  function clamp(v, lo, hi) { return v < lo ? lo : v > hi ? hi : v; }
+
+  // ------------------------------------------------------------------ log ---
+
+  function log(text, kind) {
+    var li = document.createElement('li');
+    var t = document.createElement('em');
+    t.textContent = (startedAt < 0 ? '0.0' : ((performance.now() - startedAt) / 1000).toFixed(1)) + 's';
+    li.appendChild(t);
+    li.appendChild(document.createTextNode(text));
+    if (kind) li.className = 'is-' + kind;
+    var el = $('log');
+    el.insertBefore(li, el.firstChild);
+    while (el.childNodes.length > 60) el.removeChild(el.lastChild);
+  }
+
+  function fail(msg) {
+    var el = $('err');
+    el.textContent = msg;
+    el.className = 'wv-err is-on';
+  }
+
+  // Hosted, the run button is Test; on a card it is Wave. Same job.
+  function runBtn() { return IS_CARD ? $('wave') : $('test'); }
+  function setRunLabel(t) { runBtn().textContent = t; }
+
+  function setState(text, tone) {
+    if (!analyser && running) { text = 'No microphone — cannot decode'; tone = 'bad'; }
+    $('state').textContent = text;
+    $('dot').className = 'wv-dot' + (tone ? ' is-' + tone : '');
+    $('state').className = 'wv-state-text' + (tone === 'bad' ? ' is-bad' : '');
+  }
+
+  // ------------------------------------------------------------- audio in ---
+
+  function start() {
+    var Ctx = window.AudioContext || window.webkitAudioContext;
+    if (!Ctx) { fail('This browser has no Web Audio. Nothing here will work.'); return Promise.reject(); }
+    try { ctx = new Ctx({ sampleRate: 48000, latencyHint: 'interactive' }); }
+    catch (e) { ctx = new Ctx(); }
+
+    // iOS unlocks output only inside the gesture, and only once something has
+    // actually been played — hence the one-sample silence.
+    var unlock = ctx.createBufferSource();
+    unlock.buffer = ctx.createBuffer(1, 1, ctx.sampleRate);
+    unlock.connect(ctx.destination);
+    unlock.start(0);
+    var resumed = ctx.resume ? ctx.resume() : Promise.resolve();
+
+    // The three constraints matter more than anything else on this page. Left
+    // on, the browser's own voice processing hears an 18 kHz tone as noise and
+    // removes it before the FFT is ever shown a thing.
+    var want = {
+      audio: {
+        echoCancellation: false, noiseSuppression: false, autoGainControl: false,
+        googEchoCancellation: false, googNoiseSuppression: false, googAutoGainControl: false,
+        channelCount: 1
+      }
+    };
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+      fail('No microphone API here. Needs a secure (https) context.');
+      return resumed;
+    }
+    return resumed.then(function () {
+      return navigator.mediaDevices.getUserMedia(want);
+    }).then(function (stream) {
+      micStream = stream;
+      micSrc = ctx.createMediaStreamSource(stream);
+      analyser = ctx.createAnalyser();
+      analyser.fftSize = FFT;
+      analyser.smoothingTimeConstant = 0;   // we do our own averaging, per symbol
+      analyser.minDecibels = -120;
+      micSrc.connect(analyser);             // and nowhere near the destination
+      freq = new Float32Array(analyser.frequencyBinCount);
+      diagnose();
+    }, function (e) {
+      fail('Microphone refused (' + (e && e.name ? e.name : 'error') + '). This device can still '
+        + 'send, but it will never decode the other one.');
+      diagnose();
+    });
+  }
+
+  function diagnose() {
+    if (!ctx) return;
+    var c = cfg || readCfg();
+    var nyq = ctx.sampleRate / 2;
+    var txt = 'Sample rate ' + ctx.sampleRate + ' Hz · FFT ' + FFT
+      + ' (' + (ctx.sampleRate / FFT).toFixed(1) + ' Hz/bin, ' + (FFT / ctx.sampleRate * 1000).toFixed(1) + ' ms window)'
+      + ' · mic ' + (analyser ? 'live' : 'unavailable');
+    if (c.band.fp + 400 > nyq) {
+      txt += ' — Nyquist is ' + nyq.toFixed(0) + ' Hz, so this band cannot be heard or sent here. '
+        + 'Pick a lower band.';
+    }
+    $('diag').textContent = txt;
+  }
+
+  // ------------------------------------------------------------- receiver ---
+
+  function binOf(hz) { return Math.round(hz / (ctx.sampleRate / FFT)); }
+
+  var FLOOR_DB = -140;
+
+  function peak(centreBin) {
+    var best = -Infinity;
+    for (var i = centreBin - 2; i <= centreBin + 2; i++) {
+      if (i < 0 || i >= freq.length) continue;
+      if (freq[i] > best) best = freq[i];
+    }
+    return best > FLOOR_DB ? best : FLOOR_DB;
+  }
+
+  // The floor is measured in the bins between and immediately around the tones,
+  // never in a guard band off to one side.
+  //
+  // This is the difference between the thing working on a device and not working
+  // at all. A phone microphone is not flat up here: it can be fifteen decibels
+  // less sensitive at 19.5 kHz than at 16 kHz, and room noise arrives through
+  // that same slope. Measure the floor at 16 kHz and compare it to a tone at
+  // 19.5 kHz and the subtraction is meaningless — the floor reads loud, the tone
+  // reads faint, and a burst that would decode perfectly well never gets looked
+  // at because it appears to be below the noise. Bins a few hundred hertz apart
+  // share whatever response the hardware has, so the difference between them is
+  // real. The bit decisions were always safe from this (they compare the two
+  // data tones against each other) but everything that gated on absolute
+  // loudness was not.
+  function floorDb() {
+    var vals = [];
+    for (var i = bins.lo; i <= bins.hi; i++) {
+      if (i < 0 || i >= freq.length) continue;
+      if (Math.abs(i - bins.b0) <= 3 || Math.abs(i - bins.b1) <= 3 || Math.abs(i - bins.bp) <= 3) continue;
+      vals.push(freq[i]);
+    }
+    if (!vals.length) return FLOOR_DB;
+    vals.sort(function (a, b) { return a - b; });
+    var med = vals[vals.length >> 1];
+    return med > FLOOR_DB ? med : FLOOR_DB;
+  }
+
+  var bins = null;
+  function computeBins() {
+    var nyq = ctx.sampleRate / 2;
+    var span = Math.max(500, (cfg.band.fp - cfg.band.f0) * 0.4);
+    bins = {
+      b0: binOf(cfg.band.f0), b1: binOf(cfg.band.f1), bp: binOf(cfg.band.fp),
+      lo: binOf(Math.max(200, cfg.band.f0 - span)),
+      hi: binOf(Math.min(nyq - 200, cfg.band.fp + span))
+    };
+  }
+
+  function muted(t) {
+    for (var i = 0; i < txWindows.length; i++)
+      if (t >= txWindows[i].a && t <= txWindows[i].b) return true;
+    return false;
+  }
+
+  function poll() {
+    if (!running) return;
+    pollTimer = setTimeout(poll, POLL_MS);
+    if (!analyser) return;
+    analyser.getFloatFrequencyData(freq);
+    var t = ctx.currentTime;
+    var r = {
+      t: t,
+      e0: peak(bins.b0), e1: peak(bins.b1), ep: peak(bins.bp),
+      fl: floorDb(),
+      m: muted(t)
+    };
+    reads.push(r);
+    while (reads.length && reads[0].t < t - BUFFER_S) reads.shift();
+
+    meter(r);
+    detect(r);
+    if (pending && t > pending.end + 0.06) attempt();
+  }
+
+  var meterAt = 0, bestSnr = -Infinity;
+  function meter(r) {
+    if (r.t - meterAt < 0.08) return;
+    meterAt = r.t;
+    var snr = Math.max(r.e0, r.e1, r.ep) - r.fl;
+    if (!isFinite(snr)) snr = 0;
+    if (!r.m && snr > bestSnr) bestSnr = snr;
+    $('snr').textContent = (snr >= 0 ? '+' : '') + snr.toFixed(1) + ' dB';
+    var pct = clamp(snr / 36, 0, 1) * 100;
+    var bar = $('bar');
+    bar.style.width = pct.toFixed(1) + '%';
+    bar.className = snr >= cfg.snr ? 'is-over' : '';
+    $('gate').style.left = (clamp(cfg.snr / 36, 0, 1) * 100).toFixed(1) + '%';
+
+    var k = function (hz) { return (hz / 1000).toFixed(hz % 1000 ? 1 : 0) + 'k'; };
+    var db = function (v) { return isFinite(v) ? v.toFixed(0) : '--'; };
+    $('tones').innerHTML =
+      k(cfg.band.f0) + ' <b>' + db(r.e0) + '</b>&nbsp; '
+      + k(cfg.band.f1) + ' <b>' + db(r.e1) + '</b>&nbsp; '
+      + k(cfg.band.fp) + ' <b>' + db(r.ep) + '</b>&nbsp; floor <b>' + db(r.fl) + '</b> dB'
+      + '<br><span class="wv-best' + (bestSnr >= cfg.snr ? ' is-over' : '') + '">best since start '
+      + (isFinite(bestSnr) ? (bestSnr >= 0 ? '+' : '') + bestSnr.toFixed(1) : '—') + ' dB'
+      + '</span> · gate ' + cfg.snr + ' dB' + (r.m ? ' · (our own burst)' : '');
+  }
+
+  // A reading that looks like somebody's preamble: the third tone clearly up out
+  // of the floor and clearly above both data tones.
+  function preambleish(r) {
+    return !r.m && (r.ep - r.fl) >= cfg.snr && r.ep >= r.e0 + 5 && r.ep >= r.e1 + 5;
+  }
+
+  function detect(r) {
+    if (pending || r.t < holdoffUntil) { run = null; return; }
+    if (preambleish(r)) {
+      if (!run) run = { from: r.t, to: r.t, miss: 0, snr: r.ep - r.fl, n: 1 };
+      else { run.to = r.t; run.miss = 0; run.snr += r.ep - r.fl; run.n++; }
+      return;
+    }
+    if (!run) return;
+    // A single dropped frame mid-preamble is normal; three in a row means it ended.
+    if (++run.miss < 3) return;
+    var held = run.to - run.from;
+    if (held >= cfg.pre * 0.55) {
+      var snr = run.snr / run.n;
+      pending = {
+        start: run.from + cfg.pre,
+        end: run.from + cfg.pre + PAYLOAD_BITS * cfg.bit,
+        snr: snr
+      };
+      // Yield the floor: hold our own next burst until theirs is done.
+      inboundUntil = pending.end + 0.15;
+      log(' preamble, ' + (held * 1000).toFixed(0) + ' ms at ' + snr.toFixed(1) + ' dB — listening it out');
+    }
+    run = null;
+  }
+
+  // Lower bound on the reading timeline.
+  function lower(t) {
+    var lo = 0, hi = reads.length;
+    while (lo < hi) { var mid = (lo + hi) >> 1; if (reads[mid].t < t) lo = mid + 1; else hi = mid; }
+    return lo;
+  }
+
+  function decodeAt(start) {
+    var out = [], snrs = [];
+    for (var i = 0; i < PAYLOAD_BITS; i++) {
+      var a = start + i * cfg.bit + cfg.bit * 0.2;
+      var b = start + i * cfg.bit + cfg.bit * 0.8;
+      var s0 = 0, s1 = 0, sf = 0, n = 0;
+      for (var k = lower(a); k < reads.length && reads[k].t <= b; k++) {
+        if (reads[k].m) return null;             // our own burst sat on this symbol
+        s0 += reads[k].e0; s1 += reads[k].e1; sf += reads[k].fl; n++;
+      }
+      if (n < 2) return null;
+      out.push(s1 > s0 ? 1 : 0);
+      snrs.push(Math.max(s0, s1) / n - sf / n);
+    }
+    snrs.sort(function (x, y) { return x - y; });
+    var bytes = new Uint8Array(3), crc = 0, j;
+    for (j = 0; j < 24; j++) bytes[j >> 3] = (bytes[j >> 3] << 1) | out[j];
+    for (j = 24; j < 32; j++) crc = (crc << 1) | out[j];
+    return { bytes: bytes, crc: crc, want: crc8(bytes), snr: snrs[snrs.length >> 1] };
+  }
+
+  function attempt() {
+    var p = pending;
+    pending = null;
+    holdoffUntil = p.end + 0.25;
+    var best = null, got = null;
+    for (var i = 0; i < OFFSETS.length && !got; i++) {
+      var r = decodeAt(p.start + OFFSETS[i]);
+      if (!r) continue;
+      if (!best || r.snr > best.snr) best = r;
+      if (r.crc === r.want) got = r;
+    }
+    if (!best) { log(' burst lost — no clean listening window for it', 'warn'); return; }
+    if (!got) {
+      log(' decoded ' + hex(best.bytes) + ' at ' + best.snr.toFixed(1) + ' dB, checksum '
+        + pad2(best.crc) + ' ≠ ' + pad2(best.want) + ' — dropped', 'bad');
+      return;
+    }
+    if (got.snr < cfg.snr) {
+      log(' ' + hex(got.bytes) + ' checksum ok but only ' + got.snr.toFixed(1)
+        + ' dB — under the ' + cfg.snr + ' dB gate, too far away', 'warn');
+      return;
+    }
+    if (hex(got.bytes) === ownHex) { log(' that was our own burst coming back — ignored'); return; }
+    log(' ' + hex(got.bytes) + ' checksum ok at ' + got.snr.toFixed(1) + ' dB — paired', 'good');
+    succeed(hex(got.bytes));
+  }
+
+  function pad2(n) { return '0x' + ('0' + n.toString(16)).slice(-2).toUpperCase(); }
+
+  // ------------------------------------------------------------ transmitter ---
+
+  function transmit() {
+    var t0 = ctx.currentTime + 0.08;
+    var dur = cfg.pre + PAYLOAD_BITS * cfg.bit;
+    var osc = ctx.createOscillator();
+    var g = ctx.createGain();
+    osc.type = 'sine';
+    osc.connect(g);
+    g.connect(ctx.destination);
+
+    // Short ramps at the two ends only. Frequency steps mid-burst are phase
+    // continuous, so they need no envelope and make no click.
+    g.gain.setValueAtTime(0, t0);
+    g.gain.linearRampToValueAtTime(cfg.gain, t0 + 0.006);
+    g.gain.setValueAtTime(cfg.gain, t0 + dur - 0.006);
+    g.gain.linearRampToValueAtTime(0, t0 + dur);
+
+    osc.frequency.setValueAtTime(cfg.band.fp, t0);
+    for (var i = 0; i < PAYLOAD_BITS; i++)
+      osc.frequency.setValueAtTime(ownBits[i] ? cfg.band.f1 : cfg.band.f0, t0 + cfg.pre + i * cfg.bit);
+
+    osc.start(t0);
+    osc.stop(t0 + dur + 0.01);
+
+    while (txWindows.length && txWindows[0].b < ctx.currentTime - BUFFER_S) txWindows.shift();
+    txWindows.push({ a: t0 - TX_MARGIN, b: t0 + dur + TX_MARGIN });
+    return { t0: t0, dur: dur };
+  }
+
+  function cycleStep() {
+    if (!running) return;
+    var now = ctx.currentTime;
+    if (inboundUntil > now) {
+      setState('Holding — a burst is coming in', 'hold');
+      cycleTimer = setTimeout(cycleStep, (inboundUntil - now) * 1000 + 30);
+      return;
+    }
+
+    cfg = readCfg();
+    computeBins();
+    cycle++;
+    $('cycles').textContent = 'cycle ' + cycle;
+
+    var burst = transmit();
+    var leadMs = (burst.t0 - ctx.currentTime) * 1000;
+    var durMs = burst.dur * 1000;
+
+    setTimeout(function () {
+      if (!running) return;
+      setState('Sending ' + ownHex, 'send');
+      $('pulse').className = 'wv-pulse is-live';
+      $('pulse-label').textContent = ownHex;
+    }, Math.max(0, leadMs));
+
+    setTimeout(function () {
+      if (!running) return;
+      $('pulse').className = 'wv-pulse';
+      $('pulse-label').textContent = 'rx';
+      setState('Listening', 'listen');
+    }, Math.max(0, leadMs + durMs));
+
+    var gap = cfg.gapMin + Math.random() * Math.max(0, cfg.gapMax - cfg.gapMin);
+    log(' burst ' + cycle + ' out (' + durMs.toFixed(0) + ' ms), then quiet for ' + (gap * 1000).toFixed(0) + ' ms');
+    cycleTimer = setTimeout(cycleStep, leadMs + durMs + gap * 1000);
+  }
+
+  // ----------------------------------------------------------------- flow ---
+
+  function begin() {
+    if (!ctx) { fail('No audio context — nothing to run.'); return; }
+    cfg = readCfg();
+    computeBins();
+    diagnose();
+    running = true;
+    cycle = 0;
+    reads = [];
+    txWindows = [];
+    pending = null;
+    run = null;
+    inboundUntil = 0;
+    holdoffUntil = 0;
+    tail = 0;
+    startedAt = performance.now();
+    bestSnr = -Infinity;
+    $('log').innerHTML = '';
+    $('monitor').className = 'flow-card wv-monitor is-on';
+    $('done').className = 'wv-done';
+    setRunLabel('Stop');
+    $('open-streak').hidden = true;
+    $('again').hidden = true;
+    log(' listening on ' + (cfg.band.f0 / 1000).toFixed(1) + ' / ' + (cfg.band.f1 / 1000).toFixed(1)
+      + ' kHz, preamble ' + (cfg.band.fp / 1000).toFixed(1) + ' kHz');
+    if (!analyser) log(' NO MICROPHONE — this device will send forever and never decode anything', 'bad');
+    setState('Listening', 'listen');
+    poll();
+    cycleStep();
+  }
+
+  function halt() {
+    running = false;
+    clearTimeout(pollTimer);
+    clearTimeout(cycleTimer);
+    clearTimeout(tailTimer);
+    $('pulse').className = 'wv-pulse';
+    $('pulse-label').textContent = '—';
+  }
+
+  // Paired, deaf on purpose, and still answering.
+  function tailStep() {
+    if (tail >= TAIL_BURSTS) {
+      setState('Done — both keys exchanged', 'listen');
+      $('pulse').className = 'wv-pulse';
+      $('pulse-label').textContent = '✓';
+      log(' finished answering', 'good');
+      return;
+    }
+    tail++;
+    var burst = transmit();
+    var leadMs = (burst.t0 - ctx.currentTime) * 1000;
+    var durMs = burst.dur * 1000;
+    setTimeout(function () {
+      $('pulse').className = 'wv-pulse is-live';
+      $('pulse-label').textContent = ownHex;
+      setState('Paired — answering (' + tail + '/' + TAIL_BURSTS + ')', 'send');
+    }, Math.max(0, leadMs));
+    setTimeout(function () { $('pulse').className = 'wv-pulse'; }, Math.max(0, leadMs + durMs));
+    var gap = TAIL_GAP[0] + Math.random() * (TAIL_GAP[1] - TAIL_GAP[0]);
+    tailTimer = setTimeout(tailStep, leadMs + durMs + gap * 1000);
+  }
+
+  function succeed(peerHex) {
+    halt();
+    if (micStream) { micStream.getTracks().forEach(function (t) { t.stop(); }); micStream = null; analyser = null; }
+    setState('Paired', 'listen');
+    tail = 0;
+    tailStep();
+
+    var keys = $('keys');
+    keys.className = 'wv-keys' + (IS_CARD ? '' : ' is-paired');
+    var peer = document.createElement('div');
+    peer.className = 'wv-key is-peer';
+    peer.innerHTML = '<div class="wv-key-label">Other device</div>';
+    var v = document.createElement('div');
+    v.className = 'wv-key-value';
+    v.textContent = peerHex;
+    peer.appendChild(v);
+    keys.appendChild(peer);
+
+    $('done-note').textContent = 'Heard ' + peerHex + ' and the checksum agreed, in '
+      + ((performance.now() - startedAt) / 1000).toFixed(1) + 's over ' + cycle
+      + (cycle === 1 ? ' cycle. ' : ' cycles. ')
+      + 'Still sending for a few seconds so the other phone can finish too.';
+    $('done').className = 'wv-done is-on';
+    runBtn().hidden = true;
+    $('open-streak').hidden = false;
+    $('again').hidden = false;
+    if (navigator.vibrate) navigator.vibrate([20, 60, 30]);
+  }
+
+  // ------------------------------------------------------------ card mode ---
+
+  function bootCard() {
+    document.body.className = 'is-card';
+    document.title = 'Wave card ' + ownHex;
+    $('card-code').textContent = ownHex;
+    $('card-name-out').textContent = CARD.name || '';
+    $('card-issued').textContent = CARD.issued || '—';
+    // The face carries the code; the tile beside it would only say it twice.
+    var own = $('own-key');
+    if (own && own.parentNode) own.parentNode.remove();
+  }
+
+  // One tap has to cover everything iOS wants a gesture for: unlocking output,
+  // and asking for the microphone. So Wave does the lot and goes straight in.
+  function waveNow() {
+    if (running) { halt(); setState('Stopped'); setRunLabel('Wave'); log(' stopped'); return; }
+    if (ctx) { setRunLabel('Stop'); begin(); return; }
+    setRunLabel('Starting…');
+    start().then(go, go);
+    function go() { setRunLabel('Stop'); begin(); }
+  }
+
+  // ---------------------------------------------------------- card issuing ---
+
+  // Built at runtime so the literal token exists exactly once in this file:
+  // in the CARD declaration, which is the thing being replaced.
+  function slot(n) { return '@@' + 'WAVE_' + n + '@@'; }
+
+  function makeCard() {
+    var btn = $('make-card');
+    var note = $('card-note');
+    var bytes = new Uint8Array(3);
+    (crypto.getRandomValues ? crypto : window.msCrypto).getRandomValues(bytes);
+    var code = hex(bytes);
+    // The name lands inside a single-quoted JS string in the stamped copy, so
+    // it is narrowed to characters that cannot end it and the quote escaped.
+    var name = ($('card-name').value || '').replace(/[^A-Za-z0-9 '.\-]/g, '').trim().slice(0, 32);
+    var issued = new Date().toISOString().slice(0, 10);
+
+    btn.disabled = true;
+    note.textContent = 'Building card ' + code + '…';
+
+    fetch(location.href, { cache: 'no-store' }).then(function (r) {
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      return r.text();
+    }).then(function (src) {
+      if (src.indexOf(slot('CODE')) < 0) throw new Error('this copy has no card slot left in it');
+      var out = src
+        .replace(slot('CODE'), code)
+        .replace(slot('NAME'), name.replace(/'/g, "\\'"))
+        .replace(slot('ISSUED'), issued);
+      var url = URL.createObjectURL(new Blob([out], { type: 'text/html' }));
+      var a = document.createElement('a');
+      a.href = url;
+      a.download = 'wave-card-' + code + '.html';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(function () { URL.revokeObjectURL(url); }, 20000);
+      note.textContent = 'Card ' + code + ' saved (' + Math.round(out.length / 1024) + ' KB). Open it '
+        + 'from Files or Downloads — it never needs the network again.';
+      btn.disabled = false;
+    })['catch'](function (e) {
+      note.textContent = 'Could not build a card: ' + e.message + '. Issuing needs this page online; '
+        + 'a card cannot issue another card.';
+      btn.disabled = false;
+    });
+  }
+
+  if (IS_CARD) bootCard();
+  $('wave').addEventListener('click', waveNow);
+  $('make-card').addEventListener('click', makeCard);
+
+  $('access').addEventListener('click', function () {
+    var btn = $('access');
+    btn.disabled = true;
+    btn.textContent = 'Starting audio…';
+    if ($('own-key')) {
+      $('own-key').textContent = ownHex;
+      $('own-key').className = 'wv-key-value';
+    }
+    start().then(finish, finish);
+    function finish() {
+      btn.hidden = true;
+      $('test').hidden = false;
+      $('test').className = 'flow-btn';
+    }
+  }, { once: true });
+
+  $('test').addEventListener('click', function () {
+    if (running) { halt(); setState('Stopped'); $('test').textContent = 'Test'; log(' stopped'); }
+    else begin();
+  });
+
+  $('again').addEventListener('click', function () {
+    window.location.reload();
+  });
+
+  $('band').addEventListener('change', function () {
+    cfg = readCfg();
+    if (ctx) computeBins();
+    diagnose();
+  });
+
+  document.addEventListener('visibilitychange', function () {
+    if (document.visibilityState === 'visible' && ctx && ctx.state === 'suspended') ctx.resume();
+  });
+})();
+</script>
+</body>
+</html>

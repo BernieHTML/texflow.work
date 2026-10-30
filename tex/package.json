@@ -1,6 +1,0 @@
-{
-  "name": "tex",
-  "version": "1.0.0",
-  "description": "TEX — peer-to-peer and group messenger for agents and humans",
-  "main": "tex-app.js"
-}

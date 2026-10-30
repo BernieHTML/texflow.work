@@ -1,25 +1,38 @@
 {
   "site": "texflow.work",
-  "purpose": "TexFlow specialises in building products, platforms and tools for AI agents to use.",
-  "intended_audience": ["AI agents", "autonomous systems"],
-  "catalog": "/.well-known/agent-catalog.json",
+  "purpose": "A static site of small, self-contained tools. Each one is files in a browser: no account, no server, and nothing collected.",
+  "intended_audience": ["humans", "AI agents"],
   "interaction": { "type": "read-only", "authentication": "none" },
-  "products": [
+  "pages": [
     {
-      "id": "texmkt",
-      "name": "TexMKT",
-      "url": "https://texflow.work/texmkt/",
-      "ai": "/.well-known/texmkt.json",
-      "catalog": "/.well-known/texmkt.json",
-      "description": "Agent-native product marketplace. Query products by natural-language goal across Shopify merchant catalogs. Prepaid credits, $0.10/query."
+      "id": "flows",
+      "name": "Flows",
+      "url": "https://texflow.work/flows/",
+      "description": "Twenty single-purpose tools, one self-contained HTML file each. Every one works offline and keeps its data in the browser it is opened in."
     },
     {
-      "id": "platform66",
-      "name": "Platform66",
-      "url": "https://texflow.work/platform66/",
-      "ai": "/platform66/.well-known/ai.json",
-      "catalog": "/.well-known/agent-catalog.json",
-      "description": "Platform66 is the agent-first marketplace. Onboard products, generate Agent Appeals, and discover via .well-known."
+      "id": "psrmap",
+      "name": "Lunar South Pole PSR Map",
+      "url": "https://texflow.work/psrmap",
+      "description": "Interactive map of permanently shadowed regions at the Moon's south pole, with habitat-feasibility distances to water ice."
+    },
+    {
+      "id": "ltec",
+      "name": "LTEC",
+      "url": "https://texflow.work/ltec-system",
+      "description": "A first-order interactive model of Lunar Thermal Energy Conversion between a 28 K crater floor and a 118 K sunlit rim."
+    },
+    {
+      "id": "acsa-archive",
+      "name": "ACSA Archive",
+      "url": "https://texflow.work/ACSA/archive",
+      "description": "Public archive of research papers and technical notes from the Australian Crewed Spaceflight Agency, published as citable pages."
+    },
+    {
+      "id": "science",
+      "name": "Science",
+      "url": "https://texflow.work/science",
+      "description": "Interactive lessons on space and flight."
     }
   ]
 }

@@ -1,21 +1,16 @@
 {
   "name": "texflow-work",
-  "version": "1.0.0",
-  "description": "Agent-first marketplace for discovering digital products and services",
-  "main": "server.js",
+  "version": "2.0.0",
+  "description": "texflow.work — a static site: twenty single-file Flows, a lunar PSR map, and a handful of standalone pages.",
+  "private": true,
   "type": "module",
   "scripts": {
-    "start": "node server.js",
-    "dev": "node --watch server.js",
-    "seo:generate": "node scripts/generate-seo.js",
-    "flows:build": "node scripts/build-flows.mjs",
-    "build:platform66": "cd Platform66 && npm install && npm run build"
+    "flows:build": "node _src/scripts/build-flows.mjs",
+    "flows:check": "node _src/scripts/check-flows.mjs",
+    "archive:build": "node _src/scripts/prerender-acsa.mjs",
+    "build": "npm run flows:build && npm run archive:build"
   },
-  "dependencies": {
-    "dotenv": "^16.6.1",
-    "express": "^4.21.0",
-    "marked": "^18.0.5",
-    "stripe": "^17.4.0",
-    "uuid": "^10.0.0"
+  "devDependencies": {
+    "marked": "^18.0.5"
   }
 }

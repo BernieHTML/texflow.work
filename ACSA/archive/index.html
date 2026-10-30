@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ACSA Archive | Research Papers &amp; Technical Notes</title>
+  <meta name="description" content="A public archive of research papers, technical notes, and trade studies from the Australian Crewed Spaceflight Agency (ACSA).">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <link rel="canonical" href="https://texflow.work/ACSA/archive/">
+  <meta property="og:title" content="ACSA Archive | Research Papers &amp; Technical Notes">
+  <meta property="og:description" content="A public archive of research papers, technical notes, and trade studies from the Australian Crewed Spaceflight Agency (ACSA).">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://texflow.work/ACSA/archive/">
+  <meta property="og:image" content="https://texflow.work/ACSA/ACSA-Logo.jpg">
+  <meta property="og:site_name" content="ACSA Archive">
+  <meta property="og:locale" content="en_AU">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="ACSA Archive | Research Papers &amp; Technical Notes">
+  <meta name="twitter:description" content="A public archive of research papers, technical notes, and trade studies from the Australian Crewed Spaceflight Agency (ACSA).">
+  <meta name="twitter:image" content="https://texflow.work/ACSA/ACSA-Logo.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="icon" href="../ACSA-Logo.jpg">
+  <link rel="stylesheet" href="assets/archive.css">
+</head>
+<body>
+  <canvas id="stars" aria-hidden="true"></canvas>
+  <div class="cursor-dot" aria-hidden="true"></div>
+  <div class="cursor-ring" aria-hidden="true"></div>
+
+  <header class="topbar">
+    <a class="brand-link" href="../" aria-label="ACSA home">
+      <img class="brand-logo" src="../ACSA-Logo.jpg" alt="Australian Crewed Spaceflight Agency logo">
+      <span class="brand-text">
+        <span class="brand-name">ACSA</span>
+        <span class="brand-sub">Archive</span>
+      </span>
+    </a>
+    <div class="topbar-actions">
+      <button class="pill-btn" id="theme-toggle" type="button">Light mode</button>
+      <a class="pill-link" href="../">Back to ACSA</a>
+    </div>
+  </header>
+
+  <main class="shell">
+    <section class="archive-hero">
+      <p class="archive-eyebrow">Australian Crewed Spaceflight Agency</p>
+      <h1 class="archive-title">Archive</h1>
+      <p class="archive-lede">A public archive of research papers, technical notes, and trade studies written by ACSA across spaceflight, propulsion, human factors, and vehicle design.</p>
+      <div class="archive-search">
+        <input id="archive-search-input" type="search" placeholder="Search by title, author, or tag..." aria-label="Search papers" autocomplete="off">
+      </div>
+    </section>
+
+    <div class="paper-grid">
+      <a class="paper-card" href="acsa-astrodynamics-manual/" data-search="ACSA Astrodynamics Manual Angus Mann astrodynamics orbital mechanics spaceflight manoeuvres manual">
+      <div class="card-meta"><span>1 June 2026</span><span>46 min read</span></div>
+      <h2 class="card-title">ACSA Astrodynamics Manual</h2>
+      <p class="card-author">Angus Mann</p>
+      <p class="card-abstract">A practical manual giving astronauts the means to perform orbital calculations and manoeuvres by hand in the event of a guidance computer failure, covering orbital parameters, the equations of orbital motion, propulsion fundamentals, and emergency manoeuvre procedures for Earth orbit and cislunar space.</p>
+      <div class="tag-row"><span class="tag">astrodynamics</span><span class="tag">orbital mechanics</span><span class="tag">spaceflight</span><span class="tag">manoeuvres</span><span class="tag">manual</span></div>
+    </a>
+    </div>
+  </main>
+
+  <div id="copy-toast" class="copy-toast" role="status" aria-live="polite"></div>
+  <script src="assets/archive.js"></script>
+</body>
+</html>

@@ -1,0 +1,647 @@
+/* The look every Flow inherits.
+ *
+ * One rule governs everything here: a Flow has to feel the same opened from a
+ * home-screen icon, from a link in a message, and from a file sitting in
+ * Downloads with no network at all. So there are no web fonts, no external
+ * stylesheets and no images — the accent is the two colours from the Flow's
+ * own icon, injected as --a1/--a2, and everything else is drawn with CSS.
+ */
+
+:root {
+  --a1: #0369a1;
+  --a2: #38bdf8;
+
+  --bg: #f6f6f7;
+  --bg-deep: #eeeef1;
+  --surface: #ffffff;
+  --surface-2: #fafafb;
+  --line: rgba(9, 9, 11, 0.09);
+  --line-strong: rgba(9, 9, 11, 0.16);
+  --ink: #18181b;
+  --ink-2: #52525b;
+  --ink-3: #8b8b95;
+  --danger: #dc2626;
+  --good: #15803d;
+
+  --shadow-1: 0 1px 2px rgba(9, 9, 11, 0.04), 0 1px 3px rgba(9, 9, 11, 0.05);
+  --shadow-2: 0 2px 6px rgba(9, 9, 11, 0.05), 0 12px 28px rgba(9, 9, 11, 0.09);
+  --shadow-3: 0 10px 40px rgba(9, 9, 11, 0.18);
+
+  --r-sm: 10px;
+  --r: 14px;
+  --r-lg: 20px;
+  --r-xl: 26px;
+
+  --pad: 18px;
+  --tap: 48px;
+  --header: 56px;
+
+  --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+
+  --ease: cubic-bezier(0.32, 0.72, 0, 1);
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0c0c0e;
+    --bg-deep: #08080a;
+    --surface: #17171a;
+    --surface-2: #1e1e22;
+    --line: rgba(255, 255, 255, 0.09);
+    --line-strong: rgba(255, 255, 255, 0.18);
+    --ink: #f4f4f5;
+    --ink-2: #a1a1aa;
+    --ink-3: #71717a;
+    --danger: #f87171;
+    --good: #4ade80;
+    --shadow-1: 0 1px 2px rgba(0, 0, 0, 0.4);
+    --shadow-2: 0 2px 6px rgba(0, 0, 0, 0.4), 0 12px 28px rgba(0, 0, 0, 0.5);
+    --shadow-3: 0 10px 40px rgba(0, 0, 0, 0.6);
+    color-scheme: dark;
+  }
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overscroll-behavior-y: none;
+}
+
+body {
+  font-family: var(--font);
+  font-size: 16px;
+  line-height: 1.45;
+  color: var(--ink);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+  text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+}
+
+button, input, select, textarea { font: inherit; color: inherit; }
+input, textarea, select { -webkit-appearance: none; appearance: none; }
+h1, h2, h3, h4, p, ul, ol { margin: 0; }
+ul, ol { padding: 0; list-style: none; }
+a { color: var(--a1); }
+@media (prefers-color-scheme: dark) { a { color: var(--a2); } }
+
+/* ------------------------------------------------------------------ layout */
+
+.flow-app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  min-height: 100dvh;
+}
+
+.flow-bar {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: calc(var(--header) + env(safe-area-inset-top));
+  padding: env(safe-area-inset-top) max(var(--pad), env(safe-area-inset-left)) 0 max(var(--pad), env(safe-area-inset-right));
+  background: color-mix(in srgb, var(--bg) 82%, transparent);
+  backdrop-filter: saturate(1.6) blur(16px);
+  -webkit-backdrop-filter: saturate(1.6) blur(16px);
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s;
+}
+.flow-bar.is-stuck { border-bottom-color: var(--line); }
+
+/* One inline SVG, sized by whoever is showing it. */
+.flow-mark { display: block; width: 100%; height: 100%; }
+.flow-mark-sm { flex: none; display: block; width: 28px; height: 28px; }
+.flow-mark-lg { display: block; width: 78px; height: 78px; margin: 6px auto 15px; filter: drop-shadow(0 8px 22px rgba(9, 9, 11, 0.2)); }
+
+.flow-bar-title {
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.flow-bar-spacer { flex: 1; }
+
+.flow-icon-btn {
+  flex: none;
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--ink-2);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, transform 0.15s var(--ease);
+}
+.flow-icon-btn:hover { background: var(--line); color: var(--ink); }
+.flow-icon-btn:active { transform: scale(0.9); }
+.flow-icon-btn svg { width: 21px; height: 21px; }
+
+.flow-main {
+  flex: 1;
+  width: 100%;
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 12px max(var(--pad), env(safe-area-inset-left)) calc(40px + env(safe-area-inset-bottom)) max(var(--pad), env(safe-area-inset-right));
+  display: flex;
+  flex-direction: column;
+}
+
+/* A dock that stays put at the bottom of the viewport for the one action a
+ * Flow is really about — Start, Add, Settle up. */
+.flow-dock {
+  position: sticky;
+  bottom: 0;
+  z-index: 30;
+  /* `auto` rather than a fixed gap: on a short page the action sits at the
+     bottom of the screen where a thumb is, and on a long one it rides the
+     scroll instead of running away up the page. */
+  margin: 16px calc(var(--pad) * -1) 0;
+  margin-top: auto;
+  padding: 12px var(--pad) calc(12px + env(safe-area-inset-bottom));
+  background: linear-gradient(to top, var(--bg) 62%, transparent);
+}
+
+/* ------------------------------------------------------------- typography */
+
+.flow-lede {
+  color: var(--ink-2);
+  font-size: 15px;
+  margin-bottom: 18px;
+}
+
+.flow-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 650;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin: 0 0 8px 2px;
+}
+
+.flow-section { margin-top: 26px; }
+.flow-section:first-child { margin-top: 6px; }
+
+.flow-hint { font-size: 13px; color: var(--ink-3); margin-top: 8px; }
+
+.flow-empty {
+  text-align: center;
+  padding: 44px 20px;
+  color: var(--ink-3);
+  font-size: 15px;
+}
+.flow-empty strong { display: block; color: var(--ink-2); font-weight: 600; margin-bottom: 4px; }
+
+.num { font-variant-numeric: tabular-nums; }
+
+/* ---------------------------------------------------------------- surfaces */
+
+.flow-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-1);
+  padding: 16px;
+}
+.flow-card + .flow-card { margin-top: 12px; }
+
+.flow-tile {
+  border-radius: var(--r-xl);
+  padding: 22px 20px;
+  color: #fff;
+  background: linear-gradient(135deg, var(--a1), var(--a2));
+  box-shadow: var(--shadow-2);
+}
+.flow-tile .flow-tile-value {
+  font-size: clamp(38px, 13vw, 56px);
+  font-weight: 680;
+  letter-spacing: -0.035em;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.flow-tile .flow-tile-label {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.78;
+  margin-bottom: 10px;
+}
+.flow-tile .flow-tile-note { font-size: 14px; opacity: 0.86; margin-top: 8px; }
+
+/* --------------------------------------------------------------- controls */
+
+.flow-field { margin-bottom: 14px; }
+
+.flow-input, .flow-select, .flow-textarea {
+  width: 100%;
+  min-height: var(--tap);
+  padding: 12px 14px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r);
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 16px;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.flow-textarea { min-height: 120px; resize: vertical; line-height: 1.5; }
+.flow-input:focus, .flow-select:focus, .flow-textarea:focus {
+  outline: none;
+  border-color: var(--a2);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--a2) 22%, transparent);
+}
+.flow-input::placeholder, .flow-textarea::placeholder { color: var(--ink-3); }
+.flow-input[inputmode="decimal"], .flow-input[type="number"] { font-variant-numeric: tabular-nums; }
+
+.flow-select {
+  background-image: linear-gradient(45deg, transparent 50%, var(--ink-3) 50%), linear-gradient(135deg, var(--ink-3) 50%, transparent 50%);
+  background-position: calc(100% - 19px) 50%, calc(100% - 13px) 50%;
+  background-size: 6px 6px, 6px 6px;
+  background-repeat: no-repeat;
+  padding-right: 38px;
+}
+
+.flow-row { display: flex; gap: 10px; }
+.flow-row > * { flex: 1; min-width: 0; }
+
+.flow-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 52px;
+  padding: 0 20px;
+  border: 0;
+  border-radius: var(--r);
+  background: linear-gradient(135deg, var(--a1), var(--a2));
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  cursor: pointer;
+  box-shadow: var(--shadow-1);
+  transition: transform 0.16s var(--ease), filter 0.16s, opacity 0.16s;
+}
+.flow-btn:active { transform: scale(0.975); filter: brightness(0.95); }
+.flow-btn[disabled] { opacity: 0.4; pointer-events: none; }
+.flow-btn svg { width: 19px; height: 19px; }
+
+.flow-btn.is-quiet {
+  background: var(--surface);
+  color: var(--ink);
+  border: 1px solid var(--line-strong);
+  box-shadow: none;
+}
+.flow-btn.is-ghost { background: none; color: var(--ink-2); box-shadow: none; font-weight: 550; }
+.flow-btn.is-danger { background: none; color: var(--danger); border: 1px solid color-mix(in srgb, var(--danger) 35%, transparent); box-shadow: none; }
+.flow-btn.is-small { min-height: 40px; font-size: 14px; padding: 0 14px; width: auto; }
+
+/* A row of mutually exclusive choices. */
+.flow-segment {
+  display: flex;
+  gap: 3px;
+  padding: 3px;
+  background: var(--bg-deep);
+  border-radius: var(--r);
+  border: 1px solid var(--line);
+}
+.flow-segment button {
+  flex: 1;
+  min-width: 0;
+  min-height: 40px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: 11px;
+  background: transparent;
+  color: var(--ink-2);
+  font-size: 14px;
+  font-weight: 560;
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: background 0.18s var(--ease), color 0.18s, box-shadow 0.18s;
+}
+.flow-segment button[aria-pressed="true"] {
+  background: var(--surface);
+  color: var(--ink);
+  box-shadow: var(--shadow-1);
+}
+
+/* Chips: filters, tags, quick picks. */
+.flow-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.flow-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 36px;
+  padding: 0 13px;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--ink-2);
+  font-size: 14px;
+  font-weight: 550;
+  cursor: pointer;
+  transition: all 0.16s var(--ease);
+}
+.flow-chip:active { transform: scale(0.95); }
+.flow-chip[aria-pressed="true"], .flow-chip.is-on {
+  background: linear-gradient(135deg, var(--a1), var(--a2));
+  border-color: transparent;
+  color: #fff;
+}
+
+/* Stepper for counts that people nudge rather than type. */
+.flow-stepper {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  background: var(--bg-deep);
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  padding: 3px;
+}
+.flow-stepper button {
+  width: 42px;
+  height: 42px;
+  border: 0;
+  border-radius: 11px;
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 21px;
+  font-weight: 500;
+  cursor: pointer;
+  box-shadow: var(--shadow-1);
+  transition: transform 0.12s var(--ease);
+}
+.flow-stepper button:active { transform: scale(0.9); }
+.flow-stepper output {
+  flex: 1;
+  text-align: center;
+  font-size: 17px;
+  font-weight: 620;
+  font-variant-numeric: tabular-nums;
+}
+
+.flow-check {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: var(--tap);
+  padding: 4px 2px;
+  cursor: pointer;
+}
+.flow-check input { position: absolute; opacity: 0; pointer-events: none; }
+.flow-check .box {
+  flex: none;
+  width: 25px;
+  height: 25px;
+  border: 2px solid var(--line-strong);
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  transition: all 0.18s var(--ease);
+}
+.flow-check .box svg { width: 15px; height: 15px; stroke: #fff; opacity: 0; transform: scale(0.6); transition: all 0.18s var(--ease); }
+.flow-check input:checked + .box { background: linear-gradient(135deg, var(--a1), var(--a2)); border-color: transparent; }
+.flow-check input:checked + .box svg { opacity: 1; transform: scale(1); }
+.flow-check input:checked ~ .txt { color: var(--ink-3); text-decoration: line-through; }
+.flow-check .txt { transition: color 0.18s; }
+
+/* ------------------------------------------------------------------ lists */
+
+.flow-list { border-radius: var(--r-lg); overflow: hidden; border: 1px solid var(--line); background: var(--surface); box-shadow: var(--shadow-1); }
+.flow-list > li { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-top: 1px solid var(--line); }
+.flow-list > li:first-child { border-top: 0; }
+.flow-list .grow { flex: 1; min-width: 0; }
+.flow-list .name { font-weight: 560; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.flow-list .sub { font-size: 13px; color: var(--ink-3); }
+.flow-list .val { font-variant-numeric: tabular-nums; font-weight: 620; }
+
+.flow-x {
+  flex: none;
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--ink-3);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+.flow-x:hover { background: color-mix(in srgb, var(--danger) 12%, transparent); color: var(--danger); }
+.flow-x svg { width: 16px; height: 16px; }
+
+/* ---------------------------------------------------------------- overlays */
+
+.flow-scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  background: rgba(9, 9, 11, 0.42);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  opacity: 0;
+  transition: opacity 0.28s var(--ease);
+}
+.flow-scrim.is-open { opacity: 1; }
+
+.flow-sheet {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 91;
+  max-height: 88dvh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 10px max(16px, env(safe-area-inset-left)) calc(16px + env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-right));
+  background: var(--surface);
+  border-radius: 26px 26px 0 0;
+  box-shadow: var(--shadow-3);
+  transform: translateY(100%);
+  transition: transform 0.36s var(--ease);
+}
+.flow-sheet.is-open { transform: translateY(0); }
+@media (min-width: 620px) {
+  .flow-sheet {
+    left: 50%;
+    right: auto;
+    bottom: 50%;
+    width: 440px;
+    max-width: calc(100vw - 32px);
+    border-radius: 24px;
+    transform: translate(-50%, 60%) scale(0.96);
+    opacity: 0;
+    transition: transform 0.3s var(--ease), opacity 0.3s var(--ease);
+  }
+  .flow-sheet.is-open { transform: translate(-50%, 50%); opacity: 1; }
+}
+
+.flow-grip { width: 38px; height: 4px; border-radius: 2px; background: var(--line-strong); margin: 2px auto 12px; }
+@media (min-width: 620px) { .flow-grip { display: none; } }
+
+.flow-sheet h2 { font-size: 19px; font-weight: 650; letter-spacing: -0.02em; margin: 0 4px 4px; }
+.flow-sheet .sheet-lede { font-size: 14.5px; color: var(--ink-2); margin: 0 4px 14px; }
+
+.flow-menu { display: flex; flex-direction: column; gap: 2px; }
+.flow-menu button {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  min-height: 54px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: var(--r);
+  background: transparent;
+  color: var(--ink);
+  font-size: 16px;
+  font-weight: 520;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.14s;
+}
+.flow-menu button:hover { background: var(--surface-2); }
+.flow-menu button:active { background: var(--bg-deep); }
+.flow-menu button .mi {
+  flex: none;
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  border-radius: 10px;
+  background: var(--bg-deep);
+  color: var(--ink-2);
+}
+.flow-menu button .mi svg { width: 18px; height: 18px; }
+.flow-menu button .mt { flex: 1; min-width: 0; }
+.flow-menu button .ms { display: block; font-size: 12.5px; font-weight: 400; color: var(--ink-3); margin-top: 1px; }
+.flow-menu button.is-accent .mi { background: linear-gradient(135deg, var(--a1), var(--a2)); color: #fff; }
+.flow-menu button.is-danger { color: var(--danger); }
+.flow-menu button.is-danger .mi { background: color-mix(in srgb, var(--danger) 14%, transparent); color: var(--danger); }
+.flow-menu hr { border: 0; border-top: 1px solid var(--line); margin: 6px 12px; }
+
+/* Toast */
+.flow-toasts {
+  position: fixed;
+  left: 50%;
+  bottom: calc(22px + env(safe-area-inset-bottom));
+  z-index: 95;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+  pointer-events: none;
+  width: max-content;
+  max-width: calc(100vw - 32px);
+}
+.flow-toast {
+  padding: 11px 18px;
+  border-radius: 999px;
+  background: #18181b;
+  color: #fafafa;
+  font-size: 14.5px;
+  font-weight: 520;
+  box-shadow: var(--shadow-2);
+  animation: flow-toast-in 0.32s var(--ease);
+}
+@media (prefers-color-scheme: dark) { .flow-toast { background: #f4f4f5; color: #18181b; } }
+.flow-toast.is-out { animation: flow-toast-out 0.26s var(--ease) forwards; }
+@keyframes flow-toast-in { from { opacity: 0; transform: translateY(14px) scale(0.94); } }
+@keyframes flow-toast-out { to { opacity: 0; transform: translateY(10px) scale(0.96); } }
+
+/* The Add-to-Home-Screen coach. */
+.flow-coach { text-align: center; padding: 6px 6px 2px; }
+.flow-coach h2 { text-align: center; }
+.flow-coach .sheet-lede { text-align: center; }
+.flow-steps { display: flex; flex-direction: column; gap: 10px; margin: 16px 0 18px; text-align: left; }
+.flow-steps li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  font-size: 15px;
+}
+.flow-steps .n {
+  flex: none;
+  width: 24px;
+  height: 24px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--a1), var(--a2));
+  color: #fff;
+  font-size: 13px;
+  font-weight: 650;
+}
+.flow-steps svg { width: 18px; height: 18px; vertical-align: -4px; margin: 0 2px; }
+
+/* What a Flow looks like where scripts do not run — the iOS Files preview,
+ * most of all. Without this it is an empty page under a title bar, which reads
+ * as broken rather than as "open me somewhere that can run me". */
+.flow-noscript {
+  margin: 22px 0;
+  padding: 24px 22px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-xl);
+  box-shadow: var(--shadow-1);
+}
+.flow-noscript h1 { font-size: 21px; font-weight: 640; letter-spacing: -0.025em; margin-bottom: 10px; }
+.flow-noscript p { color: var(--ink-2); font-size: 15.5px; margin-bottom: 12px; }
+.flow-noscript p:last-child { margin-bottom: 0; }
+.flow-noscript-why {
+  padding: 13px 15px;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+}
+.flow-noscript-why strong { color: var(--ink); }
+
+.flow-remove h2 { text-align: center; margin-bottom: 14px; }
+.flow-remove .flow-steps { margin-bottom: 4px; }
+
+/* The screen a deleted Flow leaves behind. */
+.flow-gone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-height: 100dvh;
+  padding: 32px;
+  text-align: center;
+}
+.flow-gone .flow-mark-lg { width: 72px; height: 72px; filter: grayscale(1); opacity: 0.32; }
+.flow-gone h1 { font-size: 22px; font-weight: 650; letter-spacing: -0.02em; }
+.flow-gone p { color: var(--ink-2); max-width: 32ch; }
+.flow-gone .flow-btn { margin-top: 4px; }
+
+.flow-hidden { display: none !important; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}

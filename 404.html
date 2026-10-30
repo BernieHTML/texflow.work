@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nothing here</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#07080c">
+<style>
+  :root { --ink: #f2f4f8; --ink-dim: #8b93a7; --space: #07080c; }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    margin: 0;
+    background: var(--space);
+    color: var(--ink);
+    font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1.6rem;
+    padding: 2rem 16px;
+    text-align: center;
+  }
+  .code {
+    font-size: clamp(3.4rem, 16vw, 7rem);
+    font-weight: 600;
+    letter-spacing: -.04em;
+    line-height: 1;
+    margin: 0;
+    background: linear-gradient(180deg, #ffffff 0%, #6d7793 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  p { margin: 0; max-width: 30rem; color: var(--ink-dim); line-height: 1.6; }
+  nav { display: flex; flex-wrap: wrap; gap: .6rem; justify-content: center; margin-top: .4rem; }
+  a {
+    color: var(--ink);
+    text-decoration: none;
+    border: 1px solid rgba(255,255,255,.18);
+    border-radius: 999px;
+    padding: .55rem 1.1rem;
+    font-size: .92rem;
+    transition: border-color .18s, background .18s;
+  }
+  a:hover, a:focus-visible { border-color: rgba(255,255,255,.45); background: rgba(255,255,255,.06); }
+</style>
+</head>
+<body>
+  <h1 class="code">404</h1>
+  <p>There is nothing at this address. Some of what used to live here needed a server, and this site no longer has one.</p>
+  <nav id="ways"></nav>
+
+<script>
+(function () {
+  'use strict';
+
+  // This one page is served for any unknown path, so the address in the bar is
+  // not where the file sits and a relative link would resolve against the wrong
+  // directory. The site root has to be worked out instead: on a github.io
+  // project site it is the first path segment, and anywhere else it is /.
+  function siteRoot() {
+    if (/\.github\.io$/i.test(location.hostname)) {
+      var first = location.pathname.split('/')[1];
+      if (first) return '/' + first + '/';
+    }
+    return '/';
+  }
+
+  var root = siteRoot();
+  var ways = [
+    ['Home', ''],
+    ['Everything here', 'products'],
+    ['Flows', 'flows/']
+  ];
+
+  var nav = document.getElementById('ways');
+  ways.forEach(function (way) {
+    var a = document.createElement('a');
+    a.href = root + way[1];
+    a.textContent = way[0];
+    nav.appendChild(a);
+  });
+})();
+</script>
+</body>
+</html>

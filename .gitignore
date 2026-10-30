@@ -1,19 +1,5 @@
 node_modules/
-.env
 
-# smig's runtime state. These hold real people: email addresses, the 128-float
-# face descriptors the unlock gate matches against, private messages, live
-# session tokens, and the voice notes and photos themselves. `origin` is a
-# GitHub remote, so a stray `git add -A` would publish all of it permanently.
-data/smig-*.json
-data/smig-media/
-
-# Local python virtualenv for scripts/.
-scripts/.venv/
-
-# Flows runtime state: account names, the scrypt'd TexTokens that are the only
-# way into an account, live session tokens, and the list of which copy of which
-# tool belongs to whom. `origin` is a GitHub remote, so a stray `git add -A`
-# would publish all of it permanently. (What people type *into* a Flow never
-# reaches this server at all — it stays in the browser.)
-data/flows-*.json
+# Build-time only: npm run flows:build and npm run archive:build regenerate
+# everything they touch, and the output is committed.
+.DS_Store
