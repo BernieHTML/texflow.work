@@ -1,6 +1,6 @@
 // Service worker for the "Sleep Log" Flow. Scope is this directory only,
 // so a deleted copy takes nothing else with it.
-const CACHE = 'flow-sleep-8449b63c7f';
+const CACHE = 'flow-sleep-37b9fab2e8';
 const SHELL = ['./', './manifest.webmanifest', './icon-192.png', './icon-512.png', './icon-maskable-512.png'];
 
 self.addEventListener('install', (e) => {

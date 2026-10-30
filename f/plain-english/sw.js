@@ -1,6 +1,6 @@
 // Service worker for the "Plain English" Flow. Scope is this directory only,
 // so a deleted copy takes nothing else with it.
-const CACHE = 'flow-plain-english-12f2778f7f';
+const CACHE = 'flow-plain-english-7e14a9a01b';
 const SHELL = ['./', './manifest.webmanifest', './icon-192.png', './icon-512.png', './icon-maskable-512.png'];
 
 self.addEventListener('install', (e) => {

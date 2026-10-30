@@ -1,6 +1,6 @@
 // Service worker for the "Interval Timer" Flow. Scope is this directory only,
 // so a deleted copy takes nothing else with it.
-const CACHE = 'flow-intervals-d87eab9e36';
+const CACHE = 'flow-intervals-235b9344ed';
 const SHELL = ['./', './manifest.webmanifest', './icon-192.png', './icon-512.png', './icon-maskable-512.png'];
 
 self.addEventListener('install', (e) => {

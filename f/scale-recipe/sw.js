@@ -1,6 +1,6 @@
 // Service worker for the "Recipe Scaler" Flow. Scope is this directory only,
 // so a deleted copy takes nothing else with it.
-const CACHE = 'flow-scale-recipe-5e8f6799ba';
+const CACHE = 'flow-scale-recipe-47c3802453';
 const SHELL = ['./', './manifest.webmanifest', './icon-192.png', './icon-512.png', './icon-maskable-512.png'];
 
 self.addEventListener('install', (e) => {

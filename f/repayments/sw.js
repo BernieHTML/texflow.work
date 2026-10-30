@@ -1,6 +1,6 @@
 // Service worker for the "Repayments" Flow. Scope is this directory only,
 // so a deleted copy takes nothing else with it.
-const CACHE = 'flow-repayments-42618d95e9';
+const CACHE = 'flow-repayments-05f7a4b875';
 const SHELL = ['./', './manifest.webmanifest', './icon-192.png', './icon-512.png', './icon-maskable-512.png'];
 
 self.addEventListener('install', (e) => {

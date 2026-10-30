@@ -1325,8 +1325,11 @@ a { color: var(--a1); }
 
   // ----------------------------------------------------------------- share ---
 
+  // With the trailing slash, because this link is the one that goes out to
+  // other people: a directory named without it costs the recipient a
+  // redirect before anything loads.
   function canonicalUrl() {
-    return siteRoot() + '/f/' + (META.id || '');
+    return siteRoot() + '/f/' + (META.id || '') + '/';
   }
 
   // A share used to mint a fresh server-side copy so the recipient's Delete

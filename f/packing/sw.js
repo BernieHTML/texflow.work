@@ -1,6 +1,6 @@
 // Service worker for the "Packing" Flow. Scope is this directory only,
 // so a deleted copy takes nothing else with it.
-const CACHE = 'flow-packing-4958e19e20';
+const CACHE = 'flow-packing-a5e506d167';
 const SHELL = ['./', './manifest.webmanifest', './icon-192.png', './icon-512.png', './icon-maskable-512.png'];
 
 self.addEventListener('install', (e) => {
