@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TexFlow Lab — Experiments</title>
+  <meta name="description" content="The TexFlow Lab: experimental space projects built on real, open satellite and deep-space data feeds. Live Deep Space Network monitor, LEO Spy 3D satellite tracker, and more.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://texflow.work/lab">
+  <meta property="og:title" content="TexFlow Lab — Experiments">
+  <meta property="og:description" content="Experimental space projects on real open data feeds.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://texflow.work/lab">
+  <meta property="og:image" content="https://texflow.work/texflowlogo.png">
+  <link rel="icon" href="/texflowlogo.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#0a0b0f; --bg-elevated:#111318; --surface:#16181f; --border:#252830;
+      --text:#e8eaef; --text-muted:#8b90a0; --accent:#3b82f6; --accent-dim:#2563eb;
+      --font-sans:'Outfit',system-ui,sans-serif; --font-mono:'JetBrains Mono',monospace;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{
+      font-family:var(--font-sans);background:var(--bg);color:var(--text);
+      min-height:100vh;line-height:1.55;-webkit-font-smoothing:antialiased;
+      position:relative;overflow-x:hidden;
+    }
+    /* starfield */
+    .stars{position:fixed;inset:0;z-index:0;pointer-events:none;
+      background:
+        radial-gradient(1px 1px at 20% 30%, #fff, transparent),
+        radial-gradient(1px 1px at 60% 70%, rgba(255,255,255,.8), transparent),
+        radial-gradient(1px 1px at 80% 20%, rgba(255,255,255,.6), transparent),
+        radial-gradient(2px 2px at 35% 80%, rgba(255,255,255,.5), transparent),
+        radial-gradient(1px 1px at 90% 60%, rgba(255,255,255,.7), transparent),
+        radial-gradient(1px 1px at 10% 90%, rgba(255,255,255,.5), transparent),
+        radial-gradient(1.5px 1.5px at 50% 15%, rgba(255,255,255,.6), transparent);
+      background-size:cover;opacity:.5;}
+    .glow{position:fixed;top:-25%;left:50%;transform:translateX(-50%);
+      width:900px;height:700px;z-index:0;pointer-events:none;
+      background:radial-gradient(ellipse at center, rgba(59,130,246,.18), transparent 60%);
+      filter:blur(40px);}
+    .wrap{position:relative;z-index:1;max-width:1120px;margin:0 auto;padding:0 1.25rem}
+    header.bar{display:flex;align-items:center;justify-content:space-between;
+      padding:1.4rem 0;}
+    .brand{display:flex;align-items:center;gap:.6rem;text-decoration:none;color:var(--text)}
+    .brand img{width:34px;height:34px;border-radius:8px}
+    .brand b{font-weight:600;letter-spacing:.3px}
+    .brand span{color:var(--text-muted);font-weight:400}
+    .back{color:var(--text-muted);text-decoration:none;font-size:.9rem;
+      border:1px solid var(--border);padding:.45rem .85rem;border-radius:999px;transition:.18s}
+    .back:hover{color:var(--text);border-color:var(--accent)}
+    .hero{text-align:center;padding:3.5rem 0 2.5rem}
+    .kicker{font-family:var(--font-mono);color:var(--accent);font-size:.8rem;
+      letter-spacing:3px;text-transform:uppercase}
+    h1{font-size:clamp(2.4rem,6vw,3.8rem);font-weight:700;margin:.6rem 0;letter-spacing:-1px}
+    .lead{color:var(--text-muted);max-width:640px;margin:0 auto;font-size:1.08rem}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+      gap:1.25rem;padding:1rem 0 3rem}
+    .card{display:flex;flex-direction:column;background:linear-gradient(180deg,var(--surface),var(--bg-elevated));
+      border:1px solid var(--border);border-radius:18px;padding:1.6rem;
+      text-decoration:none;color:var(--text);position:relative;overflow:hidden;
+      transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease}
+    .card:hover{transform:translateY(-4px);border-color:var(--accent);
+      box-shadow:0 18px 50px -20px rgba(59,130,246,.5)}
+    .card::after{content:"";position:absolute;inset:0;background:
+      radial-gradient(400px circle at var(--mx,50%) var(--my,0%),rgba(59,130,246,.09),transparent 45%);
+      opacity:0;transition:opacity .25s}
+    .card:hover::after{opacity:1}
+    .card .ico{font-size:2rem;margin-bottom:.9rem}
+    .badge{position:absolute;top:1.2rem;right:1.2rem;font-family:var(--font-mono);
+      font-size:.65rem;letter-spacing:1px;padding:.25rem .55rem;border-radius:999px;
+      border:1px solid rgba(34,197,94,.4);color:#4ade80;background:rgba(34,197,94,.08)}
+    .badge.soon{border-color:rgba(139,146,160,.35);color:var(--text-muted);background:transparent}
+    .card h2{font-size:1.4rem;font-weight:600;margin-bottom:.5rem}
+    .card p{color:var(--text-muted);font-size:.95rem;flex:1}
+    .tags{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:1rem}
+    .tag{font-family:var(--font-mono);font-size:.68rem;color:var(--text-muted);
+      border:1px solid var(--border);border-radius:999px;padding:.2rem .55rem}
+    .go{margin-top:1.1rem;font-weight:600;color:var(--accent);font-size:.95rem}
+    .card.disabled{pointer-events:none;opacity:.6}
+    footer{text-align:center;color:var(--text-muted);font-size:.85rem;
+      padding:2rem 0 3rem;border-top:1px solid var(--border);margin-top:1rem}
+    footer a{color:var(--text-muted)}
+  </style>
+</head>
+<body>
+  <div class="stars"></div>
+  <div class="glow"></div>
+  <div class="wrap">
+    <header class="bar">
+      <a class="brand" href="/"><img src="/texflowlogo.png" alt="TexFlow"><b>TexFlow</b><span>/ Lab</span></a>
+      <a class="back" href="/">← Back to TexFlow</a>
+    </header>
+
+    <section class="hero">
+      <p class="kicker">Experimental</p>
+      <h1>The Lab</h1>
+      <p class="lead">A workbench for space experiments — small, self-contained projects built on real, open satellite and deep-space data feeds. No logins, no keys, just live data.</p>
+    </section>
+
+    <section class="grid" id="grid">
+      <a class="card" href="/lab/deepspace">
+        <span class="badge">● LIVE</span>
+        <div class="ico">📡</div>
+        <h2>Deep Space Network</h2>
+        <p>Watch NASA's giant dishes in California, Spain and Australia talk to spacecraft across the solar system in real time — including Voyager 1 &amp; 2, still calling home from interstellar space.</p>
+        <div class="tags"><span class="tag">NASA DSN Now</span><span class="tag">live feed</span><span class="tag">Voyager</span></div>
+        <div class="go">Open monitor →</div>
+      </a>
+
+      <a class="card" href="/lab/leospy">
+        <span class="badge">● LIVE</span>
+        <div class="ico">🛰️</div>
+        <h2>LEO Spy</h2>
+        <p>An interactive 3D globe tracking thousands of active satellites in real time — ISS, Starlink, GPS, weather and science birds — propagated live in your browser from open orbital data.</p>
+        <div class="tags"><span class="tag">CelesTrak TLEs</span><span class="tag">3D globe</span><span class="tag">SGP4</span></div>
+        <div class="go">Track satellites →</div>
+      </a>
+
+      <a class="card" href="/lab/ltec">
+        <span class="badge">● LIVE</span>
+        <div class="ico">♨️</div>
+        <h2>LTEC System</h2>
+        <p>A simple interactive diagram of a Low-Temperature Energy Conversion cycle — click any stage to see what it does. A first sketch, built to grow.</p>
+        <div class="tags"><span class="tag">interactive</span><span class="tag">diagram</span><span class="tag">draft</span></div>
+        <div class="go">Explore diagram →</div>
+      </a>
+    </section>
+
+    <footer>
+      Built by TexFlow · powered by open data from
+      <a href="https://eyes.nasa.gov/dsn/" target="_blank" rel="noopener">NASA DSN</a> &amp;
+      <a href="https://celestrak.org/" target="_blank" rel="noopener">CelesTrak</a>.
+      More experiments landing soon.
+    </footer>
+  </div>
+
+  <script>
+    // subtle cursor glow per card
+    document.querySelectorAll('.card').forEach(c=>{
+      c.addEventListener('pointermove',e=>{
+        const r=c.getBoundingClientRect();
+        c.style.setProperty('--mx',((e.clientX-r.left)/r.width*100)+'%');
+        c.style.setProperty('--my',((e.clientY-r.top)/r.height*100)+'%');
+      });
+    });
+  </script>
+</body>
+</html>

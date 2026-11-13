@@ -588,6 +588,97 @@ app.get('/psrmap/wms', async (req, res) => {
   }
 });
 
+// ============================================================================
+//  TexFlow Lab — experimental space projects at /lab
+//  Self-contained pages that run on free, no-auth public APIs. The server
+//  proxies + caches the upstream feeds so the browser never hits rate limits
+//  or CORS, and the pages keep working even if an upstream is briefly down.
+// ============================================================================
+const LAB_CACHE_DIR = join(__dirname, 'data', 'lab-cache');
+let labCacheReady = false;
+async function ensureLabCache() {
+  if (!labCacheReady) { await mkdir(LAB_CACHE_DIR, { recursive: true }); labCacheReady = true; }
+}
+
+// Fetch `url` with a disk cache keyed by `key`, refreshed at most every `ttlMs`.
+// Falls back to a stale cached copy if the upstream fetch fails.
+async function labCachedFetch(key, url, ttlMs, { timeoutMs = 20000 } = {}) {
+  await ensureLabCache();
+  const file = join(LAB_CACHE_DIR, key);
+  let stat = null;
+  try { stat = require('node:fs').statSync(file); } catch (_) {}
+  const fresh = stat && (Date.now() - stat.mtimeMs) < ttlMs;
+  if (fresh) {
+    return { body: await readFile(file, 'utf8'), cache: 'HIT', age: Math.round((Date.now() - stat.mtimeMs) / 1000) };
+  }
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), timeoutMs);
+  try {
+    const r = await fetch(url, { signal: ctrl.signal, headers: { 'User-Agent': 'TexFlowLab/1.0 (+https://texflow.work/lab)' } });
+    if (!r.ok) throw new Error('upstream ' + r.status);
+    const body = await r.text();
+    writeFile(file, body).catch(() => {});
+    return { body, cache: 'MISS', age: 0 };
+  } catch (e) {
+    if (stat) return { body: await readFile(file, 'utf8'), cache: 'STALE', age: Math.round((Date.now() - stat.mtimeMs) / 1000) };
+    throw e;
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+// Lab pages (clean URLs, with and without trailing slash).
+const LAB_DIR = join(__dirname, 'public', 'lab');
+app.get(['/lab', '/lab/'], (req, res) => res.sendFile(join(LAB_DIR, 'index.html')));
+app.get(['/lab/deepspace', '/lab/deepspace/'], (req, res) => res.sendFile(join(LAB_DIR, 'deepspace', 'index.html')));
+app.get(['/lab/leospy', '/lab/leospy/'], (req, res) => res.sendFile(join(LAB_DIR, 'leospy', 'index.html')));
+app.get(['/lab/ltec', '/lab/ltec/'], (req, res) => res.sendFile(join(LAB_DIR, 'ltec', 'index.html')));
+
+// NASA Deep Space Network "DSN Now" live feed (which dish is talking to which
+// spacecraft right now — Voyager, Mars orbiters, etc.). Public, no key.
+app.get('/lab/api/dsn', async (req, res) => {
+  try {
+    const { body, cache, age } = await labCachedFetch('dsn.xml', 'https://eyes.nasa.gov/dsn/data/dsn.xml?r=' + Date.now(), 12000);
+    res.set('Content-Type', 'application/xml; charset=utf-8');
+    res.set('Cache-Control', 'public, max-age=10');
+    res.set('X-Lab-Cache', `${cache} ${age}s`);
+    res.send(body);
+  } catch (e) {
+    res.status(502).json({ error: 'DSN feed unavailable', message: e.message });
+  }
+});
+
+// CelesTrak GP/TLE catalogue, by group. Public, no key. Cached 3h (CelesTrak
+// asks clients not to poll more than a few times a day).
+const LAB_TLE_GROUPS = new Set([
+  'stations', 'visual', 'active', 'starlink', 'oneweb', 'gps-ops',
+  'galileo', 'beidou', 'science', 'weather', 'noaa', 'geo', 'last-30-days'
+]);
+app.get('/lab/api/tles', async (req, res) => {
+  const group = String(req.query.group || 'visual').toLowerCase();
+  if (!LAB_TLE_GROUPS.has(group)) return res.status(400).json({ error: 'unknown group' });
+  try {
+    const url = `https://celestrak.org/NORAD/elements/gp.php?GROUP=${encodeURIComponent(group)}&FORMAT=tle`;
+    const { body, cache, age } = await labCachedFetch(`tle-${group}.txt`, url, 3 * 60 * 60 * 1000, { timeoutMs: 25000 });
+    // Parse 3-line TLE sets into compact JSON the client can feed to satellite.js.
+    const lines = body.split(/\r?\n/).filter((l) => l.trim().length);
+    const sats = [];
+    for (let i = 0; i + 2 < lines.length + 1; i += 3) {
+      const name = (lines[i] || '').trim();
+      const l1 = lines[i + 1];
+      const l2 = lines[i + 2];
+      if (l1 && l2 && l1.startsWith('1 ') && l2.startsWith('2 ')) {
+        sats.push({ name, l1, l2, id: l2.slice(2, 7).trim() });
+      } else { i -= 2; } // resync if a block was malformed
+    }
+    res.set('Cache-Control', 'public, max-age=1800');
+    res.set('X-Lab-Cache', `${cache} ${age}s`);
+    res.json({ group, count: sats.length, updated: cache === 'MISS' ? 'now' : `${age}s ago`, sats });
+  } catch (e) {
+    res.status(502).json({ error: 'TLE feed unavailable', message: e.message });
+  }
+});
+
 // --- ACSA public site and support tokens ---
 app.use((req, res, next) => {
   if (req.path === '/acsa' || req.path === '/acsa/') return res.redirect('/ACSA/');

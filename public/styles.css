@@ -1026,3 +1026,15 @@ a.nav-gander-btn:active {
   color: var(--text);
   border-color: var(--text-muted);
 }
+
+/* TexFlow Lab button (homepage nav) */
+.nav-lab-btn {
+  border-color: rgba(59, 130, 246, 0.5) !important;
+  color: var(--accent) !important;
+  background: rgba(59, 130, 246, 0.08) !important;
+}
+.nav-lab-btn:hover {
+  background: rgba(59, 130, 246, 0.18) !important;
+  border-color: var(--accent) !important;
+  color: #fff !important;
+}

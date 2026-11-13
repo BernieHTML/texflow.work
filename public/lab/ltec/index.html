@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LTEC System — Interactive Diagram · TexFlow Lab</title>
+  <meta name="description" content="A simple interactive diagram of a Low-Temperature Energy Conversion (LTEC) cycle. Click any stage to see what it does.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://texflow.work/lab/ltec">
+  <link rel="icon" href="/texflowlogo.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#0a0b0f; --surface:#14161d; --surface2:#1a1d26; --border:#252830;
+      --text:#e8eaef; --muted:#8b90a0; --accent:#3b82f6;
+      --hot:#f97316; --cold:#38bdf8; --power:#facc15; --fluid:#4ade80;
+      --font:'Outfit',system-ui,sans-serif; --mono:'JetBrains Mono',monospace;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;
+      -webkit-font-smoothing:antialiased}
+    .wrap{max-width:1080px;margin:0 auto;padding:0 1.1rem 4rem}
+    header.bar{display:flex;align-items:center;justify-content:space-between;padding:1.2rem 0;flex-wrap:wrap;gap:.6rem}
+    .brand{display:flex;align-items:center;gap:.55rem;text-decoration:none;color:var(--text)}
+    .brand img{width:30px;height:30px;border-radius:7px}
+    .brand b{font-weight:600}.brand span{color:var(--muted)}
+    .back{color:var(--muted);text-decoration:none;font-size:.85rem;border:1px solid var(--border);
+      padding:.4rem .8rem;border-radius:999px}
+    .back:hover{color:var(--text);border-color:var(--accent)}
+    .title{padding:.8rem 0 .4rem}
+    .kicker{font-family:var(--mono);color:var(--accent);font-size:.75rem;letter-spacing:3px;text-transform:uppercase}
+    h1{font-size:clamp(1.8rem,5vw,2.6rem);font-weight:700;letter-spacing:-.5px;margin:.3rem 0}
+    .sub{color:var(--muted);max-width:720px}
+    .draft{display:inline-block;margin-top:.6rem;font-family:var(--mono);font-size:.72rem;
+      color:#fbbf24;border:1px solid rgba(251,191,36,.4);background:rgba(251,191,36,.08);
+      padding:.25rem .6rem;border-radius:999px}
+    .layout{display:grid;grid-template-columns:1fr 320px;gap:1.2rem;margin-top:1.4rem}
+    @media(max-width:860px){.layout{grid-template-columns:1fr}}
+    .stage{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:1rem}
+    svg{width:100%;height:auto;display:block}
+    .node{cursor:pointer}
+    .node rect{transition:.18s}
+    .node:hover rect, .node.active rect{filter:brightness(1.18)}
+    .node.active rect{stroke-width:2.5}
+    .node text{pointer-events:none;font-family:var(--font);fill:var(--text)}
+    .node .lab{font-weight:600;font-size:15px}
+    .node .sub{font-size:11px;fill:var(--muted);font-family:var(--mono)}
+    .flow{fill:none;stroke-width:3;stroke-linecap:round}
+    .flowdot{fill:var(--fluid)}
+    .legend{display:flex;gap:1rem;flex-wrap:wrap;margin-top:.7rem;font-size:.78rem;color:var(--muted);font-family:var(--mono)}
+    .legend span{display:inline-flex;align-items:center;gap:.35rem}
+    .legend i{width:18px;height:3px;border-radius:2px;display:inline-block}
+
+    .detail{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:1.2rem;
+      position:sticky;top:1rem;align-self:start}
+    .detail .pill{font-family:var(--mono);font-size:.7rem;letter-spacing:1px;text-transform:uppercase;
+      padding:.2rem .55rem;border-radius:999px;display:inline-block;margin-bottom:.6rem}
+    .detail h2{font-size:1.3rem;font-weight:600;margin-bottom:.4rem}
+    .detail p{color:var(--muted);font-size:.92rem;margin-bottom:.9rem}
+    .detail dl{display:grid;grid-template-columns:auto 1fr;gap:.35rem .8rem;font-size:.85rem}
+    .detail dt{color:var(--muted);font-family:var(--mono);font-size:.74rem}
+    .detail dd{text-align:right}
+    .detail .note{margin-top:1rem;font-size:.76rem;color:var(--muted);border-top:1px solid var(--border);padding-top:.7rem}
+    footer{color:var(--muted);font-size:.82rem;text-align:center;margin-top:2.5rem}
+    footer a{color:var(--muted)}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="bar">
+      <a class="brand" href="/"><img src="/texflowlogo.png" alt="TexFlow"><b>TexFlow</b><span>/ Lab</span></a>
+      <a class="back" href="/lab">← Lab</a>
+    </header>
+
+    <div class="title">
+      <p class="kicker">Interactive diagram</p>
+      <h1>LTEC System</h1>
+      <p class="sub">A <b>Low-Temperature Energy Conversion</b> cycle turns a modest temperature difference between a warm source and a cold sink into useful electricity, using a working fluid that boils and condenses around room temperature. Click any stage below to see what it does.</p>
+      <span class="draft">⚑ First draft — basic info only, built to expand</span>
+    </div>
+
+    <div class="layout">
+      <div class="stage">
+        <svg viewBox="0 0 760 420" role="img" aria-label="LTEC cycle diagram">
+          <defs>
+            <marker id="arrow" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
+              <path d="M0,0 L7,3 L0,6 Z" fill="#8b90a0"/>
+            </marker>
+          </defs>
+
+          <!-- flow loop path (clockwise): evaporator -> turbine -> condenser -> pump -> evaporator -->
+          <path id="loop" class="flow" stroke="#2f6d4a"
+            d="M 210,110 L 470,110 L 470,310 L 210,310 Z" marker-mid="url(#arrow)"/>
+          <!-- arrow heads on each leg -->
+          <path class="flow" stroke="#2f6d4a" d="M 300,110 L 360,110" marker-end="url(#arrow)"/>
+          <path class="flow" stroke="#2f6d4a" d="M 470,180 L 470,240" marker-end="url(#arrow)"/>
+          <path class="flow" stroke="#2f6d4a" d="M 400,310 L 340,310" marker-end="url(#arrow)"/>
+          <path class="flow" stroke="#2f6d4a" d="M 210,240 L 210,180" marker-end="url(#arrow)"/>
+
+          <!-- animated working-fluid dot -->
+          <circle class="flowdot" r="5">
+            <animateMotion dur="7s" repeatCount="indefinite"
+              path="M 210,110 L 470,110 L 470,310 L 210,310 Z"/>
+          </circle>
+
+          <!-- HEAT SOURCE (top-left, feeds evaporator) -->
+          <g class="node" data-k="source">
+            <rect x="8" y="60" width="118" height="90" rx="12" fill="#2a1710" stroke="var(--hot)"/>
+            <text class="lab" x="67" y="98" text-anchor="middle">Heat source</text>
+            <text class="sub" x="67" y="120" text-anchor="middle">warm reservoir</text>
+            <text class="sub" x="67" y="136" text-anchor="middle" fill="#f97316">~25 °C</text>
+          </g>
+          <path class="flow" stroke="var(--hot)" d="M 126,105 L 148,105" marker-end="url(#arrow)"/>
+
+          <!-- EVAPORATOR -->
+          <g class="node" data-k="evaporator">
+            <rect x="152" y="70" width="128" height="80" rx="12" fill="#161d20" stroke="var(--fluid)"/>
+            <text class="lab" x="216" y="104" text-anchor="middle">Evaporator</text>
+            <text class="sub" x="216" y="124" text-anchor="middle">fluid boils</text>
+          </g>
+
+          <!-- TURBINE + GENERATOR -->
+          <g class="node" data-k="turbine">
+            <rect x="405" y="70" width="130" height="80" rx="12" fill="#211e0c" stroke="var(--power)"/>
+            <text class="lab" x="470" y="100" text-anchor="middle">Turbine</text>
+            <text class="sub" x="470" y="120" text-anchor="middle">+ generator</text>
+            <text class="sub" x="470" y="136" text-anchor="middle" fill="#facc15">→ electricity</text>
+          </g>
+
+          <!-- CONDENSER -->
+          <g class="node" data-k="condenser">
+            <rect x="405" y="270" width="130" height="80" rx="12" fill="#0d1a22" stroke="var(--cold)"/>
+            <text class="lab" x="470" y="304" text-anchor="middle">Condenser</text>
+            <text class="sub" x="470" y="324" text-anchor="middle">fluid condenses</text>
+          </g>
+
+          <!-- COLD SINK -->
+          <g class="node" data-k="sink">
+            <rect x="565" y="260" width="150" height="90" rx="12" fill="#0d1a22" stroke="var(--cold)"/>
+            <text class="lab" x="640" y="298" text-anchor="middle">Cold sink</text>
+            <text class="sub" x="640" y="320" text-anchor="middle">cold reservoir</text>
+            <text class="sub" x="640" y="336" text-anchor="middle" fill="#38bdf8">~5 °C</text>
+          </g>
+          <path class="flow" stroke="var(--cold)" d="M 535,310 L 560,310" marker-end="url(#arrow)"/>
+
+          <!-- PUMP -->
+          <g class="node" data-k="pump">
+            <rect x="150" y="270" width="130" height="80" rx="12" fill="#1a1d26" stroke="var(--accent)"/>
+            <text class="lab" x="215" y="304" text-anchor="middle">Pump</text>
+            <text class="sub" x="215" y="324" text-anchor="middle">pressurises liquid</text>
+          </g>
+        </svg>
+
+        <div class="legend">
+          <span><i style="background:var(--hot)"></i> heat in</span>
+          <span><i style="background:var(--fluid)"></i> working fluid loop</span>
+          <span><i style="background:var(--power)"></i> power out</span>
+          <span><i style="background:var(--cold)"></i> heat out</span>
+        </div>
+      </div>
+
+      <aside class="detail" id="detail">
+        <span class="pill" id="d-pill">Overview</span>
+        <h2 id="d-title">The LTEC cycle</h2>
+        <p id="d-desc">A closed loop of working fluid carries heat from the warm source to the cold sink. On the way, some of that heat is skimmed off as electricity. Click a stage in the diagram to learn more.</p>
+        <dl id="d-specs"></dl>
+        <div class="note" id="d-note">Values shown are illustrative placeholders for this first draft.</div>
+      </aside>
+    </div>
+
+    <footer>A <a href="/lab">TexFlow Lab</a> experiment · simple interactive systems diagram</footer>
+  </div>
+
+  <script>
+    const INFO = {
+      source: { pill:'Input', color:'var(--hot)', title:'Heat source',
+        desc:'The warm reservoir that supplies energy to the cycle — for a low-temperature system this might be warm surface water, waste heat from industry, or geothermal fluid. Only a small temperature difference is needed.',
+        specs:{ 'Role':'Energy input', 'Temp (placeholder)':'~25 °C', 'Transfers heat to':'Evaporator' } },
+      evaporator: { pill:'Heat exchanger', color:'var(--fluid)', title:'Evaporator',
+        desc:'Heat from the warm source boils the working fluid — a liquid chosen to vaporise at low temperature (e.g. ammonia or a refrigerant). The fluid leaves as a pressurised vapour.',
+        specs:{ 'Role':'Boils working fluid', 'In':'Warm liquid fluid', 'Out':'High-pressure vapour' } },
+      turbine: { pill:'Power', color:'var(--power)', title:'Turbine + Generator',
+        desc:'The expanding vapour spins a turbine coupled to a generator, converting the flow energy into electricity. This is where the cycle does its useful work.',
+        specs:{ 'Role':'Extracts work', 'Drives':'Electric generator', 'Output':'Electricity' } },
+      condenser: { pill:'Heat exchanger', color:'var(--cold)', title:'Condenser',
+        desc:'The low-pressure vapour leaving the turbine is cooled by the cold sink until it condenses back into a liquid, ready to be pumped round again.',
+        specs:{ 'Role':'Condenses vapour', 'In':'Low-pressure vapour', 'Out':'Cool liquid fluid' } },
+      sink: { pill:'Output', color:'var(--cold)', title:'Cold sink',
+        desc:'The cold reservoir that absorbs the leftover heat — for a low-temperature system this might be cold deep water or ambient cooling. The bigger the temperature gap with the source, the more power the cycle can produce.',
+        specs:{ 'Role':'Heat rejection', 'Temp (placeholder)':'~5 °C', 'Absorbs heat from':'Condenser' } },
+      pump: { pill:'Circulation', color:'var(--accent)', title:'Pump',
+        desc:'A small pump raises the pressure of the condensed liquid and pushes it back into the evaporator, closing the loop. It uses only a fraction of the power the turbine produces.',
+        specs:{ 'Role':'Circulates fluid', 'In':'Low-pressure liquid', 'Out':'High-pressure liquid' } }
+    };
+    const d = {
+      pill:document.getElementById('d-pill'), title:document.getElementById('d-title'),
+      desc:document.getElementById('d-desc'), specs:document.getElementById('d-specs'),
+    };
+    function show(k){
+      const info = INFO[k]; if(!info) return;
+      d.pill.textContent = info.pill; d.pill.style.color = info.color;
+      d.pill.style.borderColor = info.color;
+      d.pill.style.border = '1px solid '+info.color;
+      d.title.textContent = info.title; d.desc.textContent = info.desc;
+      d.specs.innerHTML = Object.entries(info.specs).map(([k,v])=>`<dt>${k}</dt><dd>${v}</dd>`).join('');
+      document.querySelectorAll('.node').forEach(n=>n.classList.toggle('active', n.dataset.k===k));
+    }
+    document.querySelectorAll('.node').forEach(n=>{
+      n.addEventListener('click', ()=>show(n.dataset.k));
+      n.addEventListener('mouseenter', ()=>show(n.dataset.k));
+    });
+  </script>
+</body>
+</html>

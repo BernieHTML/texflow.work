@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Deep Space Network — TexFlow Lab</title>
+  <meta name="description" content="A live view of NASA's Deep Space Network: which giant antenna is talking to which spacecraft right now, from Mars orbiters to Voyager in interstellar space.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://texflow.work/lab/deepspace">
+  <link rel="icon" href="/texflowlogo.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#0a0b0f; --surface:#14161d; --surface2:#1a1d26; --border:#252830;
+      --text:#e8eaef; --muted:#8b90a0; --accent:#3b82f6; --up:#f59e0b; --down:#4ade80;
+      --font:'Outfit',system-ui,sans-serif; --mono:'JetBrains Mono',monospace;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;
+      -webkit-font-smoothing:antialiased}
+    .stars{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.45;
+      background:
+        radial-gradient(1px 1px at 15% 25%, #fff, transparent),
+        radial-gradient(1px 1px at 55% 65%, rgba(255,255,255,.8), transparent),
+        radial-gradient(1px 1px at 85% 15%, rgba(255,255,255,.6), transparent),
+        radial-gradient(2px 2px at 30% 85%, rgba(255,255,255,.5), transparent),
+        radial-gradient(1px 1px at 92% 55%, rgba(255,255,255,.7), transparent);}
+    .wrap{position:relative;z-index:1;max-width:1240px;margin:0 auto;padding:0 1.1rem 4rem}
+    header.bar{display:flex;align-items:center;justify-content:space-between;gap:1rem;
+      padding:1.2rem 0;flex-wrap:wrap}
+    .brand{display:flex;align-items:center;gap:.55rem;text-decoration:none;color:var(--text)}
+    .brand img{width:30px;height:30px;border-radius:7px}
+    .brand b{font-weight:600}.brand span{color:var(--muted)}
+    .back{color:var(--muted);text-decoration:none;font-size:.85rem;border:1px solid var(--border);
+      padding:.4rem .8rem;border-radius:999px}
+    .back:hover{color:var(--text);border-color:var(--accent)}
+    .title{padding:1rem 0 .4rem}
+    .kicker{font-family:var(--mono);color:var(--accent);font-size:.75rem;letter-spacing:3px;text-transform:uppercase}
+    h1{font-size:clamp(1.9rem,5vw,2.8rem);font-weight:700;letter-spacing:-.5px;margin:.3rem 0}
+    .sub{color:var(--muted);max-width:760px}
+    .status{display:flex;align-items:center;gap:.9rem;flex-wrap:wrap;margin:1rem 0 1.4rem;
+      font-family:var(--mono);font-size:.78rem;color:var(--muted)}
+    .dot{width:8px;height:8px;border-radius:50%;background:var(--down);display:inline-block;
+      box-shadow:0 0 8px var(--down);animation:pulse 2s infinite}
+    @keyframes pulse{50%{opacity:.35}}
+    .stations{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:1.1rem}
+    .station{background:var(--surface);border:1px solid var(--border);border-radius:16px;overflow:hidden}
+    .station-h{padding:1rem 1.2rem;border-bottom:1px solid var(--border);
+      display:flex;align-items:center;justify-content:space-between;
+      background:linear-gradient(180deg,var(--surface2),var(--surface))}
+    .station-h h2{font-size:1.2rem;font-weight:600}
+    .station-h .loc{font-family:var(--mono);font-size:.72rem;color:var(--muted)}
+    .station-time{font-family:var(--mono);font-size:.72rem;color:var(--accent)}
+    .dish{padding:.9rem 1.2rem;border-bottom:1px solid var(--border)}
+    .dish:last-child{border-bottom:none}
+    .dish-h{display:flex;align-items:baseline;justify-content:space-between;gap:.5rem}
+    .dish-name{font-family:var(--mono);font-weight:700;font-size:.9rem}
+    .dish-act{font-size:.76rem;color:var(--muted);text-align:right}
+    .links{margin-top:.6rem;display:flex;flex-direction:column;gap:.5rem}
+    .link{display:flex;align-items:center;gap:.6rem;background:var(--surface2);
+      border:1px solid var(--border);border-radius:10px;padding:.55rem .7rem;cursor:pointer;
+      transition:.15s}
+    .link:hover{border-color:var(--accent)}
+    .arrow{font-family:var(--mono);font-weight:700;font-size:.95rem;width:1.3rem;text-align:center}
+    .arrow.up{color:var(--up)}.arrow.down{color:var(--down)}
+    .link-body{flex:1;min-width:0}
+    .sc-name{font-weight:600;font-size:.92rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .sc-meta{font-family:var(--mono);font-size:.7rem;color:var(--muted);margin-top:.1rem}
+    .idle{color:var(--muted);font-size:.82rem;font-style:italic;padding:.3rem 0}
+    .spotlight{margin:2.2rem 0 0;background:linear-gradient(135deg,rgba(59,130,246,.09),var(--surface));
+      border:1px solid var(--border);border-radius:16px;padding:1.4rem 1.5rem}
+    .spotlight h3{font-size:1.15rem;margin-bottom:.3rem}
+    .spotlight p{color:var(--muted);font-size:.92rem}
+    .hidden{display:none}
+    /* modal */
+    .modal{position:fixed;inset:0;z-index:50;background:rgba(5,6,10,.72);backdrop-filter:blur(4px);
+      display:flex;align-items:center;justify-content:center;padding:1.2rem}
+    .modal.hidden{display:none}
+    .modal-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;
+      max-width:480px;width:100%;padding:1.6rem;position:relative}
+    .modal-card h3{font-size:1.4rem;margin-bottom:.2rem}
+    .modal-card .tagline{color:var(--accent);font-family:var(--mono);font-size:.76rem;margin-bottom:.9rem}
+    .modal-card p{color:var(--text);font-size:.95rem;margin-bottom:.9rem}
+    .kv{display:grid;grid-template-columns:auto 1fr;gap:.35rem .9rem;font-size:.86rem}
+    .kv dt{color:var(--muted);font-family:var(--mono);font-size:.76rem}
+    .kv dd{color:var(--text)}
+    .close{position:absolute;top:.9rem;right:1rem;background:none;border:none;color:var(--muted);
+      font-size:1.5rem;cursor:pointer;line-height:1}
+    .close:hover{color:var(--text)}
+    footer{color:var(--muted);font-size:.82rem;text-align:center;margin-top:2.5rem}
+    footer a{color:var(--muted)}
+    .err{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.35);color:#fca5a5;
+      padding:1rem;border-radius:12px;font-size:.9rem}
+  </style>
+</head>
+<body>
+  <div class="stars"></div>
+  <div class="wrap">
+    <header class="bar">
+      <a class="brand" href="/"><img src="/texflowlogo.png" alt="TexFlow"><b>TexFlow</b><span>/ Lab</span></a>
+      <a class="back" href="/lab">← Lab</a>
+    </header>
+
+    <div class="title">
+      <p class="kicker">Live · NASA Deep Space Network</p>
+      <h1>Who's calling home?</h1>
+      <p class="sub">The Deep Space Network is three enormous antenna complexes — one each in California, Spain and Australia — so Earth can always hear its most distant robots. This is what they're receiving and transmitting <em>right now</em>. Tap any link for the spacecraft's story.</p>
+    </div>
+
+    <div class="status">
+      <span><span class="dot"></span> <span id="live-label">connecting…</span></span>
+      <span id="count-label"></span>
+      <span id="updated-label"></span>
+    </div>
+
+    <div id="stations" class="stations"></div>
+    <div id="error" class="err hidden"></div>
+
+    <div class="spotlight" id="spotlight">
+      <h3>🛰️ The two faintest whispers</h3>
+      <p><b>Voyager 1 &amp; 2</b> launched in 1977 and are now the most distant human-made objects, over 20 billion km away in interstellar space. Their signals reach Earth at about 10<sup>-16</sup> watts — a few hundred billion times weaker than a digital watch battery — which is why it takes a 70-metre dish to hear them. When the DSN is listening to a Voyager, it lights up <b>orange</b> above.</p>
+    </div>
+
+    <footer>
+      Data: <a href="https://eyes.nasa.gov/dsn/dsn.html" target="_blank" rel="noopener">NASA/JPL DSN Now</a> ·
+      refreshes every 10&nbsp;seconds · a <a href="/lab">TexFlow Lab</a> experiment
+    </footer>
+  </div>
+
+  <div class="modal hidden" id="modal">
+    <div class="modal-card">
+      <button class="close" id="modal-close" aria-label="Close">×</button>
+      <h3 id="m-name"></h3>
+      <div class="tagline" id="m-tag"></div>
+      <p id="m-desc"></p>
+      <dl class="kv" id="m-kv"></dl>
+    </div>
+  </div>
+
+  <script src="/lab/deepspace/app.js"></script>
+</body>
+</html>
