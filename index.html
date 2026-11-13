@@ -161,6 +161,38 @@
   @media (prefers-reduced-motion: reduce) {
     .ground, .sky { animation: none; }
   }
+
+  /* A quiet way in, for anyone curious while the rest is still coming. */
+  .lab-link {
+    display: inline-flex;
+    align-items: center;
+    gap: .55em;
+    margin-top: clamp(1.4rem, 4.5vmin, 2.4rem);
+    padding: .62rem 1.25rem;
+    font-size: clamp(.78rem, 2.4vw, .92rem);
+    font-weight: 500;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    text-indent: .2em;
+    color: var(--ink-dim);
+    text-decoration: none;
+    border: 1px solid rgba(185, 194, 214, .22);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, .015);
+    backdrop-filter: blur(2px);
+    transition: color .25s, border-color .25s, background .25s, transform .25s;
+  }
+
+  .lab-link:hover,
+  .lab-link:focus-visible {
+    color: var(--ink);
+    border-color: rgba(185, 194, 214, .5);
+    background: rgba(255, 255, 255, .05);
+    transform: translateY(-1px);
+    outline: none;
+  }
+
+  .lab-link .spark { color: #b9c2d6; }
 </style>
 </head>
 <body>
@@ -175,6 +207,7 @@
   <div class="word">
     <h1>TexFlow</h1>
     <p>Coming&nbsp;Soon</p>
+    <a class="lab-link" href="/lab"><span class="spark" aria-hidden="true">✦</span>Enter the Lab</a>
   </div>
 
 <script>
