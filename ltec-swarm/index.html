@@ -129,6 +129,7 @@
     <a class="brand" href="/ltec-system"><img src="/texflowlogo.png" alt="TexFlow"><b>LTEC</b><span>&middot; Swarm</span></a>
     <nav class="top-links">
       <a href="/ltec-visuals">Single unit</a>
+      <a href="/ltec-multicrater">Multi-crater</a>
       <a href="/ltec-testkit">Test kit</a>
       <a href="/ltec-system">The model</a>
       <a href="/lab">Lab</a>
@@ -338,8 +339,9 @@
   }
 
   // ---------- reusable materials ----------
-  const steelMat = new THREE.MeshStandardMaterial({color:C.steel, metalness:.85, roughness:.34});
-  const steelDarkMat = new THREE.MeshStandardMaterial({color:C.steelDark, metalness:.8, roughness:.5});
+  // Light, mostly-diffuse metal so the units read clearly against the dark regolith.
+  const steelMat = new THREE.MeshStandardMaterial({color:0xdfe4ec, metalness:.4, roughness:.46});
+  const steelDarkMat = new THREE.MeshStandardMaterial({color:0xaab3c3, metalness:.45, roughness:.52});
   const panelMat = new THREE.MeshStandardMaterial({color:0x202733, metalness:.5, roughness:.6});
   function emissiveMat(hex,intensity){ return new THREE.MeshStandardMaterial({color:hex, emissive:hex, emissiveIntensity:intensity, metalness:.4, roughness:.4}); }
   function onGround(x,z,yOff=0){ return new THREE.Vector3(x, H(x,z)+yOff, z); }
