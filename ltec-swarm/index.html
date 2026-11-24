@@ -236,8 +236,8 @@
   sun.shadow.bias = -0.0004; sun.shadow.normalBias = 0.7;
   scene.add(sun, sun.target);
 
-  scene.add(new THREE.AmbientLight(0x1a2234, 0.55));
-  scene.add(new THREE.HemisphereLight(0x1d3356, 0x05070c, 0.6));
+  scene.add(new THREE.AmbientLight(0x2b3754, 0.8));
+  scene.add(new THREE.HemisphereLight(0x2c4a74, 0x090d16, 0.85));
 
   // Cold blue fill deep in the PSR so the shadowed floor reads cold, not black.
   const psrFill = new THREE.PointLight(0x8fd4ff, 420, 170, 2.0);
@@ -310,7 +310,7 @@
   moonTex.anisotropy = renderer.capabilities.getMaxAnisotropy();
   moonTex.wrapS = moonTex.wrapT = THREE.ClampToEdgeWrapping;
   const terrain = new THREE.Mesh(terGeo, new THREE.MeshStandardMaterial({
-    map:moonTex, color:0xbfc4cc, roughness:1, metalness:0
+    map:moonTex, color:0xeaedf3, roughness:1, metalness:0
   }));
   terrain.castShadow = true; terrain.receiveShadow = true;
   scene.add(terrain);
