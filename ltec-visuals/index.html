@@ -105,15 +105,23 @@
   .controls button[aria-pressed="true"]{color:var(--base);background:var(--cold);border-color:var(--cold)}
   .controls button .dot{width:7px;height:7px;border-radius:50%;background:currentColor;opacity:.7}
 
+  .panel .collapse{display:none;float:right;font-size:.72rem;color:var(--ink-3);background:none;border:1px solid var(--line);
+    border-radius:999px;padding:.15rem .5rem;cursor:pointer;margin-top:-.1rem}
   @media (max-width:760px){
+    /* brand on its own line, the nav a single swipeable row underneath */
+    .topbar{flex-direction:column;align-items:stretch;gap:.45rem;padding:.6rem .6rem .8rem}
+    .brand span{font-size:.82rem}
+    .top-links{flex-wrap:nowrap;overflow-x:auto;justify-content:flex-start;gap:.4rem;
+      scrollbar-width:none;-ms-overflow-style:none}
+    .top-links::-webkit-scrollbar{display:none}
+    .top-links a{padding:.36rem .7rem;font-size:.78rem}
     .panel{top:auto;bottom:66px;left:.6rem;right:.6rem;width:auto;max-height:42vh}
     .legend{bottom:14px;left:.6rem;right:.6rem;justify-content:center;border-radius:14px}
-    .controls{top:56px;bottom:auto;right:.6rem}
+    .controls{top:102px;bottom:auto;right:.6rem;left:.6rem;justify-content:flex-end;gap:.35rem}
+    .controls button{padding:.42rem .62rem;font-size:.72rem}
     .panel.collapsed .stats,.panel.collapsed .cycle,.panel.collapsed .foot-note,.panel.collapsed p.lede{display:none}
     .panel .collapse{display:inline-flex}
   }
-  .panel .collapse{display:none;float:right;font-size:.72rem;color:var(--ink-3);background:none;border:1px solid var(--line);
-    border-radius:999px;padding:.15rem .5rem;cursor:pointer;margin-top:-.1rem}
 </style>
 </head>
 <body>
@@ -128,6 +136,7 @@
     <a class="brand" href="/ltec-system"><img src="/texflowlogo.png" alt="TexFlow"><b>LTEC</b><span>&middot; 3D</span></a>
     <nav class="top-links">
       <a href="/ltec-testkit">Test kit</a>
+      <a href="/ltec-settlement">Settlement</a>
       <a href="/ltec-system">The model</a>
       <a href="/lab">Lab</a>
     </nav>

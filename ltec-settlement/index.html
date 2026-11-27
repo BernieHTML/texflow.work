@@ -1,0 +1,625 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>LTEC settlement grid in 3D &middot; TexFlow</title>
+<meta name="description" content="An interactive 3D visualisation of a lunar settlement powered by LTEC: several permanently shadowed craters each host a swarm of Lunar Thermal Energy Conversion units, and every swarm feeds a shared grid converging on a central power-storage hub at a settlement built for about a thousand residents.">
+<meta name="author" content="B. Dyke">
+<meta name="theme-color" content="#05070e">
+<meta name="color-scheme" content="dark">
+<link rel="canonical" href="https://texflow.work/ltec-settlement">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="TexFlow">
+<meta property="og:title" content="LTEC settlement — crater swarms powering a lunar town">
+<meta property="og:description" content="Five crater swarms of LTEC units feed one grid into a central power-storage hub at a lunar settlement for ~1000 people — explore it in 3D.">
+<meta property="og:url" content="https://texflow.work/ltec-settlement">
+<meta property="og:image" content="https://texflow.work/ltec-system/og.png">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%23070a12'/%3E%3Cpath d='M50 16a34 34 0 100 68 34 34 0 010-68z' fill='%2338bdf8'/%3E%3Cpath d='M50 16a34 34 0 010 68' fill='%23fbbf24'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cold:#4cc5fb; --cold-deep:#0a7fc2;
+    --hot:#fcc33a;  --hot-deep:#d98c07;
+    --power:#5be58c; --power-deep:#16a34a;
+    --ink:#f2f6fd; --ink-2:#c2cde2; --ink-3:#93a1ba;
+    --base:#05070e;
+    --glass:rgba(10,14,24,.74); --glass-2:rgba(16,22,38,.6);
+    --line:rgba(255,255,255,.12); --line-soft:rgba(255,255,255,.07);
+    --sans:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;
+    --display:'Space Grotesk','Inter',system-ui,sans-serif;
+    --r:14px; --r-sm:10px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{font-family:var(--sans);background:var(--base);color:var(--ink);overflow:hidden;
+    -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+  #scene{position:fixed;inset:0;z-index:0}
+  #scene canvas{display:block;touch-action:none}
+
+  /* ---- loading ---- */
+  #loader{position:fixed;inset:0;z-index:30;display:flex;flex-direction:column;align-items:center;
+    justify-content:center;gap:1.1rem;background:radial-gradient(ellipse at 60% 30%,#0b1120,#05070e 70%);
+    transition:opacity .6s ease;color:var(--ink-3);font-family:var(--display)}
+  #loader.gone{opacity:0;pointer-events:none}
+  .spin{width:54px;height:54px;border-radius:50%;
+    border:3px solid rgba(255,255,255,.1);
+    border-top-color:var(--cold);border-right-color:var(--hot);animation:spin 1.1s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  #loader .lt{font-size:.82rem;letter-spacing:.14em;text-transform:uppercase}
+
+  /* ---- top bar ---- */
+  .topbar{position:fixed;top:0;left:0;right:0;z-index:12;display:flex;align-items:center;
+    justify-content:space-between;gap:1rem;padding:.8rem 1rem;
+    background:linear-gradient(180deg,rgba(5,7,14,.82),transparent);pointer-events:none}
+  .topbar>*{pointer-events:auto}
+  .brand{display:flex;align-items:center;gap:.55rem;text-decoration:none;color:var(--ink)}
+  .brand img{width:30px;height:30px;border-radius:7px}
+  .brand b{font-family:var(--display);font-weight:600}
+  .brand span{color:var(--ink-3);font-size:.9rem}
+  .top-links{display:flex;gap:.5rem;flex-wrap:wrap;justify-content:flex-end}
+  .top-links a{font-size:.82rem;color:var(--ink-2);text-decoration:none;
+    border:1px solid var(--line);border-radius:999px;padding:.4rem .8rem;
+    background:var(--glass);backdrop-filter:blur(8px);transition:.18s;white-space:nowrap}
+  .top-links a:hover{color:var(--ink);border-color:var(--cold)}
+
+  /* ---- info panel ---- */
+  .panel{position:fixed;top:60px;left:1rem;z-index:11;width:310px;max-width:calc(100vw - 2rem);
+    background:var(--glass);border:1px solid var(--line);border-radius:var(--r);
+    backdrop-filter:blur(13px);padding:1.05rem 1.1rem;max-height:calc(100vh - 150px);overflow-y:auto}
+  .panel .eyebrow{font-family:var(--display);font-size:.68rem;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--cold)}
+  .panel h1{font-family:var(--display);font-size:1.3rem;font-weight:600;line-height:1.1;margin:.25rem 0 .5rem}
+  .panel p.lede{color:var(--ink-2);font-size:.86rem;line-height:1.5}
+  .stats{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin:.9rem 0}
+  .stat{background:var(--glass-2);border:1px solid var(--line-soft);border-radius:var(--r-sm);padding:.55rem .6rem}
+  .stat .k{font-family:var(--display);font-size:1.18rem;font-weight:600;font-variant-numeric:tabular-nums}
+  .stat .l{font-size:.68rem;color:var(--ink-3);letter-spacing:.02em;margin-top:.1rem}
+  .stat.cold .k{color:var(--cold)} .stat.hot .k{color:var(--hot)}
+  .stat.pow .k{color:var(--power)} .stat.eff .k{color:var(--ink)}
+  .cycle{margin:.5rem 0 .2rem;border-top:1px solid var(--line-soft);padding-top:.7rem}
+  .cycle h2{font-family:var(--display);font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--ink-3);margin-bottom:.5rem}
+  .step{display:flex;gap:.55rem;font-size:.82rem;color:var(--ink-2);margin-bottom:.5rem;line-height:1.4}
+  .step .n{flex:none;width:20px;height:20px;border-radius:50%;display:grid;place-items:center;
+    font-family:var(--display);font-size:.72rem;font-weight:600;color:var(--base)}
+  .step b{color:var(--ink)}
+  .foot-note{font-size:.72rem;color:var(--ink-3);line-height:1.5;margin-top:.55rem;
+    border-top:1px solid var(--line-soft);padding-top:.6rem}
+
+  /* ---- legend ---- */
+  .legend{position:fixed;bottom:1rem;left:1rem;z-index:11;display:flex;gap:.9rem;flex-wrap:wrap;
+    background:var(--glass);border:1px solid var(--line);border-radius:999px;
+    backdrop-filter:blur(10px);padding:.5rem .95rem;font-size:.76rem;color:var(--ink-2)}
+  .legend .it{display:flex;align-items:center;gap:.4rem}
+  .legend .sw{width:11px;height:11px;border-radius:50%}
+
+  /* ---- controls ---- */
+  .controls{position:fixed;bottom:1rem;right:1rem;z-index:11;display:flex;gap:.45rem;flex-wrap:wrap;justify-content:flex-end}
+  .controls button{font-family:var(--sans);font-size:.78rem;color:var(--ink-2);cursor:pointer;
+    border:1px solid var(--line);border-radius:999px;padding:.48rem .8rem;
+    background:var(--glass);backdrop-filter:blur(10px);transition:.16s;display:flex;align-items:center;gap:.35rem}
+  .controls button:hover{color:var(--ink);border-color:var(--cold)}
+  .controls button[aria-pressed="true"]{color:var(--base);background:var(--cold);border-color:var(--cold)}
+  .controls button .dot{width:7px;height:7px;border-radius:50%;background:currentColor;opacity:.7}
+
+  .panel .collapse{display:none;float:right;font-size:.72rem;color:var(--ink-3);background:none;border:1px solid var(--line);
+    border-radius:999px;padding:.15rem .5rem;cursor:pointer;margin-top:-.1rem}
+  @media (max-width:760px){
+    /* brand on its own line, the nav a single swipeable row underneath */
+    .topbar{flex-direction:column;align-items:stretch;gap:.45rem;padding:.6rem .6rem .8rem}
+    .brand span{font-size:.82rem}
+    .top-links{flex-wrap:nowrap;overflow-x:auto;justify-content:flex-start;gap:.4rem;
+      scrollbar-width:none;-ms-overflow-style:none}
+    .top-links::-webkit-scrollbar{display:none}
+    .top-links a{padding:.36rem .7rem;font-size:.78rem}
+    .panel{top:auto;bottom:66px;left:.6rem;right:.6rem;width:auto;max-height:42vh}
+    .legend{bottom:14px;left:.6rem;right:.6rem;justify-content:center;border-radius:14px}
+    .controls{top:102px;bottom:auto;right:.6rem;left:.6rem;justify-content:flex-end;gap:.35rem}
+    .controls button{padding:.42rem .62rem;font-size:.72rem}
+    .panel.collapsed .stats,.panel.collapsed .cycle,.panel.collapsed .foot-note,.panel.collapsed p.lede{display:none}
+    .panel .collapse{display:inline-flex}
+  }
+</style>
+</head>
+<body>
+  <div id="scene"></div>
+
+  <div id="loader">
+    <div class="spin"></div>
+    <div class="lt" id="loaderText">Assembling the settlement grid&hellip;</div>
+  </div>
+
+  <div class="topbar">
+    <a class="brand" href="/ltec-system"><img src="/texflowlogo.png" alt="TexFlow"><b>LTEC</b><span>&middot; Settlement</span></a>
+    <nav class="top-links">
+      <a href="/ltec-visuals">Single unit</a>
+      <a href="/ltec-swarm">Swarm</a>
+      <a href="/ltec-multicrater">Multi-crater</a>
+      <a href="/ltec-testkit">Test kit</a>
+      <a href="/ltec-system">The model</a>
+      <a href="/lab">Lab</a>
+    </nav>
+  </div>
+
+  <aside class="panel" id="panel">
+    <button class="collapse" id="collapseBtn" aria-expanded="true">hide</button>
+    <p class="eyebrow">Lunar Thermal Energy Conversion</p>
+    <h1>Powering a lunar settlement</h1>
+    <p class="lede">Several permanently shadowed craters each carry their own swarm of LTEC units. Every swarm feeds a shared grid that converges on a central power-storage hub at the heart of a lunar settlement built for roughly a thousand residents.</p>
+
+    <div class="stats">
+      <div class="stat eff"><div class="k">~1000</div><div class="l">residents (illustrative)</div></div>
+      <div class="stat pow"><div class="k">5</div><div class="l">crater swarms</div></div>
+      <div class="stat cold"><div class="k">19</div><div class="l">LTEC units &middot; ~28 K sinks</div></div>
+      <div class="stat hot"><div class="k">~0.2 MW</div><div class="l">grid &rarr; storage (illustrative)</div></div>
+    </div>
+
+    <div class="cycle">
+      <h2>How the grid converges</h2>
+      <div class="step"><span class="n" style="background:var(--cold)">1</span><div>Each crater rim carries a <b>swarm</b> of LTEC units dipping condensers into its shadow.</div></div>
+      <div class="step"><span class="n" style="background:var(--hot)">2</span><div>Sunlit rims boil the fluid, spin the turbines, and the cold floors condense it back.</div></div>
+      <div class="step"><span class="n" style="background:var(--power)">3</span><div>Units in a crater share a local <b>power ring</b>; one feeder cord runs inward.</div></div>
+      <div class="step"><span class="n" style="background:var(--power-deep)">4</span><div>Feeders converge on the central <b>storage hub</b> buffering the settlement grid.</div></div>
+    </div>
+
+    <p class="foot-note">Surface, craters and settlement are a stylised grey relief; geometry is schematic and temperatures &amp; efficiency follow the TexFlow LTEC paper. Compare the single-crater <a href="/ltec-swarm" style="color:var(--cold)">swarm</a> and <a href="/ltec-multicrater" style="color:var(--cold)">multi-crater</a> grids.</p>
+  </aside>
+
+  <div class="legend">
+    <div class="it"><span class="sw" style="background:var(--cold)"></span>Cold liquid</div>
+    <div class="it"><span class="sw" style="background:var(--hot)"></span>Hot gas</div>
+    <div class="it"><span class="sw" style="background:var(--power)"></span>Electricity</div>
+  </div>
+
+  <div class="controls">
+    <button id="btnLabels" aria-pressed="true"><span class="dot"></span>Labels</button>
+    <button id="btnFlow" aria-pressed="true"><span class="dot"></span>Flow</button>
+    <button id="btnSpin" aria-pressed="true"><span class="dot"></span>Auto-rotate</button>
+    <button id="btnReset">Reset view</button>
+  </div>
+
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.min.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"
+    }
+  }
+  </script>
+  <script type="module">
+  import * as THREE from 'three';
+  import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+  const mobile = Math.min(innerWidth, innerHeight) < 760;
+  const $ = id => document.getElementById(id);
+
+  // ---------- colours ----------
+  const C = { cold:0x4cc5fb, coldDeep:0x0a7fc2, hot:0xfcc33a, hotDeep:0xd98c07, power:0x5be58c };
+
+  // ---------- renderer / scene / camera ----------
+  const host = $('scene');
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x04060c);
+  scene.fog = new THREE.FogExp2(0x05070e, 0.0013);
+
+  const camera = new THREE.PerspectiveCamera(46, innerWidth/innerHeight, 0.5, 6000);
+  // portrait screens see a narrower slice, so start further back
+  camera.position.set(12, 196, 372);
+  if(mobile) camera.position.set(10, 236, 462);
+
+  const renderer = new THREE.WebGLRenderer({ antialias:!mobile, powerPreference:'high-performance' });
+  renderer.setPixelRatio(Math.min(devicePixelRatio, mobile ? 1.5 : 2));
+  renderer.setSize(innerWidth, innerHeight);
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.14;
+  host.appendChild(renderer.domElement);
+
+  const controls = new OrbitControls(camera, renderer.domElement);
+  controls.enableDamping = true;
+  controls.dampingFactor = 0.07;
+  controls.target.set(0, -8, 0);
+  controls.minDistance = 110;
+  controls.maxDistance = 560;
+  controls.maxPolarAngle = 1.40;
+  controls.autoRotate = true;
+  controls.autoRotateSpeed = 0.28;
+  controls.enablePan = false;
+
+  // ---------- lights ----------
+  const sunDir = new THREE.Vector3(228, 68, 74);
+  const sun = new THREE.DirectionalLight(0xfff4de, 2.35);
+  sun.position.copy(sunDir);
+  sun.castShadow = true;
+  sun.shadow.mapSize.set(mobile?1024:2048, mobile?1024:2048);
+  sun.shadow.camera.near = 40; sun.shadow.camera.far = 1000;
+  const sc = 330;
+  sun.shadow.camera.left=-sc; sun.shadow.camera.right=sc;
+  sun.shadow.camera.top=sc; sun.shadow.camera.bottom=-sc;
+  sun.shadow.bias = -0.0004; sun.shadow.normalBias = 0.7;
+  scene.add(sun, sun.target);
+
+  scene.add(new THREE.AmbientLight(0x1f2a3e, 0.8));
+  scene.add(new THREE.HemisphereLight(0x24406b, 0x05070c, 0.75));
+
+  // ---------- sky ----------
+  (function stars(){
+    const n = mobile?900:1700, pos = new Float32Array(n*3);
+    for(let i=0;i<n;i++){
+      const r=2200, u=Math.random(), v=Math.random();
+      const th=2*Math.PI*u, ph=Math.acos(2*v-1);
+      pos[i*3]=r*Math.sin(ph)*Math.cos(th); pos[i*3+1]=Math.abs(r*Math.cos(ph))*0.8+60; pos[i*3+2]=r*Math.sin(ph)*Math.sin(th);
+    }
+    const g=new THREE.BufferGeometry(); g.setAttribute('position',new THREE.BufferAttribute(pos,3));
+    scene.add(new THREE.Points(g,new THREE.PointsMaterial({color:0xcdd6ec,size:2.4,sizeAttenuation:false,transparent:true,opacity:.9})));
+  })();
+  function glowSprite(color, size, opacity){
+    const cv=document.createElement('canvas'); cv.width=cv.height=128;
+    const x=cv.getContext('2d'); const g=x.createRadialGradient(64,64,0,64,64,64);
+    const col=new THREE.Color(color);
+    g.addColorStop(0,`rgba(${col.r*255|0},${col.g*255|0},${col.b*255|0},1)`);
+    g.addColorStop(.25,`rgba(${col.r*255|0},${col.g*255|0},${col.b*255|0},.5)`);
+    g.addColorStop(1,'rgba(0,0,0,0)');
+    x.fillStyle=g; x.fillRect(0,0,128,128);
+    const t=new THREE.CanvasTexture(cv);
+    const s=new THREE.Sprite(new THREE.SpriteMaterial({map:t,transparent:true,opacity:opacity,depthWrite:false,blending:THREE.AdditiveBlending}));
+    s.scale.set(size,size,1); return s;
+  }
+  const sunGlow = glowSprite(0xfff1cf, 300, 0.9); sunGlow.position.copy(sunDir).setLength(1300); scene.add(sunGlow);
+  const sunCore = new THREE.Mesh(new THREE.SphereGeometry(34,24,24), new THREE.MeshBasicMaterial({color:0xfff6e0}));
+  sunCore.position.copy(sunDir).setLength(1300); scene.add(sunCore);
+  (function earth(){
+    const e=new THREE.Mesh(new THREE.SphereGeometry(20,32,32),
+      new THREE.MeshStandardMaterial({color:0x2a5c9e,emissive:0x0a2038,emissiveIntensity:.6,roughness:.85}));
+    e.position.set(-660, 240, -900); scene.add(e);
+    scene.add(glowSprite(0x6fa8ff, 84, .5).translateX(-660).translateY(240).translateZ(-900));
+  })();
+
+  // ---------- terrain: a ring of crater swarms around a central settlement ----------
+  function smooth(e0,e1,x){ const t=Math.min(1,Math.max(0,(x-e0)/(e1-e0))); return t*t*(3-2*t); }
+  const HUB = {x:0, z:0};
+  const HUB_PAD = 46, HUB_PAD2 = 70, HUB_Y = 2.4;   // flattened plateau under the settlement
+  // the five working craters, each hosting a swarm (x, z, rim radius, bowl depth, units)
+  const craters = [
+    {x:   0, z:-140, R:34, d:26, n:4},
+    {x: 133, z: -43, R:30, d:23, n:4},
+    {x:  82, z: 113, R:32, d:24, n:4},
+    {x: -82, z: 113, R:28, d:21, n:3},
+    {x:-133, z: -43, R:30, d:23, n:4},
+  ];
+  // background craters for scale and realism
+  const extra = [[182,122,22,12],[-186,120,24,13],[150,-156,20,10],[-150,-156,22,12],[2,196,20,11],
+    [262,-24,30,15],[-268,34,28,14],[64,278,26,13],[-96,-266,30,15],[232,214,24,12],
+    [-240,-196,26,13],[14,-324,34,17],[318,110,28,14],[-330,-70,30,15],[-60,330,24,12]];
+  function height(x,z){
+    let h = 2.2*Math.sin(x*0.03)*Math.cos(z*0.028) + 1.3*Math.sin(x*0.07+1.1)*Math.sin(z*0.06+0.5);
+    for(const c of craters){
+      const d=Math.hypot(x-c.x, z-c.z);
+      h += (c.R*0.24)*Math.exp(-Math.pow((d-c.R)/(c.R*0.3),2)); // raised rim ring
+      h -= c.d*smooth(c.R+5, 5, d);                             // bowl floor (PSR)
+    }
+    for(const [ex,ez,er,ed] of extra){
+      const d=Math.hypot(x-ex,z-ez);
+      h += (er*0.22)*Math.exp(-Math.pow((d-er)/(er*0.4),2));
+      h -= ed*smooth(er, er*0.2, d);
+    }
+    const dh=Math.hypot(x-HUB.x,z-HUB.z);
+    const pad=smooth(HUB_PAD2, HUB_PAD, dh);   // 1 near the centre, 0 outside
+    h = h*(1-pad) + HUB_Y*pad;                 // flatten/raise the settlement site
+    return h;
+  }
+  const SEG = mobile?234:348, SPAN=760;
+  const terGeo = new THREE.PlaneGeometry(SPAN, SPAN, SEG, SEG);
+  terGeo.rotateX(-Math.PI/2);
+  // plain lighter-grey surface (no photo map); flat shading + darker bowls read the craters
+  const cPlain=new THREE.Color(0xbcc1ca), cFloor=new THREE.Color(0x626b79);
+  { const p = terGeo.attributes.position, colArr=[];
+    for(let i=0;i<p.count;i++){
+      const x=p.getX(i), z=p.getZ(i); p.setY(i, height(x,z));
+      let f=0; for(const c of craters){ f=Math.max(f, smooth(c.R+4, 4, Math.hypot(x-c.x,z-c.z))); } // 1 = deep in a bowl
+      const cc=cPlain.clone().lerp(cFloor, f*0.82);
+      colArr.push(cc.r,cc.g,cc.b);
+    }
+    terGeo.computeVertexNormals();
+    terGeo.setAttribute('color', new THREE.Float32BufferAttribute(colArr,3));
+  }
+  const terrain = new THREE.Mesh(terGeo, new THREE.MeshStandardMaterial({ vertexColors:true, roughness:1, metalness:0, flatShading:true }));
+  terrain.castShadow = true; terrain.receiveShadow = true;
+  scene.add(terrain);
+  const H = (x,z)=>height(x,z);
+
+  // cold blue fill in each crater so its shadowed floor reads cold
+  for(const c of craters){
+    const pl=new THREE.PointLight(0x8fd4ff, 300, c.R*3.1, 2.0); pl.position.set(c.x, 3, c.z); scene.add(pl);
+  }
+
+  // ---------- labels ----------
+  const labelGroup = new THREE.Group(); scene.add(labelGroup);
+  function roundRect(c,x,y,w,h,r){c.beginPath();c.moveTo(x+r,y);c.arcTo(x+w,y,x+w,y+h,r);c.arcTo(x+w,y+h,x,y+h,r);c.arcTo(x,y+h,x,y,r);c.arcTo(x,y,x+w,y,r);c.closePath();}
+  function makeLabel(text, accent){
+    const pad=16, fs=34, dpr=2;
+    const m=document.createElement('canvas').getContext('2d');
+    m.font=`600 ${fs}px 'Space Grotesk', sans-serif`;
+    const w=Math.ceil(m.measureText(text).width)+pad*2+24, h=fs+pad*2;
+    const cv=document.createElement('canvas'); cv.width=w*dpr; cv.height=h*dpr;
+    const x=cv.getContext('2d'); x.scale(dpr,dpr);
+    x.fillStyle='rgba(6,9,16,.85)'; roundRect(x,0,0,w,h,12); x.fill();
+    x.lineWidth=1.5; x.strokeStyle=accent; roundRect(x,0.75,0.75,w-1.5,h-1.5,12); x.stroke();
+    x.beginPath(); x.arc(pad+6, h/2, 5, 0, 7); x.fillStyle=accent; x.fill();
+    x.fillStyle='#eef3fb'; x.font=`600 ${fs}px 'Space Grotesk', sans-serif`; x.textBaseline='middle';
+    x.fillText(text, pad+22, h/2+1);
+    const tex=new THREE.CanvasTexture(cv); tex.anisotropy=4;
+    const sp=new THREE.Sprite(new THREE.SpriteMaterial({map:tex,transparent:true,depthTest:true,depthWrite:false}));
+    const s=0.092; sp.scale.set(w*s, h*s, 1);
+    labelGroup.add(sp); return sp;
+  }
+
+  // ---------- materials (light metal so units read on the grey regolith) ----------
+  const steelMat = new THREE.MeshStandardMaterial({color:0xdfe4ec, metalness:.4, roughness:.46});
+  const steelDarkMat = new THREE.MeshStandardMaterial({color:0xaab3c3, metalness:.45, roughness:.52});
+  const panelMat = new THREE.MeshStandardMaterial({color:0x2a3340, metalness:.5, roughness:.6});
+  function emissiveMat(hex,intensity){ return new THREE.MeshStandardMaterial({color:hex, emissive:hex, emissiveIntensity:intensity, metalness:.4, roughness:.4}); }
+  function onGround(x,z,yOff=0){ return new THREE.Vector3(x, H(x,z)+yOff, z); }
+  function placeOnGround(obj,x,z,yOff=0){ obj.position.copy(onGround(x,z,yOff)); scene.add(obj); return obj; }
+  function castRecv(group){ group.traverse(o=>{ if(o.isMesh){o.castShadow=true;o.receiveShadow=true;} }); }
+  function legs(group,w,d,h){
+    const g=new THREE.CylinderGeometry(.5,.5,h,8);
+    [[-w,-d],[w,-d],[-w,d],[w,d]].forEach(([lx,lz])=>{
+      const l=new THREE.Mesh(g, steelDarkMat); l.position.set(lx, -h/2, lz); group.add(l);
+    });
+  }
+
+  const units = [];
+
+  // one compact LTEC unit on a crater rim at angle `ang`; local +X faces out, -X into the crater
+  function buildUnit(c, ang){
+    const ux = c.x + Math.cos(ang)*c.R, uz = c.z + Math.sin(ang)*c.R;
+    const g = new THREE.Group();
+    g.position.set(ux, H(ux,uz), uz);
+    g.rotation.y = -ang;                        // local +X points radially outward (sunward-ish)
+    scene.add(g);
+
+    const skid=new THREE.Mesh(new THREE.BoxGeometry(11,1.6,8), steelDarkMat); skid.position.y=2.6; g.add(skid);
+    // evaporator (hot) outward
+    const evap=new THREE.Mesh(new THREE.BoxGeometry(2.4,5,6), steelMat); evap.position.set(4.1,5.4,0); g.add(evap);
+    const hotFace=new THREE.Mesh(new THREE.BoxGeometry(.5,4.4,5.2), emissiveMat(C.hot,1.5)); hotFace.position.set(5.5,5.4,0); g.add(hotFace);
+    for(let f=0;f<5;f++){ const fin=new THREE.Mesh(new THREE.BoxGeometry(2.6,.25,5.4), emissiveMat(C.hotDeep,.9)); fin.position.set(6.7,3.5+f*.95,0); fin.rotation.z=-.5; g.add(fin); }
+    // condenser (cold) inward (over the shadow)
+    const cond=new THREE.Mesh(new THREE.BoxGeometry(2.2,5,6), steelMat); cond.position.set(-4.1,5.2,0); g.add(cond);
+    const coldFace=new THREE.Mesh(new THREE.BoxGeometry(.4,4.6,5.4), emissiveMat(C.coldDeep,1.7)); coldFace.position.set(-5.5,5.2,0); g.add(coldFace);
+    for(let f=0;f<6;f++){ const fin=new THREE.Mesh(new THREE.BoxGeometry(2.2,4.4,.25), emissiveMat(C.cold,1.3)); fin.position.set(-5.3,5.2,-2.6+f*1.05); g.add(fin); }
+    // turbine + generator
+    const housing=new THREE.Mesh(new THREE.CylinderGeometry(1.5,1.5,4.2,16), steelMat); housing.rotation.z=Math.PI/2; housing.position.set(0,6.6,2.5); g.add(housing);
+    const gen=new THREE.Mesh(new THREE.BoxGeometry(3.2,3.2,3.4), panelMat); gen.position.set(0,6.1,-0.4); g.add(gen);
+    const genGlow=new THREE.Mesh(new THREE.BoxGeometry(3.4,.8,3.6), emissiveMat(C.power,1.3)); genGlow.position.set(0,8.0,-0.4); g.add(genGlow);
+    const blades=new THREE.Group();
+    for(let b=0;b<6;b++){ const bl=new THREE.Mesh(new THREE.BoxGeometry(.18,1.7,.55), emissiveMat(C.hot,.5)); bl.rotation.x=b*Math.PI/3; blades.add(bl); }
+    blades.rotation.z=Math.PI/2; blades.position.set(2.3,6.6,2.5); g.add(blades);
+    // pump
+    const pump=new THREE.Mesh(new THREE.CylinderGeometry(1.2,1.2,2.2,14), steelDarkMat); pump.position.set(0,3.9,-2.7); g.add(pump);
+    const rotor=new THREE.Mesh(new THREE.TorusGeometry(.75,.24,8,16), emissiveMat(C.cold,1.4)); rotor.position.set(0,5.1,-2.7); rotor.rotation.x=Math.PI/2; g.add(rotor);
+    // cold heat-pipe stub into the crater
+    const stub=new THREE.Mesh(new THREE.CylinderGeometry(.55,.55,11,10), steelMat); stub.position.set(-8.5,-0.5,0); stub.rotation.z=1.02; g.add(stub);
+    const tip=new THREE.Mesh(new THREE.SphereGeometry(1.2,12,12), emissiveMat(C.coldDeep,1.9)); tip.position.set(-12.8,-5.4,0); g.add(tip);
+
+    legs(g, 4.6, 3, 2.6);
+    castRecv(g);
+
+    g.updateMatrixWorld(true);
+    const wp=(lx,ly,lz)=> g.localToWorld(new THREE.Vector3(lx,ly,lz));
+    const loopPts=[ wp(0,5.1,-2.7), wp(4.1,5.4,0), wp(1.8,6.6,2.5), wp(-4.1,5.2,0) ];
+    const curve=new THREE.CatmullRomCurve3(loopPts, true, 'catmullrom', 0.4);
+    const loopTube=new THREE.Mesh(new THREE.TubeGeometry(curve, 50, 0.32, 8, true), steelMat);
+    loopTube.castShadow=true; scene.add(loopTube);
+
+    units.push({ g, blades, rotor, genGlow, curve, cableNode: wp(0,8.6,-0.4), ux, uz, crater:c });
+  }
+  // ring each crater's units evenly around its rim
+  for(const c of craters){
+    const base = -Math.PI/2;
+    for(let k=0;k<c.n;k++) buildUnit(c, base + k*2*Math.PI/c.n);
+  }
+
+  // ---------- central lunar settlement (~1000 residents) ----------
+  const glows = [];              // emissive materials to pulse
+  const SRr = 12;                // power-storage ring radius
+  function buildSettlement(hx,hz){
+    const g=new THREE.Group();
+    const domeMat=new THREE.MeshStandardMaterial({color:0xcdd4df, metalness:.3, roughness:.55});
+    const modMat=new THREE.MeshStandardMaterial({color:0xb7c0cd, metalness:.35, roughness:.5});
+    const darkMat=new THREE.MeshStandardMaterial({color:0x2a3340, metalness:.5, roughness:.6});
+    const padMat=new THREE.MeshStandardMaterial({color:0x3a434f, roughness:.9, metalness:.1});
+    const winMat=emissiveMat(C.power,.9);      // habitat windows
+    const storeMat=emissiveMat(C.power,1.0);   // storage glow
+    glows.push(winMat, storeMat);
+
+    // --- central power-storage hub: ring of tanks + tower ---
+    const nT=8;
+    for(let i=0;i<nT;i++){
+      const a=i/nT*Math.PI*2, tx=Math.cos(a)*SRr, tz=Math.sin(a)*SRr;
+      const tank=new THREE.Mesh(new THREE.CylinderGeometry(2.3,2.3,11,16), modMat); tank.position.set(tx,5.5,tz); g.add(tank);
+      const cap=new THREE.Mesh(new THREE.SphereGeometry(2.3,16,10,0,Math.PI*2,0,Math.PI/2), domeMat); cap.position.set(tx,11,tz); g.add(cap);
+      const band=new THREE.Mesh(new THREE.CylinderGeometry(2.45,2.45,1.4,16), storeMat); band.position.set(tx,7.5,tz); g.add(band);
+    }
+    const tower=new THREE.Mesh(new THREE.CylinderGeometry(3.4,4,16,20), domeMat); tower.position.set(0,8,0); g.add(tower);
+    const towerTop=new THREE.Mesh(new THREE.CylinderGeometry(3.7,3.7,1.8,20), storeMat); towerTop.position.set(0,16,0); g.add(towerTop);
+
+    // --- habitat domes cluster ---
+    function dome(x,z,r){
+      const d=new THREE.Mesh(new THREE.SphereGeometry(r,20,14,0,Math.PI*2,0,Math.PI/2), domeMat); d.position.set(x,0,z); g.add(d);
+      const ring=new THREE.Mesh(new THREE.CylinderGeometry(r*.55,r*.55,r*.3,20), winMat); ring.position.set(x,r*.3,z); g.add(ring);
+    }
+    const domes=[[26,6,8],[33,-13,6],[19,-22,5.5],[8,29,6.5],[-6,33,5],[-24,20,6],[-32,-6,6.5],[-21,-26,5.5],[-4,-33,6],[14,-31,5]];
+    for(const [x,z,r] of domes) dome(x,z,r);
+
+    // --- connective tubes between a few domes and the hub ---
+    function tube(ax,az,bx,bz,r=1.3){
+      const a=new THREE.Vector3(ax,r+0.6,az), b=new THREE.Vector3(bx,r+0.6,bz);
+      const len=a.distanceTo(b); const t=new THREE.Mesh(new THREE.CylinderGeometry(r,r,len,10), modMat);
+      t.position.copy(a.clone().add(b).multiplyScalar(0.5));
+      t.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0), b.clone().sub(a).normalize()); g.add(t);
+    }
+    tube(26,6,12,3); tube(8,29,4,11); tube(-24,20,-10,7); tube(-32,-6,-12,-2); tube(-4,-33,-2,-13); tube(14,-31,6,-13); tube(33,-13,20,-3);
+
+    // --- habitation modules (horizontal cylinders) ---
+    function module(x,z,rot,len=16){
+      const sub=new THREE.Group(); sub.position.set(x,3,z); sub.rotation.y=rot;
+      const m=new THREE.Mesh(new THREE.CylinderGeometry(2.6,2.6,len,16), modMat); m.rotation.z=Math.PI/2; sub.add(m);
+      const cap1=new THREE.Mesh(new THREE.SphereGeometry(2.6,14,10), domeMat); cap1.position.set(len/2,0,0); sub.add(cap1);
+      const cap2=new THREE.Mesh(new THREE.SphereGeometry(2.6,14,10), domeMat); cap2.position.set(-len/2,0,0); sub.add(cap2);
+      const stripe=new THREE.Mesh(new THREE.BoxGeometry(len*0.78,0.5,0.3), winMat); stripe.position.set(0,1.9,2.55); sub.add(stripe);
+      g.add(sub);
+    }
+    module(38,15,0.3); module(-37,-19,-0.4); module(20,38,1.1);
+
+    // --- radiator arrays (dark angled fins) ---
+    function radiator(x,z,rot){
+      const sub=new THREE.Group(); sub.position.set(x,0,z); sub.rotation.y=rot;
+      for(let i=0;i<3;i++){ const p=new THREE.Mesh(new THREE.BoxGeometry(0.4,7,5), darkMat); p.position.set(i*2.2-2.2,5,0); p.rotation.x=0.32; sub.add(p); }
+      g.add(sub);
+    }
+    radiator(40,-32,0.6); radiator(-40,28,-0.5);
+
+    // --- landing pads with perimeter lights ---
+    function pad(x,z){
+      const p=new THREE.Mesh(new THREE.CylinderGeometry(8,8,0.5,24), padMat); p.position.set(x,0.3,z); g.add(p);
+      for(let i=0;i<6;i++){ const a=i/6*Math.PI*2; const l=new THREE.Mesh(new THREE.SphereGeometry(0.5,8,8), emissiveMat(C.hot,1.2)); l.position.set(x+Math.cos(a)*7, 0.8, z+Math.sin(a)*7); g.add(l); }
+    }
+    pad(30,30); pad(-30,-32);
+
+    // --- comms masts + dishes ---
+    function mast(x,z){
+      const m=new THREE.Mesh(new THREE.CylinderGeometry(.5,.5,12,8), steelDarkMat); m.position.set(x,6,z); g.add(m);
+      const dish=new THREE.Mesh(new THREE.SphereGeometry(3.4,18,10,0,Math.PI*2,0,Math.PI/2.4),
+        new THREE.MeshStandardMaterial({color:0xe8ecf2,metalness:.4,roughness:.4,side:THREE.DoubleSide}));
+      dish.position.set(x,12,z); dish.rotation.set(-0.9,0,0.4); g.add(dish);
+    }
+    mast(-16,8); mast(18,-6);
+
+    castRecv(g);
+    placeOnGround(g, hx, hz, 0);
+    return g;
+  }
+  buildSettlement(HUB.x, HUB.z);
+  { const hl=new THREE.PointLight(0xbcd8ff, 420, 150, 2.0); hl.position.set(HUB.x, H(HUB.x,HUB.z)+30, HUB.z); scene.add(hl);
+    const gl=new THREE.PointLight(0x5be58c, 120, 60, 2.0); gl.position.set(HUB.x, H(HUB.x,HUB.z)+10, HUB.z); scene.add(gl); }
+
+  // ---------- cabling: per-crater power rings + feeders to the storage hub ----------
+  function groundPt(x,z,clear=1.8){ return new THREE.Vector3(x, H(x,z)+clear, z); }
+  function linkPts(a,b,n,clear){ const o=[]; for(let i=1;i<n;i++){ const u=i/n; o.push(groundPt(a.x+(b.x-a.x)*u, a.z+(b.z-a.z)*u, clear)); } return o; }
+
+  const pulses = [];
+  function addPulse(curve, n, speed, size){
+    const m=new THREE.InstancedMesh(new THREE.SphereGeometry(size,8,8), new THREE.MeshBasicMaterial({color:C.power,toneMapped:false}), n);
+    m.frustumCulled=false; scene.add(m); pulses.push({m,curve,n,speed});
+  }
+
+  for(const c of craters){
+    const cu = units.filter(u=>u.crater===c);
+    cu.sort((a,b)=>Math.atan2(a.uz-c.z,a.ux-c.x)-Math.atan2(b.uz-c.z,b.ux-c.x));
+    // closed power ring through this crater's units
+    const pts=[];
+    for(let i=0;i<cu.length;i++){
+      const node=cu[i].cableNode.clone(); pts.push(node);
+      const next=cu[(i+1)%cu.length].cableNode.clone();
+      pts.push(...linkPts(groundPt(node.x,node.z), groundPt(next.x,next.z), 4, 2.0));
+    }
+    const ring=new THREE.CatmullRomCurve3(pts, true, 'catmullrom', 0.5);
+    scene.add(new THREE.Mesh(new THREE.TubeGeometry(ring, 170, 0.3, 6, true), steelDarkMat));
+    addPulse(ring, 24, 0.05, 0.5);
+
+    // feeder from the hub-facing unit to the storage ring edge
+    let near=cu[0], nd=Infinity;
+    for(const u of cu){ const d=Math.hypot(u.ux-HUB.x,u.uz-HUB.z); if(d<nd){nd=d;near=u;} }
+    const dir=new THREE.Vector2(HUB.x-c.x, HUB.z-c.z); dir.normalize();
+    const endX=HUB.x - dir.x*(SRr+1.5), endZ=HUB.z - dir.y*(SRr+1.5);
+    const tap=near.cableNode.clone();
+    const end=groundPt(endX,endZ,5);
+    const fpts=[ tap, groundPt(tap.x,tap.z,3), ...linkPts(groundPt(tap.x,tap.z), end, 11, 2.4), end ];
+    const feeder=new THREE.CatmullRomCurve3(fpts, false, 'catmullrom', 0.5);
+    scene.add(new THREE.Mesh(new THREE.TubeGeometry(feeder, 150, 0.42, 6, false), steelDarkMat));
+    addPulse(feeder, 20, 0.1, 0.62);
+  }
+
+  // ---------- flowing fluid (all unit loops, one instanced mesh) ----------
+  const PER = 14, FLOW_N = units.length*PER;
+  const flow = new THREE.InstancedMesh(new THREE.SphereGeometry(0.55,8,8), new THREE.MeshBasicMaterial({toneMapped:false}), FLOW_N);
+  flow.instanceMatrix.setUsage(THREE.DynamicDrawUsage); flow.frustumCulled=false; scene.add(flow);
+  const col=new THREE.Color(), cHot=new THREE.Color(C.hot), cCold=new THREE.Color(C.cold);
+  const uT1=0.25, uT2=0.5, uT3=0.75;
+  function unitPhaseColor(t){
+    if(t<uT1) return col.setHex(C.cold);
+    if(t<uT2) return col.setHex(C.hot);
+    if(t<uT3) return col.lerpColors(cHot, cCold, (t-uT2)/(uT3-uT2));
+    return col.setHex(C.cold);
+  }
+  const dummy = new THREE.Object3D();
+
+  // ---------- labels ----------
+  const L=[];
+  craters.forEach((c,i)=> L.push([makeLabel('Swarm '+String.fromCharCode(65+i)+' · ~28 K', '#4cc5fb'), onGround(c.x, c.z, Math.max(13, c.d*0.7))]));
+  L.push([makeLabel('Settlement · ~1000', '#5be58c'), onGround(HUB.x, HUB.z, 40)]);
+  L.push([makeLabel('Power storage', '#fcc33a'), onGround(HUB.x + 30, HUB.z + 14, 24)]);
+  L.forEach(([sp,p])=>sp.position.copy(p));
+
+  // ---------- controls ----------
+  let flowOn=true, spinOn=true;
+  function toggle(btn,on){ btn.setAttribute('aria-pressed', on?'true':'false'); }
+  $('btnLabels').onclick=e=>{ const on=labelGroup.visible=!labelGroup.visible; toggle(e.currentTarget,on); };
+  $('btnFlow').onclick=e=>{ flowOn=!flowOn; flow.visible=flowOn; pulses.forEach(p=>p.m.visible=flowOn); toggle(e.currentTarget,flowOn); };
+  $('btnSpin').onclick=e=>{ spinOn=controls.autoRotate=!controls.autoRotate; toggle(e.currentTarget,spinOn); };
+  const home={pos:camera.position.clone(), tgt:controls.target.clone()};
+  $('btnReset').onclick=()=>{ camera.position.copy(home.pos); controls.target.copy(home.tgt); };
+  const cb=$('collapseBtn'); cb.onclick=()=>{ const p=$('panel'); const c=p.classList.toggle('collapsed'); cb.textContent=c?'show':'hide'; cb.setAttribute('aria-expanded',(!c).toString()); };
+  if(mobile) $('panel').classList.add('collapsed'), cb.textContent='show';
+
+  addEventListener('resize', ()=>{
+    camera.aspect=innerWidth/innerHeight; camera.updateProjectionMatrix();
+    renderer.setSize(innerWidth,innerHeight);
+  });
+
+  // ---------- loop ----------
+  let paused=false;
+  document.addEventListener('visibilitychange', ()=>{ paused=document.hidden; if(!paused) clock.getDelta(); });
+  const clock=new THREE.Clock();
+  let flowT=0;
+  function animate(){
+    requestAnimationFrame(animate);
+    if(paused) return;
+    const dt=Math.min(clock.getDelta(),0.05);
+    flowT += dt;
+    if(flowOn){
+      let idx=0;
+      for(const u of units){
+        for(let j=0;j<PER;j++){
+          const t=((j/PER)+flowT*0.085)%1;
+          const pt=u.curve.getPointAt(t);
+          dummy.position.copy(pt); dummy.scale.setScalar(t>uT1&&t<uT3?0.72:0.5); dummy.updateMatrix();
+          flow.setMatrixAt(idx,dummy.matrix); flow.setColorAt(idx, unitPhaseColor(t)); idx++;
+        }
+      }
+      flow.instanceMatrix.needsUpdate=true; if(flow.instanceColor) flow.instanceColor.needsUpdate=true;
+      for(const pz of pulses){
+        for(let i=0;i<pz.n;i++){ const t=((i/pz.n)+flowT*pz.speed)%1; const pt=pz.curve.getPointAt(t);
+          dummy.position.copy(pt); dummy.scale.setScalar(1); dummy.updateMatrix(); pz.m.setMatrixAt(i,dummy.matrix); }
+        pz.m.instanceMatrix.needsUpdate=true;
+      }
+    }
+    for(const u of units){ if(u.blades) u.blades.rotation.x += dt*7; if(u.rotor) u.rotor.rotation.z += dt*5; }
+    const beat = 0.75+0.25*Math.sin(flowT*3);
+    for(const u of units){ if(u.genGlow) u.genGlow.material.emissiveIntensity = 1.0+0.7*beat; }
+    for(const m of glows){ m.emissiveIntensity = 0.7+0.5*beat; }
+    controls.update();
+    renderer.render(scene,camera);
+  }
+  requestAnimationFrame(()=>{
+    animate();
+    const ld=$('loader'); ld.classList.add('gone'); setTimeout(()=>ld.remove(),700);
+  });
+  </script>
+</body>
+</html>
