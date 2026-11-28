@@ -22,7 +22,7 @@
 <style>
   :root{
     --cold:#4cc5fb; --cold-deep:#0a7fc2;
-    --hot:#fcc33a;  --hot-deep:#d98c07;
+    --hot:#ff4d3d;  --hot-deep:#c01f10;
     --power:#5be58c; --power-deep:#16a34a;
     --ink:#f2f6fd; --ink-2:#c2cde2; --ink-3:#93a1ba;
     --base:#05070e;
@@ -196,7 +196,7 @@
 
   // ---------- colours ----------
   const C = {
-    cold:0x4cc5fb, coldDeep:0x0a7fc2, hot:0xfcc33a, hotDeep:0xd98c07,
+    cold:0x4cc5fb, coldDeep:0x0a7fc2, hot:0xff4d3d, hotDeep:0xc01f10,
     power:0x5be58c, steel:0xaeb6c2, steelDark:0x6a7280
   };
 
@@ -505,8 +505,8 @@
   // ---------- labels ----------
   const L=[];
   L.push([makeLabel('PSR floor · ~28 K', '#4cc5fb'), onGround(CRATER.x, CRATER.z, 10)]);
-  L.push([makeLabel('Sunlit rim · ~118 K', '#fcc33a'), onGround(RIM.x, RIM.z, 24)]);
-  L.push([makeLabel('Evaporator', '#fcc33a'), P_evap.clone().add(new THREE.Vector3(0,9,0))]);
+  L.push([makeLabel('Sunlit rim · ~118 K', '#ff4d3d'), onGround(RIM.x, RIM.z, 24)]);
+  L.push([makeLabel('Evaporator', '#ff4d3d'), P_evap.clone().add(new THREE.Vector3(0,9,0))]);
   L.push([makeLabel('Condenser', '#4cc5fb'), P_cond.clone().add(new THREE.Vector3(0,14,0))]);
   L.push([makeLabel('Pump', '#4cc5fb'), P_pump.clone().add(new THREE.Vector3(0,6,0))]);
   L.push([makeLabel('Turbine + generator', '#5be58c'), P_turb.clone().add(new THREE.Vector3(0,10,0))]);

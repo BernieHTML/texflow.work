@@ -22,7 +22,7 @@
 <style>
   :root{
     --cold:#4cc5fb; --cold-deep:#0a7fc2;
-    --hot:#fcc33a;  --hot-deep:#d98c07;
+    --hot:#ff4d3d;  --hot-deep:#c01f10;
     --power:#5be58c; --power-deep:#16a34a;
     --foil:#e9c877;
     --ink:#f2f6fd; --ink-2:#c2cde2; --ink-3:#93a1ba;
@@ -187,7 +187,7 @@
 
   const mobile = Math.min(innerWidth, innerHeight) < 760;
   const $ = id => document.getElementById(id);
-  const C = { cold:0x4cc5fb, coldDeep:0x0a7fc2, hot:0xfcc33a, hotDeep:0xd98c07, power:0x5be58c, steel:0xaeb6c2, steelDark:0x6a7280, foil:0xe9c877 };
+  const C = { cold:0x4cc5fb, coldDeep:0x0a7fc2, hot:0xff4d3d, hotDeep:0xc01f10, power:0x5be58c, steel:0xaeb6c2, steelDark:0x6a7280, foil:0xe9c877 };
 
   const host = $('scene');
   const scene = new THREE.Scene();
@@ -393,7 +393,7 @@
   L.push([makeLabel('Insulating tent · cold reservoir','#e9c877'), onGround(TENT.x,TENT.z,7.5)]);
   L.push([makeLabel('Condenser','#4cc5fb'), P_cond.clone().add(new THREE.Vector3(0,12,0))]);
   L.push([makeLabel('Pump','#4cc5fb'), P_pump.clone().add(new THREE.Vector3(0,4.5,0))]);
-  L.push([makeLabel('Evaporator · sunlit','#fcc33a'), P_evap.clone().add(new THREE.Vector3(0,6,0))]);
+  L.push([makeLabel('Evaporator · sunlit','#ff4d3d'), P_evap.clone().add(new THREE.Vector3(0,6,0))]);
   L.push([makeLabel('Turbine + generator','#5be58c'), P_turb.clone().add(new THREE.Vector3(0,11,0))]);
   L.push([makeLabel('Powers surface tech','#5be58c'), onGround(6,-16,8)]);
   L.forEach(([sp,p])=>sp.position.copy(p));

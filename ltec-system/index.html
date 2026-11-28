@@ -56,8 +56,8 @@
 :root {
   --cold: #4cc5fb;
   --cold-deep: #0a7fc2;
-  --hot: #fcc33a;
-  --hot-deep: #d98c07;
+  --hot: #ff4d3d;
+  --hot-deep: #c01f10;
   --power: #5be58c;
   --power-deep: #16a34a;
   --warn: #fda45a;
@@ -96,8 +96,8 @@
   :root {
     --cold: #0b6ea8;
     --cold-deep: #075985;
-    --hot: #a45c06;
-    --hot-deep: #7c4306;
+    --hot: #c0351f;
+    --hot-deep: #93200f;
     --power: #11763a;
     --power-deep: #0f5c2e;
     --warn: #b4530c;
@@ -676,7 +676,7 @@ body.fs .fs-readout { display: flex; }
           </linearGradient>
           <linearGradient id="pipeGrad" x1="0" y1="0" x2="1" y2="0">
             <stop offset="0%" stop-color="#4cc5fb" id="gradCold"/>
-            <stop offset="100%" stop-color="#fcc33a" id="gradHot"/>
+            <stop offset="100%" stop-color="#ff4d3d" id="gradHot"/>
           </linearGradient>
           <radialGradient id="bulbGrad">
             <stop offset="0%" stop-color="#5be58c" stop-opacity="0.95"/>
@@ -719,8 +719,8 @@ body.fs .fs-readout { display: flex; }
           </g>
         </g>
         <g id="evaporator">
-          <rect x="572" y="186" width="76" height="52" rx="12" fill="#1a1407" stroke="#fcc33a" stroke-width="2.5"/>
-          <g stroke="#fcc33a" stroke-width="2" opacity="0.8" fill="none">
+          <rect x="572" y="186" width="76" height="52" rx="12" fill="#1c0a07" stroke="#ff4d3d" stroke-width="2.5"/>
+          <g stroke="#ff4d3d" stroke-width="2" opacity="0.8" fill="none">
             <path d="M584 202 h52"/><path d="M584 212 h52"/><path d="M584 222 h52"/>
           </g>
         </g>
@@ -751,7 +751,7 @@ body.fs .fs-readout { display: flex; }
         <text x="150" y="300" text-anchor="middle" font-size="11.5" fill="#93a1ba">PSR &mdash; condenser</text>
         <text x="150" y="318" text-anchor="middle" font-size="13" font-weight="600" fill="#4cc5fb" id="svgTc">28 K</text>
         <text x="610" y="258" text-anchor="middle" font-size="11.5" fill="#93a1ba">Sunlit rim &mdash; evaporator</text>
-        <text x="610" y="276" text-anchor="middle" font-size="13" font-weight="600" fill="#fcc33a" id="svgTh">118 K</text>
+        <text x="610" y="276" text-anchor="middle" font-size="13" font-weight="600" fill="#ff4d3d" id="svgTh">118 K</text>
         <text x="432" y="150" text-anchor="middle" font-size="15" font-weight="700" fill="#5be58c" id="svgPower">45.7 kW</text>
         <text x="352" y="62" text-anchor="middle" font-size="11.5" fill="#93a1ba">turbine</text>
         <text x="266" y="92" text-anchor="middle" font-size="11.5" fill="#93a1ba">&larr; exhaust</text>
@@ -1436,7 +1436,8 @@ function coldColour(Tc) {
 }
 function hotColour(Th) {
   const t = clamp((Th - 100) / 300, 0, 1);
-  return `hsl(${(46 - t * 32).toFixed(0)}, 95%, ${(54 + t * 10).toFixed(0)}%)`;
+  // red ramp: deeper red when cool, brighter as the rim heats up
+  return `hsl(${(8 - t * 8).toFixed(0)}, 95%, ${(56 + t * 10).toFixed(0)}%)`;
 }
 
 // A fixed star field, seeded so it does not reshuffle on every repaint.

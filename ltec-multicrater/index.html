@@ -22,7 +22,7 @@
 <style>
   :root{
     --cold:#4cc5fb; --cold-deep:#0a7fc2;
-    --hot:#fcc33a;  --hot-deep:#d98c07;
+    --hot:#ff4d3d;  --hot-deep:#c01f10;
     --power:#5be58c; --power-deep:#16a34a;
     --ink:#f2f6fd; --ink-2:#c2cde2; --ink-3:#93a1ba;
     --base:#05070e;
@@ -197,7 +197,7 @@
   const $ = id => document.getElementById(id);
 
   // ---------- colours ----------
-  const C = { cold:0x4cc5fb, coldDeep:0x0a7fc2, hot:0xfcc33a, hotDeep:0xd98c07, power:0x5be58c };
+  const C = { cold:0x4cc5fb, coldDeep:0x0a7fc2, hot:0xff4d3d, hotDeep:0xc01f10, power:0x5be58c };
 
   // ---------- renderer / scene / camera ----------
   const host = $('scene');
@@ -489,7 +489,7 @@
 
   // ---------- labels ----------
   const L=[];
-  units.forEach((u,i)=> L.push([makeLabel('LTEC '+(i+1), '#fcc33a'), u.cableNode.clone().add(new THREE.Vector3(0,6,0))]));
+  units.forEach((u,i)=> L.push([makeLabel('LTEC '+(i+1), '#ff4d3d'), u.cableNode.clone().add(new THREE.Vector3(0,6,0))]));
   craters.forEach((c,i)=> L.push([makeLabel('PSR ~28 K', '#4cc5fb'), onGround(c.x, c.z, Math.max(10, c.d*0.7))]));
   L.push([makeLabel('Lunar base', '#5be58c'), onGround(BASE.x, BASE.z, 20)]);
   L.forEach(([sp,p])=>sp.position.copy(p));
